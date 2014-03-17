@@ -7,18 +7,26 @@ Weafam::Application.routes.draw do
 
 # You can have the root of your site routed with "root"
 # root 'welcome#index'
-#  root 'pages#index'
-  root :to => 'pages#index', :as => 'root'
+  root :to => 'pages#start', :as => 'root'
 
 #  match 'admin' => 'admin#index', via: :get
 
 
   resources :names
-
   resources :relations
 
 
+  get "pages/admin"
+  post "pages/admin"
 
+  get "pages/start"
+  post "pages/start"
+
+  get "start/admin"
+  post "start/admin"
+
+  get "admin/start"
+  post "admin/start"
 
 
   # The priority is based upon order of creation: first created -> highest priority.

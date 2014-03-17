@@ -1,8 +1,14 @@
+
+<section class="admin">
+
+
+
 <h1>Listing relations</h1>
 
 <table>
   <thead>
     <tr>
+      <th>ID</th>
       <th>Relation</th>
       <th></th>
       <th></th>
@@ -13,6 +19,7 @@
   <tbody>
     <% @relations.each do |relation| %>
       <tr>
+        <td><%= relation.id %></td>
         <td><%= relation.relation %></td>
         <td><%= link_to 'Show', relation %></td>
         <td><%= link_to 'Edit', edit_relation_path(relation) %></td>
@@ -25,3 +32,9 @@
 <br>
 
 <%= link_to 'New Relation', new_relation_path %>
+
+
+  <p>Возврат на страницу Админа:  <%= link_to "Возврат к Админу -->", pages_admin_path %> </p>
+
+</section>
+
