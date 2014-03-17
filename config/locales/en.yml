@@ -21,3 +21,14 @@
 
 en:
   hello: "Hello world"
+  views:
+    pagination:
+      previous: "&lt; Пред."
+      next: "След. &gt;"
+      truncate: "..."
+      last: "Посл."
+      first: "Перв."
+  recaptcha:
+    errors:
+      incorrect-captcha-sol: 'Captcha error. Try again!'
+

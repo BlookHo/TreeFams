@@ -1,6 +1,29 @@
+# encoding: utf-8
+
+Encoding.default_external = "UTF-8"
+
+
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'date'
+require 'time'
+#gem ruby-mysql
+
+# Pick the frameworks you want:
+require "active_record/railtie"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "sprockets/railtie"
+# require "rails/test_unit/railtie"
+
+#if defined?(Bundler)
+#  # If you precompile assets before deploying to production, use this line
+#  Bundler.require(*Rails.groups(:assets => %w(development test)))
+#  # If you want your assets lazily compiled in production, use this line
+#  # Bundler.require(:default, :assets, Rails.env)
+#end
+
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -19,5 +42,45 @@ module Weafam
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    config.i18n.default_locale = :ru
+    I18n.enforce_available_locales = true
+    # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
+    config.i18n.fallbacks = true
+
+    # Configure the default encoding used in templates for Ruby 1.9.
+    config.encoding = "utf-8"
+
+    config.sass.preferred_syntax = :sass
+
+    config.force_ssl = false    # сделано в целях ухода от Ошибка 107 (net::ERR_SSL_PROTOCOL_ERROR): Ошибка протокола SSL.
+    # 25.06.13 - 10-25
+
+    config.time_zone = 'UTC'
+    config.active_record.default_timezone = 'UTC'
+
+    # Enable the asset pipeline
+    config.assets.enabled = true
+
+    #js compression
+    config.assets.compress = true
+    config.assets.js_compressor = :uglifier
+
+    # Version of your assets, change this if you want to expire all your assets
+    config.assets.version = '1.0'
+
+    #чтобы fontAwesome также был в assets
+#    config.assets.paths << Rails.root.join("app", "assets", "fonts")
+    config.assets.paths << Rails.root.join('app', 'assets', 'fonts', 'sounds')
+    config.assets.precompile += %w( .svg .eot .woff .ttf)
+
+    ## For Devise
+    #config.assets.initialize_on_precompile = false
+
+
+    #роуты для ошибок
+    config.exceptions_app = self.routes
+
+
   end
 end
