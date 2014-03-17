@@ -3,6 +3,8 @@
 
 Weafam::Application.routes.draw do
 
+  resources :names
+
   resources :relations
 
 
