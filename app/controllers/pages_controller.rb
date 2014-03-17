@@ -12,20 +12,21 @@ class PagesController < ApplicationController
   # @see News
   # @see Paginated
   # @see Place
-  def index
-    if params[:news_page].present?
-      render_file = paginate_news
-    elsif params[:reasons_page].present?
-      render_file = paginate_reasons
-    else
-      render_file = initial_index
-    end
 
-    respond_to do |format|
-      format.html
-      format.js { render render_file }
-    end
-  end
+  #def index
+  #  if params[:news_page].present?
+  #    render_file = paginate_news
+  #  elsif params[:reasons_page].present?
+  #    render_file = paginate_reasons
+  #  else
+  #    render_file = initial_index
+  #  end
+  #
+  #  respond_to do |format|
+  #    format.html
+  #    format.js { render render_file }
+  #  end
+  #end
 
 
 
