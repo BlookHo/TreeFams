@@ -1,4 +1,14 @@
+# encoding: utf-8
+
+
 Weafam::Application.routes.draw do
+
+  resources :relations
+
+
+
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -53,4 +63,9 @@ Weafam::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+
+
+
+
 end
