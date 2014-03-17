@@ -9,7 +9,7 @@ gem 'pg'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
-gem 'compass-rails'
+#gem 'compass-rails'
 gem 'bootstrap-sass'
 gem 'haml'
 
@@ -23,7 +23,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer', platforms => :ruby
+#gem 'therubyracer', platforms => :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
