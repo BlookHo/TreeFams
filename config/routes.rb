@@ -7,7 +7,7 @@ Weafam::Application.routes.draw do
 
 # You can have the root of your site routed with "root"
 # root 'welcome#index'
-  root :to => 'pages#start', :as => 'root'
+  root :to => 'pages#login', :as => 'root'
 
 #  match 'admin' => 'admin#index', via: :get
 
