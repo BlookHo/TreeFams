@@ -22,11 +22,14 @@ Weafam::Application.routes.draw do
   get "pages/start"
   post "pages/start"
 
-  get "start/admin"
-  post "start/admin"
+  get "pages/login"
+  post "pages/login"
 
-  get "admin/start"
-  post "admin/start"
+  get "pages/registration"
+  post "pages/registration"
+
+  get "pages/main"
+  post "pages/main"
 
 
   # The priority is based upon order of creation: first created -> highest priority.
