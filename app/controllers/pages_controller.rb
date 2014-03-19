@@ -31,11 +31,28 @@ class PagesController < ApplicationController
   ##  end
   #end
 
-
-  # Главная страница. Готовит новости, причины и места к отображению.
+  # Входная страница. На ней - логин. Если уже зареген, то переход на Главную страницу - отображение древа и т.п..
+  # или если впервые - переход на Стартовую стр-цу.
   # @note GET /
-  # @note Также вызывается в случае пагинации. Тогда выдает либо пагинацию новостей, либо пагинацию причин.
-  # @param news_page [Integer] опциональный номер страницы пагинации новостей
+  # @note
+  # @param login_page [Integer] опциональный номер страницы
+  # @see News
+  # @see Paginated
+  # @see Place
+  def login
+
+    @first_var = "Первая переменная - LOGIN"
+
+    #admin
+
+  end
+
+
+  # Стартовая страница. На ней - Ввод БК.
+  # по завершении ввода БК, то переход на страницу регистрации.
+  # @note GET /
+  # @note
+  # @param start_page [Integer] опциональный номер страницы
   # @see News
   # @see Paginated
   # @see Place
@@ -47,10 +64,10 @@ class PagesController < ApplicationController
 
   end
 
-  # Главная страница. Готовит новости, причины и места к отображению.
+  # Админа страница. Запуск админских методов, просмотр всех таблиц.
   # @note GET /
-  # @note Также вызывается в случае пагинации. Тогда выдает либо пагинацию новостей, либо пагинацию причин.
-  # @param news_page [Integer] опциональный номер страницы пагинации новостей
+  # @note
+  # @param admin_page [Integer] опциональный номер страницы
   # @see News
   # @see Paginated
   # @see Place
@@ -60,6 +77,30 @@ class PagesController < ApplicationController
 
   end
 
+  # Страница Регистрации.
+  # @note GET /
+  # @note
+  # @param regis_page [Integer] опциональный номер страницы
+  # @see News
+  # @see Paginated
+  # @see Place
+  def registration
 
+    @first_var = "Первая переменная - REGISTRATION"
+
+  end
+
+  # Страница Главная. - основная страница сайта. На ней отображение древа, все переходы и т.п.
+  # @note GET /
+  # @note
+  # @param main_page [Integer] опциональный номер страницы
+  # @see News
+  # @see Paginated
+  # @see Place
+  def main
+
+    @first_var = "Первая переменная - MAIN"
+
+  end
 
 end # КОНЕЦ КОНТРОЛЛЕРА PAGES

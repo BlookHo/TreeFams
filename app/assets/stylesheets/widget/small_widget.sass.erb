@@ -1,0 +1,89 @@
+//*= require outsource/reset
+//*= require recaptcha
+
+*
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+
+@font-face
+  font-family: 'PT Sans'
+  font-style: normal
+  font-weight: 400
+  src: local('PT Sans'), local('PTSans-Regular'), url('<%= asset_path('PTsans.woff') %>')
+
+.hide
+  display: none
+
+.center
+  text-align: center
+
+body
+  font: 16px 'PT Sans', Arial, sans-serif
+
+a
+  text-decoration: none
+
+#widget_container
+  height: 30px
+  width: 200px
+  background: #fff
+  overflow: hidden
+
+#votes_sum
+  width: 34px
+  height: 30px
+  float: left
+  padding: 0 5px
+  background: #25AA8A
+  color: #fff
+  line-height: 32px
+  border-left: 2px solid #fff
+  border-right: 2px solid #fff
+
+.logo
+  width: 34px
+  height: 30px
+  padding: 0 5px
+  border-left: 2px solid #fff
+  border-right: 2px solid #fff
+  float: left
+  background: #25AA8A
+  &:hover
+    background: #1C8068
+  img
+    width: 20px
+    height: 30px
+
+.btn
+  height: 30px
+  line-height: 32px
+  width: 50px
+  float: left
+  text-align: center
+  color: #fff
+  &.working
+    cursor: pointer
+  &.not_chosen
+    background: #fff!important
+    border: 1px solid #999
+    cursor: default
+    color: #999
+  &.chosen
+    cursor: default
+  &.for
+    background: #3AA85D
+    border-radius: 3px 0 0 3px
+    &:hover
+      background: #266f3e
+    &.chosen, &.not_chosen
+      &:hover
+        background: #3AA85D
+  &.against
+    background: #5D615D
+    border-radius: 0 3px 3px 0
+    &:hover
+      background: #383a38
+    &.chosen, &.not_chosen
+      &:hover
+        background: #5D615D
