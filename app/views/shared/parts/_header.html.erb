@@ -7,18 +7,14 @@
       </p>
       <ul class="left">
         <li><%= link_to raw("<i class='icon-lightbulb'></i> <span>Главная</span>"), main_path %></li>
-        <li><%= link_to raw("<i class='icon-group'> </i> <span>Общение</span>"), besedy_path %></li>
-        <li><%= link_to raw("<i class='icon-search'></i> <span>Поиск</span>"), search_path %></li>
-        <!--<% if current_user.try(:admin?) %>-->
-            <li><%= link_to raw("<i class='icon-wrench'></i>"), index_admin_path %></li>
-        <!--<% end %>-->
+        <li><%= link_to raw("<i class='icon-group'> </i> <span>Общение Login</span>"), login_path %></li>
+        <li><%= link_to raw("<i class='icon-search'></i> <span>Поиск Start</span>"), start_path %></li>
+            <li><%= link_to raw("<i class='icon-wrench'></i> <span>Админ Admin</span>"), admin_path %></li>
       </ul>
     </div>
     <ul class="right">
-      <!--<% if user_signed_in? || (!current_page?(register_path) && !current_page?(hello_path)) %>-->
           <li><%= link_to raw("<span>Новое мнение </span><i class='icon-pencil'></i>"),"", :class => "working saveIt" %></li>
-      <!--<% end %>-->
-      <!--<% if user_signed_in? %>-->
+
           <li id="updates_count"><%= render :partial => 'shared/updates_count' %></li>
           <li id="new_mail_count"><%= render :partial => 'shared/new_mail_count' %></li>
           <li class="headAva">
@@ -29,10 +25,7 @@
               <li><%= link_to raw("Выйти <i class='icon-off'></i>"), logout_path, :method => 'delete' %></li>
             </ul>
           </li>
-      <!--<% else %>-->
-          <!--<li><%= link_to raw("Регистрация <i class='icon-plus'></i>"), register_path %></li>-->
-          <!--<li><%= link_to raw("Войти <i class='icon-signin'></i>"), login_path %></li>-->
-      <!--<% end %>-->
-    </ul>
+
+     </ul>
   </section>
 </header>

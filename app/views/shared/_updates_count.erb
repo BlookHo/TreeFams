@@ -1,0 +1,7 @@
+<% if @updates_count.blank? || @updates_count == 0 %>
+  <%= link_to raw("<span>Мои новости</span> <i class='icon-globe'></i>"), news_path %>
+<% elsif  @updates_count > 9 %>
+  <%= link_to raw("<span>Мои новости</span> <i class='icon-globe'></i> <strong>(*)</strong>"), news_path %>
+<% else %>
+  <%= link_to raw("<span>Мои новости</span> <i class='icon-globe'></i> <strong>(#{@updates_count})</strong>"), news_path, :class => "ttip", title: "У тебя есть обновления" %>
+<% end %>

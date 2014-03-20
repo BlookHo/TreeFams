@@ -103,4 +103,37 @@ class PagesController < ApplicationController
 
   end
 
+  # Страница Новостей и Обновлений. На ней отображается инфа обо всех новостях и обновлениях юзера
+  # @note GET /
+  # @note
+  # @param news_page [Integer] опциональный номер страницы
+  # @see News
+  # @see Paginated
+  # @see Place
+  def news
+
+    @first_var = "Первая переменная - NEWS"
+    @updates_count = 3  # кол-во обновлений - должно вычисляться отдельно в своем контроллере
+
+
+  end
+
+  # Страница Сообщений и Бесед Юзера. На ней отображаются инфа обо всех новостях и обновлениях юзера
+  # @note GET /
+  # @note
+  # @param news_page [Integer] опциональный номер страницы
+  # @see News
+  # @see Paginated
+  # @see Place
+  def mail
+
+    @first_var = "Первая переменная - MAIL"
+    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+
+
+  end
+
+
+
+
 end # КОНЕЦ КОНТРОЛЛЕРА PAGES
