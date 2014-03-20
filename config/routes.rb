@@ -16,6 +16,12 @@ Weafam::Application.routes.draw do
   match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
+  match 'settings' => 'pages#settings', via: :get
+  match 'registration' => 'pages#registration', via: :get
+  match 'settings' => 'pages#settings', via: :get
+  match 'mypage' => 'pages#mypage', via: :get
+  match 'search' => 'pages#search', via: :get
+  match 'conversation' => 'pages#conversation', via: :get
 
 
   resources :names

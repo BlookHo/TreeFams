@@ -133,6 +133,68 @@ class PagesController < ApplicationController
 
   end
 
+  # Страница Сообщений и Бесед Юзера. На ней отображаются инфа обо всех новостях и обновлениях юзера
+  # @note GET /
+  # @note
+  # @param settings_page [Integer] опциональный номер страницы
+  # @see News
+  # @see Paginated
+  # @see Place
+  def settings
+
+    @first_var = "Первая переменная - SETTINGS"
+#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+
+
+  end
+
+
+  # Страница Юзера: вся инфа о Юзере, настройки и т.д.
+  # @note GET /
+  # @note
+  # @param settings_page [Integer] опциональный номер страницы
+  # @see News
+  # @see Paginated
+  # @see Place
+  def mypage
+
+    @first_var = "Первая переменная - MYPAGE"
+#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+
+
+  end
+
+  # Страница Поиска: поиск среди профилей и Юзеров.
+  # @note GET /
+  # @note
+  # @param settings_page [Integer] опциональный номер страницы
+  # @see News
+  # @see Paginated
+  # @see Place
+  def search
+
+    @first_var = "Первая переменная - SEARCH"
+#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+
+
+  end
+
+  # Страница общения Юзера: темы беседы события сообщения.
+  # @note GET /
+  # @note
+  # @param conversation_page [Integer] опциональный номер страницы
+  # @see News
+  # @see Paginated
+  # @see Place
+  def conversation
+
+    @first_var = "Первая переменная - CONVERSATION"
+#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+
+
+  end
+
+
 
 
 
