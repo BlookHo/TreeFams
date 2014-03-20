@@ -16,7 +16,7 @@
           <li id="updates_count"><%= render :partial => 'shared/updates_count' %></li>
           <li id="new_mail_count"><%= render :partial => 'shared/new_mail_count' %></li>
           <li class="headAva">
-            <%= link_to image_tag(current_user.avatar.url(:small)) + raw("<span>Я</span> <i class='icon-caret-down'></i>"), url_for({:controller => "/users", :action => "view", :id => current_user.id}) %>
+            <%= link_to image_tag("/assets/logo/square/logo_predki.jpg") + raw("<span>Я</span> <i class='icon-caret-down'></i>") %>
             <ul>
               <li><%= link_to raw("Моя страница <i class='icon-user'></i>"), :controller => "/users", :action => "view", :id => current_user.id %></li>
               <li><%= link_to raw("Настройки <i class='icon-cogs'></i>"), edit_user_registration_path %></li>
