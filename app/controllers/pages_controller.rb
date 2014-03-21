@@ -7,6 +7,9 @@ class PagesController < ApplicationController
 
   #@session_id = request.session_options[:id]
 
+  Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
+  @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
+
 
 
   # Главная страница. Готовит новости, причины и места к отображению.
@@ -60,6 +63,46 @@ class PagesController < ApplicationController
 
     @first_var = "Первая переменная - START"
 
+
+    # Ввод стартового древа - ближний круг.
+    # @note GET /
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    # @see Paginated
+    # @see Place
+    def enter_bk
+
+    end
+
+    # Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
+    # @note GET /
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    # @see Paginated
+    # @see Place
+    def find_match
+
+    end
+
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note GET /
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    # @see Paginated
+    # @see Place
+    def display_match
+
+    end
+
+    enter_bk
+
+    find_match
+
+    display_match
+
     #admin
 
   end
@@ -98,6 +141,35 @@ class PagesController < ApplicationController
   # @see Paginated
   # @see Place
   def main
+
+    # Отображение дерева Юзера в виде графа и таблицы.
+    # @note GET /
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    # @see Paginated
+    # @see Place
+    def display_drevo
+
+    end
+
+    # Подтверждение найденных совпадений среди всех деревьев относительно дерева Юзера.
+    # @note GET /
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    # @see Paginated
+    # @see Place
+    def confirm_match
+
+    end
+
+
+    display_drevo
+
+
+    confirm_match
+
 
     @first_var = "Первая переменная - MAIN"
 
