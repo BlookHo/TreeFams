@@ -13,7 +13,12 @@
         <li><%= link_to raw("<i class='icon-lightbulb'></i> <span>Главная</span>"), main_path, {class: "navbar-brand"} %></li>
         <li class="active"><%= link_to raw("<i class='icon-wrench'></i> <span>Вход</span>"), login_path %></li>
         <li><%= link_to raw("<i class='icon-wrench'></i> <span>Общение</span>"), conversation_path %></li>
-        <li><%= link_to raw("<i class='icon-wrench'></i> <span>Мои новости</span>"), news_path %></li>
+        <li> <%=       %>  </li>
+        <li><img src="/assets/logo/square/рукопож естеств 2.jpg" class="img-responsive" width="40" alt="" class="img-rounded"></li>
+        <li id="updates_count"><%= render :partial => 'shared/updates_count' %></li>
+        <li><img src="/assets/logo/square/конвертик желт.jpg" class="img-responsive" width="40" alt="" class="img-rounded"></li>
+        <li id="new_mail_count"><%= render :partial => 'shared/new_mail_count' %></li>
+
         <li><%= link_to raw("<i class='icon-wrench'></i> <span>Админ</span>"), admin_path %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

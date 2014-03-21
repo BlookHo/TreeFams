@@ -103,7 +103,7 @@ class PagesController < ApplicationController
 
   end
 
-  # Страница Новостей и Обновлений. На ней отображается инфа обо всех новостях и обновлениях юзера
+  # Страница Новостей и Обновлений. На ней отображается инфа о предложениях на объединение, а также другие новости
   # @note GET /
   # @note
   # @param news_page [Integer] опциональный номер страницы
@@ -113,7 +113,7 @@ class PagesController < ApplicationController
   def news
 
     @first_var = "Первая переменная - NEWS"
-    @updates_count = 3  # кол-во обновлений - должно вычисляться отдельно в своем контроллере
+    @updates_count = 4  # кол-во обновлений - должно вычисляться отдельно в своем контроллере
 
 
   end
@@ -128,7 +128,7 @@ class PagesController < ApplicationController
   def mail
 
     @first_var = "Первая переменная - MAIL"
-    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @new_mail_count = 6  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
 
 
   end
