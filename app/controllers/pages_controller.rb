@@ -72,20 +72,37 @@ class PagesController < ApplicationController
     # @see Place
     def enter_bk
 
-      @user_name = params[:name_select]#.to_i #  FOR ALL USERS MANUAL
-      @check_deleted = true
+      @user_name = params[:name_select] #
       @user_sex_found = 0
-      if !@user_name.blank? and @user_name != 0
-
-        @bk_1_name = @user_name
-
+      if !@user_name.blank?
+        #@bk_1_name = @user_name
         check_sex_by_name(@user_name)
-
         @user_sex_found = @user_sex
-
       end
 
+
+      @father_name = params[:father_name_select] #
+      # проверка, действ-но ли введено мужское имя?
+      if !@father_name.blank?
+        #@bk_1_name = @user_name
+   #     check_sex_by_name(@father_name)
+        @user_sex_found = @user_sex
+      end
+
+
+      @mother_name = params[:mother_name_select] #
+      # проверка, действ-но ли введено женское имя?
+      if !@mother_name.blank?
+        #@bk_1_name = @user_name
+  #      check_sex_by_name(@mother_name)
+        @user_sex_found = @user_sex
+      end
+
+
+
+
     end
+
 
 
 

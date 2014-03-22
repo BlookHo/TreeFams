@@ -12,21 +12,34 @@
   <div>
     <%= form_tag do %>
         <div>
-          <h4>1.Имя</h4>  remote:true, , :class => "wide okField"
+          <h4>1.Имя  (remote:true, , :class => "wide okField")  </h4>
           <%= label_tag 'Введи свое имя:' %>
           <div >
-            <%= select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери свое имя' %>
+            <%= select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя' %>
           </div>
+        </div>
+        <h4>2.Имя Отца </h4>
+        <%= label_tag 'Введи имя Отца:' %>
+        <div >
+          <%= select_tag 'father_name_select', options_for_select(@sel_names, selected = @father_name),  :prompt => 'Выбери имя' %>
+        </div>
+        </div>
+        <h4>3.Имя Матери </h4>
+        <%= label_tag 'Введи имя Матери:' %>
+        <div >
+          <%= select_tag 'mother_name_select', options_for_select(@sel_names, selected = @mother_name),  :prompt => 'Выбери имя' %>
+        </div>
         </div>
         <%= submit_tag 'Ввод' %>
     <% end %>
   </div>
 
-  @
-  <p>@user_name: <%= @user_name.inspect %></p>
 
-  <p>@bk_1_name: <%= @bk_1_name.inspect %></p>
-  <p>@user_sex_found: <%= @user_sex_found.inspect %></p>
+  <p>@user_name: <%= @user_name.inspect %></p>
+    <p>@user_sex_found: <%= @user_sex_found.inspect %></p>
+
+  <p>@father_name: <%= @father_name.inspect %></p>
+    <p>@mother_name: <%= @mother_name.inspect %></p>
 
 
 
