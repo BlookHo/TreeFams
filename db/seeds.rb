@@ -9,3 +9,12 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+# encoding: utf-8
+
+Name.delete_all
+Name.reset_pk_sequence
+
+Name.create([
+
+
+{name: 'Ангел',only_male:1, name_freq: 0},

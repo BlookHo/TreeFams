@@ -11,6 +11,7 @@
       <th>ID</th>
       <th>Name</th>
       <th>Only male</th>
+      <th>Name freq</th>
       <th></th>
       <th></th>
       <th></th>
@@ -23,6 +24,7 @@
         <td><%= name.id %></td>
         <td><%= name.name %></td>
         <td><%= name.only_male %></td>
+        <td><%= name.name_freq %></td>
         <td><%= link_to 'Show', name %></td>
         <td><%= link_to 'Edit', edit_name_path(name) %></td>
         <td><%= link_to 'Destroy', name, method: :delete, data: { confirm: 'Are you sure?' } %></td>
