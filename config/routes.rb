@@ -12,7 +12,7 @@ Weafam::Application.routes.draw do
 #  match 'admin' => 'admin#index', via: :get
   match 'main' => 'pages#main', via: :get
   match 'login' => 'pages#login', via: :get
-  match 'start' => 'pages#start', via: :get
+#  match 'start' => 'pages#start', via: :get; :post # уточнить синтаксис чтобы и post
   match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
@@ -33,6 +33,9 @@ Weafam::Application.routes.draw do
 
   get "pages/start"
   post "pages/start"
+
+  #get "pages/start/enter_bk"
+  #post "pages/start/enter_bk"
 
   get "pages/login"
   post "pages/login"

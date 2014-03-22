@@ -1,9 +1,7 @@
 # encoding: utf-8
 
-
-
 class PagesController < ApplicationController
-#  include PlacesCache
+  #include PagesHelper
 
   #@session_id = request.session_options[:id]
 
@@ -44,9 +42,9 @@ class PagesController < ApplicationController
   # @see Place
   def login
 
-    @first_var = "Первая переменная - LOGIN"
+    @first_var = "Первая страница - LOGIN"
 
-    #admin
+#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
@@ -61,8 +59,9 @@ class PagesController < ApplicationController
   # @see Place
   def start
 
-    @first_var = "Первая переменная - START"
+    @first_var = "Первая страница - START"
 
+    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
     # Ввод стартового древа - ближний круг.
     # @note GET /
@@ -73,7 +72,45 @@ class PagesController < ApplicationController
     # @see Place
     def enter_bk
 
+      @user_name = params[:name_select]#.to_i #  FOR ALL USERS MANUAL
+      @check_deleted = true
+      @user_sex_found = 0
+      if !@user_name.blank? and @user_name != 0
+
+        @bk_1_name = @user_name
+
+        check_sex_by_name(@user_name)
+
+        @user_sex_found = @user_sex
+
+      end
+
     end
+
+
+
+
+
+
+
+
+    # Автоматическое определение пола по имени.
+    # @note GET /
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    # @see Paginated
+    # @see Place
+    def check_sex_by_name(user_name)
+
+      @user_sex = 0
+      @find_name=Name.select(:only_male).where(:name => user_name)
+      if !@find_name.blank? and @find_name[0]['only_male']
+        @user_sex = 1
+      end
+
+    end
+
 
     # Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
     # @note GET /
@@ -105,6 +142,13 @@ class PagesController < ApplicationController
 
     #admin
 
+    #respond_to do |format|
+    #  format.html { redirect_to pages_start_path }
+    #  format.js { render "index/opinions/opinionsRender" }
+    #end
+
+
+
   end
 
   # Админа страница. Запуск админских методов, просмотр всех таблиц.
@@ -116,7 +160,7 @@ class PagesController < ApplicationController
   # @see Place
   def admin
 
-    @first_var = "Первая переменная - ADMIN"
+    @first_var = "Первая страница - ADMIN"
 
   end
 
@@ -129,7 +173,7 @@ class PagesController < ApplicationController
   # @see Place
   def registration
 
-    @first_var = "Первая переменная - REGISTRATION"
+    @first_var = "Первая страница - REGISTRATION"
 
   end
 
@@ -171,7 +215,7 @@ class PagesController < ApplicationController
     confirm_match
 
 
-    @first_var = "Первая переменная - MAIN"
+    @first_var = "Первая страница - MAIN"
 
   end
 
@@ -184,7 +228,7 @@ class PagesController < ApplicationController
   # @see Place
   def news
 
-    @first_var = "Первая переменная - NEWS"
+    @first_var = "Первая страница - NEWS"
     @updates_count = 4  # кол-во обновлений - должно вычисляться отдельно в своем контроллере
 
 
@@ -199,7 +243,7 @@ class PagesController < ApplicationController
   # @see Place
   def mail
 
-    @first_var = "Первая переменная - MAIL"
+    @first_var = "Первая страница - MAIL"
     @new_mail_count = 6  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
 
 
@@ -214,7 +258,7 @@ class PagesController < ApplicationController
   # @see Place
   def settings
 
-    @first_var = "Первая переменная - SETTINGS"
+    @first_var = "Первая страница - SETTINGS"
 #    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
 
 
@@ -230,7 +274,7 @@ class PagesController < ApplicationController
   # @see Place
   def mypage
 
-    @first_var = "Первая переменная - MYPAGE"
+    @first_var = "Первая страница - MYPAGE"
 #    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
 
 
@@ -245,7 +289,7 @@ class PagesController < ApplicationController
   # @see Place
   def search
 
-    @first_var = "Первая переменная - SEARCH"
+    @first_var = "Первая страница - SEARCH"
 #    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
 
 
@@ -260,7 +304,7 @@ class PagesController < ApplicationController
   # @see Place
   def conversation
 
-    @first_var = "Первая переменная - CONVERSATION"
+    @first_var = "Первая страница - CONVERSATION"
 #    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
 
 

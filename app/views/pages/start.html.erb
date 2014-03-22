@@ -1,12 +1,34 @@
-
 <section >
 
-  <h2> Страница START - ввод стартового дерева - Ближний Круг </h2>
+  <h2> Страница START</h2>
 
 
   <div>
     <p>@first_var: <%= @first_var.inspect %></p>
+    <p>@sel_names: <%= @sel_names.inspect %></p>
   </div>
+
+  <h3> Диалог ввода стартового дерева - Ближнего Круга </h3>
+  <div>
+    <%= form_tag do %>
+        <div>
+          <h4>1.Имя</h4>  remote:true, , :class => "wide okField"
+          <%= label_tag 'Введи свое имя:' %>
+          <div >
+            <%= select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери свое имя' %>
+          </div>
+        </div>
+        <%= submit_tag 'Ввод' %>
+    <% end %>
+  </div>
+
+  @
+  <p>@user_name: <%= @user_name.inspect %></p>
+
+  <p>@bk_1_name: <%= @bk_1_name.inspect %></p>
+  <p>@user_sex_found: <%= @user_sex_found.inspect %></p>
+
+
 
 
   <p>Переход на страницу Регистрации:  <%= link_to "Переход к Регистрации -->", pages_registration_path %> </p>
