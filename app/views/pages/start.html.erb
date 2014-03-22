@@ -5,14 +5,16 @@
 
   <div>
     <p>@first_var: <%= @first_var.inspect %></p>
-    <p>@sel_names: <%= @sel_names.inspect %></p>
+    <!--<p>@sel_names: <%= @sel_names.inspect %></p>-->
+    <!--<p>@sel_names_male: <%= @sel_names_male.inspect %></p>-->
+    <!--<p>@sel_names_female: <%= @sel_names_female.inspect %></p>-->
   </div>
 
   <h3> Диалог ввода стартового дерева - Ближнего Круга </h3>
   <div>
     <%= form_tag do %>
         <div>
-          <h4>1.Имя  (remote:true, , :class => "wide okField")  </h4>
+          <h4>1.Твое имя  (remote:true, , :class => "wide okField")  </h4>
           <%= label_tag 'Введи свое имя:' %>
           <div >
             <%= select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя' %>
@@ -21,13 +23,13 @@
         <h4>2.Имя Отца </h4>
         <%= label_tag 'Введи имя Отца:' %>
         <div >
-          <%= select_tag 'father_name_select', options_for_select(@sel_names, selected = @father_name),  :prompt => 'Выбери имя' %>
+          <%= select_tag 'father_name_select', options_for_select(@sel_names_male, selected = @father_name),  :prompt => 'Выбери имя' %>
         </div>
         </div>
         <h4>3.Имя Матери </h4>
         <%= label_tag 'Введи имя Матери:' %>
         <div >
-          <%= select_tag 'mother_name_select', options_for_select(@sel_names, selected = @mother_name),  :prompt => 'Выбери имя' %>
+          <%= select_tag 'mother_name_select', options_for_select(@sel_names_female, selected = @mother_name),  :prompt => 'Выбери имя' %>
         </div>
         </div>
         <%= submit_tag 'Ввод' %>

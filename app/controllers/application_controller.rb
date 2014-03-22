@@ -22,6 +22,9 @@ class ApplicationController < ActionController::Base
   def form_select_fields
 
     @sel_names = []
+    @sel_names_male = []
+    @sel_names_female = []
+
     @sel_relations = []
     #@sel_sex = []
     #@sel_educ = []
@@ -47,8 +50,15 @@ class ApplicationController < ActionController::Base
     #  @sel_countries << country.name
     #end
     Name.all.each do |name|
-      @sel_names << name.name
+      @sel_names << name.name # All names array
+      #if name.only_male
+      #  @sel_names_male << name.name  # Male names array
+      #else
+      #  @sel_names_female << name.name  # Female names array
+      #end
+      name.only_male ? @sel_names_male << name.name : @sel_names_female << name.name  #
     end
+
     Relation.all.each do |relation|
       @sel_relations << relation.relation
     end
