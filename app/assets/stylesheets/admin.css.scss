@@ -1,0 +1,65 @@
+@import 'mixins.scss';
+
+.admin {
+  max-width: 1300px;
+  min-height:1000px;
+  width: 95%;
+  margin: 0 auto;
+  background: #F7F7F7;
+  color: #2B373D;
+  font-size: 0.875em;
+  overflow: auto;
+  h1 {
+    font-size: 1.5em;
+    line-height: 2.25em;
+    margin: 4px 0 8px;
+  }
+  h2 {
+    font-size: 1.312em;
+    line-height: 1.875em;
+    margin: 10px 0;
+  }
+  h3 {
+    font-size: 1.125em;
+    line-height: 1.5em;
+    margin: 10px 0;
+  }
+  h4 {
+    font-size: 1em;
+    line-height: 1.312em;
+  }
+  p {
+    line-height: 1.312em;
+  }
+  td, th {
+    border: 1px solid #ccc;
+    padding: 0 2px;
+    background: #fff;
+    @include transitions(.25s);
+
+  }
+  tbody>tr:hover>td{
+    background: #DFFAF5!important;
+  }
+  input, select, textarea {
+    padding: 5px;
+    border: 1px solid #333;
+  }
+  #edit_user {
+    top: 75px;
+  }
+  table{
+    border-collapse: collapse;
+  }
+  input[type="checkbox"] {
+    -webkit-appearance: checkbox;
+  }
+}
+
+div.field {
+  input{
+    min-width: 500px;
+    border:1px solid #333;
+    padding: 5px;
+  }
+}

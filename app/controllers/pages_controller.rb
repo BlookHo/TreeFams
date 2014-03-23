@@ -63,26 +63,23 @@ class PagesController < ApplicationController
 
     form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
-    # Ввод стартового древа - ближний круг.
-    # @note GET /
-    # @note
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # @see Paginated
-    # @see Place
-    def enter_bk
 
+
+    # Начало диалога - ввода стартового древа - ближний круг
+    # Ввод автора древа, Отца, Матери.
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def start_dialoge
       @user_name = params[:name_select] #
       # извлечение пола из введенного имени
       if !@user_name.blank?
         @user_sex = check_sex_by_name(@user_name) # display sex by name
       end
- #     !@user_name.blank?  @user_sex = check_sex_by_name(@user_name)  #; @user_sex_found = @user_sex }
 
       @father_name = params[:father_name_select] #
       # проверка, действ-но ли введено мужское имя?
       if !@father_name.blank?
-     #    @user_sex ? @father_name_correct == true : @father_name_correct == false
          if check_sex_by_name(@father_name)
            @father_name_correct = true
          else
@@ -93,7 +90,6 @@ class PagesController < ApplicationController
       @mother_name = params[:mother_name_select] #
       # проверка, действ-но ли введено женское имя?
       if !@mother_name.blank?
-      #      !@user_sex ? @mother_name_correct == true : @mother_name_correct == false
          if !check_sex_by_name(@mother_name)
            @mother_name_correct = true
          else
@@ -104,19 +100,27 @@ class PagesController < ApplicationController
     end
 
 
+    # Ввод одного профиля древа. Проверка Имя-Пол.
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def enter_profile_bk(profile_name)
 
+      # проверка, действ-но ли введено женское имя?
+      if !profile_name.blank?
+        if !check_sex_by_name(profile_name)
+          name_correct = true
+        else
+          name_correct = false
+        end
+      end
+      return name_correct
 
-
-
-
-
+    end
 
     # Автоматическое определение пола по имени.
     # @note GET /
-    # @note
     # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # @see Paginated
     # @see Place
     def check_sex_by_name(user_name)
 
@@ -129,35 +133,133 @@ class PagesController < ApplicationController
     end
 
 
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def set_prompts
+
+    end
+
     # Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
     # @note GET /
-    # @note
     # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # @see Paginated
     # @see Place
     def find_match
 
     end
 
     # Отображение найденных совпадений среди всех деревьев относительно вводимого.
-    # @note GET /
     # @note
     # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # @see Paginated
     # @see Place
-    def display_match
+    def make_next_prompt
+
+    end
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def get_input_profile
+
+    end
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def save_profile
+
+    end
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def save_tree_node
 
     end
 
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def check_exit
+
+    end
+
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def check_continue
+
+    end
+
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def user_registration
+
+    end
+
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Paginated
+    def save_new_user
+
+    end
+
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def display_match_results
+
+    end
+
+
+    # Ввод стартового древа - ближний круг.
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def enter_bk
+
+      set_prompts
+
+      exit_n_save = false
+      bk_completed = false
+
+      unless exit_n_save or bk_completed
+
+        start_dialoge
+
+        make_next_prompt
+
+        get_input_profile
+
+        save_profile
+
+        save_tree_node
+
+        find_match
+
+        display_match_results
+
+        check_exit
+
+        check_continue
+
+      end
+
+      user_registration
+
+      save_new_user
+
+    end
+
+
     enter_bk
-
-    find_match
-
-    display_match
-
-    #admin
 
     #respond_to do |format|
     #  format.html { redirect_to pages_start_path }
