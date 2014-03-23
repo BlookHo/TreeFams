@@ -3,6 +3,12 @@
 
 Weafam::Application.routes.draw do
 
+  resources :trees
+
+  resources :profiles
+
+  resources :users
+
 #  post "admin/login"
 
 # You can have the root of your site routed with "root"

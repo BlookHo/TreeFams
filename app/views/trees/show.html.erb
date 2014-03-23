@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @tree.user_id %>
+</p>
+
+<p>
+  <strong>Profile:</strong>
+  <%= @tree.profile_id %>
+</p>
+
+<p>
+  <strong>Relation:</strong>
+  <%= @tree.relation_id %>
+</p>
+
+<p>
+  <strong>Connected:</strong>
+  <%= @tree.connected %>
+</p>
+
+<%= link_to 'Edit', edit_tree_path(@tree) %> |
+<%= link_to 'Back', trees_path %>

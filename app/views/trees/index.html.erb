@@ -1,0 +1,44 @@
+
+<section class="admin">
+
+
+<h1>Listing trees</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>User</th>
+      <th>Profile</th>
+      <th>Relation</th>
+      <th>Connected</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @trees.each do |tree| %>
+      <tr>
+        <td><%= tree.id %></td>
+        <td><%= tree.user_id %></td>
+        <td><%= tree.profile_id %></td>
+        <td><%= tree.relation_id %></td>
+        <td><%= tree.connected %></td>
+        <td><%= link_to 'Show', tree %></td>
+        <td><%= link_to 'Edit', edit_tree_path(tree) %></td>
+        <td><%= link_to 'Destroy', tree, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Tree', new_tree_path %>
+
+  <p>Возврат на страницу Админа:  <%= link_to "Возврат к Админу -->", pages_admin_path %> </p>
+
+</section>
+
