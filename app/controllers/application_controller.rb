@@ -26,12 +26,13 @@ class ApplicationController < ActionController::Base
     @sel_names_female = []
 
     @sel_relations = []
+    @sel_countries = []
+    @sel_cities = []
+
     #@sel_sex = []
     #@sel_educ = []
     #@sel_confess = []
     #@sel_politics = []
-    @sel_countries = []
-    @sel_cities = []
 
     #Sex.all.each do |sex|
     #  @sel_sex << sex.name
@@ -49,14 +50,11 @@ class ApplicationController < ActionController::Base
     #Country.all.each do |country|
     #  @sel_countries << country.name
     #end
+
     Name.all.each do |name|
-      @sel_names << name.name # All names array
-      #if name.only_male
-      #  @sel_names_male << name.name  # Male names array
-      #else
-      #  @sel_names_female << name.name  # Female names array
-      #end
-      name.only_male ? @sel_names_male << name.name : @sel_names_female << name.name  #
+      @sel_names << name.name # Both male & female names array
+      name.only_male ? @sel_names_male << name.name : @sel_names_female << name.name
+      # make @sel_names_male array or @sel_names_female array в зависимости от значения name.only_male
     end
 
     Relation.all.each do |relation|

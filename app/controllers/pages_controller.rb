@@ -73,33 +73,33 @@ class PagesController < ApplicationController
     def enter_bk
 
       @user_name = params[:name_select] #
-      @user_sex_found = 0
+      # извлечение пола из введенного имени
       if !@user_name.blank?
-        #@bk_1_name = @user_name
-        check_sex_by_name(@user_name)
-        @user_sex_found = @user_sex
+        @user_sex = check_sex_by_name(@user_name) # display sex by name
       end
-
+ #     !@user_name.blank?  @user_sex = check_sex_by_name(@user_name)  #; @user_sex_found = @user_sex }
 
       @father_name = params[:father_name_select] #
       # проверка, действ-но ли введено мужское имя?
       if !@father_name.blank?
-        #@bk_1_name = @user_name
-   #     check_sex_by_name(@father_name)
-        @user_sex_found = @user_sex
+     #    @user_sex ? @father_name_correct == true : @father_name_correct == false
+         if check_sex_by_name(@father_name)
+           @father_name_correct = true
+         else
+           @father_name_correct = false
+         end
       end
-
 
       @mother_name = params[:mother_name_select] #
       # проверка, действ-но ли введено женское имя?
       if !@mother_name.blank?
-        #@bk_1_name = @user_name
-  #      check_sex_by_name(@mother_name)
-        @user_sex_found = @user_sex
+      #      !@user_sex ? @mother_name_correct == true : @mother_name_correct == false
+         if !check_sex_by_name(@mother_name)
+           @mother_name_correct = true
+         else
+           @mother_name_correct = false
+         end
       end
-
-
-
 
     end
 
@@ -120,12 +120,12 @@ class PagesController < ApplicationController
     # @see Place
     def check_sex_by_name(user_name)
 
-      @user_sex = 0    # Female name
+      user_sex = false    # Female name
       find_name=Name.select(:only_male).where(:name => user_name)
       if !find_name.blank? and find_name[0]['only_male']
-        @user_sex = 1   # Male name
+        user_sex = true   # Male name
       end
-
+      return user_sex
     end
 
 
