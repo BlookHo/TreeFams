@@ -42,8 +42,8 @@ Weafam::Application.routes.draw do
   get "pages/start"
   post "pages/start"
 
-  #get "pages/start/enter_bk"
-  #post "pages/start/enter_bk"
+  get "pages/start_dialoge"
+  post "pages/start_dialoge"
 
   get "pages/login"
   post "pages/login"
@@ -61,6 +61,8 @@ Weafam::Application.routes.draw do
   get "main/match_approval"
   post "main/match_approval"
 
+  #get "start/start_dialoge"
+  #post "start/start_dialoge"
 
 
 
