@@ -47,5 +47,85 @@
   <%= render :partial => 'shared/parts/opinionList', :locals => {:opinion => opinion} %>
 </div>
 
+Migrations
+1/
+class AddNameFreqNames < ActiveRecord::Migration
+def change
+
+add_column :names, :name_freq, :integer
+
+end
+end
+
+2.
+class CreateUsers < ActiveRecord::Migration
+def change
+create_table :users do |t|
+t.integer :profile_id
+t.boolean :admin
+t.float :rating
+
+t.timestamps
+end
+end
+end
+
+3.
+class CreateProfiles < ActiveRecord::Migration
+def change
+create_table :profiles do |t|
+t.integer :user_id
+
+t.timestamps
+end
+end
+end
+
+4.
+class AddColumnsToProfile < ActiveRecord::Migration
+def change
+
+add_column :profiles, :name_id, :integer
+add_column :profiles, :surname, :string,   :default => ""
+add_column :profiles, :email, :string,   :default => ""
+add_column :profiles, :sex_id, :integer
+add_column :profiles, :avatar_id, :integer
+add_column :profiles, :country_id, :integer
+add_column :profiles, :city_id, :integer
+add_column :profiles, :profile_birthday, :datetime
+add_column :profiles, :about, :string,   :default => ""
+
+
+end
+end
+
+5.
+class SetDefaultsinNamesUsers < ActiveRecord::Migration
+def change
+
+change_column :names, :name_freq, :integer, :default => 0
+
+change_column :users, :admin, :boolean, :default => false
+change_column :users, :rating, :float, :default => 0.0
+
+
+end
+end
+
+6.
+class CreateTrees < ActiveRecord::Migration
+def change
+create_table :trees do |t|
+t.integer :user_id
+t.integer :profile_id
+t.integer :relation_id
+t.boolean :connected, :default => false
+
+t.timestamps
+end
+end
+end
+
+
 
 
