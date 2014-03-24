@@ -133,6 +133,7 @@ class PagesController < ApplicationController
 
   end
 
+
   # Страница Главная. - основная страница сайта. На ней отображение древа, все переходы и т.п.
   # @note GET /
   # @note
@@ -142,38 +143,26 @@ class PagesController < ApplicationController
   # @see Place
   def main
 
-    # Отображение дерева Юзера в виде графа и таблицы.
+
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
+
+
+    # Формирование массива древа Юзера для отображения на Главной .
     # @note GET /
-    # @note
     # @param admin_page [Integer] опциональный номер страницы
     # @see News
-    # @see Paginated
-    # @see Place
-    def display_drevo
+    def form_tree #формирование массива дерева для отображения
 
-    end
-
-    # Подтверждение найденных совпадений среди всех деревьев относительно дерева Юзера.
-    # @note GET /
-    # @note
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # @see Paginated
-    # @see Place
-    def confirm_match
+      @tree_array = [[1, "Я", "Денис", "м"], [2, "Отец", "Борис", "м"], [3, "Мать", "Вера", "ж"], [4, "Жена", "Юлия", "ж"]]
 
     end
 
 
-    display_drevo
-
-
-    confirm_match
-
-
-    @first_var = "Первая переменная - MAIN"
+    form_tree # Call from Main
 
   end
+
+
 
   # Страница Новостей и Обновлений. На ней отображается инфа о предложениях на объединение, а также другие новости
   # @note GET /
@@ -184,6 +173,7 @@ class PagesController < ApplicationController
   # @see Place
   def news
 
+    @location_var = "Location переменная - PAGES контроллер/main метод"
     @first_var = "Первая переменная - NEWS"
     @updates_count = 4  # кол-во обновлений - должно вычисляться отдельно в своем контроллере
 
