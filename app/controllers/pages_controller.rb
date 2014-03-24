@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+
+
 class PagesController < ApplicationController
   #include PagesHelper
 
@@ -42,12 +44,26 @@ class PagesController < ApplicationController
   # @see Place
   def login
 
-    @first_var = "Первая страница - LOGIN"
+    @first_var = "Первая переменная - LOGIN"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 #    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
+
+  # Поиск совпадений профилей из древа Юзера с другими деревьями .
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def find_match # Поиск совпадений профилей из древа Юзера с другими деревьями
+
+    @@match_qty = 15
+    @match_qty_loc = @@match_qty  # DEBUGG
+    @@approved_match_qty = 10
+    @approved_match_qty_loc = @@approved_match_qty   # DEBUGG
+
+  end
 
   # Стартовая страница. На ней - Ввод БК.
   # по завершении ввода БК, то переход на страницу регистрации.
@@ -68,7 +84,10 @@ class PagesController < ApplicationController
     # Начало диалога - ввода стартового древа - ближний круг
     # Ввод автора древа, Отца, Матери.
     # @note GET /
+    # @note
     # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    # @see Paginated
     # @see Place
     def start_dialoge
       @user_name = params[:name_select] #
@@ -99,6 +118,16 @@ class PagesController < ApplicationController
 
     end
 
+    ## Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
+    ## @note GET /
+    ## @note
+    ## @param admin_page [Integer] опциональный номер страницы
+    ## @see News
+    ## @see Paginated
+    ## @see Place
+    #def find_match
+    #
+    #end
 
     # Ввод одного профиля древа. Проверка Имя-Пол.
     # @note GET /
@@ -147,9 +176,8 @@ class PagesController < ApplicationController
     # @see Place
     def find_match
 
-    end
-
     # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    # @note GET /
     # @note
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
@@ -279,7 +307,8 @@ class PagesController < ApplicationController
   # @see Place
   def admin
 
-    @first_var = "Первая страница - ADMIN"
+    @first_var = "Первая переменная - ADMIN"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
   end
 
@@ -292,11 +321,13 @@ class PagesController < ApplicationController
   # @see Place
   def registration
 
-    @first_var = "Первая страница - REGISTRATION"
+    @first_var = "Первая переменная - REGISTRATION"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
   end
 
-  # Страница Главная. - основная страница сайта. На ней отображение древа, все переходы и т.п.
+
+   # Страница Главная. - основная страница сайта. На ней отображение древа, все переходы и т.п.
   # @note GET /
   # @note
   # @param main_page [Integer] опциональный номер страницы
@@ -305,38 +336,28 @@ class PagesController < ApplicationController
   # @see Place
   def main
 
-    # Отображение дерева Юзера в виде графа и таблицы.
+
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
+
+
+    # Формирование массива древа Юзера для отображения на Главной .
     # @note GET /
-    # @note
     # @param admin_page [Integer] опциональный номер страницы
     # @see News
-    # @see Paginated
-    # @see Place
-    def display_drevo
+    def form_tree #формирование массива дерева для отображения на Главной
 
-    end
-
-    # Подтверждение найденных совпадений среди всех деревьев относительно дерева Юзера.
-    # @note GET /
-    # @note
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # @see Paginated
-    # @see Place
-    def confirm_match
+      @tree_array = [[1, "Я", "Денис", "м"], [2, "Отец", "Борис", "м"], [3, "Мать", "Вера", "ж"], [4, "Жена", "Юлия", "ж"]]
 
     end
 
 
-    display_drevo
+    form_tree # Call from
 
-
-    confirm_match
-
-
-    @first_var = "Первая страница - MAIN"
+    find_match  #
 
   end
+
+
 
   # Страница Новостей и Обновлений. На ней отображается инфа о предложениях на объединение, а также другие новости
   # @note GET /
@@ -347,8 +368,9 @@ class PagesController < ApplicationController
   # @see Place
   def news
 
-    @first_var = "Первая страница - NEWS"
+    @first_var = "Первая переменная - NEWS"
     @updates_count = 4  # кол-во обновлений - должно вычисляться отдельно в своем контроллере
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -364,6 +386,7 @@ class PagesController < ApplicationController
 
     @first_var = "Первая страница - MAIL"
     @new_mail_count = 6  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -377,8 +400,8 @@ class PagesController < ApplicationController
   # @see Place
   def settings
 
-    @first_var = "Первая страница - SETTINGS"
-#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @first_var = "Первая переменная - SETTINGS"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -393,8 +416,8 @@ class PagesController < ApplicationController
   # @see Place
   def mypage
 
-    @first_var = "Первая страница - MYPAGE"
-#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @first_var = "Первая переменная - MYPAGE"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -408,8 +431,8 @@ class PagesController < ApplicationController
   # @see Place
   def search
 
-    @first_var = "Первая страница - SEARCH"
-#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @first_var = "Первая переменная - SEARCH"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -423,8 +446,8 @@ class PagesController < ApplicationController
   # @see Place
   def conversation
 
-    @first_var = "Первая страница - CONVERSATION"
-#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @first_var = "Первая переменная - CONVERSATION"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end

@@ -16,6 +16,8 @@ Weafam::Application.routes.draw do
   root 'pages#login'
 
 #  match 'admin' => 'admin#index', via: :get
+
+
   match 'main' => 'pages#main', via: :get
   match 'login' => 'pages#login', via: :get
 #  match 'start' => 'pages#start', via: :get; :post # уточнить синтаксис чтобы и post
@@ -51,6 +53,15 @@ Weafam::Application.routes.draw do
 
   get "pages/main"
   post "pages/main"
+
+
+  get "main/relative_menu"
+  post "main/relative_menu"
+
+  get "main/match_approval"
+  post "main/match_approval"
+
+
 
 
   # The priority is based upon order of creation: first created -> highest priority.
