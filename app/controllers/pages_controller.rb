@@ -45,6 +45,7 @@ class PagesController < ApplicationController
   def login
 
     @first_var = "Первая переменная - LOGIN"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
     #admin
 
@@ -130,6 +131,7 @@ class PagesController < ApplicationController
   def admin
 
     @first_var = "Первая переменная - ADMIN"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
   end
 
@@ -143,6 +145,7 @@ class PagesController < ApplicationController
   def registration
 
     @first_var = "Первая переменная - REGISTRATION"
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
   end
 
@@ -191,6 +194,7 @@ class PagesController < ApplicationController
     @location_var = "Location переменная - PAGES контроллер/main метод"
     @first_var = "Первая переменная - NEWS"
     @updates_count = 4  # кол-во обновлений - должно вычисляться отдельно в своем контроллере
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -206,6 +210,7 @@ class PagesController < ApplicationController
 
     @first_var = "Первая переменная - MAIL"
     @new_mail_count = 6  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -220,7 +225,7 @@ class PagesController < ApplicationController
   def settings
 
     @first_var = "Первая переменная - SETTINGS"
-#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -236,7 +241,7 @@ class PagesController < ApplicationController
   def mypage
 
     @first_var = "Первая переменная - MYPAGE"
-#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -251,7 +256,7 @@ class PagesController < ApplicationController
   def search
 
     @first_var = "Первая переменная - SEARCH"
-#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
@@ -266,7 +271,7 @@ class PagesController < ApplicationController
   def conversation
 
     @first_var = "Первая переменная - CONVERSATION"
-#    @new_mail_count = 13  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
+    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
 
 
   end
