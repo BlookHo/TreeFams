@@ -1,5 +1,5 @@
 
-<section >
+<section class="admin">
 
   <h2> Страница START - ввод стартового дерева - Ближний Круг </h2>
 
@@ -8,6 +8,16 @@
     <p>@first_var: <%= @first_var.inspect %></p>
   </div>
 
+  <h4>Совпадения древа Пользователя с другими</h4>
+  <div>
+    <p>Найдено совпадений: @match_qty_loc: <%= @match_qty_loc.inspect %></p>
+    <!--<p>Из них - подтвержденных: @approved_match_qty_loc <%= @approved_match_qty_loc.inspect %></p>-->
+  </div>
+  <p>Переход на страницу Просмотра и Подтверждения совпадений:  <%= link_to "Переход к Подтверждениям совпадений -->", main_match_approval_path %> </p>
+
+
+
+  <p>Переход на Главную страницу:  <%= link_to "Переход на Главную -->", pages_main_path %> </p>
 
   <p>Возврат на страницу Логин:  <%= link_to "Возврат в Логин -->", pages_login_path %> </p>
   <p>Переход на страницу Регистрации:  <%= link_to "Переход к Регистрации -->", pages_registration_path %> </p>

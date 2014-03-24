@@ -9,10 +9,10 @@
 
   <h3> Partial RELATIVE_MENU - отображение меню напротив выбранного родственника в дереве </h3>
 
-  <h4> Переход на Страницу EDIT RELATIVE INFO - изменить, дополнить данные о родственнике link_to <%=  "EDIT RELATIVE INFO"%> , names_path </h4>
-  <h4> Переход на Страницу ADD NEW RELATIVE - добавить нового родственника к выбранному <%=  "ADD NEW RELATIVE" %> </h4>
-  <h4> Переход на Страницу TALK WITH RELATIVE - общаться с родственником <%=  "TALK WITH RELATIVE" %> </h4>
-  <h4> Переход на Страницу MARK RELATIVE FAVORITE - добавить родственника в избранные <%=  "MARK RELATIVE FAVORITE" %> </h4>
+  <h4> Переход на Страницу EDIT RELATIVE INFO - изменить, дополнить данные о родственнике <%= link_to "Переход в редактирование профиля -->", pages_main_path %>  </h4>
+  <h4> Переход на Страницу ADD NEW RELATIVE - добавить нового родственника к выбранному <%= link_to "Переход в метод добавления профиля -->", pages_main_path %> </h4>
+  <h4> Переход на Страницу TALK WITH RELATIVE - общаться с родственником <%= link_to "Переход на страницу Общения -->", conversation_path %> </h4>
+  <h4> Переход на Страницу MARK RELATIVE FAVORITE - добавить родственника в избранные <%= link_to "Переход в метод mark_favorite -->", conversation_path %> </h4>
 
   <div>
     <p>@menu_choice: <%= @menu_choice.inspect %></p>

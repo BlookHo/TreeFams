@@ -51,6 +51,19 @@ class PagesController < ApplicationController
   end
 
 
+  # Поиск совпадений профилей из древа Юзера с другими деревьями .
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def find_match # Поиск совпадений профилей из древа Юзера с другими деревьями
+
+    @@match_qty = 15
+    @match_qty_loc = @@match_qty  # DEBUGG
+    @@approved_match_qty = 10
+    @approved_match_qty_loc = @@approved_match_qty   # DEBUGG
+
+  end
+
   # Стартовая страница. На ней - Ввод БК.
   # по завершении ввода БК, то переход на страницу регистрации.
   # @note GET /
@@ -75,16 +88,16 @@ class PagesController < ApplicationController
 
     end
 
-    # Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
-    # @note GET /
-    # @note
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # @see Paginated
-    # @see Place
-    def find_match
-
-    end
+    ## Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
+    ## @note GET /
+    ## @note
+    ## @param admin_page [Integer] опциональный номер страницы
+    ## @see News
+    ## @see Paginated
+    ## @see Place
+    #def find_match
+    #
+    #end
 
     # Отображение найденных совпадений среди всех деревьев относительно вводимого.
     # @note GET /
@@ -134,7 +147,7 @@ class PagesController < ApplicationController
   end
 
 
-  # Страница Главная. - основная страница сайта. На ней отображение древа, все переходы и т.п.
+   # Страница Главная. - основная страница сайта. На ней отображение древа, все переходы и т.п.
   # @note GET /
   # @note
   # @param main_page [Integer] опциональный номер страницы
@@ -157,18 +170,6 @@ class PagesController < ApplicationController
 
     end
 
-    # Поиск совпадений профилей из древа Юзера с другими деревьями .
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    def find_match # Поиск совпадений профилей из древа Юзера с другими деревьями
-
-      @@match_qty = 15
-      @match_qty_loc = @@match_qty  # DEBUGG
-      @@approved_match_qty = 10
-      @approved_match_qty_loc = @@approved_match_qty   # DEBUGG
-
-    end
 
     form_tree # Call from
 
