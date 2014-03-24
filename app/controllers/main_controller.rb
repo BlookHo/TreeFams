@@ -2,6 +2,20 @@ class MainController < ApplicationController
  # include MainHelper  #
 
 
+ ## Формирование массива древа Юзера для отображения на Главной .
+ ## @note GET /
+ ## @param admin_page [Integer] опциональный номер страницы
+ ## @see News
+ # def form_tree #формирование массива дерева для отображения
+ #
+ #   @tree_array = [[1, "Я", "Денис", "м"], [2, "Отец", "Борис", "м"], [3, "Мать", "Вера", "ж"], [4, "Жена", "Юлия", "ж"]]
+ #
+ # end
+ #
+ #
+#  form_tree # Call from Main
+
+
   # Отображение дерева Юзера .
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы

@@ -151,7 +151,7 @@ class PagesController < ApplicationController
     # @note GET /
     # @param admin_page [Integer] опциональный номер страницы
     # @see News
-    def form_tree #формирование массива дерева для отображения
+    def form_tree #формирование массива дерева для отображения на Главной
 
       @tree_array = [[1, "Я", "Денис", "м"], [2, "Отец", "Борис", "м"], [3, "Мать", "Вера", "ж"], [4, "Жена", "Юлия", "ж"]]
 
