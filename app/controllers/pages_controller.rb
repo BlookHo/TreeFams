@@ -37,17 +37,12 @@ class PagesController < ApplicationController
   # Входная страница. На ней - логин. Если уже зареген, то переход на Главную страницу - отображение древа и т.п..
   # или если впервые - переход на Стартовую стр-цу.
   # @note GET /
-  # @note
   # @param login_page [Integer] опциональный номер страницы
-  # @see News
-  # @see Paginated
   # @see Place
   def login
 
     @first_var = "Первая переменная - LOGIN"
-    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
-
-#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+    @navigation_var = "Navigation переменная - PAGES контроллер/login метод"
 
   end
 
@@ -58,7 +53,7 @@ class PagesController < ApplicationController
   # @see News
   def find_match # Поиск совпадений профилей из древа Юзера с другими деревьями
 
-    @@match_qty = 15
+    @@match_qty = 17
     @match_qty_loc = @@match_qty  # DEBUGG
     @@approved_match_qty = 10
     @approved_match_qty_loc = @@approved_match_qty   # DEBUGG
@@ -68,28 +63,22 @@ class PagesController < ApplicationController
   # Стартовая страница. На ней - Ввод БК.
   # по завершении ввода БК, то переход на страницу регистрации.
   # @note GET /
-  # @note
   # @param start_page [Integer] опциональный номер страницы
-  # @see News
-  # @see Paginated
   # @see Place
   def start
 
     @first_var = "Первая страница - START"
+    @navigation_var = "Navigation переменная - PAGES контроллер/start метод"
 
     form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
-
-
     # Начало диалога - ввода стартового древа - ближний круг
     # Ввод автора древа, Отца, Матери.
-    # @note GET /
     # @note
     # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # @see Paginated
     # @see Place
     def start_dialoge
+
       @user_name = params[:name_select] #
       # извлечение пола из введенного имени
       if !@user_name.blank?
@@ -116,25 +105,14 @@ class PagesController < ApplicationController
          end
       end
 
-    end
+    end # END OF start_dialoge
 
-    ## Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
-    ## @note GET /
-    ## @note
-    ## @param admin_page [Integer] опциональный номер страницы
-    ## @see News
-    ## @see Paginated
-    ## @see Place
-    #def find_match
-    #
-    #end
 
     # Ввод одного профиля древа. Проверка Имя-Пол.
     # @note GET /
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
-    def enter_profile_bk(profile_name)
-
+    def enter_profile_bk(profile_name)    # NO USE
       # проверка, действ-но ли введено женское имя?
       if !profile_name.blank?
         if !check_sex_by_name(profile_name)
@@ -144,7 +122,6 @@ class PagesController < ApplicationController
         end
       end
       return name_correct
-
     end
 
     # Автоматическое определение пола по имени.
@@ -152,7 +129,6 @@ class PagesController < ApplicationController
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
     def check_sex_by_name(user_name)
-
       user_sex = false    # Female name
       find_name=Name.select(:only_male).where(:name => user_name)
       if !find_name.blank? and find_name[0]['only_male']
@@ -170,12 +146,13 @@ class PagesController < ApplicationController
 
     end
 
-    # Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see Place
-    def find_match
-
+    ## Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
+    ## @note GET /
+    ## @param admin_page [Integer] опциональный номер страницы
+    ## @see Place
+    #def find_match
+    #
+    #end
     # Отображение найденных совпадений среди всех деревьев относительно вводимого.
     # @note GET /
     # @note
@@ -260,7 +237,7 @@ class PagesController < ApplicationController
 
       unless exit_n_save or bk_completed
 
-        start_dialoge
+        start_dialoge # USE
 
         make_next_prompt
 
@@ -270,7 +247,7 @@ class PagesController < ApplicationController
 
         save_tree_node
 
-        find_match
+        find_match  # USE
 
         display_match_results
 
@@ -300,38 +277,31 @@ class PagesController < ApplicationController
 
   # Админа страница. Запуск админских методов, просмотр всех таблиц.
   # @note GET /
-  # @note
   # @param admin_page [Integer] опциональный номер страницы
-  # @see News
-  # @see Paginated
   # @see Place
   def admin
 
     @first_var = "Первая переменная - ADMIN"
-    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
+    @navigation_var = "Navigation переменная - PAGES контроллер/admin метод"
 
   end
 
   # Страница Регистрации.
   # @note GET /
-  # @note
   # @param regis_page [Integer] опциональный номер страницы
-  # @see News
   # @see Paginated
   # @see Place
   def registration
 
     @first_var = "Первая переменная - REGISTRATION"
-    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
+    @navigation_var = "Navigation переменная - PAGES контроллер/registration метод"
 
   end
 
 
    # Страница Главная. - основная страница сайта. На ней отображение древа, все переходы и т.п.
   # @note GET /
-  # @note
   # @param main_page [Integer] опциональный номер страницы
-  # @see News
   # @see Paginated
   # @see Place
   def main
@@ -351,9 +321,9 @@ class PagesController < ApplicationController
     end
 
 
-    form_tree # Call from
+    form_tree # use
 
-    find_match  #
+    find_match  #  USE - поместить в applic-n contr
 
   end
 
@@ -361,47 +331,38 @@ class PagesController < ApplicationController
 
   # Страница Новостей и Обновлений. На ней отображается инфа о предложениях на объединение, а также другие новости
   # @note GET /
-  # @note
   # @param news_page [Integer] опциональный номер страницы
-  # @see News
-  # @see Paginated
   # @see Place
   def news
 
     @first_var = "Первая переменная - NEWS"
     @updates_count = 4  # кол-во обновлений - должно вычисляться отдельно в своем контроллере
-    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
+    @navigation_var = "Navigation переменная - PAGES контроллер/news метод"
 
 
   end
 
   # Страница Сообщений и Бесед Юзера. На ней отображаются инфа обо всех новостях и обновлениях юзера
   # @note GET /
-  # @note
   # @param news_page [Integer] опциональный номер страницы
-  # @see News
-  # @see Paginated
   # @see Place
   def mail
 
     @first_var = "Первая страница - MAIL"
     @new_mail_count = 6  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
-    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
+    @navigation_var = "Navigation переменная - PAGES контроллер/mail метод"
 
 
   end
 
   # Страница Сообщений и Бесед Юзера. На ней отображаются инфа обо всех новостях и обновлениях юзера
   # @note GET /
-  # @note
   # @param settings_page [Integer] опциональный номер страницы
-  # @see News
-  # @see Paginated
   # @see Place
   def settings
 
     @first_var = "Первая переменная - SETTINGS"
-    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
+    @navigation_var = "Navigation переменная - PAGES контроллер/settings метод"
 
 
   end
@@ -409,45 +370,35 @@ class PagesController < ApplicationController
 
   # Страница Юзера: вся инфа о Юзере, настройки и т.д.
   # @note GET /
-  # @note
   # @param settings_page [Integer] опциональный номер страницы
-  # @see News
-  # @see Paginated
   # @see Place
   def mypage
 
     @first_var = "Первая переменная - MYPAGE"
-    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
+    @navigation_var = "Navigation переменная - PAGES контроллер/mypage метод"
 
 
   end
 
   # Страница Поиска: поиск среди профилей и Юзеров.
   # @note GET /
-  # @note
   # @param settings_page [Integer] опциональный номер страницы
-  # @see News
-  # @see Paginated
   # @see Place
   def search
 
     @first_var = "Первая переменная - SEARCH"
-    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
-
+    @navigation_var = "Navigation переменная - PAGES контроллер/search метод"
 
   end
 
   # Страница общения Юзера: темы беседы события сообщения.
   # @note GET /
-  # @note
   # @param conversation_page [Integer] опциональный номер страницы
-  # @see News
-  # @see Paginated
   # @see Place
   def conversation
 
     @first_var = "Первая переменная - CONVERSATION"
-    @navigation_var = "Navigation переменная - PAGES контроллер/main метод"
+    @navigation_var = "Navigation переменная - PAGES контроллер/conversation метод"
 
 
   end

@@ -85,6 +85,8 @@ class ApplicationController < ActionController::Base
     #city = current_user.city
     #!city.blank? ? @user_city = city.name : @user_city = 0
   end
+
+
   @@approved_match_qty = 0
 
   @@match_qty = 0
