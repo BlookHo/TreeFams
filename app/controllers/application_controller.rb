@@ -12,6 +12,9 @@ class ApplicationController < ActionController::Base
   @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
 
 
+  @@approved_match_qty = 0
+
+  @@match_qty = 0
 
 
 

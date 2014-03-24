@@ -40,6 +40,22 @@ class MainController < ApplicationController
 
     end
 
+  # Подтверждение совпадения родственника в дереве Юзера.
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def match_approval
+
+    @navigation_var = "Navigation переменная - MAIN контроллер/match_approval метод"
+
+    @new_approved_qty = 3
+
+    @total_approved_qty = @@approved_match_qty + @new_approved_qty
+
+    @rest_to_approve = @@match_qty - @total_approved_qty
+
+
+  end
 
 
 end

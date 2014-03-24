@@ -49,6 +49,8 @@ Weafam::Application.routes.draw do
   get "main/relative_menu"
   post "main/relative_menu"
 
+  get "main/match_approval"
+  post "main/match_approval"
 
 
 

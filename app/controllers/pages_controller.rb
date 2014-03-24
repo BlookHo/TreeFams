@@ -157,8 +157,22 @@ class PagesController < ApplicationController
 
     end
 
+    # Поиск совпадений профилей из древа Юзера с другими деревьями .
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    def find_match # Поиск совпадений профилей из древа Юзера с другими деревьями
 
-    form_tree # Call from Main
+      @@match_qty = 15
+      @match_qty_loc = @@match_qty  # DEBUGG
+      @@approved_match_qty = 10
+      @approved_match_qty_loc = @@approved_match_qty   # DEBUGG
+
+    end
+
+    form_tree # Call from
+
+    find_match  #
 
   end
 
