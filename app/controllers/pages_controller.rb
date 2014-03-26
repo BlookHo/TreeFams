@@ -72,9 +72,7 @@ class PagesController < ApplicationController
     # @see Place
     def start_quest
 
-      @start_quest_arr = [[]]
-      @start_one_quest_arr = []
-  #    arr_i = 0
+      @start_quest_arr = []
 
       @start_tree_arr = []
       @start_tree_profile_arr = []
@@ -87,10 +85,10 @@ class PagesController < ApplicationController
       for arr_i in 0 .. @start_quest_arr.length-1 # 3 asc
 
         @one_quest_arr = @start_quest_arr[arr_i]  # DEBUGG
+        @arr_i = arr_i # DEBUGG
 
         asc_one_quest(@start_quest_arr[arr_i], arr_i ) if !@start_quest_arr[arr_i].blank?
 
-        @arr_i = arr_i # DEBUGG
 
       end
 
