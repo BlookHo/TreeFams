@@ -1,25 +1,26 @@
 
-<section class="admin">
+<section >
 
-  <h2> Страница START - ввод стартового дерева - Ближний Круг </h2>
+  <h5> Страница START</h5>
+  <h3> Ближний Круг - ввод стартового древа -  </h3>
 
   <div>
-    <p>@one_quest_arr: <%= @one_quest_arr.inspect %></p>
-    <p>@arr_i: <%= @arr_i.inspect %></p>
-    <p>@new_profile_arr: <%= @new_profile_arr.inspect %></p>
+    <!--<p>@one_quest_arr: <%= @one_quest_arr.inspect %></p>-->
+    <!--<p>@arr_i: <%= @arr_i.inspect %></p>-->
+    <!--<p>@new_profile_arr: <%= @new_profile_arr.inspect %></p>-->
     <p>@navigation_var: <%= @navigation_var.inspect %></p>
   </div>
 
   <li <%= render :partial => 'start/enter_start_tree' %></li>
 
-  <p>@navi_test: <%= @navi_test.inspect %></p>
-  <p>@start_tree_profile_arr: <%= @start_tree_profile_arr.inspect %></p>
-  <p>@start_tree_arr: <%= @start_tree_arr.inspect %></p>
+  <!--<p>@navi_test: <%= @navi_test.inspect %></p>-->
+  <!--<p>@start_tree_profile_arr: <%= @start_tree_profile_arr.inspect %></p>-->
+  <!--<p>@start_tree_arr: <%= @start_tree_arr.inspect %></p>-->
 
   <p>Возврат на страницу Логин:  <%= link_to "Возврат в Логин -->", pages_login_path %> </p>
   <p>Переход на страницу Регистрации:  <%= link_to "Переход к Регистрации -->", pages_registration_path %> </p>
   <p>Переход на Главную страницу:  <%= link_to "Переход на Главную -->", pages_main_path %> </p>
   <p>Переход на страницу Админа:  <%= link_to "Переход к Админу -->", pages_admin_path %> </p>
 
-  @@  new_profile_arr
+
 </section>

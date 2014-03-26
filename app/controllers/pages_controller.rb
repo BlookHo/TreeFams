@@ -140,54 +140,15 @@ class PagesController < ApplicationController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     # Начало диалога - ввода стартового древа - ближний круг
-    # Ввод автора древа, Отца, Матери.
+    # Ввод автора древа, Отца, Матери. - через контроллер START
     # @note
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
     def start_dialoge
 
-  #    form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
-
-      @user_name = params[:name_select] #
-      # извлечение пола из введенного имени
-      if !@user_name.blank?
-        @user_sex = check_sex_by_name(@user_name) # display sex by name
-      end
-
-      @father_name = params[:father_name_select] #
-      # проверка, действ-но ли введено мужское имя?
-      if !@father_name.blank?
-        if check_sex_by_name(@father_name)
-          @father_name_correct = true
-        else
-          @father_name_correct = false
-        end
-      end
-
-      @mother_name = params[:mother_name_select] #
-      # проверка, действ-но ли введено женское имя?
-      if !@mother_name.blank?
-        if !check_sex_by_name(@mother_name)
-          @mother_name_correct = true
-        else
-          @mother_name_correct = false
-        end
-      end
-
-    end # END OF start_dialoge
+    end #
 
     # Отображение найденных совпадений среди всех деревьев относительно вводимого.
     # @note GET /

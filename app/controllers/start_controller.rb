@@ -69,6 +69,8 @@ class StartController < ApplicationController
     end
 
 
+
+
     ##### BROTHER ##########
     @brother_name = params[:brother_name_select] #
     # проверка, действ-но ли введено мужское имя?
@@ -134,29 +136,9 @@ class StartController < ApplicationController
       @tree_array << @tree_profile_arr
     end
 
-
-
-
-
-
-
-
-#    @tree_array = session[:tree_array][:value]
-
-#    @tree_profile_arr = store_profile(1,nil,@user_name,@user_sex)
-
-#    @tree_array << @tree_profile_arr
-
-
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
 
-
-
-#    redirect_to start_enter_myself_path
-
     redirect_to start_show_start_tree_path
-
-
 
   end
 
@@ -164,9 +146,6 @@ class StartController < ApplicationController
   def show_start_tree
 
     @tree_array = session[:tree_array][:value]
-
-
-
 
 
   end
