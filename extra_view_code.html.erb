@@ -76,5 +76,16 @@
 <!--<li <%= render :partial => 'start/display_start_tree' %></li>-->
 
 
+<!--<% if ajax  %>-->
+    <!--<% remote_form_for @search, :url => {:action => :search_set, :controller => :searches, :stype => stype}  %>-->
+    <!--<% else %>-->
+    <div>
+      <h4>4.Имя Брата </h4>
+      <%= label_tag 'Введи имя Брата:' %>
+      <%= select_tag 'brother_name_select', options_for_select(@sel_names_male, selected = @brother_name),  :prompt => 'Выбери имя' %>
+    </div>
+    <!--<% end  %>-->
+
+
 
 

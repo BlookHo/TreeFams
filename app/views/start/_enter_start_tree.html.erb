@@ -20,11 +20,12 @@
       <%= select_tag 'mother_name_select', options_for_select(@sel_names_female, selected = @mother_name),  :prompt => 'Выбери имя' %>
     </div>
 
-    <div>
-      <h4>4.Имя Брата </h4>
-      <%= label_tag 'Введи имя Брата:' %>
-      <%= select_tag 'brother_name_select', options_for_select(@sel_names_male, selected = @brother_name),  :prompt => 'Выбери имя' %>
-    </div>
+
+        <div>
+          <h4>4.Имя Брата </h4>
+          <%= label_tag 'Введи имя Брата:' %>
+          <%= select_tag 'brother_name_select', options_for_select(@sel_names_male, selected = @brother_name),  :prompt => 'Выбери имя' %>
+        </div>
 
     <div>
       <h4>5.Имя Сестры </h4>
