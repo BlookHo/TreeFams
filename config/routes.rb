@@ -78,6 +78,12 @@ Weafam::Application.routes.draw do
   get "start/show_tree_table"
   post "start/show_tree_table"
 
+  get "start/check_brothers"
+  post "start/check_brothers"
+
+  get "start/enter_brothers"
+  post "start/enter_brothers"
+
   ##########
 
 

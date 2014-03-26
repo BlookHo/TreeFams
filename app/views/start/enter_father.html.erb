@@ -1,4 +1,4 @@
-<h2> Метод enter_father, Страница START - ввод стартового дерева - Ближний Круг </h2>
+<h2> Метод enter_brothers, Страница START - ввод стартового дерева - Ближний Круг </h2>
 
 <div>
   <!--<p>@sel_names: <%= @sel_names.inspect %></p>-->
@@ -9,13 +9,10 @@
 </div>
 
 
-
-
-
 <h3> Ввод информации об ОТЦЕ стартового дерева  </h3>
 <%= form_tag({ :controller => "start", :action => "father_store"}) do %>
     <div>
-      <h4>2.Имя Отца </h4>
+      <h4>2.Имя Отца  </h4>
       <%= label_tag 'Введи имя Отца:' %>
       <div >
         <%= select_tag 'father_name_select', options_for_select(@sel_names_male, selected = @father_name),  :prompt => 'Выбери имя' %>

@@ -126,12 +126,36 @@ class StartController < ApplicationController
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
 
 
-    redirect_to start_show_tree_table_path
+   # redirect_to start_show_tree_table_path
 
+    redirect_to start_check_brothers_path
 
 
 
   end
+
+
+  def check_brothers
+    @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
+
+    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+    @check_yea_nau = ["Yea", "No"]
+    @brothers_exists = params[:brothers_exist?]
+
+
+    if !@brothers_exists.blank?
+      redirect_to start_enter_brothers_path
+    end
+
+
+  end
+
+  def enter_brothers
+    @tree_array = session[:tree_array][:value]
+
+
+  end
+
 
 
   def show_tree_table
