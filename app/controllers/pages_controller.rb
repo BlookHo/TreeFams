@@ -17,8 +17,8 @@ class PagesController < ApplicationController
   # @see Place
   def login
 
-    @first_var = "Первая переменная - LOGIN"
     @navigation_var = "Navigation переменная - PAGES контроллер/login метод"
+
 
   end
 
@@ -44,8 +44,7 @@ class PagesController < ApplicationController
   # @see Place
   def start
 
-    @first_var = "Первая страница - START"
-    @navigation_var = "Navigation переменная - PAGES контроллер/START метод"
+    @navigation_var = "Navigation переменная - Cтраница - START      PAGES контроллер/START метод"
 
     form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
@@ -68,52 +67,91 @@ class PagesController < ApplicationController
 
     # Поэтапный диалог - ввод стартового древа - ближний круг
     # Перебор по массиву вопросов-предложений по вводу имен: автора древа, Отца, Матери.
-    # @note
+    # @note @start_one_quest_arr[0] = profile_logo, [1] = question, [2] = select_names_arr, [3] = id_relation
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
     def start_quest
 
       @start_quest_arr = [[]]
       @start_one_quest_arr = []
-      arr_i = 0
+  #    arr_i = 0
 
-      @start_quest_arr = [["1.Твое имя","Введи свое имя:",@sel_names],["2.Имя Отца","Введи имя отца:",@sel_names_male],["3.Имя Матери","Введи имя матери:",@sel_names_female]]
-
-      for arr_i in 0 .. @start_quest_arr.length-1
-
-        @one_quest_arr = @start_quest_arr[arr_i]
-
-        asc_one_quest(@one_quest_arr) #
+      @start_tree_arr = []
+      @start_tree_profile_arr = []
 
 
+      @start_quest_arr = [["1.Твое имя","Введи свое имя:",@sel_names,nil],
+                          ["2.Имя Отца","Введи имя отца:",@sel_names_male,1],
+                          ["3.Имя Матери","Введи имя матери:",@sel_names_female,2]]
+
+      for arr_i in 0 .. @start_quest_arr.length-1 # 3 asc
+
+        @one_quest_arr = @start_quest_arr[arr_i]  # DEBUGG
+
+        asc_one_quest(@start_quest_arr[arr_i], arr_i ) if !@start_quest_arr[arr_i].blank?
+
+        @arr_i = arr_i # DEBUGG
 
       end
 
-
     end
+
 
     # Спрашивает один вопрос в Поэтапном диалоге
     # @note
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
-    def asc_one_quest(one_quest_arr)
+    def asc_one_quest(one_quest_arr, arr_i)
 
       @profile_logo = one_quest_arr[0]
       @profile_question = one_quest_arr[1]
       @select_names_arr = one_quest_arr[2]
+      @profile_relation = one_quest_arr[3]
 
-      @profile_name = params[:name_select] #
+      @profile_name = params[:name_select] # КАК ВЗЯТЬ id ВЫБРАННОГО ИМЕНИ ПО ИНДЕКСУ МАССИВА ??
 
-      # извлечение пола из введенного имени
       if !@profile_name.blank?
-        @profile_sex = check_sex_by_name(@profile_name) # display sex by name
+        # извлечение пола из введенного имени
+        @profile_sex = check_sex_by_name(@profile_name) #
+
+        @start_tree_profile_arr = make_one_profile_arr(arr_i, @profile_relation, @profile_name, @profile_sex)
+
+        @start_tree_arr << @start_tree_profile_arr  #
+        @start_tree_profile_arr = []
+
       end
 
+    end
 
+    # Сохраняет один профиль после ответа на один вопрос в Поэтапном диалоге
+    # @note new_profile_arr[0] = id_relation, [1] = id_name, [2] = id_sex,
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def make_one_profile_arr(arr_i, relation, name, sex)     #["Я", "Денис", "м"]
+      @navi_test = "PAGES контроллер/make_one_profile_arr метод"
+      new_profile_arr = []
+      new_profile_arr[0] = arr_i        #
+      new_profile_arr[1] = relation       #
+      new_profile_arr[2] = name    #
+      new_profile_arr[3] = sex          #
 
+      @new_profile_arr = new_profile_arr # DEBUGG
 
 
     end
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     # Начало диалога - ввода стартового древа - ближний круг
     # Ввод автора древа, Отца, Матери.
@@ -160,14 +198,7 @@ class PagesController < ApplicationController
 
     end
 
-    ## Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
-    ## @note GET /
-    ## @param admin_page [Integer] опциональный номер страницы
-    ## @see Place
-    #def find_match
-    #
-    #end
-    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+     # Отображение найденных совпадений среди всех деревьев относительно вводимого.
     # @note GET /
     # @note
     # @param admin_page [Integer] опциональный номер страницы
@@ -337,7 +368,7 @@ class PagesController < ApplicationController
 
     form_tree # use
 
-    find_match  #  USE - поместить в applic-n contr
+    find_match  #  USE - поместить в applic-n contr  ??
 
   end
 

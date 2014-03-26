@@ -46,6 +46,7 @@
 <div >
   <%= render :partial => 'shared/parts/opinionList', :locals => {:opinion => opinion} %>
 </div>
+<!--<li <%= render :partial => 'start/enter_start_tree' %></li>-->
 
 
 <h4> 2.Имя Отца </h4>
@@ -58,7 +59,6 @@
 <%= label_tag 'Введи имя Матери:' %>
 <div >
   <%= select_tag 'mother_name_select', options_for_select(@sel_names_female, selected = @mother_name),  :prompt => 'Выбери имя' %>
-</div>
 </div>
 
 
