@@ -50,6 +50,8 @@ class PagesController < ApplicationController
     form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
 
+  end
+
     # Ввод одного профиля древа. Проверка Имя-Пол.
     # @note GET /
     # @param admin_page [Integer] опциональный номер страницы
@@ -66,18 +68,8 @@ class PagesController < ApplicationController
       return name_correct
     end
 
-    # Автоматическое определение пола по имени.
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see Place
-    def check_sex_by_name(user_name)
-      user_sex = false    # Female name
-      find_name=Name.select(:only_male).where(:name => user_name)
-      if !find_name.blank? and find_name[0]['only_male']
-        user_sex = true   # Male name
-      end
-      return user_sex
-    end
+
+
 
     # Начало диалога - ввода стартового древа - ближний круг
     # Ввод автора древа, Отца, Матери.
@@ -213,7 +205,9 @@ class PagesController < ApplicationController
 
       unless exit_n_save or bk_completed
 
-        start_dialoge # USE
+        step_dialoge # USE
+
+   #     start_dialoge # USE
 
         make_next_prompt
 
@@ -240,7 +234,7 @@ class PagesController < ApplicationController
     end
 
 
-    enter_bk
+ #   enter_bk
 
     #respond_to do |format|
     #  format.js
@@ -248,7 +242,7 @@ class PagesController < ApplicationController
     #end
 
 
-  end
+#  end
 
   # Админа страница. Запуск админских методов, просмотр всех таблиц.
   # @note GET /

@@ -54,7 +54,38 @@ Weafam::Application.routes.draw do
   get "pages/main"
   post "pages/main"
 
+  #########
+  #get "pages/enter_myself"
+  #post "pages/enter_myself"
+  #
+  #get "pages/enter_father"
+  #post "pages/enter_father"
+  #
+  #get "pages/enter_mother"
+  #post "pages/enter_mother"
 
+
+
+  get "start/enter_myself"
+  post "start/enter_myself"
+
+  get "start/enter_father"
+  post "start/enter_father"
+
+  get "start/enter_mother"
+  post "start/enter_mother"
+
+  get "start/myself_store"
+  post "start/myself_store"
+
+  get "start/father_store"
+  post "start/father_store"
+
+  get "start/mother_store"
+  post "start/mother_store"
+
+
+  ##########
   get "main/relative_menu"
   post "main/relative_menu"
 
