@@ -158,7 +158,7 @@ class PagesController < ApplicationController
     # @see Place
     def start_dialoge
 
-      form_select_arrays  # Формирование массивов значений для форм ввода типа select.
+  #    form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
 
       @user_name = params[:name_select] #

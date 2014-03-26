@@ -64,6 +64,8 @@ Weafam::Application.routes.draw do
   get "start/process_questions"
   post "start/process_questions"
 
+  get "start/show_start_tree"
+  post "start/show_start_tree"
 
 
   # The priority is based upon order of creation: first created -> highest priority.
