@@ -126,8 +126,20 @@ class StartController < ApplicationController
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
 
 
-    redirect_to "main/_main_display_tree"
+    redirect_to start_show_tree_table_path
 
+
+
+
+  end
+
+
+  def show_tree_table
+
+    @tree_array = session[:tree_array][:value]
+
+
+    @navigation_var = "Navigation переменная - START контроллер/mother_store метод"
 
 
 
@@ -137,7 +149,4 @@ class StartController < ApplicationController
 
 
 
-
-
-
-end
+  end

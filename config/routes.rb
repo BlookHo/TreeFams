@@ -55,15 +55,6 @@ Weafam::Application.routes.draw do
   post "pages/main"
 
   #########
-  #get "pages/enter_myself"
-  #post "pages/enter_myself"
-  #
-  #get "pages/enter_father"
-  #post "pages/enter_father"
-  #
-  #get "pages/enter_mother"
-  #post "pages/enter_mother"
-
 
 
   get "start/enter_myself"
@@ -84,16 +75,18 @@ Weafam::Application.routes.draw do
   get "start/mother_store"
   post "start/mother_store"
 
+  get "start/show_tree_table"
+  post "start/show_tree_table"
 
   ##########
+
+
   get "main/relative_menu"
   post "main/relative_menu"
 
   get "main/match_approval"
   post "main/match_approval"
 
-  #get "start/start_dialoge"
-  #post "start/start_dialoge"
 
 
 
