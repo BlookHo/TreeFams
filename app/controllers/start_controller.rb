@@ -147,6 +147,9 @@ class StartController < ApplicationController
 
     @tree_array = session[:tree_array][:value]
 
+    # сделать метод сохранения деревьев в таблице Tree
+    # и отображения дерева из таблицы /
+
 
   end
 
