@@ -10,30 +10,6 @@ class PagesController < ApplicationController
   Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
   @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
 
-
-
-  # Главная страница. Готовит новости, причины и места к отображению.
-  # @note GET /
-  # @note Также вызывается в случае пагинации. Тогда выдает либо пагинацию новостей, либо пагинацию причин.
-  # @param news_page [Integer] опциональный номер страницы пагинации новостей
-  # @see News
-  # @see Paginated
-  # @see Place
-  #def index
-  ##  if params[:news_page].present?
-  ##    render_file = paginate_news
-  ##  elsif params[:reasons_page].present?
-  ##    render_file = paginate_reasons
-  ##  else
-  ##    render_file = initial_index
-  ##  end
-  ##
-  ##  respond_to do |format|
-  ##    format.html
-  ##    format.js { render render_file }
-  ##  end
-  #end
-
   # Входная страница. На ней - логин. Если уже зареген, то переход на Главную страницу - отображение древа и т.п..
   # или если впервые - переход на Стартовую стр-цу.
   # @note GET /
