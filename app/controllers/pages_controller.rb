@@ -158,6 +158,7 @@ class PagesController < ApplicationController
     # @see Place
     def start_dialoge
 
+      form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
 
       @user_name = params[:name_select] #
@@ -280,8 +281,8 @@ class PagesController < ApplicationController
 
       unless exit_n_save or bk_completed
 
-        start_quest
-  #      start_dialoge # USE
+  #      start_quest
+        start_dialoge #
 
         make_next_prompt
 
