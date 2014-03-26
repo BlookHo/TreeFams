@@ -1,5 +1,5 @@
 <h3> Диалог ввода стартового дерева - Ближнего Круга { :controller => "start", :action => "start_dialoge" }(remote:true, , :class => "wide okField") </h3>
-<%= form_tag({ :controller => "pages", :action => "start"}) do %>
+<%= form_tag({ :controller => "start", :action => "process_questions"}) do %>
     <div>
       <h4>1.Твое имя   </h4>
       <%= label_tag 'Введи свое имя:' %>
@@ -19,26 +19,25 @@
     <div>
       <h4>4.Имя Брата </h4>
       <%= label_tag 'Введи имя Брата:' %>
-      <%= select_tag 'mother_name_select', options_for_select(@sel_names_male, selected = @brother_name),  :prompt => 'Выбери имя' %>
+      <%= select_tag 'brother_name_select', options_for_select(@sel_names_male, selected = @brother_name),  :prompt => 'Выбери имя' %>
     </div>
     <div>
       <h4>5.Имя Сестры </h4>
       <%= label_tag 'Введи имя Сестры:' %>
-      <%= select_tag 'mother_name_select', options_for_select(@sel_names_female, selected = @sister_name),  :prompt => 'Выбери имя' %>
+      <%= select_tag 'sister_name_select', options_for_select(@sel_names_female, selected = @sister_name),  :prompt => 'Выбери имя' %>
     </div>
 
     <div>
       <h4>6.Имя Сына </h4>
       <%= label_tag 'Введи имя Сына:' %>
-      <%= select_tag 'mother_name_select', options_for_select(@sel_names_male, selected = @son_name),  :prompt => 'Выбери имя' %>
+      <%= select_tag 'son_name_select', options_for_select(@sel_names_male, selected = @son_name),  :prompt => 'Выбери имя' %>
     </div>
 
     <div>
       <h4>7.Имя Дочери </h4>
       <%= label_tag 'Введи имя Дочери:' %>
-      <%= select_tag 'mother_name_select', options_for_select(@sel_names_female, selected = @daugter_name),  :prompt => 'Выбери имя' %>
+      <%= select_tag 'daugter_name_select', options_for_select(@sel_names_female, selected = @daugter_name),  :prompt => 'Выбери имя' %>
     </div>
-
 
 
 

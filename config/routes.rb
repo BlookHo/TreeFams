@@ -61,8 +61,8 @@ Weafam::Application.routes.draw do
   get "main/match_approval"
   post "main/match_approval"
 
-  #get "start/start_dialoge"
-  #post "start/start_dialoge"
+  get "start/process_questions"
+  post "start/process_questions"
 
 
 
