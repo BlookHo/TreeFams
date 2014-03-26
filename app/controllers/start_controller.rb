@@ -39,7 +39,7 @@ class StartController < ApplicationController
 
     daugter_name_select
 
-    
+
 
 
 
