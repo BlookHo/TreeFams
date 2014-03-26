@@ -1,0 +1,21 @@
+<h3> Диалог ввода стартового дерева - Ближнего Круга (remote:true, :class => "wide okField") </h3>
+<%= form_tag({ :controller => "pages", :action => "start"}) do %>
+    <div>
+      <h4> Заголовок вопроса: <%= @profile_logo.inspect %> </h4>
+      <%= label_tag @profile_question %>
+      <div >
+        <%= select_tag 'name_select', options_for_select(@select_names_arr, selected = @profile_name),  :prompt => 'Выбери имя' %>
+      </div>
+    </div>
+    <%= submit_tag 'Ввод' %>
+<% end %>
+
+
+<p>Мое имя: @profile_name: <%= @profile_name.inspect %>, пол = <%= @profile_sex.inspect %> </p>
+<!--<p>@profile_sex: <%= @profile_sex.inspect %></p>-->
+
+<p>Если @profile_sex = false, то <%= @profile_name.inspect %> - женское имя %></p>
+<p>Если @profile_sex = true, то <%= @profile_name.inspect %> - мужское имя %></p>
+
+
+<

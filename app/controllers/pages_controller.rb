@@ -47,7 +47,7 @@ class PagesController < ApplicationController
     @first_var = "Первая страница - START"
     @navigation_var = "Navigation переменная - PAGES контроллер/START метод"
 
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+    form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
 
     # Ввод одного профиля древа. Проверка Имя-Пол.
@@ -66,17 +66,53 @@ class PagesController < ApplicationController
       return name_correct
     end
 
-    # Автоматическое определение пола по имени.
-    # @note GET /
+    # Поэтапный диалог - ввод стартового древа - ближний круг
+    # Перебор по массиву вопросов-предложений по вводу имен: автора древа, Отца, Матери.
+    # @note
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
-    def check_sex_by_name(user_name)
-      user_sex = false    # Female name
-      find_name=Name.select(:only_male).where(:name => user_name)
-      if !find_name.blank? and find_name[0]['only_male']
-        user_sex = true   # Male name
+    def start_quest
+
+      @start_quest_arr = [[]]
+      @start_one_quest_arr = []
+      arr_i = 0
+
+      @start_quest_arr = [["1.Твое имя","Введи свое имя:",@sel_names],["2.Имя Отца","Введи имя отца:",@sel_names_male],["3.Имя Матери","Введи имя матери:",@sel_names_female]]
+
+      for arr_i in 0 .. @start_quest_arr.length-1
+
+        @one_quest_arr = @start_quest_arr[arr_i]
+
+        asc_one_quest(@one_quest_arr) #
+
+
+
       end
-      return user_sex
+
+
+    end
+
+    # Спрашивает один вопрос в Поэтапном диалоге
+    # @note
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see Place
+    def asc_one_quest(one_quest_arr)
+
+      @profile_logo = one_quest_arr[0]
+      @profile_question = one_quest_arr[1]
+      @select_names_arr = one_quest_arr[2]
+
+      @profile_name = params[:name_select] #
+
+      # извлечение пола из введенного имени
+      if !@profile_name.blank?
+        @profile_sex = check_sex_by_name(@profile_name) # display sex by name
+      end
+
+
+
+
+
     end
 
     # Начало диалога - ввода стартового древа - ближний круг
@@ -85,6 +121,8 @@ class PagesController < ApplicationController
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
     def start_dialoge
+
+
 
       @user_name = params[:name_select] #
       # извлечение пола из введенного имени
@@ -213,7 +251,8 @@ class PagesController < ApplicationController
 
       unless exit_n_save or bk_completed
 
-        start_dialoge # USE
+        start_quest
+  #      start_dialoge # USE
 
         make_next_prompt
 

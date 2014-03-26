@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   # @see News
   # @see Paginated
   # @see Place
-  def form_select_fields
+  def form_select_arrays
 
     @sel_names = []
     @sel_names_male = []
@@ -91,6 +91,19 @@ class ApplicationController < ActionController::Base
 
   @@match_qty = 0
 
+
+  # Автоматическое определение пола по имени.
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see Place
+  def check_sex_by_name(user_name)
+    user_sex = false    # Female name
+    find_name=Name.select(:only_male).where(:name => user_name)
+    if !find_name.blank? and find_name[0]['only_male']
+      user_sex = true   # Male name
+    end
+    return user_sex
+  end
 
 
 

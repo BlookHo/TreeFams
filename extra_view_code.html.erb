@@ -47,84 +47,30 @@
   <%= render :partial => 'shared/parts/opinionList', :locals => {:opinion => opinion} %>
 </div>
 
-Migrations
-1/
-class AddNameFreqNames < ActiveRecord::Migration
-def change
 
-add_column :names, :name_freq, :integer
-
-end
-end
-
-2.
-class CreateUsers < ActiveRecord::Migration
-def change
-create_table :users do |t|
-t.integer :profile_id
-t.boolean :admin
-t.float :rating
-
-t.timestamps
-end
-end
-end
-
-3.
-class CreateProfiles < ActiveRecord::Migration
-def change
-create_table :profiles do |t|
-t.integer :user_id
-
-t.timestamps
-end
-end
-end
-
-4.
-class AddColumnsToProfile < ActiveRecord::Migration
-def change
-
-add_column :profiles, :name_id, :integer
-add_column :profiles, :surname, :string,   :default => ""
-add_column :profiles, :email, :string,   :default => ""
-add_column :profiles, :sex_id, :integer
-add_column :profiles, :avatar_id, :integer
-add_column :profiles, :country_id, :integer
-add_column :profiles, :city_id, :integer
-add_column :profiles, :profile_birthday, :datetime
-add_column :profiles, :about, :string,   :default => ""
+<h4> 2.Имя Отца </h4>
+<%= label_tag 'Введи имя Отца:' %>
+<div >
+  <%= select_tag 'father_name_select', options_for_select(@sel_names_male, selected = @father_name),  :prompt => 'Выбери имя' %>
+</div>
+</div>
+<h4> 3.Имя Матери </h4>
+<%= label_tag 'Введи имя Матери:' %>
+<div >
+  <%= select_tag 'mother_name_select', options_for_select(@sel_names_female, selected = @mother_name),  :prompt => 'Выбери имя' %>
+</div>
+</div>
 
 
-end
-end
+!--<p>@user_sex_found: <%= @user_sex_found.inspect %></p>-->
 
-5.
-class SetDefaultsinNamesUsers < ActiveRecord::Migration
-def change
+<p>Имя Отца: @father_name: <%= @father_name.inspect %> </p>
+<p>@father_name_correct: <%= @father_name_correct.inspect %></p>
 
-change_column :names, :name_freq, :integer, :default => 0
-
-change_column :users, :admin, :boolean, :default => false
-change_column :users, :rating, :float, :default => 0.0
+<p>Имя Матери: @mother_name: <%= @mother_name.inspect %></p>
+<p>@mother_name_correct: <%= @mother_name_correct.inspect %></p>
 
 
-end
-end
-
-6.
-class CreateTrees < ActiveRecord::Migration
-def change
-create_table :trees do |t|
-t.integer :user_id
-t.integer :profile_id
-t.integer :relation_id
-t.boolean :connected, :default => false
-
-t.timestamps
-end
-end
-end
 
 
 
