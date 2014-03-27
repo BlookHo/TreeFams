@@ -468,6 +468,9 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @user_sex = session[:user_sex][:value]
 
+    @id_author = @tree_array[0][0]  # Только для отображения в виде таблицы
+
+
     #@new_tree_profile = Tree.new
     #@new_tree_profile.user_id =
     #@new_tree_profile.profile_id =
