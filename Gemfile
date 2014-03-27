@@ -58,6 +58,11 @@ group :development do
   gem "bullet"
 end
 
+gem 'activerecord-reset-pk-sequence'
+
+# Redis
+gem 'redis-rails'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'

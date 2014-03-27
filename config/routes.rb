@@ -13,6 +13,8 @@ Weafam::Application.routes.draw do
   match 'login' => 'pages#login', via: :get
   match 'start' => 'pages#start', via: :get
   match 'admin' => 'pages#admin', via: [:get, :post]
+#  match 'start_enter' => 'pages#start_enter', via: :get; :post # уточнить синтаксис чтобы и post
+  match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
   match 'settings' => 'pages#settings', via: :get
@@ -46,6 +48,112 @@ Weafam::Application.routes.draw do
 # root 'welcome#index'
 
 #  match 'admin' => 'admin#index', via: :get
+  get "pages/registration"
+  post "pages/registration"
+
+  get "pages/main"
+  post "pages/main"
+
+  #########
+  ######### start_enter/enters
+
+  get "start/enter_myself"
+  post "start/enter_myself"
+
+ get "start/enter_father"
+  post "start/enter_father"
+
+  get "start/enter_mother"
+  post "start/enter_mother"
+
+  get "start/enter_brother"
+  post "start/enter_brother"
+
+  get "start/enter_sister"
+  post "start/enter_sister"
+
+  get "start/enter_son"
+  post "start/enter_son"
+
+  get "start/enter_daugther"
+  post "start/enter_daugther"
+
+  get "start/enter_husband"
+  post "start/enter_husband"
+
+  get "start/enter_wife"
+  post "start/enter_wife"
+
+  get "start/enter_final"
+  post "start/enter_final"
+
+  ######### start/checks
+
+  get "start/check_brothers"
+  post "start/check_brothers"
+
+  get "start/check_sisters"
+  post "start/check_sisters"
+
+  get "start/check_sons"
+  post "start/check_sons"
+
+  get "start/check_daugthers"
+  post "start/check_daugthers"
+
+  get "start/check_husband"
+  post "start/check_husband"
+
+  get "start/check_wife"
+  post "start/check_wife"
+
+  ######### start/__store
+
+  get "start/store_myself"
+  post "start/store_myself"
+
+  get "start/store_father"
+  post "start/store_father"
+
+  get "start/store_mother"
+  post "start/store_mother"
+
+  get "start/store_brother"
+  post "start/store_brother"
+
+  get "start/store_sister"
+  post "start/store_sister"
+
+  get "start/store_son"
+  post "start/store_son"
+
+  get "start/store_daugther"
+  post "start/store_daugther"
+
+  get "start/store_husband"
+  post "start/store_husband"
+
+  get "start/store_wife"
+  post "start/store_wife"
+
+  #########
+
+  get "start/show_tree_table"
+  post "start/show_tree_table"
+
+  ##########
+  #########
+
+
+  get "main/relative_menu"
+  post "main/relative_menu"
+
+  get "main/match_approval"
+  post "main/match_approval"
+
+
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

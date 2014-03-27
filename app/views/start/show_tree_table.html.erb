@@ -1,0 +1,58 @@
+<h3>Отображение Стартового Древа Пользователя в табличной форме</h3>
+
+
+<% if !@tree_array.blank? %>
+
+
+    <div>
+      <p>@session_id: <%= @session_id.inspect %></p>
+      <p>@navigation_var: <%= @navigation_var.inspect %></p>
+      <p>@tree_array: <%= @tree_array.inspect %></p>
+      <!--<p>@menu_choice: <%= @menu_choice.inspect %></p>-->
+    </div>
+
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Родство</th>
+        <th>Имя</th>
+        <th>Пол</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @tree_array.each do |tree| %>
+          <tr>
+            <td><%= tree[0] %></td>
+            <td><%= tree[1] %></td>
+            <td><%= tree[2] %></td>
+            <td><%= tree[3] %></td>
+            <td> Вызов меню Родственника: <%= link_to "Relative Menu", main_relative_menu_path %> </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+
+    <h4>Совпадения древа Пользователя с другими</h4>
+    <div>
+      <p>Найдено совпадений: @match_qty_loc: <%= @match_qty_loc.inspect %></p>
+    </div>
+
+
+<% else %>
+    <h1>No Listing tree!</h1>
+    <p>Переход на страницу Старт:  <%= link_to "Переход на Старт -->", pages_start_path %> </p>
+    <p>Возврат на страницу Логин:  <%= link_to "Возврат в Логин -->", pages_login_path %> </p>
+
+<% end %>
+
+
+<p>@user_sex: <%= @user_sex.inspect %></p>
+<h4>Чтобы подтвердить совпадения и пожать руку родственнику - сначала зарегистрируйся. </h4>
+<h4> Выход + Сохранить - Переход на страницу Регистрации: <%= link_to "Переход к Регистрации -->", pages_registration_path %> </h4>
+

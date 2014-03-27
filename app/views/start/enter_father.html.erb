@@ -1,0 +1,26 @@
+<h2> Метод enter_father, Страница START - ввод стартового дерева - Ближний Круг </h2>
+
+<div>
+  <!--<p>@sel_names: <%= @sel_names.inspect %></p>-->
+  <!--<p>@sel_names_male: <%= @sel_names_male.inspect %></p>-->
+  <!--<p>@sel_names_female: <%= @sel_names_female.inspect %></p>-->
+  <p>@navigation_var: <%= @navigation_var.inspect %></p>
+  <p>@tree_array: <%= @tree_array.inspect %></p>
+</div>
+
+
+<h3> Ввод информации об ОТЦЕ </h3>
+<%= form_tag({ :controller => "start", :action => "store_father"}) do %>
+    <div>
+      <h4>2.Имя Отца  </h4>
+      <%= label_tag 'Введи имя Отца:' %>
+      <div >
+        <%= select_tag 'father_name_select', options_for_select(@sel_names_male, selected = @father_name),  :prompt => 'Выбери имя' %>
+      </div>
+    </div>
+    <%= submit_tag 'Ввод' %>
+<% end %>
+
+
+<p>Имя Отца: @father_name: <%= @father_name.inspect %>, я - <%= @father_sex.inspect %> </p>
+<p>@user_sex: <%= @user_sex.inspect %></p>

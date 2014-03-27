@@ -1,0 +1,29 @@
+<section class="admin">
+
+  <div>
+     <p>@session_id: <%= @session_id.inspect %></p>
+     <p>@first_var: <%= @first_var.inspect %></p>
+     <p>@navigation_var: <%= @navigation_var.inspect %></p>
+  </div>
+
+
+  <h3> Страница ADMIN - служебные методы </h3>
+
+
+  <h3> Просмотр и редактирование таблиц </h3>
+
+  <h4> Пользователи - авторы деревьев <%= link_to "Users", users_path %> </h4>
+  <h4> Профили - все участники деревьев <%= link_to "Profiles", profiles_path %> </h4>
+  <h4> Деревья - все деревья всех пользователей-авторов <%= link_to "Tree", trees_path %> </h4>
+  <h4> Имена <%= link_to "Names", names_path %> </h4>
+  <h4> Отношения родства <%= link_to "Relations", relations_path %> </h4>
+
+
+
+  <p>Возврат на страницу Старт:  <%= link_to "Возврат на Старт -->", pages_start_enter_path %> </p>
+  <p>Возврат на страницу Логин:  <%= link_to "Возврат в Логин -->", pages_login_path %> </p>
+  <p>Возврат на Главную страницу:  <%= link_to "Возврат на Главную -->", pages_main_path %> </p>
+
+
+
+</section>
