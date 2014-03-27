@@ -1,4 +1,4 @@
-<h2> Метод enter_father, Страница START - ввод стартового дерева - Ближний Круг </h2>
+<h2> Метод check_wife, Страница START - ввод стартового дерева - Ближний Круг </h2>
 
 <div>
   <!--<p>@sel_names: <%= @sel_names.inspect %></p>-->
@@ -11,13 +11,13 @@
 <%= form_tag({ :controller => "start", :action => "father_store"}) do %>
     <div>
       <h4>Есть ли Братья? </h4>
-      <%= check_box_tag 'brothers_exist?', options_for_select(@check_yea_nau, selected = @checked_brother) -%>
+      <%= check_box_tag 'wife_exist?', options_for_select(@check_yea_nau, selected = @checked_wife) -%>
 
 
 
       <!--<%= label_tag 'Введи имя Отца:' %>-->
       <div >
-        <!--<%= select_tag 'father_name_select', options_for_select(@sel_names_male, selected = @father_name),  :prompt => 'Выбери имя' %>-->
+        <!--<%= select_tag 'wife_name_select', options_for_select(@sel_names_male, selected = @wife_name),  :prompt => 'Выбери имя' %>-->
       </div>
     </div>
     <%= submit_tag 'Ввод' %>

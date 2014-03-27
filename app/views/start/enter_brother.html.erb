@@ -1,9 +1,9 @@
-<h2> Метод enter_brothers, Страница START - ввод стартового дерева - Ближний Круг </h2>
+<h2> Метод enter_brother, Страница START - ввод стартового дерева - Ближний Круг </h2>
 
 
 
 <h3> Ввод информации о БРАТЕ стартового дерева  </h3>
-<%= form_tag({ :controller => "start", :action => "father_store"}) do %>
+<%= form_tag({ :controller => "start", :action => "store_brother"}) do %>
     <div>
       <h4>2.Имя Брата </h4>
       <%= label_tag 'Введи имя Брата:' %>
@@ -15,5 +15,5 @@
 <% end %>
 
 
-<p>Имя Брата: @user_name: <%= @brother_name.inspect %>, я - <%= @user_sex.inspect %> </p>
-<p>@user_sex: <%= @user_sex.inspect %></p>
+<p>Имя Брата: @brother_name: <%= @brother_name.inspect %>, я - <%= @brother_sex.inspect %> </p>
+<p>@brother_sex: <%= @brother_sex.inspect %></p>

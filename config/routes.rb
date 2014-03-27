@@ -20,7 +20,7 @@ Weafam::Application.routes.draw do
 
   match 'main' => 'pages#main', via: :get
   match 'login' => 'pages#login', via: :get
-#  match 'start' => 'pages#start', via: :get; :post # уточнить синтаксис чтобы и post
+#  match 'start_enter' => 'pages#start_enter', via: :get; :post # уточнить синтаксис чтобы и post
   match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
@@ -39,8 +39,8 @@ Weafam::Application.routes.draw do
   get "pages/admin"
   post "pages/admin"
 
-  get "pages/start"
-  post "pages/start"
+  get "pages/start_enter"
+  post "pages/start_enter"
 
   get "pages/start_dialoge"
   post "pages/start_dialoge"
@@ -55,12 +55,12 @@ Weafam::Application.routes.draw do
   post "pages/main"
 
   #########
-  ######### start/enter
+  ######### start_enter/enters
 
   get "start/enter_myself"
   post "start/enter_myself"
 
-  get "start/enter_father"
+ get "start/enter_father"
   post "start/enter_father"
 
   get "start/enter_mother"
@@ -84,7 +84,7 @@ Weafam::Application.routes.draw do
   get "start/enter_wife"
   post "start/enter_wife"
 
-  ######### start/check
+  ######### start/checks
 
   get "start/check_brothers"
   post "start/check_brothers"
@@ -106,32 +106,32 @@ Weafam::Application.routes.draw do
 
   ######### start/__store
 
-  get "start/myself_store"
-  post "start/myself_store"
+  get "start/store_myself"
+  post "start/store_myself"
 
-  get "start/father_store"
-  post "start/father_store"
+  get "start/store_father"
+  post "start/store_father"
 
-  get "start/mother_store"
-  post "start/mother_store"
+  get "start/store_mother"
+  post "start/store_mother"
 
-  get "start/brother_store"
-  post "start/brother_store"
+  get "start/store_brother"
+  post "start/store_brother"
 
-  get "start/sister_store"
-  post "start/sister_store"
+  get "start/store_sister"
+  post "start/store_sister"
 
-  get "start/son_store"
-  post "start/son_store"
+  get "start/store_son"
+  post "start/store_son"
 
-  get "start/daugther_store"
-  post "start/daugther_store"
+  get "start/store_daugther"
+  post "start/store_daugther"
 
-  get "start/husband_store"
-  post "start/mother_store"
+  get "start/store_husband"
+  post "start/store_husband"
 
-  get "start/wife_store"
-  post "start/wife_store"
+  get "start/store_wife"
+  post "start/store_wife"
 
   #########
 

@@ -9,65 +9,77 @@ class StartController < ApplicationController
     @navigation_var = "Navigation переменная - START контроллер/enter_myself метод"
 
     form_select_fields  # Формирование массивов значений для форм ввода типа select.
+    session[:sel_names] = {:value => @sel_names, :updated_at => Time.current}
+    session[:sel_names_male] = {:value => @sel_names_male, :updated_at => Time.current}
+    session[:sel_names_female] = {:value => @sel_names_female, :updated_at => Time.current}
 
 
   end
 
   def enter_father
     @tree_array = session[:tree_array][:value]
+    @sel_names_male = session[:sel_names_male][:value]
+
     @navigation_var = "Navigation переменная - START контроллер/enter_father метод"
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
 
   end
 
   def enter_mother
     @tree_array = session[:tree_array][:value]
+    @sel_names_female = session[:sel_names_female][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_mother метод"
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
 
   end
 
   def enter_brother
     @tree_array = session[:tree_array][:value]
+    @sel_names_male = session[:sel_names_male][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_brother метод"
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
   def enter_sister
     @tree_array = session[:tree_array][:value]
+    @sel_names_female = session[:sel_names_female][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_sister метод"
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
   def enter_son
     @tree_array = session[:tree_array][:value]
+    @sel_names_male = session[:sel_names_male][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_son метод"
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
   def enter_daugther
     @tree_array = session[:tree_array][:value]
+    @sel_names_female = session[:sel_names_female][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_daugther метод"
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
   def enter_husband
     @tree_array = session[:tree_array][:value]
+    @sel_names_male = session[:sel_names_male][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_husband метод"
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
   def enter_wife
     @tree_array = session[:tree_array][:value]
+    @sel_names_female = session[:sel_names_female][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_wife метод"
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
@@ -133,7 +145,26 @@ class StartController < ApplicationController
   end
 
 
+  def check_husband_or_wife
+
+    @user_sex = session[:user_sex][:value]
+    @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
+
+    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+    @check_yea_nau = ["Yea", "No"]
+  #  @brothers_exists = params[:brothers_exist?]
+
+
+    if @user_sex    # = true -> User = Male
+      redirect_to start_enter_wife_path
+    else
+      redirect_to start_enter_husband_path
+    end
+
+  end
+
   def check_husband
+    @user_sex = session[:user_sex][:value]
     @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
 
     form_select_fields  # Формирование массивов значений для форм ввода типа select.
@@ -180,7 +211,7 @@ class StartController < ApplicationController
   end
 
 
-  def myself_store
+  def store_myself
     @navigation_var = "Navigation переменная - START контроллер/myself_store метод"
 
     @user_name = params[:name_select] #
@@ -193,14 +224,16 @@ class StartController < ApplicationController
     @tree_array << @tree_profile_arr
 
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
+    session[:user_sex] = {:value => @user_sex, :updated_at => Time.current}
     redirect_to start_enter_father_path
 
   end
 
 
-  def father_store
+  def store_father
 
     @tree_array = session[:tree_array][:value]
+    @user_sex = session[:user_sex][:value]
 
     @navigation_var = "Navigation переменная - START контроллер/father_store метод"
     @father_name = params[:father_name_select] #
@@ -214,6 +247,7 @@ class StartController < ApplicationController
       end
     end
 
+    # Сохранять отчество Юзера в зависимости от его пола @user_sex!
     @tree_profile_arr = store_profile(2,1,@father_name,@user_sex)
     @tree_array << @tree_profile_arr
 
@@ -223,9 +257,10 @@ class StartController < ApplicationController
   end
 
 
-  def mother_store
+  def store_mother
 
     @tree_array = session[:tree_array][:value]
+    @user_sex = session[:user_sex][:value]
 
     @navigation_var = "Navigation переменная - START контроллер/mother_store метод"
     @mother_name = params[:mother_name_select] #
@@ -244,11 +279,11 @@ class StartController < ApplicationController
 
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
 
-    redirect_to start_check_brothers_path
+    redirect_to start_enter_brother_path
 
   end
 
-  def brother_store
+  def store_brother
 
     @tree_array = session[:tree_array][:value]
 
@@ -268,11 +303,11 @@ class StartController < ApplicationController
     @tree_array << @tree_profile_arr
 
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
-    redirect_to start_enter_mother_path
+    redirect_to start_enter_sister_path
 
   end
 
-  def sister_store
+  def store_sister
 
     @tree_array = session[:tree_array][:value]
 
@@ -292,106 +327,129 @@ class StartController < ApplicationController
     @tree_array << @tree_profile_arr
 
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
-    redirect_to start_enter_mother_path
+
+
+    check_husband_or_wife
+
+
+ #   redirect_to start_enter_son_path
+
+
+
+
+
 
   end
 
-  def son_store
+  def store_husband
 
     @tree_array = session[:tree_array][:value]
 
-    @navigation_var = "Navigation переменная - START контроллер/father_store метод"
-    @father_name = params[:father_name_select] #
+    @navigation_var = "Navigation переменная - START контроллер/store_husband метод"
+    @husband_name = params[:husband_name_select] #
 
-    if !@father_name.blank?
-      @user_sex = check_sex_by_name(@father_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@father_name)
-        @father_name_correct = true
+    if !@husband_name.blank?  # надо ли проверять пол мужа - геи?
+      @husband_sex = check_sex_by_name(@husband_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+      if check_sex_by_name(@husband_name)
+        @husband_name_correct = true
       else
-        @father_name_correct = false
+        @husband_name_correct = false
       end
     end
 
-    @tree_profile_arr = store_profile(2,1,@father_name,@user_sex)
+    @tree_profile_arr = store_profile(2,1,@husband_name,@husband_sex)
     @tree_array << @tree_profile_arr
 
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
-    redirect_to start_enter_mother_path
+    redirect_to start_enter_sons_path
 
   end
 
-  def daugther_store
+  def store_wife
 
     @tree_array = session[:tree_array][:value]
 
-    @navigation_var = "Navigation переменная - START контроллер/father_store метод"
-    @father_name = params[:father_name_select] #
+    @navigation_var = "Navigation переменная - START контроллер/store_wife метод"
+    @wife_name = params[:wife_name_select] #
 
-    if !@father_name.blank?
-      @user_sex = check_sex_by_name(@father_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+    if !@wife_name.blank?   # надо ли проверять пол жены - геи?
+      @wife_sex = check_sex_by_name(@wife_name) # display sex by name # проверка, действ-но ли введено мужское имя?
       if check_sex_by_name(@father_name)
-        @father_name_correct = true
+        @wife_name_correct = true
       else
-        @father_name_correct = false
+        @wife_name_correct = false
       end
     end
 
-    @tree_profile_arr = store_profile(2,1,@father_name,@user_sex)
+    @tree_profile_arr = store_profile(2,1,@wife_name,@wife_sex)
     @tree_array << @tree_profile_arr
 
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
-    redirect_to start_enter_mother_path
+    redirect_to start_enter_sons_path
 
   end
 
-  def husband_store
+
+  def store_son
 
     @tree_array = session[:tree_array][:value]
+    @user_sex = session[:user_sex][:value]
 
-    @navigation_var = "Navigation переменная - START контроллер/father_store метод"
-    @father_name = params[:father_name_select] #
+    @navigation_var = "Navigation переменная - START контроллер/store_son метод"
+    @son_name = params[:son_name_select] #
 
-    if !@father_name.blank?
-      @user_sex = check_sex_by_name(@father_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@father_name)
-        @father_name_correct = true
+    if !@son_name.blank?
+      @son_sex = check_sex_by_name(@son_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+      if check_sex_by_name(@son_name)
+        @son_name_correct = true
       else
-        @father_name_correct = false
+        @son_name_correct = false
       end
     end
 
-    @tree_profile_arr = store_profile(2,1,@father_name,@user_sex)
+    # Сохранять отчество Profile в зависимости от пола @user_sex!
+    @tree_profile_arr = store_profile(2,1,@son_name,@son_sex)
     @tree_array << @tree_profile_arr
 
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
-    redirect_to start_enter_mother_path
+    redirect_to start_enter_daugther_path
 
   end
 
-  def wife_store
+  def store_daugther
 
     @tree_array = session[:tree_array][:value]
+    @user_sex = session[:user_sex][:value]
 
-    @navigation_var = "Navigation переменная - START контроллер/father_store метод"
-    @father_name = params[:father_name_select] #
+    @navigation_var = "Navigation переменная - START контроллер/store_daugther метод"
+    @daugther_name = params[:daugther_name_select] #
 
-    if !@father_name.blank?
-      @user_sex = check_sex_by_name(@father_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@father_name)
-        @father_name_correct = true
+    if !@daugther_name.blank?
+      @daugther_sex = check_sex_by_name(@daugther_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+      if check_sex_by_name(@daugther_name)
+        @daugther_name_correct = true
       else
-        @father_name_correct = false
+        @daugther_name_correct = false
       end
     end
 
-    @tree_profile_arr = store_profile(2,1,@father_name,@user_sex)
+    # Сохранять отчество Profile в зависимости от  пола @user_sex!
+    @tree_profile_arr = store_profile(2,1,@daugther_name,@daugther_sex)
     @tree_array << @tree_profile_arr
 
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
-    redirect_to start_enter_mother_path
+    redirect_to start_enter_final_path
 
   end
 
+
+  def enter_final
+
+    @tree_array = session[:tree_array][:value]
+    @user_sex = session[:user_sex][:value]
+
+
+  end
 
 
   def show_tree_table

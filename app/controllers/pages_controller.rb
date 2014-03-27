@@ -42,7 +42,7 @@ class PagesController < ApplicationController
   # @note GET /
   # @param start_page [Integer] опциональный номер страницы
   # @see Place
-  def start
+  def start_enter
 
     @first_var = "Первая страница - START"
     @navigation_var = "Navigation переменная - PAGES контроллер/START метод"

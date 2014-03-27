@@ -9,8 +9,8 @@
 </div>
 
 
-<h3> Ввод информации о МАТЕРИ стартового дерева  </h3>
-<%= form_tag({ :controller => "start", :action => "mother_store"}) do %>
+<h3> Ввод информации о МАТЕРИ </h3>
+<%= form_tag({ :controller => "start", :action => "store_mother"}) do %>
     <div>
       <h4>3.Имя Матери </h4>
       <%= label_tag 'Введи имя Матери:' %>
@@ -22,5 +22,5 @@
 <% end %>
 
 
-<p>Имя матери: @user_name: <%= @user_name.inspect %>, я - <%= @user_sex.inspect %> </p>
+<p>Имя матери: @mother_name: <%= @mother_name.inspect %>, я - <%= @mother_sex.inspect %> </p>
 <p>@user_sex: <%= @user_sex.inspect %></p>
