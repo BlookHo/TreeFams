@@ -8,10 +8,16 @@ class StartController < ApplicationController
   def enter_myself
     @navigation_var = "Navigation переменная - START контроллер/enter_myself метод"
 
+    Tree.delete_all
+    Tree.reset_pk_sequence
+
+
+
     form_select_fields  # Формирование массивов значений для форм ввода типа select.
     session[:sel_names] = {:value => @sel_names, :updated_at => Time.current}
     session[:sel_names_male] = {:value => @sel_names_male, :updated_at => Time.current}
     session[:sel_names_female] = {:value => @sel_names_female, :updated_at => Time.current}
+
 
 
   end
@@ -21,7 +27,6 @@ class StartController < ApplicationController
     @sel_names_male = session[:sel_names_male][:value]
 
     @navigation_var = "Navigation переменная - START контроллер/enter_father метод"
-#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
 
   end
@@ -30,7 +35,6 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @sel_names_female = session[:sel_names_female][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_mother метод"
-#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
 
   end
@@ -39,7 +43,6 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @sel_names_male = session[:sel_names_male][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_brother метод"
-#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
@@ -47,7 +50,6 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @sel_names_female = session[:sel_names_female][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_sister метод"
-#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
@@ -55,7 +57,6 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @sel_names_male = session[:sel_names_male][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_son метод"
-#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
@@ -63,7 +64,6 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @sel_names_female = session[:sel_names_female][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_daugther метод"
-#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
@@ -71,7 +71,6 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @sel_names_male = session[:sel_names_male][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_husband метод"
-#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
@@ -79,7 +78,6 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @sel_names_female = session[:sel_names_female][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_wife метод"
-#    form_select_fields  # Формирование массивов значений для форм ввода типа select.
 
   end
 
@@ -93,7 +91,6 @@ class StartController < ApplicationController
     @check_yea_nau = ["Yea", "No"]
     @brothers_exists = params[:brothers_exist?]
 
-
     if !@brothers_exists.blank?
       redirect_to start_enter_brothers_path
     end
@@ -106,7 +103,6 @@ class StartController < ApplicationController
     form_select_fields  # Формирование массивов значений для форм ввода типа select.
     @check_yea_nau = ["Yea", "No"]
     @brothers_exists = params[:brothers_exist?]
-
 
     if !@brothers_exists.blank?
       redirect_to start_enter_brothers_path
@@ -198,7 +194,20 @@ class StartController < ApplicationController
 
   def store_profile(id,relation,name,sex)
 
-    @tree_profile_arr = []
+    #@new_tree_profile = Tree.new
+    #@new_tree_profile.user_id =
+    #@new_tree_profile.profile_id =
+    #@new_tree_profile.relation_id =
+    #@new_tree_profile.connected =
+    #@new_tree_profile.save
+    #
+    #
+    #
+
+
+
+
+                        @tree_profile_arr = []
 
     @tree_profile_arr[0] = id              # id
     @tree_profile_arr[1] = relation        # Relation
@@ -463,22 +472,31 @@ class StartController < ApplicationController
   end
 
 
-  def enter_final
-
-    @tree_array = session[:tree_array][:value]
-    @user_sex = session[:user_sex][:value]
-
-
-  end
-
 
   def show_tree_table
 
+    @navigation_var = "Navigation переменная - START контроллер/show_tree_table метод"
     @tree_array = session[:tree_array][:value]
     @user_sex = session[:user_sex][:value]
 
+    #@new_tree_profile = Tree.new
+    #@new_tree_profile.user_id =
+    #@new_tree_profile.profile_id =
+    #@new_tree_profile.relation_id =
+    #@new_tree_profile.connected =
+    #@new_tree_profile.save
 
-    @navigation_var = "Navigation переменная - START контроллер/show_tree_table метод"
+    #make_user_id
+    #
+    #make_profile_id
+    #
+    #make_relation_id
+    #
+    #save_tree
+    #
+    #display_tree
+    #
+    #
 
 
 
