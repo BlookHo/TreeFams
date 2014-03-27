@@ -11,7 +11,7 @@
 
 # encoding: utf-8
 
-Name.delete_all
+#Name.delete_all
 #Name.reset_pk_sequence
 
 Name.create([

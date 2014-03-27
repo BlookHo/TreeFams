@@ -47,6 +47,7 @@ module Weafam
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
     config.i18n.fallbacks = true
+    config.i18n.fallbacks = [:en]
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"

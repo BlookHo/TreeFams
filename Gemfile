@@ -35,7 +35,7 @@ gem 'gon'
 #gem 'jquery-turbolinks'
 #gem 'turbolinks'
 
-gem 'will_paginate'
+#gem 'will_paginate'
 
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
