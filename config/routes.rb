@@ -55,8 +55,7 @@ Weafam::Application.routes.draw do
   post "pages/main"
 
   #########
-  #########
-
+  ######### start/enter
 
   get "start/enter_myself"
   post "start/enter_myself"
@@ -85,7 +84,7 @@ Weafam::Application.routes.draw do
   get "start/enter_wife"
   post "start/enter_wife"
 
-  #########
+  ######### start/check
 
   get "start/check_brothers"
   post "start/check_brothers"
@@ -105,7 +104,7 @@ Weafam::Application.routes.draw do
   get "start/check_wife"
   post "start/check_wife"
 
-  #########
+  ######### start/__store
 
   get "start/myself_store"
   post "start/myself_store"
