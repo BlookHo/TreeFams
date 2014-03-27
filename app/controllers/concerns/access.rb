@@ -20,10 +20,10 @@ module Access
 
   # Checks if a good belongs to user
   # @note is called on goods/view
-  # @param good [Active Record Single] Товар
+  # @param model [Active Record Single] Model name
   # @return [Boolean]
-  def belongs_to_user?(good)
-    good.user_id == current_user.try(:id)
+  def belongs_to_user?(model)
+    model.user_id == current_user.try(:id)
   end
 
 
