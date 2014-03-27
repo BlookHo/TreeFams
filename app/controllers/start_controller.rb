@@ -12,13 +12,10 @@ class StartController < ApplicationController
     Tree.reset_pk_sequence
 
 
-
     form_select_fields  # Формирование массивов значений для форм ввода типа select.
     session[:sel_names] = {:value => @sel_names, :updated_at => Time.current}
     session[:sel_names_male] = {:value => @sel_names_male, :updated_at => Time.current}
     session[:sel_names_female] = {:value => @sel_names_female, :updated_at => Time.current}
-
-
 
   end
 
@@ -28,14 +25,12 @@ class StartController < ApplicationController
 
     @navigation_var = "Navigation переменная - START контроллер/enter_father метод"
 
-
   end
 
   def enter_mother
     @tree_array = session[:tree_array][:value]
     @sel_names_female = session[:sel_names_female][:value]
     @navigation_var = "Navigation переменная - START контроллер/enter_mother метод"
-
 
   end
 
@@ -200,14 +195,9 @@ class StartController < ApplicationController
     #@new_tree_profile.relation_id =
     #@new_tree_profile.connected =
     #@new_tree_profile.save
-    #
-    #
-    #
 
 
-
-
-                        @tree_profile_arr = []
+    @tree_profile_arr = []
 
     @tree_profile_arr[0] = id              # id
     @tree_profile_arr[1] = relation        # Relation
@@ -215,7 +205,6 @@ class StartController < ApplicationController
     @tree_profile_arr[3] = sex             # Sex
 
     return @tree_profile_arr
-
 
   end
 
