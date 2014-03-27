@@ -84,6 +84,9 @@ Weafam::Application.routes.draw do
   get "start/enter_wife"
   post "start/enter_wife"
 
+  get "start/enter_final"
+  post "start/enter_final"
+
   ######### start/checks
 
   get "start/check_brothers"
