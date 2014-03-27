@@ -4,10 +4,10 @@
 Weafam::Application.routes.draw do
 
   resources :trees
-
   resources :profiles
-
   resources :users
+  resources :names
+  resources :relations
 
 #  post "admin/login"
 
@@ -31,9 +31,7 @@ Weafam::Application.routes.draw do
   match 'search' => 'pages#search', via: :get
   match 'conversation' => 'pages#conversation', via: :get
 
-
-  resources :names
-  resources :relations
+  match 'show_tree_table' => 'start#show_tree_table', via: :get
 
 
   get "pages/admin"
@@ -54,38 +52,18 @@ Weafam::Application.routes.draw do
   get "pages/main"
   post "pages/main"
 
-  #########
   ######### start_enter/enters
 
   get "start/enter_myself"
-  post "start/enter_myself"
-
- get "start/enter_father"
-  post "start/enter_father"
-
+  get "start/enter_father"
   get "start/enter_mother"
-  post "start/enter_mother"
-
   get "start/enter_brother"
-  post "start/enter_brother"
-
   get "start/enter_sister"
-  post "start/enter_sister"
-
   get "start/enter_son"
-  post "start/enter_son"
-
   get "start/enter_daugther"
-  post "start/enter_daugther"
-
   get "start/enter_husband"
-  post "start/enter_husband"
-
   get "start/enter_wife"
-  post "start/enter_wife"
-
   get "start/enter_final"
-  post "start/enter_final"
 
   ######### start/checks
 
@@ -109,37 +87,15 @@ Weafam::Application.routes.draw do
 
   ######### start/__store
 
-  get "start/store_myself"
   post "start/store_myself"
-
-  get "start/store_father"
   post "start/store_father"
-
-  get "start/store_mother"
   post "start/store_mother"
-
-  get "start/store_brother"
   post "start/store_brother"
-
-  get "start/store_sister"
   post "start/store_sister"
-
-  get "start/store_son"
   post "start/store_son"
-
-  get "start/store_daugther"
   post "start/store_daugther"
-
-  get "start/store_husband"
   post "start/store_husband"
-
-  get "start/store_wife"
   post "start/store_wife"
-
-  #########
-
-  get "start/show_tree_table"
-  post "start/show_tree_table"
 
   ##########
   #########

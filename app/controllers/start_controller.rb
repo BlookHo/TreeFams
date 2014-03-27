@@ -467,7 +467,7 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to start_show_tree_table_path
+    redirect_to show_tree_table_path
 
   end
 
