@@ -55,6 +55,7 @@ Weafam::Application.routes.draw do
   post "pages/main"
 
   #########
+  #########
 
 
   get "start/enter_myself"
@@ -66,6 +67,46 @@ Weafam::Application.routes.draw do
   get "start/enter_mother"
   post "start/enter_mother"
 
+  get "start/enter_brother"
+  post "start/enter_brother"
+
+  get "start/enter_sister"
+  post "start/enter_sister"
+
+  get "start/enter_son"
+  post "start/enter_son"
+
+  get "start/enter_daugther"
+  post "start/enter_daugther"
+
+  get "start/enter_husband"
+  post "start/enter_husband"
+
+  get "start/enter_wife"
+  post "start/enter_wife"
+
+  #########
+
+  get "start/check_brothers"
+  post "start/check_brothers"
+
+  get "start/check_sisters"
+  post "start/check_sisters"
+
+  get "start/check_sons"
+  post "start/check_sons"
+
+  get "start/check_daugthers"
+  post "start/check_daugthers"
+
+  get "start/check_husband"
+  post "start/check_husband"
+
+  get "start/check_wife"
+  post "start/check_wife"
+
+  #########
+
   get "start/myself_store"
   post "start/myself_store"
 
@@ -75,16 +116,31 @@ Weafam::Application.routes.draw do
   get "start/mother_store"
   post "start/mother_store"
 
+  get "start/brother_store"
+  post "start/brother_store"
+
+  get "start/sister_store"
+  post "start/sister_store"
+
+  get "start/son_store"
+  post "start/son_store"
+
+  get "start/daugther_store"
+  post "start/daugther_store"
+
+  get "start/husband_store"
+  post "start/mother_store"
+
+  get "start/wife_store"
+  post "start/wife_store"
+
+  #########
+
   get "start/show_tree_table"
   post "start/show_tree_table"
 
-  get "start/check_brothers"
-  post "start/check_brothers"
-
-  get "start/enter_brothers"
-  post "start/enter_brothers"
-
   ##########
+  #########
 
 
   get "main/relative_menu"

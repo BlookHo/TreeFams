@@ -150,7 +150,7 @@ class StartController < ApplicationController
 
   end
 
-  def enter_brothers
+  def enter_brother
     @tree_array = session[:tree_array][:value]
 
 
