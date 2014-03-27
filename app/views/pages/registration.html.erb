@@ -1,25 +1,26 @@
-<section  class="admin">
+<section  >
 
 
   <h2> Страница REGISTRATION - регистрация Юзера </h2>
+  <h4> Здесь происходит регистрация Юзера и переход на Главную для основной работы </h4>
 
 
   <div>
     <p>@navigation_var: <%= @navigation_var.inspect %></p>
-    <p>@first_var: <%= @first_var.inspect %></p>
+    <!--<p>@first_var: <%= @first_var.inspect %></p>-->
   </div>
 
   <form class="form-horizontal" role="form">
     <div class="form-group">
-      <label for="inputEmail3" class="col-sm-2 control-label">Эл.почта</label>
+      <label for="inputEmail3" class="col-sm-2 control-label">Электронная почта</label>
       <div class="col-sm-10">
-        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+        <input type="email" class="form-control" id="inputEmail3" placeholder="Введите электронную почту">
       </div>
     </div>
     <div class="form-group">
       <label for="inputPassword3" class="col-sm-2 control-label">Пароль</label>
       <div class="col-sm-10">
-        <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+        <input type="password" class="form-control" id="inputPassword3" placeholder="Введите пароль">
       </div>
     </div>
     <div class="form-group">
@@ -41,17 +42,9 @@
 
 
 
-
-
-
-
-
-
-
-  <p>Здесь происходит регистрация Юзера и переход на Главную для основной работы %> </p>
   <p>Переход на Главную страницу:  <%= link_to "Переход на Главную -->", pages_main_path %> </p>
-
   <p>Переход на страницу Админа:  <%= link_to "Переход к Админу -->", pages_admin_path %> </p>
+  <p>Возврат на страницу Старт:  <%= link_to "Возврат в Старт -->", pages_start_path %> </p>
 
 
 </section>
