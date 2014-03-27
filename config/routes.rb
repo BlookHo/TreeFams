@@ -1,7 +1,7 @@
 Weafam::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
 
-  root 'pages#login'
+  root 'pages#main'
 
   resources :trees
   resources :profiles
@@ -22,12 +22,6 @@ Weafam::Application.routes.draw do
     get    "account" => "devise/registrations#edit",   as: :edit_user_registration
   end
 
-#  post "admin/login"
-
-# You can have the root of your site routed with "root"
-# root 'welcome#index'
-
-#  match 'admin' => 'admin#index', via: :get
 
 
   match 'main' => 'pages#main', via: :get
@@ -37,7 +31,7 @@ Weafam::Application.routes.draw do
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
   match 'settings' => 'pages#settings', via: :get
-  match 'registration' => 'pages#registration', via: :get
+  #match 'registration' => 'pages#registration', via: :get
   match 'settings' => 'pages#settings', via: :get
   match 'mypage' => 'pages#mypage', via: :get
   match 'search' => 'pages#search', via: :get
@@ -78,6 +72,12 @@ Weafam::Application.routes.draw do
   post "start/show_start_tree"
 
 
+#  post "admin/login"
+
+# You can have the root of your site routed with "root"
+# root 'welcome#index'
+
+#  match 'admin' => 'admin#index', via: :get
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
