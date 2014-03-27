@@ -28,7 +28,7 @@
           %td= tree[2]
           %td= tree[3]
           %td
-            Вызов меню Родственника: #{link_to "Relative Menu", main_relative_menu_path}
+            Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
   %h4 Совпадения древа Пользователя с другими
   %div
     %p
@@ -36,10 +36,10 @@
     %p
       Из них - подтвержденных: @approved_match_qty_loc #{@approved_match_qty_loc.inspect}
   %p
-    Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Переход к Подтверждениям совпадений -->", main_match_approval_path}
+    Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Переход к Подтверждениям совпадений -->", match_approval_path}
 - else
   %h1 No Listing tree!
   %p
-    Переход на страницу Старт:  #{link_to "Переход на Старт -->", pages_start_path}
+    Переход на страницу Старт:  #{link_to "Переход на Старт -->", start_path}
   %p
-    Возврат на страницу Логин:  #{link_to "Возврат в Логин -->", pages_login_path}
+    Возврат на страницу Логин:  #{link_to "Возврат в Логин -->", login_path}
