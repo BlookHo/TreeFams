@@ -8,5 +8,6 @@
     = javascript_include_tag 'application'
     %title Weafam
   %body
-    = render 'shared/parts/header'
+    = render 'shared/flash', flash: flash
+    = render 'shared/header'
     = yield

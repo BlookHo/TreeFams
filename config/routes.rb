@@ -1,4 +1,5 @@
 Weafam::Application.routes.draw do
+  mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
 
   root 'pages#login'
 
@@ -7,6 +8,19 @@ Weafam::Application.routes.draw do
   resources :users
   resources :names
   resources :relations
+
+
+  devise_for :users, skip: [:sessions, :registrations]
+  devise_scope :user do
+    get    "login"   => "devise/sessions#new",         as: :new_user_session
+    post   "login"   => "devise/sessions#create",      as: :user_session
+    delete "signout" => "devise/sessions#destroy",     as: :destroy_user_session
+
+    get    "signup"  => "devise/registrations#new",    as: :new_user_registration
+    post   "signup"  => "devise/registrations#create", as: :user_registration
+    put    "signup"  => "devise/registrations#update", as: :update_user_registration
+    get    "account" => "devise/registrations#edit",   as: :edit_user_registration
+  end
 
 #  post "admin/login"
 
