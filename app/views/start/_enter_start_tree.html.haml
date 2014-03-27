@@ -1,0 +1,45 @@
+%section
+  %h3 Диалог ввода Ближнего Круга (стартового древа)
+  = form_tag({ :controller => "start", :action => "process_questions"}) do
+    %div
+      %h4 1.Твое имя
+      = label_tag 'Введи свое имя:'
+      = select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя'
+    %div
+      %h4 2.Имя Отца
+      = label_tag 'Введи имя Отца:'
+      = select_tag 'father_name_select', options_for_select(@sel_names_male, selected = @father_name),  :prompt => 'Выбери имя'
+    %div
+      %h4 3.Имя Матери
+      = label_tag 'Введи имя Матери:'
+      = select_tag 'mother_name_select', options_for_select(@sel_names_female, selected = @mother_name),  :prompt => 'Выбери имя'
+    %div
+      %h4 4.Имя Брата
+      = label_tag 'Введи имя Брата:'
+      = select_tag 'brother_name_select', options_for_select(@sel_names_male, selected = @brother_name),  :prompt => 'Выбери имя'
+    %div
+      %h4 5.Имя Сестры
+      = label_tag 'Введи имя Сестры:'
+      = select_tag 'sister_name_select', options_for_select(@sel_names_female, selected = @sister_name),  :prompt => 'Выбери имя'
+    %div
+      %h4 6.Имя Сына
+      = label_tag 'Введи имя Сына:'
+      = select_tag 'son_name_select', options_for_select(@sel_names_male, selected = @son_name),  :prompt => 'Выбери имя'
+    %div
+      %h4 7.Имя Дочери
+      = label_tag 'Введи имя Дочери:'
+      = select_tag 'daugter_name_select', options_for_select(@sel_names_female, selected = @daugter_name),  :prompt => 'Выбери имя'
+    = submit_tag 'Ввод'
+  / <p>Мое имя: @user_name: <haml:loud> @user_name.inspect </haml:loud>, я - <haml:loud> @user_sex.inspect </haml:loud> </p>
+  / <p>@user_sex: <haml:loud> @user_sex.inspect </haml:loud></p>
+  / <p>Имя Отца: @father_name: <haml:loud> @father_name.inspect </haml:loud> </p>
+  / <p>@father_name_correct: <haml:loud> @father_name_correct.inspect </haml:loud></p>
+  / <p>Имя Матери: @mother_name: <haml:loud> @mother_name.inspect </haml:loud></p>
+  / <p>@mother_name_correct: <haml:loud> @mother_name_correct.inspect </haml:loud></p>
+  %h4 Совпадения древа Пользователя с другими
+  %div
+    %p
+      Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
+    / <p>Из них - подтвержденных: @approved_match_qty_loc <haml:loud> @approved_match_qty_loc.inspect </haml:loud></p>
+  %p
+    Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Переход к Подтверждениям совпадений -->", main_match_approval_path}

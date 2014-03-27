@@ -1,0 +1,26 @@
+%section.admin
+  %div
+    %p
+      @session_id: #{@session_id.inspect}
+    %p
+      @first_var: #{@first_var.inspect}
+    %p
+      @navigation_var: #{@navigation_var.inspect}
+  %h3 Страница ADMIN - служебные методы
+  %h3 Просмотр и редактирование таблиц
+  %h4
+    Пользователи - авторы деревьев #{link_to "Users", users_path}
+  %h4
+    Профили - все участники деревьев #{link_to "Profiles", profiles_path}
+  %h4
+    Деревья - все деревья всех пользователей-авторов #{link_to "Tree", trees_path}
+  %h4
+    Имена #{link_to "Names", names_path}
+  %h4
+    Отношения родства #{link_to "Relations", relations_path}
+  %p
+    Возврат на страницу Старт:  #{link_to "Возврат на Старт -->", pages_start_path}
+  %p
+    Возврат на страницу Логин:  #{link_to "Возврат в Логин -->", pages_login_path}
+  %p
+    Возврат на Главную страницу:  #{link_to "Возврат на Главную -->", pages_main_path}

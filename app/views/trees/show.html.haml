@@ -1,0 +1,16 @@
+%p#notice= notice
+%p
+  %strong User:
+  = @tree.user_id
+%p
+  %strong Profile:
+  = @tree.profile_id
+%p
+  %strong Relation:
+  = @tree.relation_id
+%p
+  %strong Connected:
+  = @tree.connected
+= link_to 'Edit', edit_tree_path(@tree)
+|
+\#{link_to 'Back', trees_path}

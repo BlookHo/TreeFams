@@ -1,0 +1,29 @@
+%h3 Отображение стартового Древа Пользователя в табличной форме - Ближнего Круга
+- if !@tree_array.blank?
+  %table
+    %thead
+      %tr
+        %th ID
+        %th Родство
+        %th Имя
+        %th Пол
+        %th
+        %th
+        %th
+    %tbody
+      - @tree_array.each do |tree|
+        %tr
+          %td= tree[0]
+          %td= tree[1]
+          %td= tree[2]
+          %td= tree[3]
+          %td
+            Вызов меню Родственника: #{link_to "Relative Menu", main_relative_menu_path}
+/ <p>Если @profile_sex = false, то <haml:loud> @profile_name.inspect </haml:loud> - женское имя %></p>
+%h4 Совпадения древа Пользователя с другими
+%div
+  %p
+    Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
+  / <p>Из них - подтвержденных: @approved_match_qty_loc <haml:loud> @approved_match_qty_loc.inspect </haml:loud></p>
+%p
+  Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Переход к Подтверждениям совпадений -->", main_match_approval_path}

@@ -1,0 +1,26 @@
+%section.admin
+  %h1 Listing names
+  %table
+    %thead
+      %tr
+        %th ID
+        %th Name
+        %th Only male
+        %th Name freq
+        %th
+        %th
+        %th
+    %tbody
+      - @names.each do |name|
+        %tr
+          %td= name.id
+          %td= name.name
+          %td= name.only_male
+          %td= name.name_freq
+          %td= link_to 'Show', name
+          %td= link_to 'Edit', edit_name_path(name)
+          %td= link_to 'Destroy', name, method: :delete, data: { confirm: 'Are you sure?' }
+  %br/
+  = link_to 'New Name', new_name_path
+  %p
+    Возврат на страницу Админа:  #{link_to "Возврат к Админу -->", pages_admin_path}

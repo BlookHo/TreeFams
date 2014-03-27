@@ -9,7 +9,7 @@ gem 'pg'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
-#gem 'compass-rails'
+gem 'compass-rails'
 gem 'bootstrap-sass'
 gem 'haml'
 
@@ -27,11 +27,13 @@ gem 'therubyracer'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+
+# Обмен переменными Ruby -> JS
 gem 'gon'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'jquery-turbolinks'
-gem 'turbolinks'
+#gem 'jquery-turbolinks'
+#gem 'turbolinks'
 
 gem 'will_paginate'
 
@@ -40,16 +42,29 @@ gem 'will_paginate'
 gem 'jbuilder', '~> 1.2'
 
 group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-#  gem 'sdoc', require: false
+  # Документация
   gem 'yard'
 end
 
 group :development do
+  # Лучше отображает ошибки
   gem "better_errors"
   gem "binding_of_caller"
+
+  # Ловит письма для отладки
   #gem 'mailcatcher'
+
+  # Находит косяки в запросах к базе
+  gem "bullet"
 end
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'capybara'
+  #gem "watir-rspec"
+end
+
+gem 'devise', github: 'plataformatec/devise'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
@@ -62,3 +77,6 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+# Админка
+gem 'rails_admin'

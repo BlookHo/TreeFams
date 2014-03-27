@@ -1,0 +1,24 @@
+%section.admin
+  %div
+    %p
+      @session_id: #{@session_id.inspect}
+    %p
+      @navigation_var: #{@navigation_var.inspect}
+    %p
+      @menu_choice: #{@menu_choice.inspect}
+  %h3 Partial RELATIVE_MENU - отображение меню напротив выбранного родственника в дереве
+  %h4
+    Переход на Страницу EDIT RELATIVE INFO - изменить, дополнить данные о родственнике #{link_to "Переход в редактирование профиля -->", pages_main_path}
+  %h4
+    Переход на Страницу ADD NEW RELATIVE - добавить нового родственника к выбранному #{link_to "Переход в метод добавления профиля -->", pages_main_path}
+  %h4
+    Переход на Страницу TALK WITH RELATIVE - общаться с родственником #{link_to "Переход на страницу Общения -->", conversation_path}
+  %h4
+    Переход на Страницу MARK RELATIVE FAVORITE - добавить родственника в избранные #{link_to "Переход в метод mark_favorite -->", conversation_path}
+  %div
+    %p
+      @menu_choice: #{@menu_choice.inspect}
+  %p
+    Возврат на Главную страницу:  #{link_to "Возврат на Главную -->", pages_main_path}
+  %p
+    Переход на страницу Старт:  #{link_to "Переход на Старт -->", pages_start_path}

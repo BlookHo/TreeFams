@@ -1,0 +1,13 @@
+%section.admin
+  %div
+    %p
+      @session_id: #{@session_id.inspect}
+    %p
+      @navigation_var: #{@navigation_var.inspect}
+    %p
+      @first_var: #{@first_var.inspect}
+  %h3 Страница CONVERSATION - методы общения Юзера с другими Юзерами: темы беседы события сообщения
+  %p
+    Возврат на Главную страницу:  #{link_to "Возврат на Главную -->", pages_main_path}
+  %p
+    Возврат на страницу Старт:  #{link_to "Возврат на Старт -->", pages_start_path}

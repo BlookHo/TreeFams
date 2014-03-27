@@ -1,0 +1,23 @@
+%h3 Отображение стартового Древа Пользователя в табличной форме - Ближнего Круга
+- if !@start_tree_arr.blank?
+  %table
+    %thead
+      %tr
+        %th ID
+        %th Родство
+        %th Имя
+        %th Пол
+        %th
+        %th
+        %th
+    %tbody
+      - @start_tree_arr.each do |tree|
+        %tr
+          %td= tree[0]
+          %td= tree[1]
+          %td= tree[2]
+          %td= tree[3]
+          %td
+            Вызов меню Родственника: #{link_to "Relative Menu", main_relative_menu_path}
+%p
+  Если @profile_sex = false, то #{@profile_name.inspect} - женское имя %>

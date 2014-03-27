@@ -1,0 +1,11 @@
+%section.admin
+  %h3 Страница MYPAGE - страница Юзера: вся инфа о Юзере, настройки и т.д.
+  %div
+    %p
+      @first_var: #{@first_var.inspect}
+    %p
+      @navigation_var: #{@navigation_var.inspect}
+  %p
+    Возврат на страницу Старт:  #{link_to "Возврат в Старт -->", pages_start_path}
+  %p
+    Переход на страницу Админа:  #{link_to "Переход к Админу -->", pages_admin_path}

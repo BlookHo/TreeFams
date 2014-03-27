@@ -1,0 +1,13 @@
+%p#notice= notice
+%p
+  %strong Profile:
+  = @user.profile_id
+%p
+  %strong Admin:
+  = @user.admin
+%p
+  %strong Rating:
+  = @user.rating
+= link_to 'Edit', edit_user_path(@user)
+|
+\#{link_to 'Back', users_path}

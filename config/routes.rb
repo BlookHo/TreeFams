@@ -1,19 +1,17 @@
-# encoding: utf-8
-
-
 Weafam::Application.routes.draw do
 
+  root 'pages#login'
+
   resources :trees
-
   resources :profiles
-
   resources :users
+  resources :names
+  resources :relations
 
 #  post "admin/login"
 
 # You can have the root of your site routed with "root"
 # root 'welcome#index'
-  root 'pages#login'
 
 #  match 'admin' => 'admin#index', via: :get
 
@@ -32,8 +30,6 @@ Weafam::Application.routes.draw do
   match 'conversation' => 'pages#conversation', via: :get
 
 
-  resources :names
-  resources :relations
 
 
   get "pages/admin"
@@ -42,7 +38,7 @@ Weafam::Application.routes.draw do
   get "pages/start"
   post "pages/start"
 
-  get "pages/start_dialoge"       # запуск процесса диалогового ввода стартового древа
+  get "pages/start_dialoge"
   post "pages/start_dialoge"
 
   get "pages/login"

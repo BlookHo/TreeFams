@@ -1,0 +1,26 @@
+%section.admin
+  %h1 Listing users
+  %table
+    %thead
+      %tr
+        %th ID
+        %th Profile_ID
+        %th Admin
+        %th Rating
+        %th
+        %th
+        %th
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= user.id
+          %td= user.profile_id
+          %td= user.admin
+          %td= user.rating
+          %td= link_to 'Show', user
+          %td= link_to 'Edit', edit_user_path(user)
+          %td= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }
+  %br/
+  = link_to 'New User', new_user_path
+  %p
+    Возврат на страницу Админа:  #{link_to "Возврат к Админу -->", pages_admin_path}

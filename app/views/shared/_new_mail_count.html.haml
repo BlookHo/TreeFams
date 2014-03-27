@@ -1,0 +1,6 @@
+- if @new_mail_count.blank? || @new_mail_count == 0
+  = link_to raw("<i class='icon-envelope-alt'></i>"), mail_path, :class => "ttip", title: "Мои сообщения"
+- elsif  @new_mail_count > 9
+  = link_to raw("<span>Мои беседы</span> <i class='icon-envelope-alt'></i> <strong>(*)</strong>"), mail_path, :class => "ttip", title: "У тебя есть новые сообщения"
+- else
+  = link_to raw(" <i class='icon-envelope-alt'></i> <strong>(#{@new_mail_count})</strong>"), mail_path, :class => "ttip", title: "У тебя есть новые сообщения"
