@@ -1,12 +1,17 @@
-<h3>Отображение Стартового Древа Пользователя в табличной форме</h3>
+
+<section  class="admin">
+
+  <h1>ПРОМЕЖУТОЧНОЕ Отображение Стартового Древа Пользователя в табличной форме</h1>
+  <h1>(для отладки)</h1>
 
 
-<% if !@tree_array.blank? %>
+  <% if !@tree_array.blank? %>
 
 
     <div>
-      <p>@session_id: <%= @session_id.inspect %></p>
+      <!--<p>@session_id: <%= @session_id.inspect %></p>-->
       <p>@navigation_var: <%= @navigation_var.inspect %></p>
+      <p>@user_sex: <%= @user_sex.inspect %></p>
       <p>@tree_array: <%= @tree_array.inspect %></p>
 
     </div>
@@ -35,28 +40,23 @@
             <td><%= tree[1] %></td>
             <td><%= tree[2] %></td>
             <td><%= tree[3] %></td>
-            <td> Вызов меню Родственника: <%= link_to "Relative Menu", main_relative_menu_path %> </td>
           </tr>
       <% end %>
       </tbody>
     </table>
 
 
-    <h4>Совпадения древа Пользователя с другими</h4>
-    <div>
-      <p>Найдено совпадений: @match_qty_loc: <%= @match_qty_loc.inspect %></p>
-    </div>
-
-
 <% else %>
     <h1>No Listing tree!</h1>
-    <p>Переход на страницу Старт:  <%= link_to "Переход на Старт -->", pages_start_path %> </p>
+    <p>Переход на страницу Старт:  <%= link_to "Переход на Старт -->", start_enter_myself_path %> </p>
     <p>Возврат на страницу Логин:  <%= link_to "Возврат в Логин -->", pages_login_path %> </p>
 
 <% end %>
 
 
-<p>@user_sex: <%= @user_sex.inspect %></p>
-<h4>Чтобы подтвердить совпадения и пожать руку родственнику - сначала зарегистрируйся. </h4>
-<h4> Выход + Сохранить - Переход на страницу Регистрации: <%= link_to "Переход к Регистрации -->", pages_registration_path %> </h4>
+<h2>Чтобы подтвердить совпадения и пожать руку родственнику - сначала зарегистрируйся. </h2>
+<h2> Выход + Сохранить - Переход на страницу Регистрации: <%= link_to "Переход к Регистрации -->", pages_registration_path %> </h2>
+<h2>Переход на страницу Старт:  <%= link_to "Старт -->", start_enter_myself_path %> </h2>
+<h2>Возврат на страницу Логин:  <%= link_to "Логин -->", pages_login_path %> </h2>
 
+</section>

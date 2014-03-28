@@ -16,6 +16,21 @@ class MainController < ApplicationController
 #  form_tree # Call from Main
 
 
+# Отображение дерева Юзера .
+# @note GET /
+# @param admin_page [Integer] опциональный номер страницы
+# @see News
+  def main_page
+
+    @navigation_var = "Navigation переменная - MAIN контроллер/main_display_tree метод"
+
+    @tree_array = session[:tree_array][:value]
+
+
+  end
+
+
+
   # Отображение дерева Юзера .
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы

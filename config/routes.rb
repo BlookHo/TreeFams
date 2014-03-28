@@ -32,6 +32,9 @@ Weafam::Application.routes.draw do
   match 'conversation' => 'pages#conversation', via: :get
 
   match 'show_tree_table' => 'start#show_tree_table', via: :get
+  match 'display_saved_tree' => 'start#display_saved_tree', via: :get
+
+  match 'main_page' => 'main#main_page', via: :get
 
 
   get "pages/admin"
@@ -96,6 +99,7 @@ Weafam::Application.routes.draw do
   post "start/store_daugther"
   post "start/store_husband"
   post "start/store_wife"
+  post "start/save_start"
 
   ##########
   #########

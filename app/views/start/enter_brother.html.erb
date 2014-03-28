@@ -1,4 +1,7 @@
-<h2> Метод enter_brother, Страница START - ввод стартового дерева - Ближний Круг </h2>
+<section class="admin">
+
+  <h1> Страница START - ввод стартового дерева - Ближний Круг </h1>
+
 
 <div>
   <!--<p>@sel_names: <%= @sel_names.inspect %></p>-->
@@ -10,10 +13,10 @@
 
 
 
-<h3> Ввод информации о БРАТЕ стартового дерева  </h3>
+<h2> Ввод информации о БРАТЕ стартового дерева  </h2>
 <%= form_tag({ :controller => "start", :action => "store_brother"}) do %>
     <div>
-      <h4>2.Имя Брата </h4>
+      <h2>2.Имя Брата </h2>
       <%= label_tag 'Введи имя Брата:' %>
       <div >
         <%= select_tag 'brother_name_select', options_for_select(@sel_names_male, selected = @brother_name),  :prompt => 'Выбери имя' %>
@@ -25,3 +28,8 @@
 
 <p>Имя Брата: @brother_name: <%= @brother_name.inspect %>, я - <%= @brother_sex.inspect %> </p>
 <p>@brother_sex: <%= @brother_sex.inspect %></p>
+
+  <h2> Переход на страницу Регистрации:  <%= link_to "Регистрация -->", registration_path %> </h2>
+  <h2> Возврат на страницу Логин:   <%= link_to "Логин -->", pages_login_path %> </h2>
+
+</section>

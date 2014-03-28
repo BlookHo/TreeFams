@@ -141,10 +141,8 @@ class StartController < ApplicationController
     @user_sex = session[:user_sex][:value]
     @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
 
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
-    @check_yea_nau = ["Yea", "No"]
-  #  @brothers_exists = params[:brothers_exist?]
-
+ #   form_select_fields  # Формирование массивов значений для форм ввода типа select.
+ #   @check_yea_nau = ["Yea", "No"]
 
     if @user_sex    # = true -> User = Male
       redirect_to start_enter_wife_path
@@ -295,17 +293,17 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @tree_profile_id = session[:tree_profile_id][:value]
 
-    @navigation_var = "Navigation переменная - START контроллер/father_store метод"
-    @father_name = params[:father_name_select] #
+    @navigation_var = "Navigation переменная - START контроллер/brother_store метод"
+    @brother_name = params[:brother_name_select] #
 
-    if !@father_name.blank?
-      @user_sex = check_sex_by_name(@father_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@father_name)
-        @father_name_correct = true
+    if !@brother_name.blank?
+      @user_sex = check_sex_by_name(@brother_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+      if check_sex_by_name(@brother_name)
+        @brother_name_correct = true
       else
-        @father_name_correct = false
+        @brother_name_correct = false
       end
-      @tree_profile_arr = store_profile(@tree_profile_id,5,@father_name,@user_sex)
+      @tree_profile_arr = store_profile(@tree_profile_id,5,@brother_name,@user_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
@@ -322,17 +320,17 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @tree_profile_id = session[:tree_profile_id][:value]
 
-    @navigation_var = "Navigation переменная - START контроллер/father_store метод"
-    @father_name = params[:father_name_select] #
+    @navigation_var = "Navigation переменная - START контроллер/sister_store метод"
+    @sister_name = params[:sister_name_select] #
 
-    if !@father_name.blank?
-      @user_sex = check_sex_by_name(@father_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@father_name)
-        @father_name_correct = true
+    if !@sister_name.blank?
+      @user_sex = check_sex_by_name(@sister_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+      if check_sex_by_name(@sister_name)
+        @sister_name_correct = true
       else
-        @father_name_correct = false
+        @sister_name_correct = false
       end
-      @tree_profile_arr = store_profile(@tree_profile_id,6,@father_name,@user_sex)
+      @tree_profile_arr = store_profile(@tree_profile_id,6,@sister_name,@user_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
@@ -383,7 +381,7 @@ class StartController < ApplicationController
 
     if !@wife_name.blank?   # надо ли проверять пол жены - геи?
       @wife_sex = check_sex_by_name(@wife_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@father_name)
+      if check_sex_by_name(@wife_name)
         @wife_name_correct = true
       else
         @wife_name_correct = false
@@ -456,7 +454,12 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to show_tree_table_path
+    #@email_name = ""
+    #@passw_name = ""
+    #session[:email_name] = {:value => email_name, :updated_at => Time.current}
+    #session[:passw_name] = {:value => passw_name, :updated_at => Time.current}
+
+    redirect_to show_tree_table_path  #########
 
   end
 
@@ -469,6 +472,27 @@ class StartController < ApplicationController
     @user_sex = session[:user_sex][:value]
 
     @id_author = @tree_array[0][0]  # Только для отображения в виде таблицы
+
+  end
+
+
+  def save_start
+
+    @navigation_var = "Navigation переменная - START контроллер/show_tree_table метод"
+    @tree_array = session[:tree_array][:value]
+    @user_sex = session[:user_sex][:value]
+    @id_author = @tree_array[0][0]  # Только для отображения в виде таблицы
+
+
+    @email_name = params[:email] #
+
+
+
+
+
+    @passw_name = params[:passw] #
+
+
 
 
     #@new_tree_profile = Tree.new
@@ -492,9 +516,19 @@ class StartController < ApplicationController
 
 
 
+
+
+
+    session[:email_name] = {:value => @email_name, :updated_at => Time.current}
+    session[:passw_name] = {:value => @passw_name, :updated_at => Time.current}
+
+    redirect_to main_page_path  #########
+
   end
 
+def display_saved_tree
 
+end
 
 
 
