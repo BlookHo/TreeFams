@@ -8,8 +8,9 @@ gem 'rails', '4.0.2'
 gem 'pg'
 
 # Use SCSS for stylesheets
+gem 'sass', '~> 3.2.18'
 gem 'sass-rails', '~> 4.0.0'
-#gem 'compass-rails'
+gem 'compass-rails'
 gem 'bootstrap-sass'
 gem 'haml'
 
@@ -35,7 +36,7 @@ gem 'gon'
 #gem 'jquery-turbolinks'
 #gem 'turbolinks'
 
-#gem 'will_paginate'
+gem 'kaminari'
 
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
