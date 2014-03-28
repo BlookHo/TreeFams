@@ -185,14 +185,7 @@ class StartController < ApplicationController
 
   ####  STORE ENTERED PROFILE  ########################
 
-  def store_profile(id,relation,name,sex)
-
-    #@new_tree_profile = Tree.new
-    #@new_tree_profile.user_id =
-    #@new_tree_profile.profile_id =
-    #@new_tree_profile.relation_id =
-    #@new_tree_profile.connected =
-    #@new_tree_profile.save
+  def add_profile(id,relation,name,sex)
 
 
     @tree_profile_arr = []
@@ -217,7 +210,7 @@ class StartController < ApplicationController
 
     @tree_array = []
     @tree_profile_id = 1
-    @tree_profile_arr = store_profile(@tree_profile_id,nil,@user_name,@user_sex)
+    @tree_profile_arr = add_profile(@tree_profile_id,nil,@user_name,@user_sex)
     @tree_array << @tree_profile_arr
     @tree_profile_id += 1
 
@@ -247,7 +240,7 @@ class StartController < ApplicationController
         @father_name_correct = false
       end
       # Сохранять отчество Юзера в зависимости от его пола @user_sex!
-      @tree_profile_arr = store_profile(@tree_profile_id,1,@father_name,@father_sex)
+      @tree_profile_arr = add_profile(@tree_profile_id,1,@father_name,@father_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
@@ -276,7 +269,7 @@ class StartController < ApplicationController
       else
         @mother_name_correct = false
       end
-      @tree_profile_arr = store_profile(@tree_profile_id,2,@mother_name,@user_sex)
+      @tree_profile_arr = add_profile(@tree_profile_id,2,@mother_name,@user_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
@@ -303,7 +296,7 @@ class StartController < ApplicationController
       else
         @brother_name_correct = false
       end
-      @tree_profile_arr = store_profile(@tree_profile_id,5,@brother_name,@user_sex)
+      @tree_profile_arr = add_profile(@tree_profile_id,5,@brother_name,@user_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
@@ -330,7 +323,7 @@ class StartController < ApplicationController
       else
         @sister_name_correct = false
       end
-      @tree_profile_arr = store_profile(@tree_profile_id,6,@sister_name,@user_sex)
+      @tree_profile_arr = add_profile(@tree_profile_id,6,@sister_name,@user_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
@@ -359,7 +352,7 @@ class StartController < ApplicationController
       else
         @husband_name_correct = false
       end
-      @tree_profile_arr = store_profile(@tree_profile_id,7,@husband_name,@husband_sex)
+      @tree_profile_arr = add_profile(@tree_profile_id,7,@husband_name,@husband_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
@@ -386,7 +379,7 @@ class StartController < ApplicationController
       else
         @wife_name_correct = false
       end
-      @tree_profile_arr = store_profile(@tree_profile_id,8,@wife_name,@wife_sex)
+      @tree_profile_arr = add_profile(@tree_profile_id,8,@wife_name,@wife_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
@@ -417,7 +410,7 @@ class StartController < ApplicationController
       end
 
       # Сохранять отчество Profile в зависимости от пола @user_sex!
-      @tree_profile_arr = store_profile(@tree_profile_id,3,@son_name,@son_sex)
+      @tree_profile_arr = add_profile(@tree_profile_id,3,@son_name,@son_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
@@ -446,18 +439,13 @@ class StartController < ApplicationController
         @daugther_name_correct = false
       end
       # Сохранять отчество Profile в зависимости от  пола @user_sex!
-      @tree_profile_arr = store_profile(@tree_profile_id,4,@daugther_name,@daugther_sex)
+      @tree_profile_arr = add_profile(@tree_profile_id,4,@daugther_name,@daugther_sex)
       @tree_array << @tree_profile_arr
       @tree_profile_id += 1
 
       session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
-
-    #@email_name = ""
-    #@passw_name = ""
-    #session[:email_name] = {:value => email_name, :updated_at => Time.current}
-    #session[:passw_name] = {:value => passw_name, :updated_at => Time.current}
 
     redirect_to show_tree_table_path  #########
 
@@ -484,13 +472,31 @@ class StartController < ApplicationController
     @id_author = @tree_array[0][0]  # Только для отображения в виде таблицы
 
 
-    @email_name = params[:email] #
+    @user_email = params[:email] #
+    if !@user_email.blank?
+
+      @passw_name = params[:passw] #
+      if !@passw_name.blank?
+
+        #save_profiles(@tree_array,@user_email,@user_sex)
+        #
+        #save_user
+        #
+        #save_tree
 
 
 
+      end
+
+    end
 
 
-    @passw_name = params[:passw] #
+    #@new_tree_profile = Tree.new
+    #@new_tree_profile.user_id =
+    #@new_tree_profile.profile_id =
+    #@new_tree_profile.relation_id =
+    #@new_tree_profile.connected =
+    #@new_tree_profile.save
 
 
 

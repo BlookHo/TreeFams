@@ -9,7 +9,6 @@ Weafam::Application.routes.draw do
   resources :names
   resources :relations
 
-#  post "admin/login"
 
 # You can have the root of your site routed with "root"
 # root 'welcome#index'
@@ -17,10 +16,9 @@ Weafam::Application.routes.draw do
 
 #  match 'admin' => 'admin#index', via: :get
 
-
+  # pages controller
   match 'main' => 'pages#main', via: :get
   match 'login' => 'pages#login', via: :get
-#  match 'start_enter' => 'pages#start_enter', via: :get; :post # уточнить синтаксис чтобы и post
   match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
@@ -30,12 +28,6 @@ Weafam::Application.routes.draw do
   match 'mypage' => 'pages#mypage', via: :get
   match 'search' => 'pages#search', via: :get
   match 'conversation' => 'pages#conversation', via: :get
-
-  match 'show_tree_table' => 'start#show_tree_table', via: :get
-  match 'display_saved_tree' => 'start#display_saved_tree', via: :get
-
-  match 'main_page' => 'main#main_page', via: :get
-
 
   get "pages/admin"
   post "pages/admin"
@@ -55,8 +47,12 @@ Weafam::Application.routes.draw do
   get "pages/main"
   post "pages/main"
 
-  ######### start_enter/enters
 
+  # start controller
+  match 'show_tree_table' => 'start#show_tree_table', via: :get
+  match 'display_saved_tree' => 'start#display_saved_tree', via: :get
+
+  ######### start_enter/enters
   get "start/enter_myself"
   get "start/enter_father"
   get "start/enter_mother"
@@ -67,6 +63,7 @@ Weafam::Application.routes.draw do
   get "start/enter_husband"
   get "start/enter_wife"
   get "start/enter_final"
+
 
   ######### start/checks
 
@@ -102,6 +99,12 @@ Weafam::Application.routes.draw do
   post "start/save_start"
 
   ##########
+
+
+  # main controller
+  match 'main_page' => 'main#main_page', via: :get
+
+
   #########
 
 
