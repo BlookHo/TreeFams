@@ -470,7 +470,7 @@ class StartController < ApplicationController
     @tree_array = session[:tree_array][:value]
     @user_sex = session[:user_sex][:value]
     @id_author = @tree_array[0][0]  # Только для отображения в виде таблицы
-
+    @profile_arr = []
 
     @user_email = params[:email] #
     if !@user_email.blank?
@@ -478,7 +478,7 @@ class StartController < ApplicationController
       @passw_name = params[:passw] #
       if !@passw_name.blank?
 
-        #save_profiles(@tree_array,@user_email,@user_sex)
+        @profile_arr = save_profiles(@tree_array,@user_email)
         #
         #save_user
         #
@@ -491,46 +491,40 @@ class StartController < ApplicationController
     end
 
 
-    #@new_tree_profile = Tree.new
-    #@new_tree_profile.user_id =
-    #@new_tree_profile.profile_id =
-    #@new_tree_profile.relation_id =
-    #@new_tree_profile.connected =
-    #@new_tree_profile.save
-
-
-
-
-    #@new_tree_profile = Tree.new
-    #@new_tree_profile.user_id =
-    #@new_tree_profile.profile_id =
-    #@new_tree_profile.relation_id =
-    #@new_tree_profile.connected =
-    #@new_tree_profile.save
-
-    #make_user_id
-    #
-    #make_profile_id
-    #
-    #make_relation_id
-    #
-    #save_tree
-    #
-    #display_tree
-    #
-    #
-
-
-
-
-
-
     session[:email_name] = {:value => @email_name, :updated_at => Time.current}
     session[:passw_name] = {:value => @passw_name, :updated_at => Time.current}
+    session[:profile_arr] = {:value => @profile_arr, :updated_at => Time.current}
 
     redirect_to main_page_path  #########
 
   end
+
+  def save_profiles(tree_array,user_email)
+
+    @profile_arr = []
+    @new_profile = []             # Sex
+
+
+    for arr_i in 0 .. tree_array.length-1
+
+  #  @new_profile = Profile.new
+  #  @new_profile[0] =     # после
+    @new_profile[1] = Name.find_by_name("#{tree_array[arr_i][2]}").id # name_id
+    @new_profile[2] = user_email # email
+    @new_profile[3] = tree_array[arr_i][3] # sex_id
+
+    @profile_arr <<  @new_profile
+
+   #   @new_profile.save
+
+    end
+
+    return @profile_arr
+
+
+  end
+
+
 
 def display_saved_tree
 
