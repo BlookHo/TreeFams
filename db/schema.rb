@@ -9,9 +9,9 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended that you checks this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140323091722) do
+ActiveRecord::Schema.define(version: 20140329064315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,8 @@ ActiveRecord::Schema.define(version: 20140323091722) do
     t.float    "rating",     default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "email",      default: ""
+    t.string   "password",   default: ""
   end
 
 end

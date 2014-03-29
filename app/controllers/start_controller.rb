@@ -11,6 +11,11 @@ class StartController < ApplicationController
     Tree.delete_all
     Tree.reset_pk_sequence
 
+    User.delete_all
+    User.reset_pk_sequence
+
+    Profile.delete_all
+    Profile.reset_pk_sequence
 
     form_select_fields  # Формирование массивов значений для форм ввода типа select.
     session[:sel_names] = {:value => @sel_names, :updated_at => Time.current}
@@ -466,6 +471,15 @@ class StartController < ApplicationController
 
   def save_start
 
+    Tree.delete_all             # DEBUGG
+    Tree.reset_pk_sequence
+
+    User.delete_all             # DEBUGG
+    User.reset_pk_sequence
+
+    Profile.delete_all          # DEBUGG
+    Profile.reset_pk_sequence
+
     @navigation_var = "Navigation переменная - START контроллер/show_tree_table метод"
     @tree_array = session[:tree_array][:value]
     @user_sex = session[:user_sex][:value]
@@ -478,9 +492,12 @@ class StartController < ApplicationController
       @passw_name = params[:passw] #
       if !@passw_name.blank?
 
-        @profile_arr = save_profiles(@tree_array,@user_email)
+        @new_user_id = user_registration(@user_email,@passw_name)
+
+        @profile_arr = save_profiles(@tree_array,@user_email,@new_user_id)
         #
-        #save_user
+   #     @user_arr = save_user(@tree_array,@profile_arr)
+        #
         #
         #save_tree
 
@@ -494,39 +511,75 @@ class StartController < ApplicationController
     session[:email_name] = {:value => @email_name, :updated_at => Time.current}
     session[:passw_name] = {:value => @passw_name, :updated_at => Time.current}
     session[:profile_arr] = {:value => @profile_arr, :updated_at => Time.current}
+    session[:new_user_id] = {:value => @new_user_id, :updated_at => Time.current}
 
     redirect_to main_page_path  #########
 
   end
 
-  def save_profiles(tree_array,user_email)
+
+  def user_registration(user_email,passw_name)
+
+        @new_user = User.new
+        @new_user.email = user_email        # user_email
+        @new_user.password = passw_name     # passw_name
+        @new_user.save
+
+        @last_user = User.last
+        @last_user_id = User.last.id
+
+        return @last_user_id
+
+  end
+
+
+  def save_profiles(tree_array, user_email, user_id)
 
     @profile_arr = []
-    @new_profile = []             # Sex
+    @new_profile_arr = []             #
+
+    #@tree_profile_arr[0] = id              # id
+    #@tree_profile_arr[1] = relation        # Relation
+    #@tree_profile_arr[2] = name            # Name
+    #@tree_profile_arr[3] = sex             # Sex
 
 
     for arr_i in 0 .. tree_array.length-1
 
-  #  @new_profile = Profile.new
-  #  @new_profile[0] =     # после
-    @new_profile[1] = Name.find_by_name("#{tree_array[arr_i][2]}").id # name_id
-    @new_profile[2] = user_email # email
-    @new_profile[3] = tree_array[arr_i][3] # sex_id
+    #  @new_profile = Profile.new
+    #  @new_profile[0] =     # после
+    #  @id_name_profile = Name.find_by_name(tree_array[arr_i][2])
 
-    @profile_arr <<  @new_profile
+      if arr_i == 0 # only for email для user
+         @new_profile_arr[0] = user_id  # user_id
+         @new_profile_arr[2] = user_email
+      else
+        @new_profile_arr[0] = arr_i + 1  # profile_id
+      end
+      @new_profile_arr[1] = Name.find_by_name(tree_array[arr_i][2]).id  # name_id
+      @new_profile_arr[3] = tree_array[arr_i][3] # sex_id
 
-   #   @new_profile.save
+      @profile_arr <<  @new_profile_arr
+      @new_profile_arr = []
+
+     #   @new_profile.save
 
     end
 
     return @profile_arr
+
+  end
+
+
+  def save_user(profile_array)
 
 
   end
 
 
 
-def display_saved_tree
+
+  def display_saved_tree
 
 end
 

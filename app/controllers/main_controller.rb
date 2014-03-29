@@ -24,8 +24,9 @@ class MainController < ApplicationController
 
     @navigation_var = "Navigation переменная - MAIN контроллер/main_display_tree метод"
 
-    @tree_array = session[:tree_array][:value]
-    @profile_arr = session[:profile_arr][:value]
+    @tree_array = session[:tree_array][:value]       # DEBUGG
+    @profile_arr = session[:profile_arr][:value] # DEBUGG
+     @new_user_id = session[:new_user_id][:value] # DEBUGG
 
 
   end
