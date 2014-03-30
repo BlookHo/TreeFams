@@ -495,11 +495,11 @@ class StartController < ApplicationController
         @new_user_id = user_registration(@user_email,@passw_name)
 
         @profile_arr = save_profiles(@tree_array,@user_email,@new_user_id)
-        #
-   #     @user_arr = save_user(@tree_array,@profile_arr)
-        #
-        #
-        #save_tree
+
+        @tree_arr = save_tree(@tree_array,@profile_arr,@new_user_id )
+
+
+
 
 
 
@@ -512,6 +512,7 @@ class StartController < ApplicationController
     session[:passw_name] = {:value => @passw_name, :updated_at => Time.current}
     session[:profile_arr] = {:value => @profile_arr, :updated_at => Time.current}
     session[:new_user_id] = {:value => @new_user_id, :updated_at => Time.current}
+    session[:tree_arr] = {:value => @tree_arr, :updated_at => Time.current}
 
     redirect_to main_page_path  #########
 
@@ -546,12 +547,22 @@ class StartController < ApplicationController
 
     for arr_i in 0 .. tree_array.length-1
 
-    #  @new_profile = Profile.new
-    #  @new_profile[0] =     # после
-    #  @id_name_profile = Name.find_by_name(tree_array[arr_i][2])
+      new_profile = Profile.new
+      new_profile.user_id = user_id    # user_id
 
-      if arr_i == 0 # only for email для user
-         @new_profile_arr[0] = user_id  # user_id
+      @id_name_profile = Name.find_by_name(tree_array[arr_i][2])
+
+      new_profile.name_id = Name.find_by_name(tree_array[arr_i][2]).id  # name_id
+      new_profile.user_id = user_id    # user_id
+      if tree_array[arr_i][3]
+      new_profile.sex_id = 1    # sex_id - MALE
+      else
+        new_profile.sex_id = 0    # sex_id - FEMALE
+      end
+
+        if arr_i == 0 # only for email для user
+        new_profile.email = user_email    # email
+        @new_profile_arr[0] = user_id  # user_id
          @new_profile_arr[2] = user_email
       else
         @new_profile_arr[0] = arr_i + 1  # profile_id
@@ -562,7 +573,7 @@ class StartController < ApplicationController
       @profile_arr <<  @new_profile_arr
       @new_profile_arr = []
 
-     #   @new_profile.save
+      new_profile.save
 
     end
 
@@ -571,17 +582,39 @@ class StartController < ApplicationController
   end
 
 
-  def save_user(profile_array)
+  def save_tree(tree_array, profile_arr, new_user_id)
+
+    @new_tree_arr = []
+    @tree_arr = []             #
+
+    #@tree_profile_arr[0] = id              # id
+    #@tree_profile_arr[1] = relation        # Relation
+    #@tree_profile_arr[2] = name            # Name
+    #@tree_profile_arr[3] = sex             # Sex
+
+
+    for arr_i in 1 .. tree_array.length-1
+
+      @new_tree = Tree.new
+      @new_tree.user_id = new_user_id        # user_email
+      @new_tree.profile_id = tree_array[arr_i][0]     # profile_id
+      @new_tree.relation_id = tree_array[arr_i][1]     # relation_id
+      @new_tree.save
+
+
+      @new_tree_arr[0] = new_user_id  # user_id
+      @new_tree_arr[1] = tree_array[arr_i][0]     # profile_id
+      @new_tree_arr[2] = tree_array[arr_i][1]     # relation_id
+
+      @tree_arr <<  @new_tree_arr
+      @new_tree_arr = []
+
+    end
+
+      return @tree_arr
 
 
   end
-
-
-
-
-  def display_saved_tree
-
-end
 
 
 

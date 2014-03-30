@@ -9,6 +9,15 @@
     <tr>
       <th>ID</th>
       <th>User</th>
+      <th>Name</th>
+      <th>Surname</th>
+      <th>Email</th>
+      <th>Sex_id</th>
+      <th>Avatar_id</th>
+      <th>Country_id</th>
+      <th>City_id</th>
+      <th>Birthday</th>
+      <th>About</th>
       <th></th>
       <th></th>
       <th></th>
@@ -20,6 +29,15 @@
       <tr>
         <td><%= profile.id %></td>
         <td><%= profile.user_id %></td>
+        <td><%= profile.name_id %></td>
+        <td><%= profile.surname %></td>
+        <td><%= profile.email %></td>
+        <td><%= profile.sex_id %></td>
+        <td><%= profile.avatar_id %></td>
+        <td><%= profile.country_id %></td>
+        <td><%= profile.city_id %></td>
+        <td><%= profile.profile_birthday %></td>
+        <td><%= profile.about %></td>
         <td><%= link_to 'Show', profile %></td>
         <td><%= link_to 'Edit', edit_profile_path(profile) %></td>
         <td><%= link_to 'Destroy', profile, method: :delete, data: { confirm: 'Are you sure?' } %></td>
