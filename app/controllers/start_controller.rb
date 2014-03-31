@@ -375,7 +375,13 @@ class StartController < ApplicationController
     session[:user_sex] = {:value => @user_sex, :updated_at => Time.current}
     session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
 
-    redirect_to enter_father_path
+
+    @sel_names_male = session[:sel_names_male][:value]
+    respond_to do |format|
+      format.html
+      format.js { render 'start/store_myself' }
+    end
+    #redirect_to enter_father_path
 
   end
 
