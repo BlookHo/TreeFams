@@ -386,18 +386,6 @@ class PagesController < ApplicationController
 
   end
 
-  # Страница Сообщений и Бесед Юзера. На ней отображаются инфа обо всех новостях и обновлениях юзера
-  # @note GET /
-  # @param settings_page [Integer] опциональный номер страницы
-  # @see Place
-  def settings
-
-    @first_var = "Первая переменная - SETTINGS"
-    @navigation_var = "Navigation переменная - PAGES контроллер/settings метод"
-
-
-  end
-
 
   # Страница Юзера: вся инфа о Юзере, настройки и т.д.
   # @note GET /

@@ -1,4 +1,4 @@
-%section.admin
+%section
   %div
     %p
       @session_id: #{@session_id.inspect}
@@ -10,7 +10,7 @@
       @first_var: #{@first_var.inspect}
     %p
       @sel_names: #{@sel_names.inspect}
-  <li #{render :partial => 'main/main_display_tree'}
+  =render :partial => 'main/main_display_tree'
   %p
     Возврат на страницу Старт:  #{link_to "Возврат в Старт -->", start_enter_path}
   %p

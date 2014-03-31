@@ -15,8 +15,6 @@ Weafam::Application.routes.draw do
   match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
-  match 'settings' => 'pages#settings', via: :get
-  match 'settings' => 'pages#settings', via: :get
   match 'mypage' => 'pages#mypage', via: :get
   match 'search' => 'pages#search', via: :get
   match 'conversation' => 'pages#conversation', via: :get
@@ -67,11 +65,10 @@ Weafam::Application.routes.draw do
   get 'store_daugther' => "start/store_daugther", via: :post
   get 'store_husband' => "start/store_husband", via: :post
   get 'store_wife' => "start/store_wife", via: :post
-  get 'save_start' => "start/save_start", via: :post
 
 
 
-  devise_for :users, skip: [:sessions, :registrations]
+  devise_for :users, controllers: {registrations: "users/registrations", sessions: "users/sessions", passwords: "users/passwords"}, skip: [:sessions, :registrations]
   devise_scope :user do
     get    "login"   => "devise/sessions#new",         as: :new_user_session
     post   "login"   => "devise/sessions#create",      as: :user_session
