@@ -1,0 +1,28 @@
+<section class="admin">
+
+
+  <h2> Просмотр и Подтверждение совпадений родственников в Древе Пользователя </h2>
+
+
+  <div>
+    <p>@session_id: <%= @session_id.inspect %></p>
+    <p>@navigation_var: <%= @navigation_var.inspect %></p>
+    <p>Новых подтверждений: @new_approved_qty: <%= @new_approved_qty.inspect %></p>
+    <p>Всего подтверждено: @total_approved_qty: <%= @total_approved_qty.inspect %></p>
+    <p>Осталось неподтвержденных: @rest_to_approve: <%= @rest_to_approve.inspect %></p>
+
+
+  </div>
+
+
+
+
+
+
+
+  <h2> Переход на Главную страницу:  <%= link_to "Главная -->", main_page_path %> </h2>
+  <h2> Переход на страницу Регистрации:  <%= link_to "Регистрация -->", registration_path %> </h2>
+  <h2>Переход на страницу Старт:  <%= link_to "Старт -->", start_enter_myself_path %> </h2>
+
+
+</section>

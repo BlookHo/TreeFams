@@ -1,4 +1,7 @@
-<h2> Метод enter_son, Страница START - ввод стартового дерева - Ближний Круг </h2>
+<section class="admin">
+
+  <h1> Страница START - ввод стартового дерева - Ближний Круг </h1>
+
 
 <div>
   <!--<p>@sel_names: <%= @sel_names.inspect %></p>-->
@@ -10,7 +13,7 @@
 
 
 
-<h3> Ввод информации о СЫНЕ  </h3>
+<h2> Ввод информации о СЫНЕ  </h2>
 <%= form_tag({ :controller => "start", :action => "store_son"}) do %>
     <div>
       <h4>2.Имя Сына </h4>
@@ -25,3 +28,8 @@
 
 <p>Имя Сына: @son_name: <%= @son_name.inspect %>, я - <%= @son_sex.inspect %> </p>
 <p>@son_sex: <%= @son_sex.inspect %></p>
+
+  <h2> Переход на страницу Регистрации:  <%= link_to "Регистрация -->", registration_path %> </h2>
+  <h2> Возврат на страницу Логин:   <%= link_to "Логин -->", pages_login_path %> </h2>
+
+</section>

@@ -1,7 +1,7 @@
-Weafam::Application.routes.draw do
-  mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
+# encoding: utf-8
 
-  root 'pages#main'
+
+Weafam::Application.routes.draw do
 
   resources :trees
   resources :profiles
@@ -9,83 +9,61 @@ Weafam::Application.routes.draw do
   resources :names
   resources :relations
 
+
+# You can have the root of your site routed with "root"
+# root 'welcome#index'
+  root 'pages#login'
+
+#  match 'admin' => 'admin#index', via: :get
+
+  # pages controller
   match 'main' => 'pages#main', via: :get
   match 'login' => 'pages#login', via: :get
-  match 'start' => 'pages#start', via: :get
-  match 'admin' => 'pages#admin', via: [:get, :post]
-#  match 'start_enter' => 'pages#start_enter', via: :get; :post # уточнить синтаксис чтобы и post
   match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
   match 'settings' => 'pages#settings', via: :get
+  match 'registration' => 'pages#registration', via: :get
+  match 'settings' => 'pages#settings', via: :get
   match 'mypage' => 'pages#mypage', via: :get
   match 'search' => 'pages#search', via: :get
   match 'conversation' => 'pages#conversation', via: :get
-  match 'start_dialoge' => 'pages#start_dialoge', via: :get
 
-  match 'show_start_tree' => 'start#show_start_tree', via: :get
-  match 'process_questions' => 'start#process_questions', via: :post
+  get "pages/admin"
+  post "pages/admin"
 
-  match 'relative_menu' => 'main#relative_menu', via: :get
-  match 'match_approval' => 'main#match_approval', via: :post
+  get "pages/start_enter"
+  post "pages/start_enter"
 
+  get "pages/start_dialoge"       # запуск процесса диалогового ввода стартового древа
+  post "pages/start_dialoge"
 
-  devise_for :users, skip: [:sessions, :registrations]
-  devise_scope :user do
-    get    "login"   => "devise/sessions#new",         as: :new_user_session
-    post   "login"   => "devise/sessions#create",      as: :user_session
-    delete "signout" => "devise/sessions#destroy",     as: :destroy_user_session
+  get "pages/login"
+  post "pages/login"
 
-    get    "signup"  => "devise/registrations#new",    as: :new_user_registration
-    post   "signup"  => "devise/registrations#create", as: :user_registration
-    put    "signup"  => "devise/registrations#update", as: :update_user_registration
-    get    "account" => "devise/registrations#edit",   as: :edit_user_registration
-  end
-
-#  post "admin/login"
-
-# You can have the root of your site routed with "root"
-# root 'welcome#index'
-
-#  match 'admin' => 'admin#index', via: :get
   get "pages/registration"
   post "pages/registration"
 
   get "pages/main"
   post "pages/main"
 
-  #########
+
+  # start controller
+  match 'show_tree_table' => 'start#show_tree_table', via: :get
+  match 'display_saved_tree' => 'start#display_saved_tree', via: :get
+
   ######### start_enter/enters
-
   get "start/enter_myself"
-  post "start/enter_myself"
-
- get "start/enter_father"
-  post "start/enter_father"
-
+  get "start/enter_father"
   get "start/enter_mother"
-  post "start/enter_mother"
-
   get "start/enter_brother"
-  post "start/enter_brother"
-
   get "start/enter_sister"
-  post "start/enter_sister"
-
   get "start/enter_son"
-  post "start/enter_son"
-
   get "start/enter_daugther"
-  post "start/enter_daugther"
-
   get "start/enter_husband"
-  post "start/enter_husband"
-
   get "start/enter_wife"
-  post "start/enter_wife"
-
   get "start/enter_final"
-  post "start/enter_final"
+
 
   ######### start/checks
 
@@ -109,39 +87,24 @@ Weafam::Application.routes.draw do
 
   ######### start/__store
 
-  get "start/store_myself"
   post "start/store_myself"
-
-  get "start/store_father"
   post "start/store_father"
-
-  get "start/store_mother"
   post "start/store_mother"
-
-  get "start/store_brother"
   post "start/store_brother"
-
-  get "start/store_sister"
   post "start/store_sister"
-
-  get "start/store_son"
   post "start/store_son"
-
-  get "start/store_daugther"
   post "start/store_daugther"
-
-  get "start/store_husband"
   post "start/store_husband"
-
-  get "start/store_wife"
   post "start/store_wife"
-
-  #########
-
-  get "start/show_tree_table"
-  post "start/show_tree_table"
+  post "start/save_start"
 
   ##########
+
+
+  # main controller
+  match 'main_page' => 'main#main_page', via: :get
+
+
   #########
 
 
@@ -151,6 +114,8 @@ Weafam::Application.routes.draw do
   get "main/match_approval"
   post "main/match_approval"
 
+  #get "start/start_dialoge"
+  #post "start/start_dialoge"
 
 
 

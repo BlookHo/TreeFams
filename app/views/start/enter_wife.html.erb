@@ -1,4 +1,6 @@
-<h2> Метод enter_wife, Страница START - ввод стартового дерева - Ближний Круг </h2>
+<section class="admin">
+
+  <h1> Страница START - ввод стартового дерева - Ближний Круг </h1>
 
 <div>
   <!--<p>@sel_names: <%= @sel_names.inspect %></p>-->
@@ -8,11 +10,11 @@
   <p>@tree_array: <%= @tree_array.inspect %></p>
 </div>
 
+  <h2> Ввод информации  о ЖЕНЕ </h2>
 
-<h3> Ввод информации о ЖЕНЕ </h3>
 <%= form_tag({ :controller => "start", :action => "store_wife"}) do %>
     <div>
-      <h4>2.Имя Жены  </h4>
+      <h2>2.Имя Жены  </h2>
       <%= label_tag 'Введи имя Жены:' %>
       <div >
         <%= select_tag 'wife_name_select', options_for_select(@sel_names_female, selected = @wife_name),  :prompt => 'Выбери имя' %>
@@ -24,3 +26,8 @@
 
 <p>Имя Жены: @wife_name: <%= @wife_name.inspect %>, я - <%= @wife_sex.inspect %> </p>
 <p>@wife_sex: <%= @wife_sex.inspect %></p>
+
+  <h2> Переход на страницу Регистрации:  <%= link_to "Регистрация -->", registration_path %> </h2>
+  <h2> Возврат на страницу Логин:   <%= link_to "Логин -->", pages_login_path %> </h2>
+
+</section>
