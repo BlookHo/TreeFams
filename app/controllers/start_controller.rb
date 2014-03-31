@@ -168,7 +168,8 @@ class StartController < ApplicationController
     Profile.delete_all
     Profile.reset_pk_sequence
 
-    form_select_fields  # Формирование массивов значений для форм ввода типа select.
+    form_select_arrays  # Формирование массивов значений для форм ввода типа select.
+
     session[:sel_names] = {:value => @sel_names, :updated_at => Time.current}
     session[:sel_names_male] = {:value => @sel_names_male, :updated_at => Time.current}
     session[:sel_names_female] = {:value => @sel_names_female, :updated_at => Time.current}
