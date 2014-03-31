@@ -18,15 +18,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
         Tree.delete_all             # DEBUGG
         Tree.reset_pk_sequence
 
-        User.delete_all             # DEBUGG
-        User.reset_pk_sequence
+        #User.delete_all             # DEBUGG
+        #User.reset_pk_sequence
 
         Profile.delete_all          # DEBUGG
         Profile.reset_pk_sequence
 
-        @tree_array = session[:tree_array][:value]
+        #@tree_array = session[:tree_array][:value]
         #@user_sex = session[:user_sex][:value]
-        @id_author = @tree_array[0][0]  # Только для отображения в виде таблицы
+        #@id_author = @tree_array[0][0]  # Только для отображения в виде таблицы
         @profile_arr = []
 
         @passw_name = params[:passw] #
