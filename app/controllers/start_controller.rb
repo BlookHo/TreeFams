@@ -296,17 +296,22 @@ class StartController < ApplicationController
   def check_husband_or_wife
 
     @user_sex = session[:user_sex][:value]
-    @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
+ #   @navigation_var = "Navigation переменная - START контроллер/check_husband_or_wife метод"
 
  #   form_select_fields  # Формирование массивов значений для форм ввода типа select.
  #   @check_yea_nau = ["Yea", "No"]
 
+    @sel_names_male = session[:sel_names_male][:value]
+    @sel_names_female = session[:sel_names_female][:value]
     if @user_sex    # = true -> User = Male
-      redirect_to enter_wife_path
-    else
-      redirect_to enter_husband_path
-    end
 
+      @render_name = 'start/enter_wife'
+      #redirect_to enter_wife_path
+    else
+      @render_name = 'start/enter_husband'
+     # redirect_to enter_husband_path
+    end
+    @render_name
   end
 
   def check_husband
@@ -411,7 +416,14 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to enter_mother_path
+
+    @sel_names_female = session[:sel_names_female][:value]
+    respond_to do |format|
+      format.html
+      format.js { render 'start/store_father' }
+    end
+
+    #redirect_to enter_mother_path
 
   end
 
@@ -426,7 +438,7 @@ class StartController < ApplicationController
     @mother_name = params[:mother_name_select] #
 
     if !@mother_name.blank?
-      @user_sex = check_sex_by_name(@mother_name) # display sex by name # проверка, действ-но ли введено женское имя?
+      @mother_sex = check_sex_by_name(@mother_name) # display sex by name # проверка, действ-но ли введено женское имя?
       if !check_sex_by_name(@mother_name)
         @mother_name_correct = true
       else
@@ -440,7 +452,13 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to enter_brother_path
+#    @sel_names_female = session[:sel_names_female][:value]
+    @sel_names_male = session[:sel_names_male][:value]
+    respond_to do |format|
+      format.html
+      format.js { render 'start/store_mother' }
+    end
+#    redirect_to enter_brother_path
 
   end
 
@@ -453,7 +471,7 @@ class StartController < ApplicationController
     @brother_name = params[:brother_name_select] #
 
     if !@brother_name.blank?
-      @user_sex = check_sex_by_name(@brother_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+      @brother_sex = check_sex_by_name(@brother_name) # display sex by name # проверка, действ-но ли введено мужское имя?
       if check_sex_by_name(@brother_name)
         @brother_name_correct = true
       else
@@ -466,8 +484,14 @@ class StartController < ApplicationController
       session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
+#    @sel_names_male = session[:sel_names_male][:value]
+    @sel_names_female = session[:sel_names_female][:value]
+    respond_to do |format|
+      format.html
+      format.js { render 'start/store_brother' }
+    end
 
-    redirect_to enter_sister_path
+ #   redirect_to enter_sister_path
 
   end
 
@@ -494,7 +518,11 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    check_husband_or_wife   #
+    @next_view = check_husband_or_wife   #
+    respond_to do |format|
+      format.html
+      format.js { render 'start/store_sister' }
+    end
 
  #   redirect_to start_enter_son_path
 
@@ -523,7 +551,12 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to enter_son_path
+    @sel_names_male = session[:sel_names_male][:value]
+    respond_to do |format|
+      format.html
+      format.js { render 'start/store_husband' }
+    end
+#    redirect_to enter_son_path
 
   end
 
@@ -550,7 +583,12 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to enter_son_path
+    @sel_names_male = session[:sel_names_male][:value]
+    respond_to do |format|
+      format.html
+      format.js { render 'start/store_wife' }
+    end
+#    redirect_to enter_son_path
 
   end
 
@@ -581,7 +619,13 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to enter_daugther_path
+#    @sel_names_male = session[:sel_names_male][:value]
+    @sel_names_female = session[:sel_names_female][:value]
+    respond_to do |format|
+      format.html
+      format.js { render 'start/store_son' }
+    end
+#    redirect_to enter_daugther_path
 
   end
 
@@ -610,7 +654,12 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to show_tree_table_path  #########
+    @sel_names_female = session[:sel_names_female][:value]
+    respond_to do |format|
+      format.html
+      format.js { render 'start/store_daugther' }
+    end
+#    redirect_to show_tree_table_path  #########
 
   end
 

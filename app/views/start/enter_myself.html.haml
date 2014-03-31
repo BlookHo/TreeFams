@@ -1,5 +1,5 @@
 %section.admin
-  %h1 Страница START - ввод стартового дерева - Ближний Круг
+  %h2 Страница START - ввод стартового дерева - Ближний Круг
   %div
     / <p>@sel_names: <haml:loud> @sel_names.inspect </haml:loud></p>
     / <p>@sel_names_male: <haml:loud> @sel_names_male.inspect </haml:loud></p>
@@ -7,12 +7,11 @@
     %p
       @navigation_var: #{@navigation_var.inspect}
   %h2 Ввод информации об авторе стартового дерева
-  = form_tag(store_myself_path, remote: true) do
+  = form_tag(store_myself_path, remote: true, id: 'myself_form') do
     %div
       %h2 1.Твое имя
       = label_tag 'Введи свое имя:'
-      %div
-        = select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя'
+      = select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя'
     = submit_tag 'Ввод'
   %div
     %p#name_container

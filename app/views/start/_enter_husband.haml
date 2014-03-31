@@ -1,0 +1,7 @@
+%h2 Ввод информации о МУЖЕ
+= form_tag(store_husband_path, remote: true, id: 'husband_form') do
+  %div
+    = label_tag 'Введи имя Мужа:'
+    %div
+      = select_tag 'husband_name_select', options_for_select(@sel_names_male, selected = @husband_name),  :prompt => 'Выбери имя'
+  = submit_tag 'Ввод'

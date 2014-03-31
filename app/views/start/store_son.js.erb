@@ -1,0 +1,4 @@
+$("#son_form").fadeOut(1200);
+$("#name_container").append(' Имя сына: <%= @son_name %>');
+$("#name_container").append(' он - <%= @son_sex %>');
+$("#next_container").html("<%= j render 'start/enter_daugther' %>");
