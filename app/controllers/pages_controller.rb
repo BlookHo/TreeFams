@@ -42,12 +42,14 @@ class PagesController < ApplicationController
   # @note GET /
   # @param start_page [Integer] опциональный номер страницы
   # @see Place
-  def start
+  def start_enter
 
     @navigation_var = "Navigation переменная - Cтраница - START      PAGES контроллер/START метод"
 
     form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
+
+  end
 
     # Ввод одного профиля древа. Проверка Имя-Пол.
     # @note GET /
@@ -65,90 +67,43 @@ class PagesController < ApplicationController
       return name_correct
     end
 
-    # Поэтапный диалог - ввод стартового древа - ближний круг
-    # Перебор по массиву вопросов-предложений по вводу имен: автора древа, Отца, Матери.
-    # @note @start_one_quest_arr[0] = profile_logo, [1] = question, [2] = select_names_arr, [3] = id_relation
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see Place
-    def start_quest
-
-      @start_quest_arr = []
-
-      @start_tree_arr = []
-      @start_tree_profile_arr = []
-
-
-      @start_quest_arr = [["1.Твое имя","Введи свое имя:",@sel_names,nil],
-                          ["2.Имя Отца","Введи имя отца:",@sel_names_male,1],
-                          ["3.Имя Матери","Введи имя матери:",@sel_names_female,2]]
-
-      for arr_i in 0 .. @start_quest_arr.length-1 # 3 asc
-
-        @one_quest_arr = @start_quest_arr[arr_i]  # DEBUGG
-        @arr_i = arr_i # DEBUGG
-
-        asc_one_quest(@start_quest_arr[arr_i], arr_i ) if !@start_quest_arr[arr_i].blank?
-
-
-      end
-
-    end
-
-
-    # Спрашивает один вопрос в Поэтапном диалоге
-    # @note
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see Place
-    def asc_one_quest(one_quest_arr, arr_i)
-
-      @profile_logo = one_quest_arr[0]
-      @profile_question = one_quest_arr[1]
-      @select_names_arr = one_quest_arr[2]
-      @profile_relation = one_quest_arr[3]
-
-      @profile_name = params[:name_select] # КАК ВЗЯТЬ id ВЫБРАННОГО ИМЕНИ ПО ИНДЕКСУ МАССИВА ??
-
-      if !@profile_name.blank?
-        # извлечение пола из введенного имени
-        @profile_sex = check_sex_by_name(@profile_name) #
-
-        @start_tree_profile_arr = make_one_profile_arr(arr_i, @profile_relation, @profile_name, @profile_sex)
-
-        @start_tree_arr << @start_tree_profile_arr  #
-        @start_tree_profile_arr = []
-
-      end
-
-    end
-
-    # Сохраняет один профиль после ответа на один вопрос в Поэтапном диалоге
-    # @note new_profile_arr[0] = id_relation, [1] = id_name, [2] = id_sex,
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see Place
-    def make_one_profile_arr(arr_i, relation, name, sex)     #["Я", "Денис", "м"]
-      @navi_test = "PAGES контроллер/make_one_profile_arr метод"
-      new_profile_arr = []
-      new_profile_arr[0] = arr_i        #
-      new_profile_arr[1] = relation       #
-      new_profile_arr[2] = name    #
-      new_profile_arr[3] = sex          #
-
-      @new_profile_arr = new_profile_arr # DEBUGG
-
-
-    end
 
 
 
     # Начало диалога - ввода стартового древа - ближний круг
-    # Ввод автора древа, Отца, Матери. - через контроллер START
+    # Ввод автора древа, Отца, Матери.
     # @note
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
     def start_dialoge
 
+      @user_name = params[:name_select] #
+      # извлечение пола из введенного имени
+      if !@user_name.blank?
+        @user_sex = check_sex_by_name(@user_name) # display sex by name
+      end
 
-    end #
+      @father_name = params[:father_name_select] #
+      # проверка, действ-но ли введено мужское имя?
+      if !@father_name.blank?
+        if check_sex_by_name(@father_name)
+          @father_name_correct = true
+        else
+          @father_name_correct = false
+        end
+      end
+
+      @mother_name = params[:mother_name_select] #
+      # проверка, действ-но ли введено женское имя?
+      if !@mother_name.blank?
+        if !check_sex_by_name(@mother_name)
+          @mother_name_correct = true
+        else
+          @mother_name_correct = false
+        end
+      end
+
+    end # END OF start_dialoge
 
     # Отображение найденных совпадений среди всех деревьев относительно вводимого.
     # @note GET /
@@ -158,7 +113,14 @@ class PagesController < ApplicationController
 
     end
 
-     # Отображение найденных совпадений среди всех деревьев относительно вводимого.
+    ## Поиск совпадений среди всех деревьев, введенных ранее относительно вводимого.
+    ## @note GET /
+    ## @param admin_page [Integer] опциональный номер страницы
+    ## @see Place
+    #def find_match
+    #
+    #end
+    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
     # @note GET /
     # @note
     # @param admin_page [Integer] опциональный номер страницы
@@ -242,8 +204,9 @@ class PagesController < ApplicationController
 
       unless exit_n_save or bk_completed
 
-  #      start_quest
-        start_dialoge #
+        step_dialoge # USE
+
+   #     start_dialoge # USE
 
         make_next_prompt
 
@@ -270,7 +233,7 @@ class PagesController < ApplicationController
     end
 
 
-    enter_bk
+ #   enter_bk
 
     #respond_to do |format|
     #  format.js
@@ -278,7 +241,7 @@ class PagesController < ApplicationController
     #end
 
 
-  end
+#  end
 
   # Админа страница. Запуск админских методов, просмотр всех таблиц.
   # @note GET /
@@ -328,7 +291,7 @@ class PagesController < ApplicationController
 
     form_tree # use
 
-    find_match  #  USE - поместить в applic-n contr  ??
+    find_match  #  USE - поместить в applic-n contr
 
   end
 

@@ -4,12 +4,11 @@
 Weafam::Application.routes.draw do
 
   resources :trees
-
   resources :profiles
-
   resources :users
+  resources :names
+  resources :relations
 
-#  post "admin/login"
 
 # You can have the root of your site routed with "root"
 # root 'welcome#index'
@@ -17,10 +16,9 @@ Weafam::Application.routes.draw do
 
 #  match 'admin' => 'admin#index', via: :get
 
-
+  # pages controller
   match 'main' => 'pages#main', via: :get
   match 'login' => 'pages#login', via: :get
-#  match 'start' => 'pages#start', via: :get; :post # уточнить синтаксис чтобы и post
   match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
@@ -31,16 +29,11 @@ Weafam::Application.routes.draw do
   match 'search' => 'pages#search', via: :get
   match 'conversation' => 'pages#conversation', via: :get
 
-
-  resources :names
-  resources :relations
-
-
   get "pages/admin"
   post "pages/admin"
 
-  get "pages/start"
-  post "pages/start"
+  get "pages/start_enter"
+  post "pages/start_enter"
 
   get "pages/start_dialoge"
   post "pages/start_dialoge"
@@ -55,17 +48,75 @@ Weafam::Application.routes.draw do
   post "pages/main"
 
 
+  # start controller
+  match 'show_tree_table' => 'start#show_tree_table', via: :get
+  match 'display_saved_tree' => 'start#display_saved_tree', via: :get
+
+  ######### start_enter/enters
+  get "start/enter_myself"
+  get "start/enter_father"
+  get "start/enter_mother"
+  get "start/enter_brother"
+  get "start/enter_sister"
+  get "start/enter_son"
+  get "start/enter_daugther"
+  get "start/enter_husband"
+  get "start/enter_wife"
+  get "start/enter_final"
+
+
+  ######### start/checks
+
+  get "start/check_brothers"
+  post "start/check_brothers"
+
+  get "start/check_sisters"
+  post "start/check_sisters"
+
+  get "start/check_sons"
+  post "start/check_sons"
+
+  get "start/check_daugthers"
+  post "start/check_daugthers"
+
+  get "start/check_husband"
+  post "start/check_husband"
+
+  get "start/check_wife"
+  post "start/check_wife"
+
+  ######### start/__store
+
+  post "start/store_myself"
+  post "start/store_father"
+  post "start/store_mother"
+  post "start/store_brother"
+  post "start/store_sister"
+  post "start/store_son"
+  post "start/store_daugther"
+  post "start/store_husband"
+  post "start/store_wife"
+  post "start/save_start"
+
+  ##########
+
+
+  # main controller
+  match 'main_page' => 'main#main_page', via: :get
+
+
+  #########
+
+
   get "main/relative_menu"
   post "main/relative_menu"
 
   get "main/match_approval"
   post "main/match_approval"
 
-  get "start/process_questions"
-  post "start/process_questions"
+  #get "start/start_dialoge"
+  #post "start/start_dialoge"
 
-  get "start/show_start_tree"
-  post "start/show_start_tree"
 
 
   # The priority is based upon order of creation: first created -> highest priority.

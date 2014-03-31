@@ -77,6 +77,9 @@ module Weafam
     ## For Devise
     #config.assets.initialize_on_precompile = false
 
+    config.cache_store = :redis_store, 'redis://localhost:6379/0/cache'
+    config.session_store :redis_store
+
 
     #роуты для ошибок
     config.exceptions_app = self.routes

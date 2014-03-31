@@ -1,0 +1,35 @@
+<section class="admin">
+
+  <h1> Страница START - ввод стартового дерева - Ближний Круг </h1>
+
+
+<div>
+  <!--<p>@sel_names: <%= @sel_names.inspect %></p>-->
+  <!--<p>@sel_names_male: <%= @sel_names_male.inspect %></p>-->
+  <!--<p>@sel_names_female: <%= @sel_names_female.inspect %></p>-->
+  <p>@navigation_var: <%= @navigation_var.inspect %></p>
+  <p>@tree_array: <%= @tree_array.inspect %></p>
+</div>
+
+
+
+<h2> Ввод информации о СЫНЕ  </h2>
+<%= form_tag({ :controller => "start", :action => "store_son"}) do %>
+    <div>
+      <h4>2.Имя Сына </h4>
+      <%= label_tag 'Введи имя Сына:' %>
+      <div >
+        <%= select_tag 'son_name_select', options_for_select(@sel_names_male, selected = @son_name),  :prompt => 'Выбери имя' %>
+      </div>
+    </div>
+    <%= submit_tag 'Ввод' %>
+<% end %>
+
+
+<p>Имя Сына: @son_name: <%= @son_name.inspect %>, я - <%= @son_sex.inspect %> </p>
+<p>@son_sex: <%= @son_sex.inspect %></p>
+
+  <h2> Переход на страницу Регистрации:  <%= link_to "Регистрация -->", registration_path %> </h2>
+  <h2> Возврат на страницу Логин:   <%= link_to "Логин -->", pages_login_path %> </h2>
+
+</section>

@@ -51,6 +51,11 @@ group :development do
   #gem 'mailcatcher'
 end
 
+gem 'activerecord-reset-pk-sequence'
+
+# Redis
+gem 'redis-rails'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 

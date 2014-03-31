@@ -1,0 +1,32 @@
+<section  class="admin">
+
+
+  <h1> ГЛАВНАЯ страница (MAIN) - для основной работы: просмотр и наращивание древа. </h1>
+  <h1> Вызов меню родственника: добавление нового смежного родственника, общение, избранные, редактирование профиля. </h1>
+  <h1> Здесь же: получение инфы о возможных совпадениях профилей в других древах. </h1>
+  <h1> Переход к просмотру совпадений и дальнейшим рукопожатиям (подтверждениям). </h1>
+
+
+  <h2>Отображение Древа Пользователя в табличной форме</h2>
+
+  <div>
+    <p>@session_id: <%= @session_id.inspect %></p>
+    <p>@navigation_var: <%= @navigation_var.inspect %></p>
+    <p>@tree_array: <%= @tree_array.inspect %></p>
+    <p>@profile_arr: <%= @profile_arr.inspect %></p>
+    <p>@last_user: <%= @last_user.inspect %></p>
+    <p>@new_user_id: <%= @new_user_id.inspect %></p>
+    <p>@tree_arr: <%= @tree_arr.inspect %></p>
+  </div>
+
+
+  <li <%= render :partial => 'main/main_display_tree' %></li>
+
+
+  <h2> Возврат на страницу Старт:  <%= link_to "Старт -->", start_enter_myself_path %> </h2>
+  <h2> Возврат на страницу Логин:  <%= link_to "Логин -->", pages_login_path %> </h2>
+  <h2> Переход на страницу Админа:  <%= link_to "Админ -->", pages_admin_path %> </h2>
+
+
+
+</section>
