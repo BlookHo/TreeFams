@@ -15,7 +15,7 @@ class PagesController < ApplicationController
   # @note GET /
   # @param login_page [Integer] опциональный номер страницы
   # @see Place
-  def login
+  def landing
 
     @navigation_var = "Navigation переменная - PAGES контроллер/login метод"
 

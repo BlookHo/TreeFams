@@ -1,0 +1,26 @@
+%section.admin
+  %h1 Страница START - ввод стартового дерева - Ближний Круг
+  %div
+    / <p>@sel_names: <haml:loud> @sel_names.inspect </haml:loud></p>
+    / <p>@sel_names_male: <haml:loud> @sel_names_male.inspect </haml:loud></p>
+    / <p>@sel_names_female: <haml:loud> @sel_names_female.inspect </haml:loud></p>
+    %p
+      @navigation_var: #{@navigation_var.inspect}
+    %p
+      @tree_array: #{@tree_array.inspect}
+  %h2 Ввод информации о СЫНЕ
+  = form_tag({ :controller => "start", :action => "store_son"}) do
+    %div
+      %h4 2.Имя Сына
+      = label_tag 'Введи имя Сына:'
+      %div
+        = select_tag 'son_name_select', options_for_select(@sel_names_male, selected = @son_name),  :prompt => 'Выбери имя'
+    = submit_tag 'Ввод'
+  %p
+    Имя Сына: @son_name: #{@son_name.inspect}, я - #{@son_sex.inspect}
+  %p
+    @son_sex: #{@son_sex.inspect}
+  %h2
+    Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
+  %h2
+    Возврат на страницу Логин:   #{link_to "Логин -->", landing_path}

@@ -1,0 +1,40 @@
+%section.admin
+  %h1 Listing profiles
+  %table
+    %thead
+      %tr
+        %th ID
+        %th User
+        %th Name
+        %th Surname
+        %th Email
+        %th Sex_id
+        %th Avatar_id
+        %th Country_id
+        %th City_id
+        %th Birthday
+        %th About
+        %th
+        %th
+        %th
+    %tbody
+      - @profiles.each do |profile|
+        %tr
+          %td= profile.id
+          %td= profile.user_id
+          %td= profile.name_id
+          %td= profile.surname
+          %td= profile.email
+          %td= profile.sex_id
+          %td= profile.avatar_id
+          %td= profile.country_id
+          %td= profile.city_id
+          %td= profile.profile_birthday
+          %td= profile.about
+          %td= link_to 'Show', profile
+          %td= link_to 'Edit', edit_profile_path(profile)
+          %td= link_to 'Destroy', profile, method: :delete, data: { confirm: 'Are you sure?' }
+  %br/
+  = link_to 'New Profile', new_profile_path
+  %p
+    Возврат на страницу Админа:  #{link_to "Возврат к Админу -->", admin_path}

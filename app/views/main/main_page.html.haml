@@ -1,0 +1,28 @@
+%section.admin
+  %h1 ГЛАВНАЯ страница (MAIN) - для основной работы: просмотр и наращивание древа.
+  %h1 Вызов меню родственника: добавление нового смежного родственника, общение, избранные, редактирование профиля.
+  %h1 Здесь же: получение инфы о возможных совпадениях профилей в других древах.
+  %h1 Переход к просмотру совпадений и дальнейшим рукопожатиям (подтверждениям).
+  %h2 Отображение Древа Пользователя в табличной форме
+  %div
+    %p
+      @session_id: #{@session_id.inspect}
+    %p
+      @navigation_var: #{@navigation_var.inspect}
+    %p
+      @tree_array: #{@tree_array.inspect}
+    %p
+      @profile_arr: #{@profile_arr.inspect}
+    %p
+      @last_user: #{@last_user.inspect}
+    %p
+      @new_user_id: #{@new_user_id.inspect}
+    %p
+      @tree_arr: #{@tree_arr.inspect}
+  <li #{render :partial => 'main/main_display_tree'}
+  %h2
+    Возврат на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
+  %h2
+    Возврат на страницу Логин:  #{link_to "Логин -->", landing_path}
+  %h2
+    Переход на страницу Админа:  #{link_to "Админ -->", admin_path}

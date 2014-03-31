@@ -5,7 +5,11 @@
       @first_var: #{@first_var.inspect}
     %p
       @navigation_var: #{@navigation_var.inspect}
-  %p
-    Возврат на страницу Старт:  #{link_to "Возврат в Старт -->", start_path}
-  %p
-    Переход на страницу Админа:  #{link_to "Переход к Админу -->", admin_path}
+  %h2
+    Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
+  %h2
+    Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
+  %h2
+    Переход на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
+  %h2
+    Переход на страницу Админа:  #{link_to "Админ -->", admin_path}

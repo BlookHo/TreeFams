@@ -1,31 +1,30 @@
-%section
+%section.admin
   %h2 Страница REGISTRATION - регистрация Юзера
-  %h4 Здесь происходит регистрация Юзера и переход на Главную для основной работы
   %div
     %p
       @navigation_var: #{@navigation_var.inspect}
     / <p>@first_var: <haml:loud> @first_var.inspect </haml:loud></p>
-  %form.form-horizontal{:role => "form"}
-    .form-group
-      %label.col-sm-2.control-label{:for => "inputEmail3"} Электронная почта
-      .col-sm-10
-        %input#inputEmail3.form-control{:placeholder => "Введите электронную почту", :type => "email"}/
-    .form-group
-      %label.col-sm-2.control-label{:for => "inputPassword3"} Пароль
-      .col-sm-10
-        %input#inputPassword3.form-control{:placeholder => "Введите пароль", :type => "password"}/
-    .form-group
-      .col-sm-offset-2.col-sm-10
-        .checkbox
-          %label
-            %input{:type => "checkbox"}/
-            Запомнить меня
-    .form-group
-      .col-sm-offset-2.col-sm-10
-        %button.btn.btn-default{:type => "submit"} Зарегистрироваться
-  %p
-    Переход на Главную страницу:  #{link_to "Переход на Главную -->", main_path}
-  %p
-    Переход на страницу Админа:  #{link_to "Переход к Админу -->", pages_admin_path}
-  %p
-    Возврат на страницу Старт:  #{link_to "Возврат в Старт -->", start_path}
+    %p
+      @first_var: #{@first_var.inspect}
+    %p
+      @tree_array из сессии : #{@tree_array.inspect}
+  = form_tag ({ :controller => "start", :action => "save_start"}) do
+    %form.form-horizontal
+      %div
+        %h2 Эл.почта
+        = text_field_tag :email, @email_name,  :prompt => 'Введи электронную почту'
+      %div
+        %h2 Пароль
+        = text_field_tag :passw, @passw_name,  :prompt => 'Введи пароль'
+      .form-group
+      .btn.btn-default
+        = submit_tag "Зарегистрироваться и Сохранить"
+  %h2 Здесь происходит регистрация Юзера и переход на Главную для основной работы
+  %h2
+    Возврат на страницу Старт - отображение дерева в виде таблицы:  #{link_to "Возврат на Старт -->", show_tree_table_path}
+  %h2
+    Переход на Главную страницу:  #{link_to "Переход на Главную -->", main_page_path}
+  %h2
+    Переход на страницу Админа:  #{link_to "Переход к Админу -->", admin_path}
+  %h2
+    Возврат на страницу Логин:   #{link_to "Логин -->", landing_path}

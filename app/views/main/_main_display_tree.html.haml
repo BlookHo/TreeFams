@@ -1,17 +1,6 @@
 - if !@tree_array.blank?
   %div
-    %p
-      @session_id: #{@session_id.inspect}
-    %p
-      @navigation_var: #{@navigation_var.inspect}
-    / <p>@menu_choice: <haml:loud> @menu_choice.inspect </haml:loud></p>
-  %h4 ГЛАВНАЯ страница MAIN - для основной работы: просмотр и наращивание древа.
-  %h4 Вызов меню родственника: добавление нового смежного родственника, общение, избранные, редактирование профиля.
-  %h4 Здесь же: получение инфы о возможных совпадениях профилей в других древах.
-  %h4 Переход к просмотру совпадений и дальнейшим рукопожатиям (подтверждениям).
-  %h3 Отображение Древа Пользователя в табличной форме
-  %table
-    %thead
+    %table
       %tr
         %th ID
         %th Родство
@@ -20,7 +9,6 @@
         %th
         %th
         %th
-    %tbody
       - @tree_array.each do |tree|
         %tr
           %td= tree[0]
@@ -29,17 +17,17 @@
           %td= tree[3]
           %td
             Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
-  %h4 Совпадения древа Пользователя с другими
+  %h2 Совпадения древа Пользователя с другими
   %div
     %p
       Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
     %p
       Из них - подтвержденных: @approved_match_qty_loc #{@approved_match_qty_loc.inspect}
-  %p
-    Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Переход к Подтверждениям совпадений -->", match_approval_path}
+  %h2
+    Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Подтверждения совпадений -->", match_approval_path}
 - else
   %h1 No Listing tree!
   %p
-    Переход на страницу Старт:  #{link_to "Переход на Старт -->", start_path}
+    Переход на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
   %p
-    Возврат на страницу Логин:  #{link_to "Возврат в Логин -->", login_path}
+    Возврат на страницу Логин:  #{link_to "Логин -->", landing_path}
