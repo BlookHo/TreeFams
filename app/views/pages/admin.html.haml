@@ -7,22 +7,5 @@
     %p
       @navigation_var: #{@navigation_var.inspect}
   %h1 Страница ADMIN - служебные методы
-  %h2 Просмотр и редактирование таблиц
   %h2
-    Пользователи - авторы деревьев #{link_to "Users", users_path}
-  %h2
-    Профили - все участники деревьев #{link_to "Profiles", profiles_path}
-  %h2
-    Деревья - все деревья всех пользователей-авторов #{link_to "Tree", trees_path}
-  %h2
-    Имена #{link_to "Names", names_path}
-  %h2
-    Отношения родства #{link_to "Relations", relations_path}
-  %h2
-    Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
-  %h2
-    Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
-  %h2
-    Переход на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
-  %h2
-    Переход на страницу Логин:  #{link_to "Логин -->", landing_path}
+    =link_to 'Просмотр и редактирование таблиц', rails_admin_path
