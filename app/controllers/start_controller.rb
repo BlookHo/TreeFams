@@ -138,7 +138,7 @@ class StartController < ApplicationController
 
     session[:tree_array] = {:value => @tree_array, :updated_at => Time.current}
 
-    redirect_to start_show_start_tree_path
+    redirect_to show_start_tree_path
 
   end
 
@@ -244,7 +244,7 @@ class StartController < ApplicationController
     @brothers_exists = params[:brothers_exist?]
 
     if !@brothers_exists.blank?
-      redirect_to start_enter_brothers_path
+      redirect_to enter_brothers_path
     end
 
   end
@@ -257,7 +257,7 @@ class StartController < ApplicationController
     @brothers_exists = params[:brothers_exist?]
 
     if !@brothers_exists.blank?
-      redirect_to start_enter_brothers_path
+      redirect_to enter_brothers_path
     end
 
   end
@@ -272,7 +272,7 @@ class StartController < ApplicationController
 
 
     if !@brothers_exists.blank?
-      redirect_to start_enter_brothers_path
+      redirect_to enter_brothers_path
     end
 
   end
@@ -287,7 +287,7 @@ class StartController < ApplicationController
 
 
     if !@brothers_exists.blank?
-      redirect_to start_enter_brothers_path
+      redirect_to enter_brothers_path
     end
 
   end
@@ -302,9 +302,9 @@ class StartController < ApplicationController
  #   @check_yea_nau = ["Yea", "No"]
 
     if @user_sex    # = true -> User = Male
-      redirect_to start_enter_wife_path
+      redirect_to enter_wife_path
     else
-      redirect_to start_enter_husband_path
+      redirect_to enter_husband_path
     end
 
   end
@@ -319,7 +319,7 @@ class StartController < ApplicationController
 
 
     if !@brothers_exists.blank?
-      redirect_to start_enter_brothers_path
+      redirect_to enter_brothers_path
     end
 
   end
@@ -334,7 +334,7 @@ class StartController < ApplicationController
 
 
     if !@brothers_exists.blank?
-      redirect_to start_enter_brothers_path
+      redirect_to enter_brothers_path
     end
 
   end
@@ -375,7 +375,7 @@ class StartController < ApplicationController
     session[:user_sex] = {:value => @user_sex, :updated_at => Time.current}
     session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
 
-    redirect_to start_enter_father_path
+    redirect_to enter_father_path
 
   end
 
@@ -405,7 +405,7 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to start_enter_mother_path
+    redirect_to enter_mother_path
 
   end
 
@@ -434,7 +434,7 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to start_enter_brother_path
+    redirect_to enter_brother_path
 
   end
 
@@ -461,7 +461,7 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to start_enter_sister_path
+    redirect_to enter_sister_path
 
   end
 
@@ -517,7 +517,7 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to start_enter_son_path
+    redirect_to enter_son_path
 
   end
 
@@ -544,7 +544,7 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to start_enter_son_path
+    redirect_to enter_son_path
 
   end
 
@@ -575,7 +575,7 @@ class StartController < ApplicationController
       session[:tree_profile_id] = {:value => @tree_profile_id, :updated_at => Time.current}
     end
 
-    redirect_to start_enter_daugther_path
+    redirect_to enter_daugther_path
 
   end
 
@@ -617,6 +617,7 @@ class StartController < ApplicationController
     @user_sex = session[:user_sex][:value]
 
     @id_author = @tree_array[0][0]  # Только для отображения в виде таблицы
+  end
 
 
   def save_profiles(tree_array, user_email, user_id)

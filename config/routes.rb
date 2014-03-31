@@ -33,38 +33,38 @@ Weafam::Application.routes.draw do
 
 
   ######### start_enter/enters
-  get 'enter_myself' => "start/enter_myself", via: :get
-  get 'enter_father' => "start/enter_father", via: :get
-  get 'enter_mother' => "start/enter_mother", via: :get
-  get 'enter_brother' => "start/enter_brother", via: :get
-  get 'enter_sister' => "start/enter_sister", via: :get
-  get 'enter_son' => "start/enter_son", via: :get
-  get 'enter_daugther' => "start/enter_daugther", via: :get
-  get 'enter_husband' => "start/enter_husband", via: :get
-  get 'enter_wife' => "start/enter_wife", via: :get
-  get 'enter_final' => "start/enter_final", via: :get
+  match 'enter_myself' => "start#enter_myself", via: :get
+  match 'enter_father' => "start#enter_father", via: :get
+  match 'enter_mother' => "start#enter_mother", via: :get
+  match 'enter_brother' => "start#enter_brother", via: :get
+  match 'enter_sister' => "start#enter_sister", via: :get
+  match 'enter_son' => "start#enter_son", via: :get
+  match 'enter_daugther' => "start#enter_daugther", via: :get
+  match 'enter_husband' => "start#enter_husband", via: :get
+  match 'enter_wife' => "start#enter_wife", via: :get
+  match 'enter_final' => "start#enter_final", via: :get
 
 
-  ######### start/checks
+  ######### start#checks
 
-  get 'check_brothers' => "start/check_brothers", via: :post
-  get 'check_sisters' => "start/check_sisters", via: :post
-  get 'check_sons' => "start/check_sons", via: :post
-  get 'check_daugthers' => "start/check_daugthers", via: :post
-  get 'check_husband' => "start/check_husband", via: :post
-  get 'check_wife' => "start/check_wife", via: :post
+  match 'check_brothers' => "start#check_brothers", via: :post
+  match 'check_sisters' => "start#check_sisters", via: :post
+  match 'check_sons' => "start#check_sons", via: :post
+  match 'check_daugthers' => "start#check_daugthers", via: :post
+  match 'check_husband' => "start#check_husband", via: :post
+  match 'check_wife' => "start#check_wife", via: :post
 
 
-  ######### start/__store
-  get 'store_myself' => "start/store_myself", via: :post
-  get 'store_father' => "start/store_father", via: :post
-  get 'store_mother' => "start/store_mother", via: :post
-  get 'store_brother' => "start/store_brother", via: :post
-  get 'store_sister' => "start/store_sister", via: :post
-  get 'store_son' => "start/store_son", via: :post
-  get 'store_daugther' => "start/store_daugther", via: :post
-  get 'store_husband' => "start/store_husband", via: :post
-  get 'store_wife' => "start/store_wife", via: :post
+  ######### start#__store
+  match 'store_myself' => "start#store_myself", via: :post
+  match 'store_father' => "start#store_father", via: :post
+  match 'store_mother' => "start#store_mother", via: :post
+  match 'store_brother' => "start#store_brother", via: :post
+  match 'store_sister' => "start#store_sister", via: :post
+  match 'store_son' => "start#store_son", via: :post
+  match 'store_daugther' => "start#store_daugther", via: :post
+  match 'store_husband' => "start#store_husband", via: :post
+  match 'store_wife' => "start#store_wife", via: :post
 
 
 
