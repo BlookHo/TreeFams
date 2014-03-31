@@ -1,14 +1,6 @@
-# encoding: utf-8
-
-
-
 class PagesController < ApplicationController
-  #include PagesHelper
-
-  #@session_id = request.session_options[:id]
-
-  Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
-  @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
+  include Access
+  before_action :require_admin, only: [:admin]
 
   # Входная страница. На ней - логин. Если уже зареген, то переход на Главную страницу - отображение древа и т.п..
   # или если впервые - переход на Стартовую стр-цу.
@@ -310,6 +302,7 @@ class PagesController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see Place
+  # @todo перенести админские методы в отдельный контроллер
   def admin
 
     @first_var = "Первая переменная - ADMIN"
