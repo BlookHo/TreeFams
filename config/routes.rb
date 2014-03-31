@@ -35,7 +35,7 @@ Weafam::Application.routes.draw do
   get "pages/start_enter"
   post "pages/start_enter"
 
-  get "pages/start_dialoge"
+  get "pages/start_dialoge"       # запуск процесса диалогового ввода стартового древа
   post "pages/start_dialoge"
 
   get "pages/login"
