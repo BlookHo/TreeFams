@@ -15,6 +15,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
         #respond_with resource, location: after_sign_up_path_for(resource)
 
             #
+
+
         Tree.delete_all             # DEBUGG
         Tree.reset_pk_sequence
 
@@ -41,6 +43,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
         session[:profile_arr] = {:value => @profile_arr, :updated_at => Time.current}
         #session[:new_user_id] = {:value => @new_user_id, :updated_at => Time.current}
         session[:tree_arr] = {:value => @tree_arr, :updated_at => Time.current}
+
+
+
 
         redirect_to main_page_path  #########
       else
