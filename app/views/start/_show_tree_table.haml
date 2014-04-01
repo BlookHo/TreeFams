@@ -2,26 +2,25 @@
 %h1 (для отладки)
 - if !@tree_array.blank?
   %table
-    %thead
+    %tr
+      %th ID
+      %th ID Автора
+      %th ID Профиля
+      %th ID Родства
+      %th Имя
+      %th Пол
+      %th
+      %th
+      %th
+  %tbody
+    - @tree_array.each do |tree|
       %tr
-        %th ID
-        %th ID Автора
-        %th ID Профиля
-        %th ID Родства
-        %th Имя
-        %th Пол
-        %th
-        %th
-        %th
-    %tbody
-      - @tree_array.each do |tree|
-        %tr
-          %td= tree[0]
-          %td= @id_author
-          %td= tree[0]
-          %td= tree[1]
-          %td= tree[2]
-          %td= tree[3]
+        %td= tree[0]
+        %td= @id_author
+        %td= tree[0]
+        %td= tree[1]
+        %td= tree[2]
+        %td= tree[3]
 - else
   %h1 No Listing tree!
   %p
