@@ -1,15 +1,15 @@
 %section.admin
-  %h2 Страница START - ввод стартового дерева - Ближний Круг
+  %h3 Страница START - ввод стартового дерева - Ближний Круг
   %div
     / <p>@sel_names: <haml:loud> @sel_names.inspect </haml:loud></p>
     / <p>@sel_names_male: <haml:loud> @sel_names_male.inspect </haml:loud></p>
     / <p>@sel_names_female: <haml:loud> @sel_names_female.inspect </haml:loud></p>
     %p
       @navigation_var: #{@navigation_var.inspect}
-  %h2 Ввод информации об авторе стартового дерева
+  %h4 Ввод информации об авторе стартового дерева
   = form_tag(store_myself_path, remote: true, id: 'myself_form') do
     %div
-      %h2 1.Твое имя
+      %h3 1.Твое имя
       = label_tag 'Введи свое имя:'
       = select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя'
     = submit_tag 'Ввод'
@@ -19,7 +19,7 @@
     %p
       @user_sex: #{@user_sex.inspect}
   #next_container
-  %h2
+  %h4
     Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
-  %h2
-    Возврат на страницу Логин:   #{link_to "Логин -->", landing_path}
+  %h4
+    Возврат на страницу Лэндинг:  #{link_to "Landing -->", landing_path}

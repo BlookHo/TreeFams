@@ -23,7 +23,9 @@
         %td= tree[3]
 - else
   %h1 No Listing tree!
-  %p
-    Переход на страницу Старт:  #{link_to "Переход на Старт -->", enter_myself_path}
-  %p
-    Возврат на страницу Логин:  #{link_to "Возврат в Логин -->", landing_path}
+  %h4
+    Возврат на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
+  %h4
+    Возврат на страницу Лэндинг:  #{link_to "Landing -->", landing_path}
+  %h4
+    Переход на страницу Админа:  #{link_to "Админ -->", admin_path}

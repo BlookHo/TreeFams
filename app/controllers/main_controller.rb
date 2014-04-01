@@ -2,37 +2,23 @@ class MainController < ApplicationController
  # include MainHelper  #
 
 
- ## Формирование массива древа Юзера для отображения на Главной .
- ## @note GET /
- ## @param admin_page [Integer] опциональный номер страницы
- ## @see News
- # def form_tree #формирование массива дерева для отображения
- #
- #   @tree_array = [[1, "Я", "Денис", "м"], [2, "Отец", "Борис", "м"], [3, "Мать", "Вера", "ж"], [4, "Жена", "Юлия", "ж"]]
- #
- # end
- #
- #
-#  form_tree # Call from Main
-
-
 # Отображение дерева Юзера .
 # @note GET /
 # @param admin_page [Integer] опциональный номер страницы
 # @see News
   def main_page
 
-    @navigation_var = "Navigation переменная - MAIN контроллер/main_display_tree метод"
-
-    @tree_array = session[:tree_array][:value]       # DEBUGG
-    @profile_arr = session[:profile_arr][:value] # DEBUGG
+    if !session[:tree_array].blank?                    # DEBUGG
+      @tree_array = session[:tree_array][:value]       # DEBUGG
+    end
+    if !session[:profile_arr].blank?                    # DEBUGG
+      @profile_arr = session[:profile_arr][:value]      # DEBUGG
+    end
+    #@profile_arr = session[:profile_arr][:value] # DEBUGG
     #@new_user_id = session[:new_user_id][:value] # DEBUGG
-    @tree_arr = session[:tree_arr][:value] # DEBUGG
-
+    #@tree_arr = session[:tree_arr][:value] # DEBUGG
 
   end
-
-
 
   # Отображение дерева Юзера .
   # @note GET /
@@ -40,13 +26,11 @@ class MainController < ApplicationController
   # @see News
   def main_display_tree
 
-    @navigation_var = "Navigation переменная - MAIN контроллер/main_display_tree метод"
-
-    @tree_array = session[:tree_array][:value]
-
+    if !session[:tree_array].blank?                    # DEBUGG
+      @tree_array = session[:tree_array][:value]       # DEBUGG
+    end
 
   end
-
 
 
   # Отображение меню действий для родственника в дереве Юзера.
@@ -74,8 +58,9 @@ class MainController < ApplicationController
 
     @rest_to_approve = @@match_qty - @total_approved_qty
 
-
   end
+
+
 
 
 end

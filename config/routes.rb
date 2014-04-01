@@ -10,7 +10,7 @@ Weafam::Application.routes.draw do
   resources :relations
 
   # pages controller
-  match 'main' => 'pages#main', via: :get
+  #match 'main' => 'pages#main', via: :get
   match 'landing' => 'pages#landing', via: :get
   match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get

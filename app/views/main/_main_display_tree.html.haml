@@ -1,3 +1,4 @@
+
 - if !@tree_array.blank?
   %div
     %table
@@ -15,9 +16,8 @@
           %td= tree[1]
           %td= tree[2]
           %td= tree[3]
-          %td
-            Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
-  %h2 Совпадения древа Пользователя с другими
+          %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
+  %h3 Совпадения древа Пользователя с другими
   %div
     %p
       Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
@@ -27,7 +27,3 @@
     Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Подтверждения совпадений -->", match_approval_path}
 - else
   %h1 No Listing tree!
-  %p
-    Переход на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
-  %p
-    Возврат на страницу Логин:  #{link_to "Логин -->", landing_path}
