@@ -28,44 +28,6 @@ class PagesController < ApplicationController
   end
 
 
-  # Стартовая страница. На ней - Ввод БК.
-  # по завершении ввода БК, то переход на страницу регистрации.
-  # @note GET /
-  # @param start_page [Integer] опциональный номер страницы
-  # @see Place
-  def start_enter
-
-    @navigation_var = "Navigation переменная - Cтраница - START      PAGES контроллер/START метод"
-    form_select_arrays  # Формирование массивов значений для форм ввода типа select. # Call from Applic-n.cntrl
-
-  end
-
-
-    # Ввод одного профиля древа. Проверка Имя-Пол.
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see Place
-    def enter_profile_bk(profile_name)    # NO USE
-      # проверка, действ-но ли введено женское имя?
-      if !profile_name.blank?
-        if !check_sex_by_name(profile_name)
-          name_correct = true
-        else
-          name_correct = false
-        end
-      end
-      return name_correct
-    end
-
-
-    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see Place
-    def set_prompts
-
-    end
-
    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
     # Начало диалога - ввода стартового древа - ближний круг
     # Ввод автора древа, Отца, Матери. - через контроллер START
@@ -77,6 +39,8 @@ class PagesController < ApplicationController
       form_select_arrays  # Формирование массивов значений для форм ввода типа select. # Call from Applic-n.cntrl
 
     end #
+
+
      # Отображение найденных совпадений среди всех деревьев относительно вводимого.
     # @note GET /
     # @note
@@ -124,22 +88,6 @@ class PagesController < ApplicationController
     end
 
     # Отображение найденных совпадений среди всех деревьев относительно вводимого.
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see Place
-    def user_registration
-
-    end
-
-    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see Paginated
-    def save_new_user
-
-    end
-
-    # Отображение найденных совпадений среди всех деревьев относительно вводимого.
     # @note
     # @param admin_page [Integer] опциональный номер страницы
     # @see Place
@@ -178,9 +126,7 @@ class PagesController < ApplicationController
 
       end
 
-      user_registration
 
-      save_new_user
 
     end
 

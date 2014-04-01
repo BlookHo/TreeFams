@@ -1,5 +1,5 @@
-%h1 ПРОМЕЖУТОЧНОЕ Отображение Стартового Древа Пользователя в табличной форме
-%h1 (для отладки)
+%h4 ПРОМЕЖУТОЧНОЕ Отображение Стартового Древа Пользователя в табличной форме
+%h4 (для отладки)
 - if !@tree_array.blank?
   %table
     %tr
@@ -12,7 +12,6 @@
       %th
       %th
       %th
-  %tbody
     - @tree_array.each do |tree|
       %tr
         %td= tree[0]
@@ -22,7 +21,7 @@
         %td= tree[2]
         %td= tree[3]
 - else
-  %h1 No Listing tree!
+  %h4 No Listing tree!
   %h4
     Возврат на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
   %h4

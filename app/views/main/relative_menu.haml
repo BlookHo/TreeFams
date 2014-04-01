@@ -1,12 +1,12 @@
 %section.admin
   %div
-    %p
-      @session_id: #{@session_id.inspect}
-    %p
-      @navigation_var: #{@navigation_var.inspect}
+    -#%p
+    -#  @session_id: #{@session_id.inspect}
+    -#%p
+    -#  @navigation_var: #{@navigation_var.inspect}
     %p
       @menu_choice: #{@menu_choice.inspect}
-  %h3 Partial RELATIVE_MENU - отображение меню напротив выбранного родственника в дереве
+  %h3 Меню Профиля: Partial RELATIVE_MENU - отображение меню напротив выбранного родственника в дереве
   %h4
     Переход на Страницу EDIT RELATIVE INFO - изменить, дополнить данные о родственнике #{link_to "Редактировать -->", main_page_path}
   %h4
@@ -20,7 +20,7 @@
   %div
     %p
       @menu_choice: #{@menu_choice.inspect}
-  %p
-    Возврат на Главную страницу:  #{link_to "Возврат на Главную -->", main_page_path}
-  %p
-    Переход на страницу Старт:  #{link_to "Переход на Старт -->", enter_myself_path}
+  %h4
+    Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
+  %h4
+    Возврат на страницу Старт:  #{link_to "Старт -->", enter_myself_path}

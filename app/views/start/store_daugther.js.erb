@@ -1,4 +1,4 @@
 $("#daugther_form").fadeOut(1200);
-$("#name_container").append(' Имя дочери: <%= @daugther_name %>');
-$("#name_container").append(' она - <%= @daugther_sex %>');
+$("#name_container").append('* Имя дочери: <%= @daugther_name %>. ');
+$("#name_container").append(' Она - <%= @daugther_sex %> ');
 $("#next_container").html("<%= j render 'start/show_tree_table' %>");

@@ -1,17 +1,14 @@
 %section.admin
   %div
-    %p
-      @session_id: #{@session_id.inspect}
-    %p
-      @navigation_var: #{@navigation_var.inspect}
-    %p
-      @first_var: #{@first_var.inspect}
-  %h3 Страница ОБЩЕНИЯ - CONVERSATION - методы общения Юзера с другими Юзерами: темы беседы события сообщения
-  %h2
+    -#%p
+    -#  @session_id: #{@session_id.inspect}
+    -#%p
+    -#  @navigation_var: #{@navigation_var.inspect}
+  %h3 Страница ОБЩЕНИЯ - CONVERSATION - методы общения Юзера с другими Юзерами
+  %h3 Темы, беседы, события, сообщения
+  %h4
     Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
-  %h2
+  %h4
     Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
-  %h2
+  %h4
     Переход на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
-  %h2
-    Переход на страницу Админа:  #{link_to "Админ -->", admin_path}

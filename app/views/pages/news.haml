@@ -1,15 +1,15 @@
 %section.admin
-  %h2 Страница NEWS - уведомления о предложениях подтвердить совпадения, новости и другие обновления Юзера
+  %h4 Страница NEWS - уведомления о предложениях подтвердить совпадения, новости и другие обновления Юзера
   %div
-    %p
-      @navigation_var: #{@navigation_var.inspect}
-    %p
-      @first_var: #{@first_var.inspect}
+    -#%p
+    -#  @navigation_var: #{@navigation_var.inspect}
+    -#%p
+    -#  @first_var: #{@first_var.inspect}
     %p
       @updates_count: #{@updates_count.inspect}
-  %h2
+  %h4
     Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
-  %h2
+  %h4
     Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
-  %h2
+  %h4
     Переход на страницу Старт:  #{link_to "Старт -->", enter_myself_path}

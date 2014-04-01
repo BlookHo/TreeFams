@@ -9,15 +9,15 @@
   %h4 Ввод информации об авторе стартового дерева
   = form_tag(store_myself_path, remote: true, id: 'myself_form') do
     %div
-      %h3 1.Твое имя
+      %h3 Твое имя
       = label_tag 'Введи свое имя:'
       = select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя'
     = submit_tag 'Ввод'
   %div
     %p#name_container
-      Мое имя: @user_name: #{@user_name.inspect}, я - #{@user_sex.inspect}
-    %p
-      @user_sex: #{@user_sex.inspect}
+      Мое имя: @user_name: #{@user_name.inspect}, Я - #{@user_sex.inspect}
+    -#%p
+    -#  @user_sex: #{@user_sex.inspect}
   #next_container
   %h4
     Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}

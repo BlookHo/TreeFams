@@ -17,13 +17,13 @@
           %td= tree[2]
           %td= tree[3]
           %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
-  %h3 Совпадения древа Пользователя с другими
-  %div
-    %p
-      Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
-    %p
-      Из них - подтвержденных: @approved_match_qty_loc #{@approved_match_qty_loc.inspect}
-  %h2
-    Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Подтверждения совпадений -->", match_approval_path}
 - else
-  %h1 No Listing tree!
+  %h4 No Listing tree!
+  %h4 Совпадения древа Пользователя с другими
+%div
+  %p
+    Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
+  %p
+    Из них - подтвержденных: @approved_match_qty_loc #{@approved_match_qty_loc.inspect}
+  %h4
+    Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Подтверждения совпадений -->", match_approval_path}

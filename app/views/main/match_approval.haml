@@ -1,19 +1,19 @@
 %section.admin
-  %h2 Просмотр и Подтверждение совпадений родственников в Древе Пользователя
+  %h3 Страница Просмотра и подтверждения совпадений родственников в Древе Пользователя
   %div
-    %p
-      @session_id: #{@session_id.inspect}
-    %p
-      @navigation_var: #{@navigation_var.inspect}
+    -#%p
+    -#  @session_id: #{@session_id.inspect}
+    -#%p
+    -#  @navigation_var: #{@navigation_var.inspect}
     %p
       Новых подтверждений: @new_approved_qty: #{@new_approved_qty.inspect}
     %p
       Всего подтверждено: @total_approved_qty: #{@total_approved_qty.inspect}
     %p
       Осталось неподтвержденных: @rest_to_approve: #{@rest_to_approve.inspect}
-  %h2
+  %h4
     Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
-  %h2
+  %h4
     Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
-  %h2
+  %h4
     Переход на страницу Старт:  #{link_to "Старт -->", enter_myself_path}

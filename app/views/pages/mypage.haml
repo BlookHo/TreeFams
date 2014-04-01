@@ -1,15 +1,13 @@
 %section.admin
   %h3 Страница MYPAGE - страница Юзера: вся инфа о Юзере, настройки и т.д.
-  %div
-    %p
-      @first_var: #{@first_var.inspect}
-    %p
-      @navigation_var: #{@navigation_var.inspect}
-  %h2
+  -#%div
+  -#  %p
+  -#    @first_var: #{@first_var.inspect}
+  -#  %p
+  -#    @navigation_var: #{@navigation_var.inspect}
+  %h4
     Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
-  %h2
+  %h4
     Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
-  %h2
+  %h4
     Переход на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
-  %h2
-    Переход на страницу Админа:  #{link_to "Админ -->", admin_path}
