@@ -16,10 +16,10 @@
   %div
     %p#name_container
       Мое имя: @user_name: #{@user_name.inspect}, Я - #{@user_sex.inspect}
-    -#%p
-    -#  @user_sex: #{@user_sex.inspect}
+    -#%p#sex_container
+    -#  Я - #{@user_sex.inspect}
   #next_container
   %h4
-    Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
+    Выйти и сохранить: Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
   %h4
     Возврат на страницу Лэндинг:  #{link_to "Landing -->", landing_path}
