@@ -6,17 +6,22 @@ class StartController < ApplicationController
 
   def enter_myself
 
- #   update_user       # DEBUGG:
+    ####  DEBUGG PLACE  ########################
+
+    #    update_user       # DEBUGG:
+
+    ####  DEBUGG PLACE  ########################
 
 
     #Tree.delete_all
     #Tree.reset_pk_sequence
     #
+    #Profile.delete_all
+    #Profile.reset_pk_sequence
+    #
     #User.delete_all
     #User.reset_pk_sequence
     #
-    #Profile.delete_all
-    #Profile.reset_pk_sequence
 
     form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
@@ -27,42 +32,42 @@ class StartController < ApplicationController
   end
 
   def enter_father
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @sel_names_male = session[:sel_names_male][:value]
   end
 
   def enter_mother
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @sel_names_female = session[:sel_names_female][:value]
   end
 
   def enter_brother
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @sel_names_male = session[:sel_names_male][:value]
   end
 
   def enter_sister
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @sel_names_female = session[:sel_names_female][:value]
   end
 
   def enter_son
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @sel_names_male = session[:sel_names_male][:value]
   end
 
   def enter_daugther
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @sel_names_female = session[:sel_names_female][:value]
   end
 
   def enter_husband
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @sel_names_male = session[:sel_names_male][:value]
   end
 
   def enter_wife
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @sel_names_female = session[:sel_names_female][:value]
   end
 
@@ -70,7 +75,6 @@ class StartController < ApplicationController
   ####  CHECK PROFILE TO BE ENTERED ########################
 
   def check_brothers
-    #form_select_fields  # Формирование массивов значений для форм ввода типа select.
     @check_yea_nau = ["Yea", "No"]
     @brothers_exists = params[:brothers_exist?]
 
@@ -83,7 +87,6 @@ class StartController < ApplicationController
   def check_sisters
     @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
 
-    #form_select_fields  # Формирование массивов значений для форм ввода типа select.
     @check_yea_nau = ["Yea", "No"]
     @brothers_exists = params[:brothers_exist?]
 
@@ -97,7 +100,6 @@ class StartController < ApplicationController
   def check_sons
     @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
 
-    #form_select_fields  # Формирование массивов значений для форм ввода типа select.
     @check_yea_nau = ["Yea", "No"]
     @brothers_exists = params[:brothers_exist?]
 
@@ -111,7 +113,6 @@ class StartController < ApplicationController
   def check_daugthers
     @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
 
-    #form_select_fields  # Формирование массивов значений для форм ввода типа select.
     @check_yea_nau = ["Yea", "No"]
     @brothers_exists = params[:brothers_exist?]
 
@@ -131,10 +132,10 @@ class StartController < ApplicationController
     if @user_sex    # = true -> User = Male
 
       @render_name = 'start/enter_wife'
-      #redirect_to enter_wife_path
+      # redirect_to enter_wife_path
     else
       @render_name = 'start/enter_husband'
-     # redirect_to enter_husband_path
+      # redirect_to enter_husband_path
     end
     @render_name
   end
@@ -143,7 +144,6 @@ class StartController < ApplicationController
     @user_sex = session[:user_sex][:value]
     @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
 
-    #form_select_fields  # Формирование массивов значений для форм ввода типа select.
     @check_yea_nau = ["Yea", "No"]
     @brothers_exists = params[:brothers_exist?]
 
@@ -157,7 +157,6 @@ class StartController < ApplicationController
   def check_wife
     @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
 
-    #form_select_fields  # Формирование массивов значений для форм ввода типа select.
     @check_yea_nau = ["Yea", "No"]
     @brothers_exists = params[:brothers_exist?]
 
@@ -176,16 +175,12 @@ class StartController < ApplicationController
       @user_sex = check_sex_by_name(@user_name) # display sex by name = извлечение пола из введенного имени
     end
 
-    @profiles_array = []  #
-    one_profile_id = 1  #
-    one_profile_arr = add_profile(one_profile_id,nil,@user_name,@user_sex)
-    @profiles_array << one_profile_arr
-    one_profile_id += 1
+    profiles_array = []  #
+    one_profile_arr = add_profile(nil,@user_name,@user_sex)
+    profiles_array << one_profile_arr
 
-    session[:profiles_array] = {:value => @profiles_array, :updated_at => Time.current}
+    session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     session[:user_sex] = {:value => @user_sex, :updated_at => Time.current}
-    session[:one_profile_id] = {:value => one_profile_id, :updated_at => Time.current}
-
 
     @sel_names_male = session[:sel_names_male][:value]
     respond_to do |format|
@@ -199,9 +194,8 @@ class StartController < ApplicationController
 
   def store_father
 
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
-    one_profile_id = session[:one_profile_id][:value]
 
     @father_name = params[:father_name_select] #
 
@@ -213,12 +207,10 @@ class StartController < ApplicationController
         @father_name_correct = false
       end
       # Сохранять отчество Юзера в зависимости от его пола @user_sex!
-      one_profile_arr = add_profile(one_profile_id,1,@father_name,@father_sex)
-      @profiles_array << one_profile_arr
-      one_profile_id += 1
+      one_profile_arr = add_profile(1,@father_name,@father_sex)
+      profiles_array << one_profile_arr
 
-      session[:profiles_array] = {:value => @profiles_array, :updated_at => Time.current}
-      session[:one_profile_id] = {:value => one_profile_id, :updated_at => Time.current}
+      session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     end
 
     @sel_names_female = session[:sel_names_female][:value]
@@ -232,9 +224,8 @@ class StartController < ApplicationController
 
   def store_mother
 
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
-    one_profile_id = session[:one_profile_id][:value]
 
     @mother_name = params[:mother_name_select] #
 
@@ -245,12 +236,10 @@ class StartController < ApplicationController
       else
         @mother_name_correct = false
       end
-      one_profile_arr = add_profile(one_profile_id,2,@mother_name,@user_sex)
-      @profiles_array << one_profile_arr
-      one_profile_id += 1
+      one_profile_arr = add_profile(2,@mother_name,@user_sex)
+      profiles_array << one_profile_arr
 
-      session[:profiles_array] = {:value => @profiles_array, :updated_at => Time.current}
-      session[:one_profile_id] = {:value => one_profile_id, :updated_at => Time.current}
+      session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     end
     @sel_names_male = session[:sel_names_male][:value]
     respond_to do |format|
@@ -263,8 +252,7 @@ class StartController < ApplicationController
 
   def store_brother
 
-    @profiles_array = session[:profiles_array][:value]
-    one_profile_id = session[:one_profile_id][:value]
+    profiles_array = session[:profiles_array][:value]
 
     @brother_name = params[:brother_name_select] #
 
@@ -275,12 +263,10 @@ class StartController < ApplicationController
       else
         @brother_name_correct = false
       end
-      one_profile_arr = add_profile(one_profile_id,5,@brother_name,@brother_sex)
-      @profiles_array << one_profile_arr
-      one_profile_id += 1
+      one_profile_arr = add_profile(5,@brother_name,@brother_sex)
+      profiles_array << one_profile_arr
 
-      session[:profiles_array] = {:value => @profiles_array, :updated_at => Time.current}
-      session[:one_profile_id] = {:value => one_profile_id, :updated_at => Time.current}
+      session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     end
     @sel_names_female = session[:sel_names_female][:value]
     respond_to do |format|
@@ -293,8 +279,7 @@ class StartController < ApplicationController
 
   def store_sister
 
-    @profiles_array = session[:profiles_array][:value]
-    one_profile_id = session[:one_profile_id][:value]
+    profiles_array = session[:profiles_array][:value]
 
     @sister_name = params[:sister_name_select] #
 
@@ -305,12 +290,10 @@ class StartController < ApplicationController
       else
         @sister_name_correct = false
       end
-      one_profile_arr = add_profile(one_profile_id,6,@sister_name,@user_sex)
-      @profiles_array << one_profile_arr
-      one_profile_id += 1
+      one_profile_arr = add_profile(6,@sister_name,@user_sex)
+      profiles_array << one_profile_arr
 
-      session[:profiles_array] = {:value => @profiles_array, :updated_at => Time.current}
-      session[:one_profile_id] = {:value => one_profile_id, :updated_at => Time.current}
+      session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     end
 
     @next_view = check_husband_or_wife   #
@@ -325,8 +308,7 @@ class StartController < ApplicationController
 
   def store_husband
 
-    @profiles_array = session[:profiles_array][:value]
-    one_profile_id = session[:one_profile_id][:value]
+    profiles_array = session[:profiles_array][:value]
 
     @husband_name = params[:husband_name_select] #
 
@@ -337,12 +319,10 @@ class StartController < ApplicationController
       else
         @husband_name_correct = false
       end
-      one_profile_arr = add_profile(one_profile_id,7,@husband_name,@husband_sex)
-      @profiles_array << one_profile_arr
-      one_profile_id += 1
+      one_profile_arr = add_profile(7,@husband_name,@husband_sex)
+      profiles_array << one_profile_arr
 
-      session[:profiles_array] = {:value => @profiles_array, :updated_at => Time.current}
-      session[:one_profile_id] = {:value => one_profile_id, :updated_at => Time.current}
+      session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     end
 
     @sel_names_male = session[:sel_names_male][:value]
@@ -356,8 +336,7 @@ class StartController < ApplicationController
 
   def store_wife
 
-    @profiles_array = session[:profiles_array][:value]
-    one_profile_id = session[:one_profile_id][:value]
+    profiles_array = session[:profiles_array][:value]
 
     @wife_name = params[:wife_name_select] #
 
@@ -368,12 +347,10 @@ class StartController < ApplicationController
       else
         @wife_name_correct = false
       end
-      one_profile_arr = add_profile(one_profile_id,8,@wife_name,@wife_sex)
-      @profiles_array << one_profile_arr
-      one_profile_id += 1
+      one_profile_arr = add_profile(8,@wife_name,@wife_sex)
+      profiles_array << one_profile_arr
 
-      session[:profiles_array] = {:value => @profiles_array, :updated_at => Time.current}
-      session[:one_profile_id] = {:value => one_profile_id, :updated_at => Time.current}
+      session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     end
 
     @sel_names_male = session[:sel_names_male][:value]
@@ -388,9 +365,8 @@ class StartController < ApplicationController
 
   def store_son
 
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
-    one_profile_id = session[:one_profile_id][:value]
 
     @son_name = params[:son_name_select] #
 
@@ -403,12 +379,10 @@ class StartController < ApplicationController
       end
 
       # Сохранять отчество Profile в зависимости от пола @user_sex!
-      one_profile_arr = add_profile(one_profile_id,3,@son_name,@son_sex)
-      @profiles_array << one_profile_arr
-      one_profile_id += 1
+      one_profile_arr = add_profile(3,@son_name,@son_sex)
+      profiles_array << one_profile_arr
 
-      session[:profiles_array] = {:value => @profiles_array, :updated_at => Time.current}
-      session[:one_profile_id] = {:value => one_profile_id, :updated_at => Time.current}
+      session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     end
 
     @sel_names_female = session[:sel_names_female][:value]
@@ -422,9 +396,8 @@ class StartController < ApplicationController
 
   def store_daugther
 
-    @profiles_array = session[:profiles_array][:value]
+    profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
-    one_profile_id = session[:one_profile_id][:value]
 
     @daugther_name = params[:daugther_name_select] #
 
@@ -435,13 +408,11 @@ class StartController < ApplicationController
       else
         @daugther_name_correct = false
       end
-      # Сохранять отчество Profile в зависимости от  пола @user_sex!
-      one_profile_arr = add_profile(one_profile_id,4,@daugther_name,@daugther_sex)
-      @profiles_array << one_profile_arr
-      one_profile_id += 1
+      # #todo: Сохранять отчества Profile в зависимости от  пола @user_sex!
+      one_profile_arr = add_profile(4,@daugther_name,@daugther_sex)
+      profiles_array << one_profile_arr
 
-      session[:profiles_array] = {:value => @profiles_array, :updated_at => Time.current}
-      session[:one_profile_id] = {:value => one_profile_id, :updated_at => Time.current}
+      session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     end
 
     @sel_names_female = session[:sel_names_female][:value]
@@ -449,17 +420,10 @@ class StartController < ApplicationController
       format.html
       format.js { render 'start/store_daugther' }
     end
-#    redirect_to show_tree_table_path  #########
 
   end
 
-  #def show_tree_table
-  #
-  #  save_start_tables
-  #
-  #end
-
-  # Сохранение стартового дерева
+   # Сохранение стартового дерева
   # Профили, Дерево, Юзер вставка ИД профиля
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
@@ -475,20 +439,23 @@ class StartController < ApplicationController
     #Profile.delete_all          # DEBUGG
     #Profile.reset_pk_sequence
 
-    @profiles_array = session[:profiles_array][:value]
-    @user_sex = session[:user_sex][:value]
+    profiles_array = session[:profiles_array][:value]
 
-    @profile_arr = save_profiles(@profiles_array)
+    if user_signed_in?
 
-    @tree_arr = save_tree(@profiles_array,@profile_arr )
+      profile_arr = save_profiles(profiles_array)
 
-    update_user
+      save_tree(profile_arr)
 
-    session[:profile_arr] = {:value => @profile_arr, :updated_at => Time.current}
-    session[:tree_arr] = {:value => @tree_arr, :updated_at => Time.current}
+      update_user
 
-    redirect_to main_page_path  #########
+    else
+      @message = "User not signed"
+    end
 
+    session[:profile_arr] = {:value => profile_arr, :updated_at => Time.current}
+
+    redirect_to main_page_path  ##
 
   end
 
@@ -500,13 +467,12 @@ class StartController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
-  def add_profile(index,relation,name,sex)
+  def add_profile(relation,name,sex)
     one_profile_arr = []
 
-    one_profile_arr[0] = index           # index
-    one_profile_arr[1] = relation        # Relation
-    one_profile_arr[2] = name            # Name
-    one_profile_arr[3] = sex             # Sex
+    one_profile_arr[0] = relation        # Relation
+    one_profile_arr[1] = name            # Name
+    one_profile_arr[2] = sex             # Sex
 
     return one_profile_arr
   end
@@ -521,47 +487,33 @@ class StartController < ApplicationController
     profiles_tree_arr = []
     new_profile_arr = []     #
 
-    #one_profile_arr[0] = id              # id
-    #one_profile_arr[1] = relation        # Relation
-    #one_profile_arr[2] = name            # Name
-    #one_profile_arr[3] = sex             # Sex
-
     for arr_i in 0 .. profiles_array.length-1
 
       new_profile = Profile.new
         if arr_i == 0 # only for email для user
-          ##############################################
-
-          new_profile.user_id = current_user.id if user_signed_in?   # user_id - берем после регистрации
-
-          ##############################################
-          new_profile.email = current_user.email if user_signed_in? # user regged email
+          new_profile.user_id = current_user.id  # user_id - берем после регистрации
+          new_profile.email = current_user.email # user regged email
         else
           new_profile.user_id = nil  # profile - not user_id
           new_profile.email = nil    # profile - not user_id
         end
-        new_profile.name_id = Name.find_by_name(profiles_array[arr_i][2]).id  # name_id
-        if profiles_array[arr_i][3]
+        new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
+        if profiles_array[arr_i][2]
           new_profile.sex_id = 1    # sex_id - MALE
         else
           new_profile.sex_id = 0    # sex_id - FEMALE
         end
       new_profile.save
 
-
-      # FOR DEBUGG - ARRAY
       if arr_i == 0 # only for email для user
-        new_profile_arr[0] = current_user.id if user_signed_in?  # user_id
-        new_profile_arr[2] = current_user.email if user_signed_in? # user regged email
+        new_profile_arr[0] = current_user.id # user_id
       else
-        new_profile_arr[0] = arr_i + 1  # profile_id
+        new_profile_arr[0] = new_profile.id  # profile_id
       end
-      new_profile_arr[1] = Name.find_by_name(profiles_array[arr_i][2]).id  # name_id
-      new_profile_arr[3] = profiles_array[arr_i][3] # sex_id
+      new_profile_arr[1] = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
 
       profiles_tree_arr <<  new_profile_arr
       new_profile_arr = []
-      # END DEBUGG - ARRAY
 
     end
 
@@ -574,36 +526,15 @@ class StartController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
-  def save_tree(profiles_array, profile_arr)
-
-    new_tree_arr = []
-    tree_arr = []             #
-
-    #one_profile_arr[0] = id              # id
-    #one_profile_arr[1] = relation        # Relation
-    #one_profile_arr[2] = name            # Name
-    #one_profile_arr[3] = sex             # Sex
+  def save_tree(profiles_array)
 
     for arr_i in 1 .. profiles_array.length-1
-
       new_tree = Tree.new
-        new_tree.user_id = current_user.id if user_signed_in?               # user_id
+        new_tree.user_id = current_user.id               # user_id
         new_tree.profile_id = profiles_array[arr_i][0]   # profile_id
         new_tree.relation_id = profiles_array[arr_i][1]  # relation_id
       new_tree.save
-
-      # FOR DEBUGG - ARRAY
-      new_tree_arr[0] = current_user.id if user_signed_in?              # user_id
-      new_tree_arr[1] = profiles_array[arr_i][0]     # profile_id
-      new_tree_arr[2] = profiles_array[arr_i][1]     # relation_id
-
-      tree_arr <<  new_tree_arr
-      new_tree_arr = []
-      # END DEBUGG - ARRAY
-
     end
-
-    return tree_arr
 
   end
 
@@ -614,17 +545,10 @@ class StartController < ApplicationController
   def update_user
 
     user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
-    #@us_id = user_profile[0]['id']     # DEBUGG
-    #
-    #@curr_user_row = User.find(current_user.id)
-
     current_user.profile_id = user_profile[0]['id']
     current_user.save
 
-
-
-
   end
 
 
-  end
+ end
