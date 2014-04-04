@@ -1,7 +1,12 @@
 %section.admin
   %h3 Страница START - ввод стартового дерева - Ближний Круг
-  -#%div
-    / <p>@sel_names: <haml:loud> @sel_names.inspect </haml:loud></p>
+  %div
+    DEBUGG: Я - #{@us_id.inspect},
+    - if user_signed_in?
+      DEBUGG: Current_user.id - #{current_user.id.inspect}
+      DEBUGG: Current_user.profile_id - #{current_user.profile_id.inspect}
+      DEBUGG: Current_user row - #{@curr_user_row.inspect}
+    /<p>@us_id: <haml:loud> @us_id.inspect </haml:loud></p>
     / <p>@sel_names_male: <haml:loud> @sel_names_male.inspect </haml:loud></p>
     / <p>@sel_names_female: <haml:loud> @sel_names_female.inspect </haml:loud></p>
   %h4 Ввод информации об авторе стартового дерева

@@ -6,14 +6,17 @@ class StartController < ApplicationController
 
   def enter_myself
 
-    Tree.delete_all
-    Tree.reset_pk_sequence
+ #   update_user       # DEBUGG:
 
+
+    #Tree.delete_all
+    #Tree.reset_pk_sequence
+    #
     #User.delete_all
     #User.reset_pk_sequence
-
-    Profile.delete_all
-    Profile.reset_pk_sequence
+    #
+    #Profile.delete_all
+    #Profile.reset_pk_sequence
 
     form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
@@ -463,14 +466,14 @@ class StartController < ApplicationController
   # @see
   def save_start_tables
 
-    Tree.delete_all             # DEBUGG
-    Tree.reset_pk_sequence
-
+    #Tree.delete_all             # DEBUGG
+    #Tree.reset_pk_sequence
+    #
     #User.delete_all             # DEBUGG
     #User.reset_pk_sequence
-
-    Profile.delete_all          # DEBUGG
-    Profile.reset_pk_sequence
+    #
+    #Profile.delete_all          # DEBUGG
+    #Profile.reset_pk_sequence
 
     @profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
@@ -609,6 +612,16 @@ class StartController < ApplicationController
   # @param admin_page [Integer] опциональный номер страницы
   # @see
   def update_user
+
+    user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
+    #@us_id = user_profile[0]['id']     # DEBUGG
+    #
+    #@curr_user_row = User.find(current_user.id)
+
+    current_user.profile_id = user_profile[0]['id']
+    current_user.save
+
+
 
 
   end
