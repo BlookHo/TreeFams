@@ -1,7 +1,7 @@
 .col-lg-6.col-md-8
   .page-header
     %h1
-      ='Регистрация'
+      ='1-я Регистрация'
   = form_for(resource, as: resource_name, url: user_registration_path, html: {class: "form-horizontal"}) do |f|
     = devise_error_messages!
     .form-group
@@ -19,3 +19,11 @@
     .form-group
       .col-md-offset-4.col-md-8
         = f.submit "Зарегистрировать", class: "btn btn-primary"
+
+-##{render 'start/show_tree_table'}
+
+-#- if user_signed_in?
+-#  #{redirect_to save_start_tables_path}
+-#- else
+-#  #{redirect_to main_page_path}
+

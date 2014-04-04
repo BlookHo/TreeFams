@@ -14,49 +14,45 @@ class Users::RegistrationsController < Devise::RegistrationsController
         sign_up(resource_name, resource)
         #respond_with resource, location: after_sign_up_path_for(resource)
 
-        Tree.delete_all             # DEBUGG
-        Tree.reset_pk_sequence
+
+        #Tree.delete_all             # DEBUGG
+        #Tree.reset_pk_sequence
 
         #User.delete_all             # DEBUGG
         #User.reset_pk_sequence
 
-        Profile.delete_all          # DEBUGG
-        Profile.reset_pk_sequence
-
-        #@profiles_array = session[:profiles_array][:value]
-        #@user_sex = session[:user_sex][:value]
-        #@id_author = @profiles_array[0][0]  # Только для отображения в виде таблицы
-        @profile_arr = []
-
-        @passw_name = params[:passw] #
-        if !@passw_name.blank?
+        #Profile.delete_all          # DEBUGG
+        #Profile.reset_pk_sequence
 
 
+        ### @todo:  Поставить здесь условие контроля зарегенности
+        #@passw_name = params[:passw] # ?????????
+        #if !@passw_name.blank?
+        #
+        #else
+        #  # @todo:  сообщить Юзеру о том, что он незарегился. Причина - диагноз.
+        #  #       redirect_to main_page_path  #########
+        #end
 
-          @profile_arr = save_profiles(@profiles_array,@user_email)
-
-          @tree_arr = save_tree(@profiles_array,@profile_arr,current_user.id )
-
-
-
+        if user_signed_in?
+          redirect_to save_start_tables_path  #########
+        else
+          # @todo:  сообщить Юзеру о том, что он незарегился. Причина - диагноз.
+          redirect_to main_page_path  #########
         end
 
-        #session[:email_name] = {:value => @email_name, :updated_at => Time.current}
-        #session[:passw_name] = {:value => @passw_name, :updated_at => Time.current}
-        session[:profile_arr] = {:value => @profile_arr, :updated_at => Time.current}
-        #session[:new_user_id] = {:value => @new_user_id, :updated_at => Time.current}
-        session[:tree_arr] = {:value => @tree_arr, :updated_at => Time.current}
-
-        redirect_to main_page_path  #########
       else
         set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
         expire_data_after_sign_in!
         respond_with resource, location: after_inactive_sign_up_path_for(resource)
       end
+
     else
       clean_up_passwords resource
       respond_with resource
     end
+
+
 
   end
 

@@ -8,13 +8,14 @@
   %div
     -#%p
     -#  @session_id: #{@session_id.inspect}
-    %p
-      current_user.id: #{current_user.id.inspect}
-    %p
-      @profiles_array: #{@profiles_array.inspect}
-    %p
-      Массив профилей: @profile_arr: #{@profile_arr.inspect}
-    -#%p
+
+  - if user_signed_in?
+    %p current_user.id: #{current_user.id.inspect}
+  %p
+    @profiles_array: #{@profiles_array.inspect}
+  %p
+    Массив профилей: @profile_arr: #{@profile_arr.inspect}
+  -#%p
     -#  @last_user: #{@last_user.inspect}
     -#%p
     -#  @new_user_id: #{@new_user_id.inspect}

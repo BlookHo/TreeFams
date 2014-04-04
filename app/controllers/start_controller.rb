@@ -198,7 +198,7 @@ class StartController < ApplicationController
 
     @profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
-    one_profile_id = session[:tree_profile_id][:value]
+    one_profile_id = session[:one_profile_id][:value]
 
     @father_name = params[:father_name_select] #
 
@@ -231,7 +231,7 @@ class StartController < ApplicationController
 
     @profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
-    one_profile_id = session[:tree_profile_id][:value]
+    one_profile_id = session[:one_profile_id][:value]
 
     @mother_name = params[:mother_name_select] #
 
@@ -261,7 +261,7 @@ class StartController < ApplicationController
   def store_brother
 
     @profiles_array = session[:profiles_array][:value]
-    one_profile_id = session[:tree_profile_id][:value]
+    one_profile_id = session[:one_profile_id][:value]
 
     @brother_name = params[:brother_name_select] #
 
@@ -291,7 +291,7 @@ class StartController < ApplicationController
   def store_sister
 
     @profiles_array = session[:profiles_array][:value]
-    one_profile_id = session[:tree_profile_id][:value]
+    one_profile_id = session[:one_profile_id][:value]
 
     @sister_name = params[:sister_name_select] #
 
@@ -323,7 +323,7 @@ class StartController < ApplicationController
   def store_husband
 
     @profiles_array = session[:profiles_array][:value]
-    one_profile_id = session[:tree_profile_id][:value]
+    one_profile_id = session[:one_profile_id][:value]
 
     @husband_name = params[:husband_name_select] #
 
@@ -354,7 +354,7 @@ class StartController < ApplicationController
   def store_wife
 
     @profiles_array = session[:profiles_array][:value]
-    one_profile_id = session[:tree_profile_id][:value]
+    one_profile_id = session[:one_profile_id][:value]
 
     @wife_name = params[:wife_name_select] #
 
@@ -387,7 +387,7 @@ class StartController < ApplicationController
 
     @profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
-    one_profile_id = session[:tree_profile_id][:value]
+    one_profile_id = session[:one_profile_id][:value]
 
     @son_name = params[:son_name_select] #
 
@@ -421,7 +421,7 @@ class StartController < ApplicationController
 
     @profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
-    one_profile_id = session[:tree_profile_id][:value]
+    one_profile_id = session[:one_profile_id][:value]
 
     @daugther_name = params[:daugther_name_select] #
 
@@ -450,10 +450,17 @@ class StartController < ApplicationController
 
   end
 
-  def show_tree_table
+  #def show_tree_table
+  #
+  #  save_start_tables
+  #
+  #end
 
-  end
-
+  # Сохранение стартового дерева
+  # Профили, Дерево, Юзер вставка ИД профиля
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see
   def save_start_tables
 
     Tree.delete_all             # DEBUGG
@@ -468,22 +475,22 @@ class StartController < ApplicationController
     @profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
 
-    @id_author = @profiles_array[0][0]  # Только для отображения в виде таблицы
-    @user_email = 'mail'
+    @profile_arr = save_profiles(@profiles_array)
 
-    @profile_arr = save_profiles(@profiles_array,@user_email)
-
-    @tree_arr = save_tree(@profiles_array,@profile_arr,current_user.id )
+    @tree_arr = save_tree(@profiles_array,@profile_arr )
 
     update_user
 
     session[:profile_arr] = {:value => @profile_arr, :updated_at => Time.current}
+    session[:tree_arr] = {:value => @tree_arr, :updated_at => Time.current}
+
+    redirect_to main_page_path  #########
 
 
   end
 
 
-  ####  SAVE TREE PROFILE  ########################
+  ####  SAVE START TREE PROFILE  ########################
 
 
   # Добавление в массив дерева одного введенного профиля стартового дерева Юзера.
@@ -506,10 +513,10 @@ class StartController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
-  def save_profiles(profiles_array, user_email)
+  def save_profiles(profiles_array)
 
     profiles_tree_arr = []
-    new_profile_arr = []             #
+    new_profile_arr = []     #
 
     #one_profile_arr[0] = id              # id
     #one_profile_arr[1] = relation        # Relation
@@ -525,7 +532,7 @@ class StartController < ApplicationController
           new_profile.user_id = current_user.id if user_signed_in?   # user_id - берем после регистрации
 
           ##############################################
-          new_profile.email = user_email    # user_id
+          new_profile.email = current_user.email if user_signed_in? # user regged email
         else
           new_profile.user_id = nil  # profile - not user_id
           new_profile.email = nil    # profile - not user_id
@@ -541,8 +548,8 @@ class StartController < ApplicationController
 
       # FOR DEBUGG - ARRAY
       if arr_i == 0 # only for email для user
-        new_profile_arr[0] = current_user.id  # user_id
-        new_profile_arr[2] = user_email
+        new_profile_arr[0] = current_user.id if user_signed_in?  # user_id
+        new_profile_arr[2] = current_user.email if user_signed_in? # user regged email
       else
         new_profile_arr[0] = arr_i + 1  # profile_id
       end
@@ -552,7 +559,6 @@ class StartController < ApplicationController
       profiles_tree_arr <<  new_profile_arr
       new_profile_arr = []
       # END DEBUGG - ARRAY
-
 
     end
 
@@ -565,36 +571,36 @@ class StartController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
-  def save_tree(profiles_array, profile_arr, new_user_id)
+  def save_tree(profiles_array, profile_arr)
 
-    @new_tree_arr = []
-    @tree_arr = []             #
+    new_tree_arr = []
+    tree_arr = []             #
 
     #one_profile_arr[0] = id              # id
     #one_profile_arr[1] = relation        # Relation
     #one_profile_arr[2] = name            # Name
     #one_profile_arr[3] = sex             # Sex
 
-
     for arr_i in 1 .. profiles_array.length-1
 
-      @new_tree = Tree.new
-      @new_tree.user_id = new_user_id        # user_email
-      @new_tree.profile_id = profiles_array[arr_i][0]     # profile_id
-      @new_tree.relation_id = profiles_array[arr_i][1]     # relation_id
-      @new_tree.save
+      new_tree = Tree.new
+        new_tree.user_id = current_user.id if user_signed_in?               # user_id
+        new_tree.profile_id = profiles_array[arr_i][0]   # profile_id
+        new_tree.relation_id = profiles_array[arr_i][1]  # relation_id
+      new_tree.save
 
+      # FOR DEBUGG - ARRAY
+      new_tree_arr[0] = current_user.id if user_signed_in?              # user_id
+      new_tree_arr[1] = profiles_array[arr_i][0]     # profile_id
+      new_tree_arr[2] = profiles_array[arr_i][1]     # relation_id
 
-      @new_tree_arr[0] = new_user_id  # user_id
-      @new_tree_arr[1] = profiles_array[arr_i][0]     # profile_id
-      @new_tree_arr[2] = profiles_array[arr_i][1]     # relation_id
-
-      @tree_arr <<  @new_tree_arr
-      @new_tree_arr = []
+      tree_arr <<  new_tree_arr
+      new_tree_arr = []
+      # END DEBUGG - ARRAY
 
     end
 
-      return @tree_arr
+    return tree_arr
 
   end
 
@@ -605,9 +611,7 @@ class StartController < ApplicationController
   def update_user
 
 
-
   end
-
 
 
   end

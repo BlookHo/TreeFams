@@ -20,7 +20,7 @@
       - if user_signed_in?
         %li.dropdown
           %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-            Я
+            < Я > #{current_user.email}
             %b.caret
           %ul.dropdown-menu
             %li
