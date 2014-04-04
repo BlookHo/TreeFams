@@ -13,14 +13,14 @@ Weafam::Application.routes.draw do
 
   # admin_methods controller
   match 'service_method_1' => 'admin_methods#service_method_1', via: :get
+  match 'service_method_1' => "admin_methods#service_method_1", via: :post
   match 'service_method_2' => 'admin_methods#service_method_2', via: :get
+  match 'service_method_2' => "admin_methods#service_method_2", via: :post
 
 
   # pages controller
-  #match 'main' => 'pages#main', via: :get
   match 'landing' => 'pages#landing', via: :get
   match 'admin' => 'pages#admin', via: :get
-  #match 'admin_service_metod_1' => 'pages#admin#service_metod_1', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
   match 'mypage' => 'pages#mypage', via: :get

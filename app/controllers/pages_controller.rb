@@ -135,19 +135,8 @@ class PagesController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see Place
-  # @todo перенести админские методы в отдельный контроллер
+  # @ перенести админские методы в отдельный контроллер
   def admin
-
-
-    #def service_metod_1
-    #
-    #  @test_string = "This is 1-st service admin method"  # DEBUGG
-    #  @match_qty_loc = 111  # DEBUGG
-    #
-    #
-    #
-    #end
-    #
 
 
 

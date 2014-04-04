@@ -4,10 +4,22 @@
     Страница ADMIN  < Служебный метод 1 >
 
   %p
-    Массив профилей: @test_string_1: #{@test_string_1.inspect}
+    Тест var 1: @test_string_1: #{@test_string_1.inspect}
   %p
-    Массив профилей: @var_qty_1: #{@var_qty_1.inspect}
+    Тест 1 Массив : @var_qty_1: #{@var_qty_1.inspect}
 
+  %h4 Ввод кода для запуска метода (111)
+  -#= form_tag(store_myself_path, remote: true, id: 'myself_form') do
+  = form_tag(service_method_1_path, id: 'service_method_1_form') do
+    %div
+      %h3 Запуск метода
+      = label_tag 'Введи 111:'
+      = number_field_tag 'start', '', :maxlength => 3, :size => 3, confirm: 'Are you sure?'
+      -#= select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя'
+    = submit_tag 'Ввод'
+
+  %p
+    Выбор старта: @start_calc: #{@start_calc.inspect}
 
   %h3
     =link_to 'Возврат на страницу Админ:', admin_path

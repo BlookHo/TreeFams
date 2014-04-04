@@ -15,7 +15,6 @@ class MainController < ApplicationController
       @profile_arr = session[:profile_arr][:value]      # DEBUGG
     end
 
-    @profile_arr = session[:profile_arr][:value] # DEBUGG
     #@new_user_id = session[:new_user_id][:value] # DEBUGG
 
   end
