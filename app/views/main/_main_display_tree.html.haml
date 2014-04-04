@@ -1,5 +1,5 @@
 
-- if !@tree_array.blank?
+- if !@profiles_array.blank?
   %div
     %table
       %tr
@@ -10,7 +10,7 @@
         %th
         %th
         %th
-      - @tree_array.each do |tree|
+      - @profiles_array.each do |tree|
         %tr
           %td= tree[0]
           %td= tree[1]
@@ -19,6 +19,10 @@
           %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
 - else
   %h4 No Listing tree!
+  %p
+    Массив профилей: @profile_arr: #{@profile_arr.inspect}
+
+
   %h4 Совпадения древа Пользователя с другими
 %div
   %p

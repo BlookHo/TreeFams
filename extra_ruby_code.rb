@@ -19,6 +19,19 @@ class ExtraCode
 
 StartController
 
+  def store_profile(id,relation,name,sex)
+
+    tree_profile_arr = []
+
+    tree_profile_arr[0] = id              # id Profile
+    tree_profile_arr[1] = relation        # Relation
+    tree_profile_arr[2] = name            # Name
+    tree_profile_arr[3] = sex             # Sex
+
+    return tree_profile_arr
+
+  end
+
 
   def process_questions
 

@@ -2,10 +2,10 @@
   %div
     %p
       @session_id: #{@session_id.inspect}
-    %p
-      @first_var: #{@first_var.inspect}
-    %p
-      @navigation_var: #{@navigation_var.inspect}
-  %h1 Страница ADMIN - служебные методы
+  %h1 Страница ADMIN
   %h2
     =link_to 'Просмотр и редактирование таблиц', rails_admin_path
+  %h2
+    =link_to 'Служебный метод 1', service_method_1_path
+  %h2
+    =link_to 'Служебный метод 2', service_method_2_path

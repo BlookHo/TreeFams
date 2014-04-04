@@ -9,7 +9,6 @@ class PagesController < ApplicationController
   # @see Place
   def landing
 
-    @navigation_var = "Navigation переменная - PAGES контроллер/login метод"
 
   end
 
@@ -139,7 +138,18 @@ class PagesController < ApplicationController
   # @todo перенести админские методы в отдельный контроллер
   def admin
 
-    @navigation_var = "Navigation переменная - PAGES контроллер/admin метод"
+
+    #def service_metod_1
+    #
+    #  @test_string = "This is 1-st service admin method"  # DEBUGG
+    #  @match_qty_loc = 111  # DEBUGG
+    #
+    #
+    #
+    #end
+    #
+
+
 
   end
 
@@ -150,7 +160,6 @@ class PagesController < ApplicationController
   # @see Place
   def registration
 
-    @navigation_var = "Navigation переменная - PAGES контроллер/registration метод"
 
   end
 
@@ -162,7 +171,6 @@ class PagesController < ApplicationController
   def news
 
     @updates_count = 4  # кол-во обновлений - должно вычисляться отдельно в своем контроллере
-    @navigation_var = "Navigation переменная - PAGES контроллер/news метод"
 
 
   end
@@ -174,7 +182,6 @@ class PagesController < ApplicationController
   def mail
 
     @new_mail_count = 6  # кол-во сообщений - должно вычисляться отдельно в своем контроллере
-    @navigation_var = "Navigation переменная - PAGES контроллер/mail метод"
 
 
   end
@@ -186,7 +193,6 @@ class PagesController < ApplicationController
   # @see Place
   def mypage
 
-    @navigation_var = "Navigation переменная - PAGES контроллер/mypage метод"
 
 
   end
@@ -197,7 +203,6 @@ class PagesController < ApplicationController
   # @see Place
   def search
 
-    @navigation_var = "Navigation переменная - PAGES контроллер/search метод"
 
   end
 
@@ -207,7 +212,6 @@ class PagesController < ApplicationController
   # @see Place
   def conversation
 
-    @navigation_var = "Navigation переменная - PAGES контроллер/conversation метод"
 
 
   end

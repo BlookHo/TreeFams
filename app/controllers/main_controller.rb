@@ -8,15 +8,15 @@ class MainController < ApplicationController
 # @see News
   def main_page
 
-    if !session[:tree_array].blank?                    # DEBUGG
-      @tree_array = session[:tree_array][:value]       # DEBUGG
+    if !session[:profiles_array].blank?                    # DEBUGG
+      @profiles_array = session[:profiles_array][:value]       # DEBUGG
     end
     if !session[:profile_arr].blank?                    # DEBUGG
       @profile_arr = session[:profile_arr][:value]      # DEBUGG
     end
-    #@profile_arr = session[:profile_arr][:value] # DEBUGG
+
+    @profile_arr = session[:profile_arr][:value] # DEBUGG
     #@new_user_id = session[:new_user_id][:value] # DEBUGG
-    #@tree_arr = session[:tree_arr][:value] # DEBUGG
 
   end
 
@@ -26,8 +26,8 @@ class MainController < ApplicationController
   # @see News
   def main_display_tree
 
-    if !session[:tree_array].blank?                    # DEBUGG
-      @tree_array = session[:tree_array][:value]       # DEBUGG
+    if !session[:profiles_array].blank?                    # DEBUGG
+      @profiles_array = session[:profiles_array][:value]       # DEBUGG
     end
 
   end
@@ -39,7 +39,6 @@ class MainController < ApplicationController
   # @see News
   def relative_menu
 
-    @navigation_var = "Navigation переменная - MAIN контроллер/relative_menu метод"
     @menu_choice = "No choice yet - in Relative_menu"
 
   end
@@ -49,8 +48,6 @@ class MainController < ApplicationController
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
   def match_approval
-
-    @navigation_var = "Navigation переменная - MAIN контроллер/match_approval метод"
 
     @new_approved_qty = 3
 

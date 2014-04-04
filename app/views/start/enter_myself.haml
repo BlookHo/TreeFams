@@ -4,8 +4,6 @@
     / <p>@sel_names: <haml:loud> @sel_names.inspect </haml:loud></p>
     / <p>@sel_names_male: <haml:loud> @sel_names_male.inspect </haml:loud></p>
     / <p>@sel_names_female: <haml:loud> @sel_names_female.inspect </haml:loud></p>
-    %p
-      @navigation_var: #{@navigation_var.inspect}
   %h4 Ввод информации об авторе стартового дерева
   = form_tag(store_myself_path, remote: true, id: 'myself_form') do
     %div
@@ -19,6 +17,8 @@
     -#%p#sex_container
     -#  Я - #{@user_sex.inspect}
   #next_container
+  %h4
+    DEBUGG Выйти и сохранить: Переход на страницу start/save_start_tables:  #{link_to "SAVE -->", save_start_tables_path}
   %h4
     Выйти и сохранить: Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
   %h4

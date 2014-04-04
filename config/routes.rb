@@ -1,4 +1,6 @@
 Weafam::Application.routes.draw do
+  get "admin_methods/service_method_1"
+  get "admin_methods/service_method_2"
   mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
 
   root 'pages#landing'
@@ -9,10 +11,16 @@ Weafam::Application.routes.draw do
   resources :names
   resources :relations
 
+  # admin_methods controller
+  match 'service_method_1' => 'admin_methods#service_method_1', via: :get
+  match 'service_method_2' => 'admin_methods#service_method_2', via: :get
+
+
   # pages controller
   #match 'main' => 'pages#main', via: :get
   match 'landing' => 'pages#landing', via: :get
   match 'admin' => 'pages#admin', via: :get
+  #match 'admin_service_metod_1' => 'pages#admin#service_metod_1', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
   match 'mypage' => 'pages#mypage', via: :get
@@ -30,6 +38,7 @@ Weafam::Application.routes.draw do
   # start controller
   match 'show_tree_table' => 'start#show_tree_table', via: :get
   match 'display_saved_tree' => 'start#display_saved_tree', via: :get
+  match 'save_start_tables' => 'start#save_start_tables', via: :get
 
 
   ######### start_enter/enters
@@ -80,14 +89,8 @@ Weafam::Application.routes.draw do
     get    "account" => "users/registrations#edit",   as: :edit_user_registration
   end
 
-#  post "admin/login"
-
 # You can have the root of your site routed with "root"
 # root 'welcome#index'
-
-#  match 'admin' => 'admin#index', via: :get
-
-
 
 
 

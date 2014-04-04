@@ -1,6 +1,6 @@
 %h4 ПРОМЕЖУТОЧНОЕ Отображение Стартового Древа Пользователя в табличной форме
 %h4 (для отладки)
-- if !@tree_array.blank?
+- if !@profiles_array.blank?
   %table
     %tr
       %th ID
@@ -12,7 +12,7 @@
       %th
       %th
       %th
-    - @tree_array.each do |tree|
+    - @profiles_array.each do |tree|
       %tr
         %td= tree[0]
         %td= @id_author
