@@ -7,10 +7,10 @@
     %div
       %div
         = label_tag 'Есть еще братья?'
-        = radio_button_tag :more_brothers_exist?, "yes", :prompt => 'Нажми имя'
+        = radio_button_tag :more_brothers_exist?, "yes", false
       %div
         = label_tag 'Нет. Далее'
-        = radio_button_tag :more_brothers_exist?, "no more", :prompt => 'Выбери имя'
+        = radio_button_tag :more_brothers_exist?, "no more", false
   = submit_tag 'Ввод'
 
 %h5 @dialog_message: #{@dialog_message.inspect}
