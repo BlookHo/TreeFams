@@ -74,29 +74,30 @@ class StartController < ApplicationController
 
   ####  CHECK PROFILE TO BE ENTERED ########################
 
-  def check_more_brothers_exist
-
-    @check_yea_nau = ["Yea", "No"]
-    @more_brothers_exists = params[:more_brothers_exist?]
-    if !@more_brothers_exists.blank?   # = true -> User = Male
-
-      @sel_names_male = session[:sel_names_male][:value]
-      @sel_names_female = session[:sel_names_female][:value]
-
-      if @more_brothers_exists == "yes"  #
-        @render_name = 'start/enter_brother'
-        # redirect_to enter_wife_path
-      else
-        @render_name = 'start/enter_sister'
-        # redirect_to enter_husband_path
-      end
-
-    else
-      @dialog_message = 'Определитесь с братьями или пропустите ввод'
-      @render_name = 'start/enter_brother'
-    end
-
-  end
+  #def check_more_brothers_exist
+  #
+  #  @check_yea_nau = ["Yea", "No"]
+  #  @more_brothers_exists = params[:more_brothers_exist?]
+  #  if !@more_brothers_exists.blank?   # = true -> User = Male
+  #
+  #    @sel_names_male = session[:sel_names_male][:value]
+  #    @sel_names_female = session[:sel_names_female][:value]
+  #
+  #    if @more_brothers_exists == "yes"  #
+  #      @render_name = 'start/enter_brother'
+  #      # redirect_to enter_wife_path
+  #    else
+  #      params[:brother_name_select] = nil
+  #      @render_name = 'start/enter_sister'
+  #      # redirect_to enter_husband_path
+  #    end
+  #
+  #  else
+  #    @dialog_message = 'Определитесь с братьями или пропустите ввод'
+  #    @render_name = 'start/enter_brother'
+  #  end
+  #
+  #end
 
   def check_sisters
     @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
@@ -270,26 +271,32 @@ class StartController < ApplicationController
     @sel_names_male = session[:sel_names_male][:value]
     @sel_names_female = session[:sel_names_female][:value]
 
+    @more_brothers_exists = params[:more_brothers_exist?]
     @brother_name = params[:brother_name_select] #
 
-    if !@brother_name.blank?
-      @brother_sex = check_sex_by_name(@brother_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@brother_name)
-        @brother_name_correct = true
-      else
-        @brother_name_correct = false
-      end
-      one_profile_arr = add_profile(5,@brother_name,@brother_sex)
-      profiles_array << one_profile_arr
+    if params[:more_brothers_exist?] == "yes" #
+      if !@brother_name.blank?
 
-      session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
-      @next_view = check_more_brothers_exist   #
+        @brother_sex = check_sex_by_name(@brother_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+        if check_sex_by_name(@brother_name)
+          @brother_name_correct = true
+        else
+          @brother_name_correct = false
+        end
+        one_profile_arr = add_profile(5,@brother_name,@brother_sex)
+        profiles_array << one_profile_arr
+
+        session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+      end
+   #   @next_view = check_more_brothers_exist   #
+      @next_view = 'start/enter_brother'
 
     else
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
       @next_view = 'start/enter_sister'   #
 
     end
+
     respond_to do |format|
       format.html
       format.js { render 'start/store_brother' }
@@ -301,6 +308,7 @@ class StartController < ApplicationController
   def store_sister
 
     profiles_array = session[:profiles_array][:value]
+    params[:brother_name_select] = nil
 
     @sister_name = params[:sister_name_select] #
 
