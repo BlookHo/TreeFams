@@ -18,6 +18,7 @@ Name.create([
 
 
 {name: 'Август', only_male:1, name_freq: 0},
+##
 {name: 'Авдей', only_male:1, name_freq: 0},
 {name: 'Аверкий', only_male:1, name_freq: 0},
 {name: 'Аверьян', only_male:1, name_freq: 0},

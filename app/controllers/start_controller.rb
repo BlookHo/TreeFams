@@ -13,6 +13,8 @@ class StartController < ApplicationController
     ####  DEBUGG PLACE  ########################
 
 
+    #### ZEROUVING OF TABLES FOR DEBUGG ########################
+
     #Tree.delete_all
     #Tree.reset_pk_sequence
     #
@@ -21,7 +23,7 @@ class StartController < ApplicationController
     #
     #User.delete_all
     #User.reset_pk_sequence
-
+    #
 
     form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 

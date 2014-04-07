@@ -10,4 +10,3 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 # encoding: utf-8
-
