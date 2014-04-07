@@ -23,7 +23,7 @@ class StartController < ApplicationController
     #
     #User.delete_all
     #User.reset_pk_sequence
-    #
+
 
     form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
@@ -476,7 +476,7 @@ class StartController < ApplicationController
       else
         new_profile_arr[0] = new_profile.id  # profile_id
       end
-      new_profile_arr[1] = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
+      new_profile_arr[1] = profiles_array[arr_i][0]  # Relation_id
 
       profiles_tree_arr <<  new_profile_arr
       new_profile_arr = []
