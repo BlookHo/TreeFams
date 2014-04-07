@@ -141,8 +141,6 @@ class StartController < ApplicationController
   def check_husband_or_wife
 
     @user_sex = session[:user_sex][:value]
-    @sel_names_male = session[:sel_names_male][:value]
-    @sel_names_female = session[:sel_names_female][:value]
 
     if @user_sex    # = true -> User = Male
 
@@ -240,7 +238,6 @@ class StartController < ApplicationController
   def store_mother
 
     profiles_array = session[:profiles_array][:value]
-    @user_sex = session[:user_sex][:value]
 
     @mother_name = params[:mother_name_select] #
 
@@ -251,7 +248,7 @@ class StartController < ApplicationController
       else
         @mother_name_correct = false
       end
-      one_profile_arr = add_profile(2,@mother_name,@user_sex)
+      one_profile_arr = add_profile(2,@mother_name,@mother_sex)
       profiles_array << one_profile_arr
 
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
@@ -261,7 +258,7 @@ class StartController < ApplicationController
       format.html
       format.js { render 'start/store_mother' }
     end
-#    redirect_to enter_brother_path
+#    redirect_to enter_brother_path # in store_mother.js
 
   end
 
@@ -288,7 +285,6 @@ class StartController < ApplicationController
 
         session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
       end
-   #   @next_view = check_more_brothers_exist   #
       @next_view = 'start/enter_brother'
 
     else
@@ -308,30 +304,37 @@ class StartController < ApplicationController
   def store_sister
 
     profiles_array = session[:profiles_array][:value]
-    params[:brother_name_select] = nil
+    @sel_names_male = session[:sel_names_male][:value]
+    @sel_names_female = session[:sel_names_female][:value]
 
+    @more_sisters_exists = params[:more_sisters_exists?]
     @sister_name = params[:sister_name_select] #
 
-    if !@sister_name.blank?
-      @sister_sex = check_sex_by_name(@sister_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@sister_name)
-        @sister_name_correct = true
-      else
-        @sister_name_correct = false
-      end
-      one_profile_arr = add_profile(6,@sister_name,@sister_sex)
-      profiles_array << one_profile_arr
+    if params[:more_sisters_exists?] == "yes" #
+      if !@sister_name.blank?
+        @sister_sex = check_sex_by_name(@sister_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+        if check_sex_by_name(@sister_name)
+          @sister_name_correct = true
+        else
+          @sister_name_correct = false
+        end
+        one_profile_arr = add_profile(6,@sister_name,@sister_sex)
+        profiles_array << one_profile_arr
 
+        session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+      end
+      @next_view = 'start/enter_sister' # повтор ввода новой сестры
+
+    else
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+      @next_view = check_husband_or_wife   # взавис-ти от пола - переход к жене или мужу
+
     end
 
-    @next_view = check_husband_or_wife   #
     respond_to do |format|
       format.html
       format.js { render 'start/store_sister' }
     end
-
- #   redirect_to start_enter_son_path
 
   end
 
