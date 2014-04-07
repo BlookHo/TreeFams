@@ -8,7 +8,7 @@ class StartController < ApplicationController
 
     ####  DEBUGG PLACE  ########################
 
-    #    update_user       # DEBUGG:
+    #    any method        # DEBUGG:
 
     ####  DEBUGG PLACE  ########################
 
@@ -21,7 +21,7 @@ class StartController < ApplicationController
     #
     #User.delete_all
     #User.reset_pk_sequence
-    #
+
 
     form_select_arrays  # Формирование массивов значений для форм ввода типа select.
 
@@ -74,70 +74,6 @@ class StartController < ApplicationController
 
   ####  CHECK PROFILE TO BE ENTERED ########################
 
-  #def check_more_brothers_exist
-  #
-  #  @check_yea_nau = ["Yea", "No"]
-  #  @more_brothers_exists = params[:more_brothers_exist?]
-  #  if !@more_brothers_exists.blank?   # = true -> User = Male
-  #
-  #    @sel_names_male = session[:sel_names_male][:value]
-  #    @sel_names_female = session[:sel_names_female][:value]
-  #
-  #    if @more_brothers_exists == "yes"  #
-  #      @render_name = 'start/enter_brother'
-  #      # redirect_to enter_wife_path
-  #    else
-  #      params[:brother_name_select] = nil
-  #      @render_name = 'start/enter_sister'
-  #      # redirect_to enter_husband_path
-  #    end
-  #
-  #  else
-  #    @dialog_message = 'Определитесь с братьями или пропустите ввод'
-  #    @render_name = 'start/enter_brother'
-  #  end
-  #
-  #end
-
-  def check_sisters
-    @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
-
-    @check_yea_nau = ["Yea", "No"]
-    @brothers_exists = params[:brothers_exist?]
-
-    if !@brothers_exists.blank?
-      redirect_to enter_brothers_path
-    end
-
-  end
-
-
-  def check_sons
-    @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
-
-    @check_yea_nau = ["Yea", "No"]
-    @brothers_exists = params[:brothers_exist?]
-
-    if !@brothers_exists.blank?
-      redirect_to enter_brothers_path
-    end
-
-  end
-
-
-  def check_daugthers
-    @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
-
-    @check_yea_nau = ["Yea", "No"]
-    @brothers_exists = params[:brothers_exist?]
-
-    if !@brothers_exists.blank?
-      redirect_to enter_brothers_path
-    end
-
-  end
-
-
   def check_husband_or_wife
 
     @user_sex = session[:user_sex][:value]
@@ -151,32 +87,6 @@ class StartController < ApplicationController
       # redirect_to enter_husband_path
     end
    # @render_name
-  end
-
-  def check_husband
-    @user_sex = session[:user_sex][:value]
-    @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
-
-    @check_yea_nau = ["Yea", "No"]
-    @brothers_exists = params[:brothers_exist?]
-
-    if !@brothers_exists.blank?
-      redirect_to enter_brothers_path
-    end
-
-  end
-
-
-  def check_wife
-    @navigation_var = "Navigation переменная - START контроллер/check_brothers метод"
-
-    @check_yea_nau = ["Yea", "No"]
-    @brothers_exists = params[:brothers_exist?]
-
-    if !@brothers_exists.blank?
-      redirect_to enter_brothers_path
-    end
-
   end
 
 
@@ -219,7 +129,7 @@ class StartController < ApplicationController
       else
         @father_name_correct = false
       end
-      # Сохранять отчество Юзера в зависимости от его пола @user_sex!
+      # todo: Сохранять отчество Profile в зависимости от пола @user_sex!
       one_profile_arr = add_profile(1,@father_name,@father_sex)
       profiles_array << one_profile_arr
 
@@ -319,6 +229,7 @@ class StartController < ApplicationController
         else
           @sister_name_correct = false
         end
+        # todo: Сохранять отчество Profile sister в зависимости от пола @user_sex!
         one_profile_arr = add_profile(6,@sister_name,@sister_sex)
         profiles_array << one_profile_arr
 
@@ -380,6 +291,7 @@ class StartController < ApplicationController
       else
         @wife_name_correct = false
       end
+      # todo: Сохранять фамилию жены по мужу? Или девичью?
       one_profile_arr = add_profile(8,@wife_name,@wife_sex)
       profiles_array << one_profile_arr
 

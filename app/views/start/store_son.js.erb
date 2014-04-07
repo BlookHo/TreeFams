@@ -1,4 +1,6 @@
 $("#son_form").fadeOut(1200);
-$("#name_container").append('* Имя сына: <%= @son_name %>. ');
-$("#name_container").append(' Oн - <%= @son_sex %> ');
+if (<%= @more_sons_exists == "yes" %>) {
+    $("#name_container").append('* Имя сына: <%= @son_name %>. ');
+    $("#name_container").append(' Oн - <%= @son_sex %> ');
+}
 $("#next_container").html("<%= j render @next_view %>");
