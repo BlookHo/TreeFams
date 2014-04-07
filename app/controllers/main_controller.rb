@@ -15,7 +15,24 @@ class MainController < ApplicationController
       @profile_arr = session[:profile_arr][:value]      # DEBUGG
     end
 
-    #@new_user_id = session[:new_user_id][:value] # DEBUGG
+    @user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
+
+    @row_arr = []
+    @tree_arr = []
+
+    @user_tree.each do |tree_row|
+      @row_arr[0] = tree_row.id
+      @row_arr[1] = tree_row.profile_id
+      @row_arr[2] = tree_row.relation_id
+      @row_arr[3] = tree_row.connected
+
+      @tree_arr << @row_arr
+      @row_arr = []
+
+    end
+
+
+
 
   end
 
@@ -25,9 +42,16 @@ class MainController < ApplicationController
   # @see News
   def main_display_tree
 
-    if !session[:profiles_array].blank?                    # DEBUGG
+    if !session[:profiles_array].blank?                        # DEBUGG
       @profiles_array = session[:profiles_array][:value]       # DEBUGG
     end
+
+
+
+
+
+
+
 
   end
 

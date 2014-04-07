@@ -15,16 +15,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
         #respond_with resource, location: after_sign_up_path_for(resource)
 
 
-        #Tree.delete_all             # DEBUGG
-        #Tree.reset_pk_sequence
-
-        #User.delete_all             # DEBUGG
-        #User.reset_pk_sequence
-
-        #Profile.delete_all          # DEBUGG
-        #Profile.reset_pk_sequence
-
-
         ### @todo:  Поставить здесь условие контроля зарегенности
         #@passw_name = params[:passw] # ?????????
         #if !@passw_name.blank?
