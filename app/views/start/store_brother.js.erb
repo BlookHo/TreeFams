@@ -1,6 +1,6 @@
 $("#brother_form").fadeOut(1200);
-
-$("#name_container").append('* Имя брата: <%= @brother_name %>. ');
-$("#name_container").append(' он - <%= @brother_sex %> ');
-
+if (<%= @more_brothers_exists == "yes" %>) {
+    $("#name_container").append('* Имя брата: <%= @brother_name %>. ');
+    $("#name_container").append(' он - <%= @brother_sex %> ');
+}
 $("#next_container").html("<%= j render @next_view %>");
