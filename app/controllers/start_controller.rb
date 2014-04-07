@@ -265,6 +265,7 @@ class StartController < ApplicationController
   def store_brother
 
     profiles_array = session[:profiles_array][:value]
+    @user_sex = session[:user_sex][:value]
     @sel_names_male = session[:sel_names_male][:value]
     @sel_names_female = session[:sel_names_female][:value]
 
@@ -272,14 +273,15 @@ class StartController < ApplicationController
     @brother_name = params[:brother_name_select] #
 
     if params[:more_brothers_exist?] == "yes" #
+      # todo: Принять меры если имя Сына не соответствует полу
       if !@brother_name.blank?
-
         @brother_sex = check_sex_by_name(@brother_name) # display sex by name # проверка, действ-но ли введено мужское имя?
         if check_sex_by_name(@brother_name)
           @brother_name_correct = true
         else
           @brother_name_correct = false
         end
+        # todo: Сохранять отчество Profile в зависимости от пола @user_sex!
         one_profile_arr = add_profile(5,@brother_name,@brother_sex)
         profiles_array << one_profile_arr
 
@@ -290,14 +292,13 @@ class StartController < ApplicationController
     else
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
       @next_view = 'start/enter_sister'   #
-
     end
 
     respond_to do |format|
       format.html
       format.js { render 'start/store_brother' }
     end
- #   redirect_to enter_sister_path
+ #   redirect_to @next_view
 
   end
 
@@ -399,30 +400,39 @@ class StartController < ApplicationController
 
     profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
+    @sel_names_male = session[:sel_names_male][:value]
+    @sel_names_female = session[:sel_names_female][:value]
 
+    @more_sons_exists = params[:more_sons_exist?]
     @son_name = params[:son_name_select] #
 
-    if !@son_name.blank?
-      @son_sex = check_sex_by_name(@son_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@son_name)
-        @son_name_correct = true
-      else
-        @son_name_correct = false
+    if params[:more_sons_exist?] == "yes" #
+      if !@son_name.blank?
+        @son_sex = check_sex_by_name(@son_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+        # todo: Принять меры если имя Сына не соответствует полу
+        if check_sex_by_name(@son_name)
+          @son_name_correct = true
+        else
+          @son_name_correct = false
+        end
+        # todo: Сохранять отчество Profile в зависимости от пола @user_sex!
+        one_profile_arr = add_profile(3,@son_name,@son_sex)
+        profiles_array << one_profile_arr
+
+        session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
       end
+      @next_view = 'start/enter_son'
 
-      # Сохранять отчество Profile в зависимости от пола @user_sex!
-      one_profile_arr = add_profile(3,@son_name,@son_sex)
-      profiles_array << one_profile_arr
-
+    else
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+      @next_view = 'start/enter_daugther'   #
     end
 
-    @sel_names_female = session[:sel_names_female][:value]
     respond_to do |format|
       format.html
       format.js { render 'start/store_son' }
     end
-#    redirect_to enter_daugther_path
+#    redirect_to @next_view
 
   end
 
@@ -430,31 +440,39 @@ class StartController < ApplicationController
 
     profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
+    @sel_names_female = session[:sel_names_female][:value]
 
+    @more_daugthers_exists = params[:more_daugthers_exist?]
     @daugther_name = params[:daugther_name_select] #
 
-    if !@daugther_name.blank?
-      @daugther_sex = check_sex_by_name(@daugther_name) # display sex by name # проверка, действ-но ли введено мужское имя?
-      if check_sex_by_name(@daugther_name)
-        @daugther_name_correct = true
-      else
-        @daugther_name_correct = false
-      end
-      # #todo: Сохранять отчества Profile в зависимости от  пола @user_sex!
-      one_profile_arr = add_profile(4,@daugther_name,@daugther_sex)
-      profiles_array << one_profile_arr
+    if params[:more_daugthers_exist?] == "yes" #
+      # todo: Принять меры если имя Дочери не соответствует полу
+      if !@daugther_name.blank?
+        @daugther_sex = check_sex_by_name(@daugther_name) # display sex by name # проверка, действ-но ли введено мужское имя?
+        if check_sex_by_name(@daugther_name)
+          @daugther_name_correct = true
+        else
+          @daugther_name_correct = false
+        end
+        # #todo: Сохранять отчества Profile в зависимости от  пола @user_sex!
+        one_profile_arr = add_profile(4,@daugther_name,@daugther_sex)
+        profiles_array << one_profile_arr
 
+        session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+      end
+      @next_view = 'start/enter_daugther'
+
+    else
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+      @profiles_array = profiles_array  # DEBUGG: for show in _show_tree_table
+      @next_view = 'start/show_tree_table'   #
     end
 
-    @profiles_array = profiles_array  # DEBUGG: for show in _show_tree_table
-
-    @sel_names_female = session[:sel_names_female][:value]
     respond_to do |format|
       format.html
       format.js { render 'start/store_daugther' }
     end
-
+    #   redirect_to @next_view
   end
 
    # Сохранение стартового дерева
