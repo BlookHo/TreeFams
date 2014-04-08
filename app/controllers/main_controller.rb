@@ -73,10 +73,47 @@ class MainController < ApplicationController
   def match_approval
 
     @new_approved_qty = 3
-
     @total_approved_qty = @@approved_match_qty + @new_approved_qty
-
     @rest_to_approve = @@match_qty - @total_approved_qty
+
+
+    # Получение одного массива для включения в массив триплекс
+    # get_profile_arr - метод сбор данных для массива по profile_id .
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    def get_profile_arr(triplex_arr,relation)
+      one_triplex_arr = []
+      if !relation.blank?
+        one_triplex_arr[0] = Tree.where(:user_id => current_user.id, :relation_id => relation)[0][:profile_id]
+      else
+        one_triplex_arr[0] = current_user.profile_id
+      end
+      one_triplex_arr[1] = Profile.find(one_triplex_arr[0]).name_id
+      one_triplex_arr[2] = Profile.find(one_triplex_arr[0]).sex_id
+      one_triplex_arr[3] = relation
+      triplex_arr << one_triplex_arr
+    end
+
+    # Получение массива массивов Триплекс: дочь - отец - мать.
+    # [profile_id, name_id, relation_id, sex_id]
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    def make_one_triplex_arr(triplex_arr, first_relation, second_relation, third_relation)
+
+      get_profile_arr(triplex_arr,first_relation)
+      get_profile_arr(triplex_arr,second_relation)
+      get_profile_arr(triplex_arr,third_relation)
+
+    end
+
+    @triplex_arr = []
+    make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
+
+
+
+
 
   end
 

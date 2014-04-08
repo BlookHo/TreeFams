@@ -1,10 +1,16 @@
 %section.admin
   %h3 Страница Просмотра и подтверждения совпадений родственников в Древе Пользователя
   %div
-    -#%p
-    -#  @session_id: #{@session_id.inspect}
-    -#%p
-    -#  @navigation_var: #{@navigation_var.inspect}
+    %p
+      @current_user_profile: #{@current_user_profile.inspect}
+    %p
+      @current_user_profile_sex: #{@current_user_profile_sex.inspect}
+    %p
+      @author_arr: #{@author_arr.inspect}
+    %p
+      @triplex_arr: #{@triplex_arr.inspect}
+    %p
+      -#@father_author_profile_id: #{@father_author_profile_id.inspect}
     %p
       Новых подтверждений: @new_approved_qty: #{@new_approved_qty.inspect}
     %p
