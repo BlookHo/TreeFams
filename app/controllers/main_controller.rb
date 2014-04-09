@@ -15,23 +15,23 @@ class MainController < ApplicationController
       @profile_arr = session[:profile_arr][:value]      # DEBUGG
     end
 
-    @user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
+    if user_signed_in?
+      @user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
 
-    @row_arr = []
-    @tree_arr = []
-
-    @user_tree.each do |tree_row|
-      @row_arr[0] = tree_row.id
-      @row_arr[1] = tree_row.profile_id
-      @row_arr[2] = tree_row.relation_id
-      @row_arr[3] = tree_row.connected
-
-      @tree_arr << @row_arr
       @row_arr = []
+      @tree_arr = []
 
+      @user_tree.each do |tree_row|
+        @row_arr[0] = tree_row.id
+        @row_arr[1] = tree_row.profile_id
+        @row_arr[2] = tree_row.relation_id
+        @row_arr[3] = tree_row.connected
+
+        @tree_arr << @row_arr
+        @row_arr = []
+
+      end
     end
-
-
 
 
   end
@@ -83,16 +83,18 @@ class MainController < ApplicationController
     # @param admin_page [Integer] опциональный номер страницы
     # @see News
     def get_profile_arr(triplex_arr,relation)
-      one_triplex_arr = []
-      if !relation.blank?
-        one_triplex_arr[0] = Tree.where(:user_id => current_user.id, :relation_id => relation)[0][:profile_id]
-      else
-        one_triplex_arr[0] = current_user.profile_id
+      if user_signed_in?
+        one_triplex_arr = []
+        if  !relation.blank?
+          one_triplex_arr[0] = Tree.where(:user_id => current_user.id, :relation_id => relation)[0][:profile_id]
+        else
+          one_triplex_arr[0] = current_user.profile_id
+        end
+        one_triplex_arr[1] = Profile.find(one_triplex_arr[0]).sex_id
+        one_triplex_arr[2] = Profile.find(one_triplex_arr[0]).name_id
+        one_triplex_arr[3] = relation
+        triplex_arr << one_triplex_arr
       end
-      one_triplex_arr[1] = Profile.find(one_triplex_arr[0]).sex_id
-      one_triplex_arr[2] = Profile.find(one_triplex_arr[0]).name_id
-      one_triplex_arr[3] = relation
-      triplex_arr << one_triplex_arr
     end
 
     # Получение массива массивов Триплекс: дочь - отец - мать.
@@ -115,51 +117,53 @@ class MainController < ApplicationController
     # @see News
     def search_bros_sist(triplex_arr)
 
-      # НАЧАЛО ПОИСКА ОТЦА - организовать параллельный поиск матери!!! Т.е. ИЩЕМ - ПАРУ!!
+      if user_signed_in?
+        # НАЧАЛО ПОИСКА ОТЦА - организовать параллельный поиск матери!!! Т.е. ИЩЕМ - ПАРУ!!
 
-      # Father_Profile_ID = triplex_arr[1][0])
-      # Father_Sex_ID = triplex_arr[1][1])
-      # Father_Name_ID = triplex_arr[1][2])
-      # Father_Relation_ID = triplex_arr[1][3])
-    #  @us_id = 2    #    IS DISTINCT FROM 2        # TRY RAILS 4 DEBUGG
-      @found_father = false
-      @all_fathers_profiles = Tree.where.not(user_id: current_user.id).select(:profile_id).where(:relation_id => triplex_arr[1][3])
-      # все profiles отцов, кроме current_user
+        # Father_Profile_ID = triplex_arr[1][0])
+        # Father_Sex_ID = triplex_arr[1][1])
+        # Father_Name_ID = triplex_arr[1][2])
+        # Father_Relation_ID = triplex_arr[1][3])
+      #  @us_id = 2    #    IS DISTINCT FROM 2        # TRY RAILS 4 DEBUGG
+        @found_father = false
+        @all_fathers_profiles = Tree.where.not(user_id: current_user.id).select(:profile_id).where(:relation_id => triplex_arr[1][3])
+        # все profiles отцов, кроме current_user
 
-      @fathers_names_arr = []
-      @all_fathers_profiles.each do |father_profile|
-        @fathers_name = Profile.where(:id => father_profile.profile_id).where(:name_id => triplex_arr[1][2]).select(:id)
-        @fathers_names_arr << @fathers_name if !@fathers_name.blank?
-        # профили отцов с таким же именем, что у отца current_user
-        # т.е. у возможных братьев/сестер.
+        @fathers_names_arr = []
+        @all_fathers_profiles.each do |father_profile|
+          @fathers_name = Profile.where(:id => father_profile.profile_id).where(:name_id => triplex_arr[1][2]).select(:id)
+          @fathers_names_arr << @fathers_name if !@fathers_name.blank?
+          # профили отцов с таким же именем, что у отца current_user
+          # т.е. у возможных братьев/сестер.
+        end
+        if !@fathers_names_arr.blank?
+          @qty_fathers_found = @fathers_names_arr.length
+        end
+        @found_father = true if !@fathers_names_arr.blank?  # если найдены профили отцов
+        # с таким же именем, что у отца current_user
+
+        #  КОНЕЦ ПОИСКА ОТЦА
+
+        # НАЧАЛО ПОИСКА МАТЕРИ В ПАРЕ С ОТЦОМ
+
+
+
+
+
+        #  КОНЕЦ ПОИСКА МАТЕРИ В ПАРЕ С ОТЦОМ
+
+
+
+        # ВЫЯВЛЕНИЕ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
+        # У current_user есть БРАТ/СЕСТРА - ЕСЛИ у них у всех ОБЩИЕ ОТЕЦ И МАТЬ - ПАРА
+
+
+
+        #  КОНЕЦ ВЫЯВЛЕНИЯ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
+
+        #  ГОТОВ МАССИВ ПРОФИЛЕЙ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
+
       end
-      if !@fathers_names_arr.blank?
-        @qty_fathers_found = @fathers_names_arr.length
-      end
-      @found_father = true if !@fathers_names_arr.blank?  # если найдены профили отцов
-      # с таким же именем, что у отца current_user
-
-      #  КОНЕЦ ПОИСКА ОТЦА
-
-      # НАЧАЛО ПОИСКА МАТЕРИ В ПАРЕ С ОТЦОМ
-
-
-
-
-
-      #  КОНЕЦ ПОИСКА МАТЕРИ В ПАРЕ С ОТЦОМ
-
-
-
-      # ВЫЯВЛЕНИЕ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
-      # У current_user есть БРАТ/СЕСТРА - ЕСЛИ у них у всех ОБЩИЕ ОТЕЦ И МАТЬ - ПАРА
-
-
-
-      #  КОНЕЦ ВЫЯВЛЕНИЯ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
-
-      #  ГОТОВ МАССИВ ПРОФИЛЕЙ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
-
 
     end
 

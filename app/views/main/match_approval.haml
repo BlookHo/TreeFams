@@ -1,8 +1,9 @@
 %section.admin
   %h3 Страница Просмотра и подтверждения совпадений родственников в Древе Пользователя
   %div
-    %p
-      current_user.id: #{current_user.id.inspect}
+    - if user_signed_in?
+      %p
+        current_user.id: #{current_user.id.inspect}
     %p
       @current_user_profile_sex: #{@current_user_profile_sex.inspect}
     %p

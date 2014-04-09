@@ -3,18 +3,18 @@
 
 User.delete_all       # 1 admin + 4 start trees
 User.reset_pk_sequence
-User.create([
+User.create!([          # create! - для сообщений об ошибках если они есть
 
 # 1
-{profile_id: 1, admin: true, email: 'aa@aa.aa' },
+{profile_id: 1, admin: true, email: 'aa@aa.aa', password: '111111', password_confirmation: '111111' },
 # 2
-{profile_id: 7, admin: false, email: 'qq@qq.qq' },
+{profile_id: 7, admin: false, email: 'qq@qq.qq', password: '222222', password_confirmation: '222222' },
 # 3
-{profile_id: 15, admin: false, email: 'ww@ww.ww' },
+{profile_id: 15, admin: false, email: 'ww@ww.ww', password: '333333', password_confirmation: '333333' },
 # 4
-{profile_id: 22, admin: false, email: 'ee@ee.ee' },
+{profile_id: 22, admin: false, email: 'ee@ee.ee', password: '444444', password_confirmation: '444444' },
 # 5
-{profile_id: 27, admin: false, email: 'rr@rr.rr' }
+{profile_id: 27, admin: false, email: 'rr@rr.rr', password: '555555', password_confirmation: '555555' }
 
 
 ])

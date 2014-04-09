@@ -405,7 +405,10 @@ class StartController < ApplicationController
     #Profile.delete_all          # DEBUGG
     #Profile.reset_pk_sequence
 
-    profiles_array = session[:profiles_array][:value]
+  #  profiles_array = session[:profiles_array][:value]
+    if !session[:profiles_array].blank?
+      profiles_array = session[:profiles_array][:value]
+    end
 
     if user_signed_in?
 
@@ -452,37 +455,35 @@ class StartController < ApplicationController
 
     profiles_tree_arr = []
     new_profile_arr = []     #
+    if !profiles_array.blank?
+      for arr_i in 0 .. profiles_array.length-1
+        new_profile = Profile.new
+          if arr_i == 0 # only for email для user
+            new_profile.user_id = current_user.id  # user_id - берем после регистрации
+            new_profile.email = current_user.email # user regged email
+          else
+            new_profile.user_id = nil  # profile - not user_id
+            new_profile.email = nil    # profile - not user_id
+          end
+          new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
+          if profiles_array[arr_i][2]
+            new_profile.sex_id = 1    # sex_id - MALE
+          else
+            new_profile.sex_id = 0    # sex_id - FEMALE
+          end
+        new_profile.save
 
-    for arr_i in 0 .. profiles_array.length-1
-
-      new_profile = Profile.new
         if arr_i == 0 # only for email для user
-          new_profile.user_id = current_user.id  # user_id - берем после регистрации
-          new_profile.email = current_user.email # user regged email
+          new_profile_arr[0] = current_user.id # user_id
         else
-          new_profile.user_id = nil  # profile - not user_id
-          new_profile.email = nil    # profile - not user_id
+          new_profile_arr[0] = new_profile.id  # profile_id
         end
-        new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
-        if profiles_array[arr_i][2]
-          new_profile.sex_id = 1    # sex_id - MALE
-        else
-          new_profile.sex_id = 0    # sex_id - FEMALE
-        end
-      new_profile.save
+        new_profile_arr[1] = profiles_array[arr_i][0]  # Relation_id
 
-      if arr_i == 0 # only for email для user
-        new_profile_arr[0] = current_user.id # user_id
-      else
-        new_profile_arr[0] = new_profile.id  # profile_id
+        profiles_tree_arr <<  new_profile_arr
+        new_profile_arr = []
       end
-      new_profile_arr[1] = profiles_array[arr_i][0]  # Relation_id
-
-      profiles_tree_arr <<  new_profile_arr
-      new_profile_arr = []
-
     end
-
     return profiles_tree_arr
 
   end
@@ -511,9 +512,10 @@ class StartController < ApplicationController
   def update_user
 
     user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
-    current_user.profile_id = user_profile[0]['id']
-    current_user.save
-
+    if !user_profile.blank?
+      current_user.profile_id = user_profile[0]['id']
+      current_user.save
+    end
   end
 
 
