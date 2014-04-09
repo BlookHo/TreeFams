@@ -118,17 +118,21 @@ class MainController < ApplicationController
     def search_bros_sist(triplex_arr)
 
       if user_signed_in?
-        # НАЧАЛО ПОИСКА ОТЦА - организовать параллельный поиск матери!!! Т.е. ИЩЕМ - ПАРУ!!
-
         # Father_Profile_ID = triplex_arr[1][0])
         # Father_Sex_ID = triplex_arr[1][1])
         # Father_Name_ID = triplex_arr[1][2])
         # Father_Relation_ID = triplex_arr[1][3])
+
+        # Mother_Profile_ID = triplex_arr[2][0])
+        # Mother_Sex_ID = triplex_arr[2][1])
+        # Mother_Name_ID = triplex_arr[2][2])
+        # Mother_Relation_ID = triplex_arr[2][3])
+
+        # НАЧАЛО ПОИСКА ОТЦА - организовать параллельный поиск матери!!! Т.е. ИЩЕМ - ПАРУ!!
       #  @us_id = 2    #    IS DISTINCT FROM 2        # TRY RAILS 4 DEBUGG
         @found_father = false
         @all_fathers_profiles = Tree.where.not(user_id: current_user.id).select(:profile_id).where(:relation_id => triplex_arr[1][3])
-        # все profiles отцов, кроме current_user
-
+        # все profiles отцов, кроме отца current_user
         @fathers_names_arr = []
         @all_fathers_profiles.each do |father_profile|
           @fathers_name = Profile.where(:id => father_profile.profile_id).where(:name_id => triplex_arr[1][2]).select(:id)
@@ -141,10 +145,24 @@ class MainController < ApplicationController
         end
         @found_father = true if !@fathers_names_arr.blank?  # если найдены профили отцов
         # с таким же именем, что у отца current_user
-
         #  КОНЕЦ ПОИСКА ОТЦА
 
         # НАЧАЛО ПОИСКА МАТЕРИ В ПАРЕ С ОТЦОМ
+        @found_mother = false
+        @all_mothers_profiles = Tree.where.not(user_id: current_user.id).select(:profile_id).where(:relation_id => triplex_arr[2][3])
+        # все profiles матерей, кроме матери current_user
+        @mothers_names_arr = []
+        @all_mothers_profiles.each do |mother_profile|
+          @mothers_name = Profile.where(:id => mother_profile.profile_id).where(:name_id => triplex_arr[2][2]).select(:id)
+          @mothers_names_arr << @mothers_name if !@mothers_name.blank?
+          # профили отцов с таким же именем, что у отца current_user
+          # т.е. у возможных братьев/сестер.
+        end
+        if !@mothers_names_arr.blank?
+          @qty_mothers_found = @mothers_name.length
+        end
+        @found_mother = true if !@mothers_names_arr.blank?  # если найдены профили отцов
+      # с таким же именем, что у отца current_user
 
 
 
