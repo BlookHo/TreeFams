@@ -138,21 +138,20 @@ class MainController < ApplicationController
         # все profiles отцов, кроме отца current_user
         @fathers_names_arr = []
         @fathers_trees_arr = []
-        @fathers_hash = Hash.new  # { Tree No (user_id) =>  Father Profile ID }
+ #       @fathers_hash = Hash.new  # { Tree No (user_id) =>  Father Profile ID }
         @all_fathers_profiles.each do |father_profile|
           @fathers_name = Profile.where(:id => father_profile.profile_id).where(:name_id => triplex_arr[1][2]).select(:id)
           if !@fathers_name.blank?
-            @fathers_names_arr << @fathers_name[0].id
-            @fathers_trees_arr << father_profile.user_id
- #           arr_terms = terms_hash.keys
- #           arr_freqs = terms_hash.values
-            @fathers_hash.merge!({father_profile.user_id  => @fathers_name[0].id}) #
-            # @fathers_hash - профили отцов с таким же именем, что у отца current_user, т.е. у возможных братьев/сестер
+            @fathers_names_arr << @fathers_name[0].id   # Fathers Profile ID
+            # @fathers_names_arr - профили отцов с таким же именем, что у отца current_user, т.е. у возможных братьев/сестер.
+            @fathers_trees_arr << father_profile.user_id  # Tree Nos (user_id)
+            # @fathers_trees_arr - номера СД отцов (user_id) с таким же именем, что у отца current_user, т.е. у возможных братьев/сестер.
+
+ #           arr_terms = terms_hash.keys  #           arr_freqs = terms_hash.values
+ #           @fathers_hash.merge!({father_profile.user_id  => @fathers_name[0].id}) #
             # @fathers_hash = { Tree No (user_id) =>  Father Profile ID }.
 
           end
-          # @fathers_names_arr - профили отцов с таким же именем, что у отца current_user, т.е. у возможных братьев/сестер.
-          # @fathers_trees_arr - номера СД отцов (user_id) с таким же именем, что у отца current_user, т.е. у возможных братьев/сестер.
         end
         if !@fathers_names_arr.blank?
           @qty_fathers_found = @fathers_names_arr.length
@@ -167,19 +166,19 @@ class MainController < ApplicationController
         # все profiles матерей, кроме матери current_user
         @mothers_names_arr = []
         @mothers_trees_arr = []
-        @mothers_hash = Hash.new  # { Tree No (user_id) =>  Mother Profile ID }
+ #       @mothers_hash = Hash.new  # { Tree No (user_id) =>  Mother Profile ID }
         @all_mothers_profiles.each do |mother_profile|
           @mothers_name = Profile.where(:id => mother_profile.profile_id).where(:name_id => triplex_arr[2][2]).select(:id)
           if !@mothers_name.blank?
-            @mothers_names_arr << @mothers_name
-            @mothers_trees_arr << mother_profile.user_id
-            @mothers_hash.merge!({mother_profile.user_id  => @mothers_name[0].id}) #
+            @mothers_names_arr << @mothers_name[0].id   # Mothers Profile ID
+            # @mothers_names_arr - профили матерей с таким же именем, что у матери current_user, т.е. у возможных братьев/сестер.
+            @mothers_trees_arr << mother_profile.user_id  # Tree Nos (user_id)
+            # @mothers_trees_arr - номера СД матерей с таким же именем, что у матери current_user, т.е. у возможных братьев/сестер.
+
+ #           @mothers_hash.merge!({mother_profile.user_id  => @mothers_name[0].id}) #
             # @@others_hash - профили матерей с таким же именем, что у матери current_user, т.е. у возможных братьев/сестер
             # @mothers_hash = { Tree No (user_id) =>  Mother Profile ID }.
-
           end
-          # @mothers_names_arr - профили матерей с таким же именем, что у матери current_user, т.е. у возможных братьев/сестер.
-          # @@mothers_trees_arr - номера СД матерей с таким же именем, что у матери current_user, т.е. у возможных братьев/сестер.
         end
         if !@mothers_names_arr.blank?
           @qty_mothers_found = @mothers_names_arr.length
@@ -188,13 +187,25 @@ class MainController < ApplicationController
         # с таким же именем, что у матери current_user
         #  КОНЕЦ ПОИСКА МАТЕРИ В ПАРЕ С ОТЦОМ
 
-
-
         # ВЫЯВЛЕНИЕ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
-        # У current_user есть БРАТ/СЕСТРА - ЕСЛИ у них у всех ОБЩИЕ ОТЕЦ И МАТЬ - ПАРА
+        # У current_user есть БРАТ/СЕСТРА - ЕСЛИ у них у всех есть ОБЩИЕ ОТЕЦ И МАТЬ - ПАРА
+        @brothers_profiles_id_arr = []
+        @sisters_profiles_id_arr = []
+        @common_trees_arr = @fathers_trees_arr & @mothers_trees_arr # Пересечение массивов - общие номера tree
+        # ID Users = No Tree.
+        @common_trees_arr.each do |tree|
+          @child_profile = Profile.find_by_user_id(tree)
+          if @child_profile.sex_id == 1
+            @brothers_profiles_id_arr << tree   # Массив ID БРАТЬЕВ к current_user
+            @nm = Name.find(@child_profile.name_id).name  # определение имени брата
+            @msg_brother = "Вашего брата зовут ".concat(@nm).concat("?") # формирование сообщения о найденном брате
+          else
+            @sisters_profiles_id_arr << tree    # Массив ID СЕСТЕР к current_user
+            @nm = Name.find(@child_profile.name_id).name  # определение имени сестры
+            @msg_sister = "Вашу сестру зовут ".concat(@nm).concat("?") # формирование сообщения о найденной сестре
+          end
 
-
-
+        end
         #  КОНЕЦ ВЫЯВЛЕНИЯ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
 
         #  ГОТОВ МАССИВ ПРОФИЛЕЙ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР

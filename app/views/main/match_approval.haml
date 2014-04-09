@@ -1,5 +1,17 @@
 %section.admin
   %h3 Страница Просмотра и подтверждения совпадений родственников в Древе Пользователя
+  -#%p
+  -#  @intersection: #{@intersection.inspect}
+  -#%p
+  -#  @difference: #{@difference.inspect}
+  -#%p
+  -#  @c: #{@c.inspect}
+  -#%p
+  -#  @rez_inter: #{@rez_inter.inspect}
+  -#%p
+  -#  @rez_diff: #{@rez_diff.inspect}
+
+
   %div
     - if user_signed_in?
       %p
@@ -19,8 +31,8 @@
       @fathers_trees_arr: #{@fathers_trees_arr.inspect}
     %p
       @found_father: #{@found_father.inspect}
-    %p
-      @fathers_hash: #{@fathers_hash.inspect}
+    -#%p
+    -#  @fathers_hash: #{@fathers_hash.inspect}
     %p
       @qty_fathers_found: #{@qty_fathers_found.inspect}
     %h4 Mothers
@@ -32,10 +44,27 @@
       @mothers_trees_arr: #{@mothers_trees_arr.inspect}
     %p
       @found_mother: #{@found_mother.inspect}
-    %p
-      @mothers_hash: #{@mothers_hash.inspect}
+    -#%p
+    -#  @mothers_hash: #{@mothers_hash.inspect}
     %p
       @qty_mothers_found: #{@qty_mothers_found.inspect}
+
+    %h4 Common Trees - Fathers & Mothers
+    %p
+      @common_trees_arr: #{@common_trees_arr.inspect}
+    -#%p
+    -#  @child_profile: #{@child_profile.inspect}
+
+    %h4 Brothers
+    %p
+      @brothers_profiles_id_arr: #{@brothers_profiles_id_arr.inspect}
+    %p
+      @msg_brother: #{@msg_brother.inspect}
+    %h4 Sisters
+    %p
+      @sisters_profiles_id_arr: #{@sisters_profiles_id_arr.inspect}
+    %p
+      @msg_sister: #{@msg_sister.inspect}
     %p
       Новых подтверждений: @new_approved_qty: #{@new_approved_qty.inspect}
     %p
@@ -43,5 +72,5 @@
     %p
       Осталось неподтвержденных: @rest_to_approve: #{@rest_to_approve.inspect}
   %h4
-    Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
-@
+    Возврат на Главную страницу:  #{link_to "Главная -->", main_page_path}
+@ @ @ @ @ @
