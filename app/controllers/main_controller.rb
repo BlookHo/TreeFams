@@ -89,27 +89,84 @@ class MainController < ApplicationController
       else
         one_triplex_arr[0] = current_user.profile_id
       end
-      one_triplex_arr[1] = Profile.find(one_triplex_arr[0]).name_id
-      one_triplex_arr[2] = Profile.find(one_triplex_arr[0]).sex_id
+      one_triplex_arr[1] = Profile.find(one_triplex_arr[0]).sex_id
+      one_triplex_arr[2] = Profile.find(one_triplex_arr[0]).name_id
       one_triplex_arr[3] = relation
       triplex_arr << one_triplex_arr
     end
 
     # Получение массива массивов Триплекс: дочь - отец - мать.
     # [profile_id, name_id, relation_id, sex_id]
-    # @note GET /
     # @param admin_page [Integer] опциональный номер страницы
     # @see News
     def make_one_triplex_arr(triplex_arr, first_relation, second_relation, third_relation)
-
       get_profile_arr(triplex_arr,first_relation)
       get_profile_arr(triplex_arr,second_relation)
       get_profile_arr(triplex_arr,third_relation)
-
     end
 
     @triplex_arr = []
     make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
+
+    # Поиск братьев/сестер по триплекс-массиву
+    # У братьев/сестер - те же отец и мать.
+    # [profile_id, sex_id, name_id, relation_id]
+    # @triplex_arr: [[22, 0, 506, nil], [23, 1, 45, 1], [24, 0, 453, 2]]
+    # @see News
+    def search_bros_sist(triplex_arr)
+
+      # НАЧАЛО ПОИСКА ОТЦА - организовать параллельный поиск матери!!! Т.е. ИЩЕМ - ПАРУ!!
+
+      # Father_Profile_ID = triplex_arr[1][0])
+      # Father_Sex_ID = triplex_arr[1][1])
+      # Father_Name_ID = triplex_arr[1][2])
+      # Father_Relation_ID = triplex_arr[1][3])
+    #  @us_id = 2    #    IS DISTINCT FROM 2        # TRY RAILS 4 DEBUGG
+      @found_father = false
+      @all_fathers_profiles = Tree.where.not(user_id: current_user.id).select(:profile_id).where(:relation_id => triplex_arr[1][3])
+      # все profiles отцов, кроме current_user
+
+      @fathers_names_arr = []
+      @all_fathers_profiles.each do |father_profile|
+        @fathers_name = Profile.where(:id => father_profile.profile_id).where(:name_id => triplex_arr[1][2]).select(:id)
+        @fathers_names_arr << @fathers_name if !@fathers_name.blank?
+        # профили отцов с таким же именем, что у отца current_user
+        # т.е. у возможных братьев/сестер.
+      end
+      if !@fathers_names_arr.blank?
+        @qty_fathers_found = @fathers_names_arr.length
+      end
+      @found_father = true if !@fathers_names_arr.blank?  # если найдены профили отцов
+      # с таким же именем, что у отца current_user
+
+      #  КОНЕЦ ПОИСКА ОТЦА
+
+      # НАЧАЛО ПОИСКА МАТЕРИ В ПАРЕ С ОТЦОМ
+
+
+
+
+
+      #  КОНЕЦ ПОИСКА МАТЕРИ В ПАРЕ С ОТЦОМ
+
+
+
+      # ВЫЯВЛЕНИЕ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
+      # У current_user есть БРАТ/СЕСТРА - ЕСЛИ у них у всех ОБЩИЕ ОТЕЦ И МАТЬ - ПАРА
+
+
+
+      #  КОНЕЦ ВЫЯВЛЕНИЯ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
+
+      #  ГОТОВ МАССИВ ПРОФИЛЕЙ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
+
+
+    end
+
+    search_bros_sist(@triplex_arr)  # найдены общие отцы с потенциальными братьями/сестрами
+
+
+
 
 
 

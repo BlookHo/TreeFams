@@ -2,7 +2,7 @@
   %h3 Страница Просмотра и подтверждения совпадений родственников в Древе Пользователя
   %div
     %p
-      @current_user_profile: #{@current_user_profile.inspect}
+      current_user.id: #{current_user.id.inspect}
     %p
       @current_user_profile_sex: #{@current_user_profile_sex.inspect}
     %p
@@ -10,7 +10,13 @@
     %p
       @triplex_arr: #{@triplex_arr.inspect}
     %p
-      -#@father_author_profile_id: #{@father_author_profile_id.inspect}
+      @all_fathers_profiles: #{@all_fathers_profiles.inspect}
+    %p
+      @fathers_names_arr: #{@fathers_names_arr.inspect}
+    %p
+      @found_father: #{@found_father.inspect}
+    %p
+      @qty_fathers_found: #{@qty_fathers_found.inspect}
     %p
       Новых подтверждений: @new_approved_qty: #{@new_approved_qty.inspect}
     %p
@@ -19,3 +25,4 @@
       Осталось неподтвержденных: @rest_to_approve: #{@rest_to_approve.inspect}
   %h4
     Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
+@
