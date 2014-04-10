@@ -14,7 +14,9 @@ User.create!([          # create! - для сообщений об ошибка�
 # 4
 {profile_id: 22, admin: false, email: 'ee@ee.ee', password: '444444', password_confirmation: '444444' },
 # 5
-{profile_id: 27, admin: false, email: 'rr@rr.rr', password: '555555', password_confirmation: '555555' }
+{profile_id: 27, admin: false, email: 'rr@rr.rr', password: '555555', password_confirmation: '555555' },
+# 6
+{profile_id: 34, admin: false, email: 'tt@tt.tt', password: '666666', password_confirmation: '666666' }
 
 
 ])
@@ -94,7 +96,20 @@ Profile.create([
 # 32
 {user_id: 0, name_id: 477, email: '', sex_id: 0 },
 # 33
-{user_id: 0, name_id: 352, email: '', sex_id: 0 }
+{user_id: 0, name_id: 352, email: '', sex_id: 0 },
+
+# 34 - Tree 6
+{user_id: 6, name_id: 212, email: 'tt@tt.tt', sex_id: 1 },
+# 35
+{user_id: 0, name_id: 45, email: '', sex_id: 1 },
+# 36
+{user_id: 0, name_id: 379, email: '', sex_id: 0 },
+# 37
+{user_id: 0, name_id: 371, email: '', sex_id: 0 },
+# 38
+{user_id: 0, name_id: 231, email: '', sex_id: 1 },
+# 39
+{user_id: 0, name_id: 506, email: '', sex_id: 0 }
 
 ])
 
@@ -114,7 +129,7 @@ Tree.create([
 # 5
 {user_id: 1, profile_id: 6, relation_id: 3, connected: false },
 
-# 6 - Tree 2
+# 7 - Tree 2
 {user_id: 2, profile_id: 8, relation_id: 1, connected: false },
 {user_id: 2, profile_id: 9, relation_id: 2, connected: false },
 {user_id: 2, profile_id: 10, relation_id: 6, connected: false },
@@ -143,8 +158,14 @@ Tree.create([
 {user_id: 5, profile_id: 30, relation_id: 5, connected: false },
 {user_id: 5, profile_id: 31, relation_id: 7, connected: false },
 {user_id: 5, profile_id: 32, relation_id: 4, connected: false },
-{user_id: 5, profile_id: 33, relation_id: 4, connected: false }
+{user_id: 5, profile_id: 33, relation_id: 4, connected: false },
 
+# 34 - Tree 6
+{user_id: 6, profile_id: 35, relation_id: 1, connected: false },
+{user_id: 6, profile_id: 36, relation_id: 2, connected: false },
+{user_id: 6, profile_id: 37, relation_id: 8, connected: false },
+{user_id: 6, profile_id: 38, relation_id: 3, connected: false },
+{user_id: 6, profile_id: 39, relation_id: 4, connected: false }
 
 
 
