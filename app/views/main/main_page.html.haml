@@ -13,14 +13,29 @@
     -#%p @tree_arr: #{@tree_arr.inspect}
 
   -#%p
-  -#  Массив профилей: @profile_arr: #{@profile_arr.inspect}
-  -#%p
     -#  @last_user: #{@last_user.inspect}
     -#%p
     -#  @new_user_id: #{@new_user_id.inspect}
     -#%p
     -#  @tree_arr: #{@tree_arr.inspect}
   <li #{render :partial => 'main/main_display_tree'}
+
+  %p
+    @search_relation: #{@search_relation.inspect}
+  %h4 Brothers
+  %p
+    @brothers_profiles_id_arr: #{@brothers_profiles_id_arr.inspect}
+  %p
+    @brothers_search_results: #{@brothers_search_results.inspect}
+  %h4
+    @msg_brother: #{@msg_brother.inspect}
+  %h4 Sisters
+  %p
+    @sisters_profiles_id_arr: #{@sisters_profiles_id_arr.inspect}
+  %p
+    @sisters_search_results: #{@sisters_search_results.inspect}
+  %h4
+    @msg_sister: #{@msg_sister.inspect}
 
   %h4 Возврат на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
   %h4 Возврат на страницу Лэндинг:  #{link_to "Landing -->", landing_path}

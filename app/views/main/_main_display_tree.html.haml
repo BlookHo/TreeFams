@@ -25,36 +25,12 @@
   %h4 No Listing tree - @tree_arr!
 
 
--#
--#- if !@profiles_array.blank?
--#
--#  %h3 Отображение Массива Древа Пользователя в табличной форме
--#
--#  %div
--#    %table
--#      %tr
--#        %th ID Профиля
--#        %th ID Родства Профиля с Автором
--#        %th ID Имя Профиля
--#        %th ID Пола Профиля
--#        %th
--#      - @profiles_array.each do |tree|
--#        %tr
--#          %td= tree[0]
--#          %td= tree[1]
--#          %td= tree[2]
--#          %td= tree[3]
--#          %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
--#- else
--#  %h4 No @profile_arr tree!
+
+
+%h4 Совпадения древа Пользователя с другими
+-#%div
 -#  %p
--#    Массив профилей: @profile_arr: #{@profile_arr.inspect}
-
-
-  %h4 Совпадения древа Пользователя с другими
-%div
-  %p
-    Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
-  %p
-    Из них - подтвержденных: @approved_match_qty_loc #{@approved_match_qty_loc.inspect}
-  %h4 Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Подтверждения совпадений -->", match_approval_path}
+-#    Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
+-#  %p
+-#    Из них - подтвержденных: @approved_match_qty_loc #{@approved_match_qty_loc.inspect}
+%h4 Переход на страницу Просмотра и Подтверждения совпадений:  #{link_to "Подтверждения совпадений -->", match_approval_path}
