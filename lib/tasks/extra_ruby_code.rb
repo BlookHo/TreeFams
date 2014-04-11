@@ -17,7 +17,29 @@ class ExtraCode
   end
 
 
-StartController
+
+  MainController
+
+  #  @us_id = 2    #    IS DISTINCT FROM 2        # TRY RAILS 4 DEBUGG
+
+  Hash
+
+         @fathers_hash = Hash.new  # { Tree No (user_id) =>  Father Profile ID }
+             arr_terms = terms_hash.keys  #           arr_freqs = terms_hash.values
+             @fathers_hash.merge!({father_profile.user_id  => @fathers_name[0].id}) #
+ # @fathers_hash = { Tree No (user_id) =>  Father Profile ID }.
+
+ #           @mothers_hash.merge!({mother_profile.user_id  => @mothers_name[0].id}) #
+ # @@others_hash - профили матерей с таким же именем, что у матери current_user, т.е. у возможных братьев/сестер
+ # @mothers_hash = { Tree No (user_id) =>  Mother Profile ID }.
+
+
+
+
+
+
+
+  StartController
 
   def store_profile(id,relation,name,sex)
 
