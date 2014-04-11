@@ -2,37 +2,35 @@ class MainController < ApplicationController
  # include MainHelper  #
 
 
-# Отображение дерева Юзера .
+# Отображение дерева Юзера в табличной форме.
 # @note GET /
 # @param admin_page [Integer] опциональный номер страницы
 # @see News
   def main_page
 
-    if !session[:profiles_array].blank?                    # DEBUGG
-      @profiles_array = session[:profiles_array][:value]       # DEBUGG
-    end
-    if !session[:profile_arr].blank?                    # DEBUGG
-      @profile_arr = session[:profile_arr][:value]      # DEBUGG
-    end
-
     if user_signed_in?
-      @user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
+      user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
 
-      @row_arr = []
+      row_arr = []
       @tree_arr = []
 
-      @user_tree.each do |tree_row|
-        @row_arr[0] = tree_row.id
-        @row_arr[1] = tree_row.profile_id
-        @row_arr[2] = tree_row.relation_id
-        @row_arr[3] = tree_row.connected
+      user_tree.each do |tree_row|
+        row_arr[0] = tree_row.id              # ID в Дереве
+        row_arr[1] = tree_row.profile_id      # ID Профиля
+        row_arr[2] = Profile.find(tree_row.profile_id).name_id      # ID Имени Профиля
+        row_arr[3] = Name.find(Profile.find(tree_row.profile_id).name_id).name   # Имя Профиля
+        row_arr[4] = Profile.find(tree_row.profile_id).sex_id         # Пол Профиля
+        row_arr[5] = tree_row.relation_id         # ID Родства Профиля с Автором
+        row_arr[6] = tree_row.connected           # Объединено
 
-        @tree_arr << @row_arr
-        @row_arr = []
+        @tree_arr << row_arr
+        row_arr = []
 
       end
-    end
 
+      session[:tree_arr] = {:value => @tree_arr, :updated_at => Time.current}
+
+    end
 
   end
 
@@ -40,21 +38,13 @@ class MainController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
-  def main_display_tree
-
-    if !session[:profiles_array].blank?                        # DEBUGG
-      @profiles_array = session[:profiles_array][:value]       # DEBUGG
-    end
-
-
-
-
-
-
-
-
-  end
-
+  #def main_display_tree
+  #
+  #  if !session[:profiles_array].blank?                        # DEBUGG
+  #    @profiles_array = session[:profiles_array][:value]       # DEBUGG
+  #  end
+  #
+  #end
 
   # Отображение меню действий для родственника в дереве Юзера.
   # @note GET /
