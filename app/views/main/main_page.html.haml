@@ -21,23 +21,29 @@
   <li #{render :partial => 'main/main_display_tree'}
 
   %p
+    @common_trees_arr: #{@common_trees_arr.inspect}
+  %p
     @search_relation: #{@search_relation.inspect}
   %h4 Brothers
   %p
-    @brothers_trees_id_arr: #{@brothers_trees_id_arr.inspect}
+    @brothers_match_arr: #{@brothers_match_arr.inspect}
   %p
     @brothers_profile_id_arr: #{@brothers_profile_id_arr.inspect}
   %p
     @brothers_search_results: #{@brothers_search_results.inspect}
   %h4
+    Массив всех совпадений родных: @all_match_arr: #{@all_match_arr.inspect}
+  %h4
     @msg_brother: #{@msg_brother.inspect}
   %h4 Sisters
   %p
-    @sisters_trees_id_arr: #{@sisters_trees_id_arr.inspect}
+    @sisters_match_arr: #{@sisters_match_arr.inspect}
   %p
     @sisters_profile_id_arr: #{@sisters_profile_id_arr.inspect}
   %p
     @sisters_search_results: #{@sisters_search_results.inspect}
+  %h4
+    Массив всех совпадений родных: @all_match_arr: #{@all_match_arr.inspect}
   %h4
     @msg_sister: #{@msg_sister.inspect}
 

@@ -47,6 +47,7 @@ class MainController < ApplicationController
       tree_arr = session[:tree_arr][:value]
     end
 
+    @all_match_arr = []
     if !@tree_arr.blank?
 
       for tree_index in 0 .. tree_arr.length-1
@@ -68,19 +69,24 @@ class MainController < ApplicationController
           when 4
             @search_relation = "daugther"   #
 
-          when 5
+          when 5,6
             @search_relation = "brother"   #
-            search_brothers # ???
+
+    #        search_brothers # ???
 
             make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
-            search_bros_sist(@triplex_arr)  # найдены общие отцы с потенциальными братьями/сестрами
+            search_bros_sist(@triplex_arr)  # найдены потенциальные братья/сестры
 
-          when 6
-            @search_relation = "sister"   #
-            search_sisters  # ???
+            grow_match_arr(@brothers_match_arr) if !@brothers_match_arr.blank? #
+            grow_match_arr(@sisters_match_arr) if !@sisters_match_arr.blank? #
 
-            make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
-            search_bros_sist(@triplex_arr)  # найдены общие отцы с потенциальными братьями/сестрами
+          #when 6
+          #  @search_relation = "sister"   #
+          #  search_sisters  # ???
+          #
+          #  make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
+          #  search_bros_sist(@triplex_arr)  # найдены потенциальные братья/сестры
+          #  grow_match_arr(@sisters_match_arr)
 
           when 7
             @search_relation = "husband"   #
@@ -100,6 +106,17 @@ class MainController < ApplicationController
 
   end
 
+  # Наращивание общего массива совпадений массивом совпавших родственников
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def grow_match_arr(relative_match_arr)
+
+    @all_match_arr << relative_match_arr# if !relative_match_arr.blank? #
+
+    @brothers_search_results = "No brothers results yet!!"
+
+  end
   # Поиск БРАТЬЕВ во всех сущ-х деревьях на основе данных в дереве Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
@@ -247,27 +264,29 @@ class MainController < ApplicationController
 
       # ВЫЯВЛЕНИЕ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
       # У current_user есть БРАТ/СЕСТРА - ЕСЛИ у них у всех есть ОБЩИЕ ОТЕЦ И МАТЬ - ПАРА
-      @brothers_trees_id_arr = []
       @brothers_profile_id_arr = []
-      @sisters_trees_id_arr = []
+      @brothers_match_arr = []
       @sisters_profile_id_arr = []
+      @sisters_match_arr = []
       @common_trees_arr = @fathers_trees_arr & @mothers_trees_arr # Пересечение массивов - общие номера trees
       # ID Users = No Tree.
-      @common_trees_arr.each do |tree|
-        @child_profile = Profile.find_by_user_id(tree)
-        if @child_profile.sex_id == 1
-          @brothers_trees_id_arr << tree   # Массив ID TREES БРАТЬЕВ к current_user
-          @brothers_profile_id_arr << User.find(tree).profile_id   # Массив ID PROFILES БРАТЬЕВ к current_user
+      if !@common_trees_arr.blank?
 
-          @nm = Name.find(@child_profile.name_id).name  # определение имени брата
-          @msg_brother = "Твой брат ".concat(@nm).concat(" также есть на сайте. Хочешь пожать ему руку? Это позволит тебе увидеть дерево его родных и объединиться с ним.") # формирование сообщения о найденном брате
-        else
-          @sisters_trees_id_arr << tree    # Массив ID СЕСТЕР к current_user
-          @sisters_profile_id_arr << User.find(tree).profile_id   # Массив ID PROFILES СЕСТЕР к current_user
-          @nm = Name.find(@child_profile.name_id).name  # определение имени сестры
-          @msg_sister = "Твоя сестра ".concat(@nm).concat(" также есть на сайте. Хочешь пожать ей руку? Это позволит тебе увидеть дерево её родных и объединиться с ним.") # формирование сообщения о найденной сестре
+        @common_trees_arr.each do |tree|
+          @child_profile = Profile.find_by_user_id(tree)
+          if @child_profile.sex_id == 1
+            @brothers_match_arr << tree   # Массив ID TREES БРАТЬЕВ к current_user
+            @brothers_profile_id_arr << User.find(tree).profile_id   # Массив ID PROFILES БРАТЬЕВ к current_user
+            @nm = Name.find(@child_profile.name_id).name  # определение имени брата
+            @msg_brother = "Твой брат ".concat(@nm).concat(" также есть на сайте. Хочешь пожать ему руку? Это позволит тебе увидеть дерево его родных и объединиться с ним.") # формирование сообщения о найденном брате
+          else
+            @sisters_match_arr << tree    # Массив ID СЕСТЕР к current_user
+            @sisters_profile_id_arr << User.find(tree).profile_id   # Массив ID PROFILES СЕСТЕР к current_user
+            @nm = Name.find(@child_profile.name_id).name  # определение имени сестры
+            @msg_sister = "Твоя сестра ".concat(@nm).concat(" также есть на сайте. Хочешь пожать ей руку? Это позволит тебе увидеть дерево её родных и объединиться с ним.") # формирование сообщения о найденной сестре
+          end
+
         end
-
       end
       #  КОНЕЦ ВЫЯВЛЕНИЯ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
 
