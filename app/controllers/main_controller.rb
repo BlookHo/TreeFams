@@ -31,8 +31,9 @@ class MainController < ApplicationController
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
       @tree_arr = tree_arr    # DEBUGG TO VIEW
 
+      search_tree_match
+
     end
-    search_tree_match
 
   end
 
@@ -60,6 +61,11 @@ class MainController < ApplicationController
 
           when 1    # Ок!
             @search_relation = "father"   #
+            make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr (nil - отец, 8 - жена, 4 - дочь)
+            @fath_triplex_arr = @triplex_arr
+            search_farther(@triplex_arr)
+
+
 
           when 2
             @search_relation = "mother"   #
@@ -110,7 +116,67 @@ class MainController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
-  def search_brothers
+  def search_farther(triplex_arr)
+
+    # взять имя брата автора
+    # Father_Profile_ID = triplex_arr[1][0])
+    # Father_Sex_ID = triplex_arr[1][1])
+    # Father_Name_ID = triplex_arr[1][2])
+    # Father_Relation_ID = triplex_arr[1][3])
+    # НАЧАЛО ПОИСКА ОТЦА - организовать параллельный поиск матери!!! Т.е. ИЩЕМ - ПАРУ!!
+    @found_father = false
+    @fathers_name_user_ids = Profile.where.not(user_id: (current_user.id || nil)).where(:name_id => triplex_arr[1][2]).select(:user_id)
+    @fathers_ids = @fathers_name_user_ids[0].user_id
+    @mothers_name_profile_ids = Tree.where(user_id: (@fathers_name_user_ids[0].user_id) ).where(:relation_id => 8).select(:profile_id)
+
+        # Tree.where.not(user_id: current_user.id).where(:relation_id => triplex_arr[1][3]).select(:id).select(:profile_id).select(:user_id)
+    # все profiles отцов, кроме отца current_user
+    #@fathers_names_arr = []
+    #@fathers_trees_arr = []
+    #@all_fathers_profiles.each do |father_profile|
+    #  @fathers_name = Profile.where(:id => father_profile.profile_id).where(:name_id => triplex_arr[1][2]).select(:id)
+    #  if !@fathers_name.blank?
+    #    @fathers_names_arr << @fathers_name[0].id   # Fathers Profile ID
+    #    @fathers_trees_arr << father_profile.user_id  # Tree Nos (user_id)
+    #  end
+    #end
+    #if !@fathers_names_arr.blank?
+    #  @qty_fathers_found = @fathers_names_arr.length
+    #end
+    #@found_father = true if !@fathers_names_arr.blank?  # DEBUGG TO VIEW  если найдены профили отцов
+    ## с таким же именем, что у отца current_user
+    ##  КОНЕЦ ПОИСКА ОТЦА
+    #
+    #
+    #@farther_search_results = "No farther results yet!!"
+    #@Fath_fathers_trees_arr = @fathers_trees_arr
+
+  end
+
+  # Поиск БРАТЬЕВ во всех сущ-х деревьях на основе данных в дереве Юзера.
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def search_mother(triplex_arr)
+
+    # взять имя брата автора
+    # Father_Profile_ID = triplex_arr[1][0])
+    # Father_Sex_ID = triplex_arr[1][1])
+    # Father_Name_ID = triplex_arr[1][2])
+    # Father_Relation_ID = triplex_arr[1][3])
+
+    #   @mothers_name_user_ids = Profile.where.not(user_id: (current_user.id || nil)).where(:name_id => triplex_arr[2][2]).select(:user_id)
+
+
+    @brothers_search_results = "No brothers results yet!!"
+
+
+  end
+  # Поиск БРАТЬЕВ во всех сущ-х деревьях на основе данных в дереве Юзера.
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def search_brothers(triplex_arr)
 
     # взять имя брата автора
     # Father_Profile_ID = triplex_arr[1][0])
