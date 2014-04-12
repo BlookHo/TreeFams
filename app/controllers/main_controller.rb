@@ -48,7 +48,8 @@ class MainController < ApplicationController
     end
 
     @all_match_arr = []
-    if !@tree_arr.blank?
+
+    if !tree_arr.blank?
 
       for tree_index in 0 .. tree_arr.length-1
 
@@ -69,7 +70,7 @@ class MainController < ApplicationController
           when 4
             @search_relation = "daugther"   #
 
-          when 5,6
+          when 5
             @search_relation = "brother"   #
 
     #        search_brothers # ???
@@ -77,16 +78,15 @@ class MainController < ApplicationController
             make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
             search_bros_sist(@triplex_arr)  # найдены потенциальные братья/сестры
 
-            grow_match_arr(@brothers_match_arr) if !@brothers_match_arr.blank? #
-            grow_match_arr(@sisters_match_arr) if !@sisters_match_arr.blank? #
+            @all_match_arr << @brothers_match_arr if !@brothers_match_arr.blank? #
 
-          #when 6
-          #  @search_relation = "sister"   #
-          #  search_sisters  # ???
-          #
-          #  make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
-          #  search_bros_sist(@triplex_arr)  # найдены потенциальные братья/сестры
-          #  grow_match_arr(@sisters_match_arr)
+          when 6
+            @search_relation = "sister"   #
+       #     search_sisters  # ???
+
+            make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
+            search_bros_sist(@triplex_arr)  # найдены потенциальные братья/сестры
+            @all_match_arr << @sisters_match_arr if !@sisters_match_arr.blank? #
 
           when 7
             @search_relation = "husband"   #
@@ -106,17 +106,6 @@ class MainController < ApplicationController
 
   end
 
-  # Наращивание общего массива совпадений массивом совпавших родственников
-  # @note GET /
-  # @param admin_page [Integer] опциональный номер страницы
-  # @see News
-  def grow_match_arr(relative_match_arr)
-
-    @all_match_arr << relative_match_arr# if !relative_match_arr.blank? #
-
-    @brothers_search_results = "No brothers results yet!!"
-
-  end
   # Поиск БРАТЬЕВ во всех сущ-х деревьях на основе данных в дереве Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
@@ -129,13 +118,6 @@ class MainController < ApplicationController
     # Father_Name_ID = triplex_arr[1][2])
     # Father_Relation_ID = triplex_arr[1][3])
 
-    # взять имя брата автора и его параметры
-    # взять имя отца автора и его параметры
-    # взять имя матери автора и его параметры
-    # сделать массив триплекс
-    # поиск комбинации брат-отец-мать
-    # .
-    # взять имя брата автора
 
     @brothers_search_results = "No brothers results yet!!"
 
@@ -148,19 +130,6 @@ class MainController < ApplicationController
   # @see News
   def search_sisters
 
-    # взять имя брата автора
-    # Father_Profile_ID = triplex_arr[1][0])
-    # Father_Sex_ID = triplex_arr[1][1])
-    # Father_Name_ID = triplex_arr[1][2])
-    # Father_Relation_ID = triplex_arr[1][3])
-
-    # взять имя сестры автора и его параметры
-    # взять имя отца автора и его параметры
-    # взять имя матери автора и его параметры
-    # сделать массив триплекс
-    # поиск комбинации брат-отец-мать
-    # .
-    # взять имя брата автора
 
     @sisters_search_results = "No sisters results yet!!"
 
