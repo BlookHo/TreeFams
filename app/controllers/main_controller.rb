@@ -49,7 +49,7 @@ class MainController < ApplicationController
     end
 
     @all_match_arr = []
-
+    @match_amount = 0
     if !tree_arr.blank?
 
       for tree_index in 0 .. tree_arr.length-1
@@ -64,11 +64,14 @@ class MainController < ApplicationController
             make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr (nil - отец, 8 - жена, 4 - дочь)
             @fath_triplex_arr = @triplex_arr
             search_farther(@triplex_arr)
-
+            @match_amount = @match_father_amount if !@match_father_amount.blank?
 
 
           when 2
             @search_relation = "mother"   #
+            if !@match_mother_amount.blank?
+              @match_amount = @match_amount + @match_mother_amount
+            end
 
           when 3
             @search_relation = "son"   #
@@ -99,6 +102,9 @@ class MainController < ApplicationController
 
           when 8
             @search_relation = "wife"   #
+            if !@match_wife_amount.blank?
+              @match_amount = @match_amount + @match_wife_amount
+            end
 
           else
             @search_relation = "ERROR: no relation in tree profile"
@@ -110,6 +116,7 @@ class MainController < ApplicationController
 
     end
 
+   # @match_amount = @match_father_amount + @match_mother_amount + @match_son_amount + @match_daugther_amount + @match_brother_amount + @match_sister_amount + @match_husband_amount + @match_wife_amount
   end
 
   # Поиск БРАТЬЕВ во всех сущ-х деревьях на основе данных в дереве Юзера.
@@ -131,8 +138,10 @@ class MainController < ApplicationController
     # 5. По этому массиву - можно формировать вопросы для подтверждения и дальнейщего рукопожатия
 
     @found_father = false
-    # 1. Массив № 1 = @all_fathers_name_user_ids. Ищем всех отцов father's user_id с именем отца автора
-    @all_fathers_name_user_ids = Profile.where.not(user_id: (current_user.id || nil)).where(:name_id => triplex_arr[1][2]).select(:user_id).pluck(:user_id)
+    # 1. Массив № 1 = @all_fathers_name_user_ids. Ищем всех отцов father's user_id с именем отца автора && !nil
+    @all_fathers_name_user_ids = Profile.where.not(user_id: current_user.id ).where.not(user_id: 0 ).where(:name_id => triplex_arr[1][2]).select(:user_id).pluck(:user_id)
+   # @all_fathers_name_len = @all_fathers_name_user_ids.length   # DEBUGG TO VIEW
+
     if !@all_fathers_name_user_ids.blank? # если такие отцы-Юзеры найдены
 
       @mothers_profile_ids_arr = []           # массив матерей с совпавшими именами матери автора
@@ -148,7 +157,7 @@ class MainController < ApplicationController
 
         # 2. Массив № 2 = @fathers_mothers_users_ids_arr.
         # У найденных отцов ищем их жен - могут быть указаны : 1) все жены (8) в деревьях @all_fathers_name_user_ids user_id
-        #                           2) имя == имени матери в триплексе автора
+        # 2) имя == имени матери в триплексе автора
         @fathers_wife_profile_id = Tree.where(user_id: father).where(:relation_id => 8).select(:profile_id)[0].profile_id
         if !@fathers_wife_profile_id.blank? # у отца - в принципе есть жена (указана в его дереве)
           # todo: здесь могут быть несколько жен! - делать как с детьми (как ниже)
@@ -220,6 +229,7 @@ class MainController < ApplicationController
       ##  КОНЕЦ ПОИСКА ОТЦА
 
       if !@common_father_arr.blank? # если найдены
+        @match_father_amount = @common_father_arr.length
         @search_msg = "Найден твой Отец на сайте. Хочешь пожать ему руку? Это позволит тебе увидеть дерево его родных и объединиться с ним."
       else
         @search_msg = "Твоего Отца не найдено на сайте. Пригласи его!"

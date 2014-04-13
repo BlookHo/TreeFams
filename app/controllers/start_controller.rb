@@ -462,8 +462,8 @@ class StartController < ApplicationController
             new_profile.user_id = current_user.id  # user_id - берем после регистрации
             new_profile.email = current_user.email # user regged email
           else
-            new_profile.user_id = nil  # profile - not user_id
-            new_profile.email = nil    # profile - not user_id
+            new_profile.user_id = 0  # profile - not user_id
+            new_profile.email = ""    # profile - not user_id
           end
           new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
           if profiles_array[arr_i][2]
