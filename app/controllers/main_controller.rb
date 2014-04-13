@@ -118,38 +118,117 @@ class MainController < ApplicationController
   # @see News
   def search_farther(triplex_arr)
 
-    # взять имя брата автора
     # Father_Profile_ID = triplex_arr[1][0])
     # Father_Sex_ID = triplex_arr[1][1])
     # Father_Name_ID = triplex_arr[1][2])
     # Father_Relation_ID = triplex_arr[1][3])
-    # НАЧАЛО ПОИСКА ОТЦА - организовать параллельный поиск матери!!! Т.е. ИЩЕМ - ПАРУ!!
-    @found_father = false
-    @fathers_name_user_ids = Profile.where.not(user_id: (current_user.id || nil)).where(:name_id => triplex_arr[1][2]).select(:user_id)
-    @fathers_ids = @fathers_name_user_ids[0].user_id
-    @mothers_name_profile_ids = Tree.where(user_id: (@fathers_name_user_ids[0].user_id) ).where(:relation_id => 8).select(:profile_id)
 
-        # Tree.where.not(user_id: current_user.id).where(:relation_id => triplex_arr[1][3]).select(:id).select(:profile_id).select(:user_id)
-    # все profiles отцов, кроме отца current_user
-    #@fathers_names_arr = []
-    #@fathers_trees_arr = []
-    #@all_fathers_profiles.each do |father_profile|
-    #  @fathers_name = Profile.where(:id => father_profile.profile_id).where(:name_id => triplex_arr[1][2]).select(:id)
-    #  if !@fathers_name.blank?
-    #    @fathers_names_arr << @fathers_name[0].id   # Fathers Profile ID
-    #    @fathers_trees_arr << father_profile.user_id  # Tree Nos (user_id)
-    #  end
-    #end
-    #if !@fathers_names_arr.blank?
-    #  @qty_fathers_found = @fathers_names_arr.length
-    #end
-    #@found_father = true if !@fathers_names_arr.blank?  # DEBUGG TO VIEW  если найдены профили отцов
-    ## с таким же именем, что у отца current_user
-    ##  КОНЕЦ ПОИСКА ОТЦА
-    #
-    #
-    #@farther_search_results = "No farther results yet!!"
-    #@Fath_fathers_trees_arr = @fathers_trees_arr
+    # НАЧАЛО ПОИСКА ОТЦА ЮЗЕРА ПО СОВПАДЕНИЯМ ИМЕН ЖЕН И/ИЛИ ДЕТЕЙ
+    # 1. Ищем всех отцов
+    # 2. У найденных отцов ищем их жен - могут быть указаны
+    # 3. У найденных отцов ищем их сынов или дочей (в завис-ти от пола автора - м или ж) - могут быть указаны
+    # 4. находим общие для всех трех поисков ИД Юзеров - отцов. Эти ИД образуют массив совпадения.
+    # 5. По этому массиву - можно формировать вопросы для подтверждения и дальнейщего рукопожатия
+
+    @found_father = false
+    # 1. Массив № 1 = @all_fathers_name_user_ids. Ищем всех отцов father's user_id с именем отца автора
+    @all_fathers_name_user_ids = Profile.where.not(user_id: (current_user.id || nil)).where(:name_id => triplex_arr[1][2]).select(:user_id).pluck(:user_id)
+    if !@all_fathers_name_user_ids.blank? # если такие отцы-Юзеры найдены
+
+      @mothers_profile_ids_arr = []           # массив матерей с совпавшими именами матери автора
+      @fathers_mothers_users_ids_arr = []     # Массив № 2. массив user_id отцов с совпавшими матерями автора
+
+      @sons_profile_ids_arr = []               # массив сынов с совпавшими именами автора - пол = м
+      @fathers_sons_users_ids_arr = []         # Массив № 3/м
+
+      @daughters_profile_ids_arr = []           # массив дочерей с совпавшими именами автора - пол = ж
+      @fathers_daughters_users_ids_arr = []     # Массив № 3/ж
+
+      @all_fathers_name_user_ids.each do |father| # для каждого из найденных отцов - поиск жен, указанных в деревьях отцов
+
+        # 2. Массив № 2 = @fathers_mothers_users_ids_arr.
+        # У найденных отцов ищем их жен - могут быть указаны : 1) все жены (8) в деревьях @all_fathers_name_user_ids user_id
+        #                           2) имя == имени матери в триплексе автора
+        @fathers_wife_profile_id = Tree.where(user_id: father).where(:relation_id => 8).select(:profile_id)[0].profile_id
+        if !@fathers_wife_profile_id.blank? # у отца - в принципе есть жена (указана в его дереве)
+          # todo: здесь могут быть несколько жен! - делать как с детьми (как ниже)
+          @mothers_name = Profile.find(@fathers_wife_profile_id).name_id # находим имя найденной жены одного из отцов
+          if !@mothers_name.blank? && @mothers_name == triplex_arr[2][2] # если имя жены отца найдено и оно - такое же, что имя матери автора
+
+            @mothers_profile_ids_arr << @fathers_wife_profile_id
+            @fathers_mothers_users_ids_arr << father  # Массив № 2.
+            # формирование массива user_id отцов, у кот-х есть жены и их имена совпадают
+            # с именем матери автора.
+
+          end
+        end
+
+        # 3. Массив № 3 = @all_fathers_name_user_ids.
+        # У найденных отцов father ищем их сынов или дочей (в завис-ти от пола автора - м или ж) - могут быть указаны:
+        # 3.1) всех сынов (relation = 3) в деревьях отцов father (user_id) + имя == имени автора в триплексе автора
+        # ИЛИ
+        # 3.2) всех дочей (relation = 4) в деревьях отцов father (user_id) + имя == имени автора в триплексе автора
+#        @fathers_sons_profile_ids = Tree.where(user_id: father).where(:relation_id => 3).select(:profile_id).pluck(:profile_id)  # DEBUGG TO VIEW
+        if triplex_arr[0][1] == 1
+          @fathers_sons_profile_ids = Tree.where(user_id: father).where(:relation_id => 3).select(:profile_id).pluck(:profile_id)  #[0].profile_id
+          # ищем всех сыновей в дереве отца, если автор - м
+          if !@fathers_sons_profile_ids.blank? # если найдены сыны у отца
+            @fathers_sons_profile_ids.each do |son|
+              @fathers_son_name = Profile.find(son).name_id # находим имя найденного сына одного из отцов
+              if !@fathers_son_name.blank? && @fathers_son_name == triplex_arr[0][2] # если имя сына отца найдено и оно - такое же, что имя автора (пол = м)
+                @sons_profile_ids_arr << son  # Массив № 3Sons.
+                @fathers_sons_users_ids_arr << father  # Массив № 3S.
+                # формирование массива user_id отцов, у кот-х есть сыны и их имена совпадают
+                # с именем автора (пол автора = м).
+              end
+            end
+          end
+
+        else
+          @fathers_daughters_profile_ids = Tree.where(user_id: father).where(:relation_id => 4).select(:profile_id).pluck(:profile_id) #[0].profile_id
+          # ищем всех дочерей в дереве отца, если автор - ж
+          if !@fathers_daughters_profile_ids.blank? # если найдены дочи у отца
+            @fathers_daughters_profile_ids.each do |daughter|
+              @fathers_daughter_name = Profile.find(daughter).name_id # находим имя найденной дочи одного из отцов
+              if !@fathers_daughter_name.blank? && @fathers_daughter_name == triplex_arr[0][2] # если имя дочи отца найдено и оно - такое же, что имя автора (пол = ж)
+                @daughters_profile_ids_arr << daughter   # Массив № 3Daughters.
+                @fathers_daughters_users_ids_arr << father  # Массив № 3D.
+                # формирование массива user_id отцов, у кот-х есть дочи и их имена совпадают
+                # с именем автора (пол автора = ж).
+              end
+            end
+          end
+
+        end
+
+
+
+      end
+
+      # 4. находим общие для всех поисков ИД Юзеров - отцов. Эти ИД образуют массив совпадения.
+      # Пересечение массивов - результатов поиска совпадения Отцов, Жен и (Сынов или Дочей)
+      # В @common_father_arr - общие user_id = номера trees
+      # Это - основа для предложения рукопожатия
+      #
+      if triplex_arr[0][1] == 1
+        @common_father_arr = @all_fathers_name_user_ids & @fathers_mothers_users_ids_arr & @fathers_sons_users_ids_arr #
+        # Итоговый массив ОТЦА если автор = сын
+      else
+        @common_father_arr = @all_fathers_name_user_ids & @fathers_mothers_users_ids_arr  & @fathers_daughters_users_ids_arr #
+        # Итоговый массив ОТЦА если автор = дочь
+      end
+      ##  КОНЕЦ ПОИСКА ОТЦА
+
+      if !@common_father_arr.blank? # если найдены
+        @search_msg = "Найден твой Отец на сайте. Он тоже разместил свое древо родных. Хочешь пожать ему руку? Это позволит тебе увидеть дерево его родных и объединиться с ним."
+      else
+        @search_msg = "Твоего Отца не найдено на сайте. Пригласи его!"
+      end
+
+    else
+
+      @search_msg = "Твоего Отца не найдено на сайте. Пригласи его!"
+    end
 
   end
 
