@@ -62,7 +62,7 @@ class MainController < ApplicationController
           when 1    # Ок!
             @search_relation = "father"   #
             make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr (nil - отец, 8 - жена, 4 - дочь)
-            @fath_triplex_arr = @triplex_arr
+            @fath_triplex_arr = @triplex_arr  # DEBUGG TO VIEW
             search_farther(@triplex_arr)
             @match_amount = @match_father_amount if !@match_father_amount.blank?
 

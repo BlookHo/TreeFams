@@ -16,7 +16,9 @@ User.create!([          # create! - для сообщений об ошибка�
 # 5
 {profile_id: 27, admin: false, email: 'rr@rr.rr', password: '555555', password_confirmation: '555555' },
 # 6
-{profile_id: 34, admin: false, email: 'tt@tt.tt', password: '666666', password_confirmation: '666666' }
+{profile_id: 34, admin: false, email: 'tt@tt.tt', password: '666666', password_confirmation: '666666' },
+# 7
+{profile_id: 40, admin: false, email: 'yy@yy.yy', password: '777777', password_confirmation: '777777' }
 
 
 ])
@@ -58,7 +60,7 @@ Profile.create([
 {user_id: 0, name_id: 477, email: '', sex_id: 0 },
 
 # 15 - Tree 3
-{user_id: 3, name_id: 45, email: 'ww@ww.ww', sex_id: 0 },
+{user_id: 3, name_id: 45, email: 'ww@ww.ww', sex_id: 1 },
 # 16
 {user_id: 0, name_id: 123, email: '', sex_id: 0 },
 # 17
@@ -66,7 +68,7 @@ Profile.create([
 # 18
 {user_id: 0, name_id: 453, email: '', sex_id: 0 },
 # 19
-{user_id: 0, name_id: 97, email: '', sex_id: 0 },
+{user_id: 0, name_id: 97, email: '', sex_id: 1 },
 # 20
 {user_id: 0, name_id: 453, email: '', sex_id: 0 },
 # 21
@@ -109,7 +111,25 @@ Profile.create([
 # 38
 {user_id: 0, name_id: 231, email: '', sex_id: 1 },
 # 39
+{user_id: 0, name_id: 506, email: '', sex_id: 0 },
+
+# 40 - Tree 3
+{user_id: 3, name_id: 45, email: 'yy@yy.yy', sex_id: 0 },
+# 41
+{user_id: 0, name_id: 123, email: '', sex_id: 0 },
+# 42
+{user_id: 0, name_id: 477, email: '', sex_id: 0 },
+# 43
+{user_id: 0, name_id: 453, email: '', sex_id: 0 },
+# 44
+{user_id: 0, name_id: 97, email: '', sex_id: 0 },
+# 45
+{user_id: 0, name_id: 453, email: '', sex_id: 0 },
+# 46
 {user_id: 0, name_id: 506, email: '', sex_id: 0 }
+
+
+
 
 ])
 
@@ -165,8 +185,15 @@ Tree.create([
 {user_id: 6, profile_id: 36, relation_id: 2, connected: false },
 {user_id: 6, profile_id: 37, relation_id: 8, connected: false },
 {user_id: 6, profile_id: 38, relation_id: 3, connected: false },
-{user_id: 6, profile_id: 39, relation_id: 4, connected: false }
+{user_id: 6, profile_id: 39, relation_id: 4, connected: false },
 
+# 40 - Tree 7
+{user_id: 7, profile_id: 41, relation_id: 1, connected: false },
+{user_id: 7, profile_id: 42, relation_id: 2, connected: false },
+{user_id: 7, profile_id: 43, relation_id: 8, connected: false },
+{user_id: 7, profile_id: 44, relation_id: 3, connected: false },
+{user_id: 7, profile_id: 45, relation_id: 4, connected: false },
+{user_id: 7, profile_id: 46, relation_id: 4, connected: false }
 
 
 
