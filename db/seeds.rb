@@ -62,7 +62,7 @@ Profile.create([
 # 15 - Tree 3
 {user_id: 3, name_id: 45, email: 'ww@ww.ww', sex_id: 1 },
 # 16
-{user_id: 0, name_id: 123, email: '', sex_id: 0 },
+{user_id: 0, name_id: 123, email: '', sex_id: 1 },
 # 17
 {user_id: 0, name_id: 477, email: '', sex_id: 0 },
 # 18
@@ -113,18 +113,18 @@ Profile.create([
 # 39
 {user_id: 0, name_id: 506, email: '', sex_id: 0 },
 
-# 40 - Tree 3
-{user_id: 3, name_id: 45, email: 'yy@yy.yy', sex_id: 0 },
+# 40 - Tree 7
+{user_id: 7, name_id: 45, email: 'yy@yy.yy', sex_id: 1 },
 # 41
-{user_id: 0, name_id: 123, email: '', sex_id: 0 },
+{user_id: 0, name_id: 123, email: '', sex_id: 1 },
 # 42
 {user_id: 0, name_id: 477, email: '', sex_id: 0 },
 # 43
 {user_id: 0, name_id: 453, email: '', sex_id: 0 },
 # 44
-{user_id: 0, name_id: 97, email: '', sex_id: 0 },
+{user_id: 0, name_id: 97, email: '', sex_id: 1 },
 # 45
-{user_id: 0, name_id: 453, email: '', sex_id: 0 },
+{user_id: 0, name_id: 453, email: '', sex_id: 0 },      # Вика
 # 46
 {user_id: 0, name_id: 506, email: '', sex_id: 0 }
 
