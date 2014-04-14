@@ -194,18 +194,43 @@ class MainController < ApplicationController
           end
 
         else
+          # ищем всех сестер в дереве автора - ж
+          author_sisters_ids = []
+          author_sisters_ids << Tree.where(user_id: current_user.id ).where(:relation_id => 6).select(:profile_id).pluck(:profile_id)
+          author_sisters_ids = author_sisters_ids.flatten
+          @author_sisters_ids = author_sisters_ids     # DEBUGG TO VIEW
+
+
+          if !author_sisters_ids.blank? # если найдены дочи у отца
+            author_and_sisters_names_ids = []
+            author_and_sisters_names_ids << triplex_arr[0][2]  # массив имен автора и ее сестер
+            author_sisters_ids.each do |sister|
+              author_and_sisters_names_ids <<  Profile.find(sister).name_id  # находим имя найденной сестры автора
+            end
+          end
+          author_and_sisters_names_ids = author_and_sisters_names_ids.sort
+          @author_and_sisters_names_ids = author_and_sisters_names_ids     # DEBUGG TO VIEW
+
           @fathers_daughters_profile_ids = Tree.where(user_id: father).where(:relation_id => 4).select(:profile_id).pluck(:profile_id) #[0].profile_id
           # ищем всех дочерей в дереве отца, если автор - ж
           if !@fathers_daughters_profile_ids.blank? # если найдены дочи у отца
+            fathers_daughters_name_arr = []
             @fathers_daughters_profile_ids.each do |daughter|
-              @fathers_daughter_name = Profile.find(daughter).name_id # находим имя найденной дочи одного из отцов
-              if !@fathers_daughter_name.blank? && @fathers_daughter_name == triplex_arr[0][2] # если имя дочи отца найдено и оно - такое же, что имя автора (пол = ж)
-                @daughters_profile_ids_arr << daughter   # Массив № 3Daughters.
+              fathers_daughters_name_arr << Profile.find(daughter).name_id # находим имя найденной дочи отца и формируем массив имен дочерей
+            end
+            @fathers_daughters_name_arr = fathers_daughters_name_arr     # DEBUGG TO VIEW
+
+
+            if !fathers_daughters_name_arr.blank?
+              fathers_daughters_name_arr.sort
+              if fathers_daughters_name_arr == author_and_sisters_names_ids #triplex_arr[0][2] # если массивы имен дочерей отца и массив сестер автора ( имя автора (пол = ж) ) - СОВПАДАЮТ
+                @daughters_profile_ids_arr << fathers_daughters_name_arr   # Массив № 3Daughters.
                 @fathers_daughters_users_ids_arr << father  # Массив № 3D.
                 # формирование массива user_id отцов, у кот-х есть дочи и их имена совпадают
                 # с именем автора (пол автора = ж).
               end
             end
+
           end
 
         end

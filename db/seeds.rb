@@ -124,7 +124,7 @@ Profile.create([
 # 44
 {user_id: 0, name_id: 97, email: '', sex_id: 1 },
 # 45
-{user_id: 0, name_id: 453, email: '', sex_id: 0 },      # Вика
+{user_id: 0, name_id: 371, email: '', sex_id: 0 },      # Вика 371
 # 46
 {user_id: 0, name_id: 506, email: '', sex_id: 0 }
 

@@ -26,8 +26,8 @@
     @fath_triplex_arr: #{@fath_triplex_arr.inspect}
   %p
     1.@all_fathers_name_user_ids: #{@all_fathers_name_user_ids.inspect}
-  %p
-    1.@@all_fathers_name_len: #{@all_fathers_name_len.inspect}
+  -#%p
+  -#  1.@@all_fathers_name_len: #{@all_fathers_name_len.inspect}
 
   %p
     2.@mothers_profile_ids_arr: #{@mothers_profile_ids_arr.inspect}
@@ -42,11 +42,19 @@
     3.Сыны @@@@fathers_sons_users_ids_arr: #{@fathers_sons_users_ids_arr.inspect}
 
   %p
-    3.Дочи @@fathers_daughters_profile_ids: #{@fathers_daughters_profile_ids.inspect}
+    3.01.Дочи @@@author_sisters_ids: #{@author_sisters_ids.inspect}
   %p
-    3.Дочи @@@daughters_profile_ids_arr: #{@daughters_profile_ids_arr.inspect}
+    3.01.Дочи @author_sisters_ids_sorted: #{@author_sisters_ids_sorted.inspect}
   %p
-    3.Дочи @@@fathers_daughters_users_ids_arr: #{@fathers_daughters_users_ids_arr.inspect}
+    3.011.Дочи @@@@author_and_sisters_names_ids: #{@author_and_sisters_names_ids.inspect}
+  %p
+    3.1.Дочи @@fathers_daughters_profile_ids: #{@fathers_daughters_profile_ids.inspect}
+  %p
+    3.11.Дочи @@fathers_daughters_name_arr: #{@fathers_daughters_name_arr.inspect}
+  %p
+    3.2.Дочи @@@daughters_profile_ids_arr: #{@daughters_profile_ids_arr.inspect}
+  %p
+    3.3.Дочи @@@fathers_daughters_users_ids_arr: #{@fathers_daughters_users_ids_arr.inspect}
 
   %p
     @common_father_arr: Результат поиска ОТЦА: Его user_id = #{@common_father_arr.inspect}
