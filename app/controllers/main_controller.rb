@@ -48,8 +48,8 @@ class MainController < ApplicationController
       tree_arr = session[:tree_arr][:value]
     end
 
-    @all_match_arr = []
-    @match_amount = 0
+    @all_match_arr = []   # Массив совпадений всех родных с Автором
+    @match_amount = 0     # Кол-во совпадений всех родных с Автором
     if !tree_arr.blank?
 
       for tree_index in 0 .. tree_arr.length-1
@@ -59,48 +59,47 @@ class MainController < ApplicationController
         @triplex_arr = []
         case relation # Определение вида поиска по значению relation
 
-          when 1    # Ок!
-            @search_relation = "father"   #
+          when 1    # "father"
+            @search_relation = "father"   # DEBUGG TO VIEW
             make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr (nil - отец, 8 - жена, 4 - дочь)
             @fath_triplex_arr = @triplex_arr  # DEBUGG TO VIEW
             search_farther(@triplex_arr)
             @match_amount = @match_father_amount if !@match_father_amount.blank?
+            @all_match_arr << @father_match_arr if !@father_match_arr.blank?
 
-
-          when 2
+          when 2    # "mother"
             @search_relation = "mother"   #
             if !@match_mother_amount.blank?
               @match_amount = @match_amount + @match_mother_amount
             end
 
-          when 3
+          when 3   # "son"
             @search_relation = "son"   #
 
-          when 4
+          when 4   # "daugther"
             @search_relation = "daugther"   #
 
-          when 5
+          when 5   # "brother"
             @search_relation = "brother"   #
-
-    #        search_brothers # ???
 
             make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
             search_bros_sist(@triplex_arr)  # найдены потенциальные братья/сестры
+            @match_amount = @match_amount + @match_brothers_amount if !@match_brothers_amount.blank?
 
             @all_match_arr << @brothers_match_arr if !@brothers_match_arr.blank? #
 
-          when 6
+          when 6   # "sister"
             @search_relation = "sister"   #
-       #     search_sisters  # ???
 
             make_one_triplex_arr(@triplex_arr,nil,1,2)   # @triplex_arr - ready!
             search_bros_sist(@triplex_arr)  # найдены потенциальные братья/сестры
             @all_match_arr << @sisters_match_arr if !@sisters_match_arr.blank? #
+            @match_amount = @match_amount + @match_sisters_amount if !@match_sisters_amount.blank?
 
-          when 7
+          when 7   # "husband"
             @search_relation = "husband"   #
 
-          when 8
+          when 8   # "wife"
             @search_relation = "wife"   #
             if !@match_wife_amount.blank?
               @match_amount = @match_amount + @match_wife_amount
@@ -119,7 +118,7 @@ class MainController < ApplicationController
    # @match_amount = @match_father_amount + @match_mother_amount + @match_son_amount + @match_daugther_amount + @match_brother_amount + @match_sister_amount + @match_husband_amount + @match_wife_amount
   end
 
-  # Поиск БРАТЬЕВ во всех сущ-х деревьях на основе данных в дереве Юзера.
+  # Поиск ОТЦА ЮЗЕРА во всех сущ-х деревьях на основе данных в дереве Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
@@ -146,10 +145,6 @@ class MainController < ApplicationController
 
       @mothers_profile_ids_arr = []           # массив матерей с совпавшими именами матери автора
       @fathers_mothers_users_ids_arr = []     # Массив № 2. массив user_id отцов с совпавшими матерями автора
-
-      #@sons_profile_ids_arr = []               # массив сынов с совпавшими именами автора - пол = м
-      #@fathers_sons_users_ids_arr = []         # Массив № 3/м
-
       @kids_profile_ids_arr = []           # массив дочерей с совпавшими именами автора - пол = ж
       @fathers_kids_users_ids_arr = []     # Массив № 3/ж
 
@@ -225,18 +220,18 @@ class MainController < ApplicationController
       # Пересечение массивов - результатов поиска совпадения Отцов, Жен и (Сынов или Дочей)
       # В @common_father_arr - общие user_id = номера trees
       # Это - основа для предложения рукопожатия
-      @common_father_arr = @all_fathers_name_user_ids & @fathers_mothers_users_ids_arr  & @fathers_kids_users_ids_arr #
+      @father_match_arr = @all_fathers_name_user_ids & @fathers_mothers_users_ids_arr  & @fathers_kids_users_ids_arr #
       ##  КОНЕЦ ПОИСКА ОТЦА
 
-      if !@common_father_arr.blank? # если найдены
-        @match_father_amount = @common_father_arr.length
-        @search_msg = "Найден твой Отец на сайте. Хочешь пожать ему руку? Это позволит тебе увидеть дерево его родных и объединиться с ним."
+      if !@father_match_arr.blank? # если найдены
+        @match_father_amount = @father_match_arr.length
+        @msg_father = "Найден твой Отец на сайте. Хочешь пожать ему руку? Это позволит тебе увидеть дерево его родных и объединиться с ним."
       else
-        @search_msg = "Твой Отец не найден на сайте. Пригласи его!"
+        @msg_father = "Твой Отец не найден на сайте. Пригласи его!"
       end
 
     else
-      @search_msg = "Твой Отец не найден на сайте. Пригласи его!"
+      @msg_father = "Твой Отец не найден на сайте. Пригласи его!"
     end
 
   end
@@ -407,6 +402,18 @@ class MainController < ApplicationController
             @sisters_profile_id_arr << User.find(tree).profile_id   # Массив ID PROFILES СЕСТЕР к current_user
             @nm = Name.find(@child_profile.name_id).name  # определение имени сестры
             @msg_sister = "Твоя сестра ".concat(@nm).concat(" также есть на сайте. Хочешь пожать ей руку? Это позволит тебе увидеть дерево её родных и объединиться с ним.") # формирование сообщения о найденной сестре
+          end
+          if !@brothers_match_arr.blank? # если найдены
+            @match_brothers_amount = @brothers_match_arr.length
+            @msg_brother = "Найден твой брат на сайте. Хочешь пожать ему руку? Это позволит тебе увидеть дерево его родных и объединиться с ним."
+          else
+            @msg_brother = "Твой брат не найден на сайте. Пригласи его!"
+          end
+          if !@sisters_match_arr.blank? # если найдены
+            @match_sisters_amount = @sisters_match_arr.length
+            @msg_sister = "Найдена твоя сестра на сайте. Хочешь пожать ей руку? Это позволит тебе увидеть дерево её родных и объединиться с ней."
+          else
+            @msg_sister = "Твоя сестра не найдена на сайте. Пригласи её!"
           end
 
         end

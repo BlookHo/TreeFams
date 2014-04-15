@@ -24,6 +24,7 @@
 
   %p
     @fath_triplex_arr: #{@fath_triplex_arr.inspect}
+  %h4 Fathers
   %p
     1.@all_fathers_name_user_ids: #{@all_fathers_name_user_ids.inspect}
 
@@ -46,37 +47,37 @@
     3.3. @fathers_kids_users_ids_arr: #{@fathers_kids_users_ids_arr.inspect}
 
   %p
-    @common_father_arr: Результат поиска ОТЦА: Его user_id = #{@common_father_arr.inspect}
-  %p
-    @search_msg: #{@search_msg.inspect}
+    @father_match_arr: Результат поиска ОТЦА: Его user_id = #{@father_match_arr.inspect}
+  %h4
+    @msg_father: #{@msg_father.inspect}
 
-  %p
-    @match_amount: Всего найдено совпадений родных: #{@match_amount.inspect}
 
-  %p
-    @search_relation: #{@search_relation.inspect}
+  -#%p
+  -#  @search_relation: #{@search_relation.inspect}
   %h4 Brothers
   %p
-    @brothers_match_arr: #{@brothers_match_arr.inspect}
+    @brothers_match_arr: Результат поиска БРАТЬЕВ: Его user_id = #{@brothers_match_arr.inspect}
   %p
     @brothers_profile_id_arr: #{@brothers_profile_id_arr.inspect}
-  %p
-    @search_results: #{@search_results.inspect}
-  %h4
-    Массив всех совпадений родных: @all_match_arr: #{@all_match_arr.inspect}
+  -#%p
+  -#  @search_results: #{@search_results.inspect}
   %h4
     @msg_brother: #{@msg_brother.inspect}
   %h4 Sisters
   %p
-    @sisters_match_arr: #{@sisters_match_arr.inspect}
+    @sisters_match_arr: Результат поиска СЕСТЕР: Её user_id = #{@sisters_match_arr.inspect}
   %p
     @sisters_profile_id_arr: #{@sisters_profile_id_arr.inspect}
+  %h4
+    @msg_sister: #{@msg_sister.inspect}
   -#%p
   -#  @sisters_search_results: #{@sisters_search_results.inspect}
+
+
   %h4
     Массив всех совпадений родных: @all_match_arr: #{@all_match_arr.inspect}
   %h4
-    @msg_sister: #{@msg_sister.inspect}
+    @match_amount: Всего найдено совпадений родных: #{@match_amount.inspect}
 
   %h4 Возврат на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
   %h4 Возврат на страницу Лэндинг:  #{link_to "Landing -->", landing_path}
