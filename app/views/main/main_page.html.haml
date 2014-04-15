@@ -9,30 +9,19 @@
   %h3 Отображение Древа Пользователя в табличной форме
   - if user_signed_in?
     %p current_user.id: #{current_user.id.inspect}
-    -#%p @user_tree: #{@user_tree.inspect}
-    -#%p @tree_arr: #{@tree_arr.inspect}
 
-  -#%p
-    -#  @last_user: #{@last_user.inspect}
-    -#%p
-    -#  @new_user_id: #{@new_user_id.inspect}
-    -#%p @
-    -#  @tree_arr: #{@tree_arr.inspect}
   <li #{render :partial => 'main/main_display_tree'}
 
-
-
   %p
-    @fath_triplex_arr: #{@fath_triplex_arr.inspect}
+    @triplex_arr: #{@triplex_arr.inspect}
+
   %h4 Fathers
   %p
     1.@all_fathers_name_user_ids: #{@all_fathers_name_user_ids.inspect}
-
   %p
     2.@mothers_profile_ids_arr: #{@mothers_profile_ids_arr.inspect}
   %p
     2.@fathers_mothers_users_ids_arr: #{@fathers_mothers_users_ids_arr.inspect}
-
   %p
     3.01. @author_bros_sisters_ids: #{@author_bros_sisters_ids.inspect}
   %p
@@ -45,12 +34,37 @@
     3.2. @kids_profile_ids_arr: #{@kids_profile_ids_arr.inspect}
   %p
     3.3. @fathers_kids_users_ids_arr: #{@fathers_kids_users_ids_arr.inspect}
-
   %p
     @father_match_arr: Результат поиска ОТЦА: Его user_id = #{@father_match_arr.inspect}
   %h4
     @msg_father: #{@msg_father.inspect}
 
+  %h4 Mothers
+  %p
+    1.@all_mothers_name_user_ids: #{@all_mothers_name_user_ids.inspect}
+
+  %p
+    2.@fathers_profile_ids_arr: #{@fathers_profile_ids_arr.inspect}
+  %p
+    2.@mothers_fathers_users_ids_arr: #{@mothers_fathers_users_ids_arr.inspect}
+
+  %p
+    3.01. @author_bros_sisters_ids: #{@author_bros_sisters_ids.inspect}
+  %p
+    3.01. @author_bros_sisters_names_ids: #{@author_bros_sisters_names_ids.inspect}
+  %p
+    3.1. @@@mothers_kids_profile_ids: #{@mothers_kids_profile_ids.inspect}
+  %p
+    3.11. @@mothers_kids_name_arr: #{@mothers_kids_name_arr.inspect}
+  %p
+    3.2. @kids_profile_ids_arr: #{@kids_profile_ids_arr.inspect}
+  %p
+    3.3. @@mothers_kids_users_ids_arr: #{@mothers_kids_users_ids_arr.inspect}
+
+  %p
+    @@mother_match_arr: Результат поиска МАТЕРИ: Её user_id = #{@mother_match_arr.inspect}
+  %h4
+    @@msg_mother: #{@msg_mother.inspect}
 
   -#%p
   -#  @search_relation: #{@search_relation.inspect}
