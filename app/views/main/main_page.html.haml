@@ -66,9 +66,21 @@
   %h4
     @@msg_mother: #{@msg_mother.inspect}
 
-  -#%p
-  -#  @search_relation: #{@search_relation.inspect}
-  %h4 Brothers
+  %h4 Sons  @
+  %p
+    1.@all_authors_son_name_user_ids: #{@all_authors_son_name_user_ids.inspect}
+  %p
+    @@author_son_names_ids: #{@author_son_names_ids.inspect}
+
+
+  %h4 Brothers  @
+  %p
+    1.@fathers_names_arr: #{@fathers_names_arr.inspect}
+  %p
+    1.@mothers_names_arr: #{@mothers_names_arr.inspect}
+
+
+
   %p
     @brothers_match_arr: Результат поиска БРАТЬЕВ: Его user_id = #{@brothers_match_arr.inspect}
   %p
