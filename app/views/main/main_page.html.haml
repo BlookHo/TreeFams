@@ -14,6 +14,10 @@
 
   %p
     Триплекс @triplex_arr: #{@triplex_arr.inspect}
+  %p
+    Братья и сестры Автора: @author_bros_sisters_names_ids: #{@author_bros_sisters_names_ids.inspect}
+  %p
+    Дети Автора: @author_kids_names_ids: #{@author_kids_names_ids.inspect}
 
   %h4 Fathers
   %p
@@ -22,10 +26,8 @@
     2.@mothers_profile_ids_arr: #{@mothers_profile_ids_arr.inspect}
   %p
     2.@fathers_mothers_users_ids_arr: #{@fathers_mothers_users_ids_arr.inspect}
-  %p
-    3.01. @author_bros_sisters_ids: #{@author_bros_sisters_ids.inspect}
-  %p
-    3.01. @author_bros_sisters_names_ids: #{@author_bros_sisters_names_ids.inspect}
+  -#%p
+  -#  3.01. @author_bros_sisters_ids: #{@author_bros_sisters_ids.inspect}
   %p
     3.1. @@fathers_kids_profile_ids: #{@fathers_kids_profile_ids.inspect}
   %p
@@ -48,10 +50,10 @@
   %p
     2.@mothers_fathers_users_ids_arr: #{@mothers_fathers_users_ids_arr.inspect}
 
-  %p
-    3.01. @author_bros_sisters_ids: #{@author_bros_sisters_ids.inspect}
-  %p
-    3.01. @author_bros_sisters_names_ids: #{@author_bros_sisters_names_ids.inspect}
+  -#%p
+  -#  3.01. @author_bros_sisters_ids: #{@author_bros_sisters_ids.inspect}
+  -#%p
+  -#  3.01. @author_bros_sisters_names_ids: #{@author_bros_sisters_names_ids.inspect}
   %p
     3.1. @@@mothers_kids_profile_ids: #{@mothers_kids_profile_ids.inspect}
   %p
@@ -67,7 +69,7 @@
     @@msg_mother: #{@msg_mother.inspect}
 
 
-  %h4 Sons  @
+  %h4 Sons  @@
   %p
     1.@@all_authors_son_profile_ids: #{@all_authors_son_profile_ids.inspect}
   %p
@@ -75,9 +77,25 @@
   %p
     @@sons_user_ids: #{@sons_user_ids.inspect}
   %p
-    @author_br_sis_ids: #{@author_br_sis_ids.inspect}
+    @@@son_br_sis_profile_ids: #{@son_br_sis_profile_ids.inspect}
+  %p
+    @@@son_br_sis_names_ids: #{@son_br_sis_names_ids.inspect}
   %p
     @son_user_name_id: #{@son_user_name_id.inspect}
+  %p
+    @@son_br_sis_kids_users_ids_arr: #{@son_br_sis_kids_users_ids_arr.inspect}
+  %p
+    @son_triplex_arr: #{@son_triplex_arr.inspect}
+  %p
+    @@son_father_users_ids_arr: #{@son_father_users_ids_arr.inspect}
+  %p
+    @authors_wives_names_ids: #{@authors_wives_names_ids.inspect}
+  %p
+    @son_mother_users_ids_arr: #{@son_mother_users_ids_arr.inspect}
+  %p
+    @@son_match_arr: #{@son_match_arr.inspect}
+  %h4
+    @msg_son: #{@msg_son.inspect}
 
 
 
