@@ -127,24 +127,27 @@
     @msg_daughter: #{@msg_daughter.inspect}
 
 
-
-
-  %h4 Brothers  @
+  %h4 Brothers
   %p
-    1.@fathers_names_arr: #{@fathers_names_arr.inspect}
+    1.@all_authors_bros_profiles_len: #{@all_authors_bros_profiles_len.inspect}
   %p
-    1.@mothers_names_arr: #{@mothers_names_arr.inspect}
+    1.@author_bros_names_ids: #{@author_bros_names_ids.inspect}
+  %p
+    @@bros_user_ids: Результат поиска БРАТЬЕВ: Его user_id = #{@bros_user_ids.inspect}
+  %p
+    @@bros_triplex_arr: #{@bros_triplex_arr.inspect}
 
 
 
   %p
     @brothers_match_arr: Результат поиска БРАТЬЕВ: Его user_id = #{@brothers_match_arr.inspect}
-  %p
-    @brothers_profile_id_arr: #{@brothers_profile_id_arr.inspect}
+  -#%p
+  -#  @brothers_profile_id_arr: #{@brothers_profile_id_arr.inspect}
   -#%p
   -#  @search_results: #{@search_results.inspect}
   %h4
     @msg_brother: #{@msg_brother.inspect}
+
   %h4 Sisters
   %p
     @sisters_match_arr: Результат поиска СЕСТЕР: Её user_id = #{@sisters_match_arr.inspect}

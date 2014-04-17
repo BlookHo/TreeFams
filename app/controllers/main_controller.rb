@@ -165,6 +165,32 @@ class MainController < ApplicationController
     author_daughters_names_ids = author_daughters_names_ids.sort if !author_daughters_names_ids.blank? #  # массив имен упорядочен
   end
 
+  # Поиск id всех братьев автора дерева. АВТОР - зареген
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def get_bros_profile_ids(user_id)  #
+    author_br_ids = [] # Массив id всех братьев
+    author_br_ids << Tree.where(user_id: user_id ).where("relation_id = 5").select(:profile_id).pluck(:profile_id)
+    author_br_ids = author_br_ids.flatten if !author_br_ids.blank? # массив объединен
+  end
+
+  # Поиск имен всех братьев автора дерева. АВТОР - зареген
+  # @note triplex_arr
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def get_bros_names_ids(bros_ids_arr) #,user_name_id)
+    if !bros_ids_arr.blank? # если найдены братья в дереве автора
+      br_names_ids = []
+    #  br_names_ids << user_name_id #if !triplex_arr.blank? # массив id имен братьев автора
+      bros_ids_arr.each do |sister|
+        br_names_ids <<  Profile.find(sister).name_id  # массив имен найденных братьев автора
+      end
+    end
+    br_names_ids = br_names_ids.sort if !br_names_ids.blank? #  # массив имен упорядочен
+  end
+
   # Поиск id всех братьев и сестер автора дерева. АВТОР - зареген
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
@@ -258,20 +284,20 @@ class MainController < ApplicationController
             all_match_arr << @daughter_match_arr if !@daughter_match_arr.blank?
             match_amount = match_amount + @match_daughter_amount if !@match_daughter_amount.blank?
 
-          when 5, 6   # "brother"
+          when 5  # "brother"
             @search_relation = "brother"   #
-     #       search_bros_sist(@triplex_arr)  # найдены потенциальные братья
+            search_brothers
+
+#            search_bros_sist(@triplex_arr)  # найдены потенциальные братья
+
             all_match_arr << @brothers_match_arr if !@brothers_match_arr.blank? #
             match_amount = match_amount + @match_brothers_amount if !@match_brothers_amount.blank?
 
-            all_match_arr << @sisters_match_arr if !@sisters_match_arr.blank? #
-            match_amount = match_amount + @match_sisters_amount if !@match_sisters_amount.blank?
-
-          #when 6   # "sister"
-          #  @search_relation = "sister"   #
-          #  search_bros_sist(@triplex_arr)  # найдены потенциальные сестры
-          #  all_match_arr << @sisters_match_arr if !@sisters_match_arr.blank? #
-          #  match_amount = match_amount + @match_sisters_amount if !@match_sisters_amount.blank?
+          when 6   # "sister"
+            @search_relation = "sister"   #
+            #search_bros_sist(@triplex_arr)  # найдены потенциальные сестры
+            #all_match_arr << @sisters_match_arr if !@sisters_match_arr.blank? #
+            #match_amount = match_amount + @match_sisters_amount if !@match_sisters_amount.blank?
 
           when 7   # "husband"
             @search_relation = "husband"   #
@@ -313,7 +339,7 @@ class MainController < ApplicationController
   # Father_Relation_ID = triplex_arr[1][3])
   def search_farther(triplex_arr)
 
-    @found_father = false
+    #@found_father = false
     # 1. Массив № 1 = @all_fathers_name_user_ids. Ищем всех отцов father's user_id с именем отца автора
     all_fathers_name_user_ids = Profile.where.not(user_id: current_user.id ).where.not(user_id: 0 ).where(:name_id => triplex_arr[1][2]).select(:user_id).pluck(:user_id)
 
@@ -484,15 +510,110 @@ class MainController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
-  def search_brothers(triplex_arr)
+  def search_brothers #(triplex_arr)
 
-    # взять имя брата автора
     # Father_Profile_ID = triplex_arr[1][0])
     # Father_Sex_ID = triplex_arr[1][1])
     # Father_Name_ID = triplex_arr[1][2])
     # Father_Relation_ID = triplex_arr[1][3])
+    # 1.Находим всех братьев-сестер Автора.
+    # 2.Массив № 1. взять имена братьев автора и найти всех Братьев-Юзеров
+    # 3. Для каждого Брата-Юзера находим его Отца и Мать. Сравниваем с отцом и матерью Автора.
+    # 4. Для каждого Брата-Юзера находим его братьев-сестер. Сравниваем с братьями-сестрами Автора.\
 
-    @brothers_search_results = "No brothers results yet!!"
+    # 1. Массив № 1 = @author_son_names_ids.
+    # Ищем всех братьев-сестер автора = user_id с именем братьев-сестер автора
+    all_authors_bros_profile_ids = get_bros_profile_ids(current_user.id)
+
+    @all_authors_bros_profiles_len = all_authors_bros_profile_ids.length  if !all_authors_bros_profile_ids.blank? #  # DEBUGG TO VIEW
+    @all_authors_bros_profile_ids = all_authors_bros_profile_ids  # DEBUGG TO VIEW
+    @author_bros_names_ids = get_bros_names_ids(all_authors_bros_profile_ids) #,@triplex_arr[0][2])  # Поиск массива id имен всех братьев и сестер автора дерева
+
+    if !all_authors_bros_profile_ids.blank? # если такие братья-Юзеры найдены
+
+      @brothers_match_arr = []
+
+      #son_br_sis_kids_users_ids_arr = []     # Check-Массив № 3
+      #son_father_users_ids_arr = []     # Check-Массив № 3/ж
+      #son_mother_users_ids_arr = []     # Check-Массив № 3/ж
+
+      @author_bros_names_ids.each do |bros_profile_id| # для каждого из найденных братьев - поиск жен, указанных в деревьях отцов
+
+        # 2. Массив № 2 = @sons_user_ids - массив сынов = user_ids с именем, равным сыну Автора.
+        # Среди профилей сынов ищем Users с именем, равным сыну Автора
+        bros_user_ids = Profile.where.not(user_id: current_user.id ).where.not(user_id: 0 ).where(:name_id => bros_profile_id).select(:user_id).pluck(:user_id)
+        if !bros_user_ids.blank? # 1. у автора - в принципе есть сыны (указаны в его дереве)
+           @bros_user_ids = bros_user_ids #  # # DEBUGG TO VIEW
+           bros_user_ids.each do |bros_user_id|
+
+            # 3. CHECK SON'S BROS AND SISTERS WITH AUTHOR'S KIDS - ALL NAMES
+            # 3. найти всех братов и сестер этого сына
+      #      @son_br_sis_profile_ids = get_bros_sist_profile_ids(son_user_id) #
+      #      @son_user_name_id = Profile.where(user_id: son_user_id).select(:name_id)[0].name_id
+      #      @son_br_sis_names_ids = get_bros_sist_names_ids(@son_br_sis_profile_ids,@son_user_name_id)
+      #      if !@son_br_sis_names_ids.blank? && @son_br_sis_names_ids == @author_kids_names_ids # если имена братьев и сестер сына совпадают с именами детей отца-автора
+      #        #@mothers_profile_ids_arr << fathers_wife_profile_id  # DEBUGG TO VIEW
+      #        son_br_sis_kids_users_ids_arr << son_user_id  # Массив № 3.
+      #        # формирование массива user_id сынов, у кот-х есть братья и сестры  и их имена совпадают с именами детей отца-автора.
+      #        @son_br_sis_kids_users_ids_arr = son_br_sis_kids_users_ids_arr  # DEBUGG TO VIEW
+      #      end
+
+            # 4. CHECK SON'S father AND Mother WITH AUTHOR'S father AND Mother NAMES
+            # 4. найти отца и мать этого сына и сравнить их имена с именами отца и матери автора.
+            # имена отца и матери автора - triplex_arr
+            # имена отца и матери сына - @son_triplex_arr
+
+            @bros_triplex_arr = []
+            make_one_triplex_arr(bros_user_id,@bros_triplex_arr,nil,1,2)   # @triplex_arr (nil - автор, 1 - отец, 2 - мать)
+            # 4.1. CHECK? BROS'S father = Author
+      #      if @triplex_arr[0][2] == @bros_triplex_arr[1][2]  # имена отца сына и автора - совпадают,
+      #        # этот сын - возможно сын автора\
+      #        son_father_users_ids_arr << son_user_id
+      #        @son_father_users_ids_arr = son_father_users_ids_arr     # DEBUGG TO VIEW
+      #      end
+
+            # 4.2. CHECK? BROS'S mother = Author's WIFE
+            # find Author's WIFE
+            # ЗДЕСЬ ЖЕНЫ АВТОРА - ЭТО МАССИВ. НА СЛУЧАЙ, КОГДА БЫЛИ ЕЩЕ ЖЕНЫ И ОНИ УКАЗАНЫ В ДЕРЕВЕ АВТОРА,
+            # ПРИ ЭТОМ, БЫВШАЯ ЖЕНА АВТОРА - МАТЬ СЫНА
+      #      authors_wives_names_ids = get_user_wife_names_ids(get_user_wife_profile_ids(current_user.id))
+      #      @authors_wives_names_ids = authors_wives_names_ids     # DEBUGG TO VIEW
+      #      if !authors_wives_names_ids.blank? # если есть жены в дереве автора
+      #        authors_wives_names_ids.each do |wife|
+      #          if wife == @son_triplex_arr[2][2]  # имена матери сына и жены автора - совпадают,
+      #            # этот сын - возможно сын автора\
+      #            son_mother_users_ids_arr << son_user_id  # хотя бы одна из жен автора = мать потенциального сына
+      #            @son_mother_users_ids_arr = son_mother_users_ids_arr     # DEBUGG TO VIEW
+      #          end
+      #        end
+      #      end
+
+           end
+         end
+
+      end
+
+      # 4. находим общие для всех поисков ИД Юзеров - сынов. Эти ИД образуют массив совпадения.
+      # Пересечение массивов - результатов поиска совпадения id Сына автора с братьями и сестрами сына автора, сынов с совпавшими отцом и матерью автора и с совпавшими детьми автора
+      # Это - основа для предложения рукопожатия
+      @brothers_match_arr = @bros_user_ids #& son_br_sis_kids_users_ids_arr & son_father_users_ids_arr & son_mother_users_ids_arr #
+
+      if !@brothers_match_arr.blank? # если найдены
+        @match_brothers_amount = @brothers_match_arr.length
+        @msg_brother = "Найден твой Брат на сайте. Хочешь пожать ему руку? Это позволит тебе увидеть дерево его родных и объединиться с ним."
+
+      else
+        @msg_brother = "Твой Брат не найден на сайте. Пригласи его!"
+      end
+
+    else
+      @msg_brother = "Твой Брат не найден на сайте. Пригласи его!"
+    end
+
+
+
+
+  #  @brothers_search_results = "No brothers results yet!!"
 
 
   end
@@ -518,13 +639,10 @@ class MainController < ApplicationController
   # @mothers_names_arr - профили матерей с таким же именем, что у матери current_user, т.е. у возможных братьев/сестер.
   # @mothers_trees_arr - номера СД матерей с таким же именем, что у матери current_user, т.е. у возможных братьев/сестер.
   # todo: Разделить этот метод на 2: поиск братьев и поиск сестер
-  # todo: ??????? Сделать, чтобы искались не только зарегенные (авторы) братья и сестры ???????
-  # todo: Разделить этот метод на БОЛЕЕ МЕЛКИЕ : поиск братьев и поиск сестер
   # @see News
   def search_bros_sist(triplex_arr)
     @sisters_match_arr = []
 
-    if user_signed_in?
       # Father_Profile_ID = triplex_arr[1][0])
       # Father_Sex_ID = triplex_arr[1][1])
       # Father_Name_ID = triplex_arr[1][2])
@@ -536,7 +654,7 @@ class MainController < ApplicationController
       # Mother_Relation_ID = triplex_arr[2][3])
 
       # НАЧАЛО ПОИСКА ОТЦА - организовать параллельный поиск матери!!! Т.е. ИЩЕМ - ПАРУ!!
-      @found_father = false
+      #@found_father = false
       @all_fathers_profiles = Tree.where.not(user_id: current_user.id).where(:relation_id => triplex_arr[1][3]).select(:id).select(:profile_id).select(:user_id)
       # все profiles отцов, кроме отца current_user
   #    all_fathers_name_user_ids = Profile.where.not(user_id: current_user.id ).where.not(user_id: 0 ).where(:name_id => triplex_arr[1][2]).select(:user_id).pluck(:user_id)
@@ -587,8 +705,6 @@ class MainController < ApplicationController
 
         @common_trees_arr.each do |tree|
           @child_profile = Profile.find_by_user_id(tree)
-          # !!!! здесь - вставить раздел на Юзеров и Профилей
-
 
           if @child_profile.sex_id == 1
             @brothers_match_arr << tree   # Массив ID TREES БРАТЬЕВ к current_user
@@ -621,7 +737,6 @@ class MainController < ApplicationController
 
       #  ГОТОВ МАССИВ ПРОФИЛЕЙ ПОТЕНЦИАЛЬНЫХ БРАТЬЕВ/СЕСТЕР
 
-    end
 
   end
 
