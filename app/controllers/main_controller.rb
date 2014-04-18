@@ -844,7 +844,7 @@ class MainController < ApplicationController
       # Пересечение массивов - результатов поиска совпадения id Сына автора с братьями и сестрами сына автора, сынов с совпавшими отцом и матерью автора и с совпавшими детьми автора
       # Это - основа для предложения рукопожатия
       @son_match_arr = @sons_user_ids & son_br_sis_kids_users_ids_arr & son_father_users_ids_arr & son_mother_users_ids_arr #
-      ##  КОНЕЦ ПОИСКА ОТЦА
+      ##  КОНЕЦ ПОИСКА СЫНА
 
       if !@son_match_arr.blank? # если найдены
         @match_son_amount = @son_match_arr.length
@@ -950,7 +950,7 @@ class MainController < ApplicationController
       @matched_daughters_user_ids_arr << @daughter_match_arr # запоминание уже найденных user_ids
       @matched_daughters_user_ids_arr = @matched_daughters_user_ids_arr.flatten #
 
-      ##  КОНЕЦ ПОИСКА ОТЦА.flatten
+      ##  КОНЕЦ ПОИСКА ДОЧЕРИ
 
       if !@daughter_match_arr.blank? # если найдены
         @match_daughter_amount = @daughter_match_arr.length
