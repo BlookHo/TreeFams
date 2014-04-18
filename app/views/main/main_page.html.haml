@@ -95,7 +95,7 @@
   %p
     @@son_match_arr: #{@son_match_arr.inspect}
   %h4
-    @msg_son: #{@msg_son.inspect}
+    @messages_sons_found_arr: #{@messages_sons_found_arr.inspect}
 
 
   %h4 Daughters
@@ -122,12 +122,20 @@
   %p
     @daughter_mother_users_ids_arr: #{@daughter_mother_users_ids_arr.inspect}
   %p
+    @@@ind: #{@ind.inspect} @
+  %p
+    @matched_daughters_user_ids_arr: #{@matched_daughters_user_ids_arr.inspect}
+  %p
+    @@@@count: #{@count.inspect}
+  %p
     @@daughter_match_arr: #{@daughter_match_arr.inspect}
   %h4
-    @msg_daughter: #{@msg_daughter.inspect}
+    @messages_daughters_found_arr: #{@messages_daughters_found_arr.inspect}
+  -#%h4
+  -#  @msg_daughter: #{@msg_daughter.inspect}
 
 
-  %h4 Brothers
+  %h4 Brothers@count
   %p
     1.@all_authors_bros_profiles_len: #{@all_authors_bros_profiles_len.inspect}
   %p
