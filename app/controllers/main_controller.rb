@@ -306,7 +306,7 @@ class MainController < ApplicationController
 
           when 5  # "brother"
             @search_relation = "brother"   #
- #           search_brothers
+            search_brothers
 
 #            search_bros_sist(@triplex_arr)  # найдены потенциальные братья
 
@@ -559,10 +559,9 @@ class MainController < ApplicationController
 
       @author_bros_names_ids.each do |bros_profile_id| # для каждого из найденных братьев - поиск жен, указанных в деревьях отцов
 
-        # 2. Массив № 2 = @sons_user_ids - массив сынов = user_ids с именем, равным сыну Автора.
-        # Среди профилей сынов ищем Users с именем, равным сыну Автора
+        # 2. Массив № 2  Среди профилей братьев ищем Users с именем, равным имени брата Автора
         bros_user_ids = Profile.where.not(user_id: current_user.id ).where.not(user_id: 0 ).where(:name_id => bros_profile_id).select(:user_id).pluck(:user_id)
-        if !bros_user_ids.blank? # 1. у автора - в принципе есть сыны (указаны в его дереве)
+        if !bros_user_ids.blank? # 1. у автора - в принципе есть братья (указаны в его дереве)
            @bros_user_ids = bros_user_ids #  # # DEBUGG TO VIEW
            bros_user_ids.each do |bros_user_id|
 
