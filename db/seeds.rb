@@ -1,7 +1,7 @@
 ﻿# encoding: utf-8
 
 
-User.delete_all       # 1 admin + 4 start trees
+User.delete_all       # 1 admin + 7 start trees
 User.reset_pk_sequence
 User.create!([          # create! - для сообщений об ошибках если они есть
 
@@ -138,6 +138,9 @@ Tree.delete_all       # 1 admin + 4 start trees
 Tree.reset_pk_sequence
 Tree.create([
 
+
+# LEGEND:
+# user_id HAS profile_id WHO IS relation_id TO user_id
 # 1 - Tree 1
 {user_id: 1, profile_id: 2, relation_id: 1, connected: false },
 # 2
