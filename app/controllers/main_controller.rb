@@ -252,6 +252,25 @@ class MainController < ApplicationController
     # Поиск массива id имен всех детей автора дерева
     @author_kids_names_ids = get_user_kids_names_ids(get_user_kids_profile_ids(current_user.id))
 
+    @count = 0
+    @matched_daughters_user_ids_arr = []  # Массив уже найденных user_id
+    @matched_sons_user_ids_arr = []  # Массив уже найденных user_id
+    @matched_brothers_user_ids_arr = []  # Массив уже найденных user_id
+    @matched_sisters_user_ids_arr = []  # Массив уже найденных user_id
+    @matched_husbands_user_ids_arr = []  # Массив уже найденных user_id
+    @matched_wives_user_ids_arr = []  # Массив уже найденных user_id
+
+    @messages_fathers_found_arr = []  # Сообщения о найденных user_id
+    @messages_mothers_found_arr = []  # Массив уже найденных user_id
+    @messages_daughters_found_arr = []  # Сообщения о найденных user_id
+    @messages_sons_found_arr = []  # Массив уже найденных user_id
+    @messages_brothers_found_ids_arr = []  # Массив уже найденных user_id
+    @messages_sisters_found_arr = []  # Массив уже найденных user_id
+    @messages_husbands_found_ids_arr = []  # Массив уже найденных user_id
+    @messages_wives_found_arr = []  # Массив уже найденных user_id
+
+
+
     if !tree_arr.blank?
 
       for tree_index in 0 .. tree_arr.length-1
@@ -283,6 +302,7 @@ class MainController < ApplicationController
             search_daughter
             all_match_arr << @daughter_match_arr if !@daughter_match_arr.blank?
             match_amount = match_amount + @match_daughter_amount if !@match_daughter_amount.blank?
+            @count += 1
 
           when 5  # "brother"
             @search_relation = "brother"   #
@@ -539,10 +559,9 @@ class MainController < ApplicationController
 
       @author_bros_names_ids.each do |bros_profile_id| # для каждого из найденных братьев - поиск жен, указанных в деревьях отцов
 
-        # 2. Массив № 2 = @sons_user_ids - массив сынов = user_ids с именем, равным сыну Автора.
-        # Среди профилей сынов ищем Users с именем, равным сыну Автора
+        # 2. Массив № 2  Среди профилей братьев ищем Users с именем, равным имени брата Автора
         bros_user_ids = Profile.where.not(user_id: current_user.id ).where.not(user_id: 0 ).where(:name_id => bros_profile_id).select(:user_id).pluck(:user_id)
-        if !bros_user_ids.blank? # 1. у автора - в принципе есть сыны (указаны в его дереве)
+        if !bros_user_ids.blank? # 1. у автора - в принципе есть братья (указаны в его дереве)
            @bros_user_ids = bros_user_ids #  # # DEBUGG TO VIEW
            bros_user_ids.each do |bros_user_id|
 
@@ -824,12 +843,12 @@ class MainController < ApplicationController
       # Пересечение массивов - результатов поиска совпадения id Сына автора с братьями и сестрами сына автора, сынов с совпавшими отцом и матерью автора и с совпавшими детьми автора
       # Это - основа для предложения рукопожатия
       @son_match_arr = @sons_user_ids & son_br_sis_kids_users_ids_arr & son_father_users_ids_arr & son_mother_users_ids_arr #
-      ##  КОНЕЦ ПОИСКА ОТЦА
+      ##  КОНЕЦ ПОИСКА СЫНА
 
       if !@son_match_arr.blank? # если найдены
         @match_son_amount = @son_match_arr.length
         @msg_son = "Найден твой Сын на сайте. Хочешь пожать ему руку? Это позволит тебе увидеть дерево его родных и объединиться с ним."
-
+        @messages_sons_found_arr << @msg_son
       else
         @msg_son = "Твой Сын не найден на сайте. Пригласи его!"
       end
@@ -854,8 +873,8 @@ class MainController < ApplicationController
     # Ищем всех дочей автора = user_id с именем дочей автора
     all_authors_daughter_profile_ids = get_auther_daughters_profile_ids
 
-    @all_authors_daughter_profiles_len = all_authors_daughter_profile_ids.length  if !all_authors_daughter_profile_ids.blank? #  # DEBUGG TO VIEW
     @all_authors_daughter_profile_ids = all_authors_daughter_profile_ids  # DEBUGG TO VIEW
+    @all_authors_daughter_profiles_len = all_authors_daughter_profile_ids.length  if !all_authors_daughter_profile_ids.blank? #  # DEBUGG TO VIEW
     @author_daughter_names_ids = get_auther_daughters_names_ids(all_authors_daughter_profile_ids)  # Поиск массива id имен всех братьев и сестер автора дерева
 
     if !all_authors_daughter_profile_ids.blank? # если такие отцы-Юзеры найдены
@@ -871,50 +890,53 @@ class MainController < ApplicationController
         daughters_user_ids = Profile.where.not(user_id: current_user.id ).where.not(user_id: 0 ).where(:name_id => daughter_profile_id).select(:user_id).pluck(:user_id)
         if !daughters_user_ids.blank? # 1. у автора - в принципе есть дочи (указаны в его дереве)
           @daughters_user_ids = daughters_user_ids #  # # DEBUGG TO VIEW
+
           daughters_user_ids.each do |daughter_user_id|
+            @ind = daughter_user_id # DEBUGG TO VIEW
+            if !@matched_daughters_user_ids_arr.include?(daughter_user_id)  # проверка: этот user_id = дочь уже был найден?
 
-            # 3. CHECK daughter'S BROS AND SISTERS WITH AUTHOR'S KIDS - ALL NAMES
-            # 3. найти всех братов и сестер этой дочи
-            @daughter_br_sis_profile_ids = get_bros_sist_profile_ids(daughter_user_id) #
-            @daughter_user_name_id = Profile.where(user_id: daughter_user_id).select(:name_id)[0].name_id
-            @daughter_br_sis_names_ids = get_bros_sist_names_ids(@daughter_br_sis_profile_ids,@daughter_user_name_id)
-            if !@daughter_br_sis_names_ids.blank? && @daughter_br_sis_names_ids == @author_kids_names_ids # если имена братьев и сестер дочи совпадают с именами детей отца-автора
-              #@mothers_profile_ids_arr << fathers_wife_profile_id  # DEBUGG TO VIEW
-              daughter_br_sis_kids_users_ids_arr << daughter_user_id  # Массив № 3.
-              # формирование массива user_id дочей, у кот-х есть братья и сестры  и их имена совпадают с именами детей отца-автора.
-              @daughter_br_sis_kids_users_ids_arr = daughter_br_sis_kids_users_ids_arr  # DEBUGG TO VIEW
-            end
-
-            # 4. CHECK daughter'S father AND Mother WITH AUTHOR'S father AND Mother NAMES
-            # 4. найти отца и мать этой дочи и сравнить их имена с именами отца и матери автора.
-            # имена отца и матери автора - triplex_arr
-            # имена отца и матери дочи - @daughter_triplex_arr
-
-            @daughter_triplex_arr = []
-            make_one_triplex_arr(daughter_user_id,@daughter_triplex_arr,nil,1,2)   # @triplex_arr (nil - автор, 1 - отец, 2 - мать)
-            # 4.1. CHECK? daughter'S father = Author
-            if @triplex_arr[0][2] == @daughter_triplex_arr[1][2]  # имена отца дочи и автора - совпадают,
-              # этa дочь - возможно дочь автора\
-              daughter_father_users_ids_arr << daughter_user_id
-              @daughter_father_users_ids_arr = daughter_father_users_ids_arr     # DEBUGG TO VIEW
-            end
-
-            # 4.2. CHECK? daughter'S mother = Author's WIFE
-            # find Author's WIFE
-            # ЗДЕСЬ ЖЕНЫ АВТОРА - ЭТО МАССИВ. НА СЛУЧАЙ, КОГДА БЫЛИ ЕЩЕ ЖЕНЫ И ОНИ УКАЗАНЫ В ДЕРЕВЕ АВТОРА,
-            # ПРИ ЭТОМ, БЫВШАЯ ЖЕНА АВТОРА - МАТЬ ДОЧЕРИ
-            authors_wives_names_ids = get_user_wife_names_ids(get_user_wife_profile_ids(current_user.id))
-            @authors_wives_names_ids = authors_wives_names_ids     # DEBUGG TO VIEW
-            if !authors_wives_names_ids.blank? # если есть жены в дереве автора
-              authors_wives_names_ids.each do |wife|
-                if wife == @daughter_triplex_arr[2][2]  # имена матери дочи и жены автора - совпадают,
-                  # этa дочь - возможно дочь автора\
-                  daughter_mother_users_ids_arr << daughter_user_id  # хотя бы одна из жен автора = мать потенциальной дочи
-                  @daughter_mother_users_ids_arr = daughter_mother_users_ids_arr     # DEBUGG TO VIEW
+                # 3. CHECK daughter'S BROS AND SISTERS WITH AUTHOR'S KIDS - ALL NAMES
+                # 3. найти всех братов и сестер этой дочи
+                @daughter_br_sis_profile_ids = get_bros_sist_profile_ids(daughter_user_id) #
+                @daughter_user_name_id = Profile.where(user_id: daughter_user_id).select(:name_id)[0].name_id
+                @daughter_br_sis_names_ids = get_bros_sist_names_ids(@daughter_br_sis_profile_ids,@daughter_user_name_id)
+                if !@daughter_br_sis_names_ids.blank? && @daughter_br_sis_names_ids == @author_kids_names_ids # если имена братьев и сестер дочи совпадают с именами детей отца-автора
+                  #@mothers_profile_ids_arr << fathers_wife_profile_id  # DEBUGG TO VIEW
+                  daughter_br_sis_kids_users_ids_arr << daughter_user_id  # Массив № 3.
+                  # формирование массива user_id дочей, у кот-х есть братья и сестры  и их имена совпадают с именами детей отца-автора.
+                  @daughter_br_sis_kids_users_ids_arr = daughter_br_sis_kids_users_ids_arr  # DEBUGG TO VIEW
                 end
-              end
-            end
 
+                # 4. CHECK daughter'S father AND Mother WITH AUTHOR'S father AND Mother NAMES
+                # 4. найти отца и мать этой дочи и сравнить их имена с именами отца и матери автора.
+                # имена отца и матери автора - triplex_arr
+                # имена отца и матери дочи - @daughter_triplex_arr
+
+                @daughter_triplex_arr = []
+                make_one_triplex_arr(daughter_user_id,@daughter_triplex_arr,nil,1,2)   # @triplex_arr (nil - автор, 1 - отец, 2 - мать)
+                # 4.1. CHECK? daughter'S father = Author
+                if @triplex_arr[0][2] == @daughter_triplex_arr[1][2]  # имена отца дочи и автора - совпадают,
+                  # этa дочь - возможно дочь автора\
+                  daughter_father_users_ids_arr << daughter_user_id
+                  @daughter_father_users_ids_arr = daughter_father_users_ids_arr     # DEBUGG TO VIEW
+                end
+
+                # 4.2. CHECK? daughter'S mother = Author's WIFE
+                # find Author's WIFE
+                # ЗДЕСЬ ЖЕНЫ АВТОРА - ЭТО МАССИВ. НА СЛУЧАЙ, КОГДА БЫЛИ ЕЩЕ ЖЕНЫ И ОНИ УКАЗАНЫ В ДЕРЕВЕ АВТОРА,
+                # ПРИ ЭТОМ, БЫВШАЯ ЖЕНА АВТОРА - МАТЬ ДОЧЕРИ
+                authors_wives_names_ids = get_user_wife_names_ids(get_user_wife_profile_ids(current_user.id))
+                @authors_wives_names_ids = authors_wives_names_ids     # DEBUGG TO VIEW
+                if !authors_wives_names_ids.blank? # если есть жены в дереве автора
+                  authors_wives_names_ids.each do |wife|
+                    if wife == @daughter_triplex_arr[2][2]  # имена матери дочи и жены автора - совпадают,
+                      # этa дочь - возможно дочь автора\
+                      daughter_mother_users_ids_arr << daughter_user_id  # хотя бы одна из жен автора = мать потенциальной дочи
+                      @daughter_mother_users_ids_arr = daughter_mother_users_ids_arr     # DEBUGG TO VIEW
+                    end
+                  end
+                end
+            end
           end
         end
 
@@ -924,14 +946,19 @@ class MainController < ApplicationController
       # Пересечение массивов - результатов поиска совпадения id Дочи автора, с братьями и сестрами дочи автора, дочей с совпавшими отцом и матерью автора и с совпавшими детьми автора
       # Это - основа для предложения рукопожатия
       @daughter_match_arr = @daughters_user_ids & daughter_br_sis_kids_users_ids_arr & daughter_father_users_ids_arr & daughter_mother_users_ids_arr #
-      ##  КОНЕЦ ПОИСКА ОТЦА
+      @matched_daughters_user_ids_arr << @daughter_match_arr # запоминание уже найденных user_ids
+      @matched_daughters_user_ids_arr = @matched_daughters_user_ids_arr.flatten #
+
+      ##  КОНЕЦ ПОИСКА ДОЧЕРИ
 
       if !@daughter_match_arr.blank? # если найдены
         @match_daughter_amount = @daughter_match_arr.length
-          @msg_daughter = "Найдена твоя Дочь на сайте. Хочешь пожать ей руку? Это позволит тебе увидеть дерево её родных и объединиться с ней."
-
-      else
-        @msg_daughter = "Твоя Дочь не найдена на сайте. Пригласи её!"
+        @msg_daughter = "Найдена твоя Дочь на сайте. Хочешь пожать ей руку? Это позволит тебе увидеть дерево её родных и объединиться с ней."
+        @messages_daughters_found_arr << @msg_daughter
+      #else
+      #  if @messages_daughters_found_arr.size > 0
+      #  @msg_daughter = "Твоя Дочь не найдена на сайте. Пригласи её!"
+      #  end
       end
 
     else
