@@ -12,6 +12,67 @@
 
   <li #{render :partial => 'main/main_display_tree'}
 
+  %h4 ПОИСК В ПОЛНОМ ДЕРЕВЕ ПРОФИЛЕЙ
+  %p
+    @@profiles_tree_arr: #{@profiles_tree_arr.inspect}
+  %p
+    @@tree_arr: #{@tree_arr.inspect}
+  %p
+    @@@relation: #{@relation.inspect}
+  %p
+    @@@profiles_tree_arr_len: #{@profiles_tree_arr_len.inspect}
+  %p
+    @@@@@name: #{@name.inspect}
+
+  %p
+    @search_profiles_relation: #{@search_profiles_relation.inspect}
+  %p
+    @@@all_fathers_relations: #{@all_fathers_relations.inspect}
+  %p
+    @@all_father_match_arr: #{@all_father_match_arr.inspect}
+  %p
+    @@@search_relations_str: #{@search_relations_str.inspect}
+  %p
+    @search_profile_id: #{@search_profile_id.inspect}
+  %p
+    @all_profiles_search: #{@all_profiles_search.inspect}
+  %p
+    @father_match_arr: Результат поиска ОТЦА: Его user_id = #{@father_match_arr.inspect}
+  %h4
+    Массив всех совпадений родных: @all_match_arr: #{@all_match_arr.inspect}
+
+  %p
+    @@@@cnt: #{@cnt.inspect}
+  %p
+    @@@@@fas: #{@fas.inspect}
+
+  - if !@final_father_match_arr.blank?
+    %div
+      %table
+        %tr
+          %th ID Дерева
+          %th ID Профиля
+          %th ID Имени Профиля
+          %th ID Родства: У Профиля
+          %th ID Родственника
+          %th ID Имени Родственника
+          %th
+        - @final_father_match_arr.each do |tree|
+          %tr
+            %td= tree[0]
+            %td= tree[1]
+            %td= tree[2]
+            %td= tree[3]
+            %td= tree[4]
+            %td= tree[5]
+            %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
+  - else
+    %h4 No Listing tree - @@final_father_match_arr!
+
+
+
+
+
   %p
     Триплекс @triplex_arr: #{@triplex_arr.inspect}
   %p

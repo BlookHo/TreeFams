@@ -1,5 +1,5 @@
 
-- if !@tree_arr.blank?
+- if !@profiles_tree_arr.blank?
   %div
     %table
       %tr
@@ -8,10 +8,12 @@
         %th ID Имени Профиля
         %th Имя Профиля
         %th Пол Профиля
-        %th ID Родства Профиля с Автором
-        %th Объединено
+        %th ID Родства: У Профиля
+        %th ID Родственника
+        %th ID Имени Родственника
+        %th Имя Родственника
         %th
-      - @tree_arr.each do |tree|
+      - @profiles_tree_arr.each do |tree|
         %tr
           %td= tree[0]
           %td= tree[1]
@@ -20,6 +22,8 @@
           %td= tree[4]
           %td= tree[5]
           %td= tree[6]
+          %td= tree[7]
+          %td= tree[8]
           %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
 - else
   %h4 No Listing tree - @tree_arr!

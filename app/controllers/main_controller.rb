@@ -2,11 +2,50 @@ class MainController < ApplicationController
  # include MainHelper  #
 
 
+ # Отображение дерева Юзера в табличной форме.
+ # @note GET /
+ # @param admin_page [Integer] опциональный номер страницы
+ # @see News
+  def get_user_tree
+
+    if user_signed_in?
+      user_profiles_tree = ProfileKey.where(:user_id => current_user.id).where(:profile_id => User.find(current_user.id).profile_id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+
+      row_arr = []
+      profiles_tree_arr = []
+
+      user_profiles_tree.each do |tree_row|
+        row_arr[0] = tree_row.id              # ID в Дереве
+        row_arr[1] = tree_row.profile_id      # ID Профиля
+        row_arr[2] = tree_row.name_id      # ID Имя Профиля
+        row_arr[3] = Name.find(tree_row.name_id).name   # Имя Профиля
+        row_arr[4] = Profile.find(tree_row.profile_id).sex_id         # Пол Профиля
+        row_arr[5] = tree_row.relation_id         # ID Родства Профиля с Автором
+        row_arr[6] = tree_row.is_profile_id      # ID Профиля Родственника
+        row_arr[7] = tree_row.is_name_id      # ID Имя Профиля
+        row_arr[8] = Name.find(tree_row.is_name_id).name   # Имя Родственника
+ #       row_arr[9] = tree_row.connected           # Объединено
+
+        profiles_tree_arr << row_arr
+        row_arr = []
+
+      end
+
+      session[:profiles_tree_arr] = {:value => profiles_tree_arr, :updated_at => Time.current}
+#      @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
+
+      search_profiles_tree_match    # Основной поиск по дереву Автора - Юзера.
+
+    end
+
+  end
 # Отображение дерева Юзера в табличной форме.
 # @note GET /
 # @param admin_page [Integer] опциональный номер страницы
 # @see News
   def main_page
+
+    get_user_tree
 
     if user_signed_in?
       user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
@@ -31,9 +70,143 @@ class MainController < ApplicationController
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
       @tree_arr = tree_arr    # DEBUGG TO VIEW
 
-      search_tree_match    # Основной поиск по дереву Автора - Юзера.
+     # search_tree_match    # Основной поиск по дереву Автора - Юзера.
 
     end
+
+  end
+
+ def find_all_profiles_by_id(search_profile_id)
+
+ #  make_sql_string(search_profile_id)
+
+   @all_profiles_search = ProfileKey.where.not(user_id: current_user.id).where(:name_id => current_user.id).where(:relation_id => current_user.id).where(:is_name_id => current_user.id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+
+ end
+
+
+   # Основной поиск по дереву Автора - Юзера.
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def search_profiles_tree_match
+
+    profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
+    @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
+    #tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
+    #@tree_arr = tree_arr    # DEBUGG TO VIEW
+
+    all_match_arr = []   # Массив совпадений всех родных с Автором
+    match_amount = 0     # Кол-во совпадений всех родных с Автором
+    @all_father_match_arr = []  #
+    @final_father_match_arr = []  #
+    @cnt = 0
+    @fas = 0
+    #
+    #search_str = "relation_id = #{@all_fathers_relations_arr[0]} "
+    #for str in 1 .. @all_fathers_relations_arr.length-1
+    #  add_str = " OR relation_id = #{@all_fathers_relations_arr[str]} " #where( "#{search_str}" )
+    #  search_str = search_str.concat(add_str)
+    #end
+    #@search_relations_str = search_str
+
+    @profiles_tree_arr_len = profiles_tree_arr.length  # DEBUGG TO VIEW
+    if !profiles_tree_arr.blank?
+
+      for tree_index in 0 .. profiles_tree_arr.length-1
+
+  #      tree_index = 0
+        relation = profiles_tree_arr[tree_index][5]  # Выбор очередности поиска в зависимости от relation
+
+    #    relation = 1   # DEBUGG TO VIEW
+        @relation = relation  # DEBUGG TO VIEW
+        @name = profiles_tree_arr[tree_index][7]
+        case relation # Определение вида поиска по значению relation
+
+          when 1    # "father"
+            @search_profiles_relation = "father"   # DEBUGG TO VIEW
+            #@search_profile_id = profiles_tree_arr[tree_index][1]
+            @fas += 1
+            @all_fathers_relations = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profiles_tree_arr[tree_index][6]).select(:user_id, :name_id, :relation_id, :is_name_id) #.pluck(:relation_id)#.where(:is_name_id => profiles_tree_arr[tree_index][8]).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+            @all_fathers_relations.each do |father_row|
+              @father_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => father_row.name_id).where(:relation_id => father_row.relation_id).where(:is_name_id => father_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+              @all_father_match_arr << @father_match_arr if !@father_match_arr.blank?
+            end
+
+            row_arr = []
+            @all_father_match_arr.each do |tree_row|
+              row_arr[0] = tree_row[0].user_id              # ID в Дереве
+              row_arr[1] = tree_row[0].profile_id      # ID Профиля
+              row_arr[2] = tree_row[0].name_id      # ID Имени Профиля
+              row_arr[3] = tree_row[0].relation_id   # ID Родства Профиля
+              row_arr[4] = tree_row[0].is_profile_id         # ID Родства Профиля с Автором
+              row_arr[5] = tree_row[0].is_name_id           # Объединено
+
+              @final_father_match_arr << row_arr
+              row_arr = []
+
+            end
+ #           all_match_arr << @father_match_arr if !@father_match_arr.blank?
+            match_amount = @match_father_amount if !@match_father_amount.blank?
+
+          when 2    # "mother"
+            @search_profiles_relation = "mother"   #
+            #search_mother(@triplex_arr)
+            all_match_arr << @mother_match_arr if !@mother_match_arr.blank?
+            match_amount = match_amount + @match_mother_amount if !@match_mother_amount.blank?
+
+          when 3   # "son"
+            @search_profiles_relation = "son"   #
+            #search_son
+            all_match_arr << @son_match_arr if !@son_match_arr.blank?
+            match_amount = match_amount + @match_son_amount if !@match_son_amount.blank?
+
+          when 4   # "daughter"
+            @search_profiles_relation = "daughter"   #
+            #search_daughter
+            all_match_arr << @daughter_match_arr if !@daughter_match_arr.blank?
+            match_amount = match_amount + @match_daughter_amount if !@match_daughter_amount.blank?
+
+          when 5  # "brother"
+            @search_profiles_relation = "brother"   #
+            #search_brothers
+
+#            search_bros_sist(@triplex_arr)  # найдены потенциальные братья
+
+            all_match_arr << @brothers_match_arr if !@brothers_match_arr.blank? #
+            match_amount = match_amount + @match_brothers_amount if !@match_brothers_amount.blank?
+
+          when 6   # "sister"
+            @search_profiles_relation = "sister"   #
+          #search_bros_sist(@triplex_arr)  # найдены потенциальные сестры
+          #all_match_arr << @sisters_match_arr if !@sisters_match_arr.blank? #
+          #match_amount = match_amount + @match_sisters_amount if !@match_sisters_amount.blank?
+
+          when 7   # "husband"
+            @search_profiles_relation = "husband"   #
+
+          when 8   # "wife"
+            @search_profiles_relation = "wife"   #
+
+            match_amount = match_amount + @match_wife_amount if !@match_wife_amount.blank?
+
+          else
+            @search_profiles_relation = "ERROR: no relation in tree profile"
+          # TODO: call error_processing
+
+        end
+
+
+  #      @count += 1
+        @cnt = tree_index
+
+
+      end
+
+    end
+
+    @match_amount = match_amount # DEBUGG TO VIEW
+    @all_match_arr = all_match_arr # DEBUGG TO VIEW
 
   end
 
