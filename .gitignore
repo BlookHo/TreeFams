@@ -15,6 +15,10 @@
 /log/*.log
 /tmp
 
+# Environment setup
+.ruby-gemset
+.ruby-version
+
 
 .idea/*
 *.idea/
