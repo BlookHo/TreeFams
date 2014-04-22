@@ -47,6 +47,13 @@ class MainController < ApplicationController
 
     get_user_tree
 
+
+    # Для поиска - формируем для каждого профиля в дереве - заполняем шаблон ближнего круга
+    # теми связями, кот-е естьв данном дереве
+    # Профиль 12 - массив шаблона 12
+    # Профиль 13 - массив шаблона 13
+    # .
+
     if user_signed_in?
       user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
 
