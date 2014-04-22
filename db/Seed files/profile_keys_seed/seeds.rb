@@ -6,10 +6,6 @@ Relations.delete_all       #
 Relations.reset_pk_sequence
 Relations.create!([          # create! - для сообщений об ошибках если они есть
 
-
-
-
-
                   ])
 
 
