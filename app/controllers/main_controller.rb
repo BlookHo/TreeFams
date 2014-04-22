@@ -93,15 +93,10 @@ class MainController < ApplicationController
 
     profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
     @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
-    #tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
-    #@tree_arr = tree_arr    # DEBUGG TO VIEW
 
     all_match_arr = []   # Массив совпадений всех родных с Автором
     match_amount = 0     # Кол-во совпадений всех родных с Автором
-    @all_father_match_arr = []  #
-    @final_father_match_arr = []  #
-    @cnt = 0
-    @fas = 0
+    @all_fathers_match_arr = []  #
     #
     #search_str = "relation_id = #{@all_fathers_relations_arr[0]} "
     #for str in 1 .. @all_fathers_relations_arr.length-1
@@ -114,39 +109,35 @@ class MainController < ApplicationController
     if !profiles_tree_arr.blank?
 
       for tree_index in 0 .. profiles_tree_arr.length-1
-
-  #      tree_index = 0
         relation = profiles_tree_arr[tree_index][5]  # Выбор очередности поиска в зависимости от relation
-
-    #    relation = 1   # DEBUGG TO VIEW
         @relation = relation  # DEBUGG TO VIEW
         @name = profiles_tree_arr[tree_index][7]
         case relation # Определение вида поиска по значению relation
 
           when 1    # "father"
             @search_profiles_relation = "father"   # DEBUGG TO VIEW
-            #@search_profile_id = profiles_tree_arr[tree_index][1]
-            @fas += 1
-            @all_fathers_relations = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profiles_tree_arr[tree_index][6]).select(:user_id, :name_id, :relation_id, :is_name_id) #.pluck(:relation_id)#.where(:is_name_id => profiles_tree_arr[tree_index][8]).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-            @all_fathers_relations.each do |father_row|
+            @all_fathers_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profiles_tree_arr[tree_index][6]).select(:user_id, :name_id, :relation_id, :is_name_id) #.pluck(:relation_id)#.where(:is_name_id => profiles_tree_arr[tree_index][8]).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+            @all_fathers_rows.each do |father_row|
               @father_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => father_row.name_id).where(:relation_id => father_row.relation_id).where(:is_name_id => father_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-              @all_father_match_arr << @father_match_arr if !@father_match_arr.blank?
-            end
-
-            row_arr = []
-            @all_father_match_arr.each do |tree_row|
-              row_arr[0] = tree_row[0].user_id              # ID в Дереве
-              row_arr[1] = tree_row[0].profile_id      # ID Профиля
-              row_arr[2] = tree_row[0].name_id      # ID Имени Профиля
-              row_arr[3] = tree_row[0].relation_id   # ID Родства Профиля
-              row_arr[4] = tree_row[0].is_profile_id         # ID Родства Профиля с Автором
-              row_arr[5] = tree_row[0].is_name_id           # Объединено
-
-              @final_father_match_arr << row_arr
               row_arr = []
+              @father_match_arr.each do |tree_row|
+                row_arr[0] = tree_row.user_id              # ID в Дереве
+                row_arr[1] = tree_row.profile_id      # ID Профиля
+                row_arr[2] = tree_row.name_id      # ID Имени Профиля
+                row_arr[3] = tree_row.relation_id   # ID Родства Профиля
+                row_arr[4] = tree_row.is_profile_id         # ID Родства Профиля с Автором
+                row_arr[5] = tree_row.is_name_id           # Объединено
+
+                @all_fathers_match_arr << row_arr
+                row_arr = []
+              end
 
             end
- #           all_match_arr << @father_match_arr if !@father_match_arr.blank?
+            @all_fathers_match_arr_len = @all_fathers_match_arr.length  # DEBUGG TO VIEW
+
+            @all_fathers_match_arr_sorted = @all_fathers_match_arr.sort_by!{ |elem| elem[0]}
+
+            all_match_arr << @all_fathers_match_arr if !@all_fathers_match_arr.blank?
             match_amount = @match_father_amount if !@match_father_amount.blank?
 
           when 2    # "mother"
