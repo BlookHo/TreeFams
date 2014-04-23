@@ -25,12 +25,16 @@
   %p
     @all_relation_rows:  #{@all_relation_rows.inspect}
   %p
+    @@all_relation_rows_len: #{@all_relation_rows_len.inspect}
+  %p
     @relation_match_arr: #{@relation_match_arr.inspect}
 
-  -#%p
-  -#  @@@@cnt: #{@cnt.inspect}
-  -#%p
-  -#  @@@@@fas: #{@fas.inspect}
+  %p
+    @found_trees_hash: #{@found_trees_hash.inspect}
+  %p
+    @found_profiles_hash: #{@found_profiles_hash.inspect}
+  %p
+    @all_found_trees_hash: #{@all_found_trees_hash.inspect}
 
   - if !@all_relation_match_arr.blank?
     %div

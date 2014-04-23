@@ -28,13 +28,9 @@ class MainController < ApplicationController
 
         profiles_tree_arr << row_arr
         row_arr = []
-
       end
 
       session[:profiles_tree_arr] = {:value => profiles_tree_arr, :updated_at => Time.current}
-#      @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
-
-      search_profiles_tree_match    # Основной поиск по дереву Автора - Юзера.
 
     end
 
@@ -45,14 +41,7 @@ class MainController < ApplicationController
 # @see News
   def main_page
 
-    get_user_tree
-
-
-    # Для поиска - формируем для каждого профиля в дереве - заполняем шаблон ближнего круга
-    # теми связями, кот-е естьв данном дереве
-    # Профиль 12 - массив шаблона 12
-    # Профиль 13 - массив шаблона 13
-    # .
+    get_user_tree # Получение массива дерева текущего Юзера
 
     if user_signed_in?
       user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
@@ -77,20 +66,13 @@ class MainController < ApplicationController
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
       @tree_arr = tree_arr    # DEBUGG TO VIEW
 
-     # search_tree_match    # Основной поиск по дереву Автора - Юзера.
+      search_profiles_tree_match    # Основной поиск по дереву Автора - Юзера.
+
+     # search_tree_match    # Пeрвый старый вариант - Основной поиск по дереву Автора - Юзера.
 
     end
 
   end
-
- def find_all_profiles_by_id(search_profile_id)
-
- #  make_sql_string(search_profile_id)
-
-   @all_profiles_search = ProfileKey.where.not(user_id: current_user.id).where(:name_id => current_user.id).where(:relation_id => current_user.id).where(:is_name_id => current_user.id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-
- end
-
 
   # Поиск совпадений для одного из профилей БК current_user
   # Берем параметр: profile_id из массива profiles_tree_arr[tree_index][6].
@@ -99,30 +81,47 @@ class MainController < ApplicationController
   # @see News
  def get_relation_match(profile_id_searched)
 
+   all_found_trees_hash = Hash.new  #
+   found_trees_hash = Hash.new  #
+   found_profiles_hash = Hash.new  #
    all_relation_match_arr = []  #
-   all_relation_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id) #.pluck(:relation_id)#.where(:is_name_id => profiles_tree_arr[tree_index][8]).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-   all_relation_rows.each do |father_row|
-      relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => father_row.name_id).where(:relation_id => father_row.relation_id).where(:is_name_id => father_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-      row_arr = []
-      relation_match_arr.each do |tree_row|
-        row_arr[0] = tree_row.user_id              # ID в Дереве
-        row_arr[1] = tree_row.profile_id      # ID Профиля
-        row_arr[2] = tree_row.name_id      # ID Имени Профиля
-        row_arr[3] = tree_row.relation_id   # ID Родства Профиля
-        row_arr[4] = tree_row.is_profile_id         # ID Родства Профиля с Автором
-        row_arr[5] = tree_row.is_name_id           # Объединено
-
-        all_relation_match_arr << row_arr
+   all_relation_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id) #.pluck(:relation_id)#.where(:is_name_id => profiles_tree_arr[tree_index][8]).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+   if !all_relation_rows.blank?
+     @all_relation_rows_len = all_relation_rows.length #
+     all_relation_rows.each do |father_row|
+        relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => father_row.name_id).where(:relation_id => father_row.relation_id).where(:is_name_id => father_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
         row_arr = []
-      end
-      @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
+        id_tree_arr = []
+        id_profiles_arr = []
+        relation_match_arr.each do |tree_row|
+          row_arr[0] = tree_row.user_id              # ID в Дереве
+          row_arr[1] = tree_row.profile_id      # ID Профиля
+          row_arr[2] = tree_row.name_id      # ID Имени Профиля
+          row_arr[3] = tree_row.relation_id   # ID Родства Профиля
+          row_arr[4] = tree_row.is_profile_id         # ID Родства Профиля с Автором
+          row_arr[5] = tree_row.is_name_id           # Объединено
 
-    end
-    all_relation_match_arr_sorted = all_relation_match_arr.sort_by!{ |elem| elem[0]}
+          all_relation_match_arr << row_arr
+          row_arr = []
+          id_tree_arr << tree_row.user_id
+          id_profiles_arr << tree_row.profile_id
 
-    @all_relation_rows = all_relation_rows   # DEBUGG TO VIEW
-    @all_relation_match_arr = all_relation_match_arr   #
-    @all_relation_match_arr_len = all_relation_match_arr.length if !all_relation_match_arr.blank? #
+        end
+        @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
+        found_trees_hash.merge!({father_row.profile_id  => id_tree_arr}) #
+        found_profiles_hash.merge!({father_row.profile_id  => id_profiles_arr}) #
+        all_found_trees_hash.merge!(found_trees_hash) #
+
+     end
+
+     all_relation_match_arr_sorted = all_relation_match_arr.sort_by!{ |elem| elem[0]}
+   end
+   @all_found_trees_hash = all_found_trees_hash
+   @found_trees_hash = found_trees_hash
+   @found_profiles_hash = found_profiles_hash
+  @all_relation_rows = all_relation_rows   # DEBUGG TO VIEW
+  @all_relation_match_arr = all_relation_match_arr   #
+  @all_relation_match_arr_len = all_relation_match_arr.length if !all_relation_match_arr.blank? #
 
 
  end
@@ -153,7 +152,7 @@ class MainController < ApplicationController
         relation = profiles_tree_arr[tree_index][5]  # Выбор очередности поиска в зависимости от relation
         @relation = relation  # DEBUGG TO VIEW
         @name = profiles_tree_arr[tree_index][7]
-        case relation # Определение вида поиска по значению relation
+        case relation # Определение вида поиска по значению relation внутри БК current_user
 
           when 1    # "father"
             @search_profiles_relation = "father"   # DEBUGG TO VIEW
