@@ -23,24 +23,16 @@
     @@@profiles_tree_arr_len: #{@profiles_tree_arr_len.inspect}
   -#%p Результат поиска ОТЦА: Его user_id =
   %p
-    @all_fathers_rows: #{@all_fathers_rows.inspect}
+    @all_relation_rows:  #{@all_relation_rows.inspect}
   %p
-    @father_match_arr:  #{@father_match_arr.inspect}
-  %p
-    @all_fathers_match_arr: #{@all_fathers_match_arr.inspect}
-  %p
-    @@all_fathers_match_arr_sorted: #{@all_fathers_match_arr_sorted.inspect}
-  %p
-    @all_fathers_match_arr_len: #{@all_fathers_match_arr_len.inspect}
-  %h4
-    Массив всех совпадений родных: @all_match_arr: #{@all_match_arr.inspect}
+    @relation_match_arr: #{@relation_match_arr.inspect}
 
   -#%p
   -#  @@@@cnt: #{@cnt.inspect}
   -#%p
   -#  @@@@@fas: #{@fas.inspect}
 
-  - if !@all_fathers_match_arr_sorted.blank?
+  - if !@all_relation_match_arr.blank?
     %div
       %table
         %tr
@@ -51,7 +43,7 @@
           %th ID Родственника
           %th ID Имени Родственника
           %th
-        - @all_fathers_match_arr_sorted.each do |tree|
+        - @all_relation_match_arr.each do |tree|
           %tr
             %td= tree[0]
             %td= tree[1]
@@ -63,6 +55,12 @@
   - else
     %h4 No Listing tree - @@final_father_match_arr!
 
+  %p
+    @all_match_arr: #{@all_match_arr.inspect}
+  %h4
+    Массив всех совпадений родных: @all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
+  %h4
+    @match_amount: Всего найдено совпадений родных: #{@match_amount.inspect}
 
 
 

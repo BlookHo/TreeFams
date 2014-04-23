@@ -92,7 +92,41 @@ class MainController < ApplicationController
  end
 
 
-   # Основной поиск по дереву Автора - Юзера.
+  # Поиск совпадений для одного из профилей БК current_user
+  # Берем параметр: profile_id из массива profiles_tree_arr[tree_index][6].
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+ def get_relation_match(profile_id_searched)
+
+   all_relation_match_arr = []  #
+   all_relation_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id) #.pluck(:relation_id)#.where(:is_name_id => profiles_tree_arr[tree_index][8]).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+   all_relation_rows.each do |father_row|
+      relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => father_row.name_id).where(:relation_id => father_row.relation_id).where(:is_name_id => father_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+      row_arr = []
+      relation_match_arr.each do |tree_row|
+        row_arr[0] = tree_row.user_id              # ID в Дереве
+        row_arr[1] = tree_row.profile_id      # ID Профиля
+        row_arr[2] = tree_row.name_id      # ID Имени Профиля
+        row_arr[3] = tree_row.relation_id   # ID Родства Профиля
+        row_arr[4] = tree_row.is_profile_id         # ID Родства Профиля с Автором
+        row_arr[5] = tree_row.is_name_id           # Объединено
+
+        all_relation_match_arr << row_arr
+        row_arr = []
+      end
+      @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
+
+    end
+    all_relation_match_arr_sorted = all_relation_match_arr.sort_by!{ |elem| elem[0]}
+
+    @all_relation_rows = all_relation_rows   # DEBUGG TO VIEW
+    @all_relation_match_arr = all_relation_match_arr   #
+    @all_relation_match_arr_len = all_relation_match_arr.length if !all_relation_match_arr.blank? #
+
+
+ end
+# Основной поиск по дереву Автора - Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
@@ -103,7 +137,7 @@ class MainController < ApplicationController
 
     all_match_arr = []   # Массив совпадений всех родных с Автором
     match_amount = 0     # Кол-во совпадений всех родных с Автором
-    @all_fathers_match_arr = []  #
+  #  all_relations_match_arr = []  #
     #
     #search_str = "relation_id = #{@all_fathers_relations_arr[0]} "
     #for str in 1 .. @all_fathers_relations_arr.length-1
@@ -123,70 +157,51 @@ class MainController < ApplicationController
 
           when 1    # "father"
             @search_profiles_relation = "father"   # DEBUGG TO VIEW
-            @all_fathers_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profiles_tree_arr[tree_index][6]).select(:user_id, :name_id, :relation_id, :is_name_id) #.pluck(:relation_id)#.where(:is_name_id => profiles_tree_arr[tree_index][8]).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-            @all_fathers_rows.each do |father_row|
-              @father_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => father_row.name_id).where(:relation_id => father_row.relation_id).where(:is_name_id => father_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-              row_arr = []
-              @father_match_arr.each do |tree_row|
-                row_arr[0] = tree_row.user_id              # ID в Дереве
-                row_arr[1] = tree_row.profile_id      # ID Профиля
-                row_arr[2] = tree_row.name_id      # ID Имени Профиля
-                row_arr[3] = tree_row.relation_id   # ID Родства Профиля
-                row_arr[4] = tree_row.is_profile_id         # ID Родства Профиля с Автором
-                row_arr[5] = tree_row.is_name_id           # Объединено
-
-                @all_fathers_match_arr << row_arr
-                row_arr = []
-              end
-
-            end
-            @all_fathers_match_arr_len = @all_fathers_match_arr.length  # DEBUGG TO VIEW
-
-            @all_fathers_match_arr_sorted = @all_fathers_match_arr.sort_by!{ |elem| elem[0]}
-
-            all_match_arr << @all_fathers_match_arr if !@all_fathers_match_arr.blank?
-            match_amount = @match_father_amount if !@match_father_amount.blank?
+            get_relation_match(profiles_tree_arr[tree_index][6])
+            all_match_arr << @all_relation_match_arr if !@all_relation_match_arr.blank?
+            match_amount = @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
 
           when 2    # "mother"
-            @search_profiles_relation = "mother"   #
-            #search_mother(@triplex_arr)
-            all_match_arr << @mother_match_arr if !@mother_match_arr.blank?
-            match_amount = match_amount + @match_mother_amount if !@match_mother_amount.blank?
+            @search_profiles_relation = "mother"   # DEBUGG TO VIEW
+            #get_relation_match(profiles_tree_arr[tree_index][6])
+            #all_match_arr << @all_relation_match_arr if !@all_relation_match_arr.blank?
+            #match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
 
           when 3   # "son"
-            @search_profiles_relation = "son"   #
-            #search_son
-            all_match_arr << @son_match_arr if !@son_match_arr.blank?
-            match_amount = match_amount + @match_son_amount if !@match_son_amount.blank?
+            @search_profiles_relation = "son"   # DEBUGG TO VIEW
+            #get_relation_match(profiles_tree_arr[tree_index][6])
+            #all_match_arr << @all_relation_match_arr if !@all_relation_match_arr.blank?
+            #match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
 
           when 4   # "daughter"
-            @search_profiles_relation = "daughter"   #
-            #search_daughter
-            all_match_arr << @daughter_match_arr if !@daughter_match_arr.blank?
-            match_amount = match_amount + @match_daughter_amount if !@match_daughter_amount.blank?
+            @search_profiles_relation = "daughter"   # DEBUGG TO VIEW
+            #get_relation_match(profiles_tree_arr[tree_index][6])
+            #all_match_arr << @all_relation_match_arr if !@all_relation_match_arr.blank?
+            #match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
 
           when 5  # "brother"
-            @search_profiles_relation = "brother"   #
-            #search_brothers
-
-#            search_bros_sist(@triplex_arr)  # найдены потенциальные братья
-
-            all_match_arr << @brothers_match_arr if !@brothers_match_arr.blank? #
-            match_amount = match_amount + @match_brothers_amount if !@match_brothers_amount.blank?
+            @search_profiles_relation = "brother"   # DEBUGG TO VIEW
+            #get_relation_match(profiles_tree_arr[tree_index][6])
+            #all_match_arr << @all_relation_match_arr if !@all_relation_match_arr.blank?
+            #match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
 
           when 6   # "sister"
-            @search_profiles_relation = "sister"   #
-          #search_bros_sist(@triplex_arr)  # найдены потенциальные сестры
-          #all_match_arr << @sisters_match_arr if !@sisters_match_arr.blank? #
-          #match_amount = match_amount + @match_sisters_amount if !@match_sisters_amount.blank?
+            @search_profiles_relation = "sister"   # DEBUGG TO VIEW
+            #get_relation_match(profiles_tree_arr[tree_index][6])
+            #all_match_arr << @all_relation_match_arr if !@all_relation_match_arr.blank?
+            #match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
 
           when 7   # "husband"
-            @search_profiles_relation = "husband"   #
+            @search_profiles_relation = "husband"   # DEBUGG TO VIEW
+            #get_relation_match(profiles_tree_arr[tree_index][6])
+            #all_match_arr << @all_relation_match_arr if !@all_relation_match_arr.blank?
+            #match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
 
           when 8   # "wife"
-            @search_profiles_relation = "wife"   #
-
-            match_amount = match_amount + @match_wife_amount if !@match_wife_amount.blank?
+            @search_profiles_relation = "wife"   # DEBUGG TO VIEW
+            #get_relation_match(profiles_tree_arr[tree_index][6])
+            #all_match_arr << @all_relation_match_arr if !@all_relation_match_arr.blank?
+            #match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
 
           else
             @search_profiles_relation = "ERROR: no relation in tree profile"
@@ -205,6 +220,7 @@ class MainController < ApplicationController
 
     @match_amount = match_amount # DEBUGG TO VIEW
     @all_match_arr = all_match_arr # DEBUGG TO VIEW
+    @all_match_arr_sorted = all_match_arr.flatten(1).sort_by!{ |elem| elem[0]}
 
   end
 
@@ -453,7 +469,7 @@ class MainController < ApplicationController
           when 1    # "father"
             @search_relation = "father"   # DEBUGG TO VIEW
             search_farther(@triplex_arr)
-            all_match_arr << @father_match_arr if !@father_match_arr.blank?
+            all_match_arr << relation_match_arr if !relation_match_arr.blank?
             match_amount = @match_father_amount if !@match_father_amount.blank?
 
           when 2    # "mother"
