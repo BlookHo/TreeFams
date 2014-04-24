@@ -22,6 +22,21 @@ class ExtraCode
 
   #  @us_id = 2    #    IS DISTINCT FROM 2        # TRY RAILS 4 DEBUGG
 
+  # ПОИСК С ПОМОЩЬЮ СГЕНЕРИРОВАННОЙ СТРОКИ sql
+  # search_str = "relation_id = #{@all_fathers_relations_arr[0]} "
+  #for str in 1 .. @all_fathers_relations_arr.length-1
+  #  add_str = " OR relation_id = #{@all_fathers_relations_arr[str]} " #where( "#{search_str}" )
+  #  search_str = search_str.concat(add_str)
+  #end
+  #@search_relations_str = search_str
+
+
+
+
+
+
+
+
   Hash
 
          @fathers_hash = Hash.new  # { Tree No (user_id) =>  Father Profile ID }
@@ -62,6 +77,12 @@ HASH ЭШИ - Merge
   @nhash5 = @nhash3.merge(@nhash4){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
 ########################################################################
 
+# h.values_at("cow", "cat")
+
+
+ARRAYS  FGF
+
+   @all_match_arr_sorted = @all_match_arr.sort_by!{ |elem| elem[0]}
 
 
 

@@ -111,12 +111,14 @@ class MainController < ApplicationController
 
      end
 
-     found_trees_hash.delete_if {|key, value| value < all_relation_rows.length } # Исключение из результатов поиска
+     # select exclude hash Class
+
+#     found_trees_hash.delete_if {|key, value| value < all_relation_rows.length } # Исключение из результатов поиска
      # тех user_id, по которым не все запросы дали результат внутри Ближнего круга
      # Остаются те user_id, в которых найдены совпавшие профили.
      # На выходе ХЭШ: {user_id  => кол-во успешных поисков } - должно быть равно длине массива
      # всех видов отношений в блжнем круге для разыскиваемого профиля.
-     found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
+ #    found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
      # те user_id, которые удалены из хэша деревьев
      # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
 
@@ -124,16 +126,13 @@ class MainController < ApplicationController
    @all_match_arr << found_profiles_hash if !found_profiles_hash.blank? # Заполнение выходного массива хэшей
 
 
-
-
    @found_profiles_hash = found_profiles_hash # DEBUGG TO VIEW
    @found_trees_hash = found_trees_hash # DEBUGG TO VIEW
    @all_relation_rows = all_relation_rows   # DEBUGG TO VIEW
    @all_relation_match_arr = all_relation_match_arr   ## DEBUGG TO VIEW
-   @all_relation_match_arr_len = all_relation_match_arr.length if !all_relation_match_arr.blank? ## DEBUGG TO VIEW
-
 
  end
+
 # Основной поиск по дереву Автора - Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
@@ -142,18 +141,9 @@ class MainController < ApplicationController
 
     profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
     @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
+    @profiles_tree_arr_len = profiles_tree_arr.length  # DEBUGG TO VIEW
 
     @all_match_arr = []   # Массив совпадений всех родных с Автором
-    match_amount = 0     # Кол-во совпадений всех родных с Автором
-    #
-    #search_str = "relation_id = #{@all_fathers_relations_arr[0]} "
-    #for str in 1 .. @all_fathers_relations_arr.length-1
-    #  add_str = " OR relation_id = #{@all_fathers_relations_arr[str]} " #where( "#{search_str}" )
-    #  search_str = search_str.concat(add_str)
-    #end
-    #@search_relations_str = search_str
-
-    @profiles_tree_arr_len = profiles_tree_arr.length  # DEBUGG TO VIEW
     if !profiles_tree_arr.blank?
 
       for tree_index in 0 .. profiles_tree_arr.length-1
@@ -166,46 +156,33 @@ class MainController < ApplicationController
             @search_profiles_relation = "father"   # DEBUGG TO VIEW
             get_relation_match(profiles_tree_arr[tree_index][6])  # На выходе: @all_match_arr по данному виду родства
 
- # РАЗОБРАТЬСЯ С КОЛИЧЕСТВОМ НАЙДЕННЫХ ПРОФИЛЕЙ (РОДСТВЕННИКОВ)
-            # и переделать all_match_arr в ХАШ
-            # накапливать номера профилей к деревьям в итоговом хэше:
-            # {user_id  => [profile_id, profile_id, profile_id ]}
-            match_amount = @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
-
           when 2    # "mother"
             @search_profiles_relation = "mother"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-            match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
+ #           get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 3   # "son"
             @search_profiles_relation = "son"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-            match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
+ #           get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 4   # "daughter"
             @search_profiles_relation = "daughter"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-            match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
+ #           get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 5  # "brother"
             @search_profiles_relation = "brother"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-            match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
+#            get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 6   # "sister"
             @search_profiles_relation = "sister"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-            match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
+#            get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 7   # "husband"
             @search_profiles_relation = "husband"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-            match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
+ #           get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 8   # "wife"
             @search_profiles_relation = "wife"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-            match_amount = match_amount + @all_relation_match_arr_len if !@all_relation_match_arr_len.blank?
+#            get_relation_match(profiles_tree_arr[tree_index][6])
 
           else
             @search_profiles_relation = "ERROR: no relation in tree profile"
@@ -213,28 +190,19 @@ class MainController < ApplicationController
 
         end
 
-
-        @cnt = tree_index
-
-
       end
 
     end
 
-    @match_amount = match_amount # DEBUGG TO VIEW
+#    @all_match_arr = @all_match_arr  # Вычисляется поэтапно в каждом get_relation_match
 
-    @all_match_arr = @all_match_arr #.flatten(1) #
-
-    @all_match_hash = Hash.new
-    join_arr_of_hashes(@all_match_arr) if !@all_match_arr.blank? if
-    final_hash = @all_match_hash
-
-    # h.values_at("cow", "cat")
-
+    @all_match_hash = Hash.new   # Вычисляется в join_arr_of_hashes
+    join_arr_of_hashes(@all_match_arr) if !@all_match_arr.blank?
     @user_ids_arr = @all_match_hash.keys
-    @profile_ids_arr = @all_match_hash.values
+    @profile_ids_arr = @all_match_hash.values.flatten
+    @amount_of_profiles = @profile_ids_arr.size if !@profile_ids_arr.blank?
 
-    @all_match_arr_sorted = @all_match_arr.sort_by!{ |elem| elem[0]}
+    count_users_found(@profile_ids_arr)
 
   end
 
@@ -243,10 +211,8 @@ class MainController < ApplicationController
   # @note GET
   # На входе: массив хэшей: [{user_id -> profile_id, ... , user_id -> profile_id}, ..., {user_id -> profile_id, ... , user_id -> profile_id} ]
   # На выходе: @all_match_hash Итоговый упорядоченный ХЭШ
-  # @param admin_page [Integer] опциональный номер страницы
-  # @see News
+  # @param admin_page [Integer]
   def join_arr_of_hashes(all_match_hash_arr)
-
     final_merged_hash = all_match_hash_arr[0]  # 1-st hash
     for h_ind in 1 .. all_match_hash_arr.length - 1
       next_hash = all_match_hash_arr[h_ind]
@@ -254,6 +220,20 @@ class MainController < ApplicationController
       final_merged_hash = merged_hash
     end
     @all_match_hash = final_merged_hash
+  end
+
+  # Подсчет количества найденных Юзеров среди найденных Профилей
+  # @note GET
+  # На входе: массив профилей all_profiles_arr: profile_id
+  # На выходе: @count Кол-во Юзеров
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def count_users_found(all_profiles_arr)
+    @count = 0
+    for ind in 0 .. all_profiles_arr.length - 1
+      user_found_id = User.find_by_profile_id(all_profiles_arr[ind])
+      @count += 1 if !user_found_id.blank?
+    end
   end
 
   # Получение одного массива для включения в массив триплекс
