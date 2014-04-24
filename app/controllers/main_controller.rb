@@ -113,12 +113,12 @@ class MainController < ApplicationController
 
      # select exclude hash Class
 
-#     found_trees_hash.delete_if {|key, value| value < all_relation_rows.length } # Исключение из результатов поиска
+     found_trees_hash.delete_if {|key, value| value < all_relation_rows.length } # Исключение из результатов поиска
      # тех user_id, по которым не все запросы дали результат внутри Ближнего круга
      # Остаются те user_id, в которых найдены совпавшие профили.
      # На выходе ХЭШ: {user_id  => кол-во успешных поисков } - должно быть равно длине массива
      # всех видов отношений в блжнем круге для разыскиваемого профиля.
- #    found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
+    found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
      # те user_id, которые удалены из хэша деревьев
      # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
 
@@ -158,31 +158,31 @@ class MainController < ApplicationController
 
           when 2    # "mother"
             @search_profiles_relation = "mother"   # DEBUGG TO VIEW
- #           get_relation_match(profiles_tree_arr[tree_index][6])
+            get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 3   # "son"
             @search_profiles_relation = "son"   # DEBUGG TO VIEW
- #           get_relation_match(profiles_tree_arr[tree_index][6])
+            get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 4   # "daughter"
             @search_profiles_relation = "daughter"   # DEBUGG TO VIEW
- #           get_relation_match(profiles_tree_arr[tree_index][6])
+            get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 5  # "brother"
             @search_profiles_relation = "brother"   # DEBUGG TO VIEW
-#            get_relation_match(profiles_tree_arr[tree_index][6])
+            get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 6   # "sister"
             @search_profiles_relation = "sister"   # DEBUGG TO VIEW
-#            get_relation_match(profiles_tree_arr[tree_index][6])
+            get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 7   # "husband"
             @search_profiles_relation = "husband"   # DEBUGG TO VIEW
- #           get_relation_match(profiles_tree_arr[tree_index][6])
+            get_relation_match(profiles_tree_arr[tree_index][6])
 
           when 8   # "wife"
             @search_profiles_relation = "wife"   # DEBUGG TO VIEW
-#            get_relation_match(profiles_tree_arr[tree_index][6])
+            get_relation_match(profiles_tree_arr[tree_index][6])
 
           else
             @search_profiles_relation = "ERROR: no relation in tree profile"
