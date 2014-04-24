@@ -223,66 +223,38 @@ class MainController < ApplicationController
 
     @match_amount = match_amount # DEBUGG TO VIEW
 
-    @all_match_arr = @all_match_arr.flatten(1) #
+    @all_match_arr = @all_match_arr #.flatten(1) #
 
-    join_hashes_arr(@all_match_arr)
+    @all_match_hash = Hash.new
+    join_arr_of_hashes(@all_match_arr) if !@all_match_arr.blank? if
+    final_hash = @all_match_hash
 
-    @all_match_arr_sorted = @all_match_arr.flatten(1).sort_by!{ |elem| elem[0]}
+    # h.values_at("cow", "cat")
+
+    @user_ids_arr = @all_match_hash.keys
+    @profile_ids_arr = @all_match_hash.values
+
+    @all_match_arr_sorted = @all_match_arr.sort_by!{ |elem| elem[0]}
 
   end
 
+  # Слияние массива Хэшей без потери значений { (key = user_id) => (value = profile_id) }
   # Получение упорядоченного Хэша: {user_id  -> [ profile_id, profile_id, profile_id ...]}
   # @note GET
   # На входе: массив хэшей: [{user_id -> profile_id, ... , user_id -> profile_id}, ..., {user_id -> profile_id, ... , user_id -> profile_id} ]
+  # На выходе: @all_match_hash Итоговый упорядоченный ХЭШ
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
-  def join_hashes_arr(all_match_arr)
+  def join_arr_of_hashes(all_match_hash_arr)
 
-    @user_ids_arr = []
-    @profile_ids_arr = []
-    @user_ids_arr = all_match_arr[0].keys
-    @profile_ids_arr = all_match_arr[0].values
-    @one_hash_keys = all_match_arr[0].keys
-    @one_hash_values = all_match_arr[0].values
-
-    for h_ind in 1 .. all_match_arr.length - 1
-      @user_ids_arr = @user_ids_arr + all_match_arr[h_ind].keys
-      @profile_ids_arr = @profile_ids_arr + all_match_arr[h_ind].values
-
-      @one_hash_keys = all_match_arr[0].keys
-      @one_hash_values = all_match_arr[0].values
-      @new_hash = Hash
-
-      for key_ind in 0 .. @one_hash_keys.length - 1
-
-
-
-
-
-
-      end
-
-
-
+    final_merged_hash = all_match_hash_arr[0]  # 1-st hash
+    for h_ind in 1 .. all_match_hash_arr.length - 1
+      next_hash = all_match_hash_arr[h_ind]
+      merged_hash = final_merged_hash.merge(next_hash){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
+      final_merged_hash = merged_hash
     end
-
-    #if user_signed_in?
-    #  one_triplex_arr = []
-    #  if !relation.blank?
-    #    one_triplex_arr[0] = Tree.where(:user_id => user_id, :relation_id => relation)[0][:profile_id]
-    #  else
-    #    one_triplex_arr[0] = User.find(user_id).profile_id
-    #  end
-    #  one_triplex_arr[1] = Profile.find(one_triplex_arr[0]).sex_id
-    #  one_triplex_arr[2] = Profile.find(one_triplex_arr[0]).name_id
-    #  one_triplex_arr[3] = relation
-    #  triplex_arr << one_triplex_arr
-    #end
-
-
+    @all_match_hash = final_merged_hash
   end
-
-
 
   # Получение одного массива для включения в массив триплекс
   # get_profile_arr - метод сбор данных для массива по profile_id .

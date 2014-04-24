@@ -34,6 +34,33 @@ class ExtraCode
  # @mothers_hash = { Tree No (user_id) =>  Mother Profile ID }.
 
 
+HASH ЭШИ - Merge
+
+# склеивание 2-х хэшей  без потери элементов
+  @hash1 = {2=>8, 3=>15}
+  @hash2 = {2=>9, 3=>18}
+
+  @hash2.each_key do |key|
+    if ( @hash1.has_key?(key) )
+      @hash1[ "hash2-originated-#{key}" ] = @hash2[key]
+    else
+      @hash1[key]=@hash2[key]
+    end
+  end
+
+  # result: @hash1: {2=>8, 3=>15, "hash2-originated-2"=>9, "hash2-originated-3"=>18}
+
+#####################################
+
+# MERGE TWO HASHES. при этом значения для одинаковых ключей собираются в массивы
+  @nhash1 = {2=>8, 3=>15}
+  @nhash2 = {2=>9, 3=>18}
+  @nhash4 = {2=>7, 3=>19}
+
+  @nhash3 = @nhash1.merge(@nhash2){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
+
+  @nhash5 = @nhash3.merge(@nhash4){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
+########################################################################
 
 
 

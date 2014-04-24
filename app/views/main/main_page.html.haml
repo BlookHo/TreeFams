@@ -59,16 +59,18 @@
   - else
     %h4 No Listing tree - @@final_father_match_arr!
 
+  -#%p
+  -#  @final_merged_hash: #{@final_merged_hash.inspect}
   %p
     @all_match_arr: #{@all_match_arr.inspect}
+  %h4
+    Массив всех совпадений родных: @all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
+  %h4
+    Все совпадения родных: @all_match_hash: #{@all_match_hash.inspect}
   %p
     @user_ids_arr: #{@user_ids_arr.inspect}
   %p
-    @@profile_ids_arr: #{@profile_ids_arr.inspect}
-
-
-  %h4
-    Массив всех совпадений родных: @all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
+    @profile_ids_arr: #{@profile_ids_arr.inspect}
   %h4
     @match_amount: Всего найдено совпадений родных: #{@match_amount.inspect}
 
