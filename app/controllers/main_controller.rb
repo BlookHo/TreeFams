@@ -230,9 +230,13 @@ class MainController < ApplicationController
   # @see News
   def count_users_found(all_profiles_arr)
     @count = 0
+    @users_id_arr = []
     for ind in 0 .. all_profiles_arr.length - 1
       user_found_id = User.find_by_profile_id(all_profiles_arr[ind])
-      @count += 1 if !user_found_id.blank?
+      if !user_found_id.blank?
+        @count += 1
+        @users_id_arr << user_found_id.id  # user_id среди найденных профилей
+      end
     end
   end
 
