@@ -518,5 +518,23 @@ class StartController < ApplicationController
     end
   end
 
+  # Заполнение таблицы ProfileKey для введенного дерева
+  # для current_user
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see
+  def save_profile_keys
 
- end
+    user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
+    if !user_profile.blank?
+      current_user.profile_id = user_profile[0]['id']
+      current_user.save
+    end
+  end
+
+
+
+
+
+
+end
