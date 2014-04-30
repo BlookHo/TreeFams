@@ -1,0 +1,38 @@
+%section.admin
+
+
+  %h3 GraphTree#show_graph_tree
+  %p
+    Find me in app/views/graph_tree/show_graph_tree.html.erb</p>
+
+  %h3 show_graph_tree
+  %h3 Страница Просмотра и управления Графом дерева Пользователя
+  %p
+  @session_id: #{@session_id.inspect}
+
+  %div
+    - if user_signed_in?
+      %p
+        current_user.id: #{current_user.id.inspect}
+      %p
+        @profiles_tree_arr_len: #{@profiles_tree_arr_len.inspect}
+      %h3 Отображение Древа Пользователя в табличной форме
+      <li #{render :partial => 'main/main_display_tree'}
+
+      %div
+        %h3 Отображение Древа Пользователя в виде Графа
+
+
+        %p
+          @this_is_graph: #{@this_is_graph.inspect}
+
+
+
+    - else
+      %h4 No Listing tree - Юзер не зареген!
+
+
+
+
+  %h4 Возврат на Главную страницу:  #{link_to "Главная -->", main_page_path}
+

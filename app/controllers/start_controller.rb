@@ -518,5 +518,93 @@ class StartController < ApplicationController
     end
   end
 
+  # Заполнение таблицы ProfileKey для введенного дерева
+  # для current_user
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see
+  def save_profile_keys
 
- end
+#Profile
+## 34 - Tree 6
+#        {user_id: 6, name_id: 212, email: 'tt@tt.tt', sex_id: 1 },
+## 35
+#        {user_id: 0, name_id: 45, email: '', sex_id: 1 },
+## 36
+#        {user_id: 0, name_id: 379, email: '', sex_id: 0 },
+## 37
+#        {user_id: 0, name_id: 371, email: '', sex_id: 0 },
+## 38
+#        {user_id: 0, name_id: 231, email: '', sex_id: 1 },
+## 39
+#        {user_id: 0, name_id: 506, email: '', sex_id: 0 },
+
+#Tree
+## 34 - Tree 6
+#    {user_id: 6, profile_id: 35, relation_id: 1, connected: false },
+#    {user_id: 6, profile_id: 36, relation_id: 2, connected: false },
+#    {user_id: 6, profile_id: 37, relation_id: 8, connected: false },
+#    {user_id: 6, profile_id: 38, relation_id: 3, connected: false },
+#    {user_id: 6, profile_id: 39, relation_id: 4, connected: false },
+
+#User
+# 6
+#{profile_id: 34, admin: false, email: 'tt@tt.tt', password: '666666', password_confirmation: '666666' },
+
+
+#ProfileKey
+# Tree 6, Pfoile 34 - Author - Николай
+# NearCircle
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 1, is_profile_id: 35, is_name_id: 45 },
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 2, is_profile_id: 36, is_name_id: 379 },
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 8, is_profile_id: 37, is_name_id: 371 },
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 3, is_profile_id: 38, is_name_id: 231 },
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 4, is_profile_id: 39, is_name_id: 506 },
+
+# Tree 6, Pfoile 35 - Борис
+# NearCircle
+#    {user_id: 6, profile_id: 35, name_id: 45, relation_id: 8, is_profile_id: 36, is_name_id: 379 },
+#    {user_id: 6, profile_id: 35, name_id: 45, relation_id: 3, is_profile_id: 34, is_name_id: 212 },
+
+
+
+# 1.Формир-е БК current_user из Profile:
+#   Profile.where(:user_id => current_user.id)
+#   цикл
+#   save в ProfileKey
+#
+# .
+# 2.Цикл по каждому профилю БК в Tree
+#   Формир-е БК для каждого профиля
+#     здесь - анализ relation_id и формирование групп relation_id для каждого profile_id
+# .
+# конец цикла
+#
+# /
+    @tree_row = Tree.where(:user_id => current_user.id)
+    if !@tree_row.blank?
+      @tree_row.each do |tree_current|
+
+
+      @new_profile_keys_row = ProfileKey.new
+
+      end
+
+    end
+
+
+
+    user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
+    if !user_profile.blank?
+      current_user.profile_id = user_profile[0]['id']
+      current_user.save
+    end
+
+  end
+
+
+
+
+
+
+end

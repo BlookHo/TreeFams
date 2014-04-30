@@ -107,6 +107,25 @@ class ApplicationController < ActionController::Base
   end
 
 
+  # Автоматическое наполнение хэша сущностями и
+  # количеством появлений каждой сущности.
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see Place = main_contrl.,
+  ################# FILLING OF HASH WITH KEYS AND/OR VALUES
+  def fill_hash(one_hash, str_elem) # Filling of hash with keys and values, according to key occurance
+    if str_elem.blank? or str_elem == "" or str_elem == nil
+      one_hash['Не найдено'] += 1
+    else
+      test = one_hash.key?(str_elem) # Is  str_elem in one_hash?
+      if test == false #  "NOT Found in hash"
+        one_hash.merge!({str_elem => 1}) # include str_elem with val=1 in hash
+      else  #  "Found in hash"
+        one_hash[str_elem] += 1 # increase (+1) val of occurance of str_elem
+      end
+    end
+  end
+
 
 
 

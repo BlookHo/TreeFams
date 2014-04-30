@@ -1,4 +1,7 @@
 Weafam::Application.routes.draw do
+  get "graph_tree/show_graph_tree"
+  get "graph_tree/edit"
+  get "graph_tree/move"
   get "admin_methods/service_method_1"
   get "admin_methods/service_method_2"
   mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
@@ -41,6 +44,10 @@ Weafam::Application.routes.draw do
   match 'display_saved_tree' => 'start#display_saved_tree', via: :get
   match 'save_start_tables' => 'start#save_start_tables', via: :get
 
+  # graph_tree controller
+  match 'show_graph_tree' => 'graph_tree#show_graph_tree', via: :get
+  match 'edit_graph_tree' => 'graph_tree#edit_graph_tree', via: :get
+  match 'move_graph_tree' => 'graph_tree#move_graph_tree', via: :get
 
   ######### start_enter/enters
   match 'enter_myself' => "start#enter_myself", via: :get

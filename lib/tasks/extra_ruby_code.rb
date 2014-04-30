@@ -22,6 +22,21 @@ class ExtraCode
 
   #  @us_id = 2    #    IS DISTINCT FROM 2        # TRY RAILS 4 DEBUGG
 
+  # ПОИСК С ПОМОЩЬЮ СГЕНЕРИРОВАННОЙ СТРОКИ sql
+  # search_str = "relation_id = #{@all_fathers_relations_arr[0]} "
+  #for str in 1 .. @all_fathers_relations_arr.length-1
+  #  add_str = " OR relation_id = #{@all_fathers_relations_arr[str]} " #where( "#{search_str}" )
+  #  search_str = search_str.concat(add_str)
+  #end
+  #@search_relations_str = search_str
+
+
+
+
+
+
+
+
   Hash
 
          @fathers_hash = Hash.new  # { Tree No (user_id) =>  Father Profile ID }
@@ -34,7 +49,40 @@ class ExtraCode
  # @mothers_hash = { Tree No (user_id) =>  Mother Profile ID }.
 
 
+HASH ЭШИ - Merge
 
+# склеивание 2-х хэшей  без потери элементов
+  @hash1 = {2=>8, 3=>15}
+  @hash2 = {2=>9, 3=>18}
+
+  @hash2.each_key do |key|
+    if ( @hash1.has_key?(key) )
+      @hash1[ "hash2-originated-#{key}" ] = @hash2[key]
+    else
+      @hash1[key]=@hash2[key]
+    end
+  end
+
+  # result: @hash1: {2=>8, 3=>15, "hash2-originated-2"=>9, "hash2-originated-3"=>18}
+
+#####################################
+
+# MERGE TWO HASHES. при этом значения для одинаковых ключей собираются в массивы
+  @nhash1 = {2=>8, 3=>15}
+  @nhash2 = {2=>9, 3=>18}
+  @nhash4 = {2=>7, 3=>19}
+
+  @nhash3 = @nhash1.merge(@nhash2){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
+
+  @nhash5 = @nhash3.merge(@nhash4){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
+########################################################################
+
+# h.values_at("cow", "cat")
+
+
+ARRAYS  FGF
+
+   @all_match_arr_sorted = @all_match_arr.sort_by!{ |elem| elem[0]}
 
 
 

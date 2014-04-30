@@ -12,6 +12,86 @@
 
   <li #{render :partial => 'main/main_display_tree'}
 
+
+  %h4 Совпадения древа Пользователя с другими
+  -#%div
+  -#  %p
+  -#    Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
+  -#  %p
+  -#    Из них - подтвержденных: @approved_match_qty_loc #{@approved_match_qty_loc.inspect}
+  %h4 Переход на:  #{link_to "Просмотр и подтверждение совпадений -->", match_approval_path}
+
+
+  %h4 Переход на:  #{link_to "Просмотр и управление Графом дерева -->", show_graph_tree_path}
+
+
+
+  %h4 ПОИСК В ПОЛНОМ ДЕРЕВЕ ПРОФИЛЕЙ
+  %p
+    @@profiles_tree_arr: #{@profiles_tree_arr.inspect}
+  -#%p
+  -#  @@tree_arr: #{@tree_arr.inspect}
+  %p
+    @@@relation: #{@relation.inspect}
+  %p
+    @@@profiles_tree_arr_len: #{@profiles_tree_arr_len.inspect}
+  -#%p Результат поиска ОТЦА: Его user_id =
+  %p
+    @all_relation_rows:  #{@all_relation_rows.inspect}
+  %p
+    @@all_relation_rows_len: #{@all_relation_rows_len.inspect}
+  %p
+    @relation_match_arr: #{@relation_match_arr.inspect}
+
+  %p
+    LAST @found_trees_hash: #{@found_trees_hash.inspect}
+  %p
+    LAST @found_profiles_hash: #{@found_profiles_hash.inspect}
+
+  - if !@all_relation_match_arr.blank?
+    %div
+      %table
+        %tr
+          %th ID Дерева
+          %th ID Профиля
+          %th ID Имени Профиля
+          %th ID Родства: У Профиля
+          %th ID Родственника
+          %th ID Имени Родственника
+          %th
+        - @all_relation_match_arr.each do |tree|
+          %tr
+            %td= tree[0]
+            %td= tree[1]
+            %td= tree[2]
+            %td= tree[3]
+            %td= tree[4]
+            %td= tree[5]
+            %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
+  - else
+    %h4 No Listing tree - No @all_relation_match_arr!
+
+  -#%p
+  -#  @final_merged_hash: #{@final_merged_hash.inspect}
+  %p
+    @all_match_arr: #{@all_match_arr.inspect}
+  -#%h4
+  -#  Массив всех совпадений родных: @all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
+  %h4
+    Все совпадения родных: @all_match_hash: #{@all_match_hash.inspect}
+  %p
+    @user_ids_arr: #{@user_ids_arr.inspect}
+  %p
+    @profile_ids_arr: #{@profile_ids_arr.inspect}
+  %h4
+    Всего найдено совпадений родных: @amount_of_profiles: #{@amount_of_profiles.inspect}
+  %h4
+    В том числе - пользователей: @count: #{@count.inspect}
+  %h4
+    Их user_id: @users_id_arr: #{@users_id_arr.inspect}
+
+
+
   %p
     Триплекс @triplex_arr: #{@triplex_arr.inspect}
   %p
