@@ -35,6 +35,7 @@ Weafam::Application.routes.draw do
   match 'search_tree_match' => 'main#search_tree_match', via: :get
   match 'relative_menu' => 'main#relative_menu', via: :get
   match 'match_approval' => 'main#match_approval', via: :get
+  match 'graph_tree_show' => 'main#graph_tree_show', via: :get
 
   # start controller
   match 'show_tree_table' => 'start#show_tree_table', via: :get

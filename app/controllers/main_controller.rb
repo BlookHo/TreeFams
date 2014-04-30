@@ -35,6 +35,8 @@ class MainController < ApplicationController
     end
 
   end
+
+
 # Отображение дерева Юзера в табличной форме.
 # @note GET /
 # @param admin_page [Integer] опциональный номер страницы
@@ -237,6 +239,25 @@ class MainController < ApplicationController
         @count += 1
         @users_id_arr << user_found_id.id  # user_id среди найденных профилей
       end
+    end
+  end
+
+  # Отображение дерева пользователя в виде графа
+  # get_profile_arr - метод сбор данных для массива по profile_id .
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def graph_tree_show
+    #(user_id,triplex_arr,relation)
+    if user_signed_in?
+
+      profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
+      @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
+      @profiles_tree_arr_len = profiles_tree_arr.length  # DEBUGG TO VIEW
+
+      @this_is_graph = "THIS IS GRAPH"  # DEBUGG TO VIEW
+
+
     end
   end
 

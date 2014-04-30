@@ -12,6 +12,20 @@
 
   <li #{render :partial => 'main/main_display_tree'}
 
+
+  %h4 Совпадения древа Пользователя с другими
+  -#%div
+  -#  %p
+  -#    Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
+  -#  %p
+  -#    Из них - подтвержденных: @approved_match_qty_loc #{@approved_match_qty_loc.inspect}
+  %h4 Переход на:  #{link_to "Просмотр и подтверждение совпадений -->", match_approval_path}
+
+
+  %h4 Переход на:  #{link_to "Просмотр и управление Графом дерева -->", graph_tree_show_path}
+
+
+
   %h4 ПОИСК В ПОЛНОМ ДЕРЕВЕ ПРОФИЛЕЙ
   %p
     @@profiles_tree_arr: #{@profiles_tree_arr.inspect}
