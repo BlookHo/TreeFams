@@ -22,7 +22,7 @@
   %h4 Переход на:  #{link_to "Просмотр и подтверждение совпадений -->", match_approval_path}
 
 
-  %h4 Переход на:  #{link_to "Просмотр и управление Графом дерева -->", graph_tree_show_path}
+  %h4 Переход на:  #{link_to "Просмотр и управление Графом дерева -->", show_graph_tree_path}
 
 
 
@@ -69,7 +69,7 @@
             %td= tree[5]
             %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
   - else
-    %h4 No Listing tree - @@final_father_match_arr!
+    %h4 No Listing tree - No @all_relation_match_arr!
 
   -#%p
   -#  @final_merged_hash: #{@final_merged_hash.inspect}

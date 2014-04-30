@@ -242,25 +242,6 @@ class MainController < ApplicationController
     end
   end
 
-  # Отображение дерева пользователя в виде графа
-  # get_profile_arr - метод сбор данных для массива по profile_id .
-  # @note GET /
-  # @param admin_page [Integer] опциональный номер страницы
-  # @see News
-  def graph_tree_show
-    #(user_id,triplex_arr,relation)
-    if user_signed_in?
-
-      profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
-      @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
-      @profiles_tree_arr_len = profiles_tree_arr.length  # DEBUGG TO VIEW
-
-      @this_is_graph = "THIS IS GRAPH"  # DEBUGG TO VIEW
-
-
-    end
-  end
-
   # Получение одного массива для включения в массив триплекс
   # get_profile_arr - метод сбор данных для массива по profile_id .
   # @note GET /
@@ -1200,20 +1181,22 @@ class MainController < ApplicationController
 
     @session_id = request.session_options[:id]    # ?
 
+    if user_signed_in?
 
-    @new_approved_qty = 3
-    @total_approved_qty = @@approved_match_qty + @new_approved_qty
-    @rest_to_approve = @@match_qty - @total_approved_qty
+      @new_approved_qty = 3
+      @total_approved_qty = @@approved_match_qty + @new_approved_qty
+      @rest_to_approve = @@match_qty - @total_approved_qty
 
-    @triplex_arr = []
-    make_one_triplex_arr(current_user.id,@triplex_arr,nil,1,2)   # @triplex_arr - ready!
+      @triplex_arr = []
+      make_one_triplex_arr(current_user.id,@triplex_arr,nil,1,2)   # @triplex_arr - ready!
 
-    # Поиск братьев/сестер по триплекс-массиву
-    # У братьев/сестер - те же отец и мать.
-    # [profile_id, sex_id, name_id, relation_id]
-    # @triplex_arr: [[22, 0, 506, nil], [23, 1, 45, 1], [24, 0, 453, 2]]
-    search_bros_sist(@triplex_arr)  # найдены общие отцы с потенциальными братьями/сестрами
+      # Поиск братьев/сестер по триплекс-массиву
+      # У братьев/сестер - те же отец и мать.
+      # [profile_id, sex_id, name_id, relation_id]
+      # @triplex_arr: [[22, 0, 506, nil], [23, 1, 45, 1], [24, 0, 453, 2]]
+      search_bros_sist(@triplex_arr)  # найдены общие отцы с потенциальными братьями/сестрами
 
+    end
 
   end
 
