@@ -78,9 +78,9 @@ class StartController < ApplicationController
 
   def check_husband_or_wife
 
-    @user_sex = session[:user_sex][:value]
+    user_sex = session[:user_sex][:value]
 
-    if @user_sex    # = true -> User = Male
+    if user_sex    # = true -> User = Male
 
       @render_name = 'start/enter_wife'
       # redirect_to enter_wife_path
@@ -92,14 +92,138 @@ class StartController < ApplicationController
   end
 
 
-  # Добавить ряды в ProfileKeys об Авторе
+  # Добавить ряды в ProfileKeys при вводе Жены (если пол Автора = true)
+  # в первом элементе мессива - данные об Авторе
+  # в последнем элементе мессива - данные о Жене
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
-  def add_author_to_ProfileKeys(author_array)
+  def add_wife_to_ProfileKeys(profiles_array)
 
-    
+    #profiles_array = [], ......, [nil, "wife_name", true]]
+    author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
+    wife_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о wife
+    #
+    # add Author rows
+    # new_row = author_name, 8, wife_name
+
+    # add Wife rows
+    # new_row = wife_name, 7, author_name
+
+    session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
+    session[:wife_ProfileKeys_arr] = {:value => wife_ProfileKeys_arr, :updated_at => Time.current}
+
+
   end
+
+  # Добавить ряды в ProfileKeys при вводе Мужа (если пол Автора = false) )
+  # в первом элементе мессива - данные об Авторе
+  # в последнем элементе мессива - данные о Муже
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def add_husband_to_ProfileKeys(profiles_array)
+
+    #profiles_array = [], ......, [nil, "husband_name", true]]
+    author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
+    husband_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    #
+    # add Author rows
+
+    # new_row = author_name, 7, husband_name
+
+    # add Husband rows
+    # new_row = husband_name, 8, author_name
+    session[:husband_ProfileKeys_arr] = {:value => husband_ProfileKeys_arr, :updated_at => Time.current}
+    session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
+
+
+  end
+
+  # Добавить ряды в ProfileKeys при вводе Отца
+  # в первом элементе мессива - данные об Авторе
+  # в последнем элементе мессива - данные об Отце
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def add_father_to_ProfileKeys(profiles_array)
+
+    #profiles_array = [[nil, author_name, true], [1, father_name, true]].
+    author_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о father
+    father_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о father
+
+    author_name = profiles_array[0][1]
+    author_sex = profiles_array[0][2]
+    father_name = profiles_array[1][1]
+
+    # add Author rows
+    # new_row = author_name, 1, father_name
+    author_ProfileKeys_arr << [author_name, 1, father_name]
+    @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
+
+    # add Father rows
+    if author_sex
+      # new_row = father_name, 3, author_name
+      father_ProfileKeys_arr << [father_name, 3, author_name]
+    else
+      # new_row = father_name, 4, author_name
+      father_ProfileKeys_arr << [father_name, 4, author_name]
+    end
+    @father_ProfileKeys_arr = father_ProfileKeys_arr # DEBUGG TO VIEW
+
+    session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
+    session[:father_ProfileKeys_arr] = {:value => father_ProfileKeys_arr, :updated_at => Time.current}
+
+
+
+  end
+
+  # Добавить ряды в ProfileKeys при вводе Матери
+  # в первом элементе мессива - данные об Авторе
+  # в последнем элементе мессива - данные о Матери
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def add_mother_to_ProfileKeys(profiles_array)
+
+    #profiles_array = [[nil, "author_name", true], [1, "mother_name", true], [2, "mother_name", false]]
+    author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
+    father_ProfileKeys_arr = session[:father_ProfileKeys_arr][:value]
+    mother_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+
+    author_name = profiles_array[0][1]
+    author_sex = profiles_array[0][2]
+    father_name = profiles_array[1][1]
+    mother_name = profiles_array[2][1]
+
+    # add Author rows
+    # new_row = author_name, 2, mother_name
+    author_ProfileKeys_arr << [author_name, 2, mother_name]
+    @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
+
+    # add Father rows
+    # new_row = father_name, 8, mother_name
+    father_ProfileKeys_arr << [father_name, 8, mother_name]
+    @father_ProfileKeys_arr = father_ProfileKeys_arr # DEBUGG TO VIEW
+
+    # add Mother rows
+    # new_row = mother_name, 7, father_name
+    mother_ProfileKeys_arr << [mother_name, 7, father_name]
+    if author_sex
+      # new_row = mother_name, 3, author_name
+      mother_ProfileKeys_arr << [mother_name, 3, author_name]
+    else
+      # new_row = mother_name, 4, author_name
+      mother_ProfileKeys_arr << [mother_name, 4, author_name]
+    end
+    @mother_ProfileKeys_arr = mother_ProfileKeys_arr # DEBUGG TO VIEW
+
+    session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
+    session[:father_ProfileKeys_arr] = {:value => father_ProfileKeys_arr, :updated_at => Time.current}
+    session[:mother_ProfileKeys_arr] = {:value => mother_ProfileKeys_arr, :updated_at => Time.current}
+
+  end
+
   ####  STORE TREE PROFILE  ########################
 
   def store_myself
@@ -108,28 +232,37 @@ class StartController < ApplicationController
       @user_sex = check_sex_by_name(@user_name) # display sex by name = извлечение пола из введенного имени
     end
 
-# Begin All Arrays
+    # Begin All Arrays
     profiles_array = []  #
 
-    @fathers_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о father
-    @mothers_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
-    @daughters_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
-    @sons_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
-    @brothers_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
-    @sisters_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
-    @husbands_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
-    @wives_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+#    author_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о father
+#    father_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о father
+#    mother_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    daughter_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    son_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    brother_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    sister_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+#    husband_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+#    wive_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
 
 
     one_profile_arr = add_profile(nil,@user_name,@user_sex)
     profiles_array << one_profile_arr
 
-    add_author_to_ProfileKeys(one_profile_arr) #
-
-
-
     session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     session[:user_sex] = {:value => @user_sex, :updated_at => Time.current}
+
+    #session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
+    #session[:father_ProfileKeys_arr] = {:value => father_ProfileKeys_arr, :updated_at => Time.current}
+    #session[:mother_ProfileKeys_arr] = {:value => mother_ProfileKeys_arr, :updated_at => Time.current}
+    session[:daughter_ProfileKeys_arr] = {:value => daughter_ProfileKeys_arr, :updated_at => Time.current}
+    session[:son_ProfileKeys_arr] = {:value => son_ProfileKeys_arr, :updated_at => Time.current}
+    session[:brother_ProfileKeys_arr] = {:value => brother_ProfileKeys_arr, :updated_at => Time.current}
+    session[:sister_ProfileKeys_arr] = {:value => sister_ProfileKeys_arr, :updated_at => Time.current}
+    #session[:husband_ProfileKeys_arr] = {:value => husband_ProfileKeys_arr, :updated_at => Time.current}
+    #session[:wive_ProfileKeys_arr] = {:value => wive_ProfileKeys_arr, :updated_at => Time.current}
+
+
 
     @profiles_array = profiles_array # DEBUGG TO VIEW
 
@@ -147,6 +280,9 @@ class StartController < ApplicationController
 
     profiles_array = session[:profiles_array][:value]
     @user_sex = session[:user_sex][:value]
+    #author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
+    #father_ProfileKeys_arr = session[:father_ProfileKeys_arr][:value]
+    #mother_ProfileKeys_arr = session[:mother_ProfileKeys_arr][:value]
 
     @father_name = params[:father_name_select] #
 
@@ -160,6 +296,8 @@ class StartController < ApplicationController
       # todo: Сохранять отчество Profile в зависимости от пола @user_sex!
       one_profile_arr = add_profile(1,@father_name,@father_sex)
       profiles_array << one_profile_arr
+
+      add_father_to_ProfileKeys(profiles_array)
 
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
 
@@ -180,6 +318,7 @@ class StartController < ApplicationController
 
     profiles_array = session[:profiles_array][:value]
 
+
     @mother_name = params[:mother_name_select] #
 
     if !@mother_name.blank?
@@ -191,6 +330,8 @@ class StartController < ApplicationController
       end
       one_profile_arr = add_profile(2,@mother_name,@mother_sex)
       profiles_array << one_profile_arr
+
+      add_mother_to_ProfileKeys(profiles_array)
 
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
 
@@ -310,6 +451,8 @@ class StartController < ApplicationController
       one_profile_arr = add_profile(7,@husband_name,@husband_sex)
       profiles_array << one_profile_arr
 
+      add_husband_to_ProfileKeys(profiles_array)
+
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
 
       @profiles_array = profiles_array # DEBUGG TO VIEW
@@ -341,6 +484,8 @@ class StartController < ApplicationController
       # todo: Сохранять фамилию жены по мужу? Или девичью?
       one_profile_arr = add_profile(8,@wife_name,@wife_sex)
       profiles_array << one_profile_arr
+
+      add_wife_to_ProfileKeys(profiles_array)
 
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
 
