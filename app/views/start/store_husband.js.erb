@@ -2,4 +2,7 @@ $("#husband_form").fadeOut(1200);
 $("#name_container").append('Массив профилей БК: @profiles_array: <%= @profiles_array.inspect %>.  ');
 $("#name_container").append('* Имя мужа: <%= @husband_name %>. ');
 $("#name_container").append(' Он - <%= @husband_sex %> ');
+$("#arr_container").html(' Массивы для ProfileKeys: ');
+$("#arr_container").append(' @author_ProfileKeys_arr - <%= @author_ProfileKeys_arr %> ');
+$("#arr_container").append(' @husband_ProfileKeys_arr - <%= @husband_ProfileKeys_arr %> ');
 $("#next_container").html("<%= j render 'start/enter_son' %>");

@@ -103,16 +103,21 @@ class StartController < ApplicationController
     #profiles_array = [], ......, [nil, "wife_name", true]]
     author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
     wife_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о wife
-    #
+
+    profiles_array_length = profiles_array.length
+    author_name = profiles_array[0][1]  #
+    wife_name = profiles_array[profiles_array_length-1][1]  #
+
     # add Author rows
-    # new_row = author_name, 8, wife_name
+    author_ProfileKeys_arr << [author_name, 8, wife_name]
+    @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Wife rows
-    # new_row = wife_name, 7, author_name
+    wife_ProfileKeys_arr << [wife_name, 7, author_name]
+    @wife_ProfileKeys_arr = wife_ProfileKeys_arr # DEBUGG TO VIEW
 
     session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
     session[:wife_ProfileKeys_arr] = {:value => wife_ProfileKeys_arr, :updated_at => Time.current}
-
 
   end
 
@@ -127,16 +132,21 @@ class StartController < ApplicationController
     #profiles_array = [], ......, [nil, "husband_name", true]]
     author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
     husband_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
-    #
-    # add Author rows
 
-    # new_row = author_name, 7, husband_name
+    profiles_array_length = profiles_array.length
+    author_name = profiles_array[0][1]  #
+    husband_name = profiles_array[profiles_array_length-1][1] #
+
+    # add Author rows
+    author_ProfileKeys_arr << [author_name, 7, husband_name]
+    @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Husband rows
-    # new_row = husband_name, 8, author_name
-    session[:husband_ProfileKeys_arr] = {:value => husband_ProfileKeys_arr, :updated_at => Time.current}
-    session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
+    husband_ProfileKeys_arr << [husband_name, 8, author_name]
+    @husband_ProfileKeys_arr = husband_ProfileKeys_arr # DEBUGG TO VIEW
 
+    session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
+    session[:husband_ProfileKeys_arr] = {:value => husband_ProfileKeys_arr, :updated_at => Time.current}
 
   end
 
@@ -157,24 +167,19 @@ class StartController < ApplicationController
     father_name = profiles_array[1][1]
 
     # add Author rows
-    # new_row = author_name, 1, father_name
     author_ProfileKeys_arr << [author_name, 1, father_name]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Father rows
     if author_sex
-      # new_row = father_name, 3, author_name
       father_ProfileKeys_arr << [father_name, 3, author_name]
     else
-      # new_row = father_name, 4, author_name
       father_ProfileKeys_arr << [father_name, 4, author_name]
     end
     @father_ProfileKeys_arr = father_ProfileKeys_arr # DEBUGG TO VIEW
 
     session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
     session[:father_ProfileKeys_arr] = {:value => father_ProfileKeys_arr, :updated_at => Time.current}
-
-
 
   end
 
@@ -197,23 +202,18 @@ class StartController < ApplicationController
     mother_name = profiles_array[2][1]
 
     # add Author rows
-    # new_row = author_name, 2, mother_name
     author_ProfileKeys_arr << [author_name, 2, mother_name]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Father rows
-    # new_row = father_name, 8, mother_name
     father_ProfileKeys_arr << [father_name, 8, mother_name]
     @father_ProfileKeys_arr = father_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Mother rows
-    # new_row = mother_name, 7, father_name
     mother_ProfileKeys_arr << [mother_name, 7, father_name]
     if author_sex
-      # new_row = mother_name, 3, author_name
       mother_ProfileKeys_arr << [mother_name, 3, author_name]
     else
-      # new_row = mother_name, 4, author_name
       mother_ProfileKeys_arr << [mother_name, 4, author_name]
     end
     @mother_ProfileKeys_arr = mother_ProfileKeys_arr # DEBUGG TO VIEW
