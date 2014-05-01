@@ -6,7 +6,7 @@
       DEBUGG: Current_user.id - #{current_user.id.inspect}
       DEBUGG: Current_user.profile_id - #{current_user.profile_id.inspect}
       DEBUGG: Current_user row - #{@curr_user_row.inspect}
-    /<p>@us_id: <haml:loud> @us_id.inspect </haml:loud></p>
+    / <p>@us_id: <haml:loud> @us_id.inspect </haml:loud></p>
     / <p>@sel_names_male: <haml:loud> @sel_names_male.inspect </haml:loud></p>
     / <p>@sel_names_female: <haml:loud> @sel_names_female.inspect </haml:loud></p>
   %h4 Ввод информации об авторе стартового дерева
@@ -17,8 +17,11 @@
       = select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя'
     = submit_tag 'Ввод'
   %div
+    -#%p
+    -#  Массив профилей БК: @profiles_array: #{@profiles_array.inspect}
+
     %p#name_container
-      Мое имя: @user_name: #{@user_name.inspect}, Я - #{@user_sex.inspect}
+      Массив профилей БК: @profiles_array: #{@profiles_array.inspect}, Мое имя: @user_name: #{@user_name.inspect}, Я - #{@user_sex.inspect}
   #next_container
   %h4
     DEBUGG Выйти и сохранить: Переход на страницу start/save_start_tables:  #{link_to "SAVE -->", save_start_tables_path}

@@ -1,5 +1,6 @@
 $("#son_form").fadeOut(1200);
 if (<%= @more_sons_exists == "yes" %>) {
+    $("#name_container").append('Массив профилей БК: @profiles_array: <%= @profiles_array.inspect %>.  ');
     $("#name_container").append('* Имя сына: <%= @son_name %>. ');
     $("#name_container").append(' Oн - <%= @son_sex %> ');
 }

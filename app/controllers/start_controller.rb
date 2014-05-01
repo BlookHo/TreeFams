@@ -92,6 +92,14 @@ class StartController < ApplicationController
   end
 
 
+  # Добавить ряды в ProfileKeys об Авторе
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def add_author_to_ProfileKeys(author_array)
+
+    
+  end
   ####  STORE TREE PROFILE  ########################
 
   def store_myself
@@ -100,12 +108,30 @@ class StartController < ApplicationController
       @user_sex = check_sex_by_name(@user_name) # display sex by name = извлечение пола из введенного имени
     end
 
+# Begin All Arrays
     profiles_array = []  #
+
+    @fathers_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о father
+    @mothers_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    @daughters_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    @sons_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    @brothers_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    @sisters_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    @husbands_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+    @wives_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
+
+
     one_profile_arr = add_profile(nil,@user_name,@user_sex)
     profiles_array << one_profile_arr
 
+    add_author_to_ProfileKeys(one_profile_arr) #
+
+
+
     session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     session[:user_sex] = {:value => @user_sex, :updated_at => Time.current}
+
+    @profiles_array = profiles_array # DEBUGG TO VIEW
 
     @sel_names_male = session[:sel_names_male][:value]
     respond_to do |format|
@@ -136,6 +162,9 @@ class StartController < ApplicationController
       profiles_array << one_profile_arr
 
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+
+      @profiles_array = profiles_array # DEBUGG TO VIEW
+
     end
 
     @sel_names_female = session[:sel_names_female][:value]
@@ -164,6 +193,10 @@ class StartController < ApplicationController
       profiles_array << one_profile_arr
 
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+
+      @profiles_array = profiles_array # DEBUGG TO VIEW
+
+
     end
     @sel_names_male = session[:sel_names_male][:value]
     respond_to do |format|
@@ -198,11 +231,16 @@ class StartController < ApplicationController
         profiles_array << one_profile_arr
 
         session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+
+        @profiles_array = profiles_array # DEBUGG TO VIEW
+
+
       end
       @next_view = 'start/enter_brother'
 
     else
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+      @profiles_array = profiles_array # DEBUGG TO VIEW
       @next_view = 'start/enter_sister'   #
     end
 
@@ -236,11 +274,15 @@ class StartController < ApplicationController
         profiles_array << one_profile_arr
 
         session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+
+        @profiles_array = profiles_array # DEBUGG TO VIEW
+
       end
       @next_view = 'start/enter_sister' # повтор ввода новой сестры
 
     else
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+      @profiles_array = profiles_array # DEBUGG TO VIEW
       @next_view = check_husband_or_wife   # взавис-ти от пола - переход к жене или мужу
 
     end
@@ -269,6 +311,9 @@ class StartController < ApplicationController
       profiles_array << one_profile_arr
 
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+
+      @profiles_array = profiles_array # DEBUGG TO VIEW
+
     end
 
     @sel_names_male = session[:sel_names_male][:value]
@@ -298,6 +343,9 @@ class StartController < ApplicationController
       profiles_array << one_profile_arr
 
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+
+      @profiles_array = profiles_array # DEBUGG TO VIEW
+
     end
 
     @sel_names_male = session[:sel_names_male][:value]
@@ -334,11 +382,15 @@ class StartController < ApplicationController
         profiles_array << one_profile_arr
 
         session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+
+        @profiles_array = profiles_array # DEBUGG TO VIEW
+
       end
       @next_view = 'start/enter_son'
 
     else
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+      @profiles_array = profiles_array # DEBUGG TO VIEW
       @next_view = 'start/enter_daugther'   #
     end
 
@@ -373,6 +425,9 @@ class StartController < ApplicationController
         profiles_array << one_profile_arr
 
         session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
+
+        @profiles_array = profiles_array # DEBUGG TO VIEW
+
       end
       @next_view = 'start/enter_daugther'
 
@@ -408,6 +463,10 @@ class StartController < ApplicationController
   #  profiles_array = session[:profiles_array][:value]
     if !session[:profiles_array].blank?
       profiles_array = session[:profiles_array][:value]
+
+      @profiles_array = profiles_array # DEBUGG TO VIEW
+
+
     end
 
     if user_signed_in?

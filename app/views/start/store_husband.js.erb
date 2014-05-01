@@ -1,4 +1,5 @@
 $("#husband_form").fadeOut(1200);
+$("#name_container").append('Массив профилей БК: @profiles_array: <%= @profiles_array.inspect %>.  ');
 $("#name_container").append('* Имя мужа: <%= @husband_name %>. ');
 $("#name_container").append(' Он - <%= @husband_sex %> ');
 $("#next_container").html("<%= j render 'start/enter_son' %>");
