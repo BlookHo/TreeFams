@@ -15,7 +15,7 @@ class GraphTreeController < ApplicationController
       @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
       @profiles_tree_arr_len = profiles_tree_arr.length  # DEBUGG TO VIEW
 
-      @this_is_graph = "THIS IS GRAPH"  # DEBUGG TO VIEW
+      @this_is_graph = "THIS IS GRAPH _2" # DEBUGG TO VIEW
 
 
     end
