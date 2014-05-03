@@ -1003,13 +1003,13 @@ class StartController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
-  def save_tree(profiles_array)
+  def save_tree(profiles_tree_arr)
 
-    for arr_i in 1 .. profiles_array.length-1
+    for arr_i in 1 .. profiles_tree_arr.length-1
       new_tree = Tree.new
         new_tree.user_id = current_user.id               # user_id
-        new_tree.profile_id = profiles_array[arr_i][0]   # profile_id
-        new_tree.relation_id = profiles_array[arr_i][1]  # relation_id
+        new_tree.profile_id = profiles_tree_arr[arr_i][0]   # profile_id
+        new_tree.relation_id = profiles_tree_arr[arr_i][1]  # relation_id
       new_tree.save
     end
 
@@ -1033,7 +1033,7 @@ class StartController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
-  def save_profile_keys
+  def save_profile_keys(profiles_array)
 
 #Profile
 ## 34 - Tree 6
@@ -1062,20 +1062,6 @@ class StartController < ApplicationController
 #{profile_id: 34, admin: false, email: 'tt@tt.tt', password: '666666', password_confirmation: '666666' },
 
 
-#ProfileKey
-# Tree 6, Pfoile 34 - Author - Николай
-# NearCircle
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 1, is_profile_id: 35, is_name_id: 45 },
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 2, is_profile_id: 36, is_name_id: 379 },
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 8, is_profile_id: 37, is_name_id: 371 },
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 3, is_profile_id: 38, is_name_id: 231 },
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 4, is_profile_id: 39, is_name_id: 506 },
-
-# Tree 6, Pfoile 35 - Борис
-# NearCircle
-#    {user_id: 6, profile_id: 35, name_id: 45, relation_id: 8, is_profile_id: 36, is_name_id: 379 },
-#    {user_id: 6, profile_id: 35, name_id: 45, relation_id: 3, is_profile_id: 34, is_name_id: 212 },
-
 
 
 # 1.Формир-е БК current_user из Profile:
@@ -1090,13 +1076,112 @@ class StartController < ApplicationController
 # .
 # конец цикла
 #
-# /
-    @tree_row = Tree.where(:user_id => current_user.id)
-    if !@tree_row.blank?
-      @tree_row.each do |tree_current|
+
+# @profiles_array: [[nil, "Август", true], [1, "Богдан", true], [2, "Вера", false], [8, "Галя", false], [3, "Давыд", true], [3, "Денис", true], [4, "Ева", false], [4, "Ефросинья", false]]
+#
+# @author_ProfileKeys_arr - [["Август", 1, "Богдан"], ["Август", 2, "Вера"], ["Август", 8, "Галя"], ["Август", 3, "Давыд"], ["Август", 3, "Денис"], ["Август", 4, "Ева"], ["Август", 4, "Ефросинья"]]
+# @wife_ProfileKeys_arr - [["Галя", 7, "Август"], ["Галя", 3, "Давыд"], ["Галя", 3, "Денис"], ["Галя", 4, "Ева"], ["Галя", 4, "Ефросинья"]]
+# @husband_ProfileKeys_arr - []
+# @son_ProfileKeys_arr - [["Давыд", 1, "Август"], ["Давыд", 2, "Галя"], ["Денис", 1, "Август"], ["Денис", 2, "Галя"], ["Давыд", 5, "Денис"], ["Денис", 5, "Давыд"], ["Давыд", 6, "Ева"], ["Денис", 6, "Ева"], ["Давыд", 6, "Ефросинья"], ["Денис", 6, "Ефросинья"]]
+# @sons_names_arr
+# @daugther_ProfileKeys_arr - [["Ева", 1, "Август"], ["Ева", 2, "Галя"], ["Ева", 5, "Давыд"], ["Ева", 5, "Денис"], ["Ефросинья", 1, "Август"], ["Ефросинья", 2, "Галя"], ["Ева", 6, "Ефросинья"], ["Ефросинья", 6, "Ева"], ["Ефросинья", 5, "Давыд"], ["Ефросинья", 5, "Денис"]]
+# @daugthers_names_arr - ["Ева", "Ефросинья"]
+#
+
+    author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
+
+    father_ProfileKeys_arr = session[:father_ProfileKeys_arr][:value]
+
+    mother_ProfileKeys_arr = session[:mother_ProfileKeys_arr][:value]  #
+
+    brother_ProfileKeys_arr = session[:brother_ProfileKeys_arr][:value]
+    brothers_names_arr = session[:brothers_names_arr][:value]  #
+
+    sister_ProfileKeys_arr = session[:sister_ProfileKeys_arr][:value]  #
+    sisters_names_arr = session[:sisters_names_arr][:value]  #
+
+    husband_ProfileKeys_arr = session[:husband_ProfileKeys_arr][:value]
+    husband_name = session[:husband_name][:value]
+
+    wife_ProfileKeys_arr = session[:wife_ProfileKeys_arr][:value]  #
+    wife_name = session[:wife_name][:value]
+
+    son_ProfileKeys_arr = session[:son_ProfileKeys_arr][:value]
+    sons_names_arr = session[:sons_names_arr][:value]
+
+    daugther_ProfileKeys_arr = session[:daugther_ProfileKeys_arr][:value]
+    daugthers_names_arr = session[:daugthers_names_arr][:value]
 
 
-      @new_profile_keys_row = ProfileKey.new
+#ProfileKey
+# Tree 6, Pfoile 34 - Author - Николай
+# NearCircle
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 1, is_profile_id: 35, is_name_id: 45 },
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 2, is_profile_id: 36, is_name_id: 379 },
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 8, is_profile_id: 37, is_name_id: 371 },
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 3, is_profile_id: 38, is_name_id: 231 },
+#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 4, is_profile_id: 39, is_name_id: 506 },
+
+# Tree 6, Pfoile 35 - Борис
+# NearCircle
+#    {user_id: 6, profile_id: 35, name_id: 45, relation_id: 8, is_profile_id: 36, is_name_id: 379 },
+#    {user_id: 6, profile_id: 35, name_id: 45, relation_id: 3, is_profile_id: 34, is_name_id: 212 },
+
+    profiles_keys_arr = []
+    relation_profile_keys_arr = []     #
+    if !profiles_array.blank?
+      for arr_i in 0 .. profiles_array.length-1
+
+        relation_id = profiles_array[arr_i][0]
+
+        case relation_id
+
+          when nil
+            for row_ind in 0 .. author_ProfileKeys_arr.length-1
+              new_profile_key_row = ProfileKey.new
+              new_profile_key_row.user_id = current_user.id
+              new_profile_key_row.profile_id = current_user.id
+              new_profile_key_row.name_id = current_user.id
+              new_profile_key_row.relation_id = current_user.id
+              new_profile_key_row.is_profile_id = current_user.id
+              new_profile_key_row.is_name_id = current_user.id
+              new_profile_key_row.save
+
+
+
+
+            end
+          when 1  # "father"
+
+
+
+          when 2  # "mother"
+
+          when 3   # "son"
+
+          when 4   # "daughter"
+
+          when 5  # "brother"
+
+          when 6   # "sister"
+
+          when 7   # "husband"
+
+          when 8   # "wife"
+
+          else
+           @search_relation = "ERROR: no relation in tree profile"
+           # TODO: call error_processing
+
+
+
+
+        end
+
+
+
+
+
 
       end
 
@@ -1104,11 +1189,34 @@ class StartController < ApplicationController
 
 
 
-    user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
-    if !user_profile.blank?
-      current_user.profile_id = user_profile[0]['id']
-      current_user.save
-    end
+    #@tree_row = Tree.where(:user_id => current_user.id)
+    #if !@tree_row.blank?
+    #  @tree_row.each do |tree_current|
+    #
+    #
+    #  @new_profile_keys_row = ProfileKey.new
+    #
+    #  end
+    #
+    #end
+    #
+    #
+    #
+    #user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
+    #if !user_profile.blank?
+    #  current_user.profile_id = user_profile[0]['id']
+    #  current_user.save
+    #end
+
+  end
+
+  # Заполнение таблицы ProfileKey для введенного дерева
+  # для current_user
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see
+  def make_profile_keys_save_rows(profiles_array)
+
 
   end
 
@@ -1117,4 +1225,6 @@ class StartController < ApplicationController
 
 
 
-end
+
+
+  end

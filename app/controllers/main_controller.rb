@@ -188,7 +188,7 @@ class MainController < ApplicationController
 
           else
             @search_profiles_relation = "ERROR: no relation in tree profile"
-          # TODO: call error_processing
+            # TODO: call error_processing
 
         end
 
@@ -473,7 +473,6 @@ class MainController < ApplicationController
     @messages_sisters_found_arr = []  # Массив уже найденных user_id
     @messages_husbands_found_ids_arr = []  # Массив уже найденных user_id
     @messages_wives_found_arr = []  # Массив уже найденных user_id
-
 
 
     if !tree_arr.blank?
