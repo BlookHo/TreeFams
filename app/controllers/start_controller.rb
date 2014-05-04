@@ -993,7 +993,7 @@ class StartController < ApplicationController
             new_profile.email = current_user.email # user regged email
           else
             new_profile.user_id = 0  # profile - not user_id
-            new_profile.email = ""    # profile - not user_id
+            new_profile.email = ""   # profile - not user_id
           end
           new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
           if profiles_array[arr_i][2] # sex_id
@@ -1003,14 +1003,11 @@ class StartController < ApplicationController
           end
         new_profile.save
 
-        #if arr_i == 0 # only for user
-        #  new_profile_arr[0] = current_user.id # user_id
-        #else
-        new_profile_arr[0] = new_profile.id  # profile_id
-        #end
-        new_profile_arr[1] = profiles_array[arr_i][0]  # Relation_id
-        #new_profile_arr[2] = new_profile.id  # # DEBUGG TO VIEW profile_id
-        new_profile_arr[2] = new_profile.name_id  # # DEBUGG TO VIEW name_id
+        new_profile_arr[0] = new_profile.id             # profile_id
+        new_profile_arr[1] = profiles_array[arr_i][1]   # name
+        new_profile_arr[2] = new_profile.name_id        # name_id
+        new_profile_arr[3] = profiles_array[arr_i][2]   # sex_id
+        new_profile_arr[4] = profiles_array[arr_i][0]   # Relation_id
 
         profiles_arr_w_ids <<  new_profile_arr
         new_profile_arr = []
@@ -1144,8 +1141,8 @@ author_ProfileKeys_arr = [["Август", 1, "Богдан"], ["Август", 
     if !profiles_array.blank?
       for arr_i in 0 .. profiles_array.length-1
 
-        relation_id = profiles_array[arr_i][1]
-
+        relation_id = profiles_array[arr_i][0]
+        @relation_id = relation_id
         case relation_id
 
           when 0
