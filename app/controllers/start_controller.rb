@@ -1061,34 +1061,6 @@ class StartController < ApplicationController
   # @see
   def save_profile_keys(profiles_array, profiles_arr_w_ids)
 
-#Profile
-## 34 - Tree 6
-#        {user_id: 6, name_id: 212, email: 'tt@tt.tt', sex_id: 1 },
-## 35
-#        {user_id: 0, name_id: 45, email: '', sex_id: 1 },
-## 36
-#        {user_id: 0, name_id: 379, email: '', sex_id: 0 },
-## 37
-#        {user_id: 0, name_id: 371, email: '', sex_id: 0 },
-## 38
-#        {user_id: 0, name_id: 231, email: '', sex_id: 1 },
-## 39
-#        {user_id: 0, name_id: 506, email: '', sex_id: 0 },
-
-#Tree
-## 34 - Tree 6
-#    {user_id: 6, profile_id: 35, relation_id: 1, connected: false },
-#    {user_id: 6, profile_id: 36, relation_id: 2, connected: false },
-#    {user_id: 6, profile_id: 37, relation_id: 8, connected: false },
-#    {user_id: 6, profile_id: 38, relation_id: 3, connected: false },
-#    {user_id: 6, profile_id: 39, relation_id: 4, connected: false },
-
-#User
-# 6
-#{profile_id: 34, admin: false, email: 'tt@tt.tt', password: '666666', password_confirmation: '666666' },
-
-
-
 
 # 1.Формир-е БК current_user из Profile:
 #   Profile.where(:user_id => current_user.id)
@@ -1188,10 +1160,10 @@ author_ProfileKeys_arr = [["Август", 1, "Богдан"], ["Август", 
               #new_profile_key_row.is_name_id = current_user.id
               #new_profile_key_row.save
 
-              relation_profile_keys_arr[0] = current_user.id  #    {user_id: 6
-              relation_profile_keys_arr[1] = profiles_arr_w_ids[arr_i][1] # ??????? [1]  profile_id: 34
+              relation_profile_keys_arr[0] = current_user.id  ###    {user_id: 6
+              relation_profile_keys_arr[1] = profiles_arr_w_ids[arr_i][0] # ??????? [1]  profile_id: 34
               relation_profile_keys_arr[2] = profiles_array[arr_i][1]  # name_id
-              relation_profile_keys_arr[3] = author_ProfileKeys_arr[row_ind][1]  # relation_id
+              relation_profile_keys_arr[3] = author_ProfileKeys_arr[row_ind][1]  # relation_id  ###
               relation_profile_keys_arr[4] =    # is_profile_id
               relation_profile_keys_arr[5] = author_ProfileKeys_arr[row_ind][2]   # is_name_id
 
@@ -1218,9 +1190,6 @@ author_ProfileKeys_arr = [["Август", 1, "Богдан"], ["Август", 
           else
            @search_relation = "ERROR: no relation in tree profile"
            # TODO: call error_processing
-
-
-
 
         end
 
