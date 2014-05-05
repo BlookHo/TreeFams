@@ -229,6 +229,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   compass-rails
   devise!
+  font-awesome-rails
   gon
   haml
   jbuilder (~> 1.2)

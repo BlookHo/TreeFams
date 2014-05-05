@@ -14,6 +14,8 @@ gem 'compass-rails'
 gem 'bootstrap-sass'
 gem 'haml'
 
+gem "font-awesome-rails"
+
 gem 'russian', '~> 0.6.0'
 
 
