@@ -1199,22 +1199,27 @@ daugther_ProfileKeys_arr = [["Ева", 1, "Август", 0], ["Ева", 2, "Г�
 
           when 4   # "daughter"
             for row_ind in 0 .. daugther_ProfileKeys_arr.length-1
-              new_profile_key_row = ProfileKey.new
-              new_profile_key_row.user_id = current_user.id                         ###    user_id
-              new_profile_key_row.profile_id = profiles_arr_w_ids[arr_i][0]         # profile_id
-              new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]            ### name_id
-              new_profile_key_row.relation_id = daugther_ProfileKeys_arr[row_ind][1]    ### relation_id
+              if !daugther_ProfileKeys_arr[row_ind][4]
+                new_profile_key_row = ProfileKey.new
+                new_profile_key_row.user_id = current_user.id                         ###    user_id
+                new_profile_key_row.profile_id = profiles_arr_w_ids[arr_i][0]         # profile_id
+                #new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]            ### name_id
+                name_id = Name.find_by_name(daugther_ProfileKeys_arr[row_ind][0]).id  # name_id
+                new_profile_key_row.name_id = name_id     # name_id
 
-              is_profile_id = profile_id_hash.key([daugther_ProfileKeys_arr[row_ind][2], daugther_ProfileKeys_arr[row_ind][3]])
-              new_profile_key_row.is_profile_id = is_profile_id  #  is_profile_id
+                #new_profile_key_row.name_id = daugther_ProfileKeys_arr[row_ind][0]            ### name_id
+                new_profile_key_row.relation_id = daugther_ProfileKeys_arr[row_ind][1]    ### relation_id
 
-              is_name_id = Name.find_by_name(daugther_ProfileKeys_arr[row_ind][2]).id  # name_id
-              new_profile_key_row.is_name_id = is_name_id     # is_name_id
+                is_profile_id = profile_id_hash.key([daugther_ProfileKeys_arr[row_ind][2], daugther_ProfileKeys_arr[row_ind][3]])
+                new_profile_key_row.is_profile_id = is_profile_id  #  is_profile_id
 
-              #new_profile_key_row.is_profile_id = profiles_arr_w_ids[row_ind+1][0]  #  is_profile_id
-              #new_profile_key_row.is_name_id = profiles_arr_w_ids[row_ind+1][2]     # is_name_id
+                is_name_id = Name.find_by_name(daugther_ProfileKeys_arr[row_ind][2]).id  # name_id
+                new_profile_key_row.is_name_id = is_name_id     # is_name_id
 
-              new_profile_key_row.save
+                new_profile_key_row.save
+                daugther_ProfileKeys_arr[row_ind][4] = true
+              end
+
             end
 
           when 5  # "brother"
@@ -1236,9 +1241,6 @@ daugther_ProfileKeys_arr = [["Ева", 1, "Август", 0], ["Ева", 2, "Г�
 
               is_name_id = Name.find_by_name(wife_ProfileKeys_arr[row_ind][2]).id  # name_id
               new_profile_key_row.is_name_id = is_name_id     # is_name_id
-
-              #new_profile_key_row.is_profile_id = profiles_arr_w_ids[row_ind+1][0]  #  is_profile_id
-              #new_profile_key_row.is_name_id = profiles_arr_w_ids[row_ind+1][2]     # is_name_id
 
               new_profile_key_row.save
             end
