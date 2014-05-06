@@ -1210,7 +1210,7 @@ class StartController < ApplicationController
             son_ProfileKeys_arr = [["Давыд", 1, "Август"], ["Давыд", 2, "Галя"], ["Денис", 1, "Август"], ["Денис", 2, "Галя"], ["Давыд", 5, "Денис"], ["Денис", 5, "Давыд"], ["Давыд", 6, "Ева"], ["Денис", 6, "Ева"], ["Давыд", 6, "Ефросинья"], ["Денис", 6, "Ефросинья"]]
             @son_ProfileKeys_arr = son_ProfileKeys_arr  # DEBUGG TO VIEW
 
-#            profile_id = profiles_arr_w_ids[arr_i][0]
+            profile_id = profiles_arr_w_ids[arr_i][0]
             save_profile_keys(profile_id, profile_id_hash, son_ProfileKeys_arr)
 
           when 4   # "daughter"
@@ -1221,7 +1221,7 @@ class StartController < ApplicationController
             @daugther_ProfileKeys_arr = daugther_ProfileKeys_arr  # DEBUGG TO VIEW
 
 #            profile_id = profiles_arr_w_ids[arr_i][0]
-            save_profile_keys(profile_id, profile_id_hash, daugther_ProfileKeys_arr)
+#            save_profile_keys(profile_id, profile_id_hash, daugther_ProfileKeys_arr)
 
             #for row_ind in 0 .. daugther_ProfileKeys_arr.length-1
             #  if !daugther_ProfileKeys_arr[row_ind][4]
@@ -1251,21 +1251,21 @@ class StartController < ApplicationController
             #brothers_names_arr = session[:brothers_names_arr][:value]  #
 
 #            profile_id = profiles_arr_w_ids[arr_i][0]
-            save_profile_keys(profile_id, profile_id_hash, brother_ProfileKeys_arr)
+#            save_profile_keys(profile_id, profile_id_hash, brother_ProfileKeys_arr)
 
           when 6   # "sister"
 #            sister_ProfileKeys_arr = session[:sister_ProfileKeys_arr][:value]  #
 #            sisters_names_arr = session[:sisters_names_arr][:value]  #
 
 #            profile_id = profiles_arr_w_ids[arr_i][0]
-            save_profile_keys(profile_id, profile_id_hash, sister_ProfileKeys_arr)
+#            save_profile_keys(profile_id, profile_id_hash, sister_ProfileKeys_arr)
 
           when 7   # "husband"
 #            husband_ProfileKeys_arr = session[:husband_ProfileKeys_arr][:value]
             #husband_name = session[:husband_name][:value]
 
 #            profile_id = profiles_arr_w_ids[arr_i][0]
-            save_profile_keys(profile_id, profile_id_hash, husband_ProfileKeys_arr)
+#            save_profile_keys(profile_id, profile_id_hash, husband_ProfileKeys_arr)
 
           when 8   # "wife"
 #            wife_ProfileKeys_arr = session[:wife_ProfileKeys_arr][:value]  #
@@ -1275,7 +1275,7 @@ class StartController < ApplicationController
             @wife_ProfileKeys_arr = wife_ProfileKeys_arr  # DEBUGG TO VIEW
 
 #            profile_id = profiles_arr_w_ids[arr_i][0]
-            save_profile_keys(profile_id, profile_id_hash, wife_ProfileKeys_arr)
+#            save_profile_keys(profile_id, profile_id_hash, wife_ProfileKeys_arr)
 
           else
            @search_relation = "ERROR: no relation in tree profile"
