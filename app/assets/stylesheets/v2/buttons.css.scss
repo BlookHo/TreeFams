@@ -1,16 +1,21 @@
-.btn{
+.btn,
+input[type=submit].btn{
   display:inline-block;
   color:#fff;
   text-decoration:none;
   border-radius:12px;
   font-weight:bold;
-
   padding:0 21px;
   height:42px;
   border-radius:21px;
   line-height:43px;
 
   font-size:14px;
+
+  border:none;
+  outline:none;
+  cursor:pointer;
+
 
   &.large{
     height:60px;
@@ -26,7 +31,6 @@
       background-color:green;
     }
   }
-
 
   &.red{
     background-color:$red-color;
