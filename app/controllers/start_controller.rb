@@ -1058,10 +1058,10 @@ class StartController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
-  def save_profile_keys(profile_id, profile_id_hash, profile_keys_arr)
+  def save_profile_keys(name, profile_id, profile_id_hash, profile_keys_arr)
 
     for row_ind in 0 .. profile_keys_arr.length-1
-      if !profile_keys_arr[row_ind][4]
+      if !profile_keys_arr[row_ind][4] and (profile_keys_arr[row_ind][0] == name)
         new_profile_key_row = ProfileKey.new
         new_profile_key_row.user_id = current_user.id                            # user_id
         new_profile_key_row.profile_id = profile_id            # profile_id
@@ -1125,6 +1125,21 @@ class StartController < ApplicationController
                            [5, "Давыд", 90, true, 3], [6, "Денис", 97, true, 3],
                            [7, "Ева", 390, false, 4], [8, "Ефросинья", 397, false, 4]]
 
+    son_ProfileKeys_arr = [["Давыд", 1, "Август", 0],
+                           ["Давыд", 2, "Галя", 8],
+                           ["Давыд", 5, "Денис", 3],
+                           ["Давыд", 6, "Ева", 4],
+                           ["Давыд", 6, "Ефросинья", 4],
+
+                           ["Денис", 1, "Август", 0],
+                           ["Денис", 2, "Галя", 8],
+                           ["Денис", 5, "Давыд", 3],
+                           ["Денис", 6, "Ева", 4],
+                           ["Денис", 6, "Ефросинья", 4]]
+    @son_ProfileKeys_arr = son_ProfileKeys_arr  # DEBUGG TO VIEW
+
+    daugther_ProfileKeys_arr = [["Ева", 1, "Август", 0], ["Ева", 2, "Галя", 8], ["Ева", 5, "Давыд", 3], ["Ева", 5, "Денис", 3], ["Ефросинья", 1, "Август", 0], ["Ефросинья", 2, "Галя", 8], ["Ева", 6, "Ефросинья", 4], ["Ефросинья", 6, "Ева", 4], ["Ефросинья", 5, "Давыд", 3], ["Ефросинья", 5, "Денис", 3]]
+    @daugther_ProfileKeys_arr = daugther_ProfileKeys_arr  # DEBUGG TO VIEW
 
 #   {user_id: 6, profile_id: 34, name_id: 212, relation_id: 1, is_profile_id: 35, is_name_id: 45 },
 #    @profile_id_hash: {1=>["Август", 0], 2=>["Богдан", 1], 3=>["Вера", 2], 4=>["Галя", 8], 5=>["Давыд", 3], 6=>["Денис", 3], 7=>["Ева", 4], 8=>["Ефросинья", 4]}
@@ -1151,8 +1166,9 @@ class StartController < ApplicationController
 
             @author_ProfileKeys_arr = author_ProfileKeys_arr  # DEBUGG TO VIEW
 
+            name = profiles_arr_w_ids[arr_i][1]
             profile_id = profiles_arr_w_ids[arr_i][0]
-            save_profile_keys(profile_id, profile_id_hash, author_ProfileKeys_arr)
+            save_profile_keys(name,profile_id, profile_id_hash, author_ProfileKeys_arr)
 
             #for row_ind in 0 .. author_ProfileKeys_arr.length-1
             #  if !author_ProfileKeys_arr[row_ind][4]
@@ -1207,21 +1223,19 @@ class StartController < ApplicationController
 #            son_ProfileKeys_arr = session[:son_ProfileKeys_arr][:value]
             #sons_names_arr = session[:sons_names_arr][:value]
 
-            son_ProfileKeys_arr = [["Давыд", 1, "Август", 0], ["Давыд", 2, "Галя", 8], ["Денис", 1, "Август", 0], ["Денис", 2, "Галя", 8], ["Давыд", 5, "Денис", 3], ["Денис", 5, "Давыд", 3], ["Давыд", 6, "Ева", 4], ["Денис", 6, "Ева", 4], ["Давыд", 6, "Ефросинья", 4], ["Денис", 6, "Ефросинья", 4]]
-            @son_ProfileKeys_arr = son_ProfileKeys_arr  # DEBUGG TO VIEW
 
+            name = profiles_arr_w_ids[arr_i][1]
             profile_id = profiles_arr_w_ids[arr_i][0]
-            save_profile_keys(profile_id, profile_id_hash, son_ProfileKeys_arr)
+            save_profile_keys(name, profile_id, profile_id_hash, son_ProfileKeys_arr)
 
           when 4   # "daughter"
 #            daugther_ProfileKeys_arr = session[:daugther_ProfileKeys_arr][:value]
             #daugthers_names_arr = session[:daugthers_names_arr][:value]
 
-            daugther_ProfileKeys_arr = [["Ева", 1, "Август", 0], ["Ева", 2, "Галя", 8], ["Ева", 5, "Давыд", 3], ["Ева", 5, "Денис", 3], ["Ефросинья", 1, "Август", 0], ["Ефросинья", 2, "Галя", 8], ["Ева", 6, "Ефросинья", 4], ["Ефросинья", 6, "Ева", 4], ["Ефросинья", 5, "Давыд", 3], ["Ефросинья", 5, "Денис", 3]]
-            @daugther_ProfileKeys_arr = daugther_ProfileKeys_arr  # DEBUGG TO VIEW
+            name = profiles_arr_w_ids[arr_i][1]
 
-#            profile_id = profiles_arr_w_ids[arr_i][0]
-#            save_profile_keys(profile_id, profile_id_hash, daugther_ProfileKeys_arr)
+            profile_id = profiles_arr_w_ids[arr_i][0]
+            save_profile_keys(name,profile_id, profile_id_hash, daugther_ProfileKeys_arr)
 
             #for row_ind in 0 .. daugther_ProfileKeys_arr.length-1
             #  if !daugther_ProfileKeys_arr[row_ind][4]
