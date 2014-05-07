@@ -1207,7 +1207,7 @@ class StartController < ApplicationController
 #            son_ProfileKeys_arr = session[:son_ProfileKeys_arr][:value]
             #sons_names_arr = session[:sons_names_arr][:value]
 
-            son_ProfileKeys_arr = [["Давыд", 1, "Август"], ["Давыд", 2, "Галя"], ["Денис", 1, "Август"], ["Денис", 2, "Галя"], ["Давыд", 5, "Денис"], ["Денис", 5, "Давыд"], ["Давыд", 6, "Ева"], ["Денис", 6, "Ева"], ["Давыд", 6, "Ефросинья"], ["Денис", 6, "Ефросинья"]]
+            son_ProfileKeys_arr = [["Давыд", 1, "Август", 0], ["Давыд", 2, "Галя", 8], ["Денис", 1, "Август", 0], ["Денис", 2, "Галя", 8], ["Давыд", 5, "Денис", 3], ["Денис", 5, "Давыд", 3], ["Давыд", 6, "Ева", 4], ["Денис", 6, "Ева", 4], ["Давыд", 6, "Ефросинья", 4], ["Денис", 6, "Ефросинья", 4]]
             @son_ProfileKeys_arr = son_ProfileKeys_arr  # DEBUGG TO VIEW
 
             profile_id = profiles_arr_w_ids[arr_i][0]
