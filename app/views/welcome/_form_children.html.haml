@@ -1,0 +1,4 @@
+%h2 Как зовут ваших детей?
+
+.control
+  = text_field_tag :name_select, params[:name_select], placeholder: "Начните вводить ваше имя...", data:{names: @sel_names}

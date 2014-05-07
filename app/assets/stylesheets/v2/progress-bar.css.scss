@@ -5,30 +5,41 @@
   width:617px;
 
   li{
-    display:inline;
     display:inline-block;
-    height:40px;
-    line-height:40px;
-    width:40px;
-    color:#fff;
-    border-radius:20px;
-    background-color:#ccc;
-    margin:0 50px;
-    position:relative;
 
+    a{
+      display:block;
+      height:40px;
+      line-height:40px;
+      width:40px;
+      color:#fff;
+      border-radius:20px;
+      background-color:#ccc;
+      margin:0 50px;
+      position:relative;
+      text-decoration:none;
 
-    &.active{
+      &:hover{
+        background-color:#666;
+      }
+    }
+
+    &.active a{
       background-color:$green-color;
     }
+
+    &:first-child a{
+      margin-left:0;
+    }
+
+    &:last-child a{
+      margin-right:0;
+    }
+
+
   }
 
-  li:first-child{
-    margin-left:0;
-  }
 
-  li:last-child{
-    margin-right:0;
-  }
 
   &:before{
     content:'';

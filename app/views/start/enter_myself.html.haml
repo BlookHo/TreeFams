@@ -4,6 +4,7 @@
   %h2
     %span 1.
     Введите Ваше имя
+
   = form_tag store_myself_path, remote: true, id: 'myself_form' do
     .control
       -#= select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя'
@@ -11,6 +12,8 @@
       = text_field_tag :name_select, params[:name_select], placeholder: "Начните вводить ваше имя...", data:{names: @sel_names}
     .control
       = submit_tag 'Дальше', class: [:btn, :green, :large]
+
+
 
 
 
