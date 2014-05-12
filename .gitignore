@@ -19,6 +19,11 @@
 .ruby-gemset
 .ruby-version
 
+#other
+*.DS_Store
+*load_all_seeds.rb
+*dump.rdb
+db/seeds.rb
 
 .idea/*
 *.idea/
