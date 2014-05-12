@@ -1138,8 +1138,24 @@ class StartController < ApplicationController
                            ["Денис", 6, "Ефросинья", 4]]
     @son_ProfileKeys_arr = son_ProfileKeys_arr  # DEBUGG TO VIEW
 
-    daugther_ProfileKeys_arr = [["Ева", 1, "Август", 0], ["Ева", 2, "Галя", 8], ["Ева", 5, "Давыд", 3], ["Ева", 5, "Денис", 3], ["Ефросинья", 1, "Август", 0], ["Ефросинья", 2, "Галя", 8], ["Ева", 6, "Ефросинья", 4], ["Ефросинья", 6, "Ева", 4], ["Ефросинья", 5, "Давыд", 3], ["Ефросинья", 5, "Денис", 3]]
+    daugther_ProfileKeys_arr = [["Ева", 1, "Август", 0],
+                                ["Ева", 2, "Галя", 8],
+                                ["Ева", 5, "Давыд", 3],
+                                ["Ева", 5, "Денис", 3],
+                                ["Ева", 6, "Ефросинья", 4],
+                                ["Ефросинья", 1, "Август", 0],
+                                ["Ефросинья", 2, "Галя", 8],
+                                ["Ефросинья", 6, "Ева", 4],
+                                ["Ефросинья", 5, "Давыд", 3],
+                                ["Ефросинья", 5, "Денис", 3]]
     @daugther_ProfileKeys_arr = daugther_ProfileKeys_arr  # DEBUGG TO VIEW
+
+    wife_ProfileKeys_arr = [["Галя", 7, "Август", 0],
+                            ["Галя", 3, "Давыд", 3],
+                            ["Галя", 3, "Денис", 3],
+                            ["Галя", 4, "Ева", 4],
+                            ["Галя", 4, "Ефросинья", 4]]
+    @wife_ProfileKeys_arr = wife_ProfileKeys_arr  # DEBUGG TO VIEW
 
 #   {user_id: 6, profile_id: 34, name_id: 212, relation_id: 1, is_profile_id: 35, is_name_id: 45 },
 #    @profile_id_hash: {1=>["Август", 0], 2=>["Богдан", 1], 3=>["Вера", 2], 4=>["Галя", 8], 5=>["Давыд", 3], 6=>["Денис", 3], 7=>["Ева", 4], 8=>["Ефросинья", 4]}
@@ -1149,6 +1165,9 @@ class StartController < ApplicationController
     relation_profile_keys_arr = []     #
     if !profiles_arr_w_ids.blank?
       for arr_i in 0 .. profiles_arr_w_ids.length-1
+
+        name = profiles_arr_w_ids[arr_i][1]
+        profile_id = profiles_arr_w_ids[arr_i][0]
 
         relation_id = profiles_arr_w_ids[arr_i][4]
         @relation_id = relation_id   # DEBUGG TO VIEW
@@ -1166,130 +1185,53 @@ class StartController < ApplicationController
 
             @author_ProfileKeys_arr = author_ProfileKeys_arr  # DEBUGG TO VIEW
 
-            name = profiles_arr_w_ids[arr_i][1]
-            profile_id = profiles_arr_w_ids[arr_i][0]
             save_profile_keys(name,profile_id, profile_id_hash, author_ProfileKeys_arr)
-
-            #for row_ind in 0 .. author_ProfileKeys_arr.length-1
-            #  if !author_ProfileKeys_arr[row_ind][4]
-            #
-            #    new_profile_key_row = ProfileKey.new
-            #    new_profile_key_row.user_id = current_user.id                         ###    user_id
-            #    new_profile_key_row.profile_id = profiles_arr_w_ids[arr_i][0]         # profile_id
-            #    new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]            ### name_id
-            #    new_profile_key_row.relation_id = author_ProfileKeys_arr[row_ind][1]  ### relation_id
-            #
-            #    is_profile_id = profile_id_hash.key([author_ProfileKeys_arr[row_ind][2], author_ProfileKeys_arr[row_ind][3]])
-            #    new_profile_key_row.is_profile_id = is_profile_id  #  is_profile_id
-            #
-            #    is_name_id = Name.find_by_name(author_ProfileKeys_arr[row_ind][2]).id  # name_id
-            #    new_profile_key_row.is_name_id = is_name_id     # is_name_id
-            #
-            #    new_profile_key_row.save
-            #
-            #    #relation_profile_keys_arr[0] = current_user.id                    ###    user_id
-            #    #relation_profile_keys_arr[1] = profiles_arr_w_ids[arr_i][0]       # profile_id
-            #    #relation_profile_keys_arr[2] = profiles_arr_w_ids[arr_i][2]       ### name_id
-            #    #relation_profile_keys_arr[3] = profiles_arr_w_ids[arr_i][1]       ### name
-            #    #relation_profile_keys_arr[4] = author_ProfileKeys_arr[row_ind][1] ### relation_id
-            #    #relation_profile_keys_arr[5] = profiles_arr_w_ids[row_ind+1][0]     #  is_profile_id
-            #    #relation_profile_keys_arr[6] = profiles_arr_w_ids[row_ind+1][2]     # is_name_id
-            #    #relation_profile_keys_arr[7] = profiles_arr_w_ids[row_ind+1][1]     # is_name
-            #    #
-            #    #profile_keys_arr << relation_profile_keys_arr
-            #    #relation_profile_keys_arr = []
-            #
-            #    author_ProfileKeys_arr[row_ind][4] = true
-            #  end
-            #
-            #end
-            #@profile_keys_arr = profile_keys_arr  # DEBUGG TO VIEW
-            #
-            #all_profiles_keys_arr << profile_keys_arr
 
           when 1  # "father"
 #            father_ProfileKeys_arr = session[:father_ProfileKeys_arr][:value]
 
-#            profile_id = profiles_arr_w_ids[arr_i][0]
 #            save_profile_keys(profile_id, profile_id_hash, father_ProfileKeys_arr)
 
           when 2  # "mother"
 #            mother_ProfileKeys_arr = session[:mother_ProfileKeys_arr][:value]  #
 
-#            profile_id = profiles_arr_w_ids[arr_i][0]
 #            save_profile_keys(profile_id, profile_id_hash, mother_ProfileKeys_arr)
 
           when 3   # "son"
 #            son_ProfileKeys_arr = session[:son_ProfileKeys_arr][:value]
             #sons_names_arr = session[:sons_names_arr][:value]
 
-
-            name = profiles_arr_w_ids[arr_i][1]
-            profile_id = profiles_arr_w_ids[arr_i][0]
             save_profile_keys(name, profile_id, profile_id_hash, son_ProfileKeys_arr)
 
           when 4   # "daughter"
 #            daugther_ProfileKeys_arr = session[:daugther_ProfileKeys_arr][:value]
             #daugthers_names_arr = session[:daugthers_names_arr][:value]
 
-            name = profiles_arr_w_ids[arr_i][1]
-
-            profile_id = profiles_arr_w_ids[arr_i][0]
-            save_profile_keys(name,profile_id, profile_id_hash, daugther_ProfileKeys_arr)
-
-            #for row_ind in 0 .. daugther_ProfileKeys_arr.length-1
-            #  if !daugther_ProfileKeys_arr[row_ind][4]
-            #    new_profile_key_row = ProfileKey.new
-            #    new_profile_key_row.user_id = current_user.id                         ###    user_id
-            #    new_profile_key_row.profile_id = profiles_arr_w_ids[arr_i][0]         # profile_id
-            #    #new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]            ### name_id
-            #    name_id = Name.find_by_name(daugther_ProfileKeys_arr[row_ind][0]).id  # name_id
-            #    new_profile_key_row.name_id = name_id     # name_id
-            #
-            #    #new_profile_key_row.name_id = daugther_ProfileKeys_arr[row_ind][0]            ### name_id
-            #    new_profile_key_row.relation_id = daugther_ProfileKeys_arr[row_ind][1]    ### relation_id
-            #
-            #    is_profile_id = profile_id_hash.key([daugther_ProfileKeys_arr[row_ind][2], daugther_ProfileKeys_arr[row_ind][3]])
-            #    new_profile_key_row.is_profile_id = is_profile_id  #  is_profile_id
-            #
-            #    is_name_id = Name.find_by_name(daugther_ProfileKeys_arr[row_ind][2]).id  # name_id
-            #    new_profile_key_row.is_name_id = is_name_id     # is_name_id
-            #
-            #    new_profile_key_row.save
-            #    daugther_ProfileKeys_arr[row_ind][4] = true
-            #  end
-            #end
+            save_profile_keys(name, profile_id, profile_id_hash, daugther_ProfileKeys_arr)
 
           when 5  # "brother"
 #            brother_ProfileKeys_arr = session[:brother_ProfileKeys_arr][:value]
             #brothers_names_arr = session[:brothers_names_arr][:value]  #
 
-#            profile_id = profiles_arr_w_ids[arr_i][0]
 #            save_profile_keys(profile_id, profile_id_hash, brother_ProfileKeys_arr)
 
           when 6   # "sister"
 #            sister_ProfileKeys_arr = session[:sister_ProfileKeys_arr][:value]  #
 #            sisters_names_arr = session[:sisters_names_arr][:value]  #
 
-#            profile_id = profiles_arr_w_ids[arr_i][0]
 #            save_profile_keys(profile_id, profile_id_hash, sister_ProfileKeys_arr)
 
           when 7   # "husband"
 #            husband_ProfileKeys_arr = session[:husband_ProfileKeys_arr][:value]
             #husband_name = session[:husband_name][:value]
 
-#            profile_id = profiles_arr_w_ids[arr_i][0]
 #            save_profile_keys(profile_id, profile_id_hash, husband_ProfileKeys_arr)
 
           when 8   # "wife"
 #            wife_ProfileKeys_arr = session[:wife_ProfileKeys_arr][:value]  #
             #wife_name = session[:wife_name][:value]
 
-            wife_ProfileKeys_arr = [["Галя", 7, "Август", 0], ["Галя", 3, "Давыд", 3], ["Галя", 3, "Денис", 3], ["Галя", 4, "Ева", 4], ["Галя", 4, "Ефросинья", 4]]
-            @wife_ProfileKeys_arr = wife_ProfileKeys_arr  # DEBUGG TO VIEW
-
-#            profile_id = profiles_arr_w_ids[arr_i][0]
-#            save_profile_keys(profile_id, profile_id_hash, wife_ProfileKeys_arr)
+            save_profile_keys(name, profile_id, profile_id_hash, wife_ProfileKeys_arr)
 
           else
            @search_relation = "ERROR: no relation in tree profile"
