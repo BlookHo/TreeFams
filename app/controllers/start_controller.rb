@@ -925,6 +925,8 @@ class StartController < ApplicationController
   # @see
   def save_start_tables
 
+    #### ZEROUVING OF TABLES FOR DEBUGG ########################
+
     #User.delete_all             # DEBUGG
     #User.reset_pk_sequence
 
