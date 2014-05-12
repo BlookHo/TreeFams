@@ -1125,6 +1125,16 @@ class StartController < ApplicationController
                            [5, "Давыд", 90, true, 3], [6, "Денис", 97, true, 3],
                            [7, "Ева", 390, false, 4], [8, "Ефросинья", 397, false, 4]]
 
+    author_ProfileKeys_arr = [["Август", 1, "Богдан",1],
+                              ["Август", 2, "Вера",2],
+                              ["Август", 8, "Галя",8],
+                              ["Август", 3, "Давыд",3],
+                              ["Август", 3, "Денис",3],
+                              ["Август", 4, "Ева",4],
+                              ["Август", 4, "Ефросинья",4]]
+
+    @author_ProfileKeys_arr = author_ProfileKeys_arr  # DEBUGG TO VIEW
+
     son_ProfileKeys_arr = [["Давыд", 1, "Август", 0],
                            ["Давыд", 2, "Галя", 8],
                            ["Давыд", 5, "Денис", 3],
@@ -1157,6 +1167,15 @@ class StartController < ApplicationController
                             ["Галя", 4, "Ефросинья", 4]]
     @wife_ProfileKeys_arr = wife_ProfileKeys_arr  # DEBUGG TO VIEW
 
+    father_ProfileKeys_arr = [["Богдан", 3, "Август", 0],
+                              ["Богдан", 8, "Вера", 2]]
+    @father_ProfileKeys_arr = father_ProfileKeys_arr  # DEBUGG TO VIEW
+
+    mother_ProfileKeys_arr = [["Вера", 3, "Август", 0],
+                              ["Вера", 7, "Богдан", 1]]
+    @mother_ProfileKeys_arr = mother_ProfileKeys_arr  # DEBUGG TO VIEW
+
+
 #   {user_id: 6, profile_id: 34, name_id: 212, relation_id: 1, is_profile_id: 35, is_name_id: 45 },
 #    @profile_id_hash: {1=>["Август", 0], 2=>["Богдан", 1], 3=>["Вера", 2], 4=>["Галя", 8], 5=>["Давыд", 3], 6=>["Денис", 3], 7=>["Ева", 4], 8=>["Ефросинья", 4]}
 
@@ -1175,27 +1194,18 @@ class StartController < ApplicationController
 
           when 0
 #            author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
-            author_ProfileKeys_arr = [["Август", 1, "Богдан",1],
-                                      ["Август", 2, "Вера",2],
-                                      ["Август", 8, "Галя",8],
-                                      ["Август", 3, "Давыд",3],
-                                      ["Август", 3, "Денис",3],
-                                      ["Август", 4, "Ева",4],
-                                      ["Август", 4, "Ефросинья",4]]
 
-            @author_ProfileKeys_arr = author_ProfileKeys_arr  # DEBUGG TO VIEW
-
-            save_profile_keys(name,profile_id, profile_id_hash, author_ProfileKeys_arr)
+            save_profile_keys(name, profile_id, profile_id_hash, author_ProfileKeys_arr)
 
           when 1  # "father"
 #            father_ProfileKeys_arr = session[:father_ProfileKeys_arr][:value]
 
-#            save_profile_keys(profile_id, profile_id_hash, father_ProfileKeys_arr)
+            save_profile_keys(name, profile_id, profile_id_hash, father_ProfileKeys_arr)
 
           when 2  # "mother"
 #            mother_ProfileKeys_arr = session[:mother_ProfileKeys_arr][:value]  #
 
-#            save_profile_keys(profile_id, profile_id_hash, mother_ProfileKeys_arr)
+            save_profile_keys(name, profile_id, profile_id_hash, mother_ProfileKeys_arr)
 
           when 3   # "son"
 #            son_ProfileKeys_arr = session[:son_ProfileKeys_arr][:value]
