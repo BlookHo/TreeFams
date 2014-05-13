@@ -33,7 +33,6 @@ cloneFormControlField = () ->
 
 
 
-
 jQuery ->
   initAutocompleteFields()
 
