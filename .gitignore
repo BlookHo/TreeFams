@@ -19,6 +19,8 @@
 .ruby-gemset
 .ruby-version
 
+# Redis
+dump.rdb
 
 .idea/*
 *.idea/

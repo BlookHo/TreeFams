@@ -3,5 +3,3 @@
 #welcome-form.center-align
   = form_tag :proceed_start, remote: false, id: 'welcome_form' do
     = render "form_#{current_step}"
-    .control
-      = submit_tag 'Дальше', class: [:btn, :green, :large]

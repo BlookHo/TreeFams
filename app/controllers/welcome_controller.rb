@@ -1,6 +1,7 @@
 class WelcomeController < ApplicationController
 
-  helper_method :current_step, :steps, :next_step
+  helper_method :current_step, :steps, :next_step, :names
+  before_filter :collect_names, except: :index
 
   # Landing page
   def index
@@ -10,7 +11,6 @@ class WelcomeController < ApplicationController
 
   # Форма ближнего круга
   def start
-    collect_names
   end
 
 
@@ -28,7 +28,9 @@ class WelcomeController < ApplicationController
   end
 
 
+
   private
+
 
   def current_step
     if session[:current_step]
@@ -38,9 +40,11 @@ class WelcomeController < ApplicationController
     end
   end
 
+
   def next_step
     steps[steps.index(current_step)+1]
   end
+
 
   def prev_step
     steps[steps.index(current_step)-1]
@@ -49,6 +53,7 @@ class WelcomeController < ApplicationController
   def steps
     %w[self parents brothers_and_sisters couple children]
   end
+
 
   def collect_names
     @names = []

@@ -1,5 +1,6 @@
 %h2 Как ваше имя?
 
 .control
-  = text_field_tag :relation_id, 0
-  = text_field_tag :name, params[:name_select], placeholder: "Начните вводить ваше имя...", data:{names: @names}
+  = text_field_tag "circle[self][name]", params[:name], class: :autocomplete_field_names, placeholder: "Начните вводить ваше имя...", data:{names: @names}
+.control
+  = submit_tag 'Дальше', class: [:btn, :green, :large]

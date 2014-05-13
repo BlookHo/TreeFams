@@ -1,4 +1,7 @@
 %h2 Как зовут вашего супруга?
 
 .control
-  = text_field_tag :name_select, params[:name_select], placeholder: "Начните вводить ваше имя...", data:{names: @sel_names}
+  = text_field_tag "couple[name]", params[:name], class: :autocomplete_field_names, placeholder: "Введите имя...", data:{names: @names}
+
+.control
+  = submit_tag 'Дальше', class: [:btn, :green, :large]
