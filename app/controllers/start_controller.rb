@@ -1076,20 +1076,20 @@ class StartController < ApplicationController
     for row_ind in 0 .. profile_keys_arr.length-1
       if !profile_keys_arr[row_ind][4] and (profile_keys_arr[row_ind][0] == name)
         new_profile_key_row = ProfileKey.new
-        new_profile_key_row.user_id = current_user.id                            # user_id
-        new_profile_key_row.profile_id = profile_id                              # profile_id
+        new_profile_key_row.user_id = current_user.id                           # user_id
+        new_profile_key_row.profile_id = profile_id                                # profile_id
 
-        #new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]            ### name_id
-        name_id = Name.find_by_name(profile_keys_arr[row_ind][0]).id             # name_id
+        #new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]             ### name_id
+        name_id = Name.find_by_name(profile_keys_arr[row_ind][0]).id                 # name_id
         new_profile_key_row.name_id = name_id                                    # name_id
 
-        new_profile_key_row.relation_id = profile_keys_arr[row_ind][1]           # relation_id
+        new_profile_key_row.relation_id = profile_keys_arr[row_ind][1]               # relation_id
 
         is_profile_id = profile_id_hash.key([profile_keys_arr[row_ind][2], profile_keys_arr[row_ind][3]])
         new_profile_key_row.is_profile_id = is_profile_id                        # is_profile_id
 
-        #new_profile_key_row.name_id = profile_keys_arr[row_ind][0]            ### name_id
-        is_name_id = Name.find_by_name(profile_keys_arr[row_ind][2]).id          # is_name_id
+        #new_profile_key_row.name_id = profile_keys_arr[row_ind][0]               ### name_id
+        is_name_id = Name.find_by_name(profile_keys_arr[row_ind][2]).id             # is_name_id
         new_profile_key_row.is_name_id = is_name_id                              # is_name_id
 
         new_profile_key_row.save
