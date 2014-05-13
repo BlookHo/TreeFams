@@ -1,3 +1,10 @@
-%h2 Как зовут ваших родителей
+%h2 Как зовут ваших родителей?
 .control
-  = text_field_tag :name_select, params[:name_select], placeholder: "Начните вводить ваше имя...", data:{names: @sel_names}
+  %label Мама
+  = text_field_tag :relation_id, 1
+  = text_field_tag :name, params[:name_select], placeholder: "Начните вводить ваше имя...", data:{names: @names_female}
+
+.control
+  %label Папа
+  = text_field_tag :relation_id, 2
+  = text_field_tag :name, params[:name_select], placeholder: "Начните вводить ваше имя...", data:{names: @names_male}

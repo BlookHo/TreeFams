@@ -97,8 +97,11 @@ Weafam::Application.routes.draw do
 
 
   # Landing & start singup
-  match 'welcome/start', to: 'welcome#start', as: :start, via: [:get, :post]
-  get 'welcome/start/:step', to: 'welcome#go_to_step', as: :welcome_step
-  root 'welcome#index'
+  get   'welcome/start',             to: 'welcome#start',        as: :start
+  post  'welcome/start/proceed',     to: 'welcome#proceed',      as: :proceed_start
+  get   'welcome/start/step/:step',  to: 'welcome#go_to_step',   as: :go_to_start_step
+
+
+  root  'welcome#index'
 
 end
