@@ -1,0 +1,12 @@
+%h2 Как зовут ваших родителей?
+.control.left
+  %label Отец
+  = text_field_tag "cirlce[mother][name]", params[:name_select], class: :autocomplete_field_names_male, placeholder: "Имя отца...", data:{names: @names_male}
+
+.control.right
+  %label Мать
+  = text_field_tag "cirlce[father][name]", params[:name_select], class: :autocomplete_field_names_female, placeholder: "Имя матери...", data:{names: @names_female}
+
+
+.control
+  = submit_tag 'Дальше', class: [:btn, :green, :large]

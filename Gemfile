@@ -14,6 +14,8 @@ gem 'compass-rails'
 gem 'bootstrap-sass'
 gem 'haml'
 
+gem "font-awesome-rails"
+
 gem 'russian', '~> 0.6.0'
 
 
@@ -28,6 +30,9 @@ gem 'therubyracer'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+
+# jQuert ui lib
+gem "jquery-ui-rails"
 
 # Обмен переменными Ruby -> JS
 gem 'gon'

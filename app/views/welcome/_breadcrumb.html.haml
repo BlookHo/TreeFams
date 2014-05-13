@@ -1,0 +1,4 @@
+%ul#progrees-bar
+  - steps.each_with_index do |step, index|
+    %li{class: ('active' if step == current_step)}
+      = link_to index+1, go_to_start_step_path(step)

@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.autocomplete
 //= require bootstrap/transition
 //= require bootstrap/modal
 //= require bootstrap/button

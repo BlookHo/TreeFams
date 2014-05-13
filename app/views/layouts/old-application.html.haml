@@ -1,14 +1,14 @@
 !!!
 %html
   %head
-    %title Weafam
     %meta{:charset => "utf-8"}/
     %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
-    = stylesheet_link_tag "v2/application"
-    = javascript_include_tag 'application'
     = csrf_meta_tags
+    = stylesheet_link_tag "application"
+    = javascript_include_tag 'application'
+    %title Weafam
   %body
-    = render 'shared/ui/header'
+    = render 'shared/flash', flash: flash
+    = render 'shared/header'
     .container
       = yield
-    = yield :debugger

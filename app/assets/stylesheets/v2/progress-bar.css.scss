@@ -1,0 +1,58 @@
+#progrees-bar{
+  margin:50px auto;
+  text-align:center;
+  position:relative;
+  width:617px;
+
+  li{
+    display:inline-block;
+
+    a{
+      display:block;
+      height:40px;
+      line-height:40px;
+      width:40px;
+      color:#fff;
+      border-radius:20px;
+      background-color:#ccc;
+      margin:0 50px;
+      position:relative;
+      text-decoration:none;
+
+      &:hover{
+        background-color:#666;
+      }
+    }
+
+    &.active a{
+      background-color:$green-color;
+    }
+
+    &:first-child a{
+      margin-left:0;
+    }
+
+    &:last-child a{
+      margin-right:0;
+    }
+
+
+  }
+
+
+
+  &:before{
+    content:'';
+    height:4px;
+    width:100%;
+    background-color:#ccc;
+    position:absolute;
+    left:0;
+    right:0;
+    margin:0 auto;
+    top:18px;
+  }
+
+
+
+}

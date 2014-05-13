@@ -1,0 +1,51 @@
+= render 'progress_bar'
+
+#welcome-form.center-align
+  %h2
+    %span 1.
+    Введите Ваше имя
+
+  = form_tag store_myself_path, remote: true, id: 'myself_form' do
+    .control
+      -#= select_tag 'name_select', options_for_select(@sel_names, selected = @user_name),  :prompt => 'Выбери имя'
+    .control
+      = text_field_tag :name_select, params[:name_select], placeholder: "Начните вводить ваше имя...", data:{names: @sel_names}
+    .control
+      = submit_tag 'Дальше', class: [:btn, :green, :large]
+
+
+
+
+
+
+- content_for :debugger do
+  #debugger
+    .container.center-align
+      %h3 Страница START - ввод стартового дерева - Ближний Круг
+      %div
+        DEBUGG: Я - #{@us_id.inspect},
+        - if user_signed_in?
+          DEBUGG: Current_user.id - #{current_user.id.inspect}
+          DEBUGG: Current_user.profile_id - #{current_user.profile_id.inspect}
+          DEBUGG: Current_user row - #{@curr_user_row.inspect}
+        / <p>@us_id: <haml:loud> @us_id.inspect </haml:loud></p>
+        / <p>@sel_names_male: <haml:loud> @sel_names_male.inspect </haml:loud></p>
+        / <p>@sel_names_female: <haml:loud> @sel_names_female.inspect </haml:loud></p>
+
+      %div
+        -#%p
+        -#  Массив профилей БК: @profiles_array: #{@profiles_array.inspect}
+
+        %p#name_container
+          Массив профилей БК: @profiles_array: #{@profiles_array.inspect}, Мое имя: @user_name: #{@user_name.inspect}, Я - #{@user_sex.inspect}
+        %p#arr_container
+          Массивы для ProfileKeys:
+      #next_container
+      %h4
+        DEBUGG Выйти и сохранить: Переход на страницу start/save_start_tables:  #{link_to "SAVE -->", save_start_tables_path}
+      %h4
+        Выйти и сохранить: Переход на страницу Регистрации:  #{link_to "Регистрация -->", user_registration_path}
+      %h4
+        Возврат на страницу Лэндинг:  #{link_to "Landing -->", landing_path}
+      %h5 @params: #{params[:name_select].inspect}
+      %h5 @params: #{params[:brother_name_select].inspect}

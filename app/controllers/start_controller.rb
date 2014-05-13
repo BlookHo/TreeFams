@@ -12,7 +12,6 @@ class StartController < ApplicationController
 
     ####  DEBUGG PLACE  ########################
 
-
     #### ZEROUVING OF TABLES FOR DEBUGG ########################
 
     #Tree.delete_all
@@ -30,7 +29,6 @@ class StartController < ApplicationController
     session[:sel_names] = {:value => @sel_names, :updated_at => Time.current}
     session[:sel_names_male] = {:value => @sel_names_male, :updated_at => Time.current}
     session[:sel_names_female] = {:value => @sel_names_female, :updated_at => Time.current}
-
   end
 
   def enter_father
@@ -78,7 +76,6 @@ class StartController < ApplicationController
   def check_husband_or_wife
     user_sex = session[:user_sex][:value]
     if user_sex    # = true -> User = Male
-
       @render_name = 'start/enter_wife'
       # redirect_to enter_wife_path
     else
@@ -87,6 +84,7 @@ class StartController < ApplicationController
     end
    # @render_name
   end
+
 
   # Добавить ряды в ProfileKeys при вводе Жены (если пол Автора = true)
   # в первом элементе мессива - всегда - данные об Авторе
@@ -145,10 +143,10 @@ class StartController < ApplicationController
 
     #profiles_array = [], ......, [nil, "husband_name", true]]
     author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
-    husband_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
-    wife_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о wife
-    son_ProfileKeys_arr = []  #
-    sons_names_arr = []  # Имена сынов
+    husband_ProfileKeys_arr = []   # Массив для записи в ProfileKeys рядов о mother
+    wife_ProfileKeys_arr = []      # Массив для записи в ProfileKeys рядов о wife
+    son_ProfileKeys_arr = []       #
+    sons_names_arr = []            # Имена сынов
     daugther_ProfileKeys_arr = []  #
     daugthers_names_arr = []  # Имена Дочерей
 
@@ -227,7 +225,7 @@ class StartController < ApplicationController
     brothers_names_arr = []  # Имена братьев
 
     author_name = profiles_array[0][1]
-    author_sex = profiles_array[0][2]
+    author_sex =  profiles_array[0][2]
     father_name = profiles_array[1][1]
     mother_name = profiles_array[2][1]
 
@@ -605,8 +603,8 @@ class StartController < ApplicationController
       session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
 
       @profiles_array = profiles_array # DEBUGG TO VIEW
-
     end
+
 
     @sel_names_female = session[:sel_names_female][:value]
     respond_to do |format|
@@ -648,8 +646,9 @@ class StartController < ApplicationController
       format.js { render 'start/store_mother' }
     end
 #    redirect_to enter_brother_path # in store_mother.js
-
   end
+
+
 
   def store_brother
 
@@ -696,6 +695,8 @@ class StartController < ApplicationController
  #   redirect_to @next_view
 
   end
+
+
 
   def store_sister
 
