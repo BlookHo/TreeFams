@@ -1,3 +1,3 @@
 jQuery ->
-  $('#name_select').autocomplete
-    source: $('#name_select').data('names')
+  $('#name').autocomplete
+    source: $('#name').data('names')

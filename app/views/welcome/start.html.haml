@@ -1,7 +1,7 @@
 = render 'breadcrumb'
 
 #welcome-form.center-align
-  = form_tag store_myself_path, remote: true, id: 'myself_form' do
+  = form_tag :proceed_start, remote: false, id: 'welcome_form' do
     = render "form_#{current_step}"
     .control
       = submit_tag 'Дальше', class: [:btn, :green, :large]
