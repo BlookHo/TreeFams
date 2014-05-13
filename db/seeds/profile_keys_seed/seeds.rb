@@ -480,12 +480,121 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 7, profile_id: 46, name_id: 506, relation_id: 1, is_profile_id: 40, is_name_id: 45 },
 {user_id: 7, profile_id: 46, name_id: 506, relation_id: 2, is_profile_id: 43, is_name_id: 453 },
 {user_id: 7, profile_id: 46, name_id: 506, relation_id: 5, is_profile_id: 44, is_name_id: 97 },
-{user_id: 7, profile_id: 46, name_id: 506, relation_id: 6, is_profile_id: 45, is_name_id: 371 }
+{user_id: 7, profile_id: 46, name_id: 506, relation_id: 6, is_profile_id: 45, is_name_id: 371 },
 # Out of NearCircle of profile_id: 46
 #{user_id: 7, profile_id: 46, name_id: 506, relation_id: 13, is_profile_id: 41, is_name_id: 123 },
 #{user_id: 7, profile_id: 46, name_id: 506, relation_id: 14, is_profile_id: 42, is_name_id: 477 }
 
 
+# Tree 8, Profile 47 - Author - Александр
+# NearCircle
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 1, is_profile_id: 48, is_name_id: 45 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 2, is_profile_id: 49, is_name_id: 453 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 5, is_profile_id: 50, is_name_id: 62 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 5, is_profile_id: 51, is_name_id: 97 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 6, is_profile_id: 52, is_name_id: 352 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 6, is_profile_id: 53, is_name_id: 477 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 8, is_profile_id: 54, is_name_id: 371 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 3, is_profile_id: 55, is_name_id: 45 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 3, is_profile_id: 56, is_name_id: 123 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 4, is_profile_id: 57, is_name_id: 453 },
+{user_id: 8, profile_id: 47, name_id: 15, relation_id: 4, is_profile_id: 58, is_name_id: 521 },
 
-             ])
+# Tree 8, Pfoile 48 - Борис
+# NearCircle
+{user_id: 8, profile_id: 48, name_id: 45, relation_id: 3, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 48, name_id: 45, relation_id: 8, is_profile_id: 49, is_name_id: 453 },
+{user_id: 8, profile_id: 48, name_id: 45, relation_id: 3, is_profile_id: 50, is_name_id: 62 },
+{user_id: 8, profile_id: 48, name_id: 45, relation_id: 3, is_profile_id: 51, is_name_id: 97 },
+{user_id: 8, profile_id: 48, name_id: 45, relation_id: 4, is_profile_id: 52, is_name_id: 352 },
+{user_id: 8, profile_id: 48, name_id: 45, relation_id: 4, is_profile_id: 53, is_name_id: 477 },
+
+# Tree 8, Pfoile 49 - Мария
+# NearCircle
+{user_id: 8, profile_id: 49, name_id: 453, relation_id: 7, is_profile_id: 48, is_name_id: 45 },
+{user_id: 8, profile_id: 49, name_id: 453, relation_id: 3, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 49, name_id: 453, relation_id: 3, is_profile_id: 50, is_name_id: 62 },
+{user_id: 8, profile_id: 49, name_id: 453, relation_id: 3, is_profile_id: 51, is_name_id: 97 },
+{user_id: 8, profile_id: 49, name_id: 453, relation_id: 4, is_profile_id: 52, is_name_id: 352 },
+{user_id: 8, profile_id: 49, name_id: 453, relation_id: 4, is_profile_id: 53, is_name_id: 477 },
+
+# Tree 8, Pfoile 50 - Виктор
+# NearCircle
+{user_id: 8, profile_id: 50, name_id: 62, relation_id: 1, is_profile_id: 48, is_name_id: 45 },
+{user_id: 8, profile_id: 50, name_id: 62, relation_id: 2, is_profile_id: 49, is_name_id: 453 },
+{user_id: 8, profile_id: 50, name_id: 62, relation_id: 5, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 50, name_id: 62, relation_id: 5, is_profile_id: 51, is_name_id: 97 },
+{user_id: 8, profile_id: 50, name_id: 62, relation_id: 6, is_profile_id: 52, is_name_id: 352 },
+{user_id: 8, profile_id: 50, name_id: 62, relation_id: 6, is_profile_id: 53, is_name_id: 477 },
+
+# Tree 8, Pfoile 51 - Денис
+# NearCircle
+{user_id: 8, profile_id: 51, name_id: 97, relation_id: 1, is_profile_id: 48, is_name_id: 45 },
+{user_id: 8, profile_id: 51, name_id: 97, relation_id: 2, is_profile_id: 49, is_name_id: 453 },
+{user_id: 8, profile_id: 51, name_id: 97, relation_id: 5, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 51, name_id: 97, relation_id: 5, is_profile_id: 50, is_name_id: 62 },
+{user_id: 8, profile_id: 51, name_id: 97, relation_id: 6, is_profile_id: 52, is_name_id: 352 },
+{user_id: 8, profile_id: 51, name_id: 97, relation_id: 6, is_profile_id: 53, is_name_id: 477 },
+
+# Tree 8, Pfoile 52 - Анна
+# NearCircle
+{user_id: 8, profile_id: 52, name_id: 352, relation_id: 1, is_profile_id: 48, is_name_id: 45 },
+{user_id: 8, profile_id: 52, name_id: 352, relation_id: 2, is_profile_id: 49, is_name_id: 453 },
+{user_id: 8, profile_id: 52, name_id: 352, relation_id: 5, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 52, name_id: 352, relation_id: 5, is_profile_id: 50, is_name_id: 62 },
+{user_id: 8, profile_id: 52, name_id: 352, relation_id: 5, is_profile_id: 51, is_name_id: 97 },
+{user_id: 8, profile_id: 52, name_id: 352, relation_id: 6, is_profile_id: 53, is_name_id: 477 },
+
+# Tree 8, Pfoile 53 - Ольга
+# NearCircle
+{user_id: 8, profile_id: 53, name_id: 477, relation_id: 1, is_profile_id: 48, is_name_id: 45 },
+{user_id: 8, profile_id: 53, name_id: 477, relation_id: 2, is_profile_id: 49, is_name_id: 453 },
+{user_id: 8, profile_id: 53, name_id: 477, relation_id: 5, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 53, name_id: 477, relation_id: 5, is_profile_id: 50, is_name_id: 62 },
+{user_id: 8, profile_id: 53, name_id: 477, relation_id: 5, is_profile_id: 51, is_name_id: 97 },
+{user_id: 8, profile_id: 53, name_id: 477, relation_id: 6, is_profile_id: 52, is_name_id: 352 },
+
+# Tree 8, Pfoile 54 - Виктория
+# NearCircle
+{user_id: 8, profile_id: 54, name_id: 371, relation_id: 3, is_profile_id: 55, is_name_id: 45 },
+{user_id: 8, profile_id: 54, name_id: 371, relation_id: 4, is_profile_id: 57, is_name_id: 453 },
+{user_id: 8, profile_id: 54, name_id: 371, relation_id: 7, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 54, name_id: 371, relation_id: 3, is_profile_id: 56, is_name_id: 123 },
+{user_id: 8, profile_id: 54, name_id: 371, relation_id: 4, is_profile_id: 58, is_name_id: 521 },
+
+# Tree 8, Pfoile 55 - Борис
+# NearCircle
+{user_id: 8, profile_id: 55, name_id: 45, relation_id: 2, is_profile_id: 54, is_name_id: 371 },
+{user_id: 8, profile_id: 55, name_id: 45, relation_id: 6, is_profile_id: 57, is_name_id: 453 },
+{user_id: 8, profile_id: 55, name_id: 45, relation_id: 1, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 55, name_id: 45, relation_id: 5, is_profile_id: 56, is_name_id: 123 },
+{user_id: 8, profile_id: 55, name_id: 45, relation_id: 6, is_profile_id: 58, is_name_id: 521 },
+
+# Tree 8, Pfoile 56 - Иван
+# NearCircle
+{user_id: 8, profile_id: 56, name_id: 123, relation_id: 2, is_profile_id: 54, is_name_id: 371 },
+{user_id: 8, profile_id: 56, name_id: 123, relation_id: 6, is_profile_id: 57, is_name_id: 453 },
+{user_id: 8, profile_id: 56, name_id: 123, relation_id: 1, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 56, name_id: 123, relation_id: 5, is_profile_id: 55, is_name_id: 45 },
+{user_id: 8, profile_id: 56, name_id: 123, relation_id: 6, is_profile_id: 58, is_name_id: 521 },
+
+# Tree 8, Pfoile 57 - Мария
+# NearCircle
+{user_id: 8, profile_id: 57, name_id: 453, relation_id: 2, is_profile_id: 54, is_name_id: 371 },
+{user_id: 8, profile_id: 57, name_id: 453, relation_id: 5, is_profile_id: 56, is_name_id: 123 },
+{user_id: 8, profile_id: 57, name_id: 453, relation_id: 1, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 57, name_id: 453, relation_id: 5, is_profile_id: 55, is_name_id: 45 },
+{user_id: 8, profile_id: 57, name_id: 453, relation_id: 6, is_profile_id: 58, is_name_id: 521 },
+
+# Tree 8, Pfoile 58 - Юлия
+# NearCircle
+{user_id: 8, profile_id: 58, name_id: 521, relation_id: 2, is_profile_id: 54, is_name_id: 371 },
+{user_id: 8, profile_id: 58, name_id: 521, relation_id: 5, is_profile_id: 56, is_name_id: 123 },
+{user_id: 8, profile_id: 58, name_id: 521, relation_id: 1, is_profile_id: 47, is_name_id: 15 },
+{user_id: 8, profile_id: 58, name_id: 521, relation_id: 5, is_profile_id: 55, is_name_id: 45 },
+{user_id: 8, profile_id: 58, name_id: 521, relation_id: 6, is_profile_id: 57, is_name_id: 453 }
+
+
+
+                   ])
 
