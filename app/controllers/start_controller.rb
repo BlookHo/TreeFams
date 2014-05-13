@@ -89,9 +89,13 @@ class StartController < ApplicationController
   end
 
   # Добавить ряды в ProfileKeys при вводе Жены (если пол Автора = true)
-  # в первом элементе мессива - данные об Авторе
+  # в первом элементе мессива - всегда - данные об Авторе
   # в последнем элементе мессива - данные о Жене
-  # @note GET /
+  # @note GET
+  # Структура одной записи:  author_ProfileKeys_arr << [author_name, 8, wife_name, 8]
+  # author_ProfileKeys_arr - массив накапливания записей для формирования рядов
+  # [author_name, 8, wife_name, 8]
+  # author_name имеет wife_name с отношением 8; при этом wife_name является 8 в массиве профилей profiles_array.
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
   def add_wife_to_ProfileKeys(profiles_array)
@@ -111,11 +115,11 @@ class StartController < ApplicationController
     husband_name = ""
 
     # add Author rows
-    author_ProfileKeys_arr << [author_name, 8, wife_name]
+    author_ProfileKeys_arr << [author_name, 8, wife_name,8]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Wife rows
-    wife_ProfileKeys_arr << [wife_name, 7, author_name]
+    wife_ProfileKeys_arr << [wife_name, 7, author_name,0]
     @wife_ProfileKeys_arr = wife_ProfileKeys_arr # DEBUGG TO VIEW
 
     session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
@@ -154,11 +158,11 @@ class StartController < ApplicationController
     wife_name = ""
 
     # add Author rows
-    author_ProfileKeys_arr << [author_name, 7, husband_name]
+    author_ProfileKeys_arr << [author_name, 7, husband_name, 7]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Husband rows
-    husband_ProfileKeys_arr << [husband_name, 8, author_name]
+    husband_ProfileKeys_arr << [husband_name, 8, author_name, 0]
     @husband_ProfileKeys_arr = husband_ProfileKeys_arr # DEBUGG TO VIEW
 
     session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
@@ -191,14 +195,14 @@ class StartController < ApplicationController
     father_name = profiles_array[1][1]
 
     # add Author rows
-    author_ProfileKeys_arr << [author_name, 1, father_name]
+    author_ProfileKeys_arr << [author_name, 1, father_name, 1]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Father rows
     if author_sex
-      father_ProfileKeys_arr << [father_name, 3, author_name]
+      father_ProfileKeys_arr << [father_name, 3, author_name, 0]
     else
-      father_ProfileKeys_arr << [father_name, 4, author_name]
+      father_ProfileKeys_arr << [father_name, 4, author_name, 0]
     end
     @father_ProfileKeys_arr = father_ProfileKeys_arr # DEBUGG TO VIEW
 
@@ -228,19 +232,19 @@ class StartController < ApplicationController
     mother_name = profiles_array[2][1]
 
     # add Author rows
-    author_ProfileKeys_arr << [author_name, 2, mother_name]
+    author_ProfileKeys_arr << [author_name, 2, mother_name, 2]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Father rows
-    father_ProfileKeys_arr << [father_name, 8, mother_name]
+    father_ProfileKeys_arr << [father_name, 8, mother_name, 2]
     @father_ProfileKeys_arr = father_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Mother rows
-    mother_ProfileKeys_arr << [mother_name, 7, father_name]
+    mother_ProfileKeys_arr << [mother_name, 7, father_name, 1]
     if author_sex
-      mother_ProfileKeys_arr << [mother_name, 3, author_name]
+      mother_ProfileKeys_arr << [mother_name, 3, author_name, 0]
     else
-      mother_ProfileKeys_arr << [mother_name, 4, author_name]
+      mother_ProfileKeys_arr << [mother_name, 4, author_name, 0]
     end
     @mother_ProfileKeys_arr = mother_ProfileKeys_arr # DEBUGG TO VIEW
 
@@ -278,30 +282,30 @@ class StartController < ApplicationController
     brother_name = profiles_array[profiles_array_length-1][1] ## Name of last brother
 
     # add Author rows
-    author_ProfileKeys_arr << [author_name, 5, brother_name]
+    author_ProfileKeys_arr << [author_name, 5, brother_name, 5]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Father rows
-    father_ProfileKeys_arr << [father_name, 3, brother_name]
+    father_ProfileKeys_arr << [father_name, 3, brother_name, 5]
     @father_ProfileKeys_arr = father_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Mother rows
-    mother_ProfileKeys_arr << [mother_name, 3, brother_name]
+    mother_ProfileKeys_arr << [mother_name, 3, brother_name, 5]
     @mother_ProfileKeys_arr = mother_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Brother rows
-    brother_ProfileKeys_arr << [brother_name, 1, father_name]
-    brother_ProfileKeys_arr << [brother_name, 2, mother_name]
+    brother_ProfileKeys_arr << [brother_name, 1, father_name, 1]
+    brother_ProfileKeys_arr << [brother_name, 2, mother_name, 2]
     if author_sex
-      brother_ProfileKeys_arr << [brother_name, 5, author_name]
+      brother_ProfileKeys_arr << [brother_name, 5, author_name, 0]
     else
-      brother_ProfileKeys_arr << [brother_name, 6, author_name]
+      brother_ProfileKeys_arr << [brother_name, 6, author_name, 0]
     end
 
     if !brothers_names_arr.blank?
       for arr_ind in 0 .. brothers_names_arr.length - 1
-        brother_ProfileKeys_arr << [brothers_names_arr[arr_ind], 5, brother_name] # Сохранение пары братьев в один массив Братьев
-        brother_ProfileKeys_arr << [brother_name, 5, brothers_names_arr[arr_ind]] # Сохранение пары братьев в один массив Братьев
+        brother_ProfileKeys_arr << [brothers_names_arr[arr_ind], 5, brother_name, 5] # Сохранение пары братьев в один массив Братьев
+        brother_ProfileKeys_arr << [brother_name, 5, brothers_names_arr[arr_ind], 5] # Сохранение пары братьев в один массив Братьев
       end
     end
 
@@ -348,39 +352,39 @@ class StartController < ApplicationController
     sister_name = profiles_array[profiles_array_length-1][1] # Name of last sister
 
     # add Author rows
-    author_ProfileKeys_arr << [author_name, 6, sister_name]
+    author_ProfileKeys_arr << [author_name, 6, sister_name, 6]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Father rows
-    father_ProfileKeys_arr << [father_name, 4, sister_name]
+    father_ProfileKeys_arr << [father_name, 4, sister_name, 6]
     @father_ProfileKeys_arr = father_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Mother rows
-    mother_ProfileKeys_arr << [mother_name, 4, sister_name]
+    mother_ProfileKeys_arr << [mother_name, 4, sister_name, 6]
     @mother_ProfileKeys_arr = mother_ProfileKeys_arr # DEBUGG TO VIEW
 
     if !brothers_names_arr.blank?
       for arr_ind in 0 .. brothers_names_arr.length - 1
-        brother_ProfileKeys_arr << [brothers_names_arr[arr_ind], 6, sister_name]
+        brother_ProfileKeys_arr << [brothers_names_arr[arr_ind], 6, sister_name, 6]
          # Сохранение пары брат - сестра в один массив Братьев
-        sister_ProfileKeys_arr << [sister_name, 5, brothers_names_arr[arr_ind]]
+        sister_ProfileKeys_arr << [sister_name, 5, brothers_names_arr[arr_ind], 5]
         # Сохранение пары сестра - брат в один массив Сестер
       end
     end
     @brother_ProfileKeys_arr = brother_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Sister rows
-    sister_ProfileKeys_arr << [sister_name, 1, father_name]
-    sister_ProfileKeys_arr << [sister_name, 2, mother_name]
+    sister_ProfileKeys_arr << [sister_name, 1, father_name, 1]
+    sister_ProfileKeys_arr << [sister_name, 2, mother_name, 2]
     if author_sex
-      sister_ProfileKeys_arr << [sister_name, 5, author_name]
+      sister_ProfileKeys_arr << [sister_name, 5, author_name, 0]
     else
-      sister_ProfileKeys_arr << [sister_name, 6, author_name]
+      sister_ProfileKeys_arr << [sister_name, 6, author_name, 0]
     end
     if !sisters_names_arr.blank?  # Если есть уже сестры?
       for arr_ind in 0 .. sisters_names_arr.length - 1
-        sister_ProfileKeys_arr << [sisters_names_arr[arr_ind], 6, sister_name] # Сохранение пары братьев в один массив Братьев
-        sister_ProfileKeys_arr << [sister_name, 6, sisters_names_arr[arr_ind]] # Сохранение пары братьев в один массив Братьев
+        sister_ProfileKeys_arr << [sisters_names_arr[arr_ind], 6, sister_name, 6] # Сохранение пары братьев в один массив Братьев
+        sister_ProfileKeys_arr << [sister_name, 6, sisters_names_arr[arr_ind], 6] # Сохранение пары братьев в один массив Братьев
       end
     end
 
@@ -424,26 +428,26 @@ class StartController < ApplicationController
     son_name = profiles_array[profiles_array_length-1][1] ## Name of last son
 
     # add Author rows
-    author_ProfileKeys_arr << [author_name, 3, son_name]
+    author_ProfileKeys_arr << [author_name, 3, son_name, 3]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Son & wife & husband rows
     if author_sex
-      son_ProfileKeys_arr << [son_name, 1, author_name]
-      son_ProfileKeys_arr << [son_name, 2, wife_name]
-      wife_ProfileKeys_arr << [wife_name, 3, son_name]
+      son_ProfileKeys_arr << [son_name, 1, author_name, 0]
+      son_ProfileKeys_arr << [son_name, 2, wife_name, 8]
+      wife_ProfileKeys_arr << [wife_name, 3, son_name, 3]
     else
-      son_ProfileKeys_arr << [son_name, 2, author_name]
-      son_ProfileKeys_arr << [son_name, 1, husband_name]
-      husband_ProfileKeys_arr << [husband_name, 3, son_name]
+      son_ProfileKeys_arr << [son_name, 2, author_name, 0]
+      son_ProfileKeys_arr << [son_name, 1, husband_name, 7]
+      husband_ProfileKeys_arr << [husband_name, 3, son_name, 3]
     end
     @husband_ProfileKeys_arr = husband_ProfileKeys_arr # DEBUGG TO VIEW
     @wife_ProfileKeys_arr = wife_ProfileKeys_arr # DEBUGG TO VIEW
 
     if !sons_names_arr.blank?
       for arr_ind in 0 .. sons_names_arr.length - 1
-        son_ProfileKeys_arr << [sons_names_arr[arr_ind], 5, son_name] # Сохранение пары братьев в один массив Братьев
-        son_ProfileKeys_arr << [son_name, 5, sons_names_arr[arr_ind]] # Сохранение пары братьев в один массив Братьев
+        son_ProfileKeys_arr << [sons_names_arr[arr_ind], 5, son_name, 3] # Сохранение пары братьев в один массив Братьев
+        son_ProfileKeys_arr << [son_name, 5, sons_names_arr[arr_ind], 3] # Сохранение пары братьев в один массив Братьев
       end
     end
 
@@ -482,41 +486,41 @@ class StartController < ApplicationController
 
     author_name = profiles_array[0][1]
     author_sex = profiles_array[0][2]
-    father_name = profiles_array[1][1]
-    mother_name = profiles_array[2][1]
+    #father_name = profiles_array[1][1]
+    #mother_name = profiles_array[2][1]
 
     profiles_array_length = profiles_array.length
     daugther_name = profiles_array[profiles_array_length-1][1] ## Name of last daugther_name
 
     # add Author rows
-    author_ProfileKeys_arr << [author_name, 4, daugther_name]
+    author_ProfileKeys_arr << [author_name, 4, daugther_name, 4]
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Daughter & wife & husband rows
     if author_sex
-      daugther_ProfileKeys_arr << [daugther_name, 1, author_name]
-      daugther_ProfileKeys_arr << [daugther_name, 2, wife_name]
-      wife_ProfileKeys_arr << [wife_name, 4, daugther_name]
+      daugther_ProfileKeys_arr << [daugther_name, 1, author_name, 0]
+      daugther_ProfileKeys_arr << [daugther_name, 2, wife_name, 8]
+      wife_ProfileKeys_arr << [wife_name, 4, daugther_name, 4]
     else
-      daugther_ProfileKeys_arr << [daugther_name, 2, author_name]
-      daugther_ProfileKeys_arr << [daugther_name, 1, husband_name]
-      husband_ProfileKeys_arr << [husband_name, 4, daugther_name]
+      daugther_ProfileKeys_arr << [daugther_name, 2, author_name, 0]
+      daugther_ProfileKeys_arr << [daugther_name, 1, husband_name, 7]
+      husband_ProfileKeys_arr << [husband_name, 4, daugther_name, 4]
     end
     @husband_ProfileKeys_arr = husband_ProfileKeys_arr # DEBUGG TO VIEW
     @wife_ProfileKeys_arr = wife_ProfileKeys_arr # DEBUGG TO VIEW
 
     if !daugthers_names_arr.blank?
       for arr_ind in 0 .. daugthers_names_arr.length - 1
-        daugther_ProfileKeys_arr << [daugthers_names_arr[arr_ind], 6, daugther_name] # Сохранение пары братьев в один массив Братьев
-        daugther_ProfileKeys_arr << [daugther_name, 6, daugthers_names_arr[arr_ind]] # Сохранение пары братьев в один массив Братьев
+        daugther_ProfileKeys_arr << [daugthers_names_arr[arr_ind], 6, daugther_name, 4] # Сохранение пары братьев в один массив Братьев
+        daugther_ProfileKeys_arr << [daugther_name, 6, daugthers_names_arr[arr_ind], 4] # Сохранение пары братьев в один массив Братьев
       end
     end
 
     if !sons_names_arr.blank?
       for arr_ind in 0 .. sons_names_arr.length - 1
-        son_ProfileKeys_arr << [sons_names_arr[arr_ind], 6, daugther_name]
+        son_ProfileKeys_arr << [sons_names_arr[arr_ind], 6, daugther_name, 4]
         # Сохранение пары брат - сестра в один массив Братьев
-        daugther_ProfileKeys_arr << [daugther_name, 5, sons_names_arr[arr_ind]]
+        daugther_ProfileKeys_arr << [daugther_name, 5, sons_names_arr[arr_ind], 3]
         # Сохранение пары сестра - брат в один массив Сестер
       end
     end
@@ -553,7 +557,7 @@ class StartController < ApplicationController
     son_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
     sister_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о mother
 
-    one_profile_arr = add_profile(nil,@user_name,@user_sex)
+    one_profile_arr = add_profile(0,@user_name,@user_sex)
     profiles_array << one_profile_arr
 
     session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
@@ -895,53 +899,6 @@ class StartController < ApplicationController
     #   redirect_to @next_view
   end
 
-   # Сохранение стартового дерева
-  # Профили, Дерево, Юзер вставка ИД профиля
-  # @note GET /
-  # @param admin_page [Integer] опциональный номер страницы
-  # @see
-  def save_start_tables
-
-    #Tree.delete_all             # DEBUGG
-    #Tree.reset_pk_sequence
-    #
-    #User.delete_all             # DEBUGG
-    #User.reset_pk_sequence
-    #
-    #Profile.delete_all          # DEBUGG
-    #Profile.reset_pk_sequence
-
-  #  profiles_array = session[:profiles_array][:value]
-    if !session[:profiles_array].blank?
-      profiles_array = session[:profiles_array][:value]
-
-      @profiles_array = profiles_array # DEBUGG TO VIEW
-
-
-    end
-
-    if user_signed_in?
-
-      profile_arr = save_profiles(profiles_array)
-
-      save_tree(profile_arr)
-
-      update_user
-
-    else
-      @message = "User not signed"
-    end
-
-    session[:profile_arr] = {:value => profile_arr, :updated_at => Time.current}
-
-    redirect_to main_page_path  ##
-
-  end
-
-
-  ####  SAVE START TREE PROFILE  ########################
-
-
   # Добавление в массив дерева одного введенного профиля стартового дерева Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
@@ -957,14 +914,97 @@ class StartController < ApplicationController
   end
 
 
-  # Добавление в массив дерева одного введенного профиля стартового дерева Юзера.
+
+  ####  SAVE START TREE PROFILES  ########################
+
+
+  # Сохранение стартового дерева
+  # Профили, Дерево, Юзер вставка ИД профиля
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see
+  def save_start_tables
+
+    #### ZEROUVING OF TABLES FOR DEBUGG ########################
+
+    #User.delete_all             # DEBUGG
+    #User.reset_pk_sequence
+
+    Tree.delete_all             # DEBUGG
+    Tree.reset_pk_sequence
+
+    Profile.delete_all          # DEBUGG
+    Profile.reset_pk_sequence
+
+    ProfileKey.delete_all             # DEBUGG
+    ProfileKey.reset_pk_sequence
+
+    #  profiles_array = session[:profiles_array][:value]
+    if !session[:profiles_array].blank?
+      profiles_array = session[:profiles_array][:value]
+      @profiles_array = profiles_array # DEBUGG TO VIEW
+    end
+
+
+  # 9 user:
+  #   @profiles_array = [[0, "Александр", true],   # DEBUGG TO VIEW
+  # [1, "Борис", true], [2, "Мария", false],
+  # [5, "Виктор", true], [5, "Денис", true],
+  # [6, "Анна", false], [6, "Ольга", false]]
+  # [8, "Виктория", false],
+  # [3, "Борис", true], [3, "Иван", true],
+  # [4, "Мария", false], [4, "Юлия", false]]   # DEBUGG TO VIEW
+
+  @profiles_array = profiles_array # DEBUGG TO VIEW
+
+ # Массивы для ProfileKeys:
+ # @author_ProfileKeys_arr = [["Александр", 1, "Борис", 1], ["Александр", 2, "Мария", 2], ["Александр", 5, "Виктор", 5], ["Александр", 5, "Денис", 5], ["Александр", 6, "Анна", 6], ["Александр", 6, "Ольга", 6], ["Александр", 8, "Виктория", 8], ["Александр", 3, "Борис", 3], ["Александр", 3, "Иван", 3], ["Александр", 4, "Мария", 4], ["Александр", 4, "Юлия", 4]]
+
+ # @father_ProfileKeys_arr = [["Борис", 3, "Александр", 0], ["Борис", 8, "Мария", 2], ["Борис", 3, "Виктор", 5], ["Борис", 3, "Денис", 5], ["Борис", 4, "Анна", 6], ["Борис", 4, "Ольга", 6]]
+ # @mother_ProfileKeys_arr = [["Мария", 7, "Борис", 1], ["Мария", 3, "Александр", 0], ["Мария", 3, "Виктор", 5], ["Мария", 3, "Денис", 5], ["Мария", 4, "Анна", 6], ["Мария", 4, "Ольга", 6]]
+ # @brother_ProfileKeys_arr = [["Виктор", 1, "Борис", 1], ["Виктор", 2, "Мария", 2], ["Виктор", 5, "Александр", 0], ["Денис", 1, "Борис", 1], ["Денис", 2, "Мария", 2], ["Денис", 5, "Александр", 0], ["Виктор", 5, "Денис", 5], ["Денис", 5, "Виктор", 5], ["Виктор", 6, "Анна", 6], ["Денис", 6, "Анна", 6], ["Виктор", 6, "Ольга", 6], ["Денис", 6, "Ольга", 6]]
+ # @sister_ProfileKeys_arr = [["Анна", 5, "Виктор", 5], ["Анна", 5, "Денис", 5], ["Анна", 1, "Борис", 1], ["Анна", 2, "Мария", 2], ["Анна", 5, "Александр", 0], ["Ольга", 5, "Виктор", 5], ["Ольга", 5, "Денис", 5], ["Ольга", 1, "Борис", 1], ["Ольга", 2, "Мария", 2], ["Ольга", 5, "Александр", 0], ["Анна", 6, "Ольга", 6], ["Ольга", 6, "Анна", 6]]
+
+ # @wife_ProfileKeys_arr = [["Виктория", 7, "Александр", 0], ["Виктория", 3, "Борис", 3], ["Виктория", 3, "Иван", 3], ["Виктория", 4, "Мария", 4], ["Виктория", 4, "Юлия", 4]]
+ # @husband_ProfileKeys_arr = []
+ # @son_ProfileKeys_arr = [["Борис", 1, "Александр", 0], ["Борис", 2, "Виктория", 8], ["Иван", 1, "Александр", 0], ["Иван", 2, "Виктория", 8], ["Борис", 5, "Иван", 3], ["Иван", 5, "Борис", 3], ["Борис", 6, "Мария", 4], ["Иван", 6, "Мария", 4], ["Борис", 6, "Юлия", 4], ["Иван", 6, "Юлия", 4]]
+ # @daugther_ProfileKeys_arr = [["Мария", 1, "Александр", 0], ["Мария", 2, "Виктория", 8], ["Мария", 5, "Борис", 3], ["Мария", 5, "Иван", 3], ["Юлия", 1, "Александр", 0], ["Юлия", 2, "Виктория", 8], ["Мария", 6, "Юлия", 4], ["Юлия", 6, "Мария", 4], ["Юлия", 5, "Борис", 3], ["Юлия", 5, "Иван", 3]]
+ # @daugthers_names_arr - ["Мария", "Юлия"]
+
+ #   @profile_id_hash: {1=>["Александр", 0], 2=>["Борис", 1], 3=>["Мария", 2], 4=>["Виктор", 5], 5=>["Денис", 5], 6=>["Анна", 6], 7=>["Ольга", 6], 8=>["Виктория", 8], 9=>["Борис", 3], 10=>["Иван", 3], 11=>["Мария", 4], 12=>["Юлия", 4]}
+
+    if user_signed_in?
+
+      profiles_arr_w_ids, profile_id_hash = save_profiles(profiles_array)  # появление profile_id
+      @profiles_arr_w_ids = profiles_arr_w_ids # DEBUGG TO VIEW
+      @profile_id_hash = profile_id_hash # DEBUGG TO VIEW
+
+      save_tree(profiles_arr_w_ids)
+
+      update_user
+
+      make_profile_keys(profiles_arr_w_ids, profile_id_hash )
+
+    else
+      @message = "User not signed"
+    end
+
+    session[:profiles_arr_w_ids] = {:value => profiles_arr_w_ids, :updated_at => Time.current}
+
+  #  redirect_to main_page_path  ##
+
+  end
+
+
+  # Сохранение профилей в таблице Profile. Получение значений profile_id.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
   def save_profiles(profiles_array)
 
-    profiles_tree_arr = []
+    profiles_arr_w_ids = []
     new_profile_arr = []     #
+    profile_id_hash = Hash.new
     if !profiles_array.blank?
       for arr_i in 0 .. profiles_array.length-1
         new_profile = Profile.new
@@ -973,46 +1013,45 @@ class StartController < ApplicationController
             new_profile.email = current_user.email # user regged email
           else
             new_profile.user_id = 0  # profile - not user_id
-            new_profile.email = ""    # profile - not user_id
+            new_profile.email = ""   # profile - not user_id
           end
           new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
-          if profiles_array[arr_i][2]
+          if profiles_array[arr_i][2] # sex_id
             new_profile.sex_id = 1    # sex_id - MALE
           else
             new_profile.sex_id = 0    # sex_id - FEMALE
           end
         new_profile.save
 
-        if arr_i == 0 # only for email для user
-          new_profile_arr[0] = current_user.id # user_id
-        else
-          new_profile_arr[0] = new_profile.id  # profile_id
-        end
-        new_profile_arr[1] = profiles_array[arr_i][0]  # Relation_id
+        profile_id_hash.merge!({new_profile.id => [profiles_array[arr_i][1], profiles_array[arr_i][0]]}) # include elem in hash
 
-        profiles_tree_arr <<  new_profile_arr
+        new_profile_arr[0] = new_profile.id             # profile_id
+        new_profile_arr[1] = profiles_array[arr_i][1]   # name
+        new_profile_arr[2] = new_profile.name_id        # name_id
+        new_profile_arr[3] = profiles_array[arr_i][2]   # sex_id
+        new_profile_arr[4] = profiles_array[arr_i][0]   # Relation_id
+
+        profiles_arr_w_ids <<  new_profile_arr
         new_profile_arr = []
       end
     end
-    return profiles_tree_arr
+    @profile_id_hash = profile_id_hash  # DEBUGG TO VIEW
+    return profiles_arr_w_ids, profile_id_hash # новый массив с profile_id
 
   end
 
-
-  # Добавление в массив дерева одного введенного профиля стартового дерева Юзера.
+  # Сохранение стартового дерева Юзера в таблице Tree.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
-  def save_tree(profiles_tree_arr)
-
-    for arr_i in 1 .. profiles_tree_arr.length-1
+  def save_tree(profiles_arr_w_ids)
+    for arr_i in 0 .. profiles_arr_w_ids.length-1
       new_tree = Tree.new
-        new_tree.user_id = current_user.id               # user_id
-        new_tree.profile_id = profiles_tree_arr[arr_i][0]   # profile_id
-        new_tree.relation_id = profiles_tree_arr[arr_i][1]  # relation_id
+      new_tree.user_id = current_user.id                   # user_id
+      new_tree.profile_id = profiles_arr_w_ids[arr_i][0]   # profile_id
+      new_tree.relation_id = profiles_arr_w_ids[arr_i][4]  # relation_id
       new_tree.save
     end
-
   end
 
   # Занесение для current_user в поле profile_id значения id из таблицы Profile
@@ -1020,7 +1059,6 @@ class StartController < ApplicationController
   # @param admin_page [Integer] опциональный номер страницы
   # @see
   def update_user
-
     user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
     if !user_profile.blank?
       current_user.profile_id = user_profile[0]['id']
@@ -1033,196 +1071,194 @@ class StartController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see
-  def save_profile_keys(profiles_array)
+  def save_profile_keys(name, profile_id, profile_id_hash, profile_keys_arr)
 
-#Profile
-## 34 - Tree 6
-#        {user_id: 6, name_id: 212, email: 'tt@tt.tt', sex_id: 1 },
-## 35
-#        {user_id: 0, name_id: 45, email: '', sex_id: 1 },
-## 36
-#        {user_id: 0, name_id: 379, email: '', sex_id: 0 },
-## 37
-#        {user_id: 0, name_id: 371, email: '', sex_id: 0 },
-## 38
-#        {user_id: 0, name_id: 231, email: '', sex_id: 1 },
-## 39
-#        {user_id: 0, name_id: 506, email: '', sex_id: 0 },
+    for row_ind in 0 .. profile_keys_arr.length-1
+      if !profile_keys_arr[row_ind][4] and (profile_keys_arr[row_ind][0] == name)
+        new_profile_key_row = ProfileKey.new
+        new_profile_key_row.user_id = current_user.id                            # user_id
+        new_profile_key_row.profile_id = profile_id                              # profile_id
 
-#Tree
-## 34 - Tree 6
-#    {user_id: 6, profile_id: 35, relation_id: 1, connected: false },
-#    {user_id: 6, profile_id: 36, relation_id: 2, connected: false },
-#    {user_id: 6, profile_id: 37, relation_id: 8, connected: false },
-#    {user_id: 6, profile_id: 38, relation_id: 3, connected: false },
-#    {user_id: 6, profile_id: 39, relation_id: 4, connected: false },
+        #new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]            ### name_id
+        name_id = Name.find_by_name(profile_keys_arr[row_ind][0]).id             # name_id
+        new_profile_key_row.name_id = name_id                                    # name_id
 
-#User
-# 6
-#{profile_id: 34, admin: false, email: 'tt@tt.tt', password: '666666', password_confirmation: '666666' },
+        new_profile_key_row.relation_id = profile_keys_arr[row_ind][1]           # relation_id
+
+        is_profile_id = profile_id_hash.key([profile_keys_arr[row_ind][2], profile_keys_arr[row_ind][3]])
+        new_profile_key_row.is_profile_id = is_profile_id                        # is_profile_id
+
+        #new_profile_key_row.name_id = profile_keys_arr[row_ind][0]            ### name_id
+        is_name_id = Name.find_by_name(profile_keys_arr[row_ind][2]).id          # is_name_id
+        new_profile_key_row.is_name_id = is_name_id                              # is_name_id
+
+        new_profile_key_row.save
+        profile_keys_arr[row_ind][4] = true
+      end
+    end
 
 
+  end
+  # Заполнение таблицы ProfileKey для введенного дерева
+  # формирование групп рядов ProfileKey для каждого профиля дерева/
+  # для current_user
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see
+  def make_profile_keys(profiles_arr_w_ids, profile_id_hash)
 
 
-# 1.Формир-е БК current_user из Profile:
-#   Profile.where(:user_id => current_user.id)
-#   цикл
-#   save в ProfileKey
-#
-# .
-# 2.Цикл по каждому профилю БК в Tree
-#   Формир-е БК для каждого профиля
-#     здесь - анализ relation_id и формирование групп relation_id для каждого profile_id
-# .
-# конец цикла
-#
-
-# @profiles_array: [[nil, "Август", true], [1, "Богдан", true], [2, "Вера", false], [8, "Галя", false], [3, "Давыд", true], [3, "Денис", true], [4, "Ева", false], [4, "Ефросинья", false]]
-#
-# @author_ProfileKeys_arr - [["Август", 1, "Богдан"], ["Август", 2, "Вера"], ["Август", 8, "Галя"], ["Август", 3, "Давыд"], ["Август", 3, "Денис"], ["Август", 4, "Ева"], ["Август", 4, "Ефросинья"]]
-# @wife_ProfileKeys_arr - [["Галя", 7, "Август"], ["Галя", 3, "Давыд"], ["Галя", 3, "Денис"], ["Галя", 4, "Ева"], ["Галя", 4, "Ефросинья"]]
-# @husband_ProfileKeys_arr - []
-# @son_ProfileKeys_arr - [["Давыд", 1, "Август"], ["Давыд", 2, "Галя"], ["Денис", 1, "Август"], ["Денис", 2, "Галя"], ["Давыд", 5, "Денис"], ["Денис", 5, "Давыд"], ["Давыд", 6, "Ева"], ["Денис", 6, "Ева"], ["Давыд", 6, "Ефросинья"], ["Денис", 6, "Ефросинья"]]
-# @sons_names_arr
-# @daugther_ProfileKeys_arr - [["Ева", 1, "Август"], ["Ева", 2, "Галя"], ["Ева", 5, "Давыд"], ["Ева", 5, "Денис"], ["Ефросинья", 1, "Август"], ["Ефросинья", 2, "Галя"], ["Ева", 6, "Ефросинья"], ["Ефросинья", 6, "Ева"], ["Ефросинья", 5, "Давыд"], ["Ефросинья", 5, "Денис"]]
-# @daugthers_names_arr - ["Ева", "Ефросинья"]
+# 8 user:
+#@profiles_array: [[nil, "Андрей", true],
+# [1, "Борис", true], [2, "Мария", false],
+# [5, "Виктор", true], [5, "Денис", true],
+# [6, "Анна", false], [6, "Ольга", false],
+# [8, "Виктория", false],
+# [3, "Борис", true], [3, "Иван", true],
+# [4, "Мария", false], [4, "Юлия", false]]
 #
 
-    author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
-
-    father_ProfileKeys_arr = session[:father_ProfileKeys_arr][:value]
-
-    mother_ProfileKeys_arr = session[:mother_ProfileKeys_arr][:value]  #
-
-    brother_ProfileKeys_arr = session[:brother_ProfileKeys_arr][:value]
-    brothers_names_arr = session[:brothers_names_arr][:value]  #
-
-    sister_ProfileKeys_arr = session[:sister_ProfileKeys_arr][:value]  #
-    sisters_names_arr = session[:sisters_names_arr][:value]  #
-
-    husband_ProfileKeys_arr = session[:husband_ProfileKeys_arr][:value]
-    husband_name = session[:husband_name][:value]
-
-    wife_ProfileKeys_arr = session[:wife_ProfileKeys_arr][:value]  #
-    wife_name = session[:wife_name][:value]
-
-    son_ProfileKeys_arr = session[:son_ProfileKeys_arr][:value]
-    sons_names_arr = session[:sons_names_arr][:value]
-
-    daugther_ProfileKeys_arr = session[:daugther_ProfileKeys_arr][:value]
-    daugthers_names_arr = session[:daugthers_names_arr][:value]
 
 
-#ProfileKey
-# Tree 6, Pfoile 34 - Author - Николай
-# NearCircle
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 1, is_profile_id: 35, is_name_id: 45 },
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 2, is_profile_id: 36, is_name_id: 379 },
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 8, is_profile_id: 37, is_name_id: 371 },
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 3, is_profile_id: 38, is_name_id: 231 },
-#    {user_id: 6, profile_id: 34, name_id: 212, relation_id: 4, is_profile_id: 39, is_name_id: 506 },
+    #@profiles_arr_w_ids = [[1, "Август", 1, true, 0], [2, "Богдан", 43, true, 1], [3, "Вера", 368, false, 2],
+    #                       [4, "Галя", 380, false, 8],
+    #                       [5, "Давыд", 90, true, 3], [6, "Денис", 97, true, 3],
+    #                       [7, "Ева", 390, false, 4], [8, "Ефросинья", 397, false, 4]]
+    #
+    #author_ProfileKeys_arr = [["Август", 1, "Богдан",1],
+    #                          ["Август", 2, "Вера",2],
+    #                          ["Август", 8, "Галя",8],
+    #                          ["Август", 3, "Давыд",3],
+    #                          ["Август", 3, "Денис",3],
+    #                          ["Август", 4, "Ева",4],
+    #                          ["Август", 4, "Ефросинья",4]]
+    #
+    #@author_ProfileKeys_arr = author_ProfileKeys_arr  # DEBUGG TO VIEW
+    #
+    #son_ProfileKeys_arr = [["Давыд", 1, "Август", 0],
+    #                       ["Давыд", 2, "Галя", 8],
+    #                       ["Давыд", 5, "Денис", 3],
+    #                       ["Давыд", 6, "Ева", 4],
+    #                       ["Давыд", 6, "Ефросинья", 4],
+    #
+    #                       ["Денис", 1, "Август", 0],
+    #                       ["Денис", 2, "Галя", 8],
+    #                       ["Денис", 5, "Давыд", 3],
+    #                       ["Денис", 6, "Ева", 4],
+    #                       ["Денис", 6, "Ефросинья", 4]]
+    #@son_ProfileKeys_arr = son_ProfileKeys_arr  # DEBUGG TO VIEW
+    #
+    #daugther_ProfileKeys_arr = [["Ева", 1, "Август", 0],
+    #                            ["Ева", 2, "Галя", 8],
+    #                            ["Ева", 5, "Давыд", 3],
+    #                            ["Ева", 5, "Денис", 3],
+    #                            ["Ева", 6, "Ефросинья", 4],
+    #                            ["Ефросинья", 1, "Август", 0],
+    #                            ["Ефросинья", 2, "Галя", 8],
+    #                            ["Ефросинья", 6, "Ева", 4],
+    #                            ["Ефросинья", 5, "Давыд", 3],
+    #                            ["Ефросинья", 5, "Денис", 3]]
+    #@daugther_ProfileKeys_arr = daugther_ProfileKeys_arr  # DEBUGG TO VIEW
+    #
+    #wife_ProfileKeys_arr = [["Галя", 7, "Август", 0],
+    #                        ["Галя", 3, "Давыд", 3],
+    #                        ["Галя", 3, "Денис", 3],
+    #                        ["Галя", 4, "Ева", 4],
+    #                        ["Галя", 4, "Ефросинья", 4]]
+    #@wife_ProfileKeys_arr = wife_ProfileKeys_arr  # DEBUGG TO VIEW
+    #
+    #father_ProfileKeys_arr = [["Богдан", 3, "Август", 0],
+    #                          ["Богдан", 8, "Вера", 2]]
+    #@father_ProfileKeys_arr = father_ProfileKeys_arr  # DEBUGG TO VIEW
+    #
+    #mother_ProfileKeys_arr = [["Вера", 3, "Август", 0],
+    #                          ["Вера", 7, "Богдан", 1]]
+    #@mother_ProfileKeys_arr = mother_ProfileKeys_arr  # DEBUGG TO VIEW
 
-# Tree 6, Pfoile 35 - Борис
-# NearCircle
-#    {user_id: 6, profile_id: 35, name_id: 45, relation_id: 8, is_profile_id: 36, is_name_id: 379 },
-#    {user_id: 6, profile_id: 35, name_id: 45, relation_id: 3, is_profile_id: 34, is_name_id: 212 },
 
-    profiles_keys_arr = []
+#   {user_id: 6, profile_id: 34, name_id: 212, relation_id: 1, is_profile_id: 35, is_name_id: 45 },
+#    @profile_id_hash: {1=>["Август", 0], 2=>["Богдан", 1], 3=>["Вера", 2], 4=>["Галя", 8], 5=>["Давыд", 3], 6=>["Денис", 3], 7=>["Ева", 4], 8=>["Ефросинья", 4]}
+
+    all_profiles_keys_arr = []
+    profile_keys_arr = []
     relation_profile_keys_arr = []     #
-    if !profiles_array.blank?
-      for arr_i in 0 .. profiles_array.length-1
+    if !profiles_arr_w_ids.blank?
+      for arr_i in 0 .. profiles_arr_w_ids.length-1
 
-        relation_id = profiles_array[arr_i][0]
+        name = profiles_arr_w_ids[arr_i][1]
+        profile_id = profiles_arr_w_ids[arr_i][0]
 
+        relation_id = profiles_arr_w_ids[arr_i][4]
+        @relation_id = relation_id   # DEBUGG TO VIEW
         case relation_id
 
-          when nil
-            for row_ind in 0 .. author_ProfileKeys_arr.length-1
-              new_profile_key_row = ProfileKey.new
-              new_profile_key_row.user_id = current_user.id
-              new_profile_key_row.profile_id = current_user.id
-              new_profile_key_row.name_id = current_user.id
-              new_profile_key_row.relation_id = current_user.id
-              new_profile_key_row.is_profile_id = current_user.id
-              new_profile_key_row.is_name_id = current_user.id
-              new_profile_key_row.save
+          when 0
+            author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
 
+            save_profile_keys(name, profile_id, profile_id_hash, author_ProfileKeys_arr)
 
-
-
-            end
           when 1  # "father"
+            father_ProfileKeys_arr = session[:father_ProfileKeys_arr][:value]
 
-
+            save_profile_keys(name, profile_id, profile_id_hash, father_ProfileKeys_arr)
 
           when 2  # "mother"
+            mother_ProfileKeys_arr = session[:mother_ProfileKeys_arr][:value]  #
+
+            save_profile_keys(name, profile_id, profile_id_hash, mother_ProfileKeys_arr)
 
           when 3   # "son"
+            son_ProfileKeys_arr = session[:son_ProfileKeys_arr][:value]
+            #sons_names_arr = session[:sons_names_arr][:value]
+
+            save_profile_keys(name, profile_id, profile_id_hash, son_ProfileKeys_arr)
 
           when 4   # "daughter"
+            daugther_ProfileKeys_arr = session[:daugther_ProfileKeys_arr][:value]
+            #daugthers_names_arr = session[:daugthers_names_arr][:value]
+
+            save_profile_keys(name, profile_id, profile_id_hash, daugther_ProfileKeys_arr)
 
           when 5  # "brother"
+            brother_ProfileKeys_arr = session[:brother_ProfileKeys_arr][:value]
+            #brothers_names_arr = session[:brothers_names_arr][:value]  #
+
+            save_profile_keys(name, profile_id, profile_id_hash, brother_ProfileKeys_arr)
 
           when 6   # "sister"
+            sister_ProfileKeys_arr = session[:sister_ProfileKeys_arr][:value]  #
+#            sisters_names_arr = session[:sisters_names_arr][:value]  #
+
+            save_profile_keys(name, profile_id, profile_id_hash, sister_ProfileKeys_arr)
 
           when 7   # "husband"
+            husband_ProfileKeys_arr = session[:husband_ProfileKeys_arr][:value]
+            #husband_name = session[:husband_name][:value]
+
+            save_profile_keys(name, profile_id, profile_id_hash, husband_ProfileKeys_arr)
 
           when 8   # "wife"
+            wife_ProfileKeys_arr = session[:wife_ProfileKeys_arr][:value]  #
+            #wife_name = session[:wife_name][:value]
+
+            save_profile_keys(name, profile_id, profile_id_hash, wife_ProfileKeys_arr)
 
           else
            @search_relation = "ERROR: no relation in tree profile"
            # TODO: call error_processing
 
-
-
-
         end
 
-
-
-
+        #@all_profiles_keys_arr = all_profiles_keys_arr  # DEBUGG TO VIEW
 
 
       end
 
     end
 
-
-
-    #@tree_row = Tree.where(:user_id => current_user.id)
-    #if !@tree_row.blank?
-    #  @tree_row.each do |tree_current|
-    #
-    #
-    #  @new_profile_keys_row = ProfileKey.new
-    #
-    #  end
-    #
-    #end
-    #
-    #
-    #
-    #user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
-    #if !user_profile.blank?
-    #  current_user.profile_id = user_profile[0]['id']
-    #  current_user.save
-    #end
+ #   @profiles_keys_arr = profiles_keys_arr  # DEBUGG TO VIEW
 
   end
-
-  # Заполнение таблицы ProfileKey для введенного дерева
-  # для current_user
-  # @note GET /
-  # @param admin_page [Integer] опциональный номер страницы
-  # @see
-  def make_profile_keys_save_rows(profiles_array)
-
-
-  end
-
-
-
-
 
 
 

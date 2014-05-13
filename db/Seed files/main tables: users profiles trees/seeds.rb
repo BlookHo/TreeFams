@@ -18,7 +18,10 @@ User.create!([          # create! - для сообщений об ошибка�
 # 6
 {profile_id: 34, admin: false, email: 'tt@tt.tt', password: '666666', password_confirmation: '666666' },
 # 7
-{profile_id: 40, admin: false, email: 'yy@yy.yy', password: '777777', password_confirmation: '777777' }
+{profile_id: 40, admin: false, email: 'yy@yy.yy', password: '777777', password_confirmation: '777777' },
+# 8
+{profile_id: 0, admin: false, email: 'dd@dd.dd', password: '888888', password_confirmation: '888888' }
+
 
 
 ])

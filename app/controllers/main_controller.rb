@@ -68,9 +68,9 @@ class MainController < ApplicationController
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
       @tree_arr = tree_arr    # DEBUGG TO VIEW
 
-  #    search_profiles_tree_match    # Второй вариант - Основной поиск по дереву Автора - Юзера.
+      search_profiles_tree_match    # Второй вариант - Основной поиск по дереву Автора - Юзера.
 
-      search_tree_match    # Пeрвый старый вариант - Основной поиск по дереву Автора - Юзера.
+  #    search_tree_match    # Пeрвый старый вариант - Основной поиск по дереву Автора - Юзера.
 
     end
 
