@@ -66,11 +66,16 @@ class MainController < ApplicationController
       end
 
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
+
       @tree_arr = tree_arr    # DEBUGG TO VIEW
 
-      search_profiles_tree_match    # Второй вариант - Основной поиск по дереву Автора - Юзера.
+      beg_search_time = Time.now   # Начало отсечки времени поиска
 
-  #    search_tree_match    # Пeрвый старый вариант - Основной поиск по дереву Автора - Юзера.
+      search_profiles_tree_match    # Основной поиск по дереву Автора - Юзера
+                                    # среди деревьев в таблице ProfileKeys.
+
+      end_search_time = Time.now   # Конец отсечки времени поиска
+      @elapsed_search_time = (end_search_time - beg_search_time).round(5)
 
     end
 

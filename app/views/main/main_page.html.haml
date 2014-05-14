@@ -34,16 +34,16 @@
   -#  @@@relation: #{@relation.inspect}
   %p
     @profiles_tree_arr_len: #{@profiles_tree_arr_len.inspect}
-  %p
-    @all_relation_rows:  #{@all_relation_rows.inspect}
-  %p
-    @all_relation_rows_len: #{@all_relation_rows_len.inspect}
-  %p
-    @relation_match_arr: #{@relation_match_arr.inspect}
-  %p
-    LAST @found_trees_hash: #{@found_trees_hash.inspect}
-  %p
-    LAST @found_profiles_hash: #{@found_profiles_hash.inspect}
+  -#%p
+  -#  @all_relation_rows:  #{@all_relation_rows.inspect}
+  -#%p
+  -#  @all_relation_rows_len: #{@all_relation_rows_len.inspect}
+  -#%p
+  -#  @relation_match_arr: #{@relation_match_arr.inspect}
+  -#%p
+  -#  LAST @found_trees_hash: #{@found_trees_hash.inspect}
+  -#%p
+  -#  LAST @found_profiles_hash: #{@found_profiles_hash.inspect}
 
   - if !@all_relation_match_arr.blank?
     %div
@@ -75,11 +75,11 @@
   -#%h4
   -#  Массив всех совпадений родных: @all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
   %h4
-    Все совпадения родных: @all_match_hash: #{@all_match_hash.inspect}
+    ВСЕ СОВПАДЕНИЯ РОДНЫХ: @all_match_hash: #{@all_match_hash.inspect}
   %p
-    @user_ids_arr: #{@user_ids_arr.inspect}
+    НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
   %p
-    @profile_ids_arr: #{@profile_ids_arr.inspect}
+    НОМЕРА ПРОФИЛЕЙ @profile_ids_arr: #{@profile_ids_arr.inspect}
   %h4
     Всего найдено совпадений родных: @amount_of_profiles: #{@amount_of_profiles.inspect}
   %h4
@@ -87,6 +87,8 @@
   %h4
     Их user_id: @users_id_arr: #{@users_id_arr.inspect}
 
+  %h3
+    ОБЩЕЕ ВРЕМЯ ПОИСКА: @elapsed_search_time: #{ @elapsed_search_time.inspect } seconds
   -#
   -#
   -#%p
