@@ -28,7 +28,6 @@ Name.create([
 {name: 'Адам', only_male:1, name_freq: 0},
 {name: 'Адриан', only_male:1, name_freq: 0},
 {name: 'Андриян', only_male:1, name_freq: 0},
-{name: 'Андрей', only_male:1, name_freq: 0},
 {name: 'Азарий', only_male:1, name_freq: 0},
 {name: 'Аким', only_male:1, name_freq: 0},
 {name: 'Александр', only_male:1, name_freq: 0},
@@ -542,6 +541,8 @@ Name.create([
 {name: 'Эмма', only_male:0, name_freq: 0},
 {name: 'Юлия', only_male:0, name_freq: 0},
 {name: 'Ядвига', only_male:0, name_freq: 0},
-{name: 'Ярослава', only_male:0, name_freq: 0}
+{name: 'Ярослава', only_male:0, name_freq: 0},
+# добавлено вручную
+{name: 'Андрей', only_male:1, name_freq: 0}
 
             ])
