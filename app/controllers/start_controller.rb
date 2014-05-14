@@ -387,6 +387,7 @@ class StartController < ApplicationController
     end
 
     sisters_names_arr << sister_name
+    @sisters_names_arr = sisters_names_arr # DEBUGG TO VIEW
     @sister_ProfileKeys_arr = sister_ProfileKeys_arr # DEBUGG TO VIEW
 
     session[:author_ProfileKeys_arr] = {:value => author_ProfileKeys_arr, :updated_at => Time.current}
@@ -931,14 +932,14 @@ class StartController < ApplicationController
     #User.delete_all             # DEBUGG
     #User.reset_pk_sequence
 
-    Tree.delete_all             # DEBUGG
-    Tree.reset_pk_sequence
-
-    Profile.delete_all          # DEBUGG
-    Profile.reset_pk_sequence
-
-    ProfileKey.delete_all             # DEBUGG
-    ProfileKey.reset_pk_sequence
+    #Tree.delete_all             # DEBUGG
+    #Tree.reset_pk_sequence
+    #
+    #Profile.delete_all          # DEBUGG
+    #Profile.reset_pk_sequence
+    #
+    #ProfileKey.delete_all             # DEBUGG
+    #ProfileKey.reset_pk_sequence
 
     if !session[:profiles_array].blank?
       profiles_array = session[:profiles_array][:value]
@@ -946,29 +947,28 @@ class StartController < ApplicationController
     end
 
   # 9 user:
-  profiles_array = [[0, "Александр", true],   # DEBUGG TO VIEW
-  [1, "Борис", true], [2, "Мария", false],
-  [5, "Виктор", true], [5, "Денис", true],
-  [6, "Анна", false], [6, "Ольга", false],
-  [8, "Виктория", false],
-  [3, "Борис", true], [3, "Иван", true],
-  [4, "Мария", false], [4, "Юлия", false]]   # DEBUGG TO VIEW
-
-  @profiles_array = profiles_array # DEBUGG TO VIEW
+  #profiles_array = [[0, "Александр", true],   # DEBUGG TO VIEW
+  #[1, "Борис", true], [2, "Мария", false],
+  #[5, "Виктор", true], [5, "Денис", true],
+  #[6, "Анна", false], [6, "Ольга", false],
+  #[8, "Виктория", false],
+  #[3, "Борис", true], [3, "Иван", true],
+  #[4, "Мария", false], [4, "Юлия", false]]   # DEBUGG TO VIEW
+#  @profiles_array = profiles_array # DEBUGG TO VIEW
 
  # Массивы для ProfileKeys: # DEBUGG TO VIEW
- author_ProfileKeys_arr = [["Александр", 1, "Борис", 1], ["Александр", 2, "Мария", 2], ["Александр", 5, "Виктор", 5], ["Александр", 5, "Денис", 5], ["Александр", 6, "Анна", 6], ["Александр", 6, "Ольга", 6], ["Александр", 8, "Виктория", 8], ["Александр", 3, "Борис", 3], ["Александр", 3, "Иван", 3], ["Александр", 4, "Мария", 4], ["Александр", 4, "Юлия", 4]]
-
- father_ProfileKeys_arr = [["Борис", 3, "Александр", 0], ["Борис", 8, "Мария", 2], ["Борис", 3, "Виктор", 5], ["Борис", 3, "Денис", 5], ["Борис", 4, "Анна", 6], ["Борис", 4, "Ольга", 6]]
- mother_ProfileKeys_arr = [["Мария", 7, "Борис", 1], ["Мария", 3, "Александр", 0], ["Мария", 3, "Виктор", 5], ["Мария", 3, "Денис", 5], ["Мария", 4, "Анна", 6], ["Мария", 4, "Ольга", 6]]
- brother_ProfileKeys_arr = [["Виктор", 1, "Борис", 1], ["Виктор", 2, "Мария", 2], ["Виктор", 5, "Александр", 0], ["Денис", 1, "Борис", 1], ["Денис", 2, "Мария", 2], ["Денис", 5, "Александр", 0], ["Виктор", 5, "Денис", 5], ["Денис", 5, "Виктор", 5], ["Виктор", 6, "Анна", 6], ["Денис", 6, "Анна", 6], ["Виктор", 6, "Ольга", 6], ["Денис", 6, "Ольга", 6]]
- sister_ProfileKeys_arr = [["Анна", 5, "Виктор", 5], ["Анна", 5, "Денис", 5], ["Анна", 1, "Борис", 1], ["Анна", 2, "Мария", 2], ["Анна", 5, "Александр", 0], ["Ольга", 5, "Виктор", 5], ["Ольга", 5, "Денис", 5], ["Ольга", 1, "Борис", 1], ["Ольга", 2, "Мария", 2], ["Ольга", 5, "Александр", 0], ["Анна", 6, "Ольга", 6], ["Ольга", 6, "Анна", 6]]
-
- wife_ProfileKeys_arr = [["Виктория", 7, "Александр", 0], ["Виктория", 3, "Борис", 3], ["Виктория", 3, "Иван", 3], ["Виктория", 4, "Мария", 4], ["Виктория", 4, "Юлия", 4]]
- husband_ProfileKeys_arr = []
- son_ProfileKeys_arr = [["Борис", 1, "Александр", 0], ["Борис", 2, "Виктория", 8], ["Иван", 1, "Александр", 0], ["Иван", 2, "Виктория", 8], ["Борис", 5, "Иван", 3], ["Иван", 5, "Борис", 3], ["Борис", 6, "Мария", 4], ["Иван", 6, "Мария", 4], ["Борис", 6, "Юлия", 4], ["Иван", 6, "Юлия", 4]]
- daugther_ProfileKeys_arr = [["Мария", 1, "Александр", 0], ["Мария", 2, "Виктория", 8], ["Мария", 5, "Борис", 3], ["Мария", 5, "Иван", 3], ["Юлия", 1, "Александр", 0], ["Юлия", 2, "Виктория", 8], ["Мария", 6, "Юлия", 4], ["Юлия", 6, "Мария", 4], ["Юлия", 5, "Борис", 3], ["Юлия", 5, "Иван", 3]]
- daugthers_names_arr = ["Мария", "Юлия"]
+ #author_ProfileKeys_arr = [["Александр", 1, "Борис", 1], ["Александр", 2, "Мария", 2], ["Александр", 5, "Виктор", 5], ["Александр", 5, "Денис", 5], ["Александр", 6, "Анна", 6], ["Александр", 6, "Ольга", 6], ["Александр", 8, "Виктория", 8], ["Александр", 3, "Борис", 3], ["Александр", 3, "Иван", 3], ["Александр", 4, "Мария", 4], ["Александр", 4, "Юлия", 4]]
+ #
+ #father_ProfileKeys_arr = [["Борис", 3, "Александр", 0], ["Борис", 8, "Мария", 2], ["Борис", 3, "Виктор", 5], ["Борис", 3, "Денис", 5], ["Борис", 4, "Анна", 6], ["Борис", 4, "Ольга", 6]]
+ #mother_ProfileKeys_arr = [["Мария", 7, "Борис", 1], ["Мария", 3, "Александр", 0], ["Мария", 3, "Виктор", 5], ["Мария", 3, "Денис", 5], ["Мария", 4, "Анна", 6], ["Мария", 4, "Ольга", 6]]
+ #brother_ProfileKeys_arr = [["Виктор", 1, "Борис", 1], ["Виктор", 2, "Мария", 2], ["Виктор", 5, "Александр", 0], ["Денис", 1, "Борис", 1], ["Денис", 2, "Мария", 2], ["Денис", 5, "Александр", 0], ["Виктор", 5, "Денис", 5], ["Денис", 5, "Виктор", 5], ["Виктор", 6, "Анна", 6], ["Денис", 6, "Анна", 6], ["Виктор", 6, "Ольга", 6], ["Денис", 6, "Ольга", 6]]
+ #sister_ProfileKeys_arr = [["Анна", 5, "Виктор", 5], ["Анна", 5, "Денис", 5], ["Анна", 1, "Борис", 1], ["Анна", 2, "Мария", 2], ["Анна", 5, "Александр", 0], ["Ольга", 5, "Виктор", 5], ["Ольга", 5, "Денис", 5], ["Ольга", 1, "Борис", 1], ["Ольга", 2, "Мария", 2], ["Ольга", 5, "Александр", 0], ["Анна", 6, "Ольга", 6], ["Ольга", 6, "Анна", 6]]
+ #
+ #wife_ProfileKeys_arr = [["Виктория", 7, "Александр", 0], ["Виктория", 3, "Борис", 3], ["Виктория", 3, "Иван", 3], ["Виктория", 4, "Мария", 4], ["Виктория", 4, "Юлия", 4]]
+ #husband_ProfileKeys_arr = []
+ #son_ProfileKeys_arr = [["Борис", 1, "Александр", 0], ["Борис", 2, "Виктория", 8], ["Иван", 1, "Александр", 0], ["Иван", 2, "Виктория", 8], ["Борис", 5, "Иван", 3], ["Иван", 5, "Борис", 3], ["Борис", 6, "Мария", 4], ["Иван", 6, "Мария", 4], ["Борис", 6, "Юлия", 4], ["Иван", 6, "Юлия", 4]]
+ #daugther_ProfileKeys_arr = [["Мария", 1, "Александр", 0], ["Мария", 2, "Виктория", 8], ["Мария", 5, "Борис", 3], ["Мария", 5, "Иван", 3], ["Юлия", 1, "Александр", 0], ["Юлия", 2, "Виктория", 8], ["Мария", 6, "Юлия", 4], ["Юлия", 6, "Мария", 4], ["Юлия", 5, "Борис", 3], ["Юлия", 5, "Иван", 3]]
+ #daugthers_names_arr = ["Мария", "Юлия"]
 
  #   @profile_id_hash: {1=>["Александр", 0], 2=>["Борис", 1], 3=>["Мария", 2], 4=>["Виктор", 5], 5=>["Денис", 5], 6=>["Анна", 6], 7=>["Ольга", 6], 8=>["Виктория", 8], 9=>["Борис", 3], 10=>["Иван", 3], 11=>["Мария", 4], 12=>["Юлия", 4]}
 
@@ -1107,18 +1107,18 @@ class StartController < ApplicationController
   def make_profile_keys(profiles_arr_w_ids, profile_id_hash)
 
     # Массивы для ProfileKeys:
-    author_ProfileKeys_arr = [["Александр", 1, "Борис", 1], ["Александр", 2, "Мария", 2], ["Александр", 5, "Виктор", 5], ["Александр", 5, "Денис", 5], ["Александр", 6, "Анна", 6], ["Александр", 6, "Ольга", 6], ["Александр", 8, "Виктория", 8], ["Александр", 3, "Борис", 3], ["Александр", 3, "Иван", 3], ["Александр", 4, "Мария", 4], ["Александр", 4, "Юлия", 4]]
-
-    father_ProfileKeys_arr = [["Борис", 3, "Александр", 0], ["Борис", 8, "Мария", 2], ["Борис", 3, "Виктор", 5], ["Борис", 3, "Денис", 5], ["Борис", 4, "Анна", 6], ["Борис", 4, "Ольга", 6]]
-    mother_ProfileKeys_arr = [["Мария", 7, "Борис", 1], ["Мария", 3, "Александр", 0], ["Мария", 3, "Виктор", 5], ["Мария", 3, "Денис", 5], ["Мария", 4, "Анна", 6], ["Мария", 4, "Ольга", 6]]
-    brother_ProfileKeys_arr = [["Виктор", 1, "Борис", 1], ["Виктор", 2, "Мария", 2], ["Виктор", 5, "Александр", 0], ["Денис", 1, "Борис", 1], ["Денис", 2, "Мария", 2], ["Денис", 5, "Александр", 0], ["Виктор", 5, "Денис", 5], ["Денис", 5, "Виктор", 5], ["Виктор", 6, "Анна", 6], ["Денис", 6, "Анна", 6], ["Виктор", 6, "Ольга", 6], ["Денис", 6, "Ольга", 6]]
-    sister_ProfileKeys_arr = [["Анна", 5, "Виктор", 5], ["Анна", 5, "Денис", 5], ["Анна", 1, "Борис", 1], ["Анна", 2, "Мария", 2], ["Анна", 5, "Александр", 0], ["Ольга", 5, "Виктор", 5], ["Ольга", 5, "Денис", 5], ["Ольга", 1, "Борис", 1], ["Ольга", 2, "Мария", 2], ["Ольга", 5, "Александр", 0], ["Анна", 6, "Ольга", 6], ["Ольга", 6, "Анна", 6]]
-
-    wife_ProfileKeys_arr = [["Виктория", 7, "Александр", 0], ["Виктория", 3, "Борис", 3], ["Виктория", 3, "Иван", 3], ["Виктория", 4, "Мария", 4], ["Виктория", 4, "Юлия", 4]]
-    husband_ProfileKeys_arr = []
-    son_ProfileKeys_arr = [["Борис", 1, "Александр", 0], ["Борис", 2, "Виктория", 8], ["Иван", 1, "Александр", 0], ["Иван", 2, "Виктория", 8], ["Борис", 5, "Иван", 3], ["Иван", 5, "Борис", 3], ["Борис", 6, "Мария", 4], ["Иван", 6, "Мария", 4], ["Борис", 6, "Юлия", 4], ["Иван", 6, "Юлия", 4]]
-    daugther_ProfileKeys_arr = [["Мария", 1, "Александр", 0], ["Мария", 2, "Виктория", 8], ["Мария", 5, "Борис", 3], ["Мария", 5, "Иван", 3], ["Юлия", 1, "Александр", 0], ["Юлия", 2, "Виктория", 8], ["Мария", 6, "Юлия", 4], ["Юлия", 6, "Мария", 4], ["Юлия", 5, "Борис", 3], ["Юлия", 5, "Иван", 3]]
-    daugthers_names_arr = ["Мария", "Юлия"]
+    #author_ProfileKeys_arr = [["Александр", 1, "Борис", 1], ["Александр", 2, "Мария", 2], ["Александр", 5, "Виктор", 5], ["Александр", 5, "Денис", 5], ["Александр", 6, "Анна", 6], ["Александр", 6, "Ольга", 6], ["Александр", 8, "Виктория", 8], ["Александр", 3, "Борис", 3], ["Александр", 3, "Иван", 3], ["Александр", 4, "Мария", 4], ["Александр", 4, "Юлия", 4]]
+    #
+    #father_ProfileKeys_arr = [["Борис", 3, "Александр", 0], ["Борис", 8, "Мария", 2], ["Борис", 3, "Виктор", 5], ["Борис", 3, "Денис", 5], ["Борис", 4, "Анна", 6], ["Борис", 4, "Ольга", 6]]
+    #mother_ProfileKeys_arr = [["Мария", 7, "Борис", 1], ["Мария", 3, "Александр", 0], ["Мария", 3, "Виктор", 5], ["Мария", 3, "Денис", 5], ["Мария", 4, "Анна", 6], ["Мария", 4, "Ольга", 6]]
+    #brother_ProfileKeys_arr = [["Виктор", 1, "Борис", 1], ["Виктор", 2, "Мария", 2], ["Виктор", 5, "Александр", 0], ["Денис", 1, "Борис", 1], ["Денис", 2, "Мария", 2], ["Денис", 5, "Александр", 0], ["Виктор", 5, "Денис", 5], ["Денис", 5, "Виктор", 5], ["Виктор", 6, "Анна", 6], ["Денис", 6, "Анна", 6], ["Виктор", 6, "Ольга", 6], ["Денис", 6, "Ольга", 6]]
+    #sister_ProfileKeys_arr = [["Анна", 5, "Виктор", 5], ["Анна", 5, "Денис", 5], ["Анна", 1, "Борис", 1], ["Анна", 2, "Мария", 2], ["Анна", 5, "Александр", 0], ["Ольга", 5, "Виктор", 5], ["Ольга", 5, "Денис", 5], ["Ольга", 1, "Борис", 1], ["Ольга", 2, "Мария", 2], ["Ольга", 5, "Александр", 0], ["Анна", 6, "Ольга", 6], ["Ольга", 6, "Анна", 6]]
+    #
+    #wife_ProfileKeys_arr = [["Виктория", 7, "Александр", 0], ["Виктория", 3, "Борис", 3], ["Виктория", 3, "Иван", 3], ["Виктория", 4, "Мария", 4], ["Виктория", 4, "Юлия", 4]]
+    #husband_ProfileKeys_arr = []
+    #son_ProfileKeys_arr = [["Борис", 1, "Александр", 0], ["Борис", 2, "Виктория", 8], ["Иван", 1, "Александр", 0], ["Иван", 2, "Виктория", 8], ["Борис", 5, "Иван", 3], ["Иван", 5, "Борис", 3], ["Борис", 6, "Мария", 4], ["Иван", 6, "Мария", 4], ["Борис", 6, "Юлия", 4], ["Иван", 6, "Юлия", 4]]
+    #daugther_ProfileKeys_arr = [["Мария", 1, "Александр", 0], ["Мария", 2, "Виктория", 8], ["Мария", 5, "Борис", 3], ["Мария", 5, "Иван", 3], ["Юлия", 1, "Александр", 0], ["Юлия", 2, "Виктория", 8], ["Мария", 6, "Юлия", 4], ["Юлия", 6, "Мария", 4], ["Юлия", 5, "Борис", 3], ["Юлия", 5, "Иван", 3]]
+    #daugthers_names_arr = ["Мария", "Юлия"]
 
 
 
@@ -1136,45 +1136,45 @@ class StartController < ApplicationController
         case relation_id
 
           when 0
-#            author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
+            author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
             save_profile_keys(name, profile_id, profile_id_hash, author_ProfileKeys_arr)
 
           when 1  # "father"
-#            father_ProfileKeys_arr = session[:father_ProfileKeys_arr][:value]
+            father_ProfileKeys_arr = session[:father_ProfileKeys_arr][:value]
             save_profile_keys(name, profile_id, profile_id_hash, father_ProfileKeys_arr)
 
           when 2  # "mother"
-#            mother_ProfileKeys_arr = session[:mother_ProfileKeys_arr][:value]  #
+            mother_ProfileKeys_arr = session[:mother_ProfileKeys_arr][:value]  #
             save_profile_keys(name, profile_id, profile_id_hash, mother_ProfileKeys_arr)
 
           when 3   # "son"
-#            son_ProfileKeys_arr = session[:son_ProfileKeys_arr][:value]
-            #sons_names_arr = session[:sons_names_arr][:value]
+            son_ProfileKeys_arr = session[:son_ProfileKeys_arr][:value]
+            sons_names_arr = session[:sons_names_arr][:value]
             save_profile_keys(name, profile_id, profile_id_hash, son_ProfileKeys_arr)
 
           when 4   # "daughter"
-#            daugther_ProfileKeys_arr = session[:daugther_ProfileKeys_arr][:value]
-            #daugthers_names_arr = session[:daugthers_names_arr][:value]
+            daugther_ProfileKeys_arr = session[:daugther_ProfileKeys_arr][:value]
+            daugthers_names_arr = session[:daugthers_names_arr][:value]
             save_profile_keys(name, profile_id, profile_id_hash, daugther_ProfileKeys_arr)
 
           when 5  # "brother"
-#            brother_ProfileKeys_arr = session[:brother_ProfileKeys_arr][:value]
-            #brothers_names_arr = session[:brothers_names_arr][:value]  #
+            brother_ProfileKeys_arr = session[:brother_ProfileKeys_arr][:value]
+            brothers_names_arr = session[:brothers_names_arr][:value]  #
             save_profile_keys(name, profile_id, profile_id_hash, brother_ProfileKeys_arr)
 
           when 6   # "sister"
-#            sister_ProfileKeys_arr = session[:sister_ProfileKeys_arr][:value]  #
-#            sisters_names_arr = session[:sisters_names_arr][:value]  #
+            sister_ProfileKeys_arr = session[:sister_ProfileKeys_arr][:value]  #
+            sisters_names_arr = session[:sisters_names_arr][:value]  #
             save_profile_keys(name, profile_id, profile_id_hash, sister_ProfileKeys_arr)
 
           when 7   # "husband"
-#            husband_ProfileKeys_arr = session[:husband_ProfileKeys_arr][:value]
-            #husband_name = session[:husband_name][:value]
+            husband_ProfileKeys_arr = session[:husband_ProfileKeys_arr][:value]
+            husband_name = session[:husband_name][:value]
             save_profile_keys(name, profile_id, profile_id_hash, husband_ProfileKeys_arr)
 
           when 8   # "wife"
-#            wife_ProfileKeys_arr = session[:wife_ProfileKeys_arr][:value]  #
-            #wife_name = session[:wife_name][:value]
+            wife_ProfileKeys_arr = session[:wife_ProfileKeys_arr][:value]  #
+            wife_name = session[:wife_name][:value]
             save_profile_keys(name, profile_id, profile_id_hash, wife_ProfileKeys_arr)
 
           else

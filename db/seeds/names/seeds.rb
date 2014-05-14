@@ -12,8 +12,7 @@
 # encoding: utf-8
 
 Name.delete_all
-#Name.reset_pk_sequence
-
+Name.reset_pk_sequence
 Name.create([
 
 
@@ -29,6 +28,7 @@ Name.create([
 {name: 'Адам', only_male:1, name_freq: 0},
 {name: 'Адриан', only_male:1, name_freq: 0},
 {name: 'Андриян', only_male:1, name_freq: 0},
+{name: 'Андрей', only_male:1, name_freq: 0},
 {name: 'Азарий', only_male:1, name_freq: 0},
 {name: 'Аким', only_male:1, name_freq: 0},
 {name: 'Александр', only_male:1, name_freq: 0},
