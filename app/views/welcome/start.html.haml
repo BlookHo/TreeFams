@@ -1,5 +1,5 @@
 = render 'breadcrumb'
 
-#welcome-form.center-align
+#welcome-form.center-align.col_1_2
   = form_tag :proceed_start, remote: false, id: 'welcome_form' do
     = render "form_#{current_step}"

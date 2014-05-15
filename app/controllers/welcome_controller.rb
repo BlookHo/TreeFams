@@ -51,7 +51,7 @@ class WelcomeController < ApplicationController
   end
 
   def steps
-    %w[self parents brothers_and_sisters couple children]
+    %w[self mother father have_brothers brothers have_sisters sisters have_couple couple have_children have_sons sons have_daughter daughter email]
   end
 
 
