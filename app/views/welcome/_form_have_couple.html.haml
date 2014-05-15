@@ -1,0 +1,5 @@
+%h2 У вас есть супрг(а)?
+
+.control
+  = link_to "Да", go_to_start_step_path("couple"), class: [:btn, :green, :large]
+  = link_to "Нет", go_to_start_step_path("email"), class: [:btn, :red, :large]

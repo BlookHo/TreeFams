@@ -1,0 +1,5 @@
+%h2 У вас сыновья?
+
+.control
+  = link_to "Да", go_to_start_step_path("sons"), class: [:btn, :green, :large]
+  = link_to "Нет", go_to_start_step_path("have_daughter"), class: [:btn, :red, :large]
