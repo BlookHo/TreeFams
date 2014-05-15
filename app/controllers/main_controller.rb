@@ -46,27 +46,28 @@ class MainController < ApplicationController
     get_user_tree # Получение массива дерева текущего Юзера
 
     if user_signed_in?
-      user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
 
-      row_arr = []
-      tree_arr = []
-
-      user_tree.each do |tree_row|
-        row_arr[0] = tree_row.id              # ID в Дереве
-        row_arr[1] = tree_row.profile_id      # ID Профиля
-        row_arr[2] = Profile.find(tree_row.profile_id).name_id      # ID Имени Профиля
-        row_arr[3] = Name.find(Profile.find(tree_row.profile_id).name_id).name   # Имя Профиля
-        row_arr[4] = Profile.find(tree_row.profile_id).sex_id         # Пол Профиля
-        row_arr[5] = tree_row.relation_id         # ID Родства Профиля с Автором
-        row_arr[6] = tree_row.connected           # Объединено
-
-        tree_arr << row_arr
-        row_arr = []
-
-      end
-
-      session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
-      @tree_arr = tree_arr    # DEBUGG TO VIEW
+      #user_tree = Tree.where(:user_id => current_user.id).select(:id, :profile_id, :relation_id, :connected)
+      #
+      #row_arr = []
+      #tree_arr = []
+      #
+      #user_tree.each do |tree_row|
+      #  row_arr[0] = tree_row.id              # ID в Дереве
+      #  row_arr[1] = tree_row.profile_id      # ID Профиля
+      #  row_arr[2] = Profile.find(tree_row.profile_id).name_id      # ID Имени Профиля
+      #  row_arr[3] = Name.find(Profile.find(tree_row.profile_id).name_id).name   # Имя Профиля
+      #  row_arr[4] = Profile.find(tree_row.profile_id).sex_id         # Пол Профиля
+      #  row_arr[5] = tree_row.relation_id         # ID Родства Профиля с Автором
+      #  row_arr[6] = tree_row.connected           # Объединено
+      #
+      #  tree_arr << row_arr
+      #  row_arr = []
+      #
+      #end
+      #
+      #session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
+      #@tree_arr = tree_arr    # DEBUGG TO VIEW
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
