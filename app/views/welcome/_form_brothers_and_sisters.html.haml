@@ -1,8 +1,0 @@
-%h2 У вас есть братья и сестры?
-
-.control
-  = text_field_tag "brothers[name][]", params[:name], class: :autocomplete_field_names, placeholder: "Имя брата или сестры...", data:{names: @names}
-
-.control
-  = link_to 'Добавить еще', '#', class: [:btn, :red, :large], id: :clone
-  = submit_tag 'Дальше', class: [:btn, :green, :large]

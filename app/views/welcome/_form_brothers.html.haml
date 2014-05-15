@@ -1,0 +1,10 @@
+%h2 Как зовут брата?
+
+.control
+  = text_field_tag "brothers[name][]", params[:name], class: :autocomplete_field_names, placeholder: "Имя брата...", data:{names: @names}
+
+.control
+  = link_to 'Добавить еще брата', '#', id: :clone
+
+.control
+  = submit_tag 'Дальше', class: [:btn, :green, :large]

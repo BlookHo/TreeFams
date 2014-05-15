@@ -1,0 +1,5 @@
+%h2 У вас есть родные братья?
+
+.control
+  = link_to "Да", go_to_start_step_path("brothers"), class: [:btn, :green, :large]
+  = link_to "Нет", go_to_start_step_path("have_sisters"), class: [:btn, :red, :large]
