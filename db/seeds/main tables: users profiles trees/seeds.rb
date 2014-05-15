@@ -20,7 +20,16 @@ User.create!([          # create! - для сообщений об ошибка�
 # 7
 {profile_id: 40, admin: false, email: 'yy@yy.yy', password: '777777', password_confirmation: '777777' },
 # 8
-{profile_id: 47, admin: false, email: 'dd@dd.dd', password: '888888', password_confirmation: '888888' }
+{profile_id: 47, admin: false, email: 'dd@dd.dd', password: '888888', password_confirmation: '888888' },
+# 9
+{profile_id: 59, admin: false, email: 'gg@gg.gg', password: '999999', password_confirmation: '999999' },
+# 10
+{profile_id: 63, admin: false, email: 'ss@ss.ss', password: '101010', password_confirmation: '101010' },
+# 11
+{profile_id: 69, admin: false, email: 'xx@xx.xx', password: '131313', password_confirmation: '131313' },
+# 12
+{profile_id: 77, admin: false, email: 'zz@zz.zz', password: '121212', password_confirmation: '121212' }
+
 
 
 ])
@@ -153,7 +162,63 @@ Profile.create([
 # 57
 {user_id: 0, name_id: 453, email: '', sex_id: 0 },
 # 58
-{user_id: 0, name_id: 521, email: '', sex_id: 0 }
+{user_id: 0, name_id: 521, email: '', sex_id: 0 },
+
+# 59
+{user_id: 9, name_id: 352, email: 'gg@gg.gg', sex_id: 0 },
+# 60
+{user_id: 0, name_id: 97, email: '', sex_id: 1 },
+# 61
+{user_id: 0, name_id: 371, email: '', sex_id: 0 },
+# 62
+{user_id: 0, name_id: 477, email: '', sex_id: 0 },
+
+# 63
+{user_id: 10, name_id: 477, email: 'ss@ss.ss', sex_id: 0 },
+# 64
+{user_id: 0, name_id: 102, email: '', sex_id: 1 },
+# 65
+{user_id: 0, name_id: 506, email: '', sex_id: 0 },
+# 66
+{user_id: 0, name_id: 123, email: '', sex_id: 1 },
+# 67
+{user_id: 0, name_id: 265, email: '', sex_id: 1 },
+# 68
+{user_id: 0, name_id: 371, email: '', sex_id: 0 },
+
+
+# 69
+{user_id: 11, name_id: 265, email: 'xx@xx.xx', sex_id: 1 },
+# 70
+{user_id: 0, name_id: 123, email: '', sex_id: 1 },
+# 71
+{user_id: 0, name_id: 477, email: '', sex_id: 0 },
+# 72
+{user_id: 0, name_id: 371, email: '', sex_id: 0 },
+# 73
+{user_id: 0, name_id: 395, email: '', sex_id: 0 },
+# 74
+{user_id: 0, name_id: 97, email: '', sex_id: 1 },
+# 75
+{user_id: 0, name_id: 212, email: '', sex_id: 1 },
+# 76
+{user_id: 0, name_id: 453, email: '', sex_id: 0 },
+
+
+# 77
+{user_id: 12, name_id: 395, email: 'zz@zz.zz', sex_id: 0 },
+# 78
+{user_id: 0, name_id: 98, email: '', sex_id: 1 },
+# 79
+{user_id: 0, name_id: 467, email: '', sex_id: 0 },
+# 80
+{user_id: 0, name_id: 265, email: '', sex_id: 1 },
+# 81
+{user_id: 0, name_id: 97, email: '', sex_id: 1 },
+# 82
+{user_id: 0, name_id: 212, email: '', sex_id: 1 },
+# 83
+{user_id: 0, name_id: 453, email: '', sex_id: 0 }
 
 
 
@@ -168,17 +233,20 @@ Tree.create([
 # LEGEND:
 # user_id HAS profile_id WHO IS relation_id TO user_id
 # 1 - Tree 1
-{user_id: 1, profile_id: 2, relation_id: 1, connected: false },
+{user_id: 1, profile_id: 1, relation_id: 0, connected: false },
 # 2
-{user_id: 1, profile_id: 3, relation_id: 2, connected: false },
+{user_id: 1, profile_id: 2, relation_id: 1, connected: false },
 # 3
-{user_id: 1, profile_id: 4, relation_id: 8, connected: false },
+{user_id: 1, profile_id: 3, relation_id: 2, connected: false },
 # 4
-{user_id: 1, profile_id: 5, relation_id: 3, connected: false },
+{user_id: 1, profile_id: 4, relation_id: 8, connected: false },
 # 5
+{user_id: 1, profile_id: 5, relation_id: 3, connected: false },
+# 6
 {user_id: 1, profile_id: 6, relation_id: 3, connected: false },
 
 # 7 - Tree 2
+{user_id: 2, profile_id: 7, relation_id: 0, connected: false },
 {user_id: 2, profile_id: 8, relation_id: 1, connected: false },
 {user_id: 2, profile_id: 9, relation_id: 2, connected: false },
 {user_id: 2, profile_id: 10, relation_id: 6, connected: false },
@@ -187,7 +255,8 @@ Tree.create([
 {user_id: 2, profile_id: 13, relation_id: 4, connected: false },
 {user_id: 2, profile_id: 14, relation_id: 4, connected: false },
 
-# 6 - Tree 3
+# 15 - Tree 3
+{user_id: 3, profile_id: 15, relation_id: 0, connected: false },
 {user_id: 3, profile_id: 16, relation_id: 1, connected: false },
 {user_id: 3, profile_id: 17, relation_id: 2, connected: false },
 {user_id: 3, profile_id: 18, relation_id: 8, connected: false },
@@ -195,13 +264,15 @@ Tree.create([
 {user_id: 3, profile_id: 20, relation_id: 4, connected: false },
 {user_id: 3, profile_id: 21, relation_id: 4, connected: false },
 
-# 6 - Tree 4
+# 22 - Tree 4
+{user_id: 4, profile_id: 22, relation_id: 0, connected: false },
 {user_id: 4, profile_id: 23, relation_id: 1, connected: false },
 {user_id: 4, profile_id: 24, relation_id: 2, connected: false },
 {user_id: 4, profile_id: 25, relation_id: 5, connected: false },
 {user_id: 4, profile_id: 26, relation_id: 6, connected: false },
 
-# 6 - Tree 5
+# 27 - Tree 5
+{user_id: 5, profile_id: 27, relation_id: 0, connected: false },
 {user_id: 5, profile_id: 28, relation_id: 1, connected: false },
 {user_id: 5, profile_id: 29, relation_id: 2, connected: false },
 {user_id: 5, profile_id: 30, relation_id: 5, connected: false },
@@ -210,6 +281,7 @@ Tree.create([
 {user_id: 5, profile_id: 33, relation_id: 4, connected: false },
 
 # 34 - Tree 6
+{user_id: 6, profile_id: 34, relation_id: 0, connected: false },
 {user_id: 6, profile_id: 35, relation_id: 1, connected: false },
 {user_id: 6, profile_id: 36, relation_id: 2, connected: false },
 {user_id: 6, profile_id: 37, relation_id: 8, connected: false },
@@ -217,6 +289,7 @@ Tree.create([
 {user_id: 6, profile_id: 39, relation_id: 4, connected: false },
 
 # 40 - Tree 7
+{user_id: 7, profile_id: 40, relation_id: 0, connected: false },
 {user_id: 7, profile_id: 41, relation_id: 1, connected: false },
 {user_id: 7, profile_id: 42, relation_id: 2, connected: false },
 {user_id: 7, profile_id: 43, relation_id: 8, connected: false },
@@ -226,6 +299,7 @@ Tree.create([
 
 
 # 47 - Tree 8
+{user_id: 8, profile_id: 47, relation_id: 0, connected: false },
 {user_id: 8, profile_id: 48, relation_id: 1, connected: false },
 {user_id: 8, profile_id: 49, relation_id: 2, connected: false },
 {user_id: 8, profile_id: 50, relation_id: 5, connected: false },
@@ -236,8 +310,40 @@ Tree.create([
 {user_id: 8, profile_id: 55, relation_id: 3, connected: false },
 {user_id: 8, profile_id: 56, relation_id: 3, connected: false },
 {user_id: 8, profile_id: 57, relation_id: 4, connected: false },
-{user_id: 8, profile_id: 58, relation_id: 4, connected: false }
+{user_id: 8, profile_id: 58, relation_id: 4, connected: false },
 
+# 59 - Tree 9
+{user_id: 9, profile_id: 59, relation_id: 0, connected: false },
+{user_id: 9, profile_id: 60, relation_id: 1, connected: false },
+{user_id: 9, profile_id: 61, relation_id: 2, connected: false },
+{user_id: 9, profile_id: 62, relation_id: 6, connected: false },
+
+# 63- Tree 10
+{user_id: 10, profile_id: 63, relation_id: 0, connected: false },
+{user_id: 10, profile_id: 64, relation_id: 1, connected: false },
+{user_id: 10, profile_id: 65, relation_id: 2, connected: false },
+{user_id: 10, profile_id: 66, relation_id: 7, connected: false },
+{user_id: 10, profile_id: 67, relation_id: 3, connected: false },
+{user_id: 10, profile_id: 68, relation_id: 4, connected: false },
+
+# 69 - Tree 11
+{user_id: 11, profile_id: 69, relation_id: 0, connected: false },
+{user_id: 11, profile_id: 70, relation_id: 1, connected: false },
+{user_id: 11, profile_id: 71, relation_id: 2, connected: false },
+{user_id: 11, profile_id: 72, relation_id: 6, connected: false },
+{user_id: 11, profile_id: 73, relation_id: 8, connected: false },
+{user_id: 11, profile_id: 74, relation_id: 3, connected: false },
+{user_id: 11, profile_id: 75, relation_id: 3, connected: false },
+{user_id: 11, profile_id: 76, relation_id: 4, connected: false },
+
+# 77 - Tree 12
+{user_id: 12, profile_id: 77, relation_id: 0, connected: false },
+{user_id: 12, profile_id: 78, relation_id: 1, connected: false },
+{user_id: 12, profile_id: 79, relation_id: 2, connected: false },
+{user_id: 12, profile_id: 80, relation_id: 7, connected: false },
+{user_id: 12, profile_id: 81, relation_id: 3, connected: false },
+{user_id: 12, profile_id: 82, relation_id: 3, connected: false },
+{user_id: 12, profile_id: 83, relation_id: 4, connected: false }
 
 
 ])

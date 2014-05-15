@@ -66,7 +66,6 @@ class MainController < ApplicationController
       end
 
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
-
       @tree_arr = tree_arr    # DEBUGG TO VIEW
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
