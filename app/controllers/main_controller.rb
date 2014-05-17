@@ -284,6 +284,32 @@ class MainController < ApplicationController
 
   end
 
+  # Добавление нового профиля для любого профиля дерева
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def add_new_profile
+
+    @sel_names = session[:sel_names][:value]
+    @menu_choice = "No choice yet - in new_profile"
+
+    @profile_name = params[:profile_name_select] #
+    if !@profile_name.blank?
+      @profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
+    end
+
+    @profile_relation = params[:relation_number] #
+    if !@profile_relation.blank?
+
+
+      #@profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
+    end
+
+
+
+
+  end
+
 
 
 
