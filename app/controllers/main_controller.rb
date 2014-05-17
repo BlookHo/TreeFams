@@ -293,6 +293,11 @@ class MainController < ApplicationController
     @sel_names = session[:sel_names][:value]
     @menu_choice = "No choice yet - in new_profile"
 
+    @add_to_profile = params[:add_to_profile] #
+    if !@add_to_profile.blank?
+      #@profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
+    end
+
     @profile_name = params[:profile_name_select] #
     if !@profile_name.blank?
       @profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
@@ -300,8 +305,6 @@ class MainController < ApplicationController
 
     @profile_relation = params[:relation_number] #
     if !@profile_relation.blank?
-
-
       #@profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
     end
 
