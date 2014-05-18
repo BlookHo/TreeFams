@@ -308,18 +308,42 @@ class MainController < ApplicationController
       #@profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
     end
 
-    #new_profile = Profile.new
-    #new_profile.user_id = current_user.id  # user_id - берем после регистрации
-    #new_profile.email = current_user.email # user regged email
-    #new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
-    #if @profile_sex # sex_id
-    #  new_profile.sex_id = 1    # sex_id - MALE
-    #else
-    #  new_profile.sex_id = 0    # sex_id - FEMALE
-    #end
-    #new_profile.save
-    #
-    #@new_profile_id = new_profile.id             # profile_id
+    new_profile = Profile.new
+    new_profile.user_id = current_user.id  # user_id - берем после регистрации
+    new_profile.email = current_user.email # user regged email
+    new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
+    if @profile_sex # sex_id
+      new_profile.sex_id = 1    # sex_id - MALE
+    else
+      new_profile.sex_id = 0    # sex_id - FEMALE
+    end
+    new_profile.save
+
+    @new_profile_id = new_profile.id             # profile_id
+
+
+    new_ProfileKeys_arr = []
+    add_profile_name_id = Profile
+
+    # add new_ProfileKeys rows
+    new_ProfileKeys_arr << [@add_to_profile, new_profile.name_id, @profile_relation, @new_profile_id, 4]
+    @new_ProfileKeys_arr = new_ProfileKeys_arr # DEBUGG TO VIEW
+
+
+    new_profile_key_row = ProfileKey.new
+    new_profile_key_row.user_id = current_user.id                           # user_id
+    new_profile_key_row.profile_id = @new_profile_id                                # profile_id
+
+    name_id = Name.find_by_name(@add_to_profile).id         # name_id
+    new_profile_key_row.name_id = name_id                                    # name_id
+
+#    is_profile_id = profile_id_hash.key([profile_keys_arr[row_ind][2], profile_keys_arr[row_ind][3]])
+    new_profile_key_row.is_profile_id = @profile_relation                        # is_profile_id
+
+    is_name_id = Name.find_by_name(@profile_name).id             # is_name_id
+    new_profile_key_row.is_name_id = is_name_id                              # is_name_id
+
+    new_profile_key_row.save
 
 
   end
