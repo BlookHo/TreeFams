@@ -308,7 +308,18 @@ class MainController < ApplicationController
       #@profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
     end
 
-
+    #new_profile = Profile.new
+    #new_profile.user_id = current_user.id  # user_id - берем после регистрации
+    #new_profile.email = current_user.email # user regged email
+    #new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
+    #if @profile_sex # sex_id
+    #  new_profile.sex_id = 1    # sex_id - MALE
+    #else
+    #  new_profile.sex_id = 0    # sex_id - FEMALE
+    #end
+    #new_profile.save
+    #
+    #@new_profile_id = new_profile.id             # profile_id
 
 
   end
