@@ -61,6 +61,7 @@ class ApplicationController < ActionController::Base
       @sel_relations << relation.relation
     end
 
+    session[:sel_names] = {:value => @sel_names, :updated_at => Time.current}
     #unless current_user.country.blank?
     #  current_user.country.cities.each do |city|
     #    @sel_cities << city.name

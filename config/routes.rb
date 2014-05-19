@@ -40,6 +40,8 @@ Weafam::Application.routes.draw do
   match 'search_tree_match' => 'main#search_tree_match', via: :get
   match 'relative_menu' => 'main#relative_menu', via: :get
   match 'match_approval' => 'main#match_approval', via: :get
+  match 'add_new_profile' => 'main#add_new_profile', via: :get
+  match 'add_new_profile' => 'main#add_new_profile', via: :post
 
   # graph_tree controller
   match 'show_graph_tree' => 'graph_tree#show_graph_tree', via: :get

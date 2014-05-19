@@ -1,0 +1,34 @@
+%section.admin
+  %h3 ADD_NEW_PROFILE
+  %h3 Добавление нового Профиля
+  %div
+    %p
+      @menu_choice: #{@menu_choice.inspect}
+%h3 Ввод информации о НОВОМ ПРОФИЛЕ (store_mother_path, remote: true, id: 'mother_form' )
+= form_tag do
+  %div
+    = label_tag 'Введи Профиль, к которому добавляем Новый Профиль:'
+    -#= select_tag :relation_select, options_for_select(@sel_names, selected = @new_profile_relation), :prompt => 'Выбери имя' , options_for_select(@sel_names, selected = @new_profile_relation),
+    = number_field_tag :add_to_profile, :prompt => 'Введи Профиль, к которому добавляем Новый Профиль '
+
+  %div
+    = label_tag 'Введи имя Нового Профиля:'
+    = select_tag :profile_name_select, options_for_select(@sel_names, selected = @new_profile_name), :prompt => 'Выбери имя'
+
+  %div
+    = label_tag 'Введи Relation Нового Профиля:'
+    -#= select_tag :relation_select, options_for_select(@sel_names, selected = @new_profile_relation), :prompt => 'Выбери имя' , options_for_select(@sel_names, selected = @new_profile_relation),
+    = number_field_tag :relation_number, :prompt => 'Выбери Relation'
+
+  = submit_tag 'Ввод'
+
+  %p
+    @add_to_profile: #{@add_to_profile.inspect}
+  %p
+    @profile_name: #{@profile_name.inspect}
+  %p
+    @profile_sex: #{@profile_sex.inspect}
+  %p
+    @profile_relation: #{@profile_relation.inspect}
+  %h4
+    Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}
