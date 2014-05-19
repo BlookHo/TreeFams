@@ -1,0 +1,4 @@
+%h2 Как зовут вашего супруга?
+
+.control
+  = text_field_tag "circle[couple]", current_circle.couple, class: :autocomplete_field_names, placeholder: "Введите имя...", data:{names: @names}

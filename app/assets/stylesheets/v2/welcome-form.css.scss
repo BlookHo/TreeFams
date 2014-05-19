@@ -2,15 +2,32 @@
 
   h2{
     font-size:24px;
-    font-weight:300;
+    font-weight:700;
     margin-bottom:25px;
 
     span{color:$green-color;}
   }
 
+  .errors{
+    color:red;
+    margin-bottom:12px;
+    font-style:italic;
+  }
+
   form{
-    width:70%;
     margin:0 auto;
+
+    .body{
+      padding:21px;
+      background-color:#f4f4f4;
+      border-radius:10px 10px 0 0;
+    }
+
+    .footer{
+        padding:21px;
+        background-color:#c2c1c1;
+        border-radius:0 0 10px 10px;
+    }
   }
 
   .control{
@@ -20,6 +37,13 @@
 
     label{
       color:grey;
+    }
+
+    .help-text{
+      font-size:small;
+      color:grey;
+      display:inline-block;
+      font-style:italic;
     }
 
     &.left{
@@ -36,35 +60,6 @@
   }
 
 }
-
-
-// Autocomplete
-// ul.ui-autocomplete {
-//     position:absolute;
-//     list-style:none;
-//     margin:0;
-//     padding:0;
-//
-//     border:1px solid grey;
-//     cursor:default;
-//     li{
-//       background-color:#fff;
-//       box-sizing:border-box;
-//       padding:12px;
-//
-//       a{color:grey;}
-//
-//       &.ui-state-focus{
-//           background-color:$green-color;
-//       }
-//     }
-//
-//     .ui-menu-item:hover{
-//       background-color:$green-color;
-//       a{color:#fff;}
-//     }
-// }
-
 
 // hide search info
 .ui-helper-hidden-accessible{display:none;}
@@ -89,7 +84,6 @@ ul.ui-menu {
 	clear: left;
 	width: 100%;
   box-sizing:border-box;
-
 }
 .ui-menu .ui-menu-item a {
 	text-decoration:none;

@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 
   # Nearest circle profiles
   has_many :profile_keys
-  has_many :profiles, through: :profile_keys
+  # has_many :profiles, through: :profile_keys, :source => :profile_id
 
 
   def name

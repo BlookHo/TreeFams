@@ -1,0 +1,17 @@
+%h2 Как вас зовут?
+
+- if errors?
+  .errors= errors.message
+
+- if errors? and errors.name == "invalid_name"
+  .control
+    %label
+      Мужской
+      = radio_button_tag "circle[author_sex]", "male"
+    %label
+      Женский
+      = radio_button_tag "circle[author_sex]", "female"
+
+.control
+  = text_field_tag "circle[author]", current_circle.author, class: [:autocomplete_field_names], placeholder: "Ваше имя...", data:{names: @names}
+  .help-text Ваше официальное имя, как в паспорте

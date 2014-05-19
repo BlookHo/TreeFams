@@ -37,6 +37,11 @@ gem "jquery-ui-rails"
 # Обмен переменными Ruby -> JS
 gem 'gon'
 
+
+# Extend hash
+gem 'hashie'
+
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 #gem 'jquery-turbolinks'
 #gem 'turbolinks'

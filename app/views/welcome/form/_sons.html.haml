@@ -1,0 +1,12 @@
+%h2 Как зовут сына?
+
+- if current_circle.sons.nil?
+  .control
+    = text_field_tag "circle[sons][]", params[:name], class: :autocomplete_field_names, placeholder: "Начните вводить ваше имя...", data:{names: @names}
+- else
+  - current_circle.sons.each do |son|
+    .control
+      = text_field_tag "circle[sons][]", son, class: :autocomplete_field_names, placeholder: "Начните вводить ваше имя...", data:{names: @names}
+
+.control
+  = link_to 'У меня есть еще сын', '#', id: :clone

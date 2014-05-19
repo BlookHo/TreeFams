@@ -1,0 +1,14 @@
+%h2 Как зовут брата?
+
+- if current_circle.brothers.nil?
+  .control
+    = text_field_tag "circle[brothers][]", params[:name], class: :autocomplete_field_names, placeholder: "Имя брата...", data:{names: @names}
+- else
+  - current_circle.brothers.each do |brother|
+    .control
+      = text_field_tag "circle[brothers][]", brother, class: :autocomplete_field_names, placeholder: "Имя брата...", data:{names: @names}
+      = link_to "- Удалить", '#', onclick: "$(this).closest('.control').fadeOut();return false;"
+
+
+.control
+  = link_to '+ Добавить еще брата', '#', id: :clone

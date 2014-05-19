@@ -1,0 +1,13 @@
+%h2 Как зовут сестру?
+
+- if current_circle.sisters.nil?
+  .control
+    = text_field_tag "circle[sisters][]", params[:name], class: :autocomplete_field_names, placeholder: "Имя сестры...", data:{names: @names}
+- else
+  - current_circle.sisters.each do |sister|
+    .control
+      = text_field_tag "circle[sisters][]", sister, class: :autocomplete_field_names, placeholder: "Имя сестры...", data:{names: @names}
+      = link_to "- Удалить", '#', onclick: "$(this).closest('.control').fadeOut();return false;"
+
+.control
+  = link_to 'Добавить еще сестру', '#', id: :clone

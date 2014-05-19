@@ -1,5 +1,8 @@
-= render 'breadcrumb'
-
-#welcome-form.center-align.col_1_2
+#welcome-form.col_1_2
+  = render 'breadcrumb'
   = form_tag :proceed_start, remote: false, id: 'welcome_form' do
-    = render "form_#{current_step}"
+    .body
+      = render "welcome/form/#{current_step}"
+    .footer
+      = link_to 'Назад', go_to_start_step_path(prev_step), class: [:btn], id: :prev
+      = submit_tag 'Дальше', class: [:btn, :blue], id: :next

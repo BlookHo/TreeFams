@@ -1,8 +1,0 @@
-%h2 Как зовут сестру?
-
-.control
-  = text_field_tag "sisters[name][]", params[:name], class: :autocomplete_field_names, placeholder: "Имя сестры...", data:{names: @names}
-.control
-  = link_to 'Добавить еще сестру', '#', id: :clone
-.control
-  = submit_tag 'Дальше', class: [:btn, :green, :large]
