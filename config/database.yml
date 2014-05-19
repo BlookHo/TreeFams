@@ -35,6 +35,17 @@
 #  timeout: 5000
 #
 
+# How to reset user:
+# sudo -u postgres psql
+# *admin password*
+# DROP DATABASE 'weafam_development";
+# DROP USER weafam_admin;
+# /q
+# sudo -u postgres createuser -P
+# weafam_admin
+# password for it
+# rake db:setup
+
 development:  # my version
   adapter: postgresql
   database: weafam_development
