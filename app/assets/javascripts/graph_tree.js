@@ -3,109 +3,188 @@
  */
 
 /*
- *  Класс вычисления координат и построения древа
- *  reTree              - конструктор класса
- *  roundTree           - обход древа
- *  sexing              - определение цвета по полу
- *  constructFigures    - рисуем фигуры по заданным координатам
- *  constructLines      - рисуем линии по заданным координатам
- *  constructTree       - построение древа (объединение методов constructFigures и constructLines
- *  в целостную конструкцию)
+ *  Класс вычисления координат и построения древа:
+ *  reTree              - конструктор класса;
+ *  roundTree           - обход древа;
+ *  sexing              - определение цвета по полу;
+ *  constructTree       - построение древа;
  */
 
 function reTree(out, obj) {
 
     this.out = out;
     this.obj = obj;
+
     this.coordinates = new Object();
     this.coordinates.author = new Object();
+    this.coordinates.parents = new Object();
+    this.coordinates.couple = new Object();
+    this.coordinates.sibs = new Object();
+    this.coordinates.childrens = new Object();
+
     this.kinetic = new reKinetic('tree_canvas', 1000, 1000);
-    this.coordinates.author.width = this.kinetic.params.stage.width / 2 - (this.kinetic.params.rectangle.width / 2);
-    this.coordinates.author.height = this.kinetic.params.stage.height / 2 - (this.kinetic.params.rectangle.height / 2);
-    this.roundTree(this.obj, 0);
+
+   /*
+    * author.x              - координата начальной точки (левого-верхнего угла) корня (автора) по оси X;
+    * author.y              - координата начальной точки (левого-верхнего угла) корня (автора) по оси Y;
+    * author.xcenter        - центр прямоугольника (фигура автора) по оси X;
+    * author.ycenter        - центр прямоугольника (фигура автора) по оси X;
+    *
+    * sibs.rlvl             - уровень следующего сибса с правой стороны (сестры), начальное значение 0;
+    * sibs.llvl             - уровень следующего сибса с левой стороны (брата), начальное значение 0;
+    * sibs.deviation        - отклонение от центра сестры или брата;
+    *
+    * childrens.rlvl        - уровень следующего ребенка с правой стороны (дочери), начальное значение 0;
+    * childrens.llvl        - уровень следующего ребенка с левой стороны (сына), начальное значение 0;
+    * childrens.xdeviation  - отклонение от центра детей по оси X;
+    * childrens.ydeviation  - отклонение от центра детей по оси Y;
+    * childrens.direction   - направление отклонения (по отношению к родителю) {
+    *       0 - центр (мать/отец детей не указаны);
+    *       1 - лево (между мужем и автором);
+    *       2 - право (между женой и автором);
+    * };
+    *
+    * parents.xdeviation    - отклонение от центра родителей по оси X;
+    * parents.ydeviation    - отклонение от центра родителей по оси Y;
+    *
+    * couple.deviation      - отклонение от центра мужа или жены;
+    * couple.direction      - направление
+    */
+
+    this.coordinates.author.x = this.kinetic.params.stage.width / 2 - this.kinetic.params.rectangle.width / 2;
+    this.coordinates.author.y = this.kinetic.params.stage.height / 2 - this.kinetic.params.rectangle.height / 2;
+    this.coordinates.author.xcenter = this.coordinates.author.x + this.kinetic.params.rectangle.width / 2;
+    this.coordinates.author.ycenter = this.coordinates.author.y + this.kinetic.params.rectangle.height / 2;
+
+    this.coordinates.sibs.rlvl = 1;
+    this.coordinates.sibs.llvl = 1;
+    this.coordinates.sibs.deviation = 150;
+
+    this.coordinates.childrens.rlvl = 0;
+    this.coordinates.childrens.llvl = 0;
+    this.coordinates.childrens.xdeviation = 150;
+    this.coordinates.childrens.ydeviation = 150;
+    this.coordinates.childrens.direction = 0;
+
+    this.coordinates.parents.xdeviation = 100;
+    this.coordinates.parents.ydeviation = 200;
+
+    this.coordinates.couple.deviation = 150;
+    this.coordinates.couple.direction = (this.coordinates.couple.deviation - Math.abs(this.coordinates.author.xcenter - this.coordinates.author.x)) / 2;
+
+    this.roundTree(this.obj);
+
     this.kinetic.compilation();
 
 }
 
-reTree.prototype.sexing = function (sex) {
-    return sex?'#bfefff':'#fffacd';
-}
+/*
+ * Определяет цвет фигуры по её полу
+ */
 
-reTree.prototype.constructLines = function (properties) {
+reTree.prototype.sexing = function (sex) { return sex ? '#bfefff' : '#fffacd'; }
 
-}
+/*
+ * Строит дерево по заданным координатам, отрисовывает фигуры и линии
+ */
 
 reTree.prototype.constructTree = function (properties) {
 
     switch (properties[3]) {
         case 0:     // author
             this.kinetic.drawRect(
-                this.coordinates.author.width,
-                this.coordinates.author.height,
+                this.coordinates.author.x,
+                this.coordinates.author.y,
                 this.sexing(properties[4])
             );
             break;
         case 1:     // father
             this.kinetic.drawCircle(
-                0,
-                0,
+                this.coordinates.author.xcenter - this.coordinates.parents.xdeviation,
+                this.coordinates.author.ycenter - this.coordinates.parents.ydeviation,
                 this.sexing(properties[6])
             );
             break;
         case 2:     // mother
             this.kinetic.drawCircle(
-                100,
-                0,
+                this.coordinates.author.xcenter + this.coordinates.parents.xdeviation,
+                this.coordinates.author.ycenter - this.coordinates.parents.ydeviation,
                 this.sexing(properties[6])
             );
             break;
         case 3:     // son
+            var xcenter = this.coordinates.author.xcenter
+                          -
+                          this.coordinates.childrens.xdeviation * this.coordinates.childrens.llvl
+                          +
+                          this.coordinates.couple.course * this.coordinates.childrens.course;
             this.kinetic.drawCircle(
-                200,
-                0,
+                xcenter,
+                this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation,
                 this.sexing(properties[6])
             );
+            this.coordinates.childrens.llvl++;
+            if (this.coordinates.childrens.rlvl == 0)
+                this.coordinates.childrens.rlvl++;
             break;
         case 4:     // daughter
+            var xcenter = this.coordinates.author.xcenter
+                          +
+                          this.coordinates.childrens.xdeviation * this.coordinates.childrens.rlvl
+                          +
+                          this.coordinates.couple.course * this.coordinates.childrens.course;
             this.kinetic.drawCircle(
-                300,
-                0,
+                xcenter,
+                this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation,
                 this.sexing(properties[6])
             );
+            this.coordinates.childrens.rlvl++;
+            if (this.coordinates.childrens.llvl == 0)
+                this.coordinates.childrens.llvl++;
             break;
         case 5:     // brother
             this.kinetic.drawCircle(
-                400,
-                0,
+                this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.llvl,
+                this.coordinates.author.ycenter,
                 this.sexing(properties[6])
             );
+            this.coordinates.sibs.llvl++;
             break;
         case 6:     // sister
             this.kinetic.drawCircle(
-                500,
-                0,
+                this.coordinates.author.xcenter + this.coordinates.sibs.deviation * this.coordinates.sibs.rlvl,
+                this.coordinates.author.ycenter,
                 this.sexing(properties[6])
             );
+            this.coordinates.sibs.rlvl++;
             break;
         case 7:     // husband
             this.kinetic.drawCircle(
-                600,
-                0,
+                this.coordinates.author.xcenter - this.coordinates.couple.deviation,
+                this.coordinates.author.ycenter,
                 this.sexing(properties[6])
             );
+            this.coordinates.sibs.llvl++;
+            this.coordinates.childrens.course = -1;
             break;
         case 8:     // wife
             this.kinetic.drawCircle(
-                700,
-                0,
+                this.coordinates.author.xcenter + this.coordinates.couple.deviation,
+                this.coordinates.author.ycenter,
                 this.sexing(properties[6])
             );
+            this.coordinates.sibs.rlvl++;
+            this.coordinates.childrens.course = 1;
             break;
         default:    // error -> exit
             return;
     }
 
 }
+
+/*
+ * Обход JSON и передача нужных для построения древа данных в функцию constructTree
+ */
 
 reTree.prototype.roundTree = function (object) {
 
@@ -123,17 +202,17 @@ reTree.prototype.roundTree = function (object) {
 }
 
 /*
- *  Класс по работе с Kinetic
- *  reKinetic       - конструктор класса [холст, слои, параметры фигур]
- *  drawLine        - рисуем линию
- *  drawCircle      - рисуем круг
- *  drawRect        - рисуем прямоугольник
- *  compilation     - отрисовываем все фигуры на холсте
+ *  Класс по работе с Kinetic:
+ *  reKinetic       - конструктор класса [холст, слои, параметры фигур];
+ *  drawLine        - рисуем линию;
+ *  drawCircle      - рисуем круг;
+ *  drawRect        - рисуем прямоугольник;
+ *  compilation     - отрисовываем все фигуры на холсте;
  */
 
 function reKinetic(stageContainer, stageWidth, stageHeight) {
 
-    this.params = new Object();                     // параметры холста, фигур и линий
+    this.params = new Object();
 
     this.params.stage = new Object();               // параметры холста
     this.params.stage.container = stageContainer;
@@ -165,15 +244,17 @@ function reKinetic(stageContainer, stageWidth, stageHeight) {
         draggable: true
     });
 
-    this.layers = new Object();                     // создаем слои
+    this.layers = new Object();
+
     this.layers.figures = new Kinetic.Layer({       // слой с фигурам
         name: 'figures_layer'
     });
+
     this.layers.lines = new Kinetic.Layer({         // слой с линиями
         name: 'lines_layer'
     });
 
-    this.shapes = new Object();                     // массивы фигур и линий
+    this.shapes = new Object();
     this.shapes.figures = new Array();              // массив фигур
     this.shapes.lines = new Array();                // массив линий
 
@@ -252,8 +333,8 @@ reKinetic.prototype.compilation = function () {
 /*
  * Всякая хрень:
  *
- * reTree.prototype.roundTree       - Функция обхода дерева
- * reTree.prototype.outputError     - Вывод ошибки
+ * reTree.prototype.roundTree       - Функция обхода дерева;
+ * reTree.prototype.outputError     - Вывод ошибки;
  */
 
 /*
