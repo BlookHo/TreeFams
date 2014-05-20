@@ -67,7 +67,7 @@ function reTree(out, obj) {
     this.coordinates.childrens.direction = 0;
 
     this.coordinates.parents.xdeviation = 100;
-    this.coordinates.parents.ydeviation = 200;
+    this.coordinates.parents.ydeviation = 150;
 
     this.coordinates.couple.deviation = 150;
     this.coordinates.couple.direction = (this.coordinates.couple.deviation - Math.abs(this.coordinates.author.xcenter - this.coordinates.author.x)) / 2;
@@ -104,6 +104,14 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation,
                 this.sexing(properties[6])
             );
+            var cLine = new Array();
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation;
+            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.parents.xdeviation;
+            cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation;
+            this.kinetic.drawLine(cLine);
             break;
         case 2:     // mother
             this.kinetic.drawCircle(
@@ -111,33 +119,71 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation,
                 this.sexing(properties[6])
             );
+            var cLine = new Array();
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation;
+            cLine[cLine.length] = this.coordinates.author.xcenter + this.coordinates.parents.xdeviation;
+            cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation;
+            this.kinetic.drawLine(cLine);
             break;
         case 3:     // son
             var xcenter = this.coordinates.author.xcenter
-                          -
-                          this.coordinates.childrens.xdeviation * this.coordinates.childrens.llvl
-                          +
-                          this.coordinates.couple.course * this.coordinates.childrens.course;
+                          - this.coordinates.childrens.xdeviation * this.coordinates.childrens.llvl
+                          + this.coordinates.couple.direction * this.coordinates.childrens.direction;
             this.kinetic.drawCircle(
                 xcenter,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation,
                 this.sexing(properties[6])
             );
+            var cLine = new Array();
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+
+            cLine[cLine.length] = this.coordinates.author.xcenter + (this.coordinates.couple.deviation / 2) * this.coordinates.childrens.direction;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+
+            cLine[cLine.length] = this.coordinates.author.xcenter + (this.coordinates.couple.deviation / 2) * this.coordinates.childrens.direction;
+            cLine[cLine.length] = this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation / 2;
+
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation / 2;
+            cLine[cLine.length] = xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation / 2;
+            cLine[cLine.length] = xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation;
+            this.kinetic.drawLine(cLine);
             this.coordinates.childrens.llvl++;
             if (this.coordinates.childrens.rlvl == 0)
                 this.coordinates.childrens.rlvl++;
             break;
         case 4:     // daughter
             var xcenter = this.coordinates.author.xcenter
-                          +
-                          this.coordinates.childrens.xdeviation * this.coordinates.childrens.rlvl
-                          +
-                          this.coordinates.couple.course * this.coordinates.childrens.course;
+                          + this.coordinates.childrens.xdeviation * this.coordinates.childrens.rlvl
+                          + this.coordinates.couple.direction * this.coordinates.childrens.direction;
             this.kinetic.drawCircle(
                 xcenter,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation,
                 this.sexing(properties[6])
             );
+            var cLine = new Array();
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+
+            cLine[cLine.length] = this.coordinates.author.xcenter + (this.coordinates.couple.deviation / 2) * this.coordinates.childrens.direction;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+
+            cLine[cLine.length] = this.coordinates.author.xcenter + (this.coordinates.couple.deviation / 2) * this.coordinates.childrens.direction;
+            cLine[cLine.length] = this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation / 2;
+
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation / 2;
+            cLine[cLine.length] = xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation / 2;
+            cLine[cLine.length] = xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation;
+            this.kinetic.drawLine(cLine);
             this.coordinates.childrens.rlvl++;
             if (this.coordinates.childrens.llvl == 0)
                 this.coordinates.childrens.llvl++;
@@ -148,6 +194,16 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.ycenter,
                 this.sexing(properties[6])
             );
+            var cLine = new Array();
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation / 2;
+            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.llvl;
+            cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation / 2;
+            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.llvl;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            this.kinetic.drawLine(cLine);
             this.coordinates.sibs.llvl++;
             break;
         case 6:     // sister
@@ -156,6 +212,16 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.ycenter,
                 this.sexing(properties[6])
             );
+            var cLine = new Array();
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation / 2;
+            cLine[cLine.length] = this.coordinates.author.xcenter + this.coordinates.sibs.deviation * this.coordinates.sibs.rlvl;
+            cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation / 2;
+            cLine[cLine.length] = this.coordinates.author.xcenter + this.coordinates.sibs.deviation * this.coordinates.sibs.rlvl;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            this.kinetic.drawLine(cLine);
             this.coordinates.sibs.rlvl++;
             break;
         case 7:     // husband
@@ -165,7 +231,13 @@ reTree.prototype.constructTree = function (properties) {
                 this.sexing(properties[6])
             );
             this.coordinates.sibs.llvl++;
-            this.coordinates.childrens.course = -1;
+            this.coordinates.childrens.direction = -1;
+            var cLine = new Array();
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.couple.deviation;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            this.kinetic.drawLine(cLine);
             break;
         case 8:     // wife
             this.kinetic.drawCircle(
@@ -174,7 +246,13 @@ reTree.prototype.constructTree = function (properties) {
                 this.sexing(properties[6])
             );
             this.coordinates.sibs.rlvl++;
-            this.coordinates.childrens.course = 1;
+            this.coordinates.childrens.direction = 1;
+            var cLine = new Array();
+            cLine[cLine.length] = this.coordinates.author.xcenter;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            cLine[cLine.length] = this.coordinates.author.xcenter + this.coordinates.couple.deviation;
+            cLine[cLine.length] = this.coordinates.author.ycenter;
+            this.kinetic.drawLine(cLine);
             break;
         default:    // error -> exit
             return;
@@ -222,7 +300,7 @@ function reKinetic(stageContainer, stageWidth, stageHeight) {
     this.params.circle = new Object();              // параметры круга
     this.params.circle.radius = 30;
     this.params.circle.stroke = '#333';
-    this.params.circle.strokeWidth = 2;
+    this.params.circle.strokeWidth = 1;
 
     this.params.rectangle = new Object();           // параметры прямоугольника
     this.params.rectangle.width = 100;
@@ -232,9 +310,9 @@ function reKinetic(stageContainer, stageWidth, stageHeight) {
 
     this.params.line = new Object();                // параметры линий
     this.params.line.stroke = 'black';
-    this.params.line.strokeWidth = 2;
-    this.params.line.lineCap = '#333';
-    this.params.line.lineJoin = '#333';
+    this.params.line.strokeWidth = 1;
+    this.params.line.lineCap = 'round';
+    this.params.line.lineJoin = 'round';
 
     this.stage = new Kinetic.Stage({                // создаем холст
         name: 'tree_stage',
@@ -246,17 +324,17 @@ function reKinetic(stageContainer, stageWidth, stageHeight) {
 
     this.layers = new Object();
 
-    this.layers.figures = new Kinetic.Layer({       // слой с фигурам
-        name: 'figures_layer'
-    });
-
     this.layers.lines = new Kinetic.Layer({         // слой с линиями
         name: 'lines_layer'
     });
 
+    this.layers.figures = new Kinetic.Layer({       // слой с фигурам
+        name: 'figures_layer'
+    });
+
     this.shapes = new Object();
-    this.shapes.figures = new Array();              // массив фигур
     this.shapes.lines = new Array();                // массив линий
+    this.shapes.figures = new Array();              // массив фигур
 
 }
 
@@ -267,7 +345,7 @@ function reKinetic(stageContainer, stageWidth, stageHeight) {
 reKinetic.prototype.drawLine = function (points) {
 
     this.shapes.lines[this.shapes.lines.length] = new Kinetic.Line({
-        points: [points],
+        points: points,
         stroke: this.params.line.stroke,
         strokeWidth: this.params.line.strokeWidth,
         lineCap: this.params.line.lineCap,
@@ -319,14 +397,15 @@ reKinetic.prototype.drawRect = function (x, y, fill) {
 
 reKinetic.prototype.compilation = function () {
 
-    for(var figure in this.shapes.figures)
-        this.layers.figures.add(this.shapes.figures[figure]);
-
     for(var line in this.shapes.lines)
         this.layers.lines.add(this.shapes.lines[line]);
 
+    for(var figure in this.shapes.figures)
+        this.layers.figures.add(this.shapes.figures[figure]);
+
     for(var layer in this.layers)
         this.stage.add(this.layers[layer]);
+
 }
 
 
