@@ -83,7 +83,7 @@ class MainController < ApplicationController
 
 
   # Поиск совпадений для одного из профилей БК current_user
-  # Берем параметр: profile_id из массива profiles_tree_arr[tree_index][6].
+  # Берем параметр: profile_id из массива  = profiles_tree_arr[tree_index][6].
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
@@ -93,9 +93,12 @@ class MainController < ApplicationController
    found_trees_hash = Hash.new  #
    found_profiles_hash = Hash.new  #
    all_relation_match_arr = []  #
-   all_relation_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id) #.pluck(:relation_id)#.where(:is_name_id => profiles_tree_arr[tree_index][8]).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+   all_relation_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id)
+   # поиск массива записей ближнего круга для Юзера
+
+   @profile_searched = profile_id_searched
    if !all_relation_rows.blank?
-     @all_relation_rows_len = all_relation_rows.length if !all_relation_rows.blank? ##
+     @all_relation_rows_len = all_relation_rows.length if !all_relation_rows.blank? # DEBUGG TO VIEW
      all_relation_rows.each do |father_row|
         relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => father_row.name_id).where(:relation_id => father_row.relation_id).where(:is_name_id => father_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
         row_arr = []
@@ -111,21 +114,21 @@ class MainController < ApplicationController
           row_arr = []
 
           fill_hash(found_trees_hash, tree_row.user_id) # наполнение хэша найденными user_id = trees и частотой их обнаружения
-          found_profiles_hash.merge!({tree_row.user_id  => tree_row.profile_id}) #
+          found_profiles_hash.merge!({tree_row.user_id  => tree_row.profile_id}) # # наполнение хэша найденными profile_id
 
         end
         @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
 
      end
 
-     # select exclude hash Class
+     # select exclude hash Class  # DEBUGG
 
      found_trees_hash.delete_if {|key, value| value < all_relation_rows.length } # Исключение из результатов поиска
      # тех user_id, по которым не все запросы дали результат внутри Ближнего круга
      # Остаются те user_id, в которых найдены совпавшие профили.
      # На выходе ХЭШ: {user_id  => кол-во успешных поисков } - должно быть равно длине массива
      # всех видов отношений в блжнем круге для разыскиваемого профиля.
-    found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
+     found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
      # те user_id, которые удалены из хэша деревьев
      # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
 
@@ -147,6 +150,21 @@ class MainController < ApplicationController
   def search_profiles_tree_match
 
     profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
+    profiles_tree_arr =
+        [[77, 22, 506, "Татьяна", 0, 1, 23, 45, "Борис"],
+         [78, 22, 506, "Татьяна", 0, 2, 24, 453, "Мария"],
+         [79, 22, 506, "Татьяна", 0, 5, 25, 97, "Денис"],
+         [80, 22, 506, "Татьяна", 0, 6, 26, 453, "Мария"],
+         #   Это - тест для поиска вне БК
+         ## Виктория к мужу Денису
+         #[80, 84, 371, "Виктория", 0, 7, 25, 97, "Денис"]     ]
+         # к Денису - жену Виктория
+         [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория"]     ]
+
+    # при этом, при вводе нового профиля: Денису добавляем Жену Викторию
+    # в табл. Tree записываем old_profile_id  has  relation_id  is  new_profile_id.
+    # т.е.  () Муж Денис имеет жену Викторию- это и записываем в profiles_tree_arr.
+
     @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
     @profiles_tree_arr_len = profiles_tree_arr.length  # DEBUGG TO VIEW
 
@@ -157,45 +175,46 @@ class MainController < ApplicationController
         relation = profiles_tree_arr[tree_index][5]  # Выбор очередности поиска в зависимости от relation
         @relation = relation  # DEBUGG TO VIEW
         @name = profiles_tree_arr[tree_index][7]
-        case relation # Определение вида поиска по значению relation внутри БК current_user
+        get_relation_match(profiles_tree_arr[tree_index][6])  # На выходе: @all_match_arr по данному виду родства
 
-          when 1    # "father"
-            @search_profiles_relation = "father"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])  # На выходе: @all_match_arr по данному виду родства
-
-          when 2    # "mother"
-            @search_profiles_relation = "mother"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-
-          when 3   # "son"
-            @search_profiles_relation = "son"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-
-          when 4   # "daughter"
-            @search_profiles_relation = "daughter"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-
-          when 5  # "brother"
-            @search_profiles_relation = "brother"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-
-          when 6   # "sister"
-            @search_profiles_relation = "sister"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-
-          when 7   # "husband"
-            @search_profiles_relation = "husband"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-
-          when 8   # "wife"
-            @search_profiles_relation = "wife"   # DEBUGG TO VIEW
-            get_relation_match(profiles_tree_arr[tree_index][6])
-
-          else
-            @search_profiles_relation = "ERROR: no relation in tree profile"
-            # TODO: call error_processing
-
-        end
+        #case relation # Определение вида поиска по значению relation внутри БК current_user
+        #
+        #  when 1    # "father"
+        #    @search_profiles_relation = "father"   # DEBUGG TO VIEW
+        #    get_relation_match(profiles_tree_arr[tree_index][6])  # На выходе: @all_match_arr по данному виду родства
+        #
+        #  when 2    # "mother"
+        #    @search_profiles_relation = "mother"   # DEBUGG TO VIEW
+        #    get_relation_match(profiles_tree_arr[tree_index][6])
+        #
+        #  when 3   # "son"
+        #    @search_profiles_relation = "son"   # DEBUGG TO VIEW
+        #    get_relation_match(profiles_tree_arr[tree_index][6])
+        #
+        #  when 4   # "daughter"
+        #    @search_profiles_relation = "daughter"   # DEBUGG TO VIEW
+        #    get_relation_match(profiles_tree_arr[tree_index][6])
+        #
+        #  when 5  # "brother"
+        #    @search_profiles_relation = "brother"   # DEBUGG TO VIEW
+        #    get_relation_match(profiles_tree_arr[tree_index][6])
+        #
+        #  when 6   # "sister"
+        #    @search_profiles_relation = "sister"   # DEBUGG TO VIEW
+        #    get_relation_match(profiles_tree_arr[tree_index][6])
+        #
+        #  when 7   # "husband"
+        #    @search_profiles_relation = "husband"   # DEBUGG TO VIEW
+        #    get_relation_match(profiles_tree_arr[tree_index][6])
+        #
+        #  when 8   # "wife"
+        #    @search_profiles_relation = "wife"   # DEBUGG TO VIEW
+        #    get_relation_match(profiles_tree_arr[tree_index][6])
+        #
+        #  else
+        #    @search_profiles_relation = "ERROR: no relation in tree profile"
+        #
+        #end
 
       end
 
@@ -205,6 +224,9 @@ class MainController < ApplicationController
 
     @all_match_hash = Hash.new   # Вычисляется в join_arr_of_hashes
     join_arr_of_hashes(@all_match_arr) if !@all_match_arr.blank?
+
+    # УПОРЯДОЧИТЬ ПО КОЛ-ВУ СОВПАВШИХ ПРОФИЛЕЙ В ДЕРЕВЬЯХ!
+
     @user_ids_arr = @all_match_hash.keys
     @profile_ids_arr = @all_match_hash.values.flatten
     @amount_of_profiles = @profile_ids_arr.size if !@profile_ids_arr.blank?

@@ -144,3 +144,157 @@ end
 
 
 3.
+
+MAIN
+
+search  by triplex
+
+
+
+  %p
+    Триплекс @triplex_arr: #{@triplex_arr.inspect}
+  %p
+    Триплекс @triplex_arr: #{@triplex_arr.inspect}
+  %p
+    Братья и сестры Автора: @author_bros_sisters_names_ids: #{@author_bros_sisters_names_ids.inspect}
+  %p
+    Дети Автора: @author_kids_names_ids: #{@author_kids_names_ids.inspect}
+
+  %h4 Fathers
+  %p
+    1.@all_fathers_name_profile_ids: #{@all_fathers_name_profile_ids.inspect}
+  %p
+    3.@fathers_user_ids_arr: #{@fathers_user_ids_arr.inspect}
+  %p
+    2.@fathers_mothers_users_ids_arr: #{@fathers_mothers_users_ids_arr.inspect}
+  %p
+    3.1. @@fathers_kids_profile_ids: #{@fathers_kids_profile_ids.inspect}
+  %p
+    3.11. @fathers_kids_name_arr: #{@fathers_kids_name_arr.inspect}
+  %p
+    3.2. @kids_profile_ids_arr: #{@kids_profile_ids_arr.inspect}
+  %p
+    3.3. @fathers_kids_users_ids_arr: #{@fathers_kids_users_ids_arr.inspect}
+  %p
+    @father_match_arr: Результат поиска ОТЦА: Его user_id = #{@father_match_arr.inspect}
+  %h4
+    @msg_father: #{@msg_father.inspect}
+
+  %h4 Mothers
+  %p
+    1.@all_mothers_name_user_ids: #{@all_mothers_name_user_ids.inspect}
+
+  %p
+    2.@fathers_profile_ids_arr: #{@fathers_profile_ids_arr.inspect}
+  %p
+    2.@mothers_fathers_users_ids_arr: #{@mothers_fathers_users_ids_arr.inspect}
+
+  %p
+    3.1. @@@mothers_kids_profile_ids: #{@mothers_kids_profile_ids.inspect}
+  %p
+    3.11. @@mothers_kids_name_arr: #{@mothers_kids_name_arr.inspect}
+  %p
+    3.2. @kids_profile_ids_arr: #{@kids_profile_ids_arr.inspect}
+  %p
+    3.3. @@mothers_kids_users_ids_arr: #{@mothers_kids_users_ids_arr.inspect}
+
+  %p
+    @@mother_match_arr: Результат поиска МАТЕРИ: Её user_id = #{@mother_match_arr.inspect}
+  %h4
+    @@msg_mother: #{@msg_mother.inspect}
+
+
+  %h4 Sons  @@
+  %p
+    1.@@all_authors_son_profile_ids: #{@all_authors_son_profile_ids.inspect}
+  %p
+    @@author_son_names_ids: #{@author_son_names_ids.inspect}
+  %p
+    @@sons_user_ids: #{@sons_user_ids.inspect}
+  %p
+    @@@son_br_sis_profile_ids: #{@son_br_sis_profile_ids.inspect}
+  %p
+    @@@son_br_sis_names_ids: #{@son_br_sis_names_ids.inspect}
+  %p
+    @son_user_name_id: #{@son_user_name_id.inspect}
+  %p
+    @@son_br_sis_kids_users_ids_arr: #{@son_br_sis_kids_users_ids_arr.inspect}
+  %p
+    @son_triplex_arr: #{@son_triplex_arr.inspect}
+  %p
+    @@son_father_users_ids_arr: #{@son_father_users_ids_arr.inspect}
+  %p
+    @authors_wives_names_ids: #{@authors_wives_names_ids.inspect}
+  %p
+    @son_mother_users_ids_arr: #{@son_mother_users_ids_arr.inspect}
+  %p
+    @@son_match_arr: #{@son_match_arr.inspect}
+  %h4
+    @messages_sons_found_arr: #{@messages_sons_found_arr.inspect}
+
+
+  %h4 Daughters
+  %p
+    1.@@all_authors_daughter_profile_ids: #{@all_authors_daughter_profile_ids.inspect}
+  %p
+    @@author_daughter_names_ids: #{@author_daughter_names_ids.inspect}
+  %p
+    @@daughters_user_ids: #{@daughters_user_ids.inspect}
+  %p
+    @@@daughter_br_sis_profile_ids: #{@daughter_br_sis_profile_ids.inspect}
+  %p
+    @@@daughter_br_sis_names_ids: #{@daughter_br_sis_names_ids.inspect}
+  %p
+    @daughter_user_name_id: #{@daughter_user_name_id.inspect}
+  %p
+    @@daughter_br_sis_kids_users_ids_arr: #{@daughter_br_sis_kids_users_ids_arr.inspect}
+  %p
+    @daughter_triplex_arr: #{@daughter_triplex_arr.inspect}
+  %p
+    @@daughter_father_users_ids_arr: #{@daughter_father_users_ids_arr.inspect}
+  %p
+    @authors_wives_names_ids: #{@authors_wives_names_ids.inspect}
+  %p
+    @daughter_mother_users_ids_arr: #{@daughter_mother_users_ids_arr.inspect}
+  %p
+    @@@ind: #{@ind.inspect} @
+  %p
+    @matched_daughters_user_ids_arr: #{@matched_daughters_user_ids_arr.inspect}
+  %p
+    @@@@count: #{@count.inspect}
+  %p
+    @@daughter_match_arr: #{@daughter_match_arr.inspect}
+  %h4
+    @messages_daughters_found_arr: #{@messages_daughters_found_arr.inspect}
+
+
+  %h4 Brothers@count
+  %p
+    1.@all_authors_bros_profiles_len: #{@all_authors_bros_profiles_len.inspect}
+  %p
+    1.@author_bros_names_ids: #{@author_bros_names_ids.inspect}
+  %p
+    @@bros_user_ids: Результат поиска БРАТЬЕВ: Его user_id = #{@bros_user_ids.inspect}
+  %p
+    @@bros_triplex_arr: #{@bros_triplex_arr.inspect}
+
+
+
+  %p
+    @brothers_match_arr: Результат поиска БРАТЬЕВ: Его user_id = #{@brothers_match_arr.inspect}
+  %h4
+    @msg_brother: #{@msg_brother.inspect}
+
+  %h4 Sisters
+  %p
+    @sisters_match_arr: Результат поиска СЕСТЕР: Её user_id = #{@sisters_match_arr.inspect}
+  %p
+    @sisters_profile_id_arr: #{@sisters_profile_id_arr.inspect}
+  %h4
+    @msg_sister: #{@msg_sister.inspect}
+
+  %h4
+    Массив всех совпадений родных: @all_match_arr: #{@all_match_arr.inspect}
+  %h4
+    @match_amount: Всего найдено совпадений родных: #{@match_amount.inspect}
+
