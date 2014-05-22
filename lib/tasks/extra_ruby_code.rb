@@ -30,8 +30,51 @@ class ExtraCode
   #end
   #@search_relations_str = search_str
 
+Из Нового поиска
 
-Старый поиск
+  case relation # Определение вида поиска по значению relation внутри БК current_user
+
+    when 1    # "father"
+      @search_profiles_relation = "father"   # DEBUGG TO VIEW
+      get_relation_match(profiles_tree_arr[tree_index][6])  # На выходе: @all_match_arr по данному виду родства
+
+    when 2    # "mother"
+      @search_profiles_relation = "mother"   # DEBUGG TO VIEW
+      get_relation_match(profiles_tree_arr[tree_index][6])
+
+    when 3   # "son"
+      @search_profiles_relation = "son"   # DEBUGG TO VIEW
+      get_relation_match(profiles_tree_arr[tree_index][6])
+
+    when 4   # "daughter"
+      @search_profiles_relation = "daughter"   # DEBUGG TO VIEW
+      get_relation_match(profiles_tree_arr[tree_index][6])
+
+    when 5  # "brother"
+      @search_profiles_relation = "brother"   # DEBUGG TO VIEW
+      get_relation_match(profiles_tree_arr[tree_index][6])
+
+    when 6   # "sister"
+      @search_profiles_relation = "sister"   # DEBUGG TO VIEW
+      get_relation_match(profiles_tree_arr[tree_index][6])
+
+    when 7   # "husband"
+      @search_profiles_relation = "husband"   # DEBUGG TO VIEW
+      get_relation_match(profiles_tree_arr[tree_index][6])
+
+    when 8   # "wife"
+      @search_profiles_relation = "wife"   # DEBUGG TO VIEW
+      get_relation_match(profiles_tree_arr[tree_index][6])
+
+    else
+      @search_profiles_relation = "ERROR: no relation in tree profile"
+
+  end
+
+
+
+
+  Старый поиск
   #    search_tree_match    # Пeрвый старый вариант - Основной поиск по дереву Автора - Юзера.
 
   # Поиск id всех жен usera дерева.
