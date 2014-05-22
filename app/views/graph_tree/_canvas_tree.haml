@@ -4,4 +4,5 @@
 
 %script{ :type => 'text/javascript', :defer => 'defer' }
   :plain
-    var constructTree = new reTree(document.getElementById('error_output'), eval('(#{@profiles_json})'));
+    var error = document.getElementById('error_output');
+    var constructTree = new reTree(error, eval('(#{@profiles_json})'));
