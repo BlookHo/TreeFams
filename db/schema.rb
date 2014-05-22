@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140519135944) do
+ActiveRecord::Schema.define(version: 20140522114039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,10 +55,10 @@ ActiveRecord::Schema.define(version: 20140519135944) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "relation_id"
-    t.string   "relation_rod_padej",  default: ""
-    t.boolean  "origin_profile_sex"
+    t.string   "relation_rod_padej",    default: ""
     t.integer  "reverse_relation_id"
-    t.string   "reverse_relation",    default: ""
+    t.string   "reverse_relation",      default: ""
+    t.integer  "origin_profile_sex_id"
   end
 
   create_table "trees", force: true do |t|
