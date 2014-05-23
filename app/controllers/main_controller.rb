@@ -88,21 +88,16 @@ class MainController < ApplicationController
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
   # На выходе: @all_match_arr по данному виду родства
- def get_relation_match(profile_id_searched, bk)
+ def get_relation_match(profile_id_searched)
 
-   found_trees_hash = Hash.new  #
+   found_trees_hash = Hash.new     #
    found_profiles_hash = Hash.new  #
-   all_relation_match_arr = []  #
-   #if bk   # ????
-   #  all_relation_rows = ProfileKey.where(:user_id => current_user.id).where( :profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id)
-   #else
-   #  all_relation_rows = ProfileKey.where(:user_id => current_user.id).where( :is_profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
-   #end
+   all_relation_match_arr = []     #
 
    all_relation_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id)
    # поиск массива записей ближнего круга для Юзера
 
-   @profile_searched = profile_id_searched
+   @profile_searched = profile_id_searched   # DEBUGG TO VIEW
    if !all_relation_rows.blank?
      @all_relation_rows_len = all_relation_rows.length if !all_relation_rows.blank? # DEBUGG TO VIEW
      all_relation_rows.each do |relation_row|
@@ -155,10 +150,10 @@ class MainController < ApplicationController
 
     profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
     profiles_tree_arr =
-        [[77, 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
-         [78, 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
-         [79, 22, 506, "Татьяна", 0, 5, 25, 97, "Денис", true],
-         [80, 22, 506, "Татьяна", 0, 6, 26, 453, "Мария", true]
+        [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
+         [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
+         [ 22, 506, "Татьяна", 0, 5, 25, 97, "Денис", true],
+         [ 22, 506, "Татьяна", 0, 6, 26, 453, "Мария", true]
          #   Это - тест для поиска вне БК
          # к Денису - добавляем новый профиль: Жену Виктория
 #         [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false],
@@ -184,9 +179,8 @@ class MainController < ApplicationController
 #        relation = profiles_tree_arr[tree_index][5]  # Выбор очередности поиска в зависимости от relation
 #        @relation = relation  # DEBUGG TO VIEW
 #        @name = profiles_tree_arr[tree_index][7]  # DEBUGG TO VIEW
-        searching_profile_id = profiles_tree_arr[tree_index][6]
-        bk = profiles_tree_arr[tree_index][9]  # ??? м.б. не нужно
-        get_relation_match(searching_profile_id, bk)  # На выходе: @all_match_arr по данному виду родства
+        searching_profile_id = profiles_tree_arr[tree_index][5]
+        get_relation_match(searching_profile_id)  # На выходе: @all_match_arr по данному дереву
       end
 
     end

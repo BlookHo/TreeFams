@@ -1104,7 +1104,7 @@ class StartController < ApplicationController
 
 
   end
-  # Заполнение таблицы ProfileKey для введенного дерева
+  # Заполнение таблицы ProfileKey для введенного Ближнего круга
   # формирование групп рядов ProfileKey для каждого профиля дерева/
   # для current_user
   # @note GET /
