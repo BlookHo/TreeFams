@@ -3,6 +3,61 @@
  */
 
 /*
+ *  Структура узла (NODE) дерева:
+ *
+ *  node: {
+ *      profile_id          -> INT          (целочисленное)         -> ID профиля
+ *      user_id             -> INT          (целочисленное)         -> ID пользователя
+ *      name                -> STRING       (строка)                -> Имя профиля
+ *      sex_id              -> TINYINT      (целочисленное 0/1)     -> Пол (муж[1]/жен[0])
+ *      relation_id         -> INT          (целочисленное)         -> Вид отношений (автора[0]/отец[1]/мать[2]/сын[3]/дочь[4]/брат[5]/сестра[6]/муж[7]/жена[8])
+ *      options { ... }     -> OBJECT       (объект)                -> Дополнительные параметры
+ *      family { ... }      -> STRUCTURE    (структура)             -> Вложенная структура дерева
+ *  }
+ *
+ *  Структура (STRUCTURE) дерева
+ *
+ *  author: {                -> Автор
+ *      <NODE_PROPERTIES>   -> Свойства автора
+ *      family {            -> Вся семья автора
+ *          fathers: [      -> Отцы автора
+ *              node { ... },
+ *              node { ... }
+ *          ],
+ *          mothers: [      -> Матери автора
+ *              node { ... },
+ *              node { ... }
+ *          ],
+ *          brothers: [     -> Братя автора
+ *              node { ... },
+ *              node { ... }
+ *          ],
+ *          sisters: [      -> Сестры автора
+ *              node { ... },
+ *              node { ... }
+ *          ],
+ *          sons: [         -> Сыновья автора
+ *              node { ... },
+ *              node { ... }
+ *          ],
+ *          daughters: [    -> Дочери автора
+ *              node { ... },
+ *              node { ... }
+ *          ],
+ *          wives: [        -> Жены автора
+ *              node { ... },
+ *              node { ... }
+ *          ],
+ *          husbands: [     -> Мужья автора
+ *              node { ... },
+ *              node { ... }
+ *          ]
+ *      }
+ *  }
+ *
+ */
+
+/*
  *  Класс вычисления координат и построения древа:
  *  reTree              - конструктор класса;
  *  roundTree           - обход древа;
@@ -22,7 +77,7 @@ function reTree(out, obj) {
     this.coordinates.sibs = new Object();
     this.coordinates.childrens = new Object();
 
-    this.kinetic = new reKinetic('tree_canvas', 1000, 1000, 75, 25, 250);
+    this.kinetic = new reKinetic('tree_canvas', 1000, 1000, 50, 25, 250);
 
    /*
     * scale                 - масштаб элементов дерева относительно друг-друга
@@ -80,6 +135,13 @@ function reTree(out, obj) {
 
     this.kinetic.compilation();
 
+    /*
+     * Scale_func ( функция мастшабирования )
+     */
+
+    //for(layer in this.kinetic.layers)
+    //    this.kinetic.layers[layer].scale({x:2,y:2});
+
 }
 
 /*
@@ -89,30 +151,30 @@ function reTree(out, obj) {
 reTree.prototype.sexing = function (sex) { return sex ? '#bfefff' : '#fffacd'; }
 
 /*
- * Строит дерево по заданным координатам, отрисовывает фигуры и линии
+ * Строит дерево по заданным координатам, отрисовывает: фигуры, линии, текст
  */
 
 reTree.prototype.constructTree = function (properties) {
 
-    switch (properties[3]) {
+    switch (properties[4]) {
         case 0:     // author
             this.kinetic.drawRect(
                 this.coordinates.author.x,
                 this.coordinates.author.y,
-                this.sexing(properties[4])
+                this.sexing(properties[3])
             );
             this.kinetic.drawText(
                 this.coordinates.author.x,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.rectangle.width,
-                properties[2]
+                properties[2] + ', ' + properties[4]
             );
             break;
         case 1:     // father
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter - this.coordinates.parents.xdeviation,
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation,
-                this.sexing(properties[6])
+                this.sexing(properties[3])
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -126,14 +188,14 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter - this.coordinates.parents.xdeviation - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties[5]
+                properties[2] + ', ' + properties[4]
             );
             break;
         case 2:     // mother
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter + this.coordinates.parents.xdeviation,
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation,
-                this.sexing(properties[6])
+                this.sexing(properties[3])
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -147,7 +209,7 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter + this.coordinates.parents.xdeviation - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties[5]
+                properties[2] + ', ' + properties[4]
             );
             break;
         case 3:     // son
@@ -157,7 +219,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 xcenter,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation,
-                this.sexing(properties[6])
+                this.sexing(properties[3])
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -177,7 +239,7 @@ reTree.prototype.constructTree = function (properties) {
                 xcenter - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties[5]
+                properties[2] + ', ' + properties[4]
             );
             this.coordinates.childrens.llvl++;
             if (this.coordinates.childrens.rlvl == 0)
@@ -190,7 +252,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 xcenter,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation,
-                this.sexing(properties[6])
+                this.sexing(properties[3])
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -210,7 +272,7 @@ reTree.prototype.constructTree = function (properties) {
                 xcenter - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties[5]
+                properties[2] + ', ' + properties[4]
             );
             this.coordinates.childrens.rlvl++;
             if (this.coordinates.childrens.llvl == 0)
@@ -220,7 +282,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.llvl,
                 this.coordinates.author.ycenter,
-                this.sexing(properties[6])
+                this.sexing(properties[3])
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -236,7 +298,7 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.llvl - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties[5]
+                properties[2] + ', ' + properties[4]
             );
             this.coordinates.sibs.llvl++;
             break;
@@ -244,7 +306,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter + this.coordinates.sibs.deviation * this.coordinates.sibs.rlvl,
                 this.coordinates.author.ycenter,
-                this.sexing(properties[6])
+                this.sexing(properties[3])
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -260,7 +322,7 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter + this.coordinates.sibs.deviation * this.coordinates.sibs.rlvl - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties[5]
+                properties[2] + ', ' + properties[4]
             );
             this.coordinates.sibs.rlvl++;
             break;
@@ -268,7 +330,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter - this.coordinates.couple.deviation,
                 this.coordinates.author.ycenter,
-                this.sexing(properties[6])
+                this.sexing(properties[3])
             );
             this.coordinates.sibs.llvl++;
             this.coordinates.childrens.direction = -1;
@@ -282,14 +344,14 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter - this.coordinates.couple.deviation - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties[5]
+                properties[2] + ', ' + properties[4]
             );
             break;
         case 8:     // wife
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter + this.coordinates.couple.deviation,
                 this.coordinates.author.ycenter,
-                this.sexing(properties[6])
+                this.sexing(properties[3])
             );
             this.coordinates.sibs.rlvl++;
             this.coordinates.childrens.direction = 1;
@@ -303,7 +365,7 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter + this.coordinates.couple.deviation - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties[5]
+                properties[2] + ', ' + properties[4]
             );
             break;
         default:    // error -> exit
@@ -346,8 +408,8 @@ function reKinetic(stageContainer, stageWidth, stageHeight, scale, max_scale, mi
     this.params = new Object();
 
     /*
-     * Если мастшаб (scale) больше максимального (max_scale), тогда используем максимальный (max_scale)
-     * Если мастшаб (scale) меньше минимального (min_scale), тогда используем минимальный (min_scale)
+     * Если мастшаб (scale) больше (меньше как число) максимального (max_scale), тогда используем максимальный (max_scale)
+     * Если мастшаб (scale) меньше (больше как число) минимального (min_scale), тогда используем минимальный (min_scale)
      */
 
     this.params.scale = scale < max_scale ? max_scale : scale > min_scale ? min_scale : scale;
