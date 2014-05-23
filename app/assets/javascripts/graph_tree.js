@@ -22,7 +22,7 @@ function reTree(out, obj) {
     this.coordinates.sibs = new Object();
     this.coordinates.childrens = new Object();
 
-    this.kinetic = new reKinetic('tree_canvas', 1000, 1000, 75);
+    this.kinetic = new reKinetic('tree_canvas', 1000, 1000, 80);
 
    /*
     * scale                 - масштаб элементов дерева относительно друг-друга
