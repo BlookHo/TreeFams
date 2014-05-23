@@ -22,7 +22,7 @@ function reTree(out, obj) {
     this.coordinates.sibs = new Object();
     this.coordinates.childrens = new Object();
 
-    this.kinetic = new reKinetic('tree_canvas', 1000, 1000, 80);
+    this.kinetic = new reKinetic('tree_canvas', 1000, 1000, 75, 25, 250);
 
    /*
     * scale                 - масштаб элементов дерева относительно друг-друга
@@ -341,11 +341,16 @@ reTree.prototype.roundTree = function (object) {
  *  compilation     - отрисовываем все фигуры на холсте;
  */
 
-function reKinetic(stageContainer, stageWidth, stageHeight, scale) {
+function reKinetic(stageContainer, stageWidth, stageHeight, scale, max_scale, min_scale) {
 
     this.params = new Object();
 
-    this.params.scale = scale;                      // масштаб
+    /*
+     * Если мастшаб (scale) больше максимального (max_scale), тогда используем максимальный (max_scale)
+     * Если мастшаб (scale) меньше минимального (min_scale), тогда используем минимальный (min_scale)
+     */
+
+    this.params.scale = scale < max_scale ? max_scale : scale > min_scale ? min_scale : scale;
 
     this.params.stage = new Object();               // параметры холста
     this.params.stage.container = stageContainer;
