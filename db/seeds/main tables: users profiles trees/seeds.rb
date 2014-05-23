@@ -218,9 +218,11 @@ Profile.create([
 # 82
 {user_id: 0, name_id: 212, email: '', sex_id: 1 },
 # 83
-{user_id: 0, name_id: 453, email: '', sex_id: 0 }
+{user_id: 0, name_id: 453, email: '', sex_id: 0 },
 
 
+# 84
+{user_id: 0, name_id: 371, email: '', sex_id: 0 }
 
 ])
 
@@ -268,15 +270,15 @@ Tree.create([
 {user_id: 3, profile_id: 21, relation_id: 4, connected: false },
 
 # 22 - Tree 4
-{user_id: 1, profile_id: 22, name_id: 506, relation_id: 0, is_profile_id: 22, is_name_id: 506, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 0, is_profile_id: 22, is_name_id: 506, connected: false },
 
-{user_id: 1, profile_id: 22, name_id: 506, relation_id: 1, is_profile_id: 23, is_name_id: 45, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 1, is_profile_id: 23, is_name_id: 45, connected: false },
 
-{user_id: 1, profile_id: 22, name_id: 506, relation_id: 2, is_profile_id: 24, is_name_id: 453, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 2, is_profile_id: 24, is_name_id: 453, connected: false },
 
-{user_id: 1, profile_id: 22, name_id: 506, relation_id: 5, is_profile_id: 25, is_name_id: 97, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 5, is_profile_id: 25, is_name_id: 97, connected: false },
 
-{user_id: 1, profile_id: 22, name_id: 506, relation_id: 6, is_profile_id: 26, is_name_id: 453, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 6, is_profile_id: 26, is_name_id: 453, connected: false },
 
 # 27 - Tree 5
 {user_id: 5, profile_id: 27, relation_id: 0, connected: false },

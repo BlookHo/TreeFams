@@ -289,8 +289,8 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 # Tree 4, Pfoile 84 - Виктория:          # к Денису - добавляем новый профиль: Жену Виктория
 # При этом: в конец profiles_tree_arr добавляем   [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false]
 
-#{user_id: 4, profile_id: 25 , name_id: 97, relation_id: 8, is_profile_id: 84, is_name_id: 371 },
-#{user_id: 4, profile_id: 84 , name_id: 371, relation_id: 7, is_profile_id: 25, is_name_id: 97 },
+{user_id: 4, profile_id: 25 , name_id: 97, relation_id: 8, is_profile_id: 84, is_name_id: 371 },
+{user_id: 4, profile_id: 84 , name_id: 371, relation_id: 7, is_profile_id: 25, is_name_id: 97 },
 
 # Tree 4, Pfoile 85 - Анна:          # к Денису - добавляем новый профиль: Дочь Анна
 # При этом: в конец profiles_tree_arr добавляем        ,[81, 25, 97, "Денис", 1, 4, 85, 352, "Анна", false]

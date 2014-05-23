@@ -8,22 +8,24 @@ class MainController < ApplicationController
  # @see News
   def get_user_tree
 
+    # Делать из Tree!!
+
     if user_signed_in?
       user_profiles_tree = ProfileKey.where(:user_id => current_user.id).where(:profile_id => User.find(current_user.id).profile_id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+#      user_profiles_tree = ProfileKey.where(:user_id => current_user.id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
 
       row_arr = []
       profiles_tree_arr = []
 
       user_profiles_tree.each do |tree_row|
-        row_arr[0] = tree_row.id              # ID в Дереве
-        row_arr[1] = tree_row.profile_id      # ID Профиля
-        row_arr[2] = tree_row.name_id      # ID Имя Профиля
-        row_arr[3] = Name.find(tree_row.name_id).name   # Имя Профиля
-        row_arr[4] = Profile.find(tree_row.profile_id).sex_id         # Пол Профиля
-        row_arr[5] = tree_row.relation_id         # ID Родства Профиля с Автором
-        row_arr[6] = tree_row.is_profile_id      # ID Профиля Родственника
-        row_arr[7] = tree_row.is_name_id      # ID Имя Профиля
-        row_arr[8] = Name.find(tree_row.is_name_id).name   # Имя Родственника
+        row_arr[0] = tree_row.profile_id      # ID Профиля
+        row_arr[1] = tree_row.name_id      # ID Имя Профиля
+        row_arr[2] = Name.find(tree_row.name_id).name   # Имя Профиля
+        row_arr[3] = Profile.find(tree_row.profile_id).sex_id         # Пол Профиля
+        row_arr[4] = tree_row.relation_id         # ID Родства Профиля с Автором
+        row_arr[5] = tree_row.is_profile_id      # ID Профиля Родственника
+        row_arr[6] = tree_row.is_name_id      # ID Имя Профиля
+        row_arr[7] = Name.find(tree_row.is_name_id).name   # Имя Родственника
  #       row_arr[9] = tree_row.connected           # Объединено
 
         profiles_tree_arr << row_arr
@@ -149,11 +151,11 @@ class MainController < ApplicationController
   def search_profiles_tree_match
 
     profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
-    profiles_tree_arr =
-        [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
-         [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
-         [ 22, 506, "Татьяна", 0, 5, 25, 97, "Денис", true],
-         [ 22, 506, "Татьяна", 0, 6, 26, 453, "Мария", true]
+    #profiles_tree_arr =
+    #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
+    #     [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
+    #     [ 22, 506, "Татьяна", 0, 5, 25, 97, "Денис", true],
+    #     [ 22, 506, "Татьяна", 0, 6, 26, 453, "Мария", true]
          #   Это - тест для поиска вне БК
          # к Денису - добавляем новый профиль: Жену Виктория
 #         [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false],
@@ -162,7 +164,8 @@ class MainController < ApplicationController
                                          # к Денису - меняем новый профиль: Дочь Елена
                                  #       ,[81, 25, 97, "Денис", 1, 4, 85, 395, "Елена", false]
 
-        ]
+#        ]
+
     # при этом, при вводе нового профиля: Денису добавляем Жену Викторию
     # в табл. Tree записываем old_profile_id  has  relation_id  is  new_profile_id.
     # т.е.  () Муж Денис имеет жену Викторию- это и записываем в profiles_tree_arr.
