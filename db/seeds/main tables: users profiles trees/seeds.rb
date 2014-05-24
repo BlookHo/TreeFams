@@ -238,17 +238,17 @@ Tree.create([
 # user_id HAS relation_id WHO IS is_profile_id WITH is_name_id
 
 # 1 - Tree 1
-{user_id: 1, profile_id: 1, name_id: 16, relation_id: 0, is_profile_id: 1, is_name_id: 16, connected: false },
+{user_id: 1, profile_id: 1, name_id: 16, relation_id: 0, is_profile_id: 1, is_name_id: 16, is_sex_id: 1, connected: false },
 # 2
-{user_id: 1, profile_id: 1, name_id: 16, relation_id: 1, is_profile_id: 2, is_name_id: 75, connected: false },
+{user_id: 1, profile_id: 1, name_id: 16, relation_id: 1, is_profile_id: 2, is_name_id: 75, is_sex_id: 1, connected: false },
 # 3
-{user_id: 1, profile_id: 1, name_id: 16, relation_id: 2, is_profile_id: 3, is_name_id: 362, connected: false },
+{user_id: 1, profile_id: 1, name_id: 16, relation_id: 2, is_profile_id: 3, is_name_id: 362, is_sex_id: 0, connected: false },
 # 4
-{user_id: 1, profile_id: 1, name_id: 16, relation_id: 8, is_profile_id: 4, is_name_id: 352, connected: false },
+{user_id: 1, profile_id: 1, name_id: 16, relation_id: 8, is_profile_id: 4, is_name_id: 352, is_sex_id: 0, connected: false },
 # 5
-{user_id: 1, profile_id: 1, name_id: 16, relation_id: 3, is_profile_id: 5, is_name_id: 231, connected: false },
+{user_id: 1, profile_id: 1, name_id: 16, relation_id: 3, is_profile_id: 5, is_name_id: 231, is_sex_id: 1, connected: false },
 # 6
-{user_id: 1, profile_id: 1, name_id: 16, relation_id: 3, is_profile_id: 6, is_name_id: 295, connected: false },
+{user_id: 1, profile_id: 1, name_id: 16, relation_id: 3, is_profile_id: 6, is_name_id: 295, is_sex_id: 1, connected: false },
 
 # 7 - Tree 2
 {user_id: 2, profile_id: 7, relation_id: 0, connected: false },
@@ -270,15 +270,21 @@ Tree.create([
 {user_id: 3, profile_id: 21, relation_id: 4, connected: false },
 
 # 22 - Tree 4
-{user_id: 4, profile_id: 22, name_id: 506, relation_id: 0, is_profile_id: 22, is_name_id: 506, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 0, is_profile_id: 22, is_name_id: 506, is_sex_id: 0, connected: false },
 
-{user_id: 4, profile_id: 22, name_id: 506, relation_id: 1, is_profile_id: 23, is_name_id: 45, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 1, is_profile_id: 23, is_name_id: 45, is_sex_id: 1, connected: false },
 
-{user_id: 4, profile_id: 22, name_id: 506, relation_id: 2, is_profile_id: 24, is_name_id: 453, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 2, is_profile_id: 24, is_name_id: 453, is_sex_id: 0, connected: false },
 
-{user_id: 4, profile_id: 22, name_id: 506, relation_id: 5, is_profile_id: 25, is_name_id: 97, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 5, is_profile_id: 25, is_name_id: 97, is_sex_id: 1, connected: false },
 
-{user_id: 4, profile_id: 22, name_id: 506, relation_id: 6, is_profile_id: 26, is_name_id: 453, connected: false },
+{user_id: 4, profile_id: 22, name_id: 506, relation_id: 6, is_profile_id: 26, is_name_id: 453, is_sex_id: 0, connected: false },
+
+# K Tree 4, Pfoile 84 - Виктория:    # к Денису - добавляем новый профиль: Жену Виктория
+# При этом: в конец profiles_tree_arr добавляем   [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false]
+{user_id: 4, profile_id: 25, name_id: 97, relation_id: 8, is_profile_id: 84, is_name_id: 371, is_sex_id: 0, connected: false },
+
+
 
 # 27 - Tree 5
 {user_id: 5, profile_id: 27, relation_id: 0, connected: false },
