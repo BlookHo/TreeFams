@@ -6,62 +6,51 @@ class MainController < ApplicationController
  # @note GET /
  # @param admin_page [Integer] опциональный номер страницы
  # @see News
-  def get_user_tree
+ def get_user_tree #
 
-    # Делать из Tree!!
+#    if user_signed_in?
+#      user_profiles_tree = ProfileKey.where(:user_id => current_user.id).where(:profile_id => User.find(current_user.id).profile_id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+##      user_profiles_tree = ProfileKey.where(:user_id => current_user.id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+#
+#      row_arr = []
+#      profiles_tree_arr = []
+#
+#      user_profiles_tree.each do |tree_row|
+#        row_arr[0] = tree_row.profile_id      # ID Профиля
+#        row_arr[1] = tree_row.name_id      # ID Имя Профиля
+#        row_arr[2] = Name.find(tree_row.name_id).name   # Имя Профиля
+#        row_arr[3] = Profile.find(tree_row.profile_id).sex_id         # Пол Профиля
+#        row_arr[4] = tree_row.relation_id         # ID Родства Профиля с Автором
+#        row_arr[5] = tree_row.is_profile_id      # ID Профиля Родственника
+#        row_arr[6] = tree_row.is_name_id      # ID Имя Профиля
+#        row_arr[7] = Name.find(tree_row.is_name_id).name   # Имя Родственника
+# #       row_arr[9] = tree_row.connected           # Объединено
+#
+#        profiles_tree_arr << row_arr
+#        row_arr = []
+#      end
+#
+#      session[:profiles_tree_arr] = {:value => profiles_tree_arr, :updated_at => Time.current}
+#
+#    end
 
-    if user_signed_in?
-      user_profiles_tree = ProfileKey.where(:user_id => current_user.id).where(:profile_id => User.find(current_user.id).profile_id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-#      user_profiles_tree = ProfileKey.where(:user_id => current_user.id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-
-      row_arr = []
-      profiles_tree_arr = []
-
-      user_profiles_tree.each do |tree_row|
-        row_arr[0] = tree_row.profile_id      # ID Профиля
-        row_arr[1] = tree_row.name_id      # ID Имя Профиля
-        row_arr[2] = Name.find(tree_row.name_id).name   # Имя Профиля
-        row_arr[3] = Profile.find(tree_row.profile_id).sex_id         # Пол Профиля
-        row_arr[4] = tree_row.relation_id         # ID Родства Профиля с Автором
-        row_arr[5] = tree_row.is_profile_id      # ID Профиля Родственника
-        row_arr[6] = tree_row.is_name_id      # ID Имя Профиля
-        row_arr[7] = Name.find(tree_row.is_name_id).name   # Имя Родственника
- #       row_arr[9] = tree_row.connected           # Объединено
-
-        profiles_tree_arr << row_arr
-        row_arr = []
-      end
-
-      session[:profiles_tree_arr] = {:value => profiles_tree_arr, :updated_at => Time.current}
-
-    end
-
-  end
+#@profiles_tree_arr:
+#[[22, 506, "Татьяна", 0, 1, 23, 45, "Борис"],
+# [22, 506, "Татьяна", 0, 2, 24, 453, "Мария"],
+# [22, 506, "Татьяна", 0, 5, 25, 97, "Денис"],
+# [22, 506, "Татьяна", 0, 6, 26, 453, "Мария"]]
+#@@tree_arr:
+#  [[4, 22, 506, 0, 22, 506, 0, false],
+#   [4, 22, 506, 1, 23, 45, 1, false],
+#   [4, 22, 506, 2, 24, 453, 0, false],
+#   [4, 22, 506, 5, 25, 97, 1, false],
+#   [4, 22, 506, 6, 26, 453, 0, false],
+#   [4, 25, 97, 8, 84, 371, 0, false]]
 
 
-# Отображение дерева Юзера в табличной форме.
-# @note GET /
-# @param admin_page [Integer] опциональный номер страницы
-# @see News
-  def main_page
-
-    get_user_tree # Получение массива дерева текущего Юзера
-    #@profiles_tree_arr:
-    #[[22, 506, "Татьяна", 0, 1, 23, 45, "Борис"],
-    # [22, 506, "Татьяна", 0, 2, 24, 453, "Мария"],
-    # [22, 506, "Татьяна", 0, 5, 25, 97, "Денис"],
-    # [22, 506, "Татьяна", 0, 6, 26, 453, "Мария"]]
-    #@@tree_arr:
-    #  [[4, 22, 506, 0, 22, 506, 0, false],
-    #   [4, 22, 506, 1, 23, 45, 1, false],
-    #   [4, 22, 506, 2, 24, 453, 0, false],
-    #   [4, 22, 506, 5, 25, 97, 1, false],
-    #   [4, 22, 506, 6, 26, 453, 0, false],
-    #   [4, 25, 97, 8, 84, 371, 0, false]]
-    if user_signed_in?
+  if user_signed_in?
 
       user_tree = Tree.where(:user_id => current_user.id)#.select(:id, :profile_id, :relation_id, :connected)
-
       row_arr = []
       tree_arr = []
 
@@ -74,7 +63,6 @@ class MainController < ApplicationController
         row_arr[5] = tree_row.is_name_id           # name_id К_Профиля
         row_arr[6] = tree_row.is_sex_id            # sex К_Профиля
         row_arr[7] = tree_row.connected            # Объединено дерево К_Профиля с другим деревом
-
         #row_arr[2] = Profile.find(tree_row.profile_id).name_id      # ID Имени Профиля
         #row_arr[3] = Name.find(Profile.find(tree_row.profile_id).name_id).name   # Имя Профиля
         #row_arr[4] = Profile.find(tree_row.profile_id).sex_id         # Пол Профиля
@@ -86,6 +74,22 @@ class MainController < ApplicationController
 
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
       @tree_arr = tree_arr    # DEBUGG TO VIEW
+
+  end
+
+
+ end
+
+
+# Отображение дерева Юзера в табличной форме.
+# @note GET /
+# @param admin_page [Integer] опциональный номер страницы
+# @see News
+  def main_page
+
+    get_user_tree # Получение массива дерева текущего Юзера
+
+    if user_signed_in?
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
@@ -167,6 +171,7 @@ class MainController < ApplicationController
   def search_profiles_tree_match
 
 #    profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
+
     profiles_tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
     #profiles_tree_arr =
     #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
