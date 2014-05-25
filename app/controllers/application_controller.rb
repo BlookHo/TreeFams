@@ -99,10 +99,10 @@ class ApplicationController < ActionController::Base
   # @param admin_page [Integer] опциональный номер страницы
   # @see Place
   def check_sex_by_name(user_name)
-    user_sex = false    # Female name
+    user_sex = 0    # Female name
     find_name=Name.select(:only_male).where(:name => user_name)
-
-    user_sex = true if !find_name.blank? and find_name[0]['only_male']    # Male name
+    @find_name = find_name
+    user_sex = 1 if !find_name.blank? and find_name[0]['only_male']    # Male name
 
     return user_sex
   end

@@ -104,10 +104,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 2, profile_id: 8, name_id: 45, relation_id: 4, is_profile_id: 10, is_name_id: 453 },
 {user_id: 2, profile_id: 8, name_id: 45, relation_id: 3, is_profile_id: 7, is_name_id: 97 },
 {user_id: 2, profile_id: 8, name_id: 45, relation_id: 4, is_profile_id: 11, is_name_id: 506 },
-# Out of NearCircle of profile_id: 8
-#{user_id: 2, profile_id: 8, name_id: 45, relation_id: 17, is_profile_id: 12, is_name_id: 371 },
-#{user_id: 2, profile_id: 8, name_id: 45, relation_id: 16, is_profile_id: 13, is_name_id: 352 },
-#{user_id: 2, profile_id: 8, name_id: 45, relation_id: 16, is_profile_id: 14, is_name_id: 477 },
 
 # Tree 2, Pfoile 9 - Мария 
 # NearCircle
@@ -115,10 +111,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 2, profile_id: 9, name_id: 453, relation_id: 7, is_profile_id: 8, is_name_id: 45 },
 {user_id: 2, profile_id: 9, name_id: 453, relation_id: 4, is_profile_id: 10, is_name_id: 453 },
 {user_id: 2, profile_id: 9, name_id: 453, relation_id: 4, is_profile_id: 11, is_name_id: 506 },
-# Out of NearCircle of profile_id: 9
-#{user_id: 2, profile_id: 9, name_id: 453, relation_id: 17, is_profile_id: 12, is_name_id: 371 },
-#{user_id: 2, profile_id: 9, name_id: 453, relation_id: 16, is_profile_id: 13, is_name_id: 352 },
-#{user_id: 2, profile_id: 9, name_id: 453, relation_id: 16, is_profile_id: 14, is_name_id: 477 },
 
 # Tree 2, Pfoile 10 - Мария
 # NearCircle
@@ -126,10 +118,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 2, profile_id: 10, name_id: 453, relation_id: 2, is_profile_id: 9, is_name_id: 453 },
 {user_id: 2, profile_id: 10, name_id: 453, relation_id: 5, is_profile_id: 7, is_name_id: 97 },
 {user_id: 2, profile_id: 10, name_id: 453, relation_id: 6, is_profile_id: 11, is_name_id: 506 },
-# Out of NearCircle of profile_id: 10
-#{user_id: 2, profile_id: 10, name_id: 453, relation_id: 19, is_profile_id: 12, is_name_id: 371 },
-#{user_id: 2, profile_id: 10, name_id: 453, relation_id: 21, is_profile_id: 13, is_name_id: 352 },
-#{user_id: 2, profile_id: 10, name_id: 453, relation_id: 21, is_profile_id: 14, is_name_id: 477 },
 
 # Tree 2, Pfoile 11 - Татьяна
 # NearCircle
@@ -137,44 +125,24 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 2, profile_id: 11, name_id: 506, relation_id: 2, is_profile_id: 9, is_name_id: 453 },
 {user_id: 2, profile_id: 11, name_id: 506, relation_id: 5, is_profile_id: 7, is_name_id: 97 },
 {user_id: 2, profile_id: 11, name_id: 506, relation_id: 6, is_profile_id: 10, is_name_id: 453 },
-# Out of NearCircle of profile_id: 11
-#{user_id: 2, profile_id: 11, name_id: 506, relation_id: 19, is_profile_id: 12, is_name_id: 371 },
-#{user_id: 2, profile_id: 11, name_id: 506, relation_id: 21, is_profile_id: 13, is_name_id: 352 },
-#{user_id: 2, profile_id: 11, name_id: 506, relation_id: 21, is_profile_id: 14, is_name_id: 477 },
 
 # Tree 2, Pfoile 12 - Виктория
 # NearCircle
 {user_id: 2, profile_id: 12, name_id: 371, relation_id: 7, is_profile_id: 7, is_name_id: 97 },
 {user_id: 2, profile_id: 12, name_id: 371, relation_id: 4, is_profile_id: 13, is_name_id: 352 },
 {user_id: 2, profile_id: 12, name_id: 371, relation_id: 4, is_profile_id: 14, is_name_id: 477 },
-# Out of NearCircle of profile_id: 12
-#{user_id: 2, profile_id: 12, name_id: 371, relation_id: 9, is_profile_id: 8, is_name_id: 45 },
-#{user_id: 2, profile_id: 12, name_id: 371, relation_id: 10, is_profile_id: 9, is_name_id: 453 },
-#{user_id: 2, profile_id: 12, name_id: 371, relation_id: 25, is_profile_id: 10, is_name_id: 453 },
-#{user_id: 2, profile_id: 12, name_id: 371, relation_id: 25, is_profile_id: 11, is_name_id: 506 },
 
 # Tree 2, Pfoile 13 - Анна
 # NearCircle
 {user_id: 2, profile_id: 13, name_id: 352, relation_id: 1, is_profile_id: 7, is_name_id: 97 },
 {user_id: 2, profile_id: 13, name_id: 352, relation_id: 2, is_profile_id: 12, is_name_id: 371 },
 {user_id: 2, profile_id: 13, name_id: 352, relation_id: 6, is_profile_id: 14, is_name_id: 477 },
-# Out of NearCircle of profile_id: 13
-#{user_id: 2, profile_id: 13, name_id: 352, relation_id: 13, is_profile_id: 8, is_name_id: 45 },
-#{user_id: 2, profile_id: 13, name_id: 352, relation_id: 14, is_profile_id: 9, is_name_id: 453 },
-#{user_id: 2, profile_id: 13, name_id: 352, relation_id: 24, is_profile_id: 10, is_name_id: 453 },
-#{user_id: 2, profile_id: 13, name_id: 352, relation_id: 24, is_profile_id: 11, is_name_id: 506 },
 
 # Tree 2, Pfoile 14 - Ольга
 # NearCircle
 {user_id: 2, profile_id: 14, name_id: 477, relation_id: 1, is_profile_id: 7, is_name_id: 97 },
 {user_id: 2, profile_id: 14, name_id: 477, relation_id: 2, is_profile_id: 12, is_name_id: 371 },
 {user_id: 2, profile_id: 14, name_id: 477, relation_id: 6, is_profile_id: 13, is_name_id: 352 },
-# Out of NearCircle of profile_id: 14
-#{user_id: 2, profile_id: 14, name_id: 477, relation_id: 13, is_profile_id: 8, is_name_id: 45 },
-#{user_id: 2, profile_id: 14, name_id: 477, relation_id: 14, is_profile_id: 9, is_name_id: 453 },
-#{user_id: 2, profile_id: 14, name_id: 477, relation_id: 24, is_profile_id: 10, is_name_id: 453 },
-#{user_id: 2, profile_id: 14, name_id: 477, relation_id: 24, is_profile_id: 11, is_name_id: 506 },
-
 
 
 # Tree 3, Pfoile 15 - Author - Борис
@@ -190,21 +158,11 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 # NearCircle
 {user_id: 3, profile_id: 16, name_id: 123, relation_id: 8, is_profile_id: 17, is_name_id: 477 },
 {user_id: 3, profile_id: 16, name_id: 123, relation_id: 3, is_profile_id: 15, is_name_id: 45 },
-# Out of NearCircle of profile_id: 16
-#{user_id: 3, profile_id: 16, name_id: 123, relation_id: 17, is_profile_id: 18, is_name_id: 453 },
-#{user_id: 3, profile_id: 16, name_id: 123, relation_id: 15, is_profile_id: 19, is_name_id: 97 },
-#{user_id: 3, profile_id: 16, name_id: 123, relation_id: 16, is_profile_id: 20, is_name_id: 453 },
-#{user_id: 3, profile_id: 16, name_id: 123, relation_id: 16, is_profile_id: 21, is_name_id: 506 },
 
 # Tree 3, Pfoile 17 - Ольга
 # NearCircle
 {user_id: 3, profile_id: 17, name_id: 477, relation_id: 7, is_profile_id: 16, is_name_id: 123 },
 {user_id: 3, profile_id: 17, name_id: 477, relation_id: 3, is_profile_id: 15, is_name_id: 45 },
-# Out of NearCircle of profile_id: 17
-#{user_id: 3, profile_id: 17, name_id: 477, relation_id: 17, is_profile_id: 18, is_name_id: 453 },
-#{user_id: 3, profile_id: 17, name_id: 477, relation_id: 15, is_profile_id: 19, is_name_id: 97 },
-#{user_id: 3, profile_id: 17, name_id: 477, relation_id: 16, is_profile_id: 20, is_name_id: 453 },
-#{user_id: 3, profile_id: 17, name_id: 477, relation_id: 16, is_profile_id: 21, is_name_id: 506 },
 
 # Tree 3, Pfoile 18 - Мария
 # NearCircle
@@ -212,9 +170,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 3, profile_id: 18, name_id: 453, relation_id: 3, is_profile_id: 19, is_name_id: 97 },
 {user_id: 3, profile_id: 18, name_id: 453, relation_id: 4, is_profile_id: 20, is_name_id: 453 },
 {user_id: 3, profile_id: 18, name_id: 453, relation_id: 4, is_profile_id: 21, is_name_id: 506 },
-# Out of NearCircle of profile_id: 17
-#{user_id: 3, profile_id: 18, name_id: 453, relation_id: 9, is_profile_id: 16, is_name_id: 123 },
-#{user_id: 3, profile_id: 18, name_id: 453, relation_id: 10, is_profile_id: 17, is_name_id: 477 },
 
 # Tree 3, Pfoile 19 - Денис
 # NearCircle
@@ -222,9 +177,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 3, profile_id: 19, name_id: 97, relation_id: 2, is_profile_id: 18, is_name_id: 453 },
 {user_id: 3, profile_id: 19, name_id: 97, relation_id: 6, is_profile_id: 20, is_name_id: 453 },
 {user_id: 3, profile_id: 19, name_id: 97, relation_id: 6, is_profile_id: 21, is_name_id: 506 },
-# Out of NearCircle of profile_id: 19
-#{user_id: 3, profile_id: 19, name_id: 97, relation_id: 13, is_profile_id: 16, is_name_id: 123 },
-#{user_id: 3, profile_id: 19, name_id: 97, relation_id: 14, is_profile_id: 17, is_name_id: 477 },
 
 # Tree 3, Pfoile 20 - Мария
 # NearCircle
@@ -232,9 +184,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 3, profile_id: 20, name_id: 453, relation_id: 2, is_profile_id: 18, is_name_id: 453 },
 {user_id: 3, profile_id: 20, name_id: 453, relation_id: 5, is_profile_id: 19, is_name_id: 97 },
 {user_id: 3, profile_id: 20, name_id: 453, relation_id: 6, is_profile_id: 21, is_name_id: 506 },
-# Out of NearCircle of profile_id: 20
-#{user_id: 3, profile_id: 20, name_id: 453, relation_id: 13, is_profile_id: 16, is_name_id: 123 },
-#{user_id: 3, profile_id: 20, name_id: 453, relation_id: 14, is_profile_id: 17, is_name_id: 477 },
 
 # Tree 3, Pfoile 21 - Татьяна
 # NearCircle
@@ -242,10 +191,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 3, profile_id: 21, name_id: 506, relation_id: 2, is_profile_id: 18, is_name_id: 453 },
 {user_id: 3, profile_id: 21, name_id: 506, relation_id: 5, is_profile_id: 19, is_name_id: 97 },
 {user_id: 3, profile_id: 21, name_id: 506, relation_id: 6, is_profile_id: 20, is_name_id: 453 },
-# Out of NearCircle of profile_id: 21
-#{user_id: 3, profile_id: 21, name_id: 506, relation_id: 13, is_profile_id: 16, is_name_id: 123 },
-#{user_id: 3, profile_id: 21, name_id: 506, relation_id: 14, is_profile_id: 17, is_name_id: 477 },
-
 
 
 # Tree 4, Pfoile 22 - Author - Татьяна
@@ -318,60 +263,36 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 5, profile_id: 28, name_id: 123, relation_id: 8, is_profile_id: 29, is_name_id: 352 },
 {user_id: 5, profile_id: 28, name_id: 123, relation_id: 4, is_profile_id: 27, is_name_id: 371 },
 {user_id: 5, profile_id: 28, name_id: 123, relation_id: 3, is_profile_id: 30, is_name_id: 265 },
-# Out of NearCircle of profile_id: 28
-#{user_id: 5, profile_id: 28, name_id: 123, relation_id: 18, is_profile_id: 31, is_name_id: 97 },
-#{user_id: 5, profile_id: 28, name_id: 123, relation_id: 16, is_profile_id: 32, is_name_id: 477 },
-#{user_id: 5, profile_id: 28, name_id: 123, relation_id: 16, is_profile_id: 33, is_name_id: 352 },
 
 # Tree 5, Pfoile 29 - Анна
 # NearCircle
 {user_id: 5, profile_id: 29, name_id: 352, relation_id: 8, is_profile_id: 28, is_name_id: 123 },
 {user_id: 5, profile_id: 29, name_id: 352, relation_id: 4, is_profile_id: 27, is_name_id: 371 },
 {user_id: 5, profile_id: 29, name_id: 352, relation_id: 3, is_profile_id: 30, is_name_id: 265 },
-# Out of NearCircle of profile_id: 29
-#{user_id: 5, profile_id: 29, name_id: 352, relation_id: 18, is_profile_id: 31, is_name_id: 97 },
-#{user_id: 5, profile_id: 29, name_id: 352, relation_id: 16, is_profile_id: 32, is_name_id: 477 },
-#{user_id: 5, profile_id: 29, name_id: 352, relation_id: 16, is_profile_id: 33, is_name_id: 352 },
 
 # Tree 5, Pfoile 30 - Сергей
 # NearCircle
 {user_id: 5, profile_id: 30, name_id: 265, relation_id: 1, is_profile_id: 28, is_name_id: 123 },
 {user_id: 5, profile_id: 30, name_id: 265, relation_id: 2, is_profile_id: 29, is_name_id: 352 },
 {user_id: 5, profile_id: 30, name_id: 265, relation_id: 6, is_profile_id: 27, is_name_id: 371 },
-# Out of NearCircle of profile_id: 30
-#{user_id: 5, profile_id: 30, name_id: 265, relation_id: 20, is_profile_id: 31, is_name_id: 97 },
-#{user_id: 5, profile_id: 30, name_id: 265, relation_id: 21, is_profile_id: 32, is_name_id: 477 },
-#{user_id: 5, profile_id: 30, name_id: 265, relation_id: 21, is_profile_id: 33, is_name_id: 352 },
 
 # Tree 5, Pfoile 31 - Денис
 # NearCircle
 {user_id: 5, profile_id: 31, name_id: 97, relation_id: 8, is_profile_id: 27, is_name_id: 371 },
 {user_id: 5, profile_id: 31, name_id: 97, relation_id: 4, is_profile_id: 32, is_name_id: 477 },
 {user_id: 5, profile_id: 31, name_id: 97, relation_id: 4, is_profile_id: 33, is_name_id: 352 },
-# Out of NearCircle of profile_id: 31
-#{user_id: 5, profile_id: 31, name_id: 97, relation_id: 11, is_profile_id: 28, is_name_id: 123 },
-#{user_id: 5, profile_id: 31, name_id: 97, relation_id: 12, is_profile_id: 29, is_name_id: 352 },
-#{user_id: 5, profile_id: 31, name_id: 97, relation_id: 28, is_profile_id: 30, is_name_id: 265 },
 
 # Tree 5, Pfoile 32 - Ольга
 # NearCircle
 {user_id: 5, profile_id: 32, name_id: 477, relation_id: 2, is_profile_id: 27, is_name_id: 371 },
 {user_id: 5, profile_id: 32, name_id: 477, relation_id: 1, is_profile_id: 31, is_name_id: 97 },
 {user_id: 5, profile_id: 32, name_id: 477, relation_id: 6, is_profile_id: 33, is_name_id: 352 },
-# Out of NearCircle of profile_id: 32
-#{user_id: 5, profile_id: 32, name_id: 477, relation_id: 23, is_profile_id: 30, is_name_id: 265 },
-#{user_id: 5, profile_id: 32, name_id: 477, relation_id: 13, is_profile_id: 28, is_name_id: 123 },
-#{user_id: 5, profile_id: 32, name_id: 477, relation_id: 14, is_profile_id: 29, is_name_id: 352 },
 
 # Tree 5, Pfoile 33 - Анна
 # NearCircle
 {user_id: 5, profile_id: 33, name_id: 352, relation_id: 2, is_profile_id: 27, is_name_id: 371 },
 {user_id: 5, profile_id: 33, name_id: 352, relation_id: 1, is_profile_id: 31, is_name_id: 97 },
 {user_id: 5, profile_id: 33, name_id: 352, relation_id: 6, is_profile_id: 32, is_name_id: 477 },
-# Out of NearCircle of profile_id: 33
-#{user_id: 5, profile_id: 33, name_id: 352, relation_id: 23, is_profile_id: 30, is_name_id: 265 },
-#{user_id: 5, profile_id: 33, name_id: 352, relation_id: 13, is_profile_id: 28, is_name_id: 123 },
-#{user_id: 5, profile_id: 33, name_id: 352, relation_id: 14, is_profile_id: 29, is_name_id: 352 },
 
 
 # Tree 6, Pfoile 34 - Author - Николай

@@ -12,26 +12,18 @@
 
   <li #{render :partial => 'main/main_display_tree'}
 
-
-  -#%div
-  -#  %p
-  -#    Найдено совпадений: @match_qty_loc: #{@match_qty_loc.inspect}
-  -#  %p
-  -#    Из них - подтвержденных: @approved_match_qty_loc #{@approved_match_qty_loc.inspect}
   %h4 Переход на:  #{link_to "Просмотр и подтверждение совпадений -->", match_approval_path}
 
-
   %h4 Переход на:  #{link_to "Просмотр и управление Графом дерева -->", show_graph_tree_path}
-
 
 
   %h4 ПОИСК Совпадения древа Пользователя с другими В ПОЛНОМ ДЕРЕВЕ ПРОФИЛЕЙ
   %p
     Основной массив БК - профилей: @profiles_tree_arr: #{@profiles_tree_arr.inspect}
   %p
-    @@tree_arr: #{@tree_arr.inspect}
+    @tree_arr: #{@tree_arr.inspect}
   %p
-    @profiles_tree_arr_len: #{@profiles_tree_arr_len.inspect}
+    @tree_arr_len: #{@tree_arr_len.inspect}
   -#%p
   -#  @all_relation_rows_len: #{@all_relation_rows_len.inspect}
   -#%p

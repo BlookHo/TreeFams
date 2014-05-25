@@ -31,6 +31,14 @@
         / <p>@us_id: <haml:loud> @us_id.inspect </haml:loud></p>
         / <p>@sel_names_male: <haml:loud> @sel_names_male.inspect </haml:loud></p>
         / <p>@sel_names_female: <haml:loud> @sel_names_female.inspect </haml:loud></p>
+        %p
+          @find_name: #{@find_name.inspect}, Мое имя: @user_name: #{@user_name.inspect}, Я - #{@user_sex.inspect}
+        %p#sex_container
+          @user_sex: #{@user_sex.inspect}, Мое имя: @user_name: #{@user_name.inspect}, Я - #{@user_sex.inspect}
+        %p
+          @mother_sex: #{@mother_sex.inspect}, Мое имя: @user_name: #{@user_name.inspect}, Я - #{@user_sex.inspect}
+        %p
+          @mother_name_correct: #{@mother_name_correct.inspect}, Мое имя: @user_name: #{@user_name.inspect}, Я - #{@user_sex.inspect}
 
       %div
         -#%p

@@ -2,11 +2,11 @@ class MainController < ApplicationController
  # include MainHelper  #
 
 
-  # Отображение дерева Юзера в табличной форме.
+ # Отображение дерева Юзера в табличной форме.
  # @note GET /
  # @param admin_page [Integer] опциональный номер страницы
  # @see News
- def get_user_tree #
+ def get_user_tree
 
 #    if user_signed_in?
 #      user_profiles_tree = ProfileKey.where(:user_id => current_user.id).where(:profile_id => User.find(current_user.id).profile_id).select(:id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
@@ -81,15 +81,16 @@ class MainController < ApplicationController
  end
 
 
-# Отображение дерева Юзера в табличной форме.
+# Поиск совпадений по дереву Юзера
+# Основной метод
 # @note GET /
 # @param admin_page [Integer] опциональный номер страницы
 # @see News
-  def main_page
-
-    get_user_tree # Получение массива дерева текущего Юзера
+ def main_page
 
     if user_signed_in?
+
+      get_user_tree # Получение массива дерева текущего Юзера из Tree
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
@@ -101,7 +102,7 @@ class MainController < ApplicationController
 
     end
 
-  end
+ end
 
 
   # Поиск совпадений для одного из профилей БК current_user
@@ -127,11 +128,11 @@ class MainController < ApplicationController
         row_arr = []
         relation_match_arr.each do |tree_row|
           row_arr[0] = tree_row.user_id              # ID Автора
-          row_arr[1] = tree_row.profile_id           # ID Профиля
-          row_arr[2] = tree_row.name_id              # ID Имени Профиля
-          row_arr[3] = tree_row.relation_id          # ID Родства Профиля
-          row_arr[4] = tree_row.is_profile_id        # ID Родства Профиля с другим Профилем
-          row_arr[5] = tree_row.is_name_id           # ID Имени другого Профиля
+          row_arr[1] = tree_row.profile_id           # ID От_Профиля
+          row_arr[2] = tree_row.name_id              # ID Имени От_Профиля
+          row_arr[3] = tree_row.relation_id          # ID Родства От_Профиля с другим К_Профиля
+          row_arr[4] = tree_row.is_profile_id        # ID другого К_Профиля
+          row_arr[5] = tree_row.is_name_id           # ID Имени К_Профиля
 
           all_relation_match_arr << row_arr
           row_arr = []
@@ -172,7 +173,7 @@ class MainController < ApplicationController
 
 #    profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
 
-    profiles_tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
+    tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
     #profiles_tree_arr =
     #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
     #     [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
@@ -194,26 +195,21 @@ class MainController < ApplicationController
 
     # true/false - признак ближнего круга автора дерева   # ??? м.б. не нужно
 
-    @profiles_tree_arr = profiles_tree_arr    # DEBUGG TO VIEW
-    @profiles_tree_arr_len = profiles_tree_arr.length  # DEBUGG TO VIEW
+    @tree_arr = tree_arr    # DEBUGG TO VIEW
+    @tree_arr_len = tree_arr.length  # DEBUGG TO VIEW
 
-    @all_match_arr = []   # Массив совпадений всех родных с Автором
-    if !profiles_tree_arr.blank?
-
-      for tree_index in 0 .. profiles_tree_arr.length-1
-#        relation = profiles_tree_arr[tree_index][5]  # Выбор очередности поиска в зависимости от relation
-#        @relation = relation  # DEBUGG TO VIEW
-#        @name = profiles_tree_arr[tree_index][7]  # DEBUGG TO VIEW
-        profile_id_searched = profiles_tree_arr[tree_index][4]
-        get_relation_match(profile_id_searched)  # На выходе: @all_match_arr по данному дереву
+    @all_match_arr = []                               # Массив совпадений всех родных с Автором
+    if !tree_arr.blank?
+      for tree_index in 0 .. tree_arr.length-1
+        profile_id_searched = tree_arr[tree_index][4] # Поиск по ID К_Профиля
+        get_relation_match(profile_id_searched)       # На выходе: @all_match_arr по данному дереву
       end
-
     end
 
-    @all_match_hash = Hash.new   # Вычисляется в join_arr_of_hashes
-    join_arr_of_hashes(@all_match_arr) if !@all_match_arr.blank?
+    @all_match_hash = Hash.new                        # Вычисляется в join_arr_of_hashes
+    join_arr_of_hashes(@all_match_arr) if !@all_match_arr.blank?  # Если найдены совпадения - в @all_match_arr
 
-    # УПОРЯДОЧИТЬ ПО КОЛ-ВУ СОВПАВШИХ ПРОФИЛЕЙ В ДЕРЕВЬЯХ!
+    # TODO: РЕЗУЛЬТАТЫ ПОИСКА УПОРЯДОЧИТЬ ПО КОЛ-ВУ СОВПАВШИХ ПРОФИЛЕЙ В ДЕРЕВЬЯХ!
 
     @user_ids_arr = @all_match_hash.keys
     @profile_ids_arr = @all_match_hash.values.flatten

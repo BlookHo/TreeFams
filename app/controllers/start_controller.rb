@@ -75,7 +75,7 @@ class StartController < ApplicationController
   ####  CHECK PROFILE TO BE ENTERED ########################
   def check_husband_or_wife
     user_sex = session[:user_sex][:value]
-    if user_sex    # = true -> User = Male
+    if user_sex == 1    # = true -> User = Male
       @render_name = 'start/enter_wife'
       # redirect_to enter_wife_path
     else
@@ -552,7 +552,12 @@ class StartController < ApplicationController
   def store_myself
     @user_name = params[:name_select] #
     if !@user_name.blank?
-      @user_sex = check_sex_by_name(@user_name) # display sex by name = извлечение пола из введенного имени
+      user_sex = 0    # Female name
+      find_name=Name.select(:only_male).where(:name => @user_name)
+      @find_name = find_name
+      user_sex = 1 if !find_name.blank? and find_name[0]['only_male']    # Male name
+      @user_sex = user_sex
+   #       check_sex_by_name(@user_name) # display sex by name = извлечение пола из введенного имени
     end
 
     # Begin All Arrays
@@ -943,7 +948,7 @@ class StartController < ApplicationController
     #
     #Profile.delete_all          # DEBUGG
     #Profile.reset_pk_sequence
-    #
+
     #ProfileKey.delete_all             # DEBUGG
     #ProfileKey.reset_pk_sequence
 
@@ -952,12 +957,13 @@ class StartController < ApplicationController
       @profiles_array = profiles_array # DEBUGG TO VIEW
     end
 
-  # 9 user:
-  #profiles_array = [[0, "Александр", true],   # DEBUGG TO VIEW
-  #[1, "Борис", true], [2, "Мария", false],
-  #[5, "Виктор", true], [5, "Денис", true],
-  #[6, "Анна", false], [6, "Ольга", false],
-  #[8, "Виктория", false],
+  # 14 user:
+  #profiles_array = [[0, "Александр", 1],   # DEBUGG TO VIEW
+  #[1, "Борис", 1], [2, "Мария", 0],
+  #[5, "Виктор", 1], [5, "Денис", 1],
+  #[6, "Анна", 0], [6, "Ольга", 0],
+  #[8, "Виктория", 0]]
+
   #[3, "Борис", true], [3, "Иван", true],
   #[4, "Мария", false], [4, "Юлия", false]]   # DEBUGG TO VIEW
 #  @profiles_array = profiles_array # DEBUGG TO VIEW
@@ -1052,9 +1058,18 @@ class StartController < ApplicationController
   def save_tree(profiles_arr_w_ids)
     for arr_i in 0 .. profiles_arr_w_ids.length-1
       new_tree = Tree.new
-      new_tree.user_id = current_user.id                   # user_id
-      new_tree.profile_id = profiles_arr_w_ids[arr_i][0]   # profile_id
-      new_tree.relation_id = profiles_arr_w_ids[arr_i][4]  # relation_id
+      new_tree.user_id = current_user.id                    # user_id ID От_Профиля (From_Profile)
+      new_tree.profile_id = current_user.profile_id         # profile_id От_Профиля
+      new_tree.name_id = Profile.find(current_user.profile_id).name_id       # name_id От_Профиля
+
+      new_tree.relation_id = profiles_arr_w_ids[arr_i][4]   # relation_id ID Родства От_Профиля с К_Профилю (To_Profile)
+
+      new_tree.is_profile_id = profiles_arr_w_ids[arr_i][0] # is_profile_id К_Профиля
+      new_tree.is_name_id = profiles_arr_w_ids[arr_i][2]    # is_name_id К_Профиля
+      new_tree.is_sex_id = profiles_arr_w_ids[arr_i][3]     # is_sex_id К_Профиля
+
+      new_tree.connected = false           # Пока не Объединено дерево К_Профиля с другим деревом
+
       new_tree.save
     end
   end
