@@ -282,7 +282,7 @@ Tree.create([
 
 # K Tree 4, Pfoile 84 - Виктория:    # к Денису - добавляем новый профиль: Жену Виктория
 # При этом: в конец profiles_tree_arr добавляем   [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false]
-{user_id: 4, profile_id: 25, name_id: 97, relation_id: 8, is_profile_id: 84, is_name_id: 371, is_sex_id: 0, connected: false },
+#{user_id: 4, profile_id: 25, name_id: 97, relation_id: 8, is_profile_id: 84, is_name_id: 371, is_sex_id: 0, connected: false },
 
 
 

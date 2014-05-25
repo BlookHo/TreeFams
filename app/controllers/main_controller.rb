@@ -166,7 +166,8 @@ class MainController < ApplicationController
   # @see News
   def search_profiles_tree_match
 
-    profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
+#    profiles_tree_arr = session[:profiles_tree_arr][:value] if !session[:profiles_tree_arr].blank?
+    profiles_tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
     #profiles_tree_arr =
     #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
     #     [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
@@ -198,7 +199,7 @@ class MainController < ApplicationController
 #        relation = profiles_tree_arr[tree_index][5]  # Выбор очередности поиска в зависимости от relation
 #        @relation = relation  # DEBUGG TO VIEW
 #        @name = profiles_tree_arr[tree_index][7]  # DEBUGG TO VIEW
-        profile_id_searched = profiles_tree_arr[tree_index][5]
+        profile_id_searched = profiles_tree_arr[tree_index][4]
         get_relation_match(profile_id_searched)  # На выходе: @all_match_arr по данному дереву
       end
 
