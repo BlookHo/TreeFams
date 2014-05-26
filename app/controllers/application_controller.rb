@@ -127,6 +127,28 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Автоматическое наполнение хэша сущностями и
+  # количеством появлений каждой сущности.
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see Place = main_contrl.,
+  ################# FILLING OF HASH WITH KEYS AND/OR VALUES
+  def two_hashes_check(one_hash, second_hash) # Filling of hash with keys and values, according to key occurance
+
+    rez_hash = {}
+    sec_val_arr = second_hash.values
+    sec_key_arr = second_hash.keys
+
+    ind = 0
+    one_hash.each do |key, val|
+      if sec_val_arr[ind] >= val
+        rez_hash.merge!({key => val}) # наполнение хэша найденными profile_id
+      end
+      ind += 1
+    end
+    return rez_hash
+  end
+
 
 
 

@@ -45,7 +45,6 @@
           %th ID Родства: с другим К_Профиля
           %th ID другого К_Профиля
           %th ID Имени К_Профиля
-          -#%th Size relation_match_arr
           %th
         - @all_relation_match_arr.each do |tree|
           %tr
@@ -55,22 +54,19 @@
             %td= tree[3]
             %td= tree[4]
             %td= tree[5]
-            -#%td= tree[6]
             %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
   - else
     %h4 No Listing tree - No @all_relation_match_arr!
-  %p
-    @relation_match_arr: #{@relation_match_arr.inspect}
-  %p
-    @relation_match_size: #{@relation_match_size.inspect}
+  -#%p
+  -#  @relation_match_arr: #{@relation_match_arr.inspect}
+  -#%p
+  -#  @relation_match_size: #{@relation_match_size.inspect}
   %p
     @tree_number: #{@tree_number.inspect}
   %p
     @profile_number: #{@profile_number.inspect}
   %p
     @name_number: #{@name_number.inspect}
-  %p
-    @relation_match_arr_5: #{@relation_match_arr_5.inspect}
   %p
     @relation_match_arr_size: #{@relation_match_arr_size.inspect}
   %p
@@ -83,11 +79,17 @@
   -#%p
   -#  @final_merged_hash: #{@final_merged_hash.inspect}
   %p
+    @all_match_trees_arr: #{@all_match_trees_arr.inspect}
+  %p
     @all_match_arr: #{@all_match_arr.inspect}
   %h4
     Массив всех совпадений родных: @all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
   %h4
     ВСЕ СОВПАДЕНИЯ РОДНЫХ: @all_match_hash: #{@all_match_hash.inspect}
+  %p
+    @match_hash_key_arr: #{@match_hash_key_arr.inspect}
+  %p
+    @match_hash_val_arr: #{@match_hash_val_arr.inspect}
   %p
     НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
   %p
