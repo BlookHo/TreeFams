@@ -28,6 +28,7 @@ gem 'therubyracer'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 # Обмен переменными Ruby -> JS
 gem 'gon'

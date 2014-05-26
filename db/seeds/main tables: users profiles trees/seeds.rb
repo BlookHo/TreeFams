@@ -20,7 +20,6 @@ User.create!([          # create! - для сообщений об ошибка�
 # 7
 {profile_id: 40, admin: false, email: 'yy@yy.yy', password: '777777', password_confirmation: '777777' }
 
-
 ])
 
 
@@ -201,8 +200,3 @@ Tree.create([
 
 
 ])
-
-
-
-
-

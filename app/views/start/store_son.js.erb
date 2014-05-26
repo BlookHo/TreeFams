@@ -1,7 +1,15 @@
 $("#son_form").fadeOut(1200);
 if (<%= @more_sons_exists == "yes" %>) {
-    $("#name_container").append('Массив профилей БК: @profiles_array: <%= @profiles_array.inspect %>.  ');
+    $("#name_container").html('@profiles_array: <%= @profiles_array.inspect %>.  ');
     $("#name_container").append('* Имя сына: <%= @son_name %>. ');
-    $("#name_container").append(' Oн - <%= @son_sex %> ');
+//    $("#name_container").append(' Oн - <%= @son_sex %> ');
+    $("#arr_container").html(' Массивы для ProfileKeys: ');
+    $("#arr_container").append(' @author_ProfileKeys_arr - <%= @author_ProfileKeys_arr %> ');
+    $("#arr_container").append(' @wife_ProfileKeys_arr - <%= @wife_ProfileKeys_arr %> ');
+    $("#arr_container").append(' @husband_ProfileKeys_arr - <%= @husband_ProfileKeys_arr %> ');
+    $("#arr_container").append(' @son_ProfileKeys_arr - <%= @son_ProfileKeys_arr %> ');
+    $("#arr_container").append(' @sons_names_arr - <%= @sons_names_arr %> ');
+
+
 }
 $("#next_container").html("<%= j render @next_view %>");
