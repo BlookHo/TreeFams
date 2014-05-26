@@ -3,15 +3,14 @@
   %div
     %table
       %tr
-        %th ID в Дереве
-        %th ID Профиля
-        %th ID Имени Профиля
-        %th Имя Профиля
-        %th Пол Профиля
-        %th ID Родства: У Профиля
-        %th ID Родственника
-        %th ID Имени Родственника
-        %th Имя Родственника
+        %th user_id
+        %th ID От_Профиля
+        %th name_id От_Профиля
+        %th ID Родства с К_Профилю
+        %th ID К_Профиля
+        %th name_id К_Профиля
+        %th sex К_Профиля
+        %th Объединено
         %th
       - @tree_arr.each do |tree|
         %tr
@@ -23,7 +22,6 @@
           %td= tree[5]
           %td= tree[6]
           %td= tree[7]
-          %td= tree[8]
           %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
 - else
   %h4 No Listing tree - No @tree_arr!

@@ -24,10 +24,12 @@
     @tree_arr: #{@tree_arr.inspect}
   %p
     @tree_arr_len: #{@tree_arr_len.inspect}
-  -#%p
-  -#  @all_relation_rows_len: #{@all_relation_rows_len.inspect}
-  -#%p
-  -#  @relation_match_arr: #{@relation_match_arr.inspect}
+  %p
+    @@@@profile_searched: #{@profile_searched.inspect}
+  %p
+    @all_relation_rows:  #{@all_relation_rows.inspect}
+  %p
+    @all_relation_rows_len: #{@all_relation_rows_len.inspect}
   -#%p
   -#  LAST @found_trees_hash: #{@found_trees_hash.inspect}
   -#%p
@@ -37,12 +39,13 @@
     %div
       %table
         %tr
-          %th ID Дерева
-          %th ID Профиля
-          %th ID Имени Профиля
-          %th ID Родства: У Профиля
-          %th ID Родственника
-          %th ID Имени Родственника
+          %th ID Автора Дерева
+          %th ID От_Профиля
+          %th ID Имени От_Профиля
+          %th ID Родства: с другим К_Профиля
+          %th ID другого К_Профиля
+          %th ID Имени К_Профиля
+          -#%th Size relation_match_arr
           %th
         - @all_relation_match_arr.each do |tree|
           %tr
@@ -52,22 +55,35 @@
             %td= tree[3]
             %td= tree[4]
             %td= tree[5]
+            -#%td= tree[6]
             %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
   - else
     %h4 No Listing tree - No @all_relation_match_arr!
+  %p
+    @relation_match_arr: #{@relation_match_arr.inspect}
+  %p
+    @relation_match_size: #{@relation_match_size.inspect}
+  %p
+    @tree_number: #{@tree_number.inspect}
+  %p
+    @profile_number: #{@profile_number.inspect}
+  %p
+    @name_number: #{@name_number.inspect}
+  %p
+    @relation_match_arr_5: #{@relation_match_arr_5.inspect}
+  %p
+    @relation_match_arr_size: #{@relation_match_arr_size.inspect}
+  %p
+    @trees_BK_hash: #{@trees_BK_hash.inspect}
+  %p
+    @found_trees_hash: #{@found_trees_hash.inspect}
+  %p
+    @found_profiles_hash: #{@found_profiles_hash.inspect}
 
   -#%p
   -#  @final_merged_hash: #{@final_merged_hash.inspect}
   %p
     @all_match_arr: #{@all_match_arr.inspect}
-  %p
-    @all_relation_rows:  #{@all_relation_rows.inspect}
-  %p
-    @@@@profile_searched: #{@profile_searched.inspect}
-  %p
-    @found_profiles_hash: #{@found_profiles_hash.inspect}
-  %p
-    @found_trees_hash: #{@found_trees_hash.inspect}
   %h4
     Массив всех совпадений родных: @all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
   %h4
