@@ -33,7 +33,7 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
 # jQuert ui lib
-gem "jquery-ui-rails"
+gem 'jquery-ui-rails'
 
 # Обмен переменными Ruby -> JS
 gem 'gon'

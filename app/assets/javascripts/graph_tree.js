@@ -68,7 +68,7 @@
 function reTree(json, params) {
 
     /*
-     * Конвертируем json в объект;
+     * Конвертируем json в объект (если это необходимо);
      *
      * Создаем объект coordinates - все координаты данного класса;
      * Создаем подобъекты в coordinates:
@@ -82,7 +82,7 @@ function reTree(json, params) {
      * Создаем экземпляр класса reKinetic;
      */
 
-    this.obj = eval('(' + json +')');
+    this.obj = json instanceof Object ? json : eval('(' + json +')');
 
     this.coordinates = new Object();
     this.coordinates.config = new Object();
@@ -150,7 +150,8 @@ function reTree(json, params) {
 
     this.roundTree(this.obj);
 
-    this.kinetic.compilation();
+    if (!this.kinetic.params.config.ajax)
+        this.kinetic.compilation();
 
 }
 
@@ -195,28 +196,36 @@ reTree.prototype.constructTree = function (properties) {
      *      муж         ->      7
      *      жена        ->      8
      * }
-     * в зависимости от типа связи рисуем фигуру (круг/прямоугольник), линии (от автора), текст
+     * В зависимости от типа связи рисуем фигуру (круг/прямоугольник), линии (от автора), текст;
+     * Если не хватает одного из основных параметров (имя, тип связи, пол) выходим из функции;
      */
+
+    if (
+        properties.name === '' ||
+        properties.sex_id === '' ||
+        properties.relation_id === ''
+    )
+        return;
 
     switch (properties.relation_id) {
         case 0:                                         // автор
             this.kinetic.drawRect(
                 this.coordinates.author.x,
                 this.coordinates.author.y,
-                this.sexing(properties['sex_id'])
+                this.sexing(properties.sex_id)
             );
             this.kinetic.drawText(
                 this.coordinates.author.x,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.rectangle.width,
-                properties['name'] + ', ' + properties['relation_id']
+                properties.name + ', ' + properties.relation_id
             );
             break;
         case 1:                                         // отец
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter - this.coordinates.parents.xdeviation,
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation,
-                this.sexing(properties['sex_id'])
+                this.sexing(properties.sex_id)
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -230,14 +239,14 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter - this.coordinates.parents.xdeviation - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties['name'] + ', ' + properties['relation_id']
+                properties.name + ', ' + properties.relation_id
             );
             break;
         case 2:                                         // мать
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter + this.coordinates.parents.xdeviation,
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation,
-                this.sexing(properties['sex_id'])
+                this.sexing(properties.sex_id)
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -251,7 +260,7 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter + this.coordinates.parents.xdeviation - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.coordinates.parents.ydeviation - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties['name'] + ', ' + properties['relation_id']
+                properties.name + ', ' + properties.relation_id
             );
             break;
         case 3:                                         // сын
@@ -261,7 +270,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 xcenter,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation,
-                this.sexing(properties['sex_id'])
+                this.sexing(properties.sex_id)
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -281,7 +290,7 @@ reTree.prototype.constructTree = function (properties) {
                 xcenter - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties['name'] + ', ' + properties['relation_id']
+                properties.name + ', ' + properties.relation_id
             );
             this.coordinates.childrens.llvl++;
             if (this.coordinates.childrens.rlvl == 0)
@@ -294,7 +303,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 xcenter,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation,
-                this.sexing(properties['sex_id'])
+                this.sexing(properties.sex_id)
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -314,7 +323,7 @@ reTree.prototype.constructTree = function (properties) {
                 xcenter - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties['name'] + ', ' + properties['relation_id']
+                properties.name + ', ' + properties.relation_id
             );
             this.coordinates.childrens.rlvl++;
             if (this.coordinates.childrens.llvl == 0)
@@ -324,7 +333,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.llvl,
                 this.coordinates.author.ycenter,
-                this.sexing(properties['sex_id'])
+                this.sexing(properties.sex_id)
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -340,7 +349,7 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.llvl - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties['name'] + ', ' + properties['relation_id']
+                properties.name + ', ' + properties.relation_id
             );
             this.coordinates.sibs.llvl++;
             break;
@@ -348,7 +357,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter + this.coordinates.sibs.deviation * this.coordinates.sibs.rlvl,
                 this.coordinates.author.ycenter,
-                this.sexing(properties['sex_id'])
+                this.sexing(properties.sex_id)
             );
             var cLine = new Array();
             cLine[cLine.length] = this.coordinates.author.xcenter;
@@ -364,7 +373,7 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter + this.coordinates.sibs.deviation * this.coordinates.sibs.rlvl - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties['name'] + ', ' + properties['relation_id']
+                properties.name + ', ' + properties.relation_id
             );
             this.coordinates.sibs.rlvl++;
             break;
@@ -372,7 +381,7 @@ reTree.prototype.constructTree = function (properties) {
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter - this.coordinates.couple.deviation,
                 this.coordinates.author.ycenter,
-                this.sexing(properties['sex_id'])
+                this.sexing(properties.sex_id)
             );
             this.coordinates.sibs.llvl++;
             this.coordinates.childrens.direction = -1;
@@ -386,14 +395,14 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter - this.coordinates.couple.deviation - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties['name'] + ', ' + properties['relation_id']
+                properties.name + ', ' + properties.relation_id
             );
             break;
         case 8:                                         // жена
             this.kinetic.drawCircle(
                 this.coordinates.author.xcenter + this.coordinates.couple.deviation,
                 this.coordinates.author.ycenter,
-                this.sexing(properties['sex_id'])
+                this.sexing(properties.sex_id)
             );
             this.coordinates.sibs.rlvl++;
             this.coordinates.childrens.direction = 1;
@@ -407,7 +416,7 @@ reTree.prototype.constructTree = function (properties) {
                 this.coordinates.author.xcenter + this.coordinates.couple.deviation - this.kinetic.params.circle.radius,
                 this.coordinates.author.ycenter - this.kinetic.params.text.fontSize / 2,
                 this.kinetic.params.circle.radius * 2,
-                properties['name'] + ', ' + properties['relation_id']
+                properties.name + ', ' + properties.relation_id
             );
             break;
         default:                                        // ошибка -> выход
@@ -451,7 +460,7 @@ function reKinetic(parameters) {
 
     this.params.config = new Object();              // общие параметры
     this.params.config.ajax = parameters.ajax;
-    this.params.config.max_scale = 50;
+    this.params.config.max_scale = 1;
     this.params.config.min_scale = 250;
 
     /*
@@ -465,6 +474,7 @@ function reKinetic(parameters) {
     this.params.stage.container = parameters.container;
     this.params.stage.width = parameters.width;
     this.params.stage.height = parameters.height;
+    this.params.stage.draggable = parameters.draggable;
 
     this.params.circle = new Object();              // параметры круга
     this.params.circle.radius = this.params.stage.width / this.params.config.scale;
@@ -494,7 +504,7 @@ function reKinetic(parameters) {
         container: this.params.stage.container,
         width: this.params.stage.width ,
         height: this.params.stage.height,
-        draggable: true
+        draggable: this.params.stage.draggable
     });
 
     this.layers = new Object();

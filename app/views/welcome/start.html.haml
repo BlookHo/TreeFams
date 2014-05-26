@@ -5,7 +5,7 @@
       = render "welcome/form/#{current_step}"
     .footer
       - if last_step?
-        "Пока отсанавливаемся тут"
+        "Пока останавливаемся тут"
       - else
         = link_to 'Назад', :previous, class: [:btn], id: :prev
         = submit_tag 'Дальше', class: [:btn, :blue], id: :next
@@ -13,8 +13,19 @@
 
 
 .col_2_2{style:'margin-top:100px;'}
-  -#  временно для жени
-  %h4 Содержание переменной @profiles_json
-  %br
   - @profiles_json = "{'author':#{current_author.to_json.to_s}}"
-  .small= @profiles_json
+
+  #tree_canvas
+
+  %script{ :type => 'text/javascript', :defer => 'defer' }
+    :plain
+      var kinetic = {
+        container: 'tree_canvas',
+        width: 500,
+        height: 300,
+        scale: 20,
+        ajax: false,
+        draggable: false
+      };
+
+      var constructTree = new reTree(#{@profiles_json}, kinetic);
