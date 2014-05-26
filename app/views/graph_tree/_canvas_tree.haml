@@ -1,8 +1,23 @@
-%div{ :id => 'error_output', :height => '100%' }
+%div{ :id => 'error_output' }
 
-%div{ :id => 'tree_canvas', :style => 'border: 1px solid #000;width:1000px;height:1000px;' }
+%div{ :id => 'scale_slider' }
+
+%div{ :id => 'tree_canvas' }
 
 %script{ :type => 'text/javascript', :defer => 'defer' }
   :plain
     var error = document.getElementById('error_output');
     var constructTree = new reTree(error, eval('(#{@profiles_json})'));
+
+    $('#scale_slider').slider({
+      orientation: 'vertical',
+      range: 'center',
+      min: 0.5,
+      max: 1.5,
+      step: 0.01,
+      value: 1,
+      slide:
+        function(event, ui) {
+          constructTree.scale(ui.value);
+        }
+    });

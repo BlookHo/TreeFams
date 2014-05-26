@@ -16,4 +16,5 @@
 //= require bootstrap/modal
 //= require bootstrap/button
 //= require bootstrap/dropdown
+//= require jquery.ui.all
 //= require_tree .
