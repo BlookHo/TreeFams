@@ -99,7 +99,8 @@ Weafam::Application.routes.draw do
   # Landing & start singup
   get   'welcome/start',             to: 'welcome#start',        as: :start
   post  'welcome/start/proceed',     to: 'welcome#proceed',      as: :proceed_start
-  get   'welcome/start/step/:step',  to: 'welcome#go_to_step',   as: :go_to_start_step
+  # get   'welcome/start/step/:step',  to: 'welcome#go_to_step',   as: :go_to_start_step
+  get   'welcome/start/step/previous',   to: 'welcome#previous',        as: :previous
 
 
   root  'welcome#index'

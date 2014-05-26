@@ -1,130 +1,99 @@
 class WelcomeController < ApplicationController
 
   helper_method :current_step,
+                :current_author,
                 :steps,
                 :next_step,
                 :prev_step,
-                :names,
-                :current_circle,
-                :'first_step?',
-                :'last_step?',
-                :'errors?',
-                :errors
+                :first_step?,
+                :last_step?
 
-  before_filter :collect_names, except: :index
+  # Small fix for development enveronment
+  before_filter do
+    Member if Rails.env == 'development'
+  end
 
   # Landing page
   def index
     session[:current_step] = nil
-    session[:current_circle] = nil
+    session[:current_author] = nil
   end
 
-  # Форма регистрации
+  # Singup form
   def start
   end
 
-  # Обработка формы
+  # Form action
   def proceed
-    # validate_step
-    merge_data(params[:circle])
-    if step_is_valid?
-      session[:current_step] = next_step
-    end
+    proceed_data
+    session[:current_step] = next_step if step_valid?
     render :start
   end
 
-  # Переход на шаг формы
-  def go_to_step
-    steps.include? params[:step] ? (session[:current_step] = params[:step]) : current_step
+  def previous
+    session[:current_step] = prev_step unless first_step?
     render :start
   end
 
 
   private
 
-  # validation methods
-  def step_is_valid?
-    if is_required_step? and name_present? and name_valid?
-       clear_errors
-       return true
-    else
-      return false
+  def step_valid?
+     first_step? ? validate_member(current_author) : validate_family
+  end
+
+  # def validate_author
+  #   if current_author.valid?
+  #     current_author.errors.clear
+  #     session[:current_author] = current_author
+  #     return true
+  #   else
+  #     session[:current_author] = current_author
+  #     return false
+  #   end
+  # end
+
+  def validate_family
+    eval("current_author.family.#{current_step}").each do |member|
+      validate_member(member)
     end
   end
 
-  def name_present?
-    if current_circle.send(current_step.to_sym).blank?
-      add_error(name: "blank_name", message: "Нужно указать имя")
-      return false
-    else
+
+  def validate_member(member)
+    if member.valid?
+      member.errors.clear
+      session[:current_author] = current_author
       return true
-    end
-  end
-
-  def name_valid?
-    name = Name.where(name: current_circle.send(current_step.to_sym)).first
-    if !name
-      logger.info "= Parse sex: ============ #{parse_sex}"
-      new_name = Name.new(name: current_circle.send(current_step.to_sym), only_male: parse_sex)
-      if new_name.save
-        return true
-      else
-        add_error(name: "invalid_name", message: "Вы указали новое имя, пожалуйста, уточните пол")
-        return false
-      end
     else
-      return true
-    end
-  end
-
-
-  def parse_sex
-    if params[:circle][:author_sex] == "male"
-        return true
-    elsif params[:circle][:author_sex] == "female"
+      session[:current_author] = current_author
       return false
-    else
-      return nil
     end
   end
 
-
-  def errors?
-    current_circle.errors
-  end
-  alias :errors :'errors?'
-
-
-  def add_error(error)
-    merge_data({errors: error})
+  def proceed_data
+    first_step? ? proceed_author : proceed_family
   end
 
-
-  def clear_errors
-    logger.info "==== Errors: #{current_circle.errors}"
-    @current_circle.errors = nil
+  def proceed_author
+    current_author.name = params[:author][:name]
+    session[:current_author] = current_author
   end
 
-  # Current welcome form data
-  def current_circle
-    if session[:current_circle]
-      @current_circle = Hashie::Mash.new session[:current_circle]
-    else
-      @current_circle = Hashie::Mash.new
+  def proceed_family
+    members = params[:author][current_step.to_sym]
+    members.each do |member|
+      current_author.add_member( eval "#{current_step.singularize.capitalize}.new(name: member[:name])" )
     end
+    session[:current_author] = current_author
   end
 
-  def merge_data(data)
-    session[:current_circle] = current_circle.merge data
+  def current_author
+    @current_author ||= session[:current_author] || Author.new
   end
 
-  # Form steps methods
   def current_step
-    if session[:current_step]
-      @current_step = session[:current_step]
-    else
-      @current_step = steps.first
-    end
+    @current_step = session[:current_step] || steps.first
   end
 
   def next_step
@@ -136,15 +105,21 @@ class WelcomeController < ApplicationController
   end
 
   def steps
-    %w[author mother father have_brothers brothers have_sisters sisters have_couple couple have_children have_sons sons have_daughter daughter email]
-  end
-
-  def required_steps
-    %w[author mother father]
-  end
-
-  def is_required_step?
-    required_steps.include? current_step
+    %w[author
+       fathers
+       mothers
+       have_brothers
+       brothers
+       have_sisters
+       sisters
+       have_couple
+       couple
+       have_children
+       have_sons
+       sons
+       have_daughter
+       daughter
+       email]
   end
 
   def first_step?
@@ -154,16 +129,5 @@ class WelcomeController < ApplicationController
   def last_step?
     steps.last == current_step
   end
-
-  def collect_names
-    @names = []
-    @names_male = []
-    @names_female = []
-    Name.all.each do |name|
-      @names << name.name
-      name.only_male ? @names_male << name.name : @names_female << name.name
-    end
-  end
-
 
 end

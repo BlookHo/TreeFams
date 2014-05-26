@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+ source 'https://rubygems.org'
 ruby '2.1.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -79,6 +79,9 @@ group :development, :test do
   gem 'capybara'
   #gem "watir-rspec"
 end
+
+# Disable assets logging in production
+gem 'quiet_assets', :group => :development
 
 gem 'devise', github: 'plataformatec/devise'
 

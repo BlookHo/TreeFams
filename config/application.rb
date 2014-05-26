@@ -35,6 +35,11 @@ module Weafam
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+
+    # Load abstract class in rails_root/app/models
+    config.autoload_paths += Dir[Rails.root.join('app', 'models', 'abstracts')]
+
+
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
@@ -70,10 +75,13 @@ module Weafam
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    #чтобы fontAwesome также был в assets
-#    config.assets.paths << Rails.root.join("app", "assets", "fonts")
+    # чтобы fontAwesome также был в assets
+    # config.assets.paths << Rails.root.join("app", "assets", "fonts")
     config.assets.paths << Rails.root.join('app', 'assets', 'fonts', 'sounds')
     config.assets.precompile += %w( .svg .eot .woff .ttf)
+
+    # Не показывать логи assets в development
+    config.quiet_assets = true
 
     ## For Devise
     #config.assets.initialize_on_precompile = false
@@ -82,7 +90,7 @@ module Weafam
     config.session_store :redis_store
 
 
-    #роуты для ошибок
+    # роуты для ошибок
     config.exceptions_app = self.routes
 
 

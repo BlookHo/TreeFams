@@ -1,8 +1,0 @@
-%h2 Как зовут вашу маму?
-
-- if errors?
-  .errors= errors.message
-
-.control
-  = text_field_tag "circle[mother]", current_circle.mother, class: :autocomplete_field_names_female, placeholder: "Имя матери...", data:{names: @names_female}
-  .help-text Официальное имя, как в паспорте

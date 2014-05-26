@@ -1,0 +1,6 @@
+%h2 Как зовут вашу маму?
+
+
+.control
+  = text_field_tag "author[mothers][][name]", '', class: :autocomplete_field_names_female, placeholder: "Имя матери...", data:{names: @names_female}
+  .help-text Официальное имя, как в паспорте

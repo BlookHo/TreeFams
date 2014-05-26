@@ -1,28 +1,12 @@
 initAutocompleteFields = ()->
-  $('.autocomplete_field_names').autocomplete
+  $('.autocomplete_field').autocomplete
     source: (request, response) ->
-      names = $('.autocomplete_field_names').first().data('names')
+      names = $('.autocomplete_field').first().data('names')
       matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
       response( $.grep( names, (item) ->
               return matcher.test( item )
       ))
 
-  $('.autocomplete_field_names_male').autocomplete
-    source: (request, response) ->
-      names = $('.autocomplete_field_names_male').first().data('names')
-      matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
-      response( $.grep( names, (item) ->
-              return matcher.test( item )
-      ))
-
-
-  $('.autocomplete_field_names_female').autocomplete
-    source: (request, response) ->
-      names = $('.autocomplete_field_names_female').first().data('names')
-      matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
-      response( $.grep( names, (item) ->
-              return matcher.test( item )
-      ))
 
 
 
