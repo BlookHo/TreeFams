@@ -1,11 +1,15 @@
 %h2 Как зовут вашего отца?
 
+-# default start form
 - if current_author.family.fathers.empty?
   .control
     = text_field_tag "author[fathers][][name]", '', class: :autocomplete_field, placeholder: "Имя отца...", data:{names: Name.approved.male.map{|n| n.name}}
     .help-text Официальное имя, как в паспорте
 
+
 - current_author.family.fathers.each do |father|
+  = render 'welcome/form/member_error', objekt: father
+  
   .control
     = text_field_tag "author[fathers][][name]", father.name, class: :autocomplete_field, placeholder: "Имя отца...", data:{names: Name.approved.male.map{|n| n.name}}
     .help-text Официальное имя, как в паспорте

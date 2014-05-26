@@ -1,9 +1,18 @@
 #welcome-form.col_1_2
   = render 'breadcrumb'
-  = current_author.to_json
   = form_tag :proceed_start, remote: false, id: 'welcome_form' do
     .body
       = render "welcome/form/#{current_step}"
     .footer
-      = link_to 'Назад', :previous, class: [:btn], id: :prev
-      = submit_tag 'Дальше', class: [:btn, :blue], id: :next
+      - if last_step?
+        "Пока отсанавливаемся тут"
+      - else
+        = link_to 'Назад', :previous, class: [:btn], id: :prev
+        = submit_tag 'Дальше', class: [:btn, :blue], id: :next
+
+
+
+.col_2_2{style:'margin-top:100px;'}
+  %h4 Содержание переменной @profiles_json
+  %br
+  .small= JSON.pretty_generate(current_author)

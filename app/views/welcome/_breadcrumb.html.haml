@@ -1,7 +1,7 @@
 %ul#progrees-bar
   %li{class: ('active' if current_step =~ /author/)} 1
   %li{class: ('active' if current_step =~ /mothers|fathers/)} 2
-  %li{class: ('active' if ['brothers', 'sisters', 'have_brothers', 'have_sisters'].include? current_step)} 3
-  %li{class: ('active' if ['have_couple', 'couple'].include? current_step)} 4
-  %li{class: ('active' if ['have_children', 'have_sons', 'sons', 'have_daughter', 'daughter'].include? current_step)} 5
+  %li{class: ('active' if current_step =~ /brothers|sisters|have_brothers|have_sisters/)} 3
+  %li{class: ('active' if current_step =~ /have_couple|couple/)} 4
+  %li{class: ('active' if current_step =~ /have_children|have_sons|sons|have_daughter|daughter/)} 5
   %li.stretch

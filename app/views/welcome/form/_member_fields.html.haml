@@ -1,12 +1,10 @@
-%h2 Как зовут брата?
-
-- if current_author.family.brothers.empty?
+-# default start form
+- if eval("current_author.family.#{current_step}.empty?")
   .control
-    = text_field_tag "author[brothers][][name]", '', class: :autocomplete_field, placeholder: "Имя брата...", data:{names: Name.approved.male.map{|n| n.name}}
+    = text_field_tag "author[#{current_step}][][name]", '', class: :autocomplete_field, placeholder: "Имя брата...", data:{names: Name.approved.male.map{|n| n.name}}
     .help-text Официальное имя, как в паспорте
 
-
-- current_author.family.brothers.each do |brother|
+- eval("current_author.family.#{current_step}").each do |brother|
   = render 'welcome/form/member_error', objekt: brother
 
   .control

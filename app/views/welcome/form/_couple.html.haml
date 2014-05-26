@@ -1,4 +1,33 @@
-%h2 Как зовут вашего супруга?
+- if current_author.male?
+  %h2 Как зовут вашу жену?
+- else
+  %h2 Как зовут вашего супруга?
 
-.control
-  = text_field_tag "circle[couple]", current_circle.couple, class: :autocomplete_field_names, placeholder: "Введите имя...", data:{names: @names}
+
+- if current_author.male?
+  -# Жена
+  - if current_author.family.wives.empty?
+    .control
+      = text_field_tag "author[wives][][name]", '', class: :autocomplete_field, placeholder: "Имя жены...", data:{names: Name.approved.female.map{|n| n.name}}
+      .help-text Официальное имя, как в паспорте
+
+
+  - current_author.family.wives.each do |wife|
+    = render 'welcome/form/member_error', objekt: wife
+    .control
+      = text_field_tag "author[wives][][name]", wife.name, class: :autocomplete_field, placeholder: "Имя жены...", data:{names: Name.approved.female.map{|n| n.name}}
+      .help-text Официальное имя, как в паспорте
+
+- else
+  -# Муж
+  - if current_author.family.husbands.empty?
+    .control
+      = text_field_tag "author[husbands][][name]", '', class: :autocomplete_field, placeholder: "Имя жены...", data:{names: Name.approved.female.map{|n| n.name}}
+      .help-text Официальное имя, как в паспорте
+
+
+  - current_author.family.husbands.each do |husband|
+    = render 'welcome/form/member_error', objekt: husband
+    .control
+      = text_field_tag "author[husbands][][name]", husband.name, class: :autocomplete_field, placeholder: "Имя жены...", data:{names: Name.approved.female.map{|n| n.name}}
+      .help-text Официальное имя, как в паспорте

@@ -23,6 +23,6 @@ class Name < ActiveRecord::Base
   scope :female, -> { where(sex_id: 0).where.not(name: "Не известно") }
 
   # Женский, включает имя "не известно"
-  scope :female_ext, -> { where(sex_id: 0) }
+  scope :female_extended, -> { where(sex_id: 0) }
 
 end
