@@ -106,6 +106,7 @@ class WelcomeController < ApplicationController
 
   def current_author
     @current_author ||= session[:current_author] || Author.new
+    @current_author
   end
 
   def current_step

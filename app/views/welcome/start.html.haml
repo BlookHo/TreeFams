@@ -13,6 +13,8 @@
 
 
 .col_2_2{style:'margin-top:100px;'}
+  -#  временно для жени
   %h4 Содержание переменной @profiles_json
   %br
-  .small= JSON.pretty_generate(current_author)
+  - @profiles_json = "{'author':#{current_author.to_json.to_s}}"
+  .small= @profiles_json
