@@ -65,10 +65,24 @@
  *  constructTree       - построение древа;
  */
 
-function reTree(out, obj) {
+function reTree(json, params) {
 
-    this.out = out;
-    this.obj = obj;
+    /*
+     * Конвертируем json в объект;
+     *
+     * Создаем объект coordinates - все координаты данного класса;
+     * Создаем подобъекты в coordinates:
+     *      config      - общие,
+     *      author      - автора,
+     *      parents     - родителей,
+     *      couple      - мужа и жены,
+     *      sibs        - братьев и сестер,
+     *      childrens   - детей
+     *
+     * Создаем экземпляр класса reKinetic;
+     */
+
+    this.obj = eval('(' + json +')');
 
     this.coordinates = new Object();
     this.coordinates.config = new Object();
@@ -78,7 +92,7 @@ function reTree(out, obj) {
     this.coordinates.sibs = new Object();
     this.coordinates.childrens = new Object();
 
-    this.kinetic = new reKinetic('tree_canvas', 1000, 1000, 50, false);
+    this.kinetic = new reKinetic(params);
 
    /*
     * config.devscale       - масштаб (конастанта) расположения элементов древа относительно друг-друга;
@@ -184,7 +198,7 @@ reTree.prototype.constructTree = function (properties) {
      * в зависимости от типа связи рисуем фигуру (круг/прямоугольник), линии (от автора), текст
      */
 
-    switch (properties['relation_id']) {
+    switch (properties.relation_id) {
         case 0:                                         // автор
             this.kinetic.drawRect(
                 this.coordinates.author.x,
@@ -431,35 +445,35 @@ reTree.prototype.roundTree = function (object) {
  *  compilation     - отрисовываем все фигуры на холсте;
  */
 
-function reKinetic(stageContainer, stageWidth, stageHeight, scale, ajax) {
+function reKinetic(parameters) {
 
     this.params = new Object();
 
     this.params.config = new Object();              // общие параметры
-    this.params.config.ajax = ajax;
+    this.params.config.ajax = parameters.ajax;
     this.params.config.max_scale = 50;
     this.params.config.min_scale = 250;
 
     /*
-     * Если мастшаб (scale) больше (меньше как число) максимального (this.params.config.max_scale), тогда используем максимальный
-     * Если мастшаб (scale) меньше (больше как число) минимального (this.params.config.min_scale), тогда используем минимальный
+     * Если мастшаб (parameters.scale) больше (меньше как число) максимального (this.params.config.max_scale), тогда используем максимальный
+     * Если мастшаб (parameters.scale) меньше (больше как число) минимального (this.params.config.min_scale), тогда используем минимальный
      */
 
-    this.params.config.scale = scale < this.params.config.max_scale ? this.params.config.max_scale : scale > this.params.config.min_scale ? this.params.config.min_scale : scale;
+    this.params.config.scale = parameters.scale < this.params.config.max_scale ? this.params.config.max_scale : parameters.scale > this.params.config.min_scale ? this.params.config.min_scale : parameters.scale;
 
     this.params.stage = new Object();               // параметры холста
-    this.params.stage.container = stageContainer;
-    this.params.stage.width = stageWidth;
-    this.params.stage.height = stageHeight;
+    this.params.stage.container = parameters.container;
+    this.params.stage.width = parameters.width;
+    this.params.stage.height = parameters.height;
 
     this.params.circle = new Object();              // параметры круга
-    this.params.circle.radius = stageWidth / this.params.config.scale;
+    this.params.circle.radius = this.params.stage.width / this.params.config.scale;
     this.params.circle.stroke = '#333';
     this.params.circle.strokeWidth = 1;
 
     this.params.rectangle = new Object();           // параметры прямоугольника
-    this.params.rectangle.width = stageWidth / (this.params.config.scale / 4);
-    this.params.rectangle.height = stageWidth / (this.params.config.scale / 2);
+    this.params.rectangle.width = this.params.stage.width / (this.params.config.scale / 4);
+    this.params.rectangle.height = this.params.stage.width / (this.params.config.scale / 2);
     this.params.rectangle.stroke = '#900';
     this.params.rectangle.strokeWidth = 2;
 
@@ -470,7 +484,7 @@ function reKinetic(stageContainer, stageWidth, stageHeight, scale, ajax) {
     this.params.line.lineJoin = 'round';
 
     this.params.text = new Object();                // параметры текста
-    this.params.text.fontSize = (stageWidth / 1.5) / this.params.config.scale;
+    this.params.text.fontSize = (this.params.stage.width / 1.5) / this.params.config.scale;
     this.params.text.fontFamily = 'Tahoma';
     this.params.text.align = 'center';
     this.params.text.fill = '#000';
