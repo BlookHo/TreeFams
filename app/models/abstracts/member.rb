@@ -139,6 +139,10 @@ class Mother < Member
   def self.sex_id
     0
   end
+
+  def self.allow_multiple?
+    false
+  end
 end
 
 class Son < Member
@@ -148,6 +152,10 @@ class Son < Member
   # Class methods
   def self.sex_id
     1
+  end
+
+  def self.allow_multiple?
+    true
   end
 end
 
@@ -159,6 +167,10 @@ class Daughter < Member
   def self.sex_id
     0
   end
+
+  def self.allow_multiple?
+    true
+  end
 end
 
 class Brother < Member
@@ -169,6 +181,10 @@ class Brother < Member
   def self.sex_id
     1
   end
+
+  def self.allow_multiple?
+    true
+  end
 end
 
 class Sister < Member
@@ -178,6 +194,10 @@ class Sister < Member
   # Class methods
   def self.sex_id
     0
+  end
+
+  def self.allow_multiple?
+    true
   end
 end
 
@@ -190,6 +210,10 @@ class Husband < Member
   def self.sex_id
     1
   end
+
+  def self.allow_multiple?
+    false
+  end
 end
 
 
@@ -200,5 +224,9 @@ class Wife < Member
   # Class methods
   def self.sex_id
     0
+  end
+
+  def self.allow_multiple?
+    false
   end
 end

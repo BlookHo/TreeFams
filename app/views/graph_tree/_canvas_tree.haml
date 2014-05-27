@@ -1,8 +1,8 @@
-%div{ :id => 'error_output' }
+#error_output
 
-%div{ :id => 'scale_slider' }
+#tree_canvas
 
-%div{ :id => 'tree_canvas' }
+#scale_slider
 
 %script{ :type => 'text/javascript', :defer => 'defer' }
   :plain
@@ -13,7 +13,8 @@
       width: 1000,
       height: 1000,
       scale: 50,
-      ajax: false
+      ajax: false,
+      draggable: true
     };
 
     var constructTree = new reTree('#{@profiles_json}', kinetic);
