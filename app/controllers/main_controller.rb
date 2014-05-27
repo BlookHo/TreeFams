@@ -298,15 +298,18 @@ class MainController < ApplicationController
       #@profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
     end
 
-    @profile_name = params[:profile_name_select] #
-    if !@profile_name.blank?
-      @profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
+    @new_profile_name = params[:profile_name_select] #
+    if !@new_profile_name.blank?
+      @new_profile_sex = check_sex_by_name(@new_profile_name) # display sex by name = извлечение пола из введенного имени
     end
 
-    @profile_relation = params[:relation_number] #
-    if !@profile_relation.blank?
+    @new_profile_relation = params[:relation_number] #
+    if !@new_profile_relation.blank?
       #@profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
     end
+
+    # Новый profile_id
+
 
 #    new_profile = Profile.new
 #    new_profile.user_id = current_user.id  # user_id - берем после регистрации
@@ -321,6 +324,27 @@ class MainController < ApplicationController
 #
 #    @new_profile_id = new_profile.id             # profile_id
 #
+
+
+
+     # Дополнение в ProfileKey
+
+     #profiles_tree_arr =
+     #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
+     #     [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
+     #     [ 22, 506, "Татьяна", 0, 5, 25, 97, "Денис", true],
+     #     [ 22, 506, "Татьяна", 0, 6, 26, 453, "Мария", true]
+     #   Это - тест для поиска вне БК
+     # к Денису - добавляем новый профиль: Жену Виктория
+     #         [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false],
+     # к Денису - добавляем новый профиль: Дочь Анна
+     #        [81, 25, 97, "Денис", 1, 4, 85, 352, "Анна", false]
+     # к Денису - меняем новый профиль: Дочь Елена
+     #       ,[81, 25, 97, "Денис", 1, 4, 85, 395, "Елена", false]
+
+     #        ]
+
+
 #
 #    new_ProfileKeys_arr = []
 #    add_profile_name_id = Profile
@@ -346,6 +370,20 @@ class MainController < ApplicationController
 #    new_profile_key_row.is_name_id = is_name_id                              # is_name_id
 #
 #    new_profile_key_row.save
+
+
+
+# Дополнение в Tree
+
+#tree_arr =
+#    [[4, 22, 506, 0, 22, 506, 0, false]]
+
+#[4, 22, 506, 1, 23, 45, 1, false],
+
+# при этом, при вводе нового профиля: Денису добавляем Жену Викторию
+# в табл. Tree записываем old_profile_id  has  relation_id  is  new_profile_id.
+# т.е.  () Муж Денис имеет жену Викторию- это и записываем в profiles_tree_arr.
+
 
 
   end
