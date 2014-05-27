@@ -17,15 +17,15 @@
 .col_2_2{style:'margin-top:100px;'}
   - @profiles_json = "{'author':#{current_author.to_json.to_s}}"
 
-  #tree_canvas
+  #tree_canvas_start
 
   %script{ :type => 'text/javascript', :defer => 'defer' }
     :plain
       var kinetic = {
-        container: 'tree_canvas',
+        container: 'tree_canvas_start',
         width: 500,
-        height: 300,
-        scale: 20,
+        height: 500,
+        scale: 25,
         ajax: false,
         draggable: false
       };
