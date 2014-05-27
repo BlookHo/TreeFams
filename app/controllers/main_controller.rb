@@ -14,13 +14,21 @@ class MainController < ApplicationController
 # [22, 506, "Татьяна", 0, 5, 25, 97, "Денис"],
 # [22, 506, "Татьяна", 0, 6, 26, 453, "Мария"]]
 #tree_arr =
-##  [[4, 22, 506, 0, 22, 506, 0, false]]
+#    [[4, 22, 506, 0, 22, 506, 0, false]]
+
+     #[4, 22, 506, 1, 23, 45, 1, false],
+     #[4, 22, 506, 2, 24, 453, 0, false],
+     #[4, 22, 506, 5, 25, 97, 1, false],
+     #[4, 22, 506, 6, 26, 453, 0, false]]
+
+     ##  [[4, 22, 506, 0, 22, 506, 0, false]]
 #    [[3, 15, 45, 0, 15, 45, 1, false]]
      #   [4, 22, 506, 1, 23, 45, 1, false],
 #    [[7, 40, 45, 0, 40, 45, 1, false]]
     #   [4, 22, 506, 2, 24, 453, 0, false],
-#   [[11, 69, 265, 0, 69, 265, 1, false]]
-    #   [4, 22, 506, 5, 25, 97, 1, false],
+   #[[11, 69, 265, 0, 69, 265, 1, false], # Сергей
+   # [11, 69, 265, 1, 70, 123, 1, false]] # Иван
+        #   [4, 22, 506, 5, 25, 97, 1, false],
 #   [4, 22, 506, 6, 26, 453, 0, false],
 #   [4, 25, 97, 8, 84, 371, 0, false]]
 
@@ -85,32 +93,22 @@ class MainController < ApplicationController
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
   # На выходе: @all_match_arr по данному виду родства
- def get_relation_match(profile_id_searched)
+ def get_relation_match(profile_id_searched, relation_id_searched)
 
-   @tmp_hash = Hash.new     #
-   @rez_hash = Hash.new     #
-   trees_BK_hash = Hash.new     #
    found_trees_hash = Hash.new     #
    found_profiles_hash = Hash.new  #
    all_relation_match_arr = []     #
 
-   all_relation_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id)
+   all_profile_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id)
    # поиск массива записей ближнего круга для Юзера
 
    @profile_searched = profile_id_searched   # DEBUGG TO VIEW
-   if !all_relation_rows.blank?
-     @all_relation_rows_len = all_relation_rows.length if !all_relation_rows.blank? # DEBUGG TO VIEW
-     all_relation_rows.each do |relation_row|
+   @relation_searched = relation_id_searched   # DEBUGG TO VIEW
+   if !all_profile_rows.blank?
+     @all_profile_rows_len = all_profile_rows.length if !all_profile_rows.blank? # DEBUGG TO VIEW
+     all_profile_rows.each do |relation_row|
         relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => relation_row.name_id).where(:relation_id => relation_row.relation_id).where(:is_name_id => relation_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-        #@relation_match_size = relation_match_arr.size
         if !relation_match_arr.blank?
-          #@tree_number = relation_match_arr[0].user_id
-          #@profile_number = relation_match_arr[0].profile_id
-          #@name_number = relation_match_arr[0].name_id
-          #@relation_match_arr_5 = ProfileKey.where(:user_id => 5).where(:name_id => relation_match_arr[0].name_id).count
-          #@relation_match_arr_size = ProfileKey.where(:user_id => relation_match_arr[0].user_id).where(:name_id => relation_match_arr[0].name_id).where(:profile_id => relation_match_arr[0].profile_id).count
-          #trees_BK_hash.merge!({relation_match_arr[0].user_id  => @relation_match_arr_size}) if !@relation_match_arr_size.blank?  #  наполнение хэша максимальными кол-вами строк БК
-
           row_arr = []
           relation_match_arr.each do |tree_row|
             row_arr[0] = tree_row.user_id              # ID Автора
@@ -125,36 +123,34 @@ class MainController < ApplicationController
 
             fill_hash(found_trees_hash, tree_row.user_id) # наполнение хэша найденными user_id = trees и частотой их обнаружения
             found_profiles_hash.merge!({tree_row.user_id  => tree_row.profile_id}) # наполнение хэша найденными profile_id
-
           end
-
           @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
-
         end
-
-        #@tmp_hash = two_hashes_check(trees_BK_hash, found_trees_hash)
-        #@rez_hash.merge!(@tmp_hash) # наполнение хэша найденными profile_id
-
      end
 
-#     found_trees_hash.delete_if {|key, value| value < all_relation_rows.length } # Исключение из результатов поиска
-     # тех user_id, по которым не все запросы дали результат внутри Ближнего круга
+     if relation_id_searched != 0 # Для всех профилей, кот-е не явл. current_user
+       found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length }  # Исключение из результатов поиска
+     else
+       found_trees_hash.delete_if {|key, value|  value <= 2 }  # 2 = НАСТРОЙКА!!
+       # Исключение из результатов поиска групп с малым кол-вом совпадений - ТОЛЬКО для current_user!
+     end
+     # Исключение тех user_id, по которым не все запросы дали результат внутри Ближнего круга
      # Остаются те user_id, в которых найдены совпавшие профили.
-     # На выходе ХЭШ: {user_id  => кол-во успешных поисков } - должно быть равно длине массива
+     # На выходе ХЭШ: {user_id  => кол-во успешных поисков } - должно быть равно (не меньше) длине массива
      # всех видов отношений в блжнем круге для разыскиваемого профиля.
-#     found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
+     found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
      # те user_id, которые удалены из хэша деревьев
      # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
-
    end
+
+   ##### результаты поиска
    @all_match_trees_arr << found_trees_hash if !found_trees_hash.blank? # Заполнение выходного массива хэшей
-   @all_match_arr << found_profiles_hash if !found_profiles_hash.blank? # Заполнение выходного массива хэшей
+   @all_match_profiles_arr << found_profiles_hash if !found_profiles_hash.blank? # Заполнение выходного массива хэшей
+   #####
 
-
-   @trees_BK_hash = trees_BK_hash # DEBUGG TO VIEW
    @found_profiles_hash = found_profiles_hash # DEBUGG TO VIEW
    @found_trees_hash = found_trees_hash # DEBUGG TO VIEW
-   @all_relation_rows = all_relation_rows   # DEBUGG TO VIEW
+   @all_profile_rows = all_profile_rows   # DEBUGG TO VIEW
    @all_relation_match_arr = all_relation_match_arr   ## DEBUGG TO VIEW
 
  end
@@ -166,6 +162,7 @@ class MainController < ApplicationController
   def search_profiles_tree_match
 
     tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
+
     #profiles_tree_arr =
     #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
     #     [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
@@ -190,17 +187,21 @@ class MainController < ApplicationController
     @tree_arr = tree_arr    # DEBUGG TO VIEW
     @tree_arr_len = tree_arr.length  # DEBUGG TO VIEW
 
-    @all_match_trees_arr = []
-    @all_match_arr = []                               # Массив совпадений всех родных с Автором
+    ##### Будущие результаты поиска
+    @all_match_trees_arr = []     # Массив совпадений деревьев
+    @all_match_profiles_arr = []  # Массив совпадений профилей
+    #####
+
     if !tree_arr.blank?
       for tree_index in 0 .. tree_arr.length-1
         profile_id_searched = tree_arr[tree_index][4] # Поиск по ID К_Профиля
-        get_relation_match(profile_id_searched)       # На выходе: @all_match_arr по данному дереву
+        relation_id_searched = tree_arr[tree_index][3] # relation_id К_Профиля
+        get_relation_match(profile_id_searched, relation_id_searched)       # На выходе: @all_match_arr по данному дереву
       end
     end
 
-    @all_match_hash = Hash.new                        # Вычисляется в join_arr_of_hashes
-    join_arr_of_hashes(@all_match_arr) if !@all_match_arr.blank?  # Если найдены совпадения - в @all_match_arr
+    @all_match_hash = Hash.new      # Вычисляется в join_arr_of_hashes
+    join_arr_of_hashes(@all_match_profiles_arr) if !@all_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
 
     @match_hash_key_arr = @all_match_hash.keys
     @match_hash_val_arr = @all_match_hash.values
