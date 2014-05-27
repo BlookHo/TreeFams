@@ -22,7 +22,8 @@ class MainController < ApplicationController
      #[4, 22, 506, 6, 26, 453, 0, false]]
 
      ##  [[4, 22, 506, 0, 22, 506, 0, false]]
-#    [[3, 15, 45, 0, 15, 45, 1, false]]
+#    [[2, 7, 97, 0, 7, 97, 1, false]]
+      #  [[3, 15, 45, 0, 15, 45, 1, false]]
      #   [4, 22, 506, 1, 23, 45, 1, false],
 #    [[7, 40, 45, 0, 40, 45, 1, false]]
     #   [4, 22, 506, 2, 24, 453, 0, false],
@@ -71,21 +72,17 @@ class MainController < ApplicationController
  def main_page
 
     if user_signed_in?
-
       get_user_tree # Получение массива дерева текущего Юзера из Tree
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
-      search_profiles_tree_match    # Основной поиск по дереву Автора - Юзера
-                                    # среди деревьев в таблице ProfileKeys.
+      search_profiles_tree_match    # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
 
       end_search_time = Time.now   # Конец отсечки времени поиска
       @elapsed_search_time = (end_search_time - beg_search_time).round(5)
-
     end
 
  end
-
 
   # Поиск совпадений для одного из профилей БК current_user
   # Берем параметр: profile_id из массива  = profiles_tree_arr[tree_index][6].
@@ -95,7 +92,7 @@ class MainController < ApplicationController
   # На выходе: @all_match_arr по данному виду родства
  def get_relation_match(profile_id_searched, relation_id_searched)
 
-   found_trees_hash = Hash.new     #
+   found_trees_hash = Hash.new     #{ 0 => []}
    found_profiles_hash = Hash.new  #
    all_relation_match_arr = []     #
 
@@ -122,7 +119,7 @@ class MainController < ApplicationController
             row_arr = []
 
             fill_hash(found_trees_hash, tree_row.user_id) # наполнение хэша найденными user_id = trees и частотой их обнаружения
-            found_profiles_hash.merge!({tree_row.user_id  => tree_row.profile_id}) # наполнение хэша найденными profile_id
+            found_profiles_hash.merge!({tree_row.user_id  => [tree_row.profile_id]}) # наполнение хэша найденными profile_id
           end
           @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
         end
@@ -200,26 +197,15 @@ class MainController < ApplicationController
       end
     end
 
-    @all_match_hash = Hash.new      # Вычисляется в join_arr_of_hashes
-    join_arr_of_hashes(@all_match_profiles_arr) if !@all_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
+    all_match_hash = join_arr_of_hashes(@all_match_profiles_arr) if !@all_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
 
-    @match_hash_key_arr = @all_match_hash.keys
-    @match_hash_val_arr = @all_match_hash.values
-    ind = 0
-    @match_hash_key_arr.each do |tree|
+    @all_match_arr_sorted = Hash[all_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
 
-#      @relation_match_arr_size = ProfileKey.where(:user_id => tree).where(:name_id => relation_match_arr[0].name_id).where(:profile_id => relation_match_arr[0].profile_id).count
+    @user_ids_arr = @all_match_arr_sorted.keys  # TO VIEW
+    @profile_ids_arr = @all_match_arr_sorted.values.flatten # TO VIEW
+    @amount_of_profiles = @profile_ids_arr.size if !@profile_ids_arr.blank? # TO VIEW
 
-
-
-    end
-    # TODO: РЕЗУЛЬТАТЫ ПОИСКА УПОРЯДОЧИТЬ ПО КОЛ-ВУ СОВПАВШИХ ПРОФИЛЕЙ В ДЕРЕВЬЯХ!
-
-    @user_ids_arr = @all_match_hash.keys
-    @profile_ids_arr = @all_match_hash.values.flatten
-    @amount_of_profiles = @profile_ids_arr.size if !@profile_ids_arr.blank?
-
-    count_users_found(@profile_ids_arr)
+    count_users_found(@profile_ids_arr) # TO VIEW
 
   end
 
@@ -236,7 +222,8 @@ class MainController < ApplicationController
       merged_hash = final_merged_hash.merge(next_hash){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
       final_merged_hash = merged_hash
     end
-    @all_match_hash = final_merged_hash
+    #@all_match_hash = final_merged_hash  # DEBUGG TO VIEW
+    return final_merged_hash
   end
 
   # Подсчет количества найденных Юзеров среди найденных Профилей
@@ -247,12 +234,12 @@ class MainController < ApplicationController
   # @see News
   def count_users_found(all_profiles_arr)
     @count = 0
-    @users_id_arr = []
+    @users_ids_arr = []
     for ind in 0 .. all_profiles_arr.length - 1
       user_found_id = User.find_by_profile_id(all_profiles_arr[ind])
       if !user_found_id.blank?
         @count += 1
-        @users_id_arr << user_found_id.id  # user_id среди найденных профилей
+        @users_ids_arr << user_found_id.id  # user_id среди найденных профилей
       end
     end
   end

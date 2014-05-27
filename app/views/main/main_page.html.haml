@@ -65,9 +65,7 @@
   -#%p
   -#  @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
   %h4
-    ВСЕ СОВПАДЕНИЯ РОДНЫХ: @all_match_hash: #{@all_match_hash.inspect}
-  %h4
-    Массив всех совпадений родных: @all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
+    ВСЕ СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
   %p
     НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
   %p
@@ -75,10 +73,10 @@
   %h4
     Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
   %h4
-    Их user_id: #{@users_id_arr.inspect}
+    Их user_id: #{@users_ids_arr.inspect}
 
   %h3
-    ОБЩЕЕ ВРЕМЯ ПОИСКА: @elapsed_search_time: #{ @elapsed_search_time.inspect } seconds
+    ОБЩЕЕ ВРЕМЯ ПОИСКА: #{ @elapsed_search_time.inspect } seconds
 
   %h4 Переход на:  #{link_to "Просмотр и подтверждение совпадений -->", match_approval_path}
 
