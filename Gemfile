@@ -32,8 +32,8 @@ gem 'therubyracer'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
-# jQuert ui lib
-gem 'jquery-ui-rails'
+# jQuert ui sass lib
+# gem 'jquery-ui-sass-rails'
 
 # Обмен переменными Ruby -> JS
 gem 'gon'
