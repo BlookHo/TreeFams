@@ -1,15 +1,2 @@
 %h2 Как зовут сестру?
-
--# default start form
-- if current_author.family.sisters.empty?
-  .control
-    = text_field_tag "author[sisters][][name]", '', class: :autocomplete_field, placeholder: "Имя сестры...", data:{names: Name.approved.female.map{|n| n.name}}
-    .help-text Официальное имя, как в паспорте
-
-
-- current_author.family.sisters.each do |sister|
-  = render 'welcome/form/member_error', objekt: sister
-
-  .control
-    = text_field_tag "author[sisters][][name]", sister.name, class: :autocomplete_field, placeholder: "Имя сестры...", data:{names: Name.approved.female.map{|n| n.name}}
-    .help-text Официальное имя, как в паспорте
+.fields= render 'welcome/form/members_fields', members: current_author.family.sisters

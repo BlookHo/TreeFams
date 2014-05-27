@@ -10,6 +10,7 @@
 
   .errors{
     color:#bb1313;
+    margin-top:-12px;
     margin-bottom:12px;
     background-color:#fffad8;
     padding:6px;
@@ -40,6 +41,7 @@
     width:100%;
     display:inline-block;
     margin-bottom:25px;
+    position:relative;
 
     label{
       color:grey;
@@ -72,6 +74,22 @@
         font-size:14px;
         font-weight:bold;
       }
+    }
+
+    &.add_member{
+      text-align:right;
+      margin-bottom:10px;
+      a{
+        font-size:14px;
+        color:#005dff;
+      }
+    }
+
+    .remove_member{
+      position:absolute;
+      color:red;
+      right:10px;
+      top:10px;
     }
 
   }

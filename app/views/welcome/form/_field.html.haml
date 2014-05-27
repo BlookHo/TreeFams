@@ -1,0 +1,5 @@
+.control
+  = text_field_tag "author[#{normolized_members_name}][][name]", (defined?(objekt).nil? ? "" : objekt.name), class: :autocomplete_field, placeholder: "Начните вводить имя #{@@klass_descriptions[1]}...", data:{names: @@autocomplete_names}
+  - if remove_link
+    = link_to (fa_icon "minus-circle"), '#', onclick: "$(this).closest('.control').remove()", class: :remove_member
+  .help-text Официальное имя, как в паспорте

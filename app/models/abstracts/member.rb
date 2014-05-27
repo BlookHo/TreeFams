@@ -11,7 +11,7 @@ class Member
   end
 
   validates :name,
-            :presence => {message: "Нельзя пропутсить ввод имени. Имена радственников в вашем ближенем круге является вашим семейным отпечатком, по которому вы смодете найти свои родственнные свзяи"}
+            :presence => {message: "Нельзя пропустить ввод имени. Имена радственников в вашем ближнем круге являются вашим семейным отпечатком, по которому будут строиться родственнные связи"}
   validate  :name_extended
   validates :sex_id, inclusion: [0, 1]
 
@@ -34,11 +34,6 @@ class Member
     end
   end
 
-  # instance method
-  def male?
-    sex_id == 1
-  end
-
 end
 
 
@@ -53,14 +48,29 @@ class Author < Member
     @family = family
   end
 
+  # Proxy methods
   def add_member(member)
     family.add_member(member)
+  end
+
+  def add_members(members)
+    family.add_members(members)
   end
 
   def relation_id
     0
   end
 
+  # Instance method
+  def male?
+    sex_id == 1
+  end
+
+  # Class methods
+  # Может ли быть несколько инстансов у одного автора?
+  def self.allow_multiple?
+    false
+  end
 
 end
 
@@ -90,23 +100,24 @@ class Family
 
   # Перезаписываем членов, чтобы избежать дублирования при ошибках валидации,
   # поскольку нам приходиться сохранять даже не валидные данные
-  def add_member(member)
+  def clear_member(member)
     eval("self.#{member.class.to_s.pluralize.downcase}=[]")
-    eval("#{member.class.to_s.pluralize.downcase}") << member
   end
 
-  # если есть, мы просто не даем создавать новых "пустых" членов семьи
-  # def unnamed_memebrs(members)
-  #   eval("#{members}").collect{ |m| m.name.blank? }
-  # end
-  #
-  # def cleanup_unnamed_memebrs
-  #   %w[fathers mothers brothers sisters sons daughters husbands wives].each do |members|
-  #     if eval("#{members}").size >= 2 and unnamed_memebrs(members).size >= 1
-  #       eval("#{members}").delete_if { |m| m.name.blank? }
-  #     end
-  #   end
-  # end
+  def add_members(members)
+    if members.kind_of?(Array)
+      clear_member(members.first)
+      members.each {|member| add_member(member) }
+    else
+      clear_member(members)
+      add_member(members)
+    end
+  end
+
+
+  def add_member(member)
+    eval("#{member.class.to_s.pluralize.downcase}") << member
+  end
 
 end
 
@@ -117,9 +128,24 @@ class Father < Member
   validates :name,
             :presence => {:message => "Если вы не знаете имени своего отца, используйте свое отчество в качестве производного. Например: Сергеевич - Сергей"}
 
-
   def relation_id
     1
+  end
+
+  # Class methods
+  def self.sex_id
+    1
+  end
+
+  # Class methods
+  # Может ли быть несколько инстансов у одного автора?
+  def self.allow_multiple?
+    false
+  end
+
+
+  def self.descriptions
+    %w[отец отца́ отцу́ отца́ отцо́м отца́]
   end
 end
 
@@ -132,29 +158,94 @@ class Mother < Member
   def relation_id
     2
   end
+
+  # Class methods
+  def self.sex_id
+    0
+  end
+
+  def self.allow_multiple?
+    false
+  end
+
+  def self.descriptions
+    %w[мать ма́тери ма́тери ма́ть ма́терью ма́тери]
+  end
 end
+
 
 class Son < Member
   def relation_id
     3
   end
+  # Class methods
+  def self.sex_id
+    1
+  end
+
+  def self.allow_multiple?
+    true
+  end
+
+  def self.descriptions
+    %w[сын сына сына сын сыном сына]
+  end
 end
+
 
 class Daughter < Member
   def relation_id
     4
   end
+  # Class methods
+  def self.sex_id
+    0
+  end
+
+  def self.allow_multiple?
+    true
+  end
+
+  def self.descriptions
+    %w[дочь дочери дочери дочь дочью дочери]
+  end
 end
+
 
 class Brother < Member
   def relation_id
     5
   end
+  # Class methods
+  def self.sex_id
+    1
+  end
+
+  def self.allow_multiple?
+    true
+  end
+
+  def self.descriptions
+    %w[брат брата́ брату́ брата́ брато́м брата́]
+  end
 end
+
 
 class Sister < Member
   def relation_id
     6
+  end
+  # Class methods
+  def self.sex_id
+    0
+  end
+
+  def self.allow_multiple?
+    true
+  end
+
+  def self.descriptions
+    %w[сестра сестру́ сестру́ сестра́ сестрой сестру́]
   end
 end
 
@@ -163,11 +254,35 @@ class Husband < Member
   def relation_id
     7
   end
+  # Class methods
+  def self.sex_id
+    1
+  end
+
+  def self.allow_multiple?
+    false
+  end
+
+  def self.descriptions
+    %w[муж мужа мужу мужа мужем мужа]
+  end
 end
 
 
 class Wife < Member
   def relation_id
     8
+  end
+  # Class methods
+  def self.sex_id
+    0
+  end
+
+  def self.allow_multiple?
+    false
+  end
+
+  def self.descriptions
+    %w[жена жену жену жену женой жены]
   end
 end

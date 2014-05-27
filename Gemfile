@@ -32,16 +32,11 @@ gem 'therubyracer'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
-# jQuert ui sass lib
-# gem 'jquery-ui-sass-rails'
-
 # Обмен переменными Ruby -> JS
 gem 'gon'
 
-
 # Extend hash
 gem 'hashie'
-
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 #gem 'jquery-turbolinks'

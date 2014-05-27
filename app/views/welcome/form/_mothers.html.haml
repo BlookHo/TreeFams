@@ -1,14 +1,2 @@
 %h2 Как зовут вашу маму?
-
--# default start form
-- if current_author.family.mothers.empty?
-  .control
-    = text_field_tag "author[mothers][][name]", '', class: :autocomplete_field, placeholder: "Имя матери...", data:{names: Name.approved.female_extended.map{|n| n.name}}
-    .help-text Официальное имя, как в паспорте
-
-
-- current_author.family.mothers.each do |mother|
-  = render 'welcome/form/member_error', objekt: mother
-  .control
-    = text_field_tag "author[mothers][][name]", mother.name, class: :autocomplete_field, placeholder: "Имя матери...", data:{names: Name.approved.female_extended.map{|n| n.name}}
-    .help-text Официальное имя, как в паспорте
+.fields= render 'welcome/form/members_fields', members: current_author.family.mothers

@@ -1,14 +1,2 @@
 %h2 Как зовут дочку?
-
--# default start form
-- if current_author.family.daughters.empty?
-  .control
-    = text_field_tag "author[daughters][][name]", '', class: :autocomplete_field, placeholder: "Имя дочери...", data:{names: Name.approved.female.map{|n| n.name}}
-    .help-text Официальное имя, как в паспорте
-
-
-- current_author.family.daughters.each do |daughter|
-  = render 'welcome/form/member_error', objekt: daughter
-  .control
-    = text_field_tag "author[daughters][][name]", son.name, class: :autocomplete_field, placeholder: "Имя дочери...", data:{names: Name.approved.female.map{|n| n.name}}
-    .help-text Официальное имя, как в паспорте
+.fields= render 'welcome/form/members_fields', members: current_author.family.daughters

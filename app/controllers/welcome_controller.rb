@@ -2,6 +2,7 @@ class WelcomeController < ApplicationController
 
   helper_method :current_step,
                 :current_author,
+                :normolized_members_name,
                 :steps,
                 :next_step,
                 :prev_step,
@@ -40,13 +41,14 @@ class WelcomeController < ApplicationController
   end
 
   def to_step
-    logger.info "=========== step debug"
-    logger.info steps.include? params[:step]
     if steps.include? params[:step]
       session[:current_step] = params[:step]
     end
     render :start
   end
+
+  # def add_member_field
+  # end
 
 
   private
@@ -86,10 +88,12 @@ class WelcomeController < ApplicationController
   end
 
   def proceed_family
-    members = params[:author][normolized_members_name.to_sym]
-    members.each do |member|
-      current_author.add_member( eval("#{normolized_members_name.singularize.capitalize}").new(name: member[:name], sex_id: member[:sex_id]) )
+    members = []
+    members_data = params[:author][normolized_members_name.to_sym]
+    members_data.each do |member|
+      members << eval("#{normolized_members_name.singularize.capitalize}").new(name: member[:name], sex_id: member[:sex_id])
     end
+    current_author.add_members(members)
     session[:current_author] = current_author
   end
 
@@ -98,7 +102,7 @@ class WelcomeController < ApplicationController
     if current_step == 'couple' && current_author.male?
       return 'wives'
     elsif current_step == 'couple' && !current_author.male?
-      return 'wives'
+      return 'husbands'
     else
       current_step
     end
