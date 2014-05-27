@@ -207,10 +207,7 @@ reTree.prototype.relationToS = function (relationNumber) {
  */
 
 reTree.prototype.validation = function (properties) {
-    if (properties.name === '' || properties.sex_id === '' || properties.relation_id === '')
-        return false;
-    else
-        return true;
+    return properties.relation_id === '' ? false : true;
 }
 
 
