@@ -162,7 +162,13 @@ function reTree(json, params) {
  * Определяет цвет фигуры по её полу
  */
 
-reTree.prototype.sexing = function (sex) { return sex === 0 ? '#ccc' : sex === 1 ? '#bfefff' : '#fffacd'; }
+reTree.prototype.sexing = function (sex) { return sex === '' ? '#ccc' : sex ? '#bfefff' : '#fffacd'; }
+
+/*
+ * Валидация на выполнение всех условий при построении элементра древа
+ */
+
+reTree.prototype.validation = function (properties) { return properties.relation_id === '' ? false : true; }
 
 /*
  * Переводит числовое представление родственной связи в символьное ( 0 -> автор; 1 -> отец; и тд)
@@ -201,15 +207,6 @@ reTree.prototype.relationToS = function (relationNumber) {
     }
     return relationString;
 }
-
-/*
- * Валидация на выполнение всех условий при построении элементра древа
- */
-
-reTree.prototype.validation = function (properties) {
-    return properties.relation_id === '' ? false : true;
-}
-
 
 /*
  * Масштабирует и центрирует дерево относительно холста
