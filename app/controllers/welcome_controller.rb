@@ -2,6 +2,7 @@ class WelcomeController < ApplicationController
 
   helper_method :current_step,
                 :current_author,
+                :normolized_members_name,
                 :steps,
                 :next_step,
                 :prev_step,
@@ -40,8 +41,6 @@ class WelcomeController < ApplicationController
   end
 
   def to_step
-    logger.info "=========== step debug"
-    logger.info steps.include? params[:step]
     if steps.include? params[:step]
       session[:current_step] = params[:step]
     end
@@ -98,7 +97,7 @@ class WelcomeController < ApplicationController
     if current_step == 'couple' && current_author.male?
       return 'wives'
     elsif current_step == 'couple' && !current_author.male?
-      return 'wives'
+      return 'husbands'
     else
       current_step
     end

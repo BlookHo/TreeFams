@@ -1,0 +1,29 @@
+-# Autocomplete helper
+- klass_sex_id = eval("#{normolized_members_name.to_s.singularize.capitalize}.sex_id")
+
+- if klass_sex_id == 0 && normolized_members_name == 'mothers'
+  -# Женские для матери
+  - autocomplete_names = Name.approved.female_extended.map{|n| n.name}
+
+- elsif klass_sex_id == 0 && normolized_members_name != 'mothers'
+  -# Женские
+  - autocomplete_names = Name.approved.female.map{|n| n.name}
+
+- else
+  -# Мужские
+  - autocomplete_names = Name.approved.male.map{|n| n.name}
+
+
+
+-# Default
+- if members.empty?
+  .control
+    = text_field_tag "author[#{normolized_members_name}][][name]", '', class: :autocomplete_field, placeholder: "Начните вводить имя...", data:{names: autocomplete_names}
+    .help-text Официальное имя, как в паспорте
+
+
+- eval("current_author.family.#{normolized_members_name}").each do |member|
+  = render 'welcome/form/member_error', objekt: member
+  .control
+    = text_field_tag "author[#{normolized_members_name}][][name]", member.name, class: :autocomplete_field, placeholder: "Начните вводить имя...", data:{names: autocomplete_names}
+    .help-text Официальное имя, как в паспорте
