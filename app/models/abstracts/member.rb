@@ -48,8 +48,13 @@ class Author < Member
     @family = family
   end
 
+  # Proxy methods
   def add_member(member)
     family.add_member(member)
+  end
+
+  def add_members(members)
+    family.add_members(members)
   end
 
   def relation_id
@@ -95,8 +100,22 @@ class Family
 
   # Перезаписываем членов, чтобы избежать дублирования при ошибках валидации,
   # поскольку нам приходиться сохранять даже не валидные данные
-  def add_member(member)
+  def clear_member(member)
     eval("self.#{member.class.to_s.pluralize.downcase}=[]")
+  end
+
+  def add_members(members)
+    if members.kind_of?(Array)
+      clear_member(members.first)
+      members.each {|member| add_member(member) }
+    else
+      clear_member(members)
+      add_member(members)
+    end
+  end
+
+
+  def add_member(member)
     eval("#{member.class.to_s.pluralize.downcase}") << member
   end
 
@@ -123,6 +142,11 @@ class Father < Member
   def self.allow_multiple?
     false
   end
+
+
+  def self.descriptions
+    %w[отец отца́ отцу́ отца́ отцо́м отца́]
+  end
 end
 
 
@@ -143,7 +167,12 @@ class Mother < Member
   def self.allow_multiple?
     false
   end
+
+  def self.descriptions
+    %w[мать ма́тери ма́тери ма́ть ма́терью ма́тери]
+  end
 end
+
 
 class Son < Member
   def relation_id
@@ -157,7 +186,12 @@ class Son < Member
   def self.allow_multiple?
     true
   end
+
+  def self.descriptions
+    %w[сын сына сына сын сыном сына]
+  end
 end
+
 
 class Daughter < Member
   def relation_id
@@ -171,7 +205,12 @@ class Daughter < Member
   def self.allow_multiple?
     true
   end
+
+  def self.descriptions
+    %w[дочь дочери дочери дочь дочью дочери]
+  end
 end
+
 
 class Brother < Member
   def relation_id
@@ -185,7 +224,12 @@ class Brother < Member
   def self.allow_multiple?
     true
   end
+
+  def self.descriptions
+    %w[брат брата́ брату́ брата́ брато́м брата́]
+  end
 end
+
 
 class Sister < Member
   def relation_id
@@ -198,6 +242,10 @@ class Sister < Member
 
   def self.allow_multiple?
     true
+  end
+
+  def self.descriptions
+    %w[сестра сестру́ сестру́ сестра́ сестрой сестру́]
   end
 end
 
@@ -214,6 +262,10 @@ class Husband < Member
   def self.allow_multiple?
     false
   end
+
+  def self.descriptions
+    %w[муж мужа мужу мужа мужем мужа]
+  end
 end
 
 
@@ -228,5 +280,9 @@ class Wife < Member
 
   def self.allow_multiple?
     false
+  end
+
+  def self.descriptions
+    %w[жена жену жену жену женой жены]
   end
 end

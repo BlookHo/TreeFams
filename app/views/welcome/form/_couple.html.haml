@@ -5,7 +5,7 @@
 
 - if current_author.male?
   -# Жена
-  = render 'welcome/form/members_fields', members: current_author.family.wives
+  .fields= render 'welcome/form/members_fields', members: current_author.family.wives
 - else
   -# Муж
-  = render 'welcome/form/members_fields', members: current_author.family.husbands
+  .fields= render 'welcome/form/members_fields', members: current_author.family.husbands

@@ -1,14 +1,2 @@
 %h2 Как зовут сына?
-
--# default start form
-- if current_author.family.sons.empty?
-  .control
-    = text_field_tag "author[sons][][name]", '', class: :autocomplete_field, placeholder: "Имя сына...", data:{names: Name.approved.male.map{|n| n.name}}
-    .help-text Официальное имя, как в паспорте
-
-
-- current_author.family.sons.each do |son|
-  = render 'welcome/form/member_error', objekt: son
-  .control
-    = text_field_tag "author[sons][][name]", son.name, class: :autocomplete_field, placeholder: "Имя сына...", data:{names: Name.approved.male.map{|n| n.name}}
-    .help-text Официальное имя, как в паспорте
+.fields= render 'welcome/form/members_fields', members: current_author.family.sons
