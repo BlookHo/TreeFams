@@ -162,7 +162,7 @@ function reTree(json, params) {
  * Определяет цвет фигуры по её полу
  */
 
-reTree.prototype.sexing = function (sex) { return sex === '' ? '#ccc' : sex ? '#bfefff' : '#fffacd'; }
+reTree.prototype.sexing = function (sex) { return 0 < sex > 1 ? '#ccc' : sex ? '#bfefff' : '#fffacd'; }
 
 /*
  * Валидация на выполнение всех условий при построении элементра древа
@@ -175,7 +175,7 @@ reTree.prototype.validation = function (properties) { return properties.relation
  */
 
 reTree.prototype.relationToS = function (relationNumber) {
-    var relationString = '';
+    var relationString;
     switch (relationNumber) {
         case 0:
             relationString = 'автор';
@@ -203,6 +203,9 @@ reTree.prototype.relationToS = function (relationNumber) {
             break;
         case 8:
             relationString = 'жена';
+            break;
+        default:
+            relationString = 'ошибка. несуществующая связь';
             break;
     }
     return relationString;
