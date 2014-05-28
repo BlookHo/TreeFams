@@ -1,4 +1,8 @@
 Weafam::Application.routes.draw do
+  get "new_profile/get_profile_params"
+  get "new_profile/make_new_profile"
+  get "new_profile/make_tree_row"
+  get "new_profile/make_profilekeys_rows"
   get "graph_tree/show_graph_tree"
   get "graph_tree/edit"
   get "graph_tree/move"
@@ -40,8 +44,8 @@ Weafam::Application.routes.draw do
   match 'search_tree_match' => 'main#search_tree_match', via: :get
   match 'relative_menu' => 'main#relative_menu', via: :get
   match 'match_approval' => 'main#match_approval', via: :get
-  match 'add_new_profile' => 'main#add_new_profile', via: :get
-  match 'add_new_profile' => 'main#add_new_profile', via: :post
+  #match 'add_new_profile' => 'main#add_new_profile', via: :get
+  #match 'add_new_profile' => 'main#add_new_profile', via: :post
 
   # graph_tree controller
   match 'show_graph_tree' => 'graph_tree#show_graph_tree', via: :get
@@ -83,6 +87,14 @@ Weafam::Application.routes.draw do
   match 'store_daugther' => 'start#store_daugther', via: :post
   match 'store_husband' => 'start#store_husband', via: :post
   match 'store_wife' => 'start#store_wife', via: :post
+
+  # new_profile controller
+  match 'make_new_profile' => 'new_profile#make_new_profile', via: :get
+  match 'make_tree_row' => 'new_profile#make_tree_row', via: :get
+  match 'make_profilekeys_rows' => 'new_profile#make_profilekeys_rows', via: :get
+  match 'add_new_profile' => 'new_profile#add_new_profile', via: :get
+  match 'add_new_profile' => 'new_profile#add_new_profile', via: :post
+
 
 
   devise_for :users, controllers: {registrations: "users/registrations", sessions: "users/sessions"}, skip: [:sessions, :registrations]
