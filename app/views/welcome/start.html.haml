@@ -1,33 +1,39 @@
-#welcome-form.col_1_2
-  = render 'breadcrumb'
-  = form_tag :proceed_start, remote: false, id: 'welcome_form' do
-    .body
-      = render "welcome/form/#{current_step}"
-    .footer
-      - if last_step?
-        "Пока останавливаемся тут"
-      - else
-        = link_to '&larr; Назад'.html_safe, :previous, class: [:btn], id: :prev
+#welcome-form
+  // Диалог
+  #dialog{ :style => 'width:40%;float:left;' }
+    = render 'breadcrumb'
+    = form_tag :proceed_start, remote: false, id: 'welcome_form' do
+      .body
+        = render "welcome/form/#{current_step}"
+      .footer
+        - if last_step?
+          "Пока останавливаемся тут"
+        - else
+          = link_to '&larr; Назад'.html_safe, :previous, class: [:btn], id: :prev
 
-        - unless current_step =~ /^have/
-          = submit_tag 'Вперед &rarr;'.html_safe, class: [:btn, :blue], id: :next, style:"float:right;"
+          - unless current_step =~ /^have/
+            = submit_tag 'Вперед &rarr;'.html_safe, class: [:btn, :blue], id: :next, style:"float:right;"
 
+  // Граф
+  #dialog_graph
+    - @profiles_json = "{'author':#{current_author.to_json.to_s}}"
 
+    %script{ :type => 'text/javascript', :defer => 'defer' }
+      :plain
+        var kinetic = {
+          container: 'dialog_graph',
+          width: $('#welcome-form').width() * 0.55,
+          height: 400,
+          scale: 29,
+          ajax: false,
+          draggable: true
+        };
 
-.col_2_2{style:'margin-top:100px;'}
-  - @profiles_json = "{'author':#{current_author.to_json.to_s}}"
+        var tree = {
+          json: #{@profiles_json},
+          deviation: -100
+        };
 
-  #tree_canvas_start
-
-  %script{ :type => 'text/javascript', :defer => 'defer' }
-    :plain
-      var kinetic = {
-        container: 'tree_canvas_start',
-        width: 500,
-        height: 275,
-        scale: 25,
-        ajax: false,
-        draggable: true
-      };
-
-      var constructTree = new reTree(#{@profiles_json}, kinetic);
+        var constructTree = new reTree(tree, kinetic);
+  %div
+    #{@profiles_json}
