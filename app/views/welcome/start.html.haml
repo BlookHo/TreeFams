@@ -22,16 +22,17 @@
       :plain
         var kinetic = {
           container: 'dialog_graph',
-          width: $('#welcome-form').width() * 0.55,
+          width: $('#welcome-form').width() * 0.55 - 2,
           height: 400,
           scale: 29,
           ajax: false,
-          draggable: true
+          draggable: false
         };
 
         var tree = {
           json: #{@profiles_json},
-          deviation: -100
+          ydeviation: -100,
+          xdeviation: -12
         };
 
         var constructTree = new reTree(tree, kinetic);

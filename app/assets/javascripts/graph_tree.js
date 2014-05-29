@@ -129,8 +129,8 @@ function reTree(params_tree, params_kinetic) {
     this.coordinates.config.devscale = this.kinetic.params.stage.width / this.kinetic.params.config.scale * 3.5;
     this.coordinates.config.scale = 1;
 
-    this.coordinates.author.x = this.kinetic.params.stage.width / 2 - this.kinetic.params.rectangle.width / 2;
-    this.coordinates.author.y = this.kinetic.params.stage.height / 2 - this.kinetic.params.rectangle.height / 2 + params_tree.deviation;
+    this.coordinates.author.x = this.kinetic.params.stage.width / 2 - this.kinetic.params.rectangle.width / 2 + params_tree.xdeviation;
+    this.coordinates.author.y = this.kinetic.params.stage.height / 2 - this.kinetic.params.rectangle.height / 2 + params_tree.ydeviation;
     this.coordinates.author.xcenter = this.coordinates.author.x + this.kinetic.params.rectangle.width / 2;
     this.coordinates.author.ycenter = this.coordinates.author.y + this.kinetic.params.rectangle.height / 2;
 
@@ -142,7 +142,8 @@ function reTree(params_tree, params_kinetic) {
     this.coordinates.childrens.blvl = 1.5;
     this.coordinates.childrens.xdeviation = this.coordinates.config.devscale;
     this.coordinates.childrens.ydeviation = this.coordinates.config.devscale;
-    this.coordinates.childrens.direction = 0;
+
+    this.coordinates.childrens.direction = 1;
 
     this.coordinates.parents.xdeviation = this.coordinates.config.devscale / 2;
     this.coordinates.parents.ydeviation = this.coordinates.config.devscale;
@@ -233,9 +234,9 @@ reTree.prototype.scale = function (scale) {
 
 reTree.prototype.constructElement = function (figure, line, text, label, properties) {
 
-    if (figure.type === 0)
+    if (properties.relation_id === 0)
         this.kinetic.drawRect(figure.x, figure.y, this.sexing(properties.sex_id));
-    else if (figure.type === 1)
+    else
         this.kinetic.drawCircle(figure.x, figure.y, this.sexing(properties.sex_id));
 
     if (line.points !== null)
@@ -244,7 +245,8 @@ reTree.prototype.constructElement = function (figure, line, text, label, propert
     if (properties.name !== '')
         this.kinetic.drawLabel(label.x, label.y, label.direction, properties.name);
 
-    this.kinetic.drawText(text.x, text.y, text.width, this.relationToS(properties.relation_id));
+    if (properties.relation_id >= 0 && properties.relation_id <= 8)
+        this.kinetic.drawText(text.x, text.y, text.width, this.relationToS(properties.relation_id));
 
 }
 
@@ -276,7 +278,6 @@ reTree.prototype.constructTree = function (properties) {
     switch (properties.relation_id) {
         case 0:                                         // автор
             var figure = {
-                type: 0,
                 x: this.coordinates.author.x,
                 y: this.coordinates.author.y
             };
@@ -295,7 +296,6 @@ reTree.prototype.constructTree = function (properties) {
             break;
         case 1:                                         // отец
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter - this.coordinates.parents.xdeviation,
                 y: this.coordinates.author.ycenter - this.coordinates.parents.ydeviation
             };
@@ -321,7 +321,6 @@ reTree.prototype.constructTree = function (properties) {
             break;
         case 2:                                         // мать
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter + this.coordinates.parents.xdeviation,
                 y: this.coordinates.author.ycenter - this.coordinates.parents.ydeviation
             };
@@ -350,7 +349,6 @@ reTree.prototype.constructTree = function (properties) {
                 + this.coordinates.childrens.xdeviation * this.coordinates.childrens.tlvl
                 + this.coordinates.couple.direction * this.coordinates.childrens.direction;
             var figure = {
-                type: 1,
                 x: xcenter,
                 y: this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation
             };
@@ -384,7 +382,6 @@ reTree.prototype.constructTree = function (properties) {
                           + this.coordinates.childrens.xdeviation * this.coordinates.childrens.blvl
                           + this.coordinates.couple.direction * this.coordinates.childrens.direction;
             var figure = {
-                type: 1,
                 x: xcenter,
                 y: this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation + this.coordinates.childrens.xdeviation
             };
@@ -415,7 +412,6 @@ reTree.prototype.constructTree = function (properties) {
             break;
         case 5:                                         // брат
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.tlvl,
                 y: this.coordinates.author.ycenter
             };
@@ -444,7 +440,6 @@ reTree.prototype.constructTree = function (properties) {
             break;
         case 6:                                         // сестра
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.blvl,
                 y: this.coordinates.author.ycenter + this.coordinates.sibs.deviation
             };
@@ -478,7 +473,6 @@ reTree.prototype.constructTree = function (properties) {
         case 8:                                         // супруги
         case 7:
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter + this.coordinates.couple.deviation * 2 + this.coordinates.couple.direction,
                 y: this.coordinates.author.ycenter
             };
@@ -499,7 +493,6 @@ reTree.prototype.constructTree = function (properties) {
                 direction: 'left'
             };
             this.constructElement(figure, line, text, label, properties);
-            this.coordinates.childrens.direction = 1;
             break;
         default:                                        // ошибка -> выход
             return;
@@ -736,7 +729,7 @@ reKinetic.prototype.drawLabel = function (x, y, direction, text) {
     this.shapes.label[this.shapes.label.length - 1].add(new Kinetic.Text({
         text: text,
         padding: this.params.label.padding,
-        fontSize: this.params.text.fontSize,
+        fontSize: this.params.text.fontSize - 2,
         fontFamily: this.params.text.fontFamily,
         fill: this.params.text.fill
     }));
