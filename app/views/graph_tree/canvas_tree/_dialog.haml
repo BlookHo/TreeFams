@@ -1,0 +1,24 @@
+#dialog_graph
+  - @profiles_json = "{'author':#{current_author.to_json.to_s}}"
+
+%script{ :type => 'text/javascript', :defer => 'defer' }
+  :plain
+    var kinetic = {
+      container: 'dialog_graph',
+      width: $('#welcome-form').width() * 0.55 - 2,
+      height: 400,
+      scale: 29,
+      ajax: false,
+      draggable: false
+    };
+
+    var tree = {
+      json: #{@profiles_json},
+      ydeviation: -100,
+      xdeviation: -12
+    };
+
+    var constructTree = new reTree(tree, kinetic);
+
+%div{ :style => 'display:none;'}
+  #{@profiles_json}
