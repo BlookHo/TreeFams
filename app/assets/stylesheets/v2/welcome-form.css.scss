@@ -47,6 +47,11 @@
       color:grey;
     }
 
+    // fields with remove link
+    .with_remove{
+      width:90%;
+    }
+
     .help-text{
       font-size:small;
       color:grey;
@@ -89,7 +94,7 @@
       position:absolute;
       color:red;
       right:10px;
-      top:10px;
+      bottom:25px;
     }
 
   }
