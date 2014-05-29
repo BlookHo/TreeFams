@@ -8,6 +8,7 @@ initAutocompleteFields = ()->
                 return matcher.test( item )
         ))
       select: ( event, ui ) ->
+        alert "hello"
         $("#welcome-form input:text, #formId textarea").blur()
 
 
