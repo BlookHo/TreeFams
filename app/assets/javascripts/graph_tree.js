@@ -60,7 +60,6 @@
  *  Класс вычисления координат и построения древа:
  *  reTree              - конструктор класса;
  *  sexing              - определение цвета по полу;
- *  validation          - валидация на существование свойств (пол, родственная связь, имя) необходимых для создания элемента
  *  relationToS         - переводит числовое представление родсвтенной связи в символьное
  *  scale               - функция изменения масштаба;
  *  constructElement    - построение элемента древа по заданным параметрам;
@@ -165,17 +164,11 @@ function reTree(params_tree, params_kinetic) {
 reTree.prototype.sexing = function (sex) { return sex === 1 ? '#bfefff' : sex === 0 ? '#fffacd' : '#ccc'; }
 
 /*
- * Валидация на выполнение всех условий при построении элементра древа
- */
-
-reTree.prototype.validation = function (properties) { return properties.relation_id >= 0 ? true : false; }
-
-/*
  * Переводит числовое представление родственной связи в символьное ( 0 -> автор; 1 -> отец; и тд)
  */
 
 reTree.prototype.relationToS = function (relationNumber) {
-    var relationString;
+    var relationString = '';
     switch (relationNumber) {
         case 0:
             relationString = 'автор';
@@ -203,9 +196,6 @@ reTree.prototype.relationToS = function (relationNumber) {
             break;
         case 8:
             relationString = 'жена';
-            break;
-        default:
-            relationString = 'ОШИБКА';
             break;
     }
     return relationString;
@@ -267,13 +257,10 @@ reTree.prototype.constructTree = function (properties) {
      *      сестра      ->      6
      *      муж         ->      7
      *      жена        ->      8
+     *      ошибка      ->      другие значения
      * }
-     * В зависимости от типа связи отрисвываем: фигуры, линии, текст и метки;
-     * Если не хватает одного из основных параметров (тип связи) выходим из функции;
+     * В зависимости от типа связи отрисвываем: фигуры, линии, текст и лейблы;
      */
-
-    if (!this.validation(properties))
-        return;
 
     switch (properties.relation_id) {
         case 0:                                         // автор
@@ -448,9 +435,9 @@ reTree.prototype.constructTree = function (properties) {
             cLine[cLine.length] = this.coordinates.author.ycenter;
             cLine[cLine.length] = this.coordinates.author.xcenter;
             cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation / 2;
-            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * .85;
+            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * .9;
             cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation / 2;
-            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * .85;
+            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * .9;
             cLine[cLine.length] = this.coordinates.author.ycenter + (this.coordinates.sibs.deviation / 2);
             cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.blvl;
             cLine[cLine.length] = this.coordinates.author.ycenter + (this.coordinates.sibs.deviation / 2);
@@ -526,6 +513,7 @@ reTree.prototype.roundTree = function (object) {
  *  drawCircle      - рисуем круг;
  *  drawRect        - рисуем прямоугольник;
  *  drawText        - отрисовываем текст;
+ *  drawLabel       - отрисовываем лейбл;
  *  compilation     - отрисовываем все фигуры на холсте;
  */
 
