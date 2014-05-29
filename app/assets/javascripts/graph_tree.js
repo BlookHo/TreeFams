@@ -548,11 +548,11 @@ function reKinetic(parameters) {
     this.params.rectangle.width = this.params.stage.width / (this.params.config.scale / 4);
     this.params.rectangle.height = this.params.stage.width / (this.params.config.scale / 2);
     this.params.rectangle.stroke = '#900';
-    this.params.rectangle.strokeWidth = 2;
+    this.params.rectangle.strokeWidth = 1;
 
     this.params.line = new Object();                // параметры линий
     this.params.line.stroke = 'black';
-    this.params.line.strokeWidth = 2;
+    this.params.line.strokeWidth = 1;
     this.params.line.lineCap = 'round';
     this.params.line.lineJoin = 'round';
 
@@ -564,11 +564,10 @@ function reKinetic(parameters) {
 
     this.params.label = new Object();               // параметры метки
     this.params.label.fill = 'yellow';
-    this.params.label.opacity = 0.9;
+    this.params.label.opacity = .9;
     this.params.label.padding = 5;
-    this.params.label.pointerDirection = 'up';
     this.params.label.pointerWidth = 10;
-    this.params.label.pointerHeight = 10;
+    this.params.label.pointerHeight = 6;
 
     this.stage = new Kinetic.Stage({                // создаем холст
         name: 'tree_stage',
@@ -683,7 +682,7 @@ reKinetic.prototype.drawText = function (x, y, width, text) {
         x: x,
         y: y,
         text: text,
-        fontSize: this.params.text.fontSize,
+        fontSize: this.params.text.fontSize - 1,
         fontFamily: this.params.text.fontFamily,
         width: width,
         align: this.params.text.align,
@@ -711,7 +710,9 @@ reKinetic.prototype.drawLabel = function (x, y, direction, text) {
         fill: this.params.label.fill,
         pointerDirection: direction,
         pointerWidth: this.params.label.pointerWidth,
-        pointerHeight: this.params.label.pointerHeight
+        pointerHeight: this.params.label.pointerHeight,
+        strokeWidth: this.params.circle.strokeWidth,
+        stroke: this.params.circle.stroke
     }));
 
     this.shapes.label[this.shapes.label.length - 1].add(new Kinetic.Text({
