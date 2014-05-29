@@ -107,7 +107,7 @@ class StartController < ApplicationController
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Father rows
-    if author_sex
+    if author_sex == 1
       father_ProfileKeys_arr << [father_name, 3, author_name, 0]
     else
       father_ProfileKeys_arr << [father_name, 4, author_name, 0]
@@ -151,7 +151,7 @@ class StartController < ApplicationController
 
     # add Mother rows
     mother_ProfileKeys_arr << [mother_name, 7, father_name, 1]
-    if author_sex
+    if author_sex == 1
       mother_ProfileKeys_arr << [mother_name, 3, author_name, 0]
     else
       mother_ProfileKeys_arr << [mother_name, 4, author_name, 0]
@@ -210,7 +210,7 @@ class StartController < ApplicationController
     # add Brother rows
     brother_ProfileKeys_arr << [brother_name, 1, father_name, 1]
     brother_ProfileKeys_arr << [brother_name, 2, mother_name, 2]
-    if author_sex
+    if author_sex == 1
       brother_ProfileKeys_arr << [brother_name, 5, author_name, 0]
     else
       brother_ProfileKeys_arr << [brother_name, 6, author_name, 0]
@@ -290,7 +290,7 @@ class StartController < ApplicationController
     # add Sister rows
     sister_ProfileKeys_arr << [sister_name, 1, father_name, 1]
     sister_ProfileKeys_arr << [sister_name, 2, mother_name, 2]
-    if author_sex
+    if author_sex == 1
       sister_ProfileKeys_arr << [sister_name, 5, author_name, 0]
     else
       sister_ProfileKeys_arr << [sister_name, 6, author_name, 0]
@@ -414,7 +414,7 @@ class StartController < ApplicationController
   # @see News
   def add_son_to_ProfileKeys(profiles_array)
 
-    #profiles_array = [[nil, "author_name", true], [1, "mother_name", true], [2, "mother_name", false]]
+    #profiles_array = [[0, "author_name", 1], [1, "mother_name", 1], [2, "mother_name", 0]]
     author_ProfileKeys_arr = session[:author_ProfileKeys_arr][:value]
     husband_ProfileKeys_arr = session[:husband_ProfileKeys_arr][:value]
     husband_name = session[:husband_name][:value]
@@ -437,7 +437,7 @@ class StartController < ApplicationController
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Son & wife & husband rows
-    if author_sex
+    if author_sex == 1
       son_ProfileKeys_arr << [son_name, 1, author_name, 0]
       son_ProfileKeys_arr << [son_name, 2, wife_name, 8]
       wife_ProfileKeys_arr << [wife_name, 3, son_name, 3]
@@ -502,7 +502,7 @@ class StartController < ApplicationController
     @author_ProfileKeys_arr = author_ProfileKeys_arr # DEBUGG TO VIEW
 
     # add Daughter & wife & husband rows
-    if author_sex
+    if author_sex == 1
       daugther_ProfileKeys_arr << [daugther_name, 1, author_name, 0]
       daugther_ProfileKeys_arr << [daugther_name, 2, wife_name, 8]
       wife_ProfileKeys_arr << [wife_name, 4, daugther_name, 4]
@@ -990,9 +990,10 @@ class StartController < ApplicationController
       @profiles_arr_w_ids = profiles_arr_w_ids # DEBUGG TO VIEW
       @profile_id_hash = profile_id_hash # DEBUGG TO VIEW
 
+      update_user
+
       save_tree(profiles_arr_w_ids)
 
-      update_user
 
       make_profile_keys(profiles_arr_w_ids, profile_id_hash )
 
@@ -1027,7 +1028,7 @@ class StartController < ApplicationController
             new_profile.email = ""   # profile - not user_id
           end
           new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
-          if profiles_array[arr_i][2] # sex_id
+          if profiles_array[arr_i][2] == 1 # sex_id ############## !!
             new_profile.sex_id = 1    # sex_id - MALE
           else
             new_profile.sex_id = 0    # sex_id - FEMALE
