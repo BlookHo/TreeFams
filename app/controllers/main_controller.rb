@@ -34,10 +34,8 @@ class MainController < ApplicationController
 #   [4, 25, 97, 8, 84, 371, 0, false]]
 
 
-#  if user_signed_in?
 
       user_tree = Tree.where(:user_id => user_id)
-      #.select(:id, :profile_id, :relation_id, :connected)
       row_arr = []
       tree_arr = []
 
@@ -58,9 +56,6 @@ class MainController < ApplicationController
 
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
       @tree_arr = tree_arr    # DEBUGG TO VIEW
-
-#  end
-
 
  end
 
