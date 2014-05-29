@@ -11,9 +11,6 @@ Weafam::Application.routes.draw do
   mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
 
 
-  #
-
-
   resources :trees
   resources :profiles
   resources :users
@@ -111,9 +108,11 @@ Weafam::Application.routes.draw do
 
 
   # Landing & start singup
-  get   'welcome/start',             to: 'welcome#start',        as: :start
-  post  'welcome/start/proceed',     to: 'welcome#proceed',      as: :proceed_start
-  get   'welcome/start/step/:step',  to: 'welcome#go_to_step',   as: :go_to_start_step
+  get    'welcome/start',                  to: 'welcome#start',                as: :start
+  match  'welcome/start/proceed',          to: 'welcome#proceed',              as: :proceed_start, via: [:get, :post]
+  get    'welcome/start/to/step/:step',    to: 'welcome#to_step',              as: :to_start_step
+  get    'welcome/start/step/previous',    to: 'welcome#previous',             as: :previous
+  get    'welcome/start/add/:member',      to: 'welcome#add_member_field',     as: :add_member_field
 
 
   root  'welcome#index'

@@ -1,0 +1,8 @@
+- if current_author.male?
+  %h2 Вы женаты?
+- else
+  %h2 Вы замужем?
+
+.control
+  = link_to "Да", to_start_step_path("couple"), class: [:btn, :green]
+  = link_to "Нет", to_start_step_path("email"), class: [:btn, :red]

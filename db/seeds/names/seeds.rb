@@ -544,5 +544,6 @@ Name.create([
 {name: 'Ярослава', only_male:0, name_freq: 0},
 # добавлено вручную
 {name: 'Андрей', only_male:1, name_freq: 0}
+{name: 'Не известно', only_male:0, name_freq: 0}
 
             ])

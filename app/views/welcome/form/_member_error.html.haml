@@ -1,0 +1,18 @@
+- if !objekt.errors.empty?
+  .errors
+    = objekt.errors[:name].last
+    - if objekt.errors[:name].empty? and objekt.errors[:name_warning]
+      = objekt.errors[:name_warning].first
+- if objekt.errors[:name].empty? and !objekt.errors[:name_warning].empty?
+  .control.sex_confirmation
+    - if objekt.class.to_s =~ /Author/
+      %label
+        Мужской
+        = radio_button_tag "author[sex_id]", 1
+      %label
+        Женский
+        = radio_button_tag "author[sex_id]", 0
+    - else
+      %label
+        = check_box_tag "author[#{objekt.class.to_s.pluralize.downcase}][][sex_id]", objekt.sex_id.to_i, false
+        Подтвердить редкое имя

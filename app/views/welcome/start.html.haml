@@ -1,5 +1,18 @@
-= render 'breadcrumb'
+#welcome-form
+  // Диалог
+  #dialog{ :style => 'width:40%;float:left;' }
+    = render 'breadcrumb'
+    = form_tag :proceed_start, remote: false, id: 'welcome_form' do
+      .body
+        = render "welcome/form/#{current_step}"
+      .footer
+        - if last_step?
+          "Пока останавливаемся тут"
+        - else
+          = link_to '&larr; Назад'.html_safe, :previous, class: [:btn], id: :prev
 
-#welcome-form.center-align.col_1_2
-  = form_tag :proceed_start, remote: false, id: 'welcome_form' do
-    = render "form_#{current_step}"
+          - unless current_step =~ /^have/
+            = submit_tag 'Вперед &rarr;'.html_safe, class: [:btn, :blue], id: :next, style:"float:right;"
+
+  // Граф
+  = render 'graph_tree/canvas_tree/dialog'
