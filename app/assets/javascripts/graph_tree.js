@@ -60,7 +60,6 @@
  *  Класс вычисления координат и построения древа:
  *  reTree              - конструктор класса;
  *  sexing              - определение цвета по полу;
- *  validation          - валидация на существование свойств (пол, родственная связь, имя) необходимых для создания элемента
  *  relationToS         - переводит числовое представление родсвтенной связи в символьное
  *  scale               - функция изменения масштаба;
  *  constructElement    - построение элемента древа по заданным параметрам;
@@ -129,8 +128,8 @@ function reTree(params_tree, params_kinetic) {
     this.coordinates.config.devscale = this.kinetic.params.stage.width / this.kinetic.params.config.scale * 3.5;
     this.coordinates.config.scale = 1;
 
-    this.coordinates.author.x = this.kinetic.params.stage.width / 2 - this.kinetic.params.rectangle.width / 2;
-    this.coordinates.author.y = this.kinetic.params.stage.height / 2 - this.kinetic.params.rectangle.height / 2 + params_tree.deviation;
+    this.coordinates.author.x = this.kinetic.params.stage.width / 2 - this.kinetic.params.rectangle.width / 2 + params_tree.xdeviation;
+    this.coordinates.author.y = this.kinetic.params.stage.height / 2 - this.kinetic.params.rectangle.height / 2 + params_tree.ydeviation;
     this.coordinates.author.xcenter = this.coordinates.author.x + this.kinetic.params.rectangle.width / 2;
     this.coordinates.author.ycenter = this.coordinates.author.y + this.kinetic.params.rectangle.height / 2;
 
@@ -142,7 +141,8 @@ function reTree(params_tree, params_kinetic) {
     this.coordinates.childrens.blvl = 1.5;
     this.coordinates.childrens.xdeviation = this.coordinates.config.devscale;
     this.coordinates.childrens.ydeviation = this.coordinates.config.devscale;
-    this.coordinates.childrens.direction = 0;
+
+    this.coordinates.childrens.direction = 1;
 
     this.coordinates.parents.xdeviation = this.coordinates.config.devscale / 2;
     this.coordinates.parents.ydeviation = this.coordinates.config.devscale;
@@ -164,17 +164,11 @@ function reTree(params_tree, params_kinetic) {
 reTree.prototype.sexing = function (sex) { return sex === 1 ? '#bfefff' : sex === 0 ? '#fffacd' : '#ccc'; }
 
 /*
- * Валидация на выполнение всех условий при построении элементра древа
- */
-
-reTree.prototype.validation = function (properties) { return properties.relation_id >= 0 ? true : false; }
-
-/*
  * Переводит числовое представление родственной связи в символьное ( 0 -> автор; 1 -> отец; и тд)
  */
 
 reTree.prototype.relationToS = function (relationNumber) {
-    var relationString;
+    var relationString = '';
     switch (relationNumber) {
         case 0:
             relationString = 'автор';
@@ -203,9 +197,6 @@ reTree.prototype.relationToS = function (relationNumber) {
         case 8:
             relationString = 'жена';
             break;
-        default:
-            relationString = 'ОШИБКА';
-            break;
     }
     return relationString;
 }
@@ -233,9 +224,9 @@ reTree.prototype.scale = function (scale) {
 
 reTree.prototype.constructElement = function (figure, line, text, label, properties) {
 
-    if (figure.type === 0)
+    if (properties.relation_id === 0)
         this.kinetic.drawRect(figure.x, figure.y, this.sexing(properties.sex_id));
-    else if (figure.type === 1)
+    else
         this.kinetic.drawCircle(figure.x, figure.y, this.sexing(properties.sex_id));
 
     if (line.points !== null)
@@ -244,7 +235,8 @@ reTree.prototype.constructElement = function (figure, line, text, label, propert
     if (properties.name !== '')
         this.kinetic.drawLabel(label.x, label.y, label.direction, properties.name);
 
-    this.kinetic.drawText(text.x, text.y, text.width, this.relationToS(properties.relation_id));
+    if (properties.relation_id >= 0 && properties.relation_id <= 8)
+        this.kinetic.drawText(text.x, text.y, text.width, this.relationToS(properties.relation_id));
 
 }
 
@@ -265,18 +257,14 @@ reTree.prototype.constructTree = function (properties) {
      *      сестра      ->      6
      *      муж         ->      7
      *      жена        ->      8
+     *      ошибка      ->      другие значения
      * }
-     * В зависимости от типа связи отрисвываем: фигуры, линии, текст и метки;
-     * Если не хватает одного из основных параметров (тип связи) выходим из функции;
+     * В зависимости от типа связи отрисвываем: фигуры, линии, текст и лейблы;
      */
-
-    if (!this.validation(properties))
-        return;
 
     switch (properties.relation_id) {
         case 0:                                         // автор
             var figure = {
-                type: 0,
                 x: this.coordinates.author.x,
                 y: this.coordinates.author.y
             };
@@ -295,7 +283,6 @@ reTree.prototype.constructTree = function (properties) {
             break;
         case 1:                                         // отец
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter - this.coordinates.parents.xdeviation,
                 y: this.coordinates.author.ycenter - this.coordinates.parents.ydeviation
             };
@@ -321,7 +308,6 @@ reTree.prototype.constructTree = function (properties) {
             break;
         case 2:                                         // мать
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter + this.coordinates.parents.xdeviation,
                 y: this.coordinates.author.ycenter - this.coordinates.parents.ydeviation
             };
@@ -350,7 +336,6 @@ reTree.prototype.constructTree = function (properties) {
                 + this.coordinates.childrens.xdeviation * this.coordinates.childrens.tlvl
                 + this.coordinates.couple.direction * this.coordinates.childrens.direction;
             var figure = {
-                type: 1,
                 x: xcenter,
                 y: this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation
             };
@@ -384,7 +369,6 @@ reTree.prototype.constructTree = function (properties) {
                           + this.coordinates.childrens.xdeviation * this.coordinates.childrens.blvl
                           + this.coordinates.couple.direction * this.coordinates.childrens.direction;
             var figure = {
-                type: 1,
                 x: xcenter,
                 y: this.coordinates.author.ycenter + this.coordinates.childrens.ydeviation + this.coordinates.childrens.xdeviation
             };
@@ -415,7 +399,6 @@ reTree.prototype.constructTree = function (properties) {
             break;
         case 5:                                         // брат
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.tlvl,
                 y: this.coordinates.author.ycenter
             };
@@ -444,7 +427,6 @@ reTree.prototype.constructTree = function (properties) {
             break;
         case 6:                                         // сестра
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.blvl,
                 y: this.coordinates.author.ycenter + this.coordinates.sibs.deviation
             };
@@ -453,9 +435,9 @@ reTree.prototype.constructTree = function (properties) {
             cLine[cLine.length] = this.coordinates.author.ycenter;
             cLine[cLine.length] = this.coordinates.author.xcenter;
             cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation / 2;
-            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * .85;
+            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * .9;
             cLine[cLine.length] = this.coordinates.author.ycenter - this.coordinates.parents.ydeviation / 2;
-            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * .85;
+            cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * .9;
             cLine[cLine.length] = this.coordinates.author.ycenter + (this.coordinates.sibs.deviation / 2);
             cLine[cLine.length] = this.coordinates.author.xcenter - this.coordinates.sibs.deviation * this.coordinates.sibs.blvl;
             cLine[cLine.length] = this.coordinates.author.ycenter + (this.coordinates.sibs.deviation / 2);
@@ -478,7 +460,6 @@ reTree.prototype.constructTree = function (properties) {
         case 8:                                         // супруги
         case 7:
             var figure = {
-                type: 1,
                 x: this.coordinates.author.xcenter + this.coordinates.couple.deviation * 2 + this.coordinates.couple.direction,
                 y: this.coordinates.author.ycenter
             };
@@ -499,7 +480,6 @@ reTree.prototype.constructTree = function (properties) {
                 direction: 'left'
             };
             this.constructElement(figure, line, text, label, properties);
-            this.coordinates.childrens.direction = 1;
             break;
         default:                                        // ошибка -> выход
             return;
@@ -533,6 +513,7 @@ reTree.prototype.roundTree = function (object) {
  *  drawCircle      - рисуем круг;
  *  drawRect        - рисуем прямоугольник;
  *  drawText        - отрисовываем текст;
+ *  drawLabel       - отрисовываем лейбл;
  *  compilation     - отрисовываем все фигуры на холсте;
  */
 
@@ -736,7 +717,7 @@ reKinetic.prototype.drawLabel = function (x, y, direction, text) {
     this.shapes.label[this.shapes.label.length - 1].add(new Kinetic.Text({
         text: text,
         padding: this.params.label.padding,
-        fontSize: this.params.text.fontSize,
+        fontSize: this.params.text.fontSize - 2,
         fontFamily: this.params.text.fontFamily,
         fill: this.params.text.fill
     }));
