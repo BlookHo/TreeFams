@@ -2,5 +2,5 @@
 .fields
   = render 'welcome/form/member_error', objekt: current_author
   .control
-    = text_field_tag "author[name]", current_author.name, class: [:autocomplete_field], placeholder: "Ваше имя...", data:{names: Name.approved.map{|n| n.name} }
+    = text_field_tag "author[name]", current_author.name.mb_chars.capitalize, class: [:autocomplete_field], placeholder: "Ваше имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
     .help-text Ваше официальное имя как в паспорте, чтобы ваши родственники смогли вас найти

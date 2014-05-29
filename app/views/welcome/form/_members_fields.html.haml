@@ -5,13 +5,13 @@
 
 - if klass_sex_id == 0 && normolized_members_name == 'mothers'
   -# Женские для матери (включают пункт неизвестно)
-  - autocomplete_names = @@autocomplete_names = Name.approved.female_extended.map{|n| n.name}
+  - autocomplete_names = @@autocomplete_names = Name.approved.female_extended.map{|n| n.name.mb_chars.capitalize}
 - elsif klass_sex_id == 0 && normolized_members_name != 'mothers'
   -# Женские
-  - autocomplete_names = @@autocomplete_names = Name.approved.female.map{|n| n.name}
+  - autocomplete_names = @@autocomplete_names = Name.approved.female.map{|n| n.name.mb_chars.capitalize }
 - else
   -# Мужские
-  - autocomplete_names = @@autocomplete_names = Name.approved.male.map{|n| n.name}
+  - autocomplete_names = @@autocomplete_names = Name.approved.male.map{|n| n.name.mb_chars.capitalize }
 
 -# Default filed for new record
 = render 'welcome/form/field', remove_link: false if members.empty?
