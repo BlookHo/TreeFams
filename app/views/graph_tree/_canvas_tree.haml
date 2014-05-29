@@ -17,7 +17,12 @@
       draggable: true
     };
 
-    var constructTree = new reTree('#{@profiles_json}', kinetic);
+    var tree = {
+      json: '#{@profiles_json}',
+      deviation: 0
+    };
+
+    var constructTree = new reTree(tree, kinetic);
 
     $('#scale_slider').slider({
       orientation: 'vertical',
