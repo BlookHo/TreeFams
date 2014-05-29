@@ -990,9 +990,10 @@ class StartController < ApplicationController
       @profiles_arr_w_ids = profiles_arr_w_ids # DEBUGG TO VIEW
       @profile_id_hash = profile_id_hash # DEBUGG TO VIEW
 
+      update_user
+
       save_tree(profiles_arr_w_ids)
 
-      update_user
 
       make_profile_keys(profiles_arr_w_ids, profile_id_hash )
 
