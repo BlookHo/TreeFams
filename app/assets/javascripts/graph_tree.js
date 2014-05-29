@@ -548,11 +548,11 @@ function reKinetic(parameters) {
     this.params.rectangle.width = this.params.stage.width / (this.params.config.scale / 4);
     this.params.rectangle.height = this.params.stage.width / (this.params.config.scale / 2);
     this.params.rectangle.stroke = '#900';
-    this.params.rectangle.strokeWidth = 2;
+    this.params.rectangle.strokeWidth = 1;
 
     this.params.line = new Object();                // параметры линий
     this.params.line.stroke = 'black';
-    this.params.line.strokeWidth = 2;
+    this.params.line.strokeWidth = 1;
     this.params.line.lineCap = 'round';
     this.params.line.lineJoin = 'round';
 
@@ -682,7 +682,7 @@ reKinetic.prototype.drawText = function (x, y, width, text) {
         x: x,
         y: y,
         text: text,
-        fontSize: this.params.text.fontSize,
+        fontSize: this.params.text.fontSize - 1,
         fontFamily: this.params.text.fontFamily,
         width: width,
         align: this.params.text.align,
