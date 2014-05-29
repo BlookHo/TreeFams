@@ -7,7 +7,10 @@ initAutocompleteFields = ()->
         response( $.grep( names, (item) ->
                 return matcher.test( item )
         ))
+      select: ( event, ui ) ->
+        $("#welcome-form input:text, #formId textarea").blur()
 
 
 jQuery ->
   initAutocompleteFields()
+  $("#welcome-form input:text, #formId textarea").first().focus();
