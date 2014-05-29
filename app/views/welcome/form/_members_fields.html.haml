@@ -13,17 +13,14 @@
   -# Мужские
   - autocomplete_names = @@autocomplete_names = Name.approved.male.map{|n| n.name}
 
-
-
 -# Default filed for new record
 = render 'welcome/form/field', remove_link: false if members.empty?
 
 -# Fields for existing family members with errors
 - eval("current_author.family.#{normolized_members_name}").each_with_index do |member, index|
-  = render 'welcome/form/member_error', objekt: member
   = render 'welcome/form/field', objekt: member, remove_link: (index != 1)
 
 
 - if eval("#{klass_name}").allow_multiple?
   .control.add_member
-    = link_to "У меня есть еще #{klass_descriptions[0]}", add_member_field_path("father"), remote: true
+    = link_to "У меня есть еще #{klass_descriptions[0]}", add_member_field_path("father"), remote: true, class: [:btn, :green]
