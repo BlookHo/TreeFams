@@ -564,11 +564,10 @@ function reKinetic(parameters) {
 
     this.params.label = new Object();               // параметры метки
     this.params.label.fill = 'yellow';
-    this.params.label.opacity = 0.9;
+    this.params.label.opacity = .9;
     this.params.label.padding = 5;
-    this.params.label.pointerDirection = 'up';
     this.params.label.pointerWidth = 10;
-    this.params.label.pointerHeight = 10;
+    this.params.label.pointerHeight = 6;
 
     this.stage = new Kinetic.Stage({                // создаем холст
         name: 'tree_stage',
@@ -711,7 +710,9 @@ reKinetic.prototype.drawLabel = function (x, y, direction, text) {
         fill: this.params.label.fill,
         pointerDirection: direction,
         pointerWidth: this.params.label.pointerWidth,
-        pointerHeight: this.params.label.pointerHeight
+        pointerHeight: this.params.label.pointerHeight,
+        strokeWidth: this.params.circle.strokeWidth,
+        stroke: this.params.circle.stroke
     }));
 
     this.shapes.label[this.shapes.label.length - 1].add(new Kinetic.Text({
