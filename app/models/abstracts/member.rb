@@ -40,12 +40,13 @@ end
 
 # Author - корень любого дерева
 class Author < Member
-  attr_accessor :family
+  attr_accessor :family, :email
 
-  def initialize(family: Family.new, name: "", sex_id: "", relation_id: relation_id)
+  def initialize(family: Family.new, name: "", sex_id: "", relation_id: relation_id, email:email)
     @name = name
     @sex_id = sex_id
     @relation_id = self.relation_id
+    @email = email
     @family = family
   end
 

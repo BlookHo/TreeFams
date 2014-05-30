@@ -47,14 +47,11 @@ class WelcomeController < ApplicationController
     render :start
   end
 
-  # def add_member_field
-  # end
-
 
   private
 
   def step_valid?
-     first_step? ? validate_member(current_author) : validate_family
+     (first_step? or last_step?) ? validate_member(current_author) : validate_family
   end
 
   def validate_family
@@ -78,12 +75,16 @@ class WelcomeController < ApplicationController
   end
 
   def proceed_data
-    first_step? ? proceed_author : proceed_family
+    (first_step? or last_step?) ? proceed_author : proceed_family
   end
 
   def proceed_author
-    current_author.name   = params[:author][:name]
-    current_author.sex_id = params[:author][:sex_id]
+    if first_step?
+      current_author.name   = params[:author][:name]
+      current_author.sex_id = params[:author][:sex_id]
+    elsif last_step?
+      current_author.email = params[:author][:email]
+    end
     session[:current_author] = current_author
   end
 
