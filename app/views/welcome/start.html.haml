@@ -15,4 +15,4 @@
             = submit_tag 'Вперед &rarr;'.html_safe, class: [:btn, :blue], id: :next, style:"float:right;"
 
 .col_2_2{style:"margin-top:50px;"}
-  = current_author.inspect
+  = current_author.to_array

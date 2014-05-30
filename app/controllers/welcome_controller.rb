@@ -10,8 +10,11 @@ class WelcomeController < ApplicationController
                 :last_step?
 
   # Small fix for development environment
-  before_filter do
-    Member if Rails.env =~ /development/
+  # before_filter do
+  #   Member if Rails.env =~ /development/
+  # end
+
+  def show_data
   end
 
   # Landing page
@@ -30,8 +33,12 @@ class WelcomeController < ApplicationController
       render :start
     else
       proceed_data
-      session[:current_step] = next_step if step_valid?
-      render :start
+      if last_step? and step_valid? and current_author.email
+        redirect_to :user_registration
+      else
+        session[:current_step] = next_step if step_valid?
+        render :start
+      end
     end
   end
 
@@ -74,6 +81,7 @@ class WelcomeController < ApplicationController
     end
   end
 
+
   def proceed_data
     (first_step? or last_step?) ? proceed_author : proceed_family
   end
@@ -83,6 +91,8 @@ class WelcomeController < ApplicationController
       current_author.name   = params[:author][:name]
       current_author.sex_id = params[:author][:sex_id]
     elsif last_step?
+      # current_author.name = current_author.name
+      # current_author.sex_id = current_author.sex_id
       current_author.email = params[:author][:email]
     end
     session[:current_author] = current_author
@@ -119,7 +129,7 @@ class WelcomeController < ApplicationController
   end
 
   def next_step
-    steps[steps.index(current_step)+1]
+      steps[steps.index(current_step)+1]
   end
 
   def prev_step
