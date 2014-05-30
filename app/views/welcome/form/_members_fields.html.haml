@@ -1,6 +1,7 @@
 -# Autocomplete helper and global view vars
 - klass_name = normolized_members_name.to_s.singularize.capitalize
 - klass_sex_id = eval("#{klass_name}.sex_id")
+- klass_allow_multiple = eval("#{klass_name}.allow_multiple?")
 - klass_descriptions = @@klass_descriptions = eval("#{klass_name}.descriptions")
 
 - if klass_sex_id == 0 && normolized_members_name == 'mothers'
@@ -18,7 +19,10 @@
 
 -# Fields for existing family members with errors
 - eval("current_author.family.#{normolized_members_name}").each_with_index do |member, index|
-  = render 'welcome/form/field', objekt: member, remove_link: (index != 1)
+  - if klass_allow_multiple
+    = render 'welcome/form/field', objekt: member, remove_link: (index != 1)
+  - else
+    = render 'welcome/form/field', objekt: member, remove_link: false
 
 
 - if eval("#{klass_name}").allow_multiple?

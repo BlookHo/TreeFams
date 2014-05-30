@@ -557,7 +557,7 @@ class StartController < ApplicationController
       @find_name = find_name
       user_sex = 1 if !find_name.blank? and find_name[0]['only_male']    # Male name
       @user_sex = user_sex
-   #       check_sex_by_name(@user_name) # display sex by name = извлечение пола из введенного имени
+      # check_sex_by_name(@user_name) # display sex by name = извлечение пола из введенного имени
     end
 
     # Begin All Arrays
@@ -569,6 +569,9 @@ class StartController < ApplicationController
 
     one_profile_arr = add_profile(0,@user_name,@user_sex)
     profiles_array << one_profile_arr
+
+
+    session[:author_ProfileKeys_arr] = {}
 
     session[:profiles_array] = {:value => profiles_array, :updated_at => Time.current}
     session[:user_sex] = {:value => @user_sex, :updated_at => Time.current}
@@ -951,11 +954,58 @@ class StartController < ApplicationController
 
     #ProfileKey.delete_all             # DEBUGG
     #ProfileKey.reset_pk_sequence
-
+    #
     if !session[:profiles_array].blank?
-      profiles_array = session[:profiles_array][:value]
-      @profiles_array = profiles_array # DEBUGG TO VIEW
+       profiles_array = session[:profiles_array][:value]
+       @profiles_array = profiles_array # DEBUGG TO VIEW
+    else
+
+      profiles_array = session[:current_author].to_array
+      session[:profiles_array] = session[:current_author].to_array
+
+
     end
+
+
+
+    session[:husband_ProfileKeys_arr] = {:value => []}
+    session[:husband_name] = {:value => ''}
+
+    session[:wife_ProfileKeys_arr] = {:value => []}
+    session[:wife_name] = {:value => ''}
+
+    session[:son_ProfileKeys_arr] = {:value => []}
+    session[:sons_names_arr] = {:value => []}
+
+    session[:daugther_ProfileKeys_arr] = {:value => []}
+    session[:daugthers_names_arr] = {:value => []}
+
+
+    profiles_array.each_with_index do |profile, index|
+
+      case profile[0]
+        when 1
+          add_father_to_ProfileKeys(profiles_array.slice(0..index))
+        when 2
+          add_mother_to_ProfileKeys(profiles_array.slice(0..index))
+        when 3
+          add_son_to_ProfileKeys(profiles_array.slice(0..index))
+        when 4
+          add_daugther_to_ProfileKeys(profiles_array.slice(0..index))
+        when 5
+          add_brother_to_ProfileKeys(profiles_array.slice(0..index))
+        when 6
+          add_sister_to_ProfileKeys(profiles_array.slice(0..index))
+        when 7
+          add_husband_to_ProfileKeys(profiles_array.slice(0..index))
+        when 8
+          add_wife_to_ProfileKeys(profiles_array.slice(0..index))
+        else
+          logger.info "======== ERRROR"
+        end
+    end
+
+
 
   # 14 user:
   #profiles_array = [[0, "Александр", 1],   # DEBUGG TO VIEW
@@ -993,6 +1043,8 @@ class StartController < ApplicationController
       update_user
 
       save_tree(profiles_arr_w_ids)
+
+
 
 
       make_profile_keys(profiles_arr_w_ids, profile_id_hash )

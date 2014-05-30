@@ -1,6 +1,7 @@
-#welcome-form
-  #dialog{ :style => 'width:40%;float:left;' }
+.col_1_2
+  #welcome-form
     = render 'breadcrumb'
+
     = form_tag :proceed_start, remote: false, id: 'welcome_form' do
       .body
         = render "welcome/form/#{current_step}"
@@ -13,5 +14,5 @@
           - unless current_step =~ /^have/
             = submit_tag 'Вперед &rarr;'.html_safe, class: [:btn, :blue], id: :next, style:"float:right;"
 
-  // Граф
-  = render 'graph_tree/canvas_tree/dialog'
+.col_2_2{style:"margin-top:50px;"}
+  = current_author.to_array

@@ -9,6 +9,6 @@ jQuery ->
                   return matcher.test( item )
           ))
         select: ( event, ui ) ->
-          $("#welcome-form input:text, #formId textarea").blur()
+          # $("#welcome-form input:text, #formId textarea").blur()
 
   $("#welcome-form input:text, #formId textarea").first().focus();

@@ -1,5 +1,10 @@
 class Users::RegistrationsController < Devise::RegistrationsController
 
+  # Small fix for development environment
+  before_filter do
+    Member if Rails.env =~ /development/
+  end
+
   # @todo: поставить условия на случай регистрации без дерева + рефакторить
   def create
     #super

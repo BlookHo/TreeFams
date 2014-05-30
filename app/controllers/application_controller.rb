@@ -6,6 +6,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
 
+  before_filter do
+    Member if Rails.env =~ /development/
+  end
   #before_filter :set_locale
 
   Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"

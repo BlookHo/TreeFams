@@ -40,12 +40,13 @@ end
 
 # Author - корень любого дерева
 class Author < Member
-  attr_accessor :family
+  attr_accessor :family, :email
 
-  def initialize(family: Family.new, name: "", sex_id: "", relation_id: relation_id)
+  def initialize(family: Family.new, name: "", sex_id: "", relation_id: relation_id, email:email)
     @name = name
     @sex_id = sex_id
     @relation_id = self.relation_id
+    @email = email
     @family = family
   end
 
@@ -73,6 +74,18 @@ class Author < Member
     false
   end
 
+  # Convert to array
+  def to_array
+    result = []
+    result << [self.relation_id, self.name, self.sex_id]
+    family.members.each do |members|
+      members.each do |member|
+        result << [member.relation_id, member.name, member.sex_id]
+      end
+    end
+    result
+  end
+
 end
 
 
@@ -83,6 +96,7 @@ class Family
   attr_accessor :brothers, :sisters
   attr_accessor :sons, :daughters
   attr_accessor :husbands, :wives
+  attr_reader :members
 
   def initialize( fathers: [],  mothers: [],
                   brothers: [], sisters: [],
@@ -93,10 +107,10 @@ class Family
     @mothers = mothers
     @brothers = brothers
     @sisters = sisters
-    @sons = sons
-    @daughters = daughters
     @husbands = husbands
     @wives = wives
+    @sons = sons
+    @daughters = daughters
   end
 
   # Перезаписываем членов, чтобы избежать дублирования при ошибках валидации,
@@ -115,9 +129,12 @@ class Family
     end
   end
 
-
   def add_member(member)
     eval("#{member.class.to_s.pluralize.downcase}") << member
+  end
+
+  def members
+    [fathers, mothers, brothers, sisters,  husbands, wives, sons, daughters]
   end
 
 end
