@@ -1,11 +1,7 @@
 %ul#progrees-bar
-  %li{class: ('active' if current_step == 'self')}
-    = link_to "1", go_to_start_step_path(:self)
-  %li{class: ('active' if current_step == 'mother' || current_step == 'father')}
-    = link_to "2", go_to_start_step_path("mother")
-  %li{class: ('active' if ['brothers', 'sisters', 'have_brothers', 'have_sisters'].include? current_step)}
-    = link_to "3", go_to_start_step_path("have_brothers")
-  %li{class: ('active' if ['have_couple', 'couple'].include? current_step)}
-    = link_to "4", go_to_start_step_path("have_couple")
-  %li{class: ('active' if ['have_children', 'sons', 'have_daughter', 'daughter'].include? current_step)}
-    = link_to "5", go_to_start_step_path("have_children")
+  %li{class: ('active' if current_step =~ /author/)} 1
+  %li{class: ('active' if current_step =~ /mothers|fathers/)} 2
+  %li{class: ('active' if current_step =~ /brothers|sisters|have_brothers|have_sisters/)} 3
+  %li{class: ('active' if current_step =~ /have_couple|couple/)} 4
+  %li{class: ('active' if current_step =~ /have_children|have_sons|sons|have_daughter|daughter/)} 5
+  %li.stretch

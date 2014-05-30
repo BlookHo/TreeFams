@@ -1,0 +1,11 @@
+- if current_author.male?
+  %h2 Как зовут вашу жену?
+- else
+  %h2 Как зовут вашего супруга?
+
+- if current_author.male?
+  -# Жена
+  .fields= render 'welcome/form/members_fields', members: current_author.family.wives
+- else
+  -# Муж
+  .fields= render 'welcome/form/members_fields', members: current_author.family.husbands
