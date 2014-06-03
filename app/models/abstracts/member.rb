@@ -42,6 +42,12 @@ end
 class Author < Member
   attr_accessor :family, :email
 
+  validates :email,
+            :uniqueness => true,
+            :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
+            :unless => 'email.blank?'
+
+
   def initialize(family: Family.new, name: "", sex_id: "", relation_id: relation_id, email:email)
     @name = name
     @sex_id = sex_id
