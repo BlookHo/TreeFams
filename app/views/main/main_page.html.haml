@@ -1,97 +1,46 @@
-%section.admin
-  %h2 ГЛАВНАЯ страница (MAIN) - для основной работы
-  -#%h4 Просмотр и наращивание древа.
-  -#%h4 Вызов меню родственника: добавление нового смежного родственника, общение.
-  -#%h4 Избранные, редактирование профиля.
-  -#%h4 Здесь же: получение инфы о возможных совпадениях профилей в других древах.
-  -#%h4 Переход к просмотру совпадений и дальнейшим рукопожатиям (подтверждениям).
-
-  %h3 Отображение Древа Пользователя в табличной форме
-  - if user_signed_in?
-    %p current_user.id: #{current_user.id.inspect}
-
-  <li #{render :partial => 'main/main_display_tree'}
+.content
+  %h1
+    = current_user.profile.name.name.mb_chars.capitalize
+    \, это ваш ближний круг
 
 
-  %h4 ПОИСК СОВПАДЕНИЙ РОДСТВЕННИКОВ в других деревьях
-  -#%p
-  -#  @tree_arr_len: #{@tree_arr_len.inspect}
-  -#%p
-  -#  Основной массив БК - из Tree: @tree_arr: #{@tree_arr.inspect}
-  -#%p
-  -#  @@profile_searched: #{@profile_searched.inspect}
-  -#%p
-  -#  @@relation_searched: #{@relation_searched.inspect}
-  -#%p
-  -#  @all_profile_rows:  #{@all_profile_rows.inspect}
-  -#%p
-  -#  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
+  %table.tmp_table
+    %tr
+      %th Отношение
+      %th Имя
+    - @tree_arr.each do |item|
+      %tr
+        %td= relation_to_human(item[3])
+        %td= Name.where(id: item[5]).first.name.mb_chars.capitalize
 
-  -#- if !@all_relation_match_arr.blank?
-  -#  %div
-  -#    %table
-  -#      %tr
-  -#        %th ID Автора Дерева
-  -#        %th ID От_Профиля
-  -#        %th ID Имени От_Профиля
-  -#        %th ID Родства: с другим К_Профиля
-  -#        %th ID другого К_Профиля
-  -#        %th ID Имени К_Профиля
-  -#        %th
-  -#      - @all_relation_match_arr.each do |tree|
-  -#        %tr
-  -#          %td= tree[0]
-  -#          %td= tree[1]
-  -#          %td= tree[2]
-  -#          %td= tree[3]
-  -#          %td= tree[4]
-  -#          %td= tree[5]
-  -#          %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
-  -#- else
-  -#  %h4 No Listing tree - No @all_relation_match_arr!
 
-  %p
-    @relation_match_arr: #{@relation_match_arr.inspect}
-  -#%p
-  -#  @relation_match_size: #{@relation_match_size.inspect}
+  %div{style: "margin-top:50px;"}
+    - if @all_match_arr_sorted.nil?
+      %h1 Совпадений не найдено
+    - else
+      %h1 Вы или ваши родственники найдены в деревьях следующих людей:
 
-  -#%p
-  -#  @found_trees_hash: #{@found_trees_hash.inspect}
-  %p
-    @found_profiles_hash: #{@found_profiles_hash.inspect}
-  %p
-    @found_relations_hash: #{@found_relations_hash.inspect}
+      %table.tmp_table
+        %tr
+          %th Пользователь
+          %th Родственники
+        - @all_match_arr_sorted.each do |key, value|
+          %tr
+            %td= User.where(id: key).first.name.mb_chars.capitalize
+            %td
+              %ul
+                - Profile.where(id: value).each_with_index do |profile, index|
+                  %li{style: "margin-bottom:6px;"}
+                    = profile.name.name.mb_chars.capitalize
+                    .span{style: "color:grey;font-size:small;"}= relation_to_human(@relation_ids_arr[index])
 
-  -#%p
-  -#  @all_match_trees_arr: #{@all_match_trees_arr.inspect}
-  -#%p
-  -#  @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
-  %h4
-    ВСЕ СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
-  %p
-    НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
-  %p
-    НОМЕРА ПРОФИЛЕЙ @profile_ids_arr: #{@profile_ids_arr.inspect}
-  -#%p
-  -#  @all_match_relations_hash: #{@all_match_relations_hash.inspect}
-  -#%p
-  -#  @all_match_relations_arr: #{@all_match_relations_arr.inspect}
-  %p
-    НОМЕРА ОТНОШЕНИЙ @all_match_relations_sorted: #{@all_match_relations_sorted.inspect}
-  %p
-    НОМЕРА ОТНОШЕНИЙ @relation_ids_arr: #{@relation_ids_arr.inspect}
-  %h4
-    Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
-  %h4
-    Их user_id: #{@users_ids_arr.inspect}
 
-  %h3
-    ОБЩЕЕ ВРЕМЯ ПОИСКА: #{ @elapsed_search_time.inspect } seconds
 
-  %h4 Переход на:  #{link_to "Просмотр и подтверждение совпадений -->", match_approval_path}
-
-  %h4 Переход на:  #{link_to "Просмотр и управление Графом дерева -->", show_graph_tree_path}
-
-  %h4 Возврат на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
-  %h4 Возврат на страницу Лэндинг:  #{link_to "Landing -->", landing_path}
-  %h4 Переход на страницу Админа:  #{link_to "Админ -->", admin_path}
+    %div{style: "margin-top:100px;margin-bottom:75px;"}
+      %h1 Список зарегистрированных пользователей
+      %table.tmp_table
+        - User.all.reverse.each do |user|
+          %tr
+            %td= user.profile.name.name.mb_chars.capitalize
+            %td= user.profile.email
+            %td= link_to "Войти под этим пользователем", login_as_user_path(user.id)

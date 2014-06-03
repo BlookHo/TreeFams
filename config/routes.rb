@@ -113,7 +113,9 @@ Weafam::Application.routes.draw do
   get    'welcome/start/to/step/:step',    to: 'welcome#to_step',              as: :to_start_step
   get    'welcome/start/step/previous',    to: 'welcome#previous',             as: :previous
   get    'welcome/start/add/:member',      to: 'welcome#add_member_field',     as: :add_member_field
-  get 'welcome/start/show_data',           to: 'welcome#show_data', as: :show_data
+  get 'welcome/start/show_data',           to: 'welcome#show_data',            as: :show_data
+  # Debug path
+  get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
 
   root  'welcome#index'
 

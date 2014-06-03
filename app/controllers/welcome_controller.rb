@@ -9,12 +9,11 @@ class WelcomeController < ApplicationController
                 :first_step?,
                 :last_step?
 
-  # Small fix for development environment
-  # before_filter do
-  #   Member if Rails.env =~ /development/
-  # end
 
-  def show_data
+
+  def login_as_user
+    sign_in(:user, User.find(params[:user_id]))
+    redirect_to :main_page
   end
 
   # Landing page

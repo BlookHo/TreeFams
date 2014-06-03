@@ -19,6 +19,9 @@ gem "font-awesome-rails"
 gem 'russian', '~> 0.6.0'
 
 
+# Has secure password
+ gem 'bcrypt-ruby'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 

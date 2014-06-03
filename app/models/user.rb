@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
-  # devise :database_authenticatable, :registerable,
-  #        :recoverable, :rememberable, :trackable, :validatable
-  has_secure_password
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  # has_secure_password
 
   validates :email,
             :uniqueness => true,
@@ -14,13 +15,9 @@ class User < ActiveRecord::Base
     profile.name.name
   end
 
-
-
   private
 
   def generate_hash
-
-
   end
 
 
