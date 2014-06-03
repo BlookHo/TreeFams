@@ -201,21 +201,22 @@ class MainController < ApplicationController
       end
     end
 
-    if !@all_match_profiles_arr.blank?  #
-         all_match_hash = join_arr_of_hashes(@all_match_profiles_arr) if !@all_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
-    @all_match_arr_sorted = Hash[all_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
+    if !@all_match_profiles_arr.blank?
 
-    @user_ids_arr = @all_match_arr_sorted.keys  # TO VIEW
-    @profile_ids_arr = @all_match_arr_sorted.values.flatten # TO VIEW
-    @amount_of_profiles = @profile_ids_arr.size if !@profile_ids_arr.blank? # TO VIEW
+      all_match_hash = join_arr_of_hashes(@all_match_profiles_arr) if !@all_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
 
-    all_match_relations_hash = join_arr_of_hashes(@all_match_relations_arr) if !@all_match_relations_arr.blank?  # Если найдены совпадения - в @all_match_arr
-    @all_match_relations_sorted = Hash[all_match_relations_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
-    @relation_ids_arr = @all_match_relations_sorted.values.flatten # TO VIEW
-         @all_match_relations_hash = all_match_relations_hash # TO VIEW
-    count_users_found(@profile_ids_arr) # TO VIEW
-end
+      @all_match_arr_sorted = Hash[all_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
 
+      @user_ids_arr = @all_match_arr_sorted.keys  # TO VIEW
+      @profile_ids_arr = @all_match_arr_sorted.values.flatten # TO VIEW
+      @amount_of_profiles = @profile_ids_arr.size if !@profile_ids_arr.blank? # TO VIEW
+
+      all_match_relations_hash = join_arr_of_hashes(@all_match_relations_arr) if !@all_match_relations_arr.blank?  # Если найдены совпадения - в @all_match_arr
+      @all_match_relations_sorted = Hash[all_match_relations_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
+      @relation_ids_arr = @all_match_relations_sorted.values.flatten # TO VIEW
+           @all_match_relations_hash = all_match_relations_hash # TO VIEW
+      count_users_found(@profile_ids_arr) # TO VIEW
+    end
   end
 
   # Слияние массива Хэшей без потери значений { (key = user_id) => (value = profile_id) }

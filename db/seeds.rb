@@ -1,4 +1,10 @@
 # encoding: utf-8
+
+# ЭТО - новый СИД - ПО НЕМУ СДЕЛАНЫ последние БК
+#   по этому (сиду) надо перепрогнать первые деревья
+
+
+
 Name.delete_all
 Name.reset_pk_sequence
 Name.create([

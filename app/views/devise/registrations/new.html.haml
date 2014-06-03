@@ -1,4 +1,4 @@
-= session[:current_author].to_array
+= session[:current_author].try(:to_array)
 .col-lg-6.col-md-8
   .page-header
     %h1
