@@ -1,19 +1,23 @@
-.center
-  %h1= "Войти"
-= form_for(resource, as: resource_name, url: user_session_path, html: {class: "form-horizontal col-lg-6 col-md-8"}) do |f|
-  .form-group
-    = f.label :email, class: "control-label col-md-2"
-    .col-md-10
-      = f.email_field :email, class: "text-field form-control", html: {spellcheck: "false"}
-  .form-group
-    = f.label :password, class: "control-label col-md-2"
-    .col-md-10
-      = f.password_field :password, class: "text-field form-control", html: {autocomplete: "off"}
-  - if devise_mapping.rememberable?
-    .form-group
-      = f.label :remember_me, "Запомнить", class: "control-label col-md-2"
-      .col-md-10
-        = f.check_box :remember_me
-  .form-group
-    .col-md-offset-2.col-md-10
-      = f.submit "Войти", class: "btn btn-primary"
+.col_1_2
+  #welcome-form{style:"margin-top:75px;"}
+    = form_for(resource, as: resource_name, url: user_session_path, html: {class: "form-horizontal col-lg-6 col-md-8"}) do |f|
+      .body
+        %h1= "Войти на сайт"
+        .control{style:"margin-top:32px;"}
+          = f.label :email, class: "control-label col-md-2"
+          .col-md-10
+            = f.email_field :email, class: "text-field form-control", html: {spellcheck: "false"}
+        .control
+          = f.label :password, class: "control-label col-md-2"
+          .col-md-10
+            = f.password_field :password, class: "text-field form-control", html: {autocomplete: "off"}
+        - if devise_mapping.rememberable?
+          .control
+            = f.label :remember_me, "Запомнить", class: "control-label col-md-2"
+            .col-md-10
+              = f.check_box :remember_me
+      .footer
+        = f.submit "Войти", class: "btn btn-primary"
+
+
+%div{style:"margin-top:32px;display:block;width:100%;;float:left;"}= render 'users/login_list'

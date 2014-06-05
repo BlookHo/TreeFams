@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
 
   # User profile
   has_one :profile
+  has_many :trees
 
   def name
     profile.name.name

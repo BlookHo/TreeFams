@@ -3,7 +3,7 @@ module ApplicationHelper
   def relation_to_human(id)
     case id.to_i
     when  0
-      "Автор (это Вы)"
+      "Автор"
     when  1
       "Отец"
     when  2
