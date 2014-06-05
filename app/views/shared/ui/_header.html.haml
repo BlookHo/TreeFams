@@ -4,7 +4,7 @@
       = fa_icon "leaf"
       Мы все &mdash; родня
     %ul
-      - if user_signed_in?
+      - if current_user
         %li= link_to current_user.email, main_page_path
         %li= link_to "Моя страница", main_page_path
         %li= link_to "Выход", :logout

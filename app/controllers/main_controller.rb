@@ -67,7 +67,7 @@ class MainController < ApplicationController
 # @see News
  def main_page
 
-    if user_signed_in?
+    if current_user
 
       get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
 
