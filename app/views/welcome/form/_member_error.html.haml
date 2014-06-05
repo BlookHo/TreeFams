@@ -1,8 +1,11 @@
 - if !objekt.errors.empty?
   .errors
+    = objekt.errors[:email].last
     = objekt.errors[:name].last
     - if objekt.errors[:name].empty? and objekt.errors[:name_warning]
       = objekt.errors[:name_warning].first
+
+
 - if objekt.errors[:name].empty? and !objekt.errors[:name_warning].empty?
   .control.sex_confirmation
     - if objekt.class.to_s =~ /Author/

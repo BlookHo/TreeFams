@@ -7,6 +7,6 @@
       - if user_signed_in?
         %li= link_to current_user.email, main_page_path
         %li= link_to "Моя страница", main_page_path
-        %li= link_to "Выход", destroy_user_session_path, method: :delete
+        %li= link_to "Выход", :logout
       -else
-        %li= link_to "Войти на сайт", new_user_session_path
+        %li= link_to "Войти на сайт", :login

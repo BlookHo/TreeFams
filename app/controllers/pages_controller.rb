@@ -8,8 +8,6 @@ class PagesController < ApplicationController
   # @param login_page [Integer] опциональный номер страницы
   # @see Place
   def landing
-
-
   end
 
 

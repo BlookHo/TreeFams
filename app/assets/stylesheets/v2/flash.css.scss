@@ -1,0 +1,10 @@
+.flash{
+  display:inline-block;
+  width:100%;
+  margin-bottom:12px;
+  font-weight:600;
+  padding-left:21px;
+
+  &.alert{color:red;}
+  &.notice{color:green;}
+}

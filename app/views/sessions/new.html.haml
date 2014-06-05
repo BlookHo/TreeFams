@@ -1,0 +1,17 @@
+.col_1_2
+  #welcome-form
+    = render 'shared/flash', :flash => flash
+
+    = form_tag :sessions do
+      .body
+        %h2 Войти на сайт
+        .control
+          = text_field_tag :email, params[:email], :class => 'form-control', :placeholder => 'Ваш email'
+        .control
+          = password_field_tag :password, nil, :class => 'form-control', :placeholder => 'Пароль'
+      .footer
+        = submit_tag "Войти", :class => 'btn green'
+
+
+.clear.top-32
+= render 'users/login_list'
