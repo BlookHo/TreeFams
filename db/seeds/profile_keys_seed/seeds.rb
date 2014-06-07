@@ -266,7 +266,7 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 
 # Tree 5, Pfoile 29 - Анна
 # NearCircle
-{user_id: 5, profile_id: 29, name_id: 352, relation_id: 8, is_profile_id: 28, is_name_id: 123 },
+{user_id: 5, profile_id: 29, name_id: 352, relation_id: 7, is_profile_id: 28, is_name_id: 123 },
 {user_id: 5, profile_id: 29, name_id: 352, relation_id: 4, is_profile_id: 27, is_name_id: 371 },
 {user_id: 5, profile_id: 29, name_id: 352, relation_id: 3, is_profile_id: 30, is_name_id: 265 },
 

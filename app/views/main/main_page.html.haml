@@ -14,41 +14,41 @@
 
 
   %h4 ПОИСК СОВПАДЕНИЙ РОДСТВЕННИКОВ в других деревьях
-  -#%p
-  -#  @tree_arr_len: #{@tree_arr_len.inspect}
+  %p
+    @tree_arr_len: #{@tree_arr_len.inspect}
   -#%p
   -#  Основной массив БК - из Tree: @tree_arr: #{@tree_arr.inspect}
   -#%p
   -#  @@profile_searched: #{@profile_searched.inspect}
-  -#%p
-  -#  @@relation_searched: #{@relation_searched.inspect}
-  -#%p
-  -#  @all_profile_rows:  #{@all_profile_rows.inspect}
-  -#%p
-  -#  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
+  %p
+    @relation_id_searched_arr: #{@relation_id_searched_arr.inspect}
+  %p
+    @all_profile_rows:  #{@all_profile_rows.inspect}
+  %p
+    Длина БК профиля с именем: @all_profile_rows_len: #{@all_profile_rows_len.inspect}
 
-  -#- if !@all_relation_match_arr.blank?
-  -#  %div
-  -#    %table
-  -#      %tr
-  -#        %th ID Автора Дерева
-  -#        %th ID От_Профиля
-  -#        %th ID Имени От_Профиля
-  -#        %th ID Родства: с другим К_Профиля
-  -#        %th ID другого К_Профиля
-  -#        %th ID Имени К_Профиля
-  -#        %th
-  -#      - @all_relation_match_arr.each do |tree|
-  -#        %tr
-  -#          %td= tree[0]
-  -#          %td= tree[1]
-  -#          %td= tree[2]
-  -#          %td= tree[3]
-  -#          %td= tree[4]
-  -#          %td= tree[5]
-  -#          %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
-  -#- else
-  -#  %h4 No Listing tree - No @all_relation_match_arr!
+  - if !@all_relation_match_arr.blank?
+    %div
+      %table
+        %tr
+          %th ID Автора Дерева
+          %th ID От_Профиля
+          %th ID Имени От_Профиля
+          %th ID Родства: с другим К_Профиля
+          %th ID другого К_Профиля
+          %th ID Имени К_Профиля
+          %th
+        - @all_relation_match_arr.each do |tree|
+          %tr
+            %td= tree[0]
+            %td= tree[1]
+            %td= tree[2]
+            %td= tree[3]
+            %td= tree[4]
+            %td= tree[5]
+            %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
+  - else
+    %h4 No Listing tree - No @all_relation_match_arr!
 
   %p
     @relation_match_arr: #{@relation_match_arr.inspect}
@@ -56,30 +56,32 @@
   -#  @relation_match_size: #{@relation_match_size.inspect}
 
   -#%p
-  -#  @found_trees_hash: #{@found_trees_hash.inspect}
+  -#  @bk_relation_match_arr: #{@bk_relation_match_arr.inspect}
+  %p
+    @found_trees_hash: #{@found_trees_hash.inspect}
   %p
     @found_profiles_hash: #{@found_profiles_hash.inspect}
   %p
     @found_relations_hash: #{@found_relations_hash.inspect}
 
-  -#%p
-  -#  @all_match_trees_arr: #{@all_match_trees_arr.inspect}
-  -#%p
-  -#  @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
+  %p
+    @all_match_trees_arr: #{@all_match_trees_arr.inspect}
+  %p
+    @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
   %h4
     ВСЕ СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
   %p
     НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
-  %p
-    НОМЕРА ПРОФИЛЕЙ @profile_ids_arr: #{@profile_ids_arr.inspect}
+  -#%p
+  -#  НОМЕРА ПРОФИЛЕЙ @profile_ids_arr: #{@profile_ids_arr.inspect}
   -#%p
   -#  @all_match_relations_hash: #{@all_match_relations_hash.inspect}
   -#%p
   -#  @all_match_relations_arr: #{@all_match_relations_arr.inspect}
   %p
     НОМЕРА ОТНОШЕНИЙ @all_match_relations_sorted: #{@all_match_relations_sorted.inspect}
-  %p
-    НОМЕРА ОТНОШЕНИЙ @relation_ids_arr: #{@relation_ids_arr.inspect}
+  -#%p
+  -#  НОМЕРА ОТНОШЕНИЙ @relation_ids_arr: #{@relation_ids_arr.inspect}
   %h4
     Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
   %h4
