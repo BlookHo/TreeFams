@@ -1,3 +1,4 @@
+- current_step = session[:current_step] if current_step.nil?
 %ul#progrees-bar
   %li{class: ('active' if current_step =~ /author/)} 1
   %li{class: ('active' if current_step =~ /mothers|fathers/)} 2

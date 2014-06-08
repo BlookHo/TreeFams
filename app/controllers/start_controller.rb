@@ -1044,9 +1044,6 @@ class StartController < ApplicationController
 
       save_tree(profiles_arr_w_ids)
 
-
-
-
       make_profile_keys(profiles_arr_w_ids, profile_id_hash )
 
     else
@@ -1055,8 +1052,8 @@ class StartController < ApplicationController
 
     session[:profiles_arr_w_ids] = {:value => profiles_arr_w_ids, :updated_at => Time.current}
 
-  #  redirect_to main_page_path  ##
-
+    # redirect to search results
+    redirect_to main_page_path
   end
 
 

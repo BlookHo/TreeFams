@@ -1,3 +1,5 @@
 %h2 Укажите Ваш email
-.control
-  = text_field_tag "author[email]", current_author.email, placeholder: "email..."
+.fields
+  = render 'welcome/form/member_error', objekt: current_author
+  .control
+    = text_field_tag "author[email]", current_author.email, placeholder: "email..."

@@ -94,17 +94,13 @@ Weafam::Application.routes.draw do
 
 
 
-  devise_for :users, controllers: {registrations: "users/registrations", sessions: "users/sessions"}, skip: [:sessions, :registrations]
-  devise_scope :user do
-    get    "login"   => "users/sessions#new",         as: :new_user_session
-    post   "login"   => "users/sessions#create",      as: :user_session
-    delete "signout" => "users/sessions#destroy",     as: :destroy_user_session
 
-    get    "signup"  => "users/registrations#new",    as: :new_user_registration
-    post   "signup"  => "users/registrations#create", as: :user_registration
-    put    "signup"  => "users/registrations#update", as: :update_user_registration
-    get    "account" => "users/registrations#edit",   as: :edit_user_registration
-  end
+
+
+  # Users and Sessions
+  resources :sessions, except: :edit
+  get "login",    to:   "sessions#new",         as: :login
+  get "logout",   to:   "sessions#destroy",     as: :logout
 
 
   # Landing & start singup
@@ -113,7 +109,10 @@ Weafam::Application.routes.draw do
   get    'welcome/start/to/step/:step',    to: 'welcome#to_step',              as: :to_start_step
   get    'welcome/start/step/previous',    to: 'welcome#previous',             as: :previous
   get    'welcome/start/add/:member',      to: 'welcome#add_member_field',     as: :add_member_field
-  get 'welcome/start/show_data',           to: 'welcome#show_data', as: :show_data
+  get 'welcome/start/show_data',           to: 'welcome#show_data',            as: :show_data
+
+  # Debug path
+  get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
 
   root  'welcome#index'
 

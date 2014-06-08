@@ -9,13 +9,18 @@ class WelcomeController < ApplicationController
                 :first_step?,
                 :last_step?
 
-  # Small fix for development environment
-  # before_filter do
-  #   Member if Rails.env =~ /development/
-  # end
 
-  def show_data
+  def login_as_user
+    user = User.where(id: params[:user_id]).first
+    if user
+      flash[:notice] = "Вы вошли как #{user.name}"
+      session[:user_id] = user.id
+    else
+      flash[:alert] = "Пользователь не найден"
+    end
+    redirect_to :main_page
   end
+
 
   # Landing page
   def index
@@ -33,8 +38,8 @@ class WelcomeController < ApplicationController
       render :start
     else
       proceed_data
-      if last_step? and step_valid? and current_author.email
-        redirect_to :user_registration
+      if last_step? and step_valid?
+        redirect_to :save_start_tables
       else
         session[:current_step] = next_step if step_valid?
         render :start
@@ -57,6 +62,7 @@ class WelcomeController < ApplicationController
 
   private
 
+
   def step_valid?
      (first_step? or last_step?) ? validate_member(current_author) : validate_family
   end
@@ -71,7 +77,7 @@ class WelcomeController < ApplicationController
 
 
   def validate_member(member)
-    if member.valid?
+    if member.valid? and check_email_and_create_user?(member)
       member.errors.clear
       session[:current_author] = current_author
       return true
@@ -80,6 +86,34 @@ class WelcomeController < ApplicationController
       return false
     end
   end
+
+
+  def check_email_and_create_user?(member)
+    # If last step
+    if last_step? and member.class.to_s == "Author"
+      # check email presence
+      if current_author.email.blank?
+        current_author.errors.add(:email, "Нужно указать ваш действующий email адрес. На него мы вышлим пароль для доступа к сайту.")
+        return false
+      else
+      # Create user by email
+        user = User.create_with_email(current_author.email)
+        if user.valid?
+          logger.info "User valid! ======"
+          session[:user_id] = user.id
+          return true
+        else
+          logger.info "Save user errors! #{user.errors.inspect}"
+          current_author.errors.add(:email, user.errors[:email].last)
+          return false
+        end
+      end
+    else
+      return true
+    end
+  end
+
+
 
 
   def proceed_data

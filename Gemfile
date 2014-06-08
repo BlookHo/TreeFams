@@ -18,7 +18,6 @@ gem "font-awesome-rails"
 
 gem 'russian', '~> 0.6.0'
 
-
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
@@ -79,10 +78,11 @@ end
 # Disable assets logging in production
 gem 'quiet_assets', :group => :development
 
-gem 'devise', github: 'plataformatec/devise'
+#
+# gem 'devise', github: 'plataformatec/devise'
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
+gem 'bcrypt-ruby', '~> 3.1.2'
 
 # Use unicorn as the app server
 # gem 'unicorn'

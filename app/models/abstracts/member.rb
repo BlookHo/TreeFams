@@ -2,6 +2,7 @@ class Member
   include ActiveModel::Validations
   include ActiveRecord::Callbacks
 
+
   attr_accessor :name, :sex_id
 
   def initialize(name: name, sex_id: sex_id, relation_id: relation_id)
@@ -41,6 +42,11 @@ end
 # Author - корень любого дерева
 class Author < Member
   attr_accessor :family, :email
+
+  validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i,
+                              message: "Неправильный формат email" },
+                              unless:  'email.blank?'
+
 
   def initialize(family: Family.new, name: "", sex_id: "", relation_id: relation_id, email:email)
     @name = name
@@ -85,6 +91,8 @@ class Author < Member
     end
     result
   end
+
+
 
 end
 

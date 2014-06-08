@@ -5,11 +5,38 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  helper_method :current_user,
+                :logged_id?,
+                :is_admin?
+
 
   before_filter do
     Member if Rails.env =~ /development/
   end
-  #before_filter :set_locale
+
+
+  def current_user
+    @current_user ||= User.find(session[:user_id])  if session[:user_id]
+  end
+
+
+  def is_admin?
+    current_user && current_user.is_admin?
+  end
+
+
+
+  def logged_in?
+    access_denied if !current_user
+  end
+
+
+  def access_denied
+    respond_to do |format|
+      format.html { redirect_to :root, :alert => 'Для просмотра этой страницы вам нужно войти на сайт!'}
+      # format.js { render :template => '/shared/access_denied'}
+    end
+  end
 
   Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
   @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
