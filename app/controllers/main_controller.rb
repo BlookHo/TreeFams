@@ -136,43 +136,41 @@ class MainController < ApplicationController
      # всех видов отношений в блжнем круге для разыскиваемого профиля.
      if relation_id_searched != 0 # Для всех профилей, кот-е не явл. current_user
        # Исключение из результатов поиска
-       found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length  } # or value <= 3
+ #      if all_profile_rows.length > 3
+         found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length  } # or value <= 3
        # all_profile_rows.length = размер ближнего круга профиля в дереве current_user.id
+       #else
+       #  # Если маленький БК
+       #  found_trees_hash.delete_if {|key, value|  value <= 2  }  # 1 .. 3 = НАСТРОЙКА!!
+ #      end
      else
-       found_trees_hash.delete_if {|key, value|  value <= 3  }  # 1 .. 3 = НАСТРОЙКА!!
-       # Исключение из результатов поиска групп с малым кол-вом совпадений в других деревьях or value < all_profile_rows.length
+       if all_profile_rows.length > 3
+         found_trees_hash.delete_if {|key, value|  value <= 2 } #all_profile_rows.length  }  # 1 .. 3 = НАСТРОЙКА!!
+         # Исключение из результатов поиска групп с малым кол-вом совпадений в других деревьях or value < all_profile_rows.length
+       else
+         # Если маленький БК
+         found_trees_hash.delete_if {|key, value|  value <= 2  }  # 1 .. 3 = НАСТРОЙКА!!
+       end
      end
 
    end
-
-   #@found_trees_keys_arr = found_trees_hash.keys
-   #@found_trees_values_arr = found_trees_hash.values
-   #
-   #@found_profiles_values_arr = found_profiles_hash.values
-   #
-   #ind = 0
-   #@found_trees_keys_arr.each do |tree|
-   #
-   #  @bk_profile = ProfileKey.where(user_id: tree).where(:profile_id => @found_profiles_values_arr[ind]).select(:user_id, :profile_id, :is_profile_id).count #, :name_id, :relation_id, :is_profile_id, :is_name_id)
-   #  found_trees_hash.delete_if {|key, value|  value < @all_profile_rows_len }  # Исключение из результатов поиска
-   #
-   #  ind += 1
-   #
-   #end
-
 
 
    ##### КОРРЕКТИРОВКА результатов поиска
    found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
    # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
+   @test_found_profiles_hash = found_profiles_hash
+
    found_relations_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
    # На выходе ХЭШ: {user_id  => relation_id} - найденные деревья с найденным relation_id.
 
    ##### ИТОГОВЫЕ результаты поиска
    #@all_match_trees_arr << found_trees_hash if !found_trees_hash.blank? # Заполнение выходного массива хэшей
    @all_match_profiles_arr << found_profiles_hash if !found_profiles_hash.blank? # Заполнение выходного массива хэшей
-   @all_match_relations_arr << found_relations_hash if !found_relations_hash.blank? # Заполнение выходного массива хэшей
+   @all_match_relations_arr << found_relations_hash if !found_relations_hash.empty? # Заполнение выходного массива хэшей
    #####
+
+
 
    @found_profiles_hash = found_profiles_hash # DEBUGG TO VIEW
    @found_relations_hash = found_relations_hash # DEBUGG TO VIEW
@@ -244,6 +242,7 @@ class MainController < ApplicationController
       all_match_hash = join_arr_of_hashes(@all_match_profiles_arr) if !@all_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
 
       @all_match_arr_sorted = Hash[all_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
+      @all_match_arr_sorted.delete_if {|key, value| value.size == 1 }  # Исключение тех рез-тов поиска, где найден всего один профиль
 
       @user_ids_arr = @all_match_arr_sorted.keys  # TO VIEW
       profile_ids_arr = @all_match_arr_sorted.values.flatten # TO VIEW
@@ -251,6 +250,7 @@ class MainController < ApplicationController
 
       all_match_relations_hash = join_arr_of_hashes(@all_match_relations_arr) if !@all_match_relations_arr.blank?  # Если найдены совпадения - в @all_match_arr
       @all_match_relations_sorted = Hash[all_match_relations_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
+      @all_match_relations_sorted.delete_if {|key, value| value .size == 1 }  # Исключение тех рез-тов поиска (отношения), где найден всего один профиль
 
       @relation_ids_arr = @all_match_relations_sorted.values.flatten # TO VIEW
            @all_match_relations_hash = all_match_relations_hash # TO VIEW
