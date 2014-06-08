@@ -16,8 +16,8 @@
   %h4 ПОИСК СОВПАДЕНИЙ РОДСТВЕННИКОВ в других деревьях
   %p
     @tree_arr_len: #{@tree_arr_len.inspect}
-  -#%p
-  -#  Основной массив БК - из Tree: @tree_arr: #{@tree_arr.inspect}
+  %p
+    Основной массив БК - из Tree: @tree_arr: #{@tree_arr.inspect}
   -#%p
   -#  @@profile_searched: #{@profile_searched.inspect}
   %p
@@ -27,40 +27,49 @@
   %p
     Длина БК профиля с именем: @all_profile_rows_len: #{@all_profile_rows_len.inspect}
 
-  - if !@all_relation_match_arr.blank?
-    %div
-      %table
-        %tr
-          %th ID Автора Дерева
-          %th ID От_Профиля
-          %th ID Имени От_Профиля
-          %th ID Родства: с другим К_Профиля
-          %th ID другого К_Профиля
-          %th ID Имени К_Профиля
-          %th
-        - @all_relation_match_arr.each do |tree|
-          %tr
-            %td= tree[0]
-            %td= tree[1]
-            %td= tree[2]
-            %td= tree[3]
-            %td= tree[4]
-            %td= tree[5]
-            %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
-  - else
-    %h4 No Listing tree - No @all_relation_match_arr!
+  -#- if !@all_relation_match_arr.blank?
+  -#  %div
+  -#    %table
+  -#      %tr
+  -#        %th ID Автора Дерева
+  -#        %th ID От_Профиля
+  -#        %th ID Имени От_Профиля
+  -#        %th ID Родства: с другим К_Профиля
+  -#        %th ID другого К_Профиля
+  -#        %th ID Имени К_Профиля
+  -#        %th
+  -#      - @all_relation_match_arr.each do |tree|
+  -#        %tr
+  -#          %td= tree[0]
+  -#          %td= tree[1]
+  -#          %td= tree[2]
+  -#          %td= tree[3]
+  -#          %td= tree[4]
+  -#          %td= tree[5]
+  -#          %td Вызов меню Родственника: #{link_to "Relative Menu", relative_menu_path}
+  -#- else
+  -#  %h4 No Listing tree - No @all_relation_match_arr!
 
   %p
     @relation_match_arr: #{@relation_match_arr.inspect}
   -#%p
   -#  @relation_match_size: #{@relation_match_size.inspect}
 
-  -#%p
-  -#  @bk_relation_match_arr: #{@bk_relation_match_arr.inspect}
   %p
     @found_trees_hash: #{@found_trees_hash.inspect}
   %p
+    @found_trees_keys_arr: #{@found_trees_keys_arr.inspect}
+  %p
+    @found_trees_values_arr: #{@found_trees_values_arr.inspect}
+  %p
     @found_profiles_hash: #{@found_profiles_hash.inspect}
+  %p
+    @found_profiles_values_arr: #{@found_profiles_values_arr.inspect}
+  %p
+    @bk_profile: #{@bk_profile.inspect}
+
+
+
   %p
     @found_relations_hash: #{@found_relations_hash.inspect}
 

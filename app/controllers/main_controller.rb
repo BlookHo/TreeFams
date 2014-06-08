@@ -57,6 +57,7 @@ class MainController < ApplicationController
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
       @tree_arr = tree_arr    # DEBUGG TO VIEW
 
+
  end
 
 
@@ -103,14 +104,10 @@ class MainController < ApplicationController
 
    if !all_profile_rows.blank?
      @all_profile_rows_len = all_profile_rows.length if !all_profile_rows.blank? #_DEBUGG_TO_VIEW
-     # размер ближнего круга профиля
-
+     # размер ближнего круга профиля в дереве current_user.id
      all_profile_rows.each do |relation_row|
-        #@bk_relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => relation_row.name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
         relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => relation_row.name_id).where(:relation_id => relation_row.relation_id).where(:is_name_id => relation_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
         if !relation_match_arr.blank?
-
-
           row_arr = []
           relation_match_arr.each do |tree_row|
             row_arr[0] = tree_row.user_id              # ID Автора
@@ -130,27 +127,48 @@ class MainController < ApplicationController
           @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
         end
      end
+     @relation_id_searched_arr << relation_id_searched  #_DEBUGG_TO_VIEW
 
-     @relation_id_searched_arr << relation_id_searched
-
-     if relation_id_searched != 0 # Для всех профилей, кот-е не явл. current_user
-     #  found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length }  # Исключение из результатов поиска
-     #else
-       found_trees_hash.delete_if {|key, value|  value <= 2 }  # 2 = НАСТРОЙКА!!
-       # Исключение из результатов поиска групп с малым кол-вом совпадений - ТОЛЬКО для current_user!
-     end
-
+     ##### НАСТРОЙКА результатов поиска
      # Исключение тех user_id, по которым не все запросы дали результат внутри Ближнего круга
      # Остаются те user_id, в которых найдены совпавшие профили.
      # На выходе ХЭШ: {user_id  => кол-во успешных поисков } - должно быть равно (не меньше) длине массива
      # всех видов отношений в блжнем круге для разыскиваемого профиля.
-     found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
-     found_relations_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
-     # те user_id, которые удалены из хэша деревьев
-     # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
+     if relation_id_searched != 0 # Для всех профилей, кот-е не явл. current_user
+       # Исключение из результатов поиска
+       found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length  } # or value <= 3
+       # all_profile_rows.length = размер ближнего круга профиля в дереве current_user.id
+     else
+       found_trees_hash.delete_if {|key, value|  value <= 3  }  # 1 .. 3 = НАСТРОЙКА!!
+       # Исключение из результатов поиска групп с малым кол-вом совпадений в других деревьях or value < all_profile_rows.length
+     end
+
    end
 
-   ##### результаты поиска
+   #@found_trees_keys_arr = found_trees_hash.keys
+   #@found_trees_values_arr = found_trees_hash.values
+   #
+   #@found_profiles_values_arr = found_profiles_hash.values
+   #
+   #ind = 0
+   #@found_trees_keys_arr.each do |tree|
+   #
+   #  @bk_profile = ProfileKey.where(user_id: tree).where(:profile_id => @found_profiles_values_arr[ind]).select(:user_id, :profile_id, :is_profile_id).count #, :name_id, :relation_id, :is_profile_id, :is_name_id)
+   #  found_trees_hash.delete_if {|key, value|  value < @all_profile_rows_len }  # Исключение из результатов поиска
+   #
+   #  ind += 1
+   #
+   #end
+
+
+
+   ##### КОРРЕКТИРОВКА результатов поиска
+   found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
+   # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
+   found_relations_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
+   # На выходе ХЭШ: {user_id  => relation_id} - найденные деревья с найденным relation_id.
+
+   ##### ИТОГОВЫЕ результаты поиска
    #@all_match_trees_arr << found_trees_hash if !found_trees_hash.blank? # Заполнение выходного массива хэшей
    @all_match_profiles_arr << found_profiles_hash if !found_profiles_hash.blank? # Заполнение выходного массива хэшей
    @all_match_relations_arr << found_relations_hash if !found_relations_hash.blank? # Заполнение выходного массива хэшей
@@ -171,6 +189,15 @@ class MainController < ApplicationController
   def search_profiles_tree_match
 
     tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
+
+    #tree_arr = [[23, 146, 73, 0, 146, 73, 1, false],
+    #            [23, 146, 73, 1, 147, 194, 1, false],
+    #            [23, 146, 73, 2, 148, 354, 0, false]]
+    ##            [23, 146, 73, 8, 149, 293, 0, false], [23, 146, 73, 3, 150, 151, 1, false], [23, 146, 73, 4, 151, 449, 0, false], [23, 146, 73, 4, 152, 293, 0, false]]   #tree_arr = [[22, 138, 151, 0, 138, 151, 1, false],
+    #            [22, 138, 151, 1, 139, 73, 1, false]]#,
+     #           [22, 138, 151, 2, 140, 293, 0, false]] #,
+                #[22, 138, 151, 6, 141, 449, 0, false],
+                #[22, 138, 151, 6, 142, 293, 0, false], [22, 138, 151, 8, 143, 103, 0, false], [22, 138, 151, 4, 144, 48, 0, false], [22, 138, 151, 4, 145, 354, 0, false]]
 
     #profiles_tree_arr =
     #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
