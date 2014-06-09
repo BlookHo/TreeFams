@@ -955,16 +955,16 @@ class StartController < ApplicationController
     #ProfileKey.delete_all             # DEBUGG
     #ProfileKey.reset_pk_sequence
     #
-    if !session[:profiles_array].blank?
-       profiles_array = session[:profiles_array][:value]
-       @profiles_array = profiles_array # DEBUGG TO VIEW
-    else
 
+
+
+    #if !session[:profiles_array].blank?
+    #   profiles_array = session[:profiles_array][:value]
+    #   @profiles_array = profiles_array # DEBUGG TO VIEW
+    #else
       profiles_array = session[:current_author].to_array
       session[:profiles_array] = session[:current_author].to_array
-
-
-    end
+    #end
 
 
 
