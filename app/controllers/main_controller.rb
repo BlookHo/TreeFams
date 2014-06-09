@@ -129,20 +129,24 @@ class MainController < ApplicationController
      end
      @relation_id_searched_arr << relation_id_searched  #_DEBUGG_TO_VIEW
 
-     ##### НАСТРОЙКА результатов поиска
+     ##### НАСТРОЙКИ результатов поиска
+
      # Исключение тех user_id, по которым не все запросы дали результат внутри Ближнего круга
      # Остаются те user_id, в которых найдены совпавшие профили.
      # На выходе ХЭШ: {user_id  => кол-во успешных поисков } - должно быть равно (не меньше) длине массива
      # всех видов отношений в блжнем круге для разыскиваемого профиля.
      if relation_id_searched != 0 # Для всех профилей, кот-е не явл. current_user
        # Исключение из результатов поиска
- #      if all_profile_rows.length > 3
-         found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length  } # or value <= 3
+#       if all_profile_rows.length > 3
+
+       #found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length - 1 } #
+       #found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length } #
        # all_profile_rows.length = размер ближнего круга профиля в дереве current_user.id
        #else
        #  # Если маленький БК
        #  found_trees_hash.delete_if {|key, value|  value <= 2  }  # 1 .. 3 = НАСТРОЙКА!!
- #      end
+       #end
+
      else
        if all_profile_rows.length > 3
          found_trees_hash.delete_if {|key, value|  value <= 2 } #all_profile_rows.length  }  # 1 .. 3 = НАСТРОЙКА!!

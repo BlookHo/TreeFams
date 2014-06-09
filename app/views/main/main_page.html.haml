@@ -1,10 +1,13 @@
 .content
   %h1
     = current_user.profile.name.name.mb_chars.capitalize
-    \, это ваш ближний круг
+    \, это ваш ближний круг,
+    = current_user.id # DEBUGG
 
   -#%p
   -#  Основной массив БК - из Tree: @tree_arr: #{@tree_arr.inspect}
+  -#%h4
+  -#  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
   -#%h4
   -#  ВСЕ СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
   -#%p
@@ -26,8 +29,8 @@
 
   %table.tmp_table
     %tr
-      %th Отношение
-      %th Имя
+      %th Родственное отношение к вам
+      %th Имя родственника
       %th profile_id
     - @tree_arr.each do |item|
       %tr
@@ -44,11 +47,12 @@
 
       %table.tmp_table
         %tr
-          %th Пользователь
+          %th Автор дерева
           -#%th Родственники (?)
-          %th Ближний круг
+          %th Ближний круг автора
           -#%th Пересечение с поиском (?)
-          %th Результат поиска от лица current_user
+          %th Результаты поиска.  Возможно, это ваши родные:
+          -#от вашего лица (пользователя)
         - @all_match_arr_sorted.each do |key, value|
           - user = User.where(id: key).first
           %tr
