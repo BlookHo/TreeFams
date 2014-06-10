@@ -24,6 +24,7 @@ class WelcomeController < ApplicationController
 
   # Landing page
   def index
+    session[:user_id] = nil
     session[:current_step] = nil
     session[:current_author] = nil
   end
