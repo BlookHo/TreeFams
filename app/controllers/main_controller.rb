@@ -57,6 +57,7 @@ class MainController < ApplicationController
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
       @tree_arr = tree_arr    # DEBUGG TO VIEW
 
+
  end
 
 
@@ -94,13 +95,16 @@ class MainController < ApplicationController
    found_relations_hash = Hash.new  #
    all_relation_match_arr = []     #
 
-   all_profile_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id)
-   # поиск массива записей ближнего круга для Юзера
 
-   @profile_searched = profile_id_searched   # DEBUGG TO VIEW
+   all_profile_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id)
+   # поиск массива записей ближнего круга для каждого профиля в дереве Юзера
+
+   @profile_searched = profile_id_searched   # DEBUGG_TO_VIEW
    @relation_searched = relation_id_searched   # DEBUGG TO VIEW
+
    if !all_profile_rows.blank?
-     @all_profile_rows_len = all_profile_rows.length if !all_profile_rows.blank? # DEBUGG TO VIEW
+     @all_profile_rows_len = all_profile_rows.length if !all_profile_rows.blank? #_DEBUGG_TO_VIEW
+     # размер ближнего круга профиля в дереве current_user.id
      all_profile_rows.each do |relation_row|
         relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => relation_row.name_id).where(:relation_id => relation_row.relation_id).where(:is_name_id => relation_row.is_name_id).select(:user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
         if !relation_match_arr.blank?
@@ -123,29 +127,54 @@ class MainController < ApplicationController
           @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
         end
      end
+     @relation_id_searched_arr << relation_id_searched  #_DEBUGG_TO_VIEW
 
-     if relation_id_searched != 0 # Для всех профилей, кот-е не явл. current_user
-       found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length }  # Исключение из результатов поиска
-     else
-       found_trees_hash.delete_if {|key, value|  value <= 1 }  # 2 = НАСТРОЙКА!!
-       # Исключение из результатов поиска групп с малым кол-вом совпадений - ТОЛЬКО для current_user!
-     end
+     ##### НАСТРОЙКИ результатов поиска
 
      # Исключение тех user_id, по которым не все запросы дали результат внутри Ближнего круга
      # Остаются те user_id, в которых найдены совпавшие профили.
      # На выходе ХЭШ: {user_id  => кол-во успешных поисков } - должно быть равно (не меньше) длине массива
      # всех видов отношений в блжнем круге для разыскиваемого профиля.
-     found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
-     found_relations_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
-     # те user_id, которые удалены из хэша деревьев
-     # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
+     if relation_id_searched != 0 # Для всех профилей, кот-е не явл. current_user
+       # Исключение из результатов поиска
+#       if all_profile_rows.length > 3
+
+       #found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length - 1 } #
+       found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length } #
+       # all_profile_rows.length = размер ближнего круга профиля в дереве current_user.id
+       #else
+       #  # Если маленький БК
+       #  found_trees_hash.delete_if {|key, value|  value <= 2  }  # 1 .. 3 = НАСТРОЙКА!!
+       #end
+
+     else
+       if all_profile_rows.length > 3
+         found_trees_hash.delete_if {|key, value|  value <= 2 } #all_profile_rows.length  }  # 1 .. 3 = НАСТРОЙКА!!
+         # Исключение из результатов поиска групп с малым кол-вом совпадений в других деревьях or value < all_profile_rows.length
+       else
+         # Если маленький БК
+         found_trees_hash.delete_if {|key, value|  value <= 2  }  # 1 .. 3 = НАСТРОЙКА!!
+       end
+     end
+
    end
 
-   ##### результаты поиска
-   @all_match_trees_arr << found_trees_hash if !found_trees_hash.blank? # Заполнение выходного массива хэшей
+
+   ##### КОРРЕКТИРОВКА результатов поиска
+   found_profiles_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
+   # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
+   @test_found_profiles_hash = found_profiles_hash
+
+   found_relations_hash.delete_if {|key, value| !found_trees_hash.keys.include?(key)} # Убираем из хэша профилей
+   # На выходе ХЭШ: {user_id  => relation_id} - найденные деревья с найденным relation_id.
+
+   ##### ИТОГОВЫЕ результаты поиска
+   #@all_match_trees_arr << found_trees_hash if !found_trees_hash.blank? # Заполнение выходного массива хэшей
    @all_match_profiles_arr << found_profiles_hash if !found_profiles_hash.blank? # Заполнение выходного массива хэшей
-   @all_match_relations_arr << found_relations_hash if !found_relations_hash.blank? # Заполнение выходного массива хэшей
+   @all_match_relations_arr << found_relations_hash if !found_relations_hash.empty? # Заполнение выходного массива хэшей
    #####
+
+
 
    @found_profiles_hash = found_profiles_hash # DEBUGG TO VIEW
    @found_relations_hash = found_relations_hash # DEBUGG TO VIEW
@@ -162,6 +191,15 @@ class MainController < ApplicationController
   def search_profiles_tree_match
 
     tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
+
+    #tree_arr = [[23, 146, 73, 0, 146, 73, 1, false],
+    #            [23, 146, 73, 1, 147, 194, 1, false],
+    #            [23, 146, 73, 2, 148, 354, 0, false]]
+    ##            [23, 146, 73, 8, 149, 293, 0, false], [23, 146, 73, 3, 150, 151, 1, false], [23, 146, 73, 4, 151, 449, 0, false], [23, 146, 73, 4, 152, 293, 0, false]]   #tree_arr = [[22, 138, 151, 0, 138, 151, 1, false],
+    #            [22, 138, 151, 1, 139, 73, 1, false]]#,
+     #           [22, 138, 151, 2, 140, 293, 0, false]] #,
+                #[22, 138, 151, 6, 141, 449, 0, false],
+                #[22, 138, 151, 6, 142, 293, 0, false], [22, 138, 151, 8, 143, 103, 0, false], [22, 138, 151, 4, 144, 48, 0, false], [22, 138, 151, 4, 145, 354, 0, false]]
 
     #profiles_tree_arr =
     #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
@@ -193,6 +231,8 @@ class MainController < ApplicationController
     @all_match_relations_arr = []  # Массив совпадений отношений
     #####
 
+    @relation_id_searched_arr = []     #_DEBUGG_TO_VIEW Ok
+
     if !tree_arr.blank?
       for tree_index in 0 .. tree_arr.length-1
         profile_id_searched = tree_arr[tree_index][4] # Поиск по ID К_Профиля
@@ -206,16 +246,19 @@ class MainController < ApplicationController
       all_match_hash = join_arr_of_hashes(@all_match_profiles_arr) if !@all_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
 
       @all_match_arr_sorted = Hash[all_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
+      @all_match_arr_sorted.delete_if {|key, value| value.size == 1 }  # Исключение тех рез-тов поиска, где найден всего один профиль
 
       @user_ids_arr = @all_match_arr_sorted.keys  # TO VIEW
-      @profile_ids_arr = @all_match_arr_sorted.values.flatten # TO VIEW
-      @amount_of_profiles = @profile_ids_arr.size if !@profile_ids_arr.blank? # TO VIEW
+      profile_ids_arr = @all_match_arr_sorted.values.flatten # TO VIEW
+      @amount_of_profiles = profile_ids_arr.size if !profile_ids_arr.blank? # TO VIEW
 
       all_match_relations_hash = join_arr_of_hashes(@all_match_relations_arr) if !@all_match_relations_arr.blank?  # Если найдены совпадения - в @all_match_arr
       @all_match_relations_sorted = Hash[all_match_relations_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
+      @all_match_relations_sorted.delete_if {|key, value| value .size == 1 }  # Исключение тех рез-тов поиска (отношения), где найден всего один профиль
+
       @relation_ids_arr = @all_match_relations_sorted.values.flatten # TO VIEW
            @all_match_relations_hash = all_match_relations_hash # TO VIEW
-      count_users_found(@profile_ids_arr) # TO VIEW
+      count_users_found(profile_ids_arr) # TO VIEW
     end
   end
 
