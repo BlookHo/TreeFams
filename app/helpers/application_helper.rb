@@ -1,25 +1,27 @@
 module ApplicationHelper
 
-  def relation_to_human(id)
+  # prefix 1 - Ваш(а)
+  #
+  def relation_to_human(id, prefix: false)
     case id.to_i
     when  0
-      "Автор"
+      prefix ? "Вы" : "Автор"
     when  1
-      "Отец"
+      prefix ? "Ваш отец" : "Отец"
     when  2
-      "Мать"
+      prefix ? "Ваша мать" : "Мать"
     when  3
-      "Cын"
+      prefix ? "Ваш сын" : "Сын"
     when 4
-      "Дочь"
+      prefix ? "Ваша дочь" : "Дочь"
     when  5
-      "Брат"
+      prefix ? "Ваш Брат" : "Брат"
     when  6
-      "Сестра"
+      prefix ? "Ваша сестра" : "Сестра"
     when  7
-      "Муж"
+      prefix ? "Ваш муж" : "Муж"
     when 8
-      "Жена"
+      prefix ? "Ваша жена" : "Жена"
     else
       "Неизвестно"
     end

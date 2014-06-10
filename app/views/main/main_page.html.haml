@@ -8,12 +8,12 @@
     %tr
       %th Родственное отношение к вам
       %th Имя родственника
-      -# %th profile_id
+      %th
     - @tree_arr.each do |item|
       %tr
         %td= relation_to_human(item[3])
         %td= Name.where(id: item[5]).first.name.mb_chars.capitalize
-        -# %td= item[4]
+        %td= link_to "Добавить родственника", '#', onclick: "alert('Добавить родственника к profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
 
 
   %div{style: "margin-top:50px;"}
@@ -25,40 +25,29 @@
       %table.tmp_table
         %tr
           %th Автор дерева
-          %th Ближний круг автора
-          %th Результаты поиска.  Возможно, это ваши родные:
+          %th
+            Ближний круг автора, в котором возможно присутствуют ваши родственники:
+
 
         - @all_match_arr_sorted.each do |key, value|
           - user = User.where(id: key).first
           %tr
             %td
-              = user.name.mb_chars.capitalize
-              -# = user.id # DEBUGG
-            %td
-              %ul
-                - user.trees.each do |tree|
-                  - profile = Profile.where(id: tree.is_profile_id).first
-                  %li{style: "margin-bottom:6px;"}
-                    %span{style: "color:grey;font-size:small;width:75px;display:inline-block;"}= relation_to_human(tree.relation_id)
-                    = profile.name.name.mb_chars.capitalize
+              %h2= user.name.mb_chars.capitalize
 
             %td
-              - matched_profile_ids = @all_match_arr_sorted[user.id]
-              - matched_relations_ids = @all_match_relations_sorted[user.id]
-              %ul
+              %table.results_table
                 - user.trees.each do |tree|
                   - profile = Profile.where(id: tree.is_profile_id).first
-                  -#= profile.id   # DEBUGG
-                  %li{style: "margin-bottom:6px;"}
-                    - ind = matched_profile_ids.index(profile.id)
-                    %span{style: "color:grey;font-size:small;width:75px;display:inline-block;"}= relation_to_human(tree.relation_id)
-                    - if matched_profile_ids.include? profile.id
-                      = profile.name.name.mb_chars.capitalize
-                      -#= matched_relations_ids[ind]
-                      %span{style: "color:grey;font-size:small;width:75px;display:inline-block;"}= relation_to_human(matched_relations_ids[ind])
-                    - else
-                      %span{style:"color:grey;text-decoration:line-through;"}
-                        = profile.name.name.mb_chars.capitalize
+                  %tr
+                    %td.grey= relation_to_human(tree.relation_id)
+                    %td.name= profile.name.name.mb_chars.capitalize
+                    %td.green.italic
+                      - if @all_match_arr_sorted[user.id].include? profile.id
+                        Возможно, это
+                        = relation_to_human( @all_match_arr_sorted[user.id].index(profile.id), prefix: true )
+                    %td= link_to 'Пожать руку', '#'
+
 
 
 

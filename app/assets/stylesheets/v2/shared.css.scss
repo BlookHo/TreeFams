@@ -9,8 +9,25 @@
   width:100%;
   border-collapse: collapse;
 
+  h2{display:inline;}
+
   th{font-weight:600;}
 
   td, th{padding:10px;}
   tr{border-bottom:1px solid #ccc;}
+  ul{text-align:left;margin:0 auto;}
+}
+
+
+.results_table{
+  width:100%;
+  tr:last-child{border:none;}
+}
+
+
+table{
+  .grey{color:grey;}
+  .name{font-weight:bold;}
+  .green{color:green;}
+  .italic{font-style:italic;}
 }
