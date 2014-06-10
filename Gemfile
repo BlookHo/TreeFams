@@ -1,4 +1,4 @@
- source 'https://rubygems.org'
+source 'https://rubygems.org'
 ruby '2.1.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -52,6 +52,7 @@ group :doc do
   gem 'yard'
 end
 
+
 group :development do
   # Лучше отображает ошибки
   gem "better_errors"
@@ -88,7 +89,18 @@ gem 'bcrypt-ruby', '~> 3.1.2'
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-# gem 'capistrano', group: :development
+# If ancsi errors:
+# export LANG=en_US.UTF-8
+# export LC_ALL="en_US.UTF-8"
+# gem 'capistrano', '~> 3.0', require: false, group: :development
+# group :development do
+#   gem 'capistrano-rvm',   '~> 0.1', require: false
+#   gem 'capistrano-rails',   '~> 1.1', require: false
+#   gem 'capistrano-bundler', '~> 1.1', require: false
+# end
+
+gem 'capistrano',     '2.15.5', group: :development
+gem 'rvm-capistrano', '1.5.1', group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
