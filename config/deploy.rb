@@ -1,11 +1,6 @@
-# $:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Для работы rvm
 require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
 
-# require 'thinking_sphinx/deploy/capistrano'
-
-# set :whenever_command, "bundle exec whenever"
-# require "whenever/capistrano"
 
 set :application, "we"
 set :user, "meduza"
@@ -22,7 +17,7 @@ set :rvm_type, :user # rvm, установленный у пользовател
 default_run_options[:pty] = true
 
 set :scm, :git # Используем git.
-set :repository, "https://meduza@bitbucket.org/Mr_Pilot/weafam.git"
+set :repository, "git@bitbucket.org:Mr_Pilot/weafam.git"
 set :branch, "master" # Ветка из которой будем тянуть код для деплоя.
 set :deploy_via, :remote_cache # Указание на то, что стоит хранить кеш репозитария локально и с каждым деплоем лишь подтягивать произведенные изменения. Очень актуально для больших и тяжелых репозитариев.
 
@@ -38,17 +33,18 @@ namespace :db do
   task :default do
     db_config = ERB.new <<-EOF
     base: &base
-      adapter: mysql2
-      username: escort
-      password: iUD93i
+      adapter: postgresql
+      username: postgres
+      password: postpass2
       encoding: utf8
       reconnect: false
       pool: 5
+      timeout: 5000
       host: 127.0.0.1
 
 
     production:
-      database: escort
+      database: weafam
       <<: *base
     EOF
 
