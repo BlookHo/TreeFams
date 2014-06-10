@@ -2,41 +2,18 @@
   %h1
     = current_user.profile.name.name.mb_chars.capitalize
     \, это ваш ближний круг,
-    = current_user.id # DEBUGG
-
-  -#%p
-  -#  Основной массив БК - из Tree: @tree_arr: #{@tree_arr.inspect}
-  -#%h4
-  -#  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
-  -#%h4
-  -#  ВСЕ СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
-  -#%p
-  -#  НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
-  -#%p
-  -#  НОМЕРА ОТНОШЕНИЙ @all_match_relations_sorted: #{@all_match_relations_sorted.inspect}
-  -#%p
-  -#  НОМЕРА ОТНОШЕНИЙ @relation_ids_arr: #{@relation_ids_arr.inspect}
-  -#%p
-  -#  @found_trees_hash: #{@found_trees_hash.inspect}
-  -#%p
-  -#  @found_profiles_hash: #{@found_profiles_hash.inspect}
-  -#%p
-  -#  @test_found_profiles_hash: #{@test_found_profiles_hash.inspect}
-  -#%p
-  -#  @found_relations_hash: #{@found_relations_hash.inspect}
-  -#%p
-  -#  @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
+    -# = current_user.id
 
   %table.tmp_table
     %tr
       %th Родственное отношение к вам
       %th Имя родственника
-      %th profile_id
+      -# %th profile_id
     - @tree_arr.each do |item|
       %tr
         %td= relation_to_human(item[3])
         %td= Name.where(id: item[5]).first.name.mb_chars.capitalize
-        %td= item[4]
+        -# %td= item[4]
 
 
   %div{style: "margin-top:50px;"}
@@ -48,25 +25,15 @@
       %table.tmp_table
         %tr
           %th Автор дерева
-          -#%th Родственники (?)
           %th Ближний круг автора
-          -#%th Пересечение с поиском (?)
           %th Результаты поиска.  Возможно, это ваши родные:
-          -#от вашего лица (пользователя)
+
         - @all_match_arr_sorted.each do |key, value|
           - user = User.where(id: key).first
           %tr
             %td
               = user.name.mb_chars.capitalize
-              = user.id # DEBUGG
-            -#%td
-            -#  %ul
-            -#    - Profile.where(id: value).each_with_index do |profile, index|
-            -#      %li{style: "margin-bottom:6px;"}
-            -#        %span{style: "color:grey;font-size:small;width:75px;display:inline-block;"}= relation_to_human(@relation_ids_arr[index])
-            -#        = profile.name.name.mb_chars.capitalize
-
-            - # Alexey listing
+              -# = user.id # DEBUGG
             %td
               %ul
                 - user.trees.each do |tree|
@@ -75,35 +42,19 @@
                     %span{style: "color:grey;font-size:small;width:75px;display:inline-block;"}= relation_to_human(tree.relation_id)
                     = profile.name.name.mb_chars.capitalize
 
-
-            -#%td
-            -#  - matched_profile_ids = @all_match_arr_sorted[user.id]
-            -#  %ul
-            -#    - user.trees.each do |tree|
-            -#      - profile = Profile.where(id: tree.is_profile_id).first
-            -#      %li{style: "margin-bottom:6px;"}
-            -#        %span{style: "color:grey;font-size:small;width:75px;display:inline-block;"}= relation_to_human(tree.relation_id)
-            -#        - if matched_profile_ids.include? profile.id
-            -#          = profile.name.name.mb_chars.capitalize
-            -#        - else
-            -#          %span{style:"color:grey;text-decoration:line-through;"}
-            -#            = profile.name.name.mb_chars.capitalize
-
-
-
             %td
               - matched_profile_ids = @all_match_arr_sorted[user.id]
               - matched_relations_ids = @all_match_relations_sorted[user.id]
               %ul
                 - user.trees.each do |tree|
                   - profile = Profile.where(id: tree.is_profile_id).first
-                  = profile.id   # DEBUGG
+                  -#= profile.id   # DEBUGG
                   %li{style: "margin-bottom:6px;"}
                     - ind = matched_profile_ids.index(profile.id)
                     %span{style: "color:grey;font-size:small;width:75px;display:inline-block;"}= relation_to_human(tree.relation_id)
                     - if matched_profile_ids.include? profile.id
                       = profile.name.name.mb_chars.capitalize
-                      = matched_relations_ids[ind]
+                      -#= matched_relations_ids[ind]
                       %span{style: "color:grey;font-size:small;width:75px;display:inline-block;"}= relation_to_human(matched_relations_ids[ind])
                     - else
                       %span{style:"color:grey;text-decoration:line-through;"}

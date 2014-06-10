@@ -1037,12 +1037,9 @@ class StartController < ApplicationController
  #daugthers_names_arr = ["Мария", "Юлия"]
 
  #   @profile_id_hash: {1=>["Александр", 0], 2=>["Борис", 1], 3=>["Мария", 2], 4=>["Виктор", 5], 5=>["Денис", 5], 6=>["Анна", 6], 7=>["Ольга", 6], 8=>["Виктория", 8], 9=>["Борис", 3], 10=>["Иван", 3], 11=>["Мария", 4], 12=>["Юлия", 4]}
+    # 
+    # if current_user
 
-<<<<<<< HEAD
-    if current_user
-=======
- #   if user_signed_in?
->>>>>>> 4657c05d34e24fe46eefcb69d5a6d3b4f27e1eb5
 
       profiles_arr_w_ids, profile_id_hash = save_profiles(profiles_array)  # появление profile_id
       @profiles_arr_w_ids = profiles_arr_w_ids # DEBUGG TO VIEW
