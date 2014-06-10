@@ -4,6 +4,11 @@
 -#   Их user_id: #{@users_ids_arr.inspect}
 -#%p
 -#  @tree_arr: #{@tree_arr.inspect}
+-#%p
+-#  @tree_to_display: #{@tree_to_display.inspect}
+-#%p
+-#  @pr: #{@pr.inspect}
+
 
 
 
@@ -21,11 +26,15 @@
       %th Родственное отношение к вам
       %th Имя родственника
       %th
-    - @tree_arr.each do |item|
+    - @tree_arr.each_with_index do |item, index|
+      -#%tr
+      -#  %td= relation_to_human(item[3]) #{@tree_arr.inspect}
+      -#  %td= Name.where(id: item[5]).first.name.mb_chars.capitalize
+      -#  %td= link_to "Добавить родственника", add_new_profile_path,  onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
       %tr
-        %td= relation_to_human(item[3])
-        %td= Name.where(id: item[5]).first.name.mb_chars.capitalize
-        %td= link_to "Добавить родственника", '#', onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
+        %td= relation_to_human(item[3]) #{@tree_arr.inspect}
+        %td= Name.find(item[5]).name.mb_chars.capitalize
+        %td= link_to "Добавить родственника", add_new_profile_path, @pr => index, onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
 
 
   %div{style: "margin-top:50px;"}

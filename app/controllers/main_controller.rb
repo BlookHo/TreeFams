@@ -224,6 +224,19 @@ class MainController < ApplicationController
 
     @tree_arr = tree_arr    # DEBUGG TO VIEW
     @tree_arr_len = tree_arr.length  # DEBUGG TO VIEW
+    @tree_to_display = []
+    @tree_row = []
+    @tree_arr.each do |item|
+      @tree_row[0] = item[3] # relation
+   #   profile_name = Name.find(item[5]).name#.mb_chars.capitalize # name
+      @tree_row[1] = Name.find(item[5]).name.mb_chars.capitalize
+      @tree_row[2] = item[4]
+      @tree_row[3] = current_user.id
+#      @tree_row = link_to "Добавить родственника", add_new_profile_path,  onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
+
+      @tree_to_display << @tree_row
+      @tree_row = []
+    end
 
     ##### Будущие результаты поиска
     @all_match_trees_arr = []     # Массив совпадений деревьев
