@@ -56,6 +56,12 @@ namespace :db do
   task :symlink do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
   end
+
+
+  desc "Load current seed.rb"
+  task :seed do
+    run "cd #{current_path}; bundle exec rake db:seed RAILS_ENV=#{rails_env}"
+  end
 end
 
 

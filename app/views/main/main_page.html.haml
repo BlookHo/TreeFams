@@ -1,7 +1,7 @@
-%h4
-  Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
-%h4
-  Их user_id: #{@users_ids_arr.inspect}
+-# %h4
+-#   Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
+-# %h4
+-#   Их user_id: #{@users_ids_arr.inspect}
 
 
 
@@ -36,7 +36,9 @@
         %tr
           %th Автор дерева
           %th
-            Ближний круг автора, в котором возможно присутствуют ваши родственники:
+            Ближний круг автора, в котором
+            %span.green возможно
+            присутствуют ваши родственники:
 
 
         - @all_match_arr_sorted.each do |key, value|
@@ -54,7 +56,6 @@
                     %td.name= profile.name.name.mb_chars.capitalize
                     %td.green.italic
                       - if @all_match_arr_sorted[user.id].include? profile.id
-                        Возможно, это
                         = relation_to_human( @all_match_arr_sorted[user.id].index(profile.id), prefix: true )
                     %td= link_to 'Пожать руку', '#'
 
