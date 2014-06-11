@@ -111,8 +111,8 @@ class NewProfileController < ApplicationController
     #end
 
     case relation_id
-      when 1
-        add_father_to_ProfileKeys(profiles_array.slice(0..index))
+      #when 1
+      #  add_father_to_ProfileKeys(profiles_array.slice(0..index))
       when 2
         #   Это - тест для поиска вне БК
         # к Денису - добавляем новый профиль: Жену Виктория
@@ -142,7 +142,7 @@ class NewProfileController < ApplicationController
         new_profile_key_row.is_name_id = new_profile_name_id  #is_name_id                              # is_name_id
 
         new_profile_key_row.save
-        
+
       end
 
         add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
