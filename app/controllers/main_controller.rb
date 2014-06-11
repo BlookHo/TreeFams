@@ -1,6 +1,12 @@
 class MainController < ApplicationController
  # include MainHelper  #
 
+  before_filter :check_user
+
+  def check_user
+    redirect_to :root if !current_user
+  end
+
 
  # Отображение дерева Юзера в табличной форме.
  # @note GET /
