@@ -2,12 +2,10 @@
 -#   Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
 -# %h4
 -#   Их user_id: #{@users_ids_arr.inspect}
--#%p
--#  @tree_arr: #{@tree_arr.inspect}
+%p
+  @tree_arr: #{@tree_arr.inspect}
 -#%p
 -#  @tree_to_display: #{@tree_to_display.inspect}
--#%p
--#  @pr: #{@pr.inspect}
 
 
 
@@ -31,8 +29,7 @@
         %td= relation_to_human(item[3]) #{@tree_arr.inspect}
         %td= Name.find(item[5]).name.mb_chars.capitalize
         %td
-          = link_to "Добавить родственника", '#', onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
-          -#= link_to "Добавить родственника", add_new_profile_path(relation_id: item[3], profile_id: item[4], user_id: current_user.id)#, onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
+          = link_to "Добавить родственника", add_new_profile_path(relation_id: item[3], profile_id: item[4], user_id: current_user.id), onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
 
 
   %div{style: "margin-top:50px;"}

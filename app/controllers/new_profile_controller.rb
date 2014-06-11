@@ -13,10 +13,6 @@ class NewProfileController < ApplicationController
     @sel_names = session[:sel_names][:value]
     @menu_choice = "No choice yet - in new_profile"
 
-    @add_to_profile = params[:add_to_profile] #
-    if !@add_to_profile.blank?
-      #@profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
-    end
 
     @new_profile_name = params[:profile_name_select] #
     if !@new_profile_name.blank?
@@ -62,19 +58,42 @@ class NewProfileController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
-  def make_tree_row
+  def make_tree_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex)
 
 
-# Дополнение в Tree
+# Исходное состояние в Tree
 
-@tree_arr =
-    [[4, 22, 506, 0, 22, 506, 0, false]]
 
-#[4, 22, 506, 1, 23, 45, 1, false],
+ #tree_arr = [[24, 153, 449, 0, 153, 449, 0, false],
+ #             [24, 153, 449, 1, 154, 73, 1, false],
+ #             [24, 153, 449, 2, 155, 293, 0, false],
+ #             [24, 153, 449, 5, 156, 151, 1, false],
+ #             [24, 153, 449, 6, 157, 293, 0, false]]
+ #
+ #session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
 
-# при этом, при вводе нового профиля: Денису добавляем Жену Викторию
+ tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
+
+ @tree_arr = tree_arr    # DEBUGG TO VIEW
+
+ #Автор   Татьяна
+ #Отец    Борис
+ #Мать    Мария
+ #Брат    Денис
+ #Сестра  Мария
+
+
+ # Дополнение в Tree
+ # к Денису - добавляем новый профиль: Жену Виктория
+ #         [user_id, profile_id, name_id, relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false],
+ @add_to_tree = []
+ @add_to_tree = [current_user.id, profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, false]
+
+ tree_arr << @add_to_tree
+
+ # при этом, при вводе нового профиля: Денису добавляем Жену Викторию
 # в табл. Tree записываем old_profile_id  has  relation_id  is  new_profile_id.
-# т.е.  () Муж Денис имеет жену Викторию- это и записываем в profiles_tree_arr.
+# т.е.  () Муж Денис имеет жену Викторию- это и записываем в tree_arr.
 
 
   end
@@ -139,11 +158,26 @@ class NewProfileController < ApplicationController
   # @see News
   def add_new_profile
 
+    # Выбираем на main_page при добавлении нового родственника
+    @profile_id = params[:profile_id].to_i
+    @relation_id = params[:relation_id].to_i
+    @user_id = current_user.id
+    profile_old = Profile.find(@profile_id)
+    @name_id = profile_old.name_id
+    #@sex_id = profile_old.sex_id
+    @new_profile_id = Profile.last.id + 1            # profile_id
+
+    @new_profile_name_id = 354  # Ольга
+    @new_profile_sex = 0  # female
+    @new_relation_id = 2  # мать
+
+
     get_profile_params
 
     make_new_profile
 
-    make_tree_row
+    #@add_to_tree = [current_user.id, @profile_id, @name_id, @relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
+    make_tree_row(@profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex)
 
     make_profilekeys_rows
 
