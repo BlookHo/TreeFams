@@ -84,8 +84,7 @@ class NewProfileController < ApplicationController
 
 
  # Дополнение в Tree
- # к Денису - добавляем новый профиль: Жену Виктория
- #         [user_id, profile_id, name_id, relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false],
+
  @add_to_tree = []
  @add_to_tree = [current_user.id, profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, false]
 
@@ -102,9 +101,87 @@ class NewProfileController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
-  def make_profilekeys_rows
+  def make_profilekeys_rows(relation_id)
 
-    # Дополнение в ProfileKey
+
+    #def get_bk_circle(user_id, profile_id)
+    #
+    #  @bk_circle = ProfileKey.where(:user_id => current_user.id, :profile_id => profile_id )
+    #
+    #end
+
+    case relation_id
+      when 1
+        add_father_to_ProfileKeys(profiles_array.slice(0..index))
+      when 2
+        #   Это - тест для поиска вне БК
+        # к Денису - добавляем новый профиль: Жену Виктория
+        #         [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false],
+
+   # user.id  ;profile_id    ;name_id   ;new_relation_id      ;new_profile_id    ;new_profile_name_id
+
+ #       add_mother_to_ProfileKeys(profiles_array.slice(0..index))
+
+      def add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
+
+        new_profile_key_row = ProfileKey.new
+        new_profile_key_row.user_id = current_user.id                           # user_id
+        new_profile_key_row.profile_id = profile_id                                # profile_id
+
+        #new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]             ### name_id
+        #name_id = Name.find_by_name(profile_keys_arr[row_ind][0]).id                 # name_id
+        new_profile_key_row.name_id = name_id                                    # name_id
+
+        new_profile_key_row.relation_id = new_relation_id #profile_keys_arr[row_ind][1]               # relation_id
+
+        #is_profile_id = profile_id_hash.key([profile_keys_arr[row_ind][2], profile_keys_arr[row_ind][3]])
+        new_profile_key_row.is_profile_id = new_profile_id  #is_profile_id                        # is_profile_id
+
+        #new_profile_key_row.name_id = profile_keys_arr[row_ind][0]               ### name_id
+        #is_name_id = Name.find_by_name(profile_keys_arr[row_ind][2]).id             # is_name_id
+        new_profile_key_row.is_name_id = new_profile_name_id  #is_name_id                              # is_name_id
+
+        new_profile_key_row.save
+        
+      end
+
+        add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
+
+        @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_profile_sex)[0].reverse_relation_id
+
+        add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
+
+
+
+
+
+
+
+      #when 3
+      #  add_son_to_ProfileKeys(profiles_array.slice(0..index))
+      #when 4
+      #  add_daugther_to_ProfileKeys(profiles_array.slice(0..index))
+      #when 5
+      #  add_brother_to_ProfileKeys(profiles_array.slice(0..index))
+      #when 6
+      #  add_sister_to_ProfileKeys(profiles_array.slice(0..index))
+      #when 7
+      #  add_husband_to_ProfileKeys(profiles_array.slice(0..index))
+      #when 8
+      #  add_wife_to_ProfileKeys(profiles_array.slice(0..index))
+      else
+        logger.info "======== ERRROR"
+    end
+
+
+
+
+
+
+
+  # Дополнение в ProfileKey
+
+
 
     @profiles_tree_arr =
         [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
@@ -179,7 +256,7 @@ class NewProfileController < ApplicationController
     #@add_to_tree = [current_user.id, @profile_id, @name_id, @relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
     make_tree_row(@profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex)
 
-    make_profilekeys_rows
+    make_profilekeys_rows(@relation_id)
 
   end
 
