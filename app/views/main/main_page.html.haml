@@ -27,14 +27,12 @@
       %th Имя родственника
       %th
     - @tree_arr.each_with_index do |item, index|
-      -#%tr
-      -#  %td= relation_to_human(item[3]) #{@tree_arr.inspect}
-      -#  %td= Name.where(id: item[5]).first.name.mb_chars.capitalize
-      -#  %td= link_to "Добавить родственника", add_new_profile_path,  onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
       %tr
         %td= relation_to_human(item[3]) #{@tree_arr.inspect}
         %td= Name.find(item[5]).name.mb_chars.capitalize
-        %td= link_to "Добавить родственника", add_new_profile_path(relation_id: item[3], profile_id: item[4], user_id: current_user.id)#, onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
+        %td
+          = link_to "Добавить родственника", '#', onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
+          -#= link_to "Добавить родственника", add_new_profile_path(relation_id: item[3], profile_id: item[4], user_id: current_user.id)#, onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
 
 
   %div{style: "margin-top:50px;"}
@@ -70,7 +68,7 @@
                         = relation_to_human( @all_match_relations_sorted[user.id][ @all_match_arr_sorted[user.id].index(profile.id) ], prefix: true )
                     %td
                       - if profile.user.present?
-                        = link_to 'Пожать руку', '#'
+                        = link_to 'Пожать руку', '#', onclick: "alert('Пожать руку с user_id: #{profile.user.id}')"
 
 
 
