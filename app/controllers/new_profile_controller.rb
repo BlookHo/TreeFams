@@ -251,12 +251,12 @@ class NewProfileController < ApplicationController
 
     get_profile_params
 
-    make_new_profile
-
-    #@add_to_tree = [current_user.id, @profile_id, @name_id, @relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
-    make_tree_row(@profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex)
-
-    make_profilekeys_rows(@relation_id)
+    #make_new_profile
+    #
+    ##@add_to_tree = [current_user.id, @profile_id, @name_id, @relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
+    #make_tree_row(@profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex)
+    #
+    #make_profilekeys_rows(@relation_id)
 
   end
 

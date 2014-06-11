@@ -76,7 +76,7 @@ class MainController < ApplicationController
 
     if current_user
 # Для отладки add_profile - исключаем этот метод
-#      get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
+      get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
