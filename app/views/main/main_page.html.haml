@@ -1,11 +1,45 @@
--# %h4
--#   Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
--# %h4
--#   Их user_id: #{@users_ids_arr.inspect}
+%h4
+  Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
+%h4
+  Их user_id: #{@users_ids_arr.inspect}
 %p
   @tree_arr: #{@tree_arr.inspect}
+%p
+  @relation_id_searched_arr: #{@relation_id_searched_arr.inspect}
+%p
+  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
+%p
+  @relation_match_arr: #{@relation_match_arr.inspect}
 -#%p
--#  @tree_to_display: #{@tree_to_display.inspect}
+-#  @relation_match_size: #{@relation_match_size.inspect}
+
+%p
+  @found_trees_hash: #{@found_trees_hash.inspect}
+%p
+  @found_trees_keys_arr: #{@found_trees_keys_arr.inspect}
+%p
+  @found_trees_values_arr: #{@found_trees_values_arr.inspect}
+%p
+  @found_profiles_hash: #{@found_profiles_hash.inspect}
+%p
+  @found_profiles_values_arr: #{@found_profiles_values_arr.inspect}
+%p
+  @bk_profile: #{@bk_profile.inspect}
+-#%p
+-#  @found_trees_hash: #{@found_trees_hash.inspect}
+%p
+  @found_profiles_hash: #{@found_profiles_hash.inspect}
+%p
+  @found_relations_hash: #{@found_relations_hash.inspect}
+
+%p
+  @all_match_trees_arr: #{@all_match_trees_arr.inspect}
+%p
+  @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
+%h4
+  ВСЕ СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
+%p
+  НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
 
 
 
@@ -17,7 +51,7 @@
   %h1
     = current_user.profile.name.name.mb_chars.capitalize
     \, это ваш ближний круг,
-    -# = current_user.id
+    = current_user.id
 
   %table.tmp_table
     %tr
@@ -33,7 +67,7 @@
 
 
   %div{style: "margin-top:50px;"}
-    - if @all_match_arr_sorted.nil?
+    - if @all_match_arr_sorted.blank?
       %h1 Совпадений не найдено
     - else
       %h1 Вы или ваши родственники найдены в деревьях следующих людей:

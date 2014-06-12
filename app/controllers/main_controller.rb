@@ -76,7 +76,7 @@ class MainController < ApplicationController
 
     if current_user
 # Для отладки add_profile - исключаем этот метод
-#      get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
+      get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
@@ -155,7 +155,7 @@ class MainController < ApplicationController
 
      else
        if all_profile_rows.length > 3
-         found_trees_hash.delete_if {|key, value|  value <= 2 } #all_profile_rows.length  }  # 1 .. 3 = НАСТРОЙКА!!
+         found_trees_hash.delete_if {|key, value|  value <= 3 } #all_profile_rows.length  }  # 1 .. 3 = НАСТРОЙКА!!
          # Исключение из результатов поиска групп с малым кол-вом совпадений в других деревьях or value < all_profile_rows.length
        else
          # Если маленький БК
@@ -232,17 +232,17 @@ class MainController < ApplicationController
     @tree_arr_len = tree_arr.length  # DEBUGG TO VIEW
     @tree_to_display = []
     @tree_row = []
-    @tree_arr.each do |item|
-      @tree_row[0] = item[3] # relation
-   #   profile_name = Name.find(item[5]).name#.mb_chars.capitalize # name
-      @tree_row[1] = Name.find(item[5]).name.mb_chars.capitalize
-      @tree_row[2] = item[4]
-      @tree_row[3] = current_user.id
-#      @tree_row = link_to "Добавить родственника", add_new_profile_path,  onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
-
-      @tree_to_display << @tree_row
-      @tree_row = []
-    end
+#    @tree_arr.each do |item|
+#      @tree_row[0] = item[3] # relation
+#   #   profile_name = Name.find(item[5]).name#.mb_chars.capitalize # name
+#      @tree_row[1] = Name.find(item[5]).name.mb_chars.capitalize
+#      @tree_row[2] = item[4]
+#      @tree_row[3] = current_user.id
+##      @tree_row = link_to "Добавить родственника", add_new_profile_path,  onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
+#
+#      @tree_to_display << @tree_row
+#      @tree_row = []
+#    end
 
     ##### Будущие результаты поиска
     @all_match_trees_arr = []     # Массив совпадений деревьев
@@ -265,7 +265,12 @@ class MainController < ApplicationController
       all_match_hash = join_arr_of_hashes(@all_match_profiles_arr) if !@all_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
 
       @all_match_arr_sorted = Hash[all_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
-      @all_match_arr_sorted.delete_if {|key, value| value.size == 1 }  # Исключение тех рез-тов поиска, где найден всего один профиль
+
+      ##### НАСТРОЙКИ результатов поиска:
+      # КОРРЕКТИРОВАТЬ ВМЕСТЕ С @all_match_relations_sorted !!!!
+
+      @all_match_arr_sorted.delete_if {|key, value| value.size == 1 }  #
+      # Исключение тех рез-тов поиска, где найден всего один профиль
 
       @user_ids_arr = @all_match_arr_sorted.keys  # TO VIEW
       profile_ids_arr = @all_match_arr_sorted.values.flatten # TO VIEW
@@ -273,7 +278,11 @@ class MainController < ApplicationController
 
       all_match_relations_hash = join_arr_of_hashes(@all_match_relations_arr) if !@all_match_relations_arr.blank?  # Если найдены совпадения - в @all_match_arr
       @all_match_relations_sorted = Hash[all_match_relations_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
-      @all_match_relations_sorted.delete_if {|key, value| value .size == 1 }  # Исключение тех рез-тов поиска (отношения), где найден всего один профиль
+
+      ##### НАСТРОЙКИ результатов поиска
+
+      @all_match_relations_sorted.delete_if {|key, value| value .size == 1 }  #
+      # Исключение тех рез-тов поиска (отношения), где найден всего один профиль
 
       @relation_ids_arr = @all_match_relations_sorted.values.flatten # TO VIEW
            @all_match_relations_hash = all_match_relations_hash # TO VIEW
