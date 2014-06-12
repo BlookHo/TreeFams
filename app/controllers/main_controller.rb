@@ -269,7 +269,7 @@ class MainController < ApplicationController
       ##### НАСТРОЙКИ результатов поиска:
       # КОРРЕКТИРОВАТЬ ВМЕСТЕ С @all_match_relations_sorted !!!!
 
-      @all_match_arr_sorted.delete_if {|key, value| value.size == 1 }  #
+      #@all_match_arr_sorted.delete_if {|key, value| value.size == 1 }  #
       # Исключение тех рез-тов поиска, где найден всего один профиль
 
       @user_ids_arr = @all_match_arr_sorted.keys  # TO VIEW
@@ -281,7 +281,7 @@ class MainController < ApplicationController
 
       ##### НАСТРОЙКИ результатов поиска
 
-      @all_match_relations_sorted.delete_if {|key, value| value .size == 1 }  #
+      #@all_match_relations_sorted.delete_if {|key, value| value .size == 1 }  #
       # Исключение тех рез-тов поиска (отношения), где найден всего один профиль
 
       @relation_ids_arr = @all_match_relations_sorted.values.flatten # TO VIEW
