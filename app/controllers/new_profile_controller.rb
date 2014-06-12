@@ -97,6 +97,44 @@ class NewProfileController < ApplicationController
 
   end
 
+
+  # Добавление нового ряда в таблицу ProfileKey
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
+
+    new_profile_key_row = ProfileKey.new
+    new_profile_key_row.user_id = current_user.id                           # user_id
+    new_profile_key_row.profile_id = profile_id                                # profile_id
+
+    #new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]             ### name_id
+    #name_id = Name.find_by_name(profile_keys_arr[row_ind][0]).id                 # name_id
+    new_profile_key_row.name_id = name_id                                    # name_id
+
+    new_profile_key_row.relation_id = new_relation_id #profile_keys_arr[row_ind][1]               # relation_id
+
+    #is_profile_id = profile_id_hash.key([profile_keys_arr[row_ind][2], profile_keys_arr[row_ind][3]])
+    new_profile_key_row.is_profile_id = new_profile_id  #is_profile_id                        # is_profile_id
+
+    #new_profile_key_row.name_id = profile_keys_arr[row_ind][0]               ### name_id
+    #is_name_id = Name.find_by_name(profile_keys_arr[row_ind][2]).id             # is_name_id
+    new_profile_key_row.is_name_id = new_profile_name_id  #is_name_id                              # is_name_id
+
+    new_profile_key_row.save
+
+    one_profile_key_arr = []
+    one_profile_key_arr[0] = current_user.id
+    one_profile_key_arr[1] = profile_id
+    one_profile_key_arr[2] = name_id
+    one_profile_key_arr[3] = new_relation_id
+    one_profile_key_arr[4] = new_profile_id
+    one_profile_key_arr[5] = new_profile_name_id
+
+    @one_profile_key_arr = one_profile_key_arr
+
+  end
+
   # Добавление новых рядов по профилю в таблицу ProfileKey
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
@@ -109,10 +147,11 @@ class NewProfileController < ApplicationController
     #  @bk_circle = ProfileKey.where(:user_id => current_user.id, :profile_id => profile_id )
     #
     #end
+
 if relation_id != 0
 
   # add to out of BK circle
-  # НАДО УСТАНАВЛИВАТЬ ПРИЗНАК - ВНЕ БК,
+  # может быть, НАДО УСТАНАВЛИВАТЬ ПРИЗНАК - ВНЕ БК,
   # ЧТОБЫ ФОРМИРОВАТЬ ПРАВИЛЬНОЕ ОТОБРАЖЕНИЕ РЕЗ-ТОВ
   # И ФОРМИРОВАТЬ НАИМЕНОВАНИЕ НАЙДЕННОГО ОТНОШЕНИЯ РОДСТВА:
   # НАПРИМЕР, ВМЕСТО ВАША МАТЬ - МАТЬ ОТЦА
@@ -130,41 +169,6 @@ if relation_id != 0
 
  #       add_mother_to_ProfileKeys(profiles_array.slice(0..index))
 
-      def add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
-
-        new_profile_key_row = ProfileKey.new
-        new_profile_key_row.user_id = current_user.id                           # user_id
-        new_profile_key_row.profile_id = profile_id                                # profile_id
-
-        #new_profile_key_row.name_id = profiles_arr_w_ids[arr_i][2]             ### name_id
-        #name_id = Name.find_by_name(profile_keys_arr[row_ind][0]).id                 # name_id
-        new_profile_key_row.name_id = name_id                                    # name_id
-
-        new_profile_key_row.relation_id = new_relation_id #profile_keys_arr[row_ind][1]               # relation_id
-
-        #is_profile_id = profile_id_hash.key([profile_keys_arr[row_ind][2], profile_keys_arr[row_ind][3]])
-        new_profile_key_row.is_profile_id = new_profile_id  #is_profile_id                        # is_profile_id
-
-        #new_profile_key_row.name_id = profile_keys_arr[row_ind][0]               ### name_id
-        #is_name_id = Name.find_by_name(profile_keys_arr[row_ind][2]).id             # is_name_id
-        new_profile_key_row.is_name_id = new_profile_name_id  #is_name_id                              # is_name_id
-
-        new_profile_key_row.save
-
-        one_profile_key_arr = []
-        one_profile_key_arr[0] = current_user.id
-        one_profile_key_arr[1] = profile_id
-        one_profile_key_arr[2] = name_id
-        one_profile_key_arr[3] = new_relation_id
-        one_profile_key_arr[4] = new_profile_id
-        one_profile_key_arr[5] = new_profile_name_id
-
-        @one_profile_key_arr = one_profile_key_arr
-
-      end
-
-
-
         add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
       @profile_key_arr << @one_profile_key_arr
 
@@ -172,12 +176,6 @@ if relation_id != 0
 
         add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
       @profile_key_arr << @one_profile_key_arr
-
-
-
-
-
-
 
       #when 3
       #  add_son_to_ProfileKeys(profiles_array.slice(0..index))

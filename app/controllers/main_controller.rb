@@ -235,6 +235,23 @@ class MainController < ApplicationController
     @tree_arr_len = tree_arr.length  # DEBUGG TO VIEW
     @tree_to_display = []
     @tree_row = []
+
+
+    # НОВАЯ СТРУКТУРА РЕЗУЛЬТАТОВ ПОИСКА
+    # - ТЕПЕРЬ С ВЛОЖЕННЫМИ РЕЗУЛЬТАТАМИ ПРИ ДОБАВЛЕННЫХ ПРОФИЛЯХ
+    # .
+    @test_hash_profiles = { 23 => {51 => [51,52,53,54], 54 => [58,59]}, 22 => {31 => [31,32,33,34], 34 =>[38,39] } }
+    @test_hash_keys = @test_hash_profiles.keys
+    @test_hash_values = @test_hash_profiles.values
+    @first_profiles_vals = @test_hash_values[0]
+
+
+    @test_hash_relations = { 23 => {51 => [0, 1, 2, 4], 54 => [7,3]}, 22 => {31 => [0, 1, 2, 5], 34 =>[8, 3] } }
+    @test_hash_relations_keys = @test_hash_relations.keys
+    @test_hash_relations_values = @test_hash_relations.values
+    @first_relations_vals = @test_hash_relations_values[0]
+
+
 #    @tree_arr.each do |item|
 #      @tree_row[0] = item[3] # relation
 #   #   profile_name = Name.find(item[5]).name#.mb_chars.capitalize # name
