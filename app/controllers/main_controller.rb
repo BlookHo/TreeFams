@@ -76,7 +76,7 @@ class MainController < ApplicationController
 
     if current_user
 # Для отладки add_profile - исключаем этот метод
-      get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
+#     get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
@@ -107,6 +107,7 @@ class MainController < ApplicationController
 
    @profile_searched = profile_id_searched   # DEBUGG_TO_VIEW
    @relation_searched = relation_id_searched   # DEBUGG TO VIEW
+   @all_profile_rows = all_profile_rows   # DEBUGG_TO_VIEW
 
    if !all_profile_rows.blank?
      @all_profile_rows_len = all_profile_rows.length if !all_profile_rows.blank? #_DEBUGG_TO_VIEW
@@ -131,6 +132,8 @@ class MainController < ApplicationController
             found_relations_hash.merge!({tree_row.user_id  => [relation_id_searched]}) # наполнение хэша найденными relation_id
           end
           @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
+        else
+          @relation_match_arr = ["relation_match_arr"]   # DEBUGG TO VIEW
         end
      end
      @relation_id_searched_arr << relation_id_searched  #_DEBUGG_TO_VIEW

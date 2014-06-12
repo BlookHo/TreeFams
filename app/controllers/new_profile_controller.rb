@@ -64,13 +64,13 @@ class NewProfileController < ApplicationController
 # Исходное состояние в Tree
 
 
- #tree_arr = [[24, 153, 449, 0, 153, 449, 0, false],
- #             [24, 153, 449, 1, 154, 73, 1, false],
- #             [24, 153, 449, 2, 155, 293, 0, false],
- #             [24, 153, 449, 5, 156, 151, 1, false],
- #             [24, 153, 449, 6, 157, 293, 0, false]]
- #
- #session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
+ tree_arr = [[24, 153, 449, 0, 153, 449, 0, false],
+              [24, 153, 449, 1, 154, 73, 1, false],
+              [24, 153, 449, 2, 155, 293, 0, false],
+              [24, 153, 449, 5, 156, 151, 1, false],
+              [24, 153, 449, 6, 157, 293, 0, false]]
+
+ session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
 
  tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
 
@@ -101,7 +101,7 @@ class NewProfileController < ApplicationController
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
-  def make_profilekeys_rows(relation_id)
+  def  make_profilekeys_rows(relation_id, profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, sex_id)
 
 
     #def get_bk_circle(user_id, profile_id)
@@ -109,8 +109,16 @@ class NewProfileController < ApplicationController
     #  @bk_circle = ProfileKey.where(:user_id => current_user.id, :profile_id => profile_id )
     #
     #end
+if relation_id != 0
 
-    case relation_id
+  # add to out of BK circle
+  # НАДО УСТАНАВЛИВАТЬ ПРИЗНАК - ВНЕ БК,
+  # ЧТОБЫ ФОРМИРОВАТЬ ПРАВИЛЬНОЕ ОТОБРАЖЕНИЕ РЕЗ-ТОВ
+  # И ФОРМИРОВАТЬ НАИМЕНОВАНИЕ НАЙДЕННОГО ОТНОШЕНИЯ РОДСТВА:
+  # НАПРИМЕР, ВМЕСТО ВАША МАТЬ - МАТЬ ОТЦА
+
+    @profile_key_arr = []
+    case new_relation_id
       #when 1
       #  add_father_to_ProfileKeys(profiles_array.slice(0..index))
       when 2
@@ -118,7 +126,7 @@ class NewProfileController < ApplicationController
         # к Денису - добавляем новый профиль: Жену Виктория
         #         [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false],
 
-   # user.id  ;profile_id    ;name_id   ;new_relation_id      ;new_profile_id    ;new_profile_name_id
+   # user.id; profile_id; name_id; new_relation_id; new_profile_id; new_profile_name_id
 
  #       add_mother_to_ProfileKeys(profiles_array.slice(0..index))
 
@@ -143,13 +151,27 @@ class NewProfileController < ApplicationController
 
         new_profile_key_row.save
 
+        one_profile_key_arr = []
+        one_profile_key_arr[0] = current_user.id
+        one_profile_key_arr[1] = profile_id
+        one_profile_key_arr[2] = name_id
+        one_profile_key_arr[3] = new_relation_id
+        one_profile_key_arr[4] = new_profile_id
+        one_profile_key_arr[5] = new_profile_name_id
+
+        @one_profile_key_arr = one_profile_key_arr
+
       end
 
-        add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
 
-        @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_profile_sex)[0].reverse_relation_id
+
+        add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
+      @profile_key_arr << @one_profile_key_arr
+
+        @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
 
         add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
+      @profile_key_arr << @one_profile_key_arr
 
 
 
@@ -173,8 +195,12 @@ class NewProfileController < ApplicationController
         logger.info "======== ERRROR"
     end
 
+else
+
+  # add inside of BK circle
 
 
+end
 
 
 
@@ -183,11 +209,11 @@ class NewProfileController < ApplicationController
 
 
 
-    @profiles_tree_arr =
-        [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
-         [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
-         [ 22, 506, "Татьяна", 0, 5, 25, 97, "Денис", true],
-         [ 22, 506, "Татьяна", 0, 6, 26, 453, "Мария", true]]
+    #@profiles_tree_arr =
+    #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
+    #     [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
+    #     [ 22, 506, "Татьяна", 0, 5, 25, 97, "Денис", true],
+    #     [ 22, 506, "Татьяна", 0, 6, 26, 453, "Мария", true]]
     #   Это - тест для поиска вне БК
     # к Денису - добавляем новый профиль: Жену Виктория
     #         [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false],
@@ -241,7 +267,7 @@ class NewProfileController < ApplicationController
     @user_id = current_user.id
     profile_old = Profile.find(@profile_id)
     @name_id = profile_old.name_id
-    #@sex_id = profile_old.sex_id
+    @sex_id = profile_old.sex_id
     @new_profile_id = Profile.last.id + 1            # profile_id
 
     @new_profile_name_id = 354  # Ольга
@@ -256,7 +282,7 @@ class NewProfileController < ApplicationController
     #@add_to_tree = [current_user.id, @profile_id, @name_id, @relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
     make_tree_row(@profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex)
 
-#    make_profilekeys_rows(@relation_id)
+    make_profilekeys_rows(@relation_id, @profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, @sex_id)
 
   end
 
