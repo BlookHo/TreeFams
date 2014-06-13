@@ -63,14 +63,14 @@ class NewProfileController < ApplicationController
 
 # Исходное состояние в Tree
 
-
- tree_arr = [[24, 153, 449, 0, 153, 449, 0, false],
-              [24, 153, 449, 1, 154, 73, 1, false],
-              [24, 153, 449, 2, 155, 293, 0, false],
-              [24, 153, 449, 5, 156, 151, 1, false],
-              [24, 153, 449, 6, 157, 293, 0, false]]
-
- session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
+ #
+ #tree_arr = [[24, 153, 449, 0, 153, 449, 0, false],
+ #             [24, 153, 449, 1, 154, 73, 1, false],
+ #             [24, 153, 449, 2, 155, 293, 0, false],
+ #             [24, 153, 449, 5, 156, 151, 1, false],
+ #             [24, 153, 449, 6, 157, 293, 0, false]]
+ #
+ #session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
 
  tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
 
