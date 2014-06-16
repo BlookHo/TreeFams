@@ -54,10 +54,14 @@
 %p
   @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
 %p
+  @all_match_hash: #{@all_match_hash.inspect}
+%p
   @all_match_relations_arr: #{@all_match_relations_arr.inspect}
 
 %p
   @all_wide_match_profiles_arr: #{@all_wide_match_profiles_arr.inspect}
+%p
+  @all_wide_match_hash: #{@all_wide_match_hash.inspect}
 %p
   @all_wide_match_relations_arr: #{@all_wide_match_relations_arr.inspect}
 
@@ -72,18 +76,28 @@
 %h4
   @pre_all_wide_match_arr_sorted: #{@pre_all_wide_match_arr_sorted.inspect}
 %h4
+  @@@pre_hash: #{@pre_hash.inspect}
+%h4
   @@pre_all_wide_values: #{@pre_all_wide_values.inspect}
 %h4
   @@@pre_all_wide_values_hash: #{@pre_all_wide_values_hash.inspect}
 %h4
   @@pre_all_wide_key: #{@pre_all_wide_key.inspect}
+%h4
+  @@@pre_all_wide: #{@pre_all_wide.inspect}
 
+%h4
+  @@@one_arr: #{@one_arr.inspect}
+%h4
+  @@size: #{@size.inspect}
 %h4
   @@@profile_arr: #{@profile_arr.inspect}
 %h4
   @@rez_hash: #{@rez_hash.inspect}
 %h4
   @@@final_hash: #{@final_hash.inspect}
+%h4
+  @@@size_v: #{@size_v.inspect}
 
 %h4
   @complete_hash: #{@complete_hash.inspect}
@@ -102,14 +116,14 @@
 %p
   @profile_key_arr: #{@profile_key_arr.inspect}
 
--#%p
--#  @test_hash_profiles: #{@test_hash_profiles.inspect}
+%p
+  @test_hash_profiles: #{@test_hash_profiles.inspect}
 -#%p
 -#  @test_hash_keys: #{@test_hash_keys.inspect}
 -#%p
 -#  @test_hash_values: #{@test_hash_values.inspect}
--#%p
--#  @first_profiles_vals: #{@first_profiles_vals.inspect}
+%p
+  @final_merged_hash: #{@final_merged_hash.inspect}
 -#
 -#%p
 -#  @test_hash_relations: #{@test_hash_relations.inspect}
@@ -127,7 +141,7 @@
   %h1
     = current_user.profile.name.name.mb_chars.capitalize
     \, это ваш ближний круг,
-    = current_user.id
+    = current_user.id # DEBUGG TO VIEW
 
   %table.tmp_table
     %tr
@@ -138,6 +152,7 @@
       %tr
         %td= relation_to_human(item[3]) #{@tree_arr.inspect}
         %td= Name.find(item[5]).name.mb_chars.capitalize
+        %td= item[4]  # DEBUGG TO VIEW
         %td
           = link_to "Добавить родственника", add_new_profile_path(relation_id: item[3], profile_id: item[4], user_id: current_user.id), onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
 
@@ -162,7 +177,7 @@
           %tr
             %td
               %h2= user.name.mb_chars.capitalize
-              %h2= user.id
+              %h2= user.id  # DEBUGG TO VIEW
 
             %td
               %table.results_table
@@ -171,7 +186,7 @@
                   %tr
                     %td.grey= relation_to_human(tree.relation_id)
                     %td.name= profile.name.name.mb_chars.capitalize
-                    %td.grey= profile.id
+                    %td.grey= profile.id  # DEBUGG TO VIEW
                     %td.green.italic
                       - if @all_match_arr_sorted[user.id].include? profile.id
                         = relation_to_human( @all_match_relations_sorted[user.id][ @all_match_arr_sorted[user.id].index(profile.id) ], prefix: true )
