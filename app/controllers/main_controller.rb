@@ -200,10 +200,9 @@ class MainController < ApplicationController
    @all_match_relations_arr << found_relations_hash if !found_relations_hash.empty? # Заполнение выходного массива хэшей
    #####
 
+   ##### ИТОГОВЫЕ РАСШИРЕННЫЕ результаты поиска
    @all_wide_match_profiles_arr << wide_found_profiles_hash if !found_profiles_hash.blank? # Заполнение выходного массива хэшей
    @all_wide_match_relations_arr << wide_found_relations_hash if !found_relations_hash.empty? # Заполнение выходного массива хэшей
-
-
 
    @found_profiles_hash = found_profiles_hash # DEBUGG TO VIEW
    @found_relations_hash = found_relations_hash # DEBUGG TO VIEW
@@ -213,7 +212,6 @@ class MainController < ApplicationController
 
    @wide_found_profiles_hash = wide_found_profiles_hash # DEBUGG TO VIEW
    @wide_found_relations_hash = wide_found_relations_hash # DEBUGG TO VIEW
-
 
  end
 
@@ -234,40 +232,13 @@ class MainController < ApplicationController
 
     # НОВАЯ СТРУКТУРА РЕЗУЛЬТАТОВ ПОИСКА
     # - ТЕПЕРЬ С ВЛОЖЕННЫМИ РЕЗУЛЬТАТАМИ ПРИ ДОБАВЛЕННЫХ ПРОФИЛЯХ
-    # .
 
     #@test_hash_profiles = { 23 => {51 => [51,52,53,54], 54 => [58,59]}, 22 => {31 => [31,32,33,34], 34 =>[38,39] } }
-    @test_hash_profiles = {20=>{138=>[127]}, 21=>{138=>[135]}, 23=>{138=>[150]}, 24=>{138=>[156]}, 25=>{138=>[159]} }
-
-
-    @final_merged_hash = hash_hash_to_hash_arr(@test_hash_profiles)
-
-    #@test_hash_profiles.each do |one_hash|
-    #  ind = 0
-    #  one_hash.values.each do |one_val_hash|
-    #    @new_test_hash_values = @final_merged_hash.merge({one_hash.keys[ind] => one_val_hash.to_a.flatten(1)} )
-    #    @final_merged_hash = @new_test_hash_values
-    #    ind += 1
-    #  end
-    #end
+    #@test_hash_profiles = {20=>{138=>[127]}, 21=>{138=>[135]}, 23=>{138=>[150]}, 24=>{138=>[156]}, 25=>{138=>[159]} }
     #
-
-      #each_hash.to_a
-      #one_hash { |k,v| v.to_a }
-
-    #end
-    #@first_profiles_vals = @test_hash_values[0]
-    #
-    #
-    #@test_hash_relations = { 23 => {51 => [0, 1, 2, 4], 54 => [7,3]}, 22 => {31 => [0, 1, 2, 5], 34 =>[8, 3] } }
-    #@test_hash_relations_keys = @test_hash_relations.keys
-    #@test_hash_relations_values = @test_hash_relations.values
-    #@first_relations_vals = @test_hash_relations_values[0]
-
+    #@final_merged_hash = hash_hash_to_hash_arr(@test_hash_profiles)
 
     #ВСЕ wide СОВПАДЕНИЯ РОДНЫХ: {дерево профили}
-
-    #@pre_all_wide_match_arr_sorted = {23=>[[153, [151]], [153, [146]], [153, [149]], [153, [150]], [153, [152]]], 22=>[[153, [141]], [153, [140]], [153, [138]], [153, [142]]]}
     #@pre_all_wide_match_arr_sorted = {23=>[[153, [151]], [153, [146]], [153, [149]], [153, [150]], [153, [152]]] } #, 22=>[[153, [141]], [153, [140]], [153, [138]], [153, [142]]]}
 
 
@@ -311,26 +282,25 @@ class MainController < ApplicationController
 
     if !@all_match_profiles_arr.blank?
 
+      #### PROFILES
       all_match_hash = join_arr_of_hashes(@all_match_profiles_arr) if !@all_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
-      @all_match_hash = all_match_hash  #_DEBUGG_TO_VIEW
+      #@all_match_hash = all_match_hash  #_DEBUGG_TO_VIEW
 
       @all_match_arr_sorted = Hash[all_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
 
       ##### НАСТРОЙКИ результатов поиска:
       # КОРРЕКТИРОВАТЬ ВМЕСТЕ С @all_match_relations_sorted !!!!
-
       #@all_match_arr_sorted.delete_if {|key, value| value.size == 1 }  #
       # Исключение тех рез-тов поиска, где найден всего один профиль
-
       @user_ids_arr = @all_match_arr_sorted.keys  # TO VIEW
       profile_ids_arr = @all_match_arr_sorted.values.flatten # TO VIEW
       @amount_of_profiles = profile_ids_arr.size if !profile_ids_arr.blank? # TO VIEW
 
+      #### RELATIONS
       all_match_relations_hash = join_arr_of_hashes(@all_match_relations_arr) if !@all_match_relations_arr.blank?  # Если найдены совпадения - в @all_match_arr
       @all_match_relations_sorted = Hash[all_match_relations_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
 
       ##### НАСТРОЙКИ результатов поиска
-
       #@all_match_relations_sorted.delete_if {|key, value| value .size == 1 }  #
       # Исключение тех рез-тов поиска (отношения), где найден всего один профиль
 
@@ -339,53 +309,80 @@ class MainController < ApplicationController
       count_users_found(profile_ids_arr) # TO VIEW
     end
 
+    #### расширенные РЕЗУЛЬТАТЫ ПОИСКА:
     if !@all_wide_match_profiles_arr.blank?
-
+      #### PROFILES
       all_wide_match_hash = join_arr_of_hashes(@all_wide_match_profiles_arr) if !@all_wide_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
-      @all_wide_match_hash = all_wide_match_hash  #_DEBUGG_TO_VIEW
+      #@all_wide_match_hash = all_wide_match_hash  #_DEBUGG_TO_VIEW
       @all_wide_match_arr_sorted = Hash[all_wide_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
 
-      @complete_hash = Hash.new     #
-      @all_wide_match_arr_sorted.each do |k, v|
-        @size_v = v.size
-        if v.size == 1
-          @complete_hash.merge!({k => v}) # наполнение хэша найденными profile_id
-        else
-          make_wide_hash(k => v)
-        end
+      #@complete_hash = make_complete_hash(@all_wide_match_arr_sorted)  #_DEBUGG_TO_VIEW
 
-        @complete_hash.merge!(@final_hash) # наполнение хэша найденными profile_id
+      # @final_reduced_profiles_hash = итоговый Хаш массивов найденных профилей
+      @final_reduced_profiles_hash = reduce_hash(make_complete_hash(@all_wide_match_arr_sorted))  # TO VIEW
 
-      end
+      # @wide_user_ids_arr = итоговый массив найденных деревьев
+      @wide_user_ids_arr = @final_reduced_profiles_hash.keys.flatten  # TO VIEW
 
-      ###### НАСТРОЙКИ результатов поиска:
-      ## КОРРЕКТИРОВАТЬ ВМЕСТЕ С @all_match_relations_sorted !!!!
-      #
-      @all_match_arr_sorted.delete_if {|key, value| value.size == 1 }  #
-      ## Исключение тех рез-тов поиска, где найден всего один профиль
-      #
-      @wide_user_ids_arr = @complete_hash.keys.flatten  # TO VIEW
-      #profile_ids_arr = @all_match_arr_sorted.values.flatten # TO VIEW
-      #@amount_of_profiles = profile_ids_arr.size if !profile_ids_arr.blank? # TO VIEW
-      #
-      #all_match_relations_hash = join_arr_of_hashes(@all_match_relations_arr) if !@all_match_relations_arr.blank?  # Если найдены совпадения - в @all_match_arr
-      #@all_match_relations_sorted = Hash[all_match_relations_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
-      #
-      ###### НАСТРОЙКИ результатов поиска
-      #
-      @all_match_relations_sorted.delete_if {|key, value| value .size == 1 }  #
-      ## Исключение тех рез-тов поиска (отношения), где найден всего один профиль
-      #
+      # @wide_profile_ids_arr = итоговый массив хашей найденных профилей
+      @wide_profile_ids_arr = @final_reduced_profiles_hash.values.flatten # TO VIEW
+
+      # @wide_amount_of_profiles = Подсчет количества найденных Профилей в массиве Хэшей
+      @wide_amount_of_profiles = count_profiles_in_hash(@wide_profile_ids_arr)
+
+      #### RELATIONS
+      all_wide_match_relations_hash = join_arr_of_hashes(@all_wide_match_relations_arr) if !@all_wide_match_relations_arr.blank?  # Если найдены совпадения - в @all_match_arr
+      @all_wide_match_relations_sorted = Hash[all_wide_match_relations_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
+
+      #@complete_relations_hash = make_complete_hash(@all_wide_match_relations_sorted)
+
+      @final_reduced_relations_hash = reduce_hash(make_complete_hash(@all_wide_match_relations_sorted))  # TO VIEW
+
       #@relation_ids_arr = @all_match_relations_sorted.values.flatten # TO VIEW
       #@all_match_relations_hash = all_match_relations_hash # TO VIEW
       #count_users_found(profile_ids_arr) # TO VIEW
 
     end
 
-
-
   end
 
+
+
+  ## Формирование полного щирокого Хаша
+  # @note GET
+  # На входе:
+  # На выходе: @ Итоговый  ХЭШ
+  def make_complete_hash(input_hash)
+    complete_hash = Hash.new     #
+    if !input_hash.blank?
+      input_hash.each do |k, v|
+        #@size_v = v.size   #_DEBUGG_TO_VIEW
+        if v.size == 1
+          complete_hash.merge!({k => v}) # наполнение хэша найденными profile_id
+        else
+          #@final_hash = make_wide_hash(k => v) #_DEBUGG_TO_VIEW
+          complete_hash.merge!(make_wide_hash(k => v)) # наполнение хэша найденными profile_id
+        end
+      end
+    end
+    return complete_hash
+  end
+
+  # НАСТРОЙКА СОКРАЩЕНИЯ РЕ-В ПОИСКА: УДАЛЕНИЕ КОРОТКИХ СОВПАДЕНИЙ
+  # ЦИФРА В УСЛОВИИ if - ЭТО РАЗМЕР СОВПАДЕНИЙ В ДЕРЕВЕ ПРИ ПОИСКЕ.
+  # # Исключение тех рез-тов поиска, где найден всего один профиль
+  # @note GET
+  # На входе:
+  # На выходе: @ Итоговый  ХЭШ
+  def reduce_hash(input_hash)
+    reduced_hash = Hash.new
+    input_hash.each do |k, v|
+      if v.values.flatten.size > 1  # НАСТРОЙКА УДАЛЕНИЯ МАЛЫХ СОВПАДЕНИЙ
+        reduced_hash.merge!({k => v}) #
+      end
+    end
+    return reduced_hash
+  end
 
   # Слияние массива Хэшей без потери значений { (key = user_id) => (value = profile_id) }
   # Получение упорядоченного Хэша: {user_id  -> [ profile_id, profile_id, profile_id ...]}
@@ -393,26 +390,29 @@ class MainController < ApplicationController
   # На входе: массив хэшей: [{user_id -> profile_id, ... , user_id -> profile_id}, ..., {user_id -> profile_id, ... , user_id -> profile_id} ]
   # На выходе: @all_match_hash Итоговый упорядоченный ХЭШ
   def make_wide_hash(pre_hash)
-    @pre_hash = pre_hash
-    @pre_all_wide_values = pre_hash.values.flatten(1)
-    @pre_all_wide_key = pre_hash.keys[0] if !pre_hash.keys.blank?#
-    @rez_hash = Hash.new     #
-    @final_hash = Hash.new     #
-    @profile_arr = []   #
-    @size = @pre_all_wide_values.size
-    if @pre_all_wide_values.size == 1
+    #@pre_hash = pre_hash   #_DEBUGG_TO_VIEW
+    pre_all_wide_values = pre_hash.values.flatten(1)
+    pre_all_wide_key = pre_hash.keys[0] if !pre_hash.keys.blank?
+    rez_hash = Hash.new     #
+    final_hash = Hash.new     #
+    profile_arr = []   #
+    #@size = pre_all_wide_values.size  #_DEBUGG_TO_VIEW
+    if pre_all_wide_values.size == 1
 #      @pre_all_wide = hash_hash_to_hash_arr(@pre_all_wide_values[0])
-      @pre_all_wide = @pre_all_wide_values[0]
+      pre_all_wide = pre_all_wide_values[0]
     else
-      @pre_all_wide = @pre_all_wide_values
+      pre_all_wide = pre_all_wide_values
     end
-    @pre_all_wide.each do |one_arr|
-      @one_arr = one_arr[0]#[0]
-      @profile_arr << one_arr[1][0]
-      @rez_hash.merge!({one_arr[0] => @profile_arr}) # наполнение хэша найденными profile_id
+    pre_all_wide.each do |one_arr|
+      #@one_arr = one_arr[0]#[0]  #_DEBUGG_TO_VIEW
+      if !one_arr.blank?
+        profile_arr << one_arr[1][0]
+        rez_hash.merge!({one_arr[0] => profile_arr}) # наполнение хэша найденными profile_id
+      end
     end
 
-    @final_hash.merge!({@pre_all_wide_key => @rez_hash}) # наполнение хэша найденными profile_id
+    final_hash.merge!({pre_all_wide_key => rez_hash}) # наполнение хэша найденными profile_id
+ #   return final_hash
 
   end
 
@@ -451,6 +451,16 @@ class MainController < ApplicationController
   end
 
 
+  # Подсчет количества найденных Профилей в массиве Хэшей
+  # На входе: массив Хэшей профилей input_arr_hash
+  # На выходе: amount_found Кол-во
+  def count_profiles_in_hash(input_arr_hash)
+    amount_found = 0
+    input_arr_hash.each do |k|
+      amount_found = amount_found + k.values.flatten.size
+    end
+    return amount_found
+  end
   # Подсчет количества найденных Юзеров среди найденных Профилей
   # @note GET
   # На входе: массив профилей all_profiles_arr: profile_id
