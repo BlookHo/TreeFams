@@ -152,11 +152,14 @@ class NewProfileController < ApplicationController
   def  make_profilekeys_rows(relation_id, profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, sex_id)
 
 
+    profiles_key_array = session[:profiles_key_array][:value] #.to_array
+    @profiles_key_array = profiles_key_array
     #def get_bk_circle(user_id, profile_id)
     #
     #  @bk_circle = ProfileKey.where(:user_id => current_user.id, :profile_id => profile_id )
     #
     #end
+    profiles_key_array.each_with_index do |profile, index|
 
     if relation_id != 0
 
@@ -166,22 +169,22 @@ class NewProfileController < ApplicationController
       # И ФОРМИРОВАТЬ НАИМЕНОВАНИЕ НАЙДЕННОГО ОТНОШЕНИЯ РОДСТВА:
       # НАПРИМЕР, ВМЕСТО ВАША МАТЬ - МАТЬ ОТЦА
 
-        @profile_key_arr = []
+        @profile_key_arr_added = []    # DEBUGG_TO_VIEW
         case new_relation_id
           when 1
-            add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
-            @profile_key_arr << @one_profile_key_arr   # DEBUGG_TO_VIEW
-            @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
-            add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
-            @profile_key_arr << @one_profile_key_arr   # DEBUGG_TO_VIEW
+            #add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
+            #@profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+            #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
+            #add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
+            #@profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
           when 2
-            add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
-            @profile_key_arr << @one_profile_key_arr   # DEBUGG_TO_VIEW
-            @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
-            add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
-            @profile_key_arr << @one_profile_key_arr   # DEBUGG_TO_VIEW
+            #add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
+            #@profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+            #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
+            #add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
+            #@profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
 
-          #when 3
+          when 3
           #  add_son_to_ProfileKeys(profiles_array.slice(0..index))
           #when 4
           #  add_daugther_to_ProfileKeys(profiles_array.slice(0..index))
@@ -203,6 +206,7 @@ class NewProfileController < ApplicationController
 
     end
 
+    end
 
   # Дополнение в ProfileKey
 
@@ -288,12 +292,14 @@ class NewProfileController < ApplicationController
   # Определение задание на добавление рядов в таблицу Profile_Keys,
   # в зависимости от профиля, к которому добавляем новый профиль,
   # от его существующего ближнего круга,
-  # от того, кого добавляем в смысле relation_id
+  # от того, какое relation_id добавляем.
+  # Формирование соответствующего массива для выполнения в методе make_profilekeys_rows
   # @note GET /
   # @see News
   def make_profile_key_add_task(profile_id,relation_id)
 
-
+    profiles_key_array = []
+    session[:profiles_key_array] = {:value => profiles_key_array, :updated_at => Time.current}
 
   end
 
@@ -307,7 +313,7 @@ class NewProfileController < ApplicationController
     # Выбираем на main_page при добавлении нового родственника
     @profile_id = params[:profile_id].to_i
     @relation_id = params[:relation_id].to_i
-    
+
     get_bk_circle(@profile_id,@relation_id)
 
     get_bk_relative_names(@profile_id,@relation_id)
@@ -327,12 +333,14 @@ class NewProfileController < ApplicationController
 
     get_profile_params
 
-    make_profile_key_add_task(@profile_id,@relation_id)
 
     make_new_profile
 
     #@add_to_tree = [current_user.id, @profile_id, @name_id, @relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
     make_tree_row(@profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex)
+
+
+    make_profile_key_add_task(@profile_id,@relation_id)
 
     make_profilekeys_rows(@relation_id, @profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, @sex_id)
 
