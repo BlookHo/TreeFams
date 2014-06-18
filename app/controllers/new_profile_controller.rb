@@ -158,60 +158,140 @@ class NewProfileController < ApplicationController
     #
     #end
 
-if relation_id != 0
+    if relation_id != 0
 
-  # add to out of BK circle
-  # может быть, НАДО УСТАНАВЛИВАТЬ ПРИЗНАК - ВНЕ БК,
-  # ЧТОБЫ ФОРМИРОВАТЬ ПРАВИЛЬНОЕ ОТОБРАЖЕНИЕ РЕЗ-ТОВ
-  # И ФОРМИРОВАТЬ НАИМЕНОВАНИЕ НАЙДЕННОГО ОТНОШЕНИЯ РОДСТВА:
-  # НАПРИМЕР, ВМЕСТО ВАША МАТЬ - МАТЬ ОТЦА
+      # add to out of BK circle
+      # может быть, НАДО УСТАНАВЛИВАТЬ ПРИЗНАК - ВНЕ БК,
+      # ЧТОБЫ ФОРМИРОВАТЬ ПРАВИЛЬНОЕ ОТОБРАЖЕНИЕ РЕЗ-ТОВ
+      # И ФОРМИРОВАТЬ НАИМЕНОВАНИЕ НАЙДЕННОГО ОТНОШЕНИЯ РОДСТВА:
+      # НАПРИМЕР, ВМЕСТО ВАША МАТЬ - МАТЬ ОТЦА
 
-    @profile_key_arr = []
-    case new_relation_id
-      #when 1
-      #  add_father_to_ProfileKeys(profiles_array.slice(0..index))
-      when 2
-        #   Это - тест для поиска вне БК
+        @profile_key_arr = []
+        case new_relation_id
+          when 1
+            add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
+            @profile_key_arr << @one_profile_key_arr   # DEBUGG_TO_VIEW
+            @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
+            add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
+            @profile_key_arr << @one_profile_key_arr   # DEBUGG_TO_VIEW
+          when 2
+            add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
+            @profile_key_arr << @one_profile_key_arr   # DEBUGG_TO_VIEW
+            @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
+            add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
+            @profile_key_arr << @one_profile_key_arr   # DEBUGG_TO_VIEW
 
-   # user.id; profile_id; name_id; new_relation_id; new_profile_id; new_profile_name_id
+          #when 3
+          #  add_son_to_ProfileKeys(profiles_array.slice(0..index))
+          #when 4
+          #  add_daugther_to_ProfileKeys(profiles_array.slice(0..index))
+          #when 5
+          #  add_brother_to_ProfileKeys(profiles_array.slice(0..index))
+          #when 6
+          #  add_sister_to_ProfileKeys(profiles_array.slice(0..index))
+          #when 7
+          #  add_husband_to_ProfileKeys(profiles_array.slice(0..index))
+          #when 8
+          #  add_wife_to_ProfileKeys(profiles_array.slice(0..index))
+          else
+            logger.info "======== ERRROR"
+        end
 
- #       add_mother_to_ProfileKeys(profiles_array.slice(0..index))
+    else
 
-        add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
-      @profile_key_arr << @one_profile_key_arr
+      # add inside of BK circle
 
-        @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
-
-        add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
-      @profile_key_arr << @one_profile_key_arr
-
-      #when 3
-      #  add_son_to_ProfileKeys(profiles_array.slice(0..index))
-      #when 4
-      #  add_daugther_to_ProfileKeys(profiles_array.slice(0..index))
-      #when 5
-      #  add_brother_to_ProfileKeys(profiles_array.slice(0..index))
-      #when 6
-      #  add_sister_to_ProfileKeys(profiles_array.slice(0..index))
-      #when 7
-      #  add_husband_to_ProfileKeys(profiles_array.slice(0..index))
-      #when 8
-      #  add_wife_to_ProfileKeys(profiles_array.slice(0..index))
-      else
-        logger.info "======== ERRROR"
     end
-
-else
-
-  # add inside of BK circle
-
-
-end
-
-
 
 
   # Дополнение в ProfileKey
+
+
+
+  end
+
+  # Определение ближнего круга профиля, к которому добавляем новый профиль
+  # @note GET /
+  # @see News
+  # @see News
+  def get_bk_circle(profile_id,relation_id)
+
+
+
+  end
+
+  # @note GET /
+  # определяется массив имен братьев
+  # @see News
+  # @see News
+  def get_brothers_names(profile_id,relation_id)
+
+  end
+
+  # @note GET /
+  # определяется массив имен сестер
+  # @see News
+  # @see News
+  def get_sisters_names(profile_id,relation_id)
+
+  end
+
+  # @note GET /
+  # определяется массив имен сыновей
+  # @see News
+  # @see News
+  def get_sons_names(profile_id,relation_id)
+
+  end
+
+  # @note GET /
+  # определяется массив имен дочерей
+  # @see News
+  # @see News
+  def get_daugthers_names(profile_id,relation_id)
+
+  end
+
+  # @note GET /
+  # определяется массив имен жен
+  # @see News
+  # @see News
+  def get_wives_names(profile_id,relation_id)
+
+  end
+
+  # @note GET /
+  # определяется массив имен мужей
+  # @see News
+  # @see News
+  def get_husbands_names(profile_id,relation_id)
+
+  end
+
+  # @note GET /
+  # определяются массивы имен всех существующих членов БК
+  # @see News
+  # @see News
+  def get_bk_relative_names(profile_id,relation_id)
+
+  end
+
+  # Определение набора отношений relation_id, допустимого для профиля, к которому добавляем новый профиль
+  # @note GET /
+  # @see News
+  def get_acceptable_relations(profile_id,relation_id)
+
+
+
+  end
+
+  # Определение задание на добавление рядов в таблицу Profile_Keys,
+  # в зависимости от профиля, к которому добавляем новый профиль,
+  # от его существующего ближнего круга,
+  # от того, кого добавляем в смысле relation_id
+  # @note GET /
+  # @see News
+  def make_profile_key_add_task(profile_id,relation_id)
 
 
 
@@ -227,6 +307,13 @@ end
     # Выбираем на main_page при добавлении нового родственника
     @profile_id = params[:profile_id].to_i
     @relation_id = params[:relation_id].to_i
+    
+    get_bk_circle(@profile_id,@relation_id)
+
+    get_bk_relative_names(@profile_id,@relation_id)
+
+    get_acceptable_relations(@profile_id,@relation_id)
+
     @user_id = current_user.id
     profile_old = Profile.find(@profile_id)
     @name_id = profile_old.name_id
@@ -239,6 +326,8 @@ end
 
 
     get_profile_params
+
+    make_profile_key_add_task(@profile_id,@relation_id)
 
     make_new_profile
 
