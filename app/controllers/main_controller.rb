@@ -14,32 +14,6 @@ class MainController < ApplicationController
  # @see News
  def get_user_tree(user_id)
 
-#@profiles_tree_arr:
-#[[22, 506, "Татьяна", 0, 1, 23, 45, "Борис"],
-# [22, 506, "Татьяна", 0, 2, 24, 453, "Мария"],
-# [22, 506, "Татьяна", 0, 5, 25, 97, "Денис"],
-# [22, 506, "Татьяна", 0, 6, 26, 453, "Мария"]]
-#tree_arr =
-#    [[4, 22, 506, 0, 22, 506, 0, false]]
-
-     #[4, 22, 506, 1, 23, 45, 1, false],
-     #[4, 22, 506, 2, 24, 453, 0, false],
-     #[4, 22, 506, 5, 25, 97, 1, false],
-     #[4, 22, 506, 6, 26, 453, 0, false]]
-
-     ##  [[4, 22, 506, 0, 22, 506, 0, false]]
-#    [[2, 7, 97, 0, 7, 97, 1, false]]
-      #  [[3, 15, 45, 0, 15, 45, 1, false]]
-     #   [4, 22, 506, 1, 23, 45, 1, false],
-#    [[7, 40, 45, 0, 40, 45, 1, false]]
-    #   [4, 22, 506, 2, 24, 453, 0, false],
-   #[[11, 69, 265, 0, 69, 265, 1, false], # Сергей
-   # [11, 69, 265, 1, 70, 123, 1, false]] # Иван
-        #   [4, 22, 506, 5, 25, 97, 1, false],
-#   [4, 22, 506, 6, 26, 453, 0, false],
-#   [4, 25, 97, 8, 84, 371, 0, false]]
-
-
 
       user_tree = Tree.where(:user_id => user_id)
       row_arr = []
@@ -76,7 +50,7 @@ class MainController < ApplicationController
 
     if current_user
 # Для отладки add_profile - исключаем этот метод
-     get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
+#     get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
@@ -232,15 +206,55 @@ class MainController < ApplicationController
 
     # НОВАЯ СТРУКТУРА РЕЗУЛЬТАТОВ ПОИСКА
     # - ТЕПЕРЬ С ВЛОЖЕННЫМИ РЕЗУЛЬТАТАМИ ПРИ ДОБАВЛЕННЫХ ПРОФИЛЯХ
+    # @all_wide_match_profiles_arr:
+    @test_arr_hash_profiles = [{22=>{153=>[141]}, 23=>{153=>[151]}},
+                           {23=>{153=>[146]}},
+                           {22=>{153=>[140]}, 23=>{153=>[149]}},
+                           {22=>{153=>[138]}, 23=>{153=>[150]}},
+                           {22=>{153=>[142]}, 23=>{153=>[152]}},
+                           {21=>{154=>[133]}, 23=>{154=>[148]}}]
 
-    #@test_hash_profiles = { 23 => {51 => [51,52,53,54], 54 => [58,59]}, 22 => {31 => [31,32,33,34], 34 =>[38,39] } }
-    #@test_hash_profiles = {20=>{138=>[127]}, 21=>{138=>[135]}, 23=>{138=>[150]}, 24=>{138=>[156]}, 25=>{138=>[159]} }
-    #
-    #@final_merged_hash = hash_hash_to_hash_arr(@test_hash_profiles)
+# @all_wide_match_arr_sorted
+    @test_hash_arr_profiles =
+    {23=>[[153, [151]],[], [154, [148]],[155, [188]],[167, [19966]],[154, [166]],[167, [22166]],[154, [167]], [153, [146]], [153, [149]], [153, [150]], [153, [152]]],
+     22=>[[153, [141]],[], [153, [140]], [155, [111]], [155, [111]], [153, [138]], [153, [142]]],
+     21=>{154=>[133]}}
 
-    #ВСЕ wide СОВПАДЕНИЯ РОДНЫХ: {дерево профили}
-    #@pre_all_wide_match_arr_sorted = {23=>[[153, [151]], [153, [146]], [153, [149]], [153, [150]], [153, [152]]] } #, 22=>[[153, [141]], [153, [140]], [153, [138]], [153, [142]]]}
 
+# @complete_hash:
+    @new_test_hash_profiles = {23=>{153=>[151, 146, 149, 150, 152], # have to be
+                                    154=>[148]},
+
+                               22=>{153=>[141, 140, 138, 142]},
+                               21=>{154=>[133]}}
+
+
+    def wmake_wide_hash(pre_hash)
+      #@pre_hash = pre_hash   #_DEBUGG_TO_VIEW
+      pre_all_wide_values = pre_hash.values.flatten(1)
+      pre_all_wide_key = pre_hash.keys[0] if !pre_hash.keys.blank?
+      rez_hash = Hash.new     #
+      final_hash = Hash.new     #
+      profile_arr = []   #
+      #@size = pre_all_wide_values.size  #_DEBUGG_TO_VIEW
+      if pre_all_wide_values.size == 1
+#      @pre_all_wide = hash_hash_to_hash_arr(@pre_all_wide_values[0])
+        pre_all_wide = pre_all_wide_values[0]
+      else
+        pre_all_wide = pre_all_wide_values
+      end
+      pre_all_wide.each do |one_arr|
+        #@one_arr = one_arr[0]#[0]  #_DEBUGG_TO_VIEW
+        if !one_arr.blank?
+          profile_arr << one_arr[1][0]
+          rez_hash.merge!({one_arr[0] => profile_arr}) # наполнение хэша найденными profile_id
+        end
+      end
+
+      final_hash.merge!({pre_all_wide_key => rez_hash}) # наполнение хэша найденными profile_id
+      #   return final_hash
+
+    end
 
 #    @tree_arr.each do |item|
 #      @tree_row[0] = item[3] # relation
@@ -313,10 +327,10 @@ class MainController < ApplicationController
     if !@all_wide_match_profiles_arr.blank?
       #### PROFILES
       all_wide_match_hash = join_arr_of_hashes(@all_wide_match_profiles_arr) if !@all_wide_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
-      #@all_wide_match_hash = all_wide_match_hash  #_DEBUGG_TO_VIEW
+      @all_wide_match_hash = all_wide_match_hash  #_DEBUGG_TO_VIEW
       @all_wide_match_arr_sorted = Hash[all_wide_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
 
-      #@complete_hash = make_complete_hash(@all_wide_match_arr_sorted)  #_DEBUGG_TO_VIEW
+      @complete_hash = make_complete_hash(@all_wide_match_arr_sorted)  #_DEBUGG_TO_VIEW
 
       # @final_reduced_profiles_hash = итоговый Хаш массивов найденных профилей
       @final_reduced_profiles_hash = reduce_hash(make_complete_hash(@all_wide_match_arr_sorted))  # TO VIEW
@@ -356,17 +370,25 @@ class MainController < ApplicationController
     complete_hash = Hash.new     #
     if !input_hash.blank?
       input_hash.each do |k, v|
-        #@size_v = v.size   #_DEBUGG_TO_VIEW
         if v.size == 1
           complete_hash.merge!({k => v}) # наполнение хэша найденными profile_id
         else
-          #@final_hash = make_wide_hash(k => v) #_DEBUGG_TO_VIEW
-          complete_hash.merge!(make_wide_hash(k => v)) # наполнение хэша найденными profile_id
+          rez_hash = Hash.new     #
+          #@one_hash = Hash.new     #
+          v.each do |one_arr|
+            if !one_arr.blank?
+              merged_hash = rez_hash.merge({one_arr[0] => one_arr[1]}){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
+              rez_hash = merged_hash
+            end
+          end
+          complete_hash.merge!(k => rez_hash) # искомый хэш
+          # с найденнымии profile_id, распределенными по связанным с ними profile_id
         end
       end
     end
     return complete_hash
   end
+
 
   # НАСТРОЙКА СОКРАЩЕНИЯ РЕ-В ПОИСКА: УДАЛЕНИЕ КОРОТКИХ СОВПАДЕНИЙ
   # ЦИФРА В УСЛОВИИ if - ЭТО РАЗМЕР СОВПАДЕНИЙ В ДЕРЕВЕ ПРИ ПОИСКЕ.
@@ -387,7 +409,7 @@ class MainController < ApplicationController
   # Слияние массива Хэшей без потери значений { (key = user_id) => (value = profile_id) }
   # Получение упорядоченного Хэша: {user_id  -> [ profile_id, profile_id, profile_id ...]}
   # @note GET
-  # На входе: массив хэшей: [{user_id -> profile_id, ... , user_id -> profile_id}, ..., {user_id -> profile_id, ... , user_id -> profile_id} ]
+  # На входе: массив
   # На выходе: @all_match_hash Итоговый упорядоченный ХЭШ
   def make_wide_hash(pre_hash)
     #@pre_hash = pre_hash   #_DEBUGG_TO_VIEW

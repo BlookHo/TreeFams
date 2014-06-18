@@ -90,9 +90,19 @@ class NewProfileController < ApplicationController
 
  tree_arr << @add_to_tree
 
- # при этом, при вводе нового профиля: Денису добавляем Жену Викторию
-# в табл. Tree записываем old_profile_id  has  relation_id  is  new_profile_id.
-# т.е.  () Муж Денис имеет жену Викторию- это и записываем в tree_arr.
+ # @add_to_tree = [24, 154, 73, 2, 172, 354, 0, false]
+
+#tree_arr = [[24, 153, 449, 0, 153, 449, 0, false],
+#            [24, 153, 449, 1, 154, 73, 1, false],
+#            [24, 153, 449, 2, 155, 293, 0, false],
+#            [24, 153, 449, 5, 156, 151, 1, false],
+#            [24, 153, 449, 6, 157, 293, 0, false],
+#            [24, 154, 73, 2, 172, 354, 0, false]]      # Дополнение в Tree @add_to_tree
+
+    #@one_profile_key_arr: [24, 172, 354, 3, 154, 73]
+    #@profile_key_arr: [[24, 154, 73, 2, 172, 354], [24, 172, 354, 3, 154, 73]]
+
+ session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
 
 
   end
@@ -162,8 +172,6 @@ if relation_id != 0
       #  add_father_to_ProfileKeys(profiles_array.slice(0..index))
       when 2
         #   Это - тест для поиска вне БК
-        # к Денису - добавляем новый профиль: Жену Виктория
-        #         [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false],
 
    # user.id; profile_id; name_id; new_relation_id; new_profile_id; new_profile_name_id
 
@@ -205,49 +213,6 @@ end
 
   # Дополнение в ProfileKey
 
-
-
-    #@profiles_tree_arr =
-    #    [[ 22, 506, "Татьяна", 0, 1, 23, 45, "Борис", true],
-    #     [ 22, 506, "Татьяна", 0, 2, 24, 453, "Мария", true],
-    #     [ 22, 506, "Татьяна", 0, 5, 25, 97, "Денис", true],
-    #     [ 22, 506, "Татьяна", 0, 6, 26, 453, "Мария", true]]
-    #   Это - тест для поиска вне БК
-    # к Денису - добавляем новый профиль: Жену Виктория
-    #         [80, 25, 97, "Денис", 1, 8, 84, 371, "Виктория", false],
-    # к Денису - добавляем новый профиль: Дочь Анна
-    #        [81, 25, 97, "Денис", 1, 4, 85, 352, "Анна", false]
-    # к Денису - меняем новый профиль: Дочь Елена
-    #       ,[81, 25, 97, "Денис", 1, 4, 85, 395, "Елена", false]
-
-    #        ]
-
-
-    #
-    #    new_ProfileKeys_arr = []
-    #    add_profile_name_id = Profile
-    #
-    #    # add new_ProfileKeys rows
-    #    new_ProfileKeys_arr << [@add_to_profile, new_profile.name_id, @profile_relation, @new_profile_id, 4]
-    #    new_ProfileKeys_arr << [@profile_relation, new_profile.name_id, @add_to_profile, @new_profile_id, 4]
-    #    @new_ProfileKeys_arr = new_ProfileKeys_arr # DEBUGG TO VIEW
-    #
-    #    # Нужны правила формирования обратных relations, в завис-ти от прямого relation, пола и т.д.
-    #
-    #    new_profile_key_row = ProfileKey.new
-    #    new_profile_key_row.user_id = current_user.id                           # user_id
-    #    new_profile_key_row.profile_id = @new_profile_id                                # profile_id
-    #
-    #    name_id = Name.find_by_name(@add_to_profile).id         # name_id
-    #    new_profile_key_row.name_id = name_id                                    # name_id
-    #
-    ##    is_profile_id = profile_id_hash.key([profile_keys_arr[row_ind][2], profile_keys_arr[row_ind][3]])
-    #    new_profile_key_row.is_profile_id = @profile_relation                        # is_profile_id
-    #
-    #    is_name_id = Name.find_by_name(@profile_name).id             # is_name_id
-    #    new_profile_key_row.is_name_id = is_name_id                              # is_name_id
-    #
-    #    new_profile_key_row.save
 
 
   end
