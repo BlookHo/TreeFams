@@ -1,4 +1,8 @@
-.content
-  %h1
-    Изменить профиль
-    = @profile.name.name.mb_chars.capitalize
+#profile
+  = render 'profile_header'
+
+  .content
+    = form_for @profile do |f|
+      = render 'form', f: f
+      .control
+        = f.submit "Сохранить"

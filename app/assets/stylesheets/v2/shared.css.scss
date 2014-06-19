@@ -32,3 +32,15 @@ table{
   .green{color:green;}
   .italic{font-style:italic;}
 }
+
+
+.control{
+  width:100%;
+  display:inline-block;
+  margin-bottom:25px;
+  position:relative;
+
+  label{
+    color:grey;
+  }
+}
