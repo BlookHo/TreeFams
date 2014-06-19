@@ -1,7 +1,6 @@
 class ProfilesController < ApplicationController
-  def index
-  end
 
+  before_filter :logged_in?
 
   def show
   end
@@ -12,6 +11,7 @@ class ProfilesController < ApplicationController
 
 
   def edit
+    @profile = Profile.where(params[:is]).first
   end
 
 

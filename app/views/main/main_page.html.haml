@@ -29,9 +29,14 @@
         %td= relation_to_human(item[3]) #{@tree_arr.inspect}
         %td= Name.find(item[5]).name.mb_chars.capitalize
         %td
-          = link_to "Добавить родственника", add_new_profile_path(relation_id: item[3], profile_id: item[4], user_id: current_user.id), onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
-
-
+          .dropdown
+            %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
+              = fa_icon 'caret-square-o-down'
+            %ul.closed
+              %li= link_to "Добавить родственника", new_member_path(relation_id: item[3], profile_id: item[4])
+              %li= link_to "Изменить", edit_profile_path(item[4])
+              %li= link_to "Общаться", '#', class: :grey
+              %li= link_to "В избранные", '#', class: :grey
   %div{style: "margin-top:50px;"}
     - if @all_match_arr_sorted.nil?
       %h1 Совпадений не найдено

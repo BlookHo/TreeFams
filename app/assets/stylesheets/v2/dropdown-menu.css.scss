@@ -1,0 +1,39 @@
+.dropdown{
+  position:relative;
+  display:inline-block;
+}
+
+.dropdown > a{
+    color:blue;
+    width:20px;
+    height:20px;
+}
+
+.dropdown ul{
+  overflow:hidden;
+  z-index:20;
+  right:0;
+  position:absolute;
+  background-color:#fff;
+  font-size:16px;
+  border-radius:5px;
+  box-shadow:0 0 4px rgba(0,0,0,0.7);
+
+  li a{
+    text-decoration:none;
+    display:inline-block;
+    padding:10px;
+    color:blue;
+    width:220px;
+    border-bottom:1px solid #ccc;
+    &.grey{color:grey;}
+    &:hover{
+      background-color:blue;
+      color:#fff;
+    }
+  }
+
+  // li:last-child a{
+  //   border-bottom:none;
+  // }
+}
