@@ -18,7 +18,7 @@
             %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
               = fa_icon 'caret-square-o-down'
             %ul.closed
-              %li= link_to "Добавить родственника", new_member_path(relation_id: item[3], profile_id: item[4])
+              %li= link_to "Добавить родственника", new_profile_path(target_relation_id: item[3], target_profile_id: item[4])
               %li= link_to "Изменить", edit_profile_path(item[4])
               %li= link_to "Общаться", '#', class: :grey
               %li= link_to "В избранные", '#', class: :grey

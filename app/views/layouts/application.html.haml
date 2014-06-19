@@ -9,6 +9,7 @@
     = csrf_meta_tags
   %body
     = render 'shared/ui/header'
+    = render 'shared/ui/flash'
     .container
       = yield
     = yield :debugger
