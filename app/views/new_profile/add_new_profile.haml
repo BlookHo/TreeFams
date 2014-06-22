@@ -27,6 +27,10 @@
     К какому родственнику добавляем: @relation_id: #{@relation_id.inspect}
   %p
     В чьем дереве добавляем: @user_id: #{@user_id.inspect}
+  %p
+    Имя профиля, к кот. добавляем: @name_id: #{@name_id.inspect}
+  %p
+    Пол профиля, к кот. добавляем: @sex_id: #{@sex_id.inspect}
 
   %p
     Новый профиль: @new_profile_id: #{@new_profile_id.inspect}
@@ -42,9 +46,43 @@
     Основной массив БК - из Tree: @tree_arr: #{@tree_arr.inspect}
 %p
   Задание на формир-е рядов в ProfileKey: @profiles_key_array: #{@profiles_key_array.inspect}
+%p
+  @fathers_hash: #{@fathers_hash.inspect}
+%p
+  @mothers_hash: #{@mothers_hash.inspect}
+%p
+  @brothers_hash: #{@brothers_hash.inspect}
+%p
+  @brothers_profiles_arr: #{@brothers_profiles_arr.inspect}
+%p
+  @brothers_names_arr: #{@brothers_names_arr.inspect}
 
 %p
-  @add_to_tree: #{@add_to_tree.inspect}
+  @sisters_hash: #{@sisters_hash.inspect}
+%p
+  @sisters_profiles_arr: #{@sisters_profiles_arr.inspect}
+%p
+  @sisters_names_arr: #{@sisters_names_arr.inspect}
+
+%p
+  @wives_hash: #{@wives_hash.inspect}
+%p
+  @husbands_hash: #{@husbands_hash.inspect}
+%p
+  @sons_hash: #{@sons_hash.inspect}
+%p
+  @daughters_hash: #{@daughters_hash.inspect}
+
+
+%p
+  @add_row_to_tree: #{@add_row_to_tree.inspect}
+%p
+  @prev_relation_id: #{@prev_relation_id.inspect}
+%p
+  @new_relation_id: #{@new_relation_id.inspect}
+
+
+
 
 %p
   @one_profile_key_arr: #{@one_profile_key_arr.inspect}
