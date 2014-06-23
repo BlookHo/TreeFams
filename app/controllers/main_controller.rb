@@ -78,6 +78,11 @@ class MainController < ApplicationController
 # Для отладки add_profile - исключаем этот метод
       get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
 
+     ## @bk_arr = circle_as_array(current_user.id)
+     # @bk_arr = current_user.profile.circle_as_array(current_user.id)
+     # target_profile_id = 155
+     # @circle = Profile.find(target_profile_id).circle_as_array(current_user.id)
+
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
       search_profiles_tree_match    # Основной поиск по дереву Автора среди деревьев в ProfileKeys.

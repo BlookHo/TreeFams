@@ -248,7 +248,7 @@ class NewProfileController < ApplicationController
     @new_profile_sex = 0  # female
     @new_relation_id = 2  # мать
 
-
+    @bk_arr = circle_as_array(@user_id)
     get_profile_params
 
     #make_new_profile
