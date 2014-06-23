@@ -210,6 +210,77 @@ class NewProfileController < ApplicationController
 
   end
 
+  # Добавление нового ряда в таблицу ProfileKey
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def add_new_ProfileKeys_rows(relation_id, add_row_to_tree)
+
+    profile_id = add_row_to_tree[1]
+    sex_id = add_row_to_tree[2]
+    name_id = add_row_to_tree[3]
+    new_relation_id = add_row_to_tree[4]
+    new_profile_id = add_row_to_tree[5]
+    new_profile_name_id = add_row_to_tree[6]
+    new_sex_id = add_row_to_tree[7]
+
+
+
+  end
+
+
+  # Добавление нового ряда в таблицу ProfileKey
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see News
+  def add_two_main_ProfileKeys_rows(add_row_to_tree)
+
+    profile_id           = add_row_to_tree[1] # Профиль_К_Кому_Добавили
+    sex_id               = add_row_to_tree[2]
+    name_id              = add_row_to_tree[3]
+
+    new_relation_id      = add_row_to_tree[4] # Новое_Отношение
+    @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
+    # Отношение_Обратное_Новому
+    new_profile_id       = add_row_to_tree[5] # Новый_профиль
+    new_profile_name_id  = add_row_to_tree[6]
+    new_sex_id           = add_row_to_tree[7]
+
+    # Добавить ряд Профиль_К_Кому_Добавили - Новое_Отношение - Новый_профиль
+    add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
+    @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+    # Добавить ряд Новый_профиль - Отношение_Обратное_Новому - Профиль_К_Кому_Добавили
+    add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
+    @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+
+  end
+
+  # Добавление Комбинации рядов родства любого вида в ProfileKeys при вводе нового профиля
+  # (Хэш_родста, профиль_Кого_добавляем, имя_Кого_добавляем, Пол_родства_того_С_Кем_делаем_новый_ряд)
+  # @note GET /
+  # @see News
+  def fill_relation_rows(relation_name_hash, sex_id, relation_id, new_profile_id, new_profile_name_id)
+    if !relation_name_hash.blank?
+      # Если существуют члены БК с родством relation_name_hash к Профилю,
+      # к кот. добавляем Новый_Профиль
+      profiles_arr = relation_name_hash.keys  # profile_id array
+      @fathers_profiles_arr = profiles_arr   # DEBUGG_TO_VIEW
+      names_arr = relation_name_hash.values  # name_id array
+      @fathers_names_arr = names_arr   # DEBUGG_TO_VIEW
+      if !names_arr.blank?
+        for arr_ind in 0 .. names_arr.length - 1
+          # Добавить ряд Мать_Профиля - Муж - Новый_профиль
+          add_new_ProfileKey_row(profiles_arr[arr_ind], names_arr[arr_ind], relation_id, new_profile_id, new_profile_name_id)
+          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+          # Добавить ряд Новый_профиль - Жена - Мать_Профиля
+          current_reverse_relation_id = Relation.where(:relation_id => relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
+          add_new_ProfileKey_row(new_profile_id, new_profile_name_id, current_reverse_relation_id, profiles_arr[arr_ind], names_arr[arr_ind])
+          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+        end
+      end
+    end
+  end
+
   def add_father_to_ProfileKeys(add_row_to_tree)
 
     #@add_row_to_tree = add_row_to_tree
@@ -224,94 +295,86 @@ class NewProfileController < ApplicationController
     new_profile_name_id = add_row_to_tree[6]
     new_sex_id = add_row_to_tree[7]
 
+    # Хэш_родста, Пол_родства_того_С_Кем_делаем_новый_ряд, Вид_Родства_с_Добавляемым, профиль_Кого_добавляем, имя_Кого_добавляем,
+    fill_relation_rows(@mothers_hash, 0, 7, new_profile_id, new_profile_name_id)
 
-    #add_main_PKey_rows
+    fill_relation_rows(@brothers_hash, 1, 1, new_profile_id, new_profile_name_id)
 
-
-    # Добавить ряд Профиль - Отец - Новый_профиль
-    add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
-    @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-    # Добавить ряд Новый_профиль - Сын - Профиль
-    @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
-    add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
-    @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-
+    fill_relation_rows(@sisters_hash, 0, 1, new_profile_id, new_profile_name_id)
 
     #add_mothers_PKey_rows
 
-    if !@mothers_hash.blank?  # Если существуют матери у Профиля, к кот. добавляем Отца
-      mothers_profiles_arr = @mothers_hash.keys  # profile_id array
-      @mothers_profiles_arr = mothers_profiles_arr   # DEBUGG_TO_VIEW
-      mothers_names_arr = @mothers_hash.values  # name_id array
-      @mothers_names_arr = mothers_names_arr   # DEBUGG_TO_VIEW
-      if !mothers_names_arr.blank?
-        for arr_ind in 0 .. mothers_names_arr.length - 1
-          # Добавить ряд Мать_Профиля - Муж - Новый_профиль
-          add_new_ProfileKey_row(mothers_profiles_arr[arr_ind], mothers_names_arr[arr_ind], 7, new_profile_id, new_profile_name_id)
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-          # Добавить ряд Новый_профиль - Жена - Мать_Профиля
-          #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_sex_id)[0].reverse_relation_id
-          #@reverse_relation_id = 3
-          add_new_ProfileKey_row(new_profile_id, new_profile_name_id, 8, mothers_profiles_arr[arr_ind], mothers_names_arr[arr_ind])
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-        end
-      end
-    end
+    #if !@mothers_hash.blank?  # Если существуют матери у Профиля, к кот. добавляем Отца
+    #  mothers_profiles_arr = @mothers_hash.keys  # profile_id array
+    #  @mothers_profiles_arr = mothers_profiles_arr   # DEBUGG_TO_VIEW
+    #  mothers_names_arr = @mothers_hash.values  # name_id array
+    #  @mothers_names_arr = mothers_names_arr   # DEBUGG_TO_VIEW
+    #  if !mothers_names_arr.blank?
+    #    for arr_ind in 0 .. mothers_names_arr.length - 1
+    #      # Добавить ряд Мать_Профиля - Муж - Новый_профиль
+    #      add_new_ProfileKey_row(mothers_profiles_arr[arr_ind], mothers_names_arr[arr_ind], 7, new_profile_id, new_profile_name_id)
+    #      @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+    #      # Добавить ряд Новый_профиль - Жена - Мать_Профиля
+    #      #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_sex_id)[0].reverse_relation_id
+    #      #@reverse_relation_id = 3
+    #      add_new_ProfileKey_row(new_profile_id, new_profile_name_id, 8, mothers_profiles_arr[arr_ind], mothers_names_arr[arr_ind])
+    #      @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+    #    end
+    #  end
+    #end
 
 
     #add_brothers_PKey_rows
 
-    if !@brothers_hash.blank?  # Если существуют братья у Профиля, к кот. добавляем Отца
-      brothers_profiles_arr = @brothers_hash.keys  # profile_id array
-      @brothers_profiles_arr = brothers_profiles_arr   # DEBUGG_TO_VIEW
-      brothers_names_arr = @brothers_hash.values  # name_id array
-      @brothers_names_arr = brothers_names_arr   # DEBUGG_TO_VIEW
-      if !brothers_names_arr.blank?
-        for arr_ind in 0 .. brothers_names_arr.length - 1
-          # Добавить ряд Брат_Профиля - Отец - Новый_профиль
-          add_new_ProfileKey_row(brothers_profiles_arr[arr_ind], brothers_names_arr[arr_ind], new_relation_id, new_profile_id, new_profile_name_id)
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-          # Добавить ряд Новый_профиль - Сын - Брат_Профиля
-          #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_sex_id)[0].reverse_relation_id
-          @reverse_relation_id = 3
-          add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, brothers_profiles_arr[arr_ind], brothers_names_arr[arr_ind])
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-        end
-      end
-    end
+    #if !@brothers_hash.blank?  # Если существуют братья у Профиля, к кот. добавляем Отца
+    #  brothers_profiles_arr = @brothers_hash.keys  # profile_id array
+    #  @brothers_profiles_arr = brothers_profiles_arr   # DEBUGG_TO_VIEW
+    #  brothers_names_arr = @brothers_hash.values  # name_id array
+    #  @brothers_names_arr = brothers_names_arr   # DEBUGG_TO_VIEW
+    #  if !brothers_names_arr.blank?
+    #    for arr_ind in 0 .. brothers_names_arr.length - 1
+    #      # Добавить ряд Брат_Профиля - Отец - Новый_профиль
+    #      add_new_ProfileKey_row(brothers_profiles_arr[arr_ind], brothers_names_arr[arr_ind], new_relation_id, new_profile_id, new_profile_name_id)
+    #      @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+    #      # Добавить ряд Новый_профиль - Сын - Брат_Профиля
+    #      #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_sex_id)[0].reverse_relation_id
+    #      @reverse_relation_id = 3
+    #      add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, brothers_profiles_arr[arr_ind], brothers_names_arr[arr_ind])
+    #      @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+    #    end
+    #  end
+    #end
 
 
     #add_sisters_PKey_rows
 
-    if !@sisters_hash.blank?  # Если существуют сестры у Профиля, к кот. добавляем Отца
-
-      sisters_profiles_arr = @sisters_hash.keys  # profile_id array
-      @sisters_profiles_arr = sisters_profiles_arr   # DEBUGG_TO_VIEW
-      sisters_names_arr = @sisters_hash.values
-      @sisters_names_arr = sisters_names_arr   # DEBUGG_TO_VIEW
-      if !sisters_names_arr.blank?
-        for arr_ind in 0 .. sisters_names_arr.length - 1
-          # Добавить ряд Сестра_Профиля - Отец - Новый_профиль
-          add_new_ProfileKey_row(sisters_profiles_arr[arr_ind], sisters_names_arr[arr_ind], new_relation_id, new_profile_id, new_profile_name_id)
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-          # Добавить ряд Новый_профиль - Дочь - Сестра_Профиля
-          #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_sex_id)[0].reverse_relation_id
-          @reverse_relation_id = 4
-          add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, sisters_profiles_arr[arr_ind], sisters_names_arr[arr_ind])
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-        end
-      end
-
-    end
+    #if !@sisters_hash.blank?  # Если существуют сестры у Профиля, к кот. добавляем Отца
+    #
+    #  sisters_profiles_arr = @sisters_hash.keys  # profile_id array
+    #  @sisters_profiles_arr = sisters_profiles_arr   # DEBUGG_TO_VIEW
+    #  sisters_names_arr = @sisters_hash.values
+    #  @sisters_names_arr = sisters_names_arr   # DEBUGG_TO_VIEW
+    #  if !sisters_names_arr.blank?
+    #    for arr_ind in 0 .. sisters_names_arr.length - 1
+    #      # Добавить ряд Сестра_Профиля - Отец - Новый_профиль
+    #      add_new_ProfileKey_row(sisters_profiles_arr[arr_ind], sisters_names_arr[arr_ind], new_relation_id, new_profile_id, new_profile_name_id)
+    #      @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+    #      # Добавить ряд Новый_профиль - Дочь - Сестра_Профиля
+    #      #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_sex_id)[0].reverse_relation_id
+    #      @reverse_relation_id = 4
+    #      add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, sisters_profiles_arr[arr_ind], sisters_names_arr[arr_ind])
+    #      @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+    #    end
+    #  end
+    #
+    #end
 
   end
 
-  
   # Добавить ряды в ProfileKeys при вводе Матери
   # в первом элементе мессива - данные об Авторе
   # в последнем элементе мессива - данные о Матери
   # @note GET /
-  # @param admin_page [Integer] опциональный номер страницы
   # @see News
   def add_mother_to_ProfileKeys(add_row_to_tree)
 
@@ -327,70 +390,12 @@ class NewProfileController < ApplicationController
     new_profile_name_id = add_row_to_tree[6]
     #new_sex_id = add_row_to_tree[7] # no use here
 
-    # Добавить ряд Профиль - Мать - Новый_профиль
-    add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
-    @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-    # Добавить ряд Новый_профиль - Сын - Профиль
-    @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
-    add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, profile_id, name_id)
-    @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
+    # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_с_Добавляемым, профиль_Кого_добавляем, имя_Кого_добавляем,
+    fill_relation_rows(@fathers_hash, 1, 8, new_profile_id, new_profile_name_id)
 
-    if !@fathers_hash.blank?  # Если существуют отцы у Профиля, к кот. добавляем Мать
-      fathers_profiles_arr = @fathers_hash.keys  # profile_id array
-      @fathers_profiles_arr = fathers_profiles_arr   # DEBUGG_TO_VIEW
-      fathers_names_arr = @fathers_hash.values  # name_id array
-      @fathers_names_arr = fathers_names_arr   # DEBUGG_TO_VIEW
-      if !fathers_names_arr.blank?
-        for arr_ind in 0 .. fathers_names_arr.length - 1
-          # Добавить ряд Мать_Профиля - Муж - Новый_профиль
-          add_new_ProfileKey_row(fathers_profiles_arr[arr_ind], fathers_names_arr[arr_ind], 7, new_profile_id, new_profile_name_id)
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-          # Добавить ряд Новый_профиль - Жена - Мать_Профиля
-          add_new_ProfileKey_row(new_profile_id, new_profile_name_id, 8, fathers_profiles_arr[arr_ind], fathers_names_arr[arr_ind])
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-        end
-      end
-    end
+    fill_relation_rows(@brothers_hash, 1, 2, new_profile_id, new_profile_name_id)
 
-    if !@brothers_hash.blank?  # Если существуют братья у Профиля, к кот. добавляем Мать
-      brothers_profiles_arr = @brothers_hash.keys  # profile_id array
-      @brothers_profiles_arr = brothers_profiles_arr   # DEBUGG_TO_VIEW
-      brothers_names_arr = @brothers_hash.values  # name_id array
-      @brothers_names_arr = brothers_names_arr   # DEBUGG_TO_VIEW
-      if !brothers_names_arr.blank?
-        for arr_ind in 0 .. brothers_names_arr.length - 1
-          # Добавить ряд Брат_Профиля - Мать - Новый_профиль
-          add_new_ProfileKey_row(brothers_profiles_arr[arr_ind], brothers_names_arr[arr_ind], new_relation_id, new_profile_id, new_profile_name_id)
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-          # Добавить ряд Новый_профиль - Сын - Брат_Профиля
-          #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_sex_id)[0].reverse_relation_id
-          @reverse_relation_id = 3
-          add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, brothers_profiles_arr[arr_ind], brothers_names_arr[arr_ind])
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-        end
-      end
-    end
-
-    if !@sisters_hash.blank?  # Если существуют сестры у Профиля, к кот. добавляем Мать
-
-      sisters_profiles_arr = @sisters_hash.keys  # profile_id array
-      @sisters_profiles_arr = sisters_profiles_arr   # DEBUGG_TO_VIEW
-      sisters_names_arr = @sisters_hash.values
-      @sisters_names_arr = sisters_names_arr   # DEBUGG_TO_VIEW
-      if !sisters_names_arr.blank?
-        for arr_ind in 0 .. sisters_names_arr.length - 1
-          # Добавить ряд Сестра_Профиля - Мать - Новый_профиль
-          add_new_ProfileKey_row(sisters_profiles_arr[arr_ind], sisters_names_arr[arr_ind], new_relation_id, new_profile_id, new_profile_name_id)
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-          # Добавить ряд Новый_профиль - Дочь - Сестра_Профиля
-          #@reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => new_sex_id)[0].reverse_relation_id
-          @reverse_relation_id = 4
-          add_new_ProfileKey_row(new_profile_id, new_profile_name_id, @reverse_relation_id, sisters_profiles_arr[arr_ind], sisters_names_arr[arr_ind])
-          @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-        end
-      end
-
-    end
+    fill_relation_rows(@sisters_hash, 0, 2, new_profile_id, new_profile_name_id)
 
   end
 
@@ -460,30 +465,31 @@ class NewProfileController < ApplicationController
     @prev_relation_id = relation_id
     @new_relation_id = add_row_to_tree[4]
 
+    @profile_key_arr_added = []    # DEBUGG_TO_VIEW
+    add_two_main_ProfileKeys_rows(add_row_to_tree)
 
     #if relation_id != 0
 
-        @profile_key_arr_added = []    # DEBUGG_TO_VIEW
-        case @new_relation_id
-          when 1
-            add_father_to_ProfileKeys(add_row_to_tree)
-          when 2
-            add_mother_to_ProfileKeys(add_row_to_tree)
-           when 3
-            add_son_to_ProfileKeys(add_row_to_tree)
-          when 4
-            add_daugther_to_ProfileKeys(add_row_to_tree)
-          when 5
-            add_brother_to_ProfileKeys(add_row_to_tree)
-          when 6
-            add_sister_to_ProfileKeys(add_row_to_tree)
-          when 7
-            add_husband_to_ProfileKeys(add_row_to_tree)
-          when 8
-            add_wife_to_ProfileKeys(add_row_to_tree)
-          else
-            logger.info "======== ERRROR"
-        end
+    case @new_relation_id
+      when 1
+        add_father_to_ProfileKeys(add_row_to_tree)
+      when 2
+        add_mother_to_ProfileKeys(add_row_to_tree)
+       when 3
+        add_son_to_ProfileKeys(add_row_to_tree)
+      when 4
+        add_daugther_to_ProfileKeys(add_row_to_tree)
+      when 5
+        add_brother_to_ProfileKeys(add_row_to_tree)
+      when 6
+        add_sister_to_ProfileKeys(add_row_to_tree)
+      when 7
+        add_husband_to_ProfileKeys(add_row_to_tree)
+      when 8
+        add_wife_to_ProfileKeys(add_row_to_tree)
+      else
+        logger.info "======== ERRROR"
+    end
 
     #else
     #
@@ -576,8 +582,8 @@ class NewProfileController < ApplicationController
 
     @fathers_hash = {173 => 454 }
     @mothers_hash = {} #{172 => 354 }
-    @brothers_hash = {}
-    @sisters_hash = {}
+    @brothers_hash = {190 => 400, 191 => 444 }
+    @sisters_hash = {1000 => 500, 1001 => 555}
     @wives_hash = {155 => 293 }
     @husbands_hash = {}
     @sons_hash = {156 => 151 }
@@ -594,27 +600,12 @@ class NewProfileController < ApplicationController
   #
   #end
 
-  ## Определение задание на добавление рядов в таблицу Profile_Keys,
-  ## в зависимости от профиля, к которому добавляем новый профиль,
-  ## от его существующего ближнего круга,
-  ## от того, какое relation_id добавляем.
-  ## Формирование соответствующего массива для выполнения в методе make_profilekeys_rows
-  ## @note GET /
-  ## @see News
-  #def make_profile_key_add_task(add_row_to_tree)
-  #
-  #  profiles_key_array = []
-  #  session[:profiles_key_array] = {:value => profiles_key_array, :updated_at => Time.current}
-  #
-  #end
-
   # Добавление нового профиля для любого профиля дерева
   # Запись во все таблицы
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
   def add_new_profile
-
 
     #get_bk_circle(@profile_id,@relation_id)  # Получить от Алексея
 
@@ -627,8 +618,6 @@ class NewProfileController < ApplicationController
     make_new_profile # Получить от Алексея
 
     make_tree_row(@profile_id, @sex_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex)
-
-    #make_profile_key_add_task(@relation_id, @add_row_to_tree)  # Ne nado
 
     #@add_row_to_tree = [current_user.id, @profile_id, @name_id, @relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
     make_profilekeys_rows(@relation_id, @add_row_to_tree)
