@@ -73,6 +73,7 @@ class MainController < ApplicationController
 # @param admin_page [Integer] опциональный номер страницы
 # @see News
  def main_page
+   @circle = current_user.profile.circle(current_user.id)
 
     if current_user
 # Для отладки add_profile - исключаем этот метод

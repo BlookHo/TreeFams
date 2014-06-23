@@ -94,6 +94,7 @@ Weafam::Application.routes.draw do
   resources :users
   resources :names
   resources :relations
+  resources :circles, only: :show
 
 
   # Users and Sessions

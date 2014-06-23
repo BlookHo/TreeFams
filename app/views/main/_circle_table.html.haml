@@ -1,0 +1,47 @@
+%table.tmp_table#circle-table
+  %tr
+    %th Родственное отношение
+    %th Имя родственника
+    %th
+  - circle.each_with_index do |item, index|
+    %tr
+      %td= relation_to_human(item.relation_id)
+      %td
+        = link_to item.name.to_name, profile_path(item.is_profile_id)
+        - if item.profile.circle(current_user.id).size > 0 and item.relation_id != 0
+          = link_to fa_icon('code-fork'), circle_path(item.is_profile_id), style: "margin-left:11px;color:green;", remote: true
+      %td
+        .dropdown
+          %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
+            = fa_icon 'caret-square-o-down'
+          %ul.closed
+            %li= link_to "Добавить родственника", new_profile_path(target_relation_id: item.relation_id, target_profile_id: item.profile_id)
+            %li= link_to "Изменить", edit_profile_path(item.is_profile_id)
+            %li= link_to "Общаться", '#', class: :grey
+            %li= link_to "В избранные", '#', class: :grey
+
+      -# %td= link_to Name.find(item[5]).name.mb_chars.capitalize, edit_profile_path(item[4])
+      -# %td
+
+
+
+
+
+-# %table.tmp_table
+-#   %tr
+-#     %th Родственное отношение к вам
+-#     %th Имя родственника
+-#     %th
+-#   - @tree_arr.each_with_index do |item, index|
+-#     %tr
+-#       %td= relation_to_human(item[3]) #{@tree_arr.inspect}
+-#       %td= link_to Name.find(item[5]).name.mb_chars.capitalize, edit_profile_path(item[4])
+-#       %td
+-#         .dropdown
+-#           %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
+-#             = fa_icon 'caret-square-o-down'
+-#           %ul.closed
+-#             %li= link_to "Добавить родственника", new_profile_path(target_relation_id: item[3], target_profile_id: item[4])
+-#             %li= link_to "Изменить", edit_profile_path(item[4])
+-#             %li= link_to "Общаться", '#', class: :grey
+-#             %li= link_to "В избранные", '#', class: :grey
