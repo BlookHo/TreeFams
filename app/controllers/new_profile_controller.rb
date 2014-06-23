@@ -224,8 +224,8 @@ class NewProfileController < ApplicationController
   def add_father_to_ProfileKeys(new_profile_id, new_profile_name_id)
     # Хэш_родста, Пол_родства_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
     fill_relation_rows(@mothers_hash, 0, 7, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@brothers_hash, 1, 1, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@sisters_hash, 0, 1, new_profile_id, new_profile_name_id)
+    fill_relation_rows(@brothers_hash, 1, 1, new_profile_id, new_profile_name_id)  ### NonStandard
+    fill_relation_rows(@sisters_hash, 0, 1, new_profile_id, new_profile_name_id)  ### NonStandard
   end
 
   # Добавить ряды в ProfileKeys при вводе Матери
@@ -236,8 +236,8 @@ class NewProfileController < ApplicationController
   def add_mother_to_ProfileKeys(new_profile_id, new_profile_name_id)
     # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_с_Добавляемым, профиль_Кого_добавляем, имя_Кого_добавляем,
     fill_relation_rows(@fathers_hash, 1, 8, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@brothers_hash, 1, 2, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@sisters_hash, 0, 2, new_profile_id, new_profile_name_id)
+    fill_relation_rows(@brothers_hash, 1, 2, new_profile_id, new_profile_name_id)  ### NonStandard
+    fill_relation_rows(@sisters_hash, 0, 2, new_profile_id, new_profile_name_id)  ### NonStandard
   end
 
   # Добавить ряды в ProfileKeys при вводе Сына   ## OK
@@ -246,8 +246,8 @@ class NewProfileController < ApplicationController
   # @see News
   def add_son_to_ProfileKeys(new_profile_id, new_profile_name_id)
     # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
-    fill_relation_rows(@wives_hash, 0, 3, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@husbands_hash, 1, 3, new_profile_id, new_profile_name_id)
+    fill_relation_rows(@wives_hash, 0, 3, new_profile_id, new_profile_name_id)      ### NonStandard
+    fill_relation_rows(@husbands_hash, 1, 3, new_profile_id, new_profile_name_id)   ### NonStandard
     fill_relation_rows(@sons_hash, 1, 5, new_profile_id, new_profile_name_id)
     fill_relation_rows(@daughters_hash, 0, 5, new_profile_id, new_profile_name_id)
   end
@@ -258,8 +258,8 @@ class NewProfileController < ApplicationController
   # @see News
   def add_daugther_to_ProfileKeys(new_profile_id, new_profile_name_id)
     # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
-    fill_relation_rows(@wives_hash, 0, 4, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@husbands_hash, 1, 4, new_profile_id, new_profile_name_id)
+    fill_relation_rows(@wives_hash, 0, 4, new_profile_id, new_profile_name_id)  ### NonStandard
+    fill_relation_rows(@husbands_hash, 1, 4, new_profile_id, new_profile_name_id)  ### NonStandard
     fill_relation_rows(@sons_hash, 1, 6, new_profile_id, new_profile_name_id)
     fill_relation_rows(@daughters_hash, 0, 6, new_profile_id, new_profile_name_id)
   end
@@ -272,8 +272,8 @@ class NewProfileController < ApplicationController
     # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
     fill_relation_rows(@fathers_hash, 1, 3, new_profile_id, new_profile_name_id)
     fill_relation_rows(@mothers_hash, 0, 3, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@brothers_hash, 1, 5, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@sisters_hash, 0, 6, new_profile_id, new_profile_name_id)
+    fill_relation_rows(@brothers_hash, 1, 5, new_profile_id, new_profile_name_id)  ### NonStandard
+    fill_relation_rows(@sisters_hash, 0, 6, new_profile_id, new_profile_name_id)  ### NonStandard
   end
 
   # Добавить ряды в ProfileKeys при вводе Сестры
@@ -284,8 +284,8 @@ class NewProfileController < ApplicationController
     # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
     fill_relation_rows(@fathers_hash, 1, 3, new_profile_id, new_profile_name_id)
     fill_relation_rows(@mothers_hash, 0, 3, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@brothers_hash, 1, 5, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@sisters_hash, 0, 6, new_profile_id, new_profile_name_id)
+    fill_relation_rows(@brothers_hash, 1, 5, new_profile_id, new_profile_name_id)  ### NonStandard
+    fill_relation_rows(@sisters_hash, 0, 6, new_profile_id, new_profile_name_id)  ### NonStandard
   end
 
   # Добавить ряды в ProfileKeys при вводе Мужа
@@ -294,9 +294,9 @@ class NewProfileController < ApplicationController
   # @see News
   def add_husband_to_ProfileKeys(new_profile_id, new_profile_name_id)
     # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
-    fill_relation_rows(@wives_hash, 0, 7, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@sons_hash, 1, 1, new_profile_id, new_profile_name_id)
-    fill_relation_rows(@daughters_hash, 0, 1, new_profile_id, new_profile_name_id)
+    fill_relation_rows(@wives_hash, 0, 7, new_profile_id, new_profile_name_id)  ### NonStandard
+    fill_relation_rows(@sons_hash, 1, 1, new_profile_id, new_profile_name_id)  ### NonStandard
+    fill_relation_rows(@daughters_hash, 0, 1, new_profile_id, new_profile_name_id)  ### NonStandard
   end
 
   # Добавить ряды в ProfileKeys при вводе Жены
