@@ -84,6 +84,7 @@ class MainController < ApplicationController
      # target_profile_id = 155
      # @circle = Profile.find(target_profile_id).circle_as_array(current_user.id)
      #@circle_hash = current_user.profile.circle_as_hash(current_user.id)#
+     #@circle_hash_mothers = current_user.profile.mothers_hash(current_user.id)#
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
