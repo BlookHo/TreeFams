@@ -121,7 +121,7 @@
   -#        = link_to "Добавить родственника", add_new_profile_path(relation_id: item[3], profile_id: item[4], user_id: current_user.id), onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
 
 
-  = render 'circle_table', circle: @circle
+  #circle-view= render 'circle_table', circle: @circle
 
 
   %div{style: "margin-top:50px;"}

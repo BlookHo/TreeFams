@@ -2,6 +2,11 @@
   .control
     = f.label "Имя"
     = text_field_tag :name, @profile.to_name, disabled: :disable
+
+  .control
+    = f.label "Отчество"
+    = f.text_field :middle_name
+
   .control
     = f.label "Страна"
     = f.text_field :country
@@ -17,11 +22,18 @@
     = f.label "Фамилия"
     = f.text_field :surname
   .control
+    = f.label "Уточнение родства"
+    = f.text_field :relation_description
+  .control
     = f.label "Город"
     = f.text_field :city
   .control
-    = f.label "Дата смерти"
-    = f.date_select :profile_deathday, include_blank: true, start_year: Time.now.year, end_year: 1900
+    %label
+      = check_box_tag :alive
+      В живых
+    #death_date_wrapper{style: "display:none;"}
+      = f.label "Дата смерти"
+      = f.date_select :profile_deathday, include_blank: true, start_year: Time.now.year, end_year: 1900
 
 
 .control.about

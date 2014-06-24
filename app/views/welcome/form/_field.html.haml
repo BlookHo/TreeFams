@@ -5,4 +5,4 @@
   = text_field_tag "author[#{normolized_members_name}][][name]", (defined?(objekt).nil? ? "" : objekt.name.mb_chars.capitalize), class: "#{'with_remove' if remove_link} autocomplete_field", placeholder: "Начните вводить имя #{@@klass_descriptions[1]}...", data:{names: @@autocomplete_names}, id: "field_#{Time.now.to_i}"
   - if remove_link
     = link_to (fa_icon "times-circle"), '#', onclick: "$(this).closest('.control').remove()", class: :remove_member
-  .help-text Официальное имя, как в паспорте
+  .help-text Официальное имя, как в паспорте. Не нужно вводить фамилию и отчество.
