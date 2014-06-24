@@ -1,10 +1,15 @@
--#
-%p
-  NEW PROFILE MAGN branch
-
 
 %p
   @tree_arr: #{@tree_arr.inspect}
+
+%p
+  BK_массив: @bk_arr: #{@bk_arr.inspect}
+%p
+  @circle: #{@circle.inspect}
+%p
+  @circle_hash: #{@circle_hash.inspect}
+%p
+  @circle_hash_mothers: #{@circle_hash_mothers.inspect}
 
 %h4
   Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
@@ -44,9 +49,6 @@
   @wide_found_relations_hash: #{@wide_found_relations_hash.inspect}
 
 
--#%p
--#  @bk_profile: #{@bk_profile.inspect}
-
 %p
   @found_profiles_hash: #{@found_profiles_hash.inspect}
 %p
@@ -68,15 +70,6 @@
 %h4
   ВСЕ wide СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_wide_match_arr_sorted: #{@all_wide_match_arr_sorted.inspect}
 
--#  BK_массив: @bk_arr: #{@bk_arr.inspect}
--#%p
--#  @circle: #{@circle.inspect}
--#%p
--#  @circle_hash: #{@circle_hash.inspect}
--#%p
--#  @circle_hash_mothers: #{@circle_hash_mothers.inspect}
--#  @complete_hash: #{@complete_hash.inspect}
-
 %h4
   ПОЛНЫЙ ХЭШ ПРОФИЛЕЙ: @final_reduced_profiles_hash: #{@final_reduced_profiles_hash.inspect}
 %p
@@ -87,22 +80,24 @@
   ПРОФИЛИ: @wide_profile_ids_arr: #{@wide_profile_ids_arr.inspect}
 %h4
   @wide_amount_of_profiles: #{@wide_amount_of_profiles.inspect}
+%h4
+  @complete_hash: #{@complete_hash.inspect}
 
 
 %p
   НОМЕРА ОТНОШЕНИЙ @all_match_relations_sorted: #{@all_match_relations_sorted.inspect}
--#%p
--#  НОМЕРА wide ОТНОШЕНИЙ @all_wide_match_relations_sorted: #{@all_wide_match_relations_sorted.inspect}
+%p
+  НОМЕРА wide ОТНОШЕНИЙ @all_wide_match_relations_sorted: #{@all_wide_match_relations_sorted.inspect}
 
 %h4
   ПОЛНЫЙ ХЭШ ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
 
 
 
--#%p
--#  @final_merged_hash: #{@final_merged_hash.inspect}
--#%p
--#  @new_test_hash_profiles: #{@new_test_hash_profiles.inspect}
+%p
+  @final_merged_hash: #{@final_merged_hash.inspect}
+%p
+  @new_test_hash_profiles: #{@new_test_hash_profiles.inspect}
 
 
 
