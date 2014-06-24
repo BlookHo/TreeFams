@@ -23,17 +23,23 @@ class ProfilesController < ApplicationController
 
   def new
     @profile = Profile.new
-    @target_profile = Profile.find(params[:target_profile_id])
+    @base_profile = Profile.find(params[:base_profile_id])
   end
 
   def create
-    @target_profile = Profile.find(params[:target_profile_id])
+    @base_profile = Profile.find(params[:base_profile_id])
+    @base_profile_id = params[:base_profile_id]
+
     @profile = Profile.new(profile_params)
+    @profile.user_id = current_user.id
     @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first
 
     if @name
       @profile.name_id = @name.id
       if @profile.save
+
+        ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
+
         flash[:notice] = "Профиль id: #{@profile.id} сохранен"
         redirect_to :main_page
       else
