@@ -278,7 +278,7 @@ module AddProfileLogic
       fill_relation_rows(@fathers_hash, 1, 3, new_profile_id, new_profile_name_id)
       fill_relation_rows(@mothers_hash, 0, 3, new_profile_id, new_profile_name_id)
       fill_relation_rows(@brothers_hash, 1, 5, new_profile_id, new_profile_name_id)  ### NonStandard
-      fill_relation_rows(@sisters_hash, 0, 6, new_profile_id, new_profile_name_id)  ### NonStandard
+      fill_relation_rows(@sisters_hash, 0, 5, new_profile_id, new_profile_name_id)  ### NonStandard
     end
 
     # Добавить ряды в ProfileKeys при вводе Сестры
@@ -287,9 +287,9 @@ module AddProfileLogic
     # @see News
     def add_sister_to_ProfileKeys(new_profile_id, new_profile_name_id)
       # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
-      fill_relation_rows(@fathers_hash, 1, 3, new_profile_id, new_profile_name_id)
-      fill_relation_rows(@mothers_hash, 0, 3, new_profile_id, new_profile_name_id)
-      fill_relation_rows(@brothers_hash, 1, 5, new_profile_id, new_profile_name_id)  ### NonStandard
+      fill_relation_rows(@fathers_hash, 1, 4, new_profile_id, new_profile_name_id)
+      fill_relation_rows(@mothers_hash, 0, 4, new_profile_id, new_profile_name_id)
+      fill_relation_rows(@brothers_hash, 1, 6, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(@sisters_hash, 0, 6, new_profile_id, new_profile_name_id)  ### NonStandard
     end
 

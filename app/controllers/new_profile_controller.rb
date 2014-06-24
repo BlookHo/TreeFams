@@ -122,8 +122,14 @@ class NewProfileController < ApplicationController
   # @see News
   def make_tree_row(profile_id, sex_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex)
 
-     tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
-     @tree_arr = tree_arr    # DEBUGG TO VIEW
+     #tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
+     @tree_arr= [[24, 133, 449, 0, 133, 449, 0, false],
+                 [24, 133, 449, 1, 134, 73, 1, false],
+                 [24, 133, 449, 2, 135, 293, 0, false],
+                 [24, 133, 449, 5, 136, 151, 1, false],
+                 [24, 133, 449, 6, 137, 293, 0, false],
+                 [24, 133, 449, 5, 200, 343, 1, false]]
+     #@tree_arr = tree_arr    # DEBUGG TO VIEW
 
      # Дополнение в Tree
      @add_row_to_tree = []
@@ -131,7 +137,7 @@ class NewProfileController < ApplicationController
 
     # save_new_tree_row(@add_row_to_tree)
 
-     tree_arr << @add_row_to_tree
+     #tree_arr << @add_row_to_tree
 
      # @add_to_tree = [24, 154, 73, 2, 172, 354, 0, false]
 
