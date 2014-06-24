@@ -48,7 +48,7 @@ class MainController < ApplicationController
 # @see News
  def main_page
    @circle = current_user.profile.circle(current_user.id)
-
+   @author = current_user.profile
     if current_user
 # Для отладки add_profile - исключаем этот метод
      get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree

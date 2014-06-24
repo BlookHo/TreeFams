@@ -13,8 +13,31 @@ class Profile < ActiveRecord::Base
     name.try(:name).try(:mb_chars).try(:capitalize)
   end
 
-  # На выходе ближний круг для профиля в дереве user_id
+
   def circle(user_id)
+    circle = []
+    #<Tree id: nil, user_id: nil, profile_id: nil, relation_id: nil,
+    # connected: false, created_at: nil, updated_at: nil, name_id: nil,
+    # is_profile_id: nil, is_name_id: nil, is_sex_id: nil>
+    # circle << Tree.new(
+    #     user_id: user_id,
+    #     profile_id: self.id,
+    #     relation_id: 0,
+    #     name_id: self.name_id,
+    #     is_profile_id: 0,
+    #     is_name_id: self.name_id,
+    #     is_sex_id: self.sex_id)
+
+    # circle << Tree.where(user_id: user_id, relation_id: 0).first
+
+    ProfileKey.where(user_id: user_id, profile_id: self.id).includes(:name).each do |p_key|
+      circle << p_key
+    end
+    return circle
+  end
+
+  # На выходе ближний круг для профиля в дереве user_id
+  def dcircle(user_id)
     Tree.where(user_id: user_id, profile_id: self.id).includes(:name)
   end
 
