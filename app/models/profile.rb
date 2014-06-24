@@ -49,7 +49,7 @@ class Profile < ActiveRecord::Base
   #  { profile_id => name_id, profile_id => name_id, ... }
   def mothers_hash(user_id)
     hash = {}
-    mothers(user_id).each{|m| hash[m.is_profile_id] = m.name_id}
+    mothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
     return hash
   end
 
@@ -65,7 +65,7 @@ class Profile < ActiveRecord::Base
   #  { profile_id => name_id, profile_id => name_id, ... }
   def fathers_hash(user_id)
     hash = {}
-    fathers(user_id).each{|m| hash[m.is_profile_id] = m.name_id}
+    fathers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
     return hash
   end
 
@@ -82,7 +82,7 @@ class Profile < ActiveRecord::Base
   #  { profile_id => name_id, profile_id => name_id, ... }
   def sons_hash(user_id)
     hash = {}
-    sons(user_id).each{|m| hash[m.is_profile_id] = m.name_id}
+    sons(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
     return hash
   end
 
@@ -100,7 +100,7 @@ class Profile < ActiveRecord::Base
   #  { profile_id => name_id, profile_id => name_id, ... }
   def daughters_hash(user_id)
     hash = {}
-    daughters(user_id).each{|m| hash[m.is_profile_id] = m.name_id}
+    daughters(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
     return hash
   end
 
@@ -117,7 +117,7 @@ class Profile < ActiveRecord::Base
   #  { profile_id => name_id, profile_id => name_id, ... }
   def brothers_hash(user_id)
     hash = {}
-    brothers(user_id).each{|m| hash[m.is_profile_id] = m.name_id}
+    brothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
     return hash
   end
 
@@ -134,7 +134,7 @@ class Profile < ActiveRecord::Base
   #  { profile_id => name_id, profile_id => name_id, ... }
   def sisters_hash(user_id)
     hash = {}
-    sisters(user_id).each{|m| hash[m.is_profile_id] = m.name_id}
+    sisters(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
     return hash
   end
 
@@ -152,7 +152,7 @@ class Profile < ActiveRecord::Base
   #  { profile_id => name_id, profile_id => name_id, ... }
   def husbands_hash(user_id)
     hash = {}
-    husbands(user_id).each{|m| hash[m.is_profile_id] = m.name_id}
+    husbands(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
     return hash
   end
 
@@ -169,7 +169,7 @@ class Profile < ActiveRecord::Base
   #  { profile_id => name_id, profile_id => name_id, ... }
   def wives_hash(user_id)
     hash = {}
-    wives(user_id).each{|m| hash[m.is_profile_id] = m.name_id}
+    wives(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
     return hash
   end
 
