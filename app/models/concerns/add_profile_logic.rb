@@ -156,17 +156,17 @@ module AddProfileLogic
     def add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
 
       new_profile_key_row = ProfileKey.new
-      new_profile_key_row.user_id = current_user.id              # user_id
+      new_profile_key_row.user_id = @@current_user_id              # user_id
       new_profile_key_row.profile_id = profile_id                # profile_id
       new_profile_key_row.name_id = name_id                      # name_id
       new_profile_key_row.relation_id = new_relation_id          # relation_id
       new_profile_key_row.is_profile_id = new_profile_id         # is_profile_id
       new_profile_key_row.is_name_id = new_profile_name_id       # is_name_id
 
-  #    new_profile_key_row.save
+      new_profile_key_row.save
 
       one_profile_key_arr = []
-      one_profile_key_arr[0] = current_user.id
+      one_profile_key_arr[0] = @@current_user_id
       one_profile_key_arr[1] = profile_id
       one_profile_key_arr[2] = name_id
       one_profile_key_arr[3] = new_relation_id
@@ -430,7 +430,7 @@ module AddProfileLogic
       @add_row_to_tree = make_tree_row(@profile_id, @sex_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, author_user)
 
 
-
+      @@current_user_id = author_user.id
       @relation_id = base_relation_id
       #@add_row_to_tree = [current_user.id, @profile_id, @name_id, @relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
       make_profilekeys_rows(@relation_id, @add_row_to_tree)

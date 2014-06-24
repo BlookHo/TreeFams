@@ -18,8 +18,8 @@ Relation.create([
 {relation_id: 5, relation: 'Брат', relation_rod_padej: 'Брата', origin_profile_sex_id: 0,  reverse_relation_id: 6, reverse_relation: 'Сестра'},
 {relation_id: 6, relation: 'Сестра', relation_rod_padej: 'Сестры', origin_profile_sex_id: 1,  reverse_relation_id: 5, reverse_relation: 'Брат'},
 {relation_id: 6, relation: 'Сестра', relation_rod_padej: 'Сестры', origin_profile_sex_id: 0,  reverse_relation_id: 6, reverse_relation: 'Сестра'},
-{relation_id: 7, relation: 'Муж', relation_rod_padej: 'Мужа', origin_profile_sex_id: 1,  reverse_relation_id: 8, reverse_relation: 'Жена'},
-{relation_id: 8, relation: 'Жена', relation_rod_padej: 'Жены', origin_profile_sex_id: 0,  reverse_relation_id: 7, reverse_relation: 'Муж'}
+{relation_id: 7, relation: 'Муж', relation_rod_padej: 'Мужа', origin_profile_sex_id: 0,  reverse_relation_id: 8, reverse_relation: 'Жена'},
+{relation_id: 8, relation: 'Жена', relation_rod_padej: 'Жены', origin_profile_sex_id: 1,  reverse_relation_id: 7, reverse_relation: 'Муж'}
 # муж/жена: добавить для однополых браков?
 
 
