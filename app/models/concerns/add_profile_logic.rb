@@ -5,12 +5,6 @@ module AddProfileLogic
 
     #ПЛАН РАБОТ
 
-    #А) Нужно от Алексея:
-    #1.переменные: кому добавляем и кого (в т.ч. sex_id)
-    #2.метод создания нового профиля
-    #3.массив БК профиля
-    #4.заполненные хэши имен
-    #
     #Б) потом - сохранение ряда в Tree - я
     #В) методы генерации рядов в ProfileKey - для каждой комбинации (кому-кого) - я
     #
@@ -24,78 +18,6 @@ module AddProfileLogic
     # отладка поиска с получением расширеных Хэшей - я
     #Е) Одновременно - отображение рез-тов с учетом wide_arr results - Алексей
     #
-    #Все. Премия.
-
-
-
-
-
-    # Получение параметров нового профиля при его добавлении для любого профиля дерева
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # def get_profile_params(base_profile, base_relation_id, new_profile, new_relation_id)
-    #
-    #   # form_select_arrays  # Формирование массивов значений для форм ввода типа select.
-    #   # session[:sel_names] = {:value => @sel_names, :updated_at => Time.current}
-    #
-    #   # @sel_names = session[:sel_names][:value]
-    #   # @menu_choice = "No choice yet - in new_profile"
-    #
-    #   # Выбираем на main_page при добавлении нового родственника
-    #   @profile_id = base_profile.id
-    #   @relation_id = base_relation_id
-    #
-    #   @new_profile_name = new_profile.name_id # выбор нового имени
-    #   if !@new_profile_name.blank?
-    #     @new_profile_sex = check_sex_by_name(@new_profile_name) # display sex by name = извлечение пола из введенного имени
-    #   end
-    #
-    #   @new_profile_relation = params[:relation_number] # выбор нового relation
-    #   if !@new_profile_relation.blank?
-    #     #@profile_sex = check_sex_by_name(@profile_name) # display sex by name = извлечение пола из введенного имени
-    #   end
-    #
-    #   @user_id = current_user.id
-    #   profile_old = Profile.find(@profile_id)
-    #   @name_id = profile_old.name_id
-    #   @sex_id = profile_old.sex_id
-    #
-    #
-    #   @new_profile_id = Profile.last.id + 1000  # DEBUGG_TO_VIEW # profile_id
-    #   @new_profile_name_id = new_profile.name_id             # DEBUGG_TO_VIEW # Ольга
-    #   @new_profile_sex = new_profile.sex_id                  # DEBUGG_TO_VIEW # female
-    #   @new_relation_id = new_relation_id                   # DEBUGG_TO_VIEW # мать
-    #
-    #
-    # end
-
-    # Добавление нового профиля в таблицу Profiles
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # def make_new_profile
-    #
-    #
-    #   # Новый profile_id
-    #
-    #
-    #   #    new_profile = Profile.new
-    #   #    new_profile.user_id = current_user.id  # user_id - берем после регистрации
-    #   #    new_profile.email = current_user.email # user regged email
-    #   #    new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
-    #   #    if @profile_sex # sex_id
-    #   #      new_profile.sex_id = 1    # sex_id - MALE
-    #   #    else
-    #   #      new_profile.sex_id = 0    # sex_id - FEMALE
-    #   #    end
-    #   #    new_profile.save
-    #   #
-    #       @new_profile_id = Profile.last.id + 1            # profile_id
-    #   #
-    #
-    #
-    # end
 
     # Сохранение нового ряда для добавленного профиля в таблице Tree.
     # @note GET /
@@ -319,9 +241,9 @@ module AddProfileLogic
     # Добавление новых рядов по профилю в таблицу ProfileKey
     # @note GET /
     # @see News
-    def  make_profilekeys_rows(relation_id, add_row_to_tree) #relation_id, profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, sex_id)
+    def  make_profilekeys_rows(relation_id, add_row_to_tree)
 
-      @prev_relation_id = relation_id
+      @prev_relation_id = relation_id  # DEBUGG_TO_VIEW
 
       #@add_row_to_tree = add_row_to_tree
       # [current_user.id, @profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
@@ -408,8 +330,6 @@ module AddProfileLogic
     # @param admin_page [Integer] опциональный номер страницы
     # @see News
     def add_new_profile(base_profile, base_relation_id, new_profile, new_relation_id, author_user)
-
-      #get_bk_circle(@profile_id,@relation_id)  # Получить от Алексея
 
       #get_acceptable_relations # ИД для общей работы
 
