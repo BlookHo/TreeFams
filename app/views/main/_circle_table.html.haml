@@ -12,7 +12,7 @@
       %td= relation_to_human(item.relation_id)
       %td
         = link_to item.name.to_name, profile_path(item.is_profile_id)
-        -#.small= item.is_profile_id
+        -#.small= item.is_profile_id  # DEBUGG TO VIEW
         - if item.profile.circle(current_user.id).size > 0 and item.relation_id != 0
           = link_to fa_icon('code-fork'), circle_path(item.is_profile_id), style: "margin-left:11px;color:green;", remote: true
       %td

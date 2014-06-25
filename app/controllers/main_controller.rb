@@ -121,12 +121,10 @@ class MainController < ApplicationController
 
             #@test_hash_profiles = { 23 => {51 => [51,52,53,54], 54 => [58,59]}, 22 => {31 => [31,32,33,34], 34 =>[38,39] } }
 
-
-
           end
           @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
         else
-          @relation_match_arr = ["relation_match_arr"]   # DEBUGG TO VIEW
+         # @relation_match_arr = ["relation_match_arr"]   # DEBUGG TO VIEW
         end
      end
      @relation_id_searched_arr << relation_id_searched  #_DEBUGG_TO_VIEW
@@ -141,8 +139,8 @@ class MainController < ApplicationController
        # Исключение из результатов поиска
 #       if all_profile_rows.length > 3
 
-       #found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length - 1 } #
-       found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length } #
+       found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length - 1 } #
+       #found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length } #
        # all_profile_rows.length = размер ближнего круга профиля в дереве current_user.id
        #else
        #  # Если маленький БК
