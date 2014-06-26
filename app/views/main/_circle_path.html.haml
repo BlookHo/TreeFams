@@ -1,0 +1,4 @@
+= @path
+%ul
+  - @path.try(:each) do |segment|
+    %li= link_to segment.name, '#'

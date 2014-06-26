@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20140624132624) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index "profile_keys", ["user_id"], name: "index_profile_keys_on_user_id", unique: true, using: :btree
 
   create_table "profiles", force: true do |t|
     t.integer  "user_id"
@@ -80,6 +81,7 @@ ActiveRecord::Schema.define(version: 20140624132624) do
     t.integer  "is_name_id"
     t.integer  "is_sex_id"
   end
+  add_index "trees", ["user_id"], name: "index_trees_on_user_id", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.integer  "profile_id"

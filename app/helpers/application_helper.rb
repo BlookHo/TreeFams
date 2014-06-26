@@ -1,5 +1,14 @@
 module ApplicationHelper
 
+
+  def circle_path_helper(current_path, profile_id, relation_id)
+    if current_path.blank?
+      return profile_id.to_s+','+relation_id.to_s
+    else
+      current_path + '-' + profile_id.to_s+','+relation_id.to_s
+    end
+  end
+
   # prefix 1 - Ваш(а)
   #
   def relation_to_human(id, prefix: false)
