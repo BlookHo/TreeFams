@@ -1,21 +1,36 @@
-= render 'main/circle_path'
 %table.tmp_table#circle-table
   %tr
-    %th Родственное отношение
-    %th Имя родственника
+    %th.left Родня
+    %th.left Имя
+    %th Ближний круг
     %th
   %tr
     %td Автор
-    %td= @author.to_name
     %td
+      %h2
+        = link_to @author.to_name, edit_profile_path(@author.id)
+        = @author.surname
+    %td
+    %td
+      .dropdown
+        %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
+          = fa_icon 'caret-square-o-down'
+        %ul.closed
+          %li= link_to "Добавить родственника", new_profile_path(base_relation_id: 0, base_profile_id: @author.id)
+          %li= link_to "Изменить", edit_profile_path(@author.id)
+          %li= link_to "Общаться", '#', class: :grey
+          %li= link_to "В избранные", '#', class: :grey
   - circle.each_with_index do |item, index|
     %tr
       %td= relation_to_human(item.relation_id)
       %td
-        = link_to item.name.to_name, profile_path(item.is_profile_id)
+        = link_to item.name.to_name, edit_profile_path(item.is_profile_id)
+        = item.is_profile.surname
+
+      %td.center
         - if item.profile.tree_circle(current_user.id, item.is_profile_id).size > 0 and item.relation_id != 0
-          = circle_path_helper(params[:path], item.is_profile_id, item.relation_id)
-          = link_to fa_icon('code-fork'), circle_path(circle_path_helper(params[:path], item.is_profile_id, item.relation_id)), style: "margin-left:11px;color:green;", remote: true
+          = link_to fa_icon('users'), circle_path(circle_path_helper(@path_params, item.is_profile_id, item.relation_id)), style: "margin-left:11px;color:green;", remote: true
+
       %td
         .dropdown
           %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}

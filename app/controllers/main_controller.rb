@@ -139,7 +139,7 @@ class MainController < ApplicationController
        # Исключение из результатов поиска
 #       if all_profile_rows.length > 3
 
-       found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length - 1 } #
+#       found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length - 1 } #
        #found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length } #
        # all_profile_rows.length = размер ближнего круга профиля в дереве current_user.id
        #else

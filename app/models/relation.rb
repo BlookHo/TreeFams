@@ -1,6 +1,11 @@
 class Relation < ActiveRecord::Base
 
 
+  def self.position_list
+    [1,2,5,6,7,8,3,4]
+  end
+
+
   def self.to_hash
     {
       fathers:   {title: "Отец",   id: 1},
