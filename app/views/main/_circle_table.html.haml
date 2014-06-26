@@ -8,7 +8,7 @@
     %td Автор
     %td
       %h2
-        = link_to @author.to_name, profile_path(@author.id)
+        = link_to @author.to_name, edit_profile_path(@author.id)
         = @author.surname
     %td
     %td
@@ -24,7 +24,7 @@
     %tr
       %td= relation_to_human(item.relation_id)
       %td
-        = link_to item.name.to_name, profile_path(item.is_profile_id)
+        = link_to item.name.to_name, edit_profile_path(item.is_profile_id)
         = item.is_profile.surname
 
       %td.center
