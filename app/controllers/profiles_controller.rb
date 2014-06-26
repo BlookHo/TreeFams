@@ -31,7 +31,7 @@ class ProfilesController < ApplicationController
     @base_profile_id = params[:base_profile_id]
 
     @profile = Profile.new(profile_params)
-    @profile.user_id = current_user.id
+    @profile.user_id = 0
     @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first
 
     if @name
