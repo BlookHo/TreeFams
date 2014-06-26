@@ -29,7 +29,7 @@ class Profile < ActiveRecord::Base
     #     is_sex_id: self.sex_id)
 
     # circle << Tree.where(user_id: user_id, relation_id: 0).first
-
+    # author = Hashie::Mash.new({user_id:user_id, profile_id:self.id, relation_id:0})
     ProfileKey.where(user_id: user_id, profile_id: self.id).includes(:name).each do |p_key|
       circle << p_key
     end
@@ -37,8 +37,8 @@ class Profile < ActiveRecord::Base
   end
 
   # На выходе ближний круг для профиля в дереве user_id
-  def dcircle(user_id)
-    Tree.where(user_id: user_id, profile_id: self.id).includes(:name)
+  def tree_circle(user_id, profile_id)
+    Tree.where(user_id: user_id, profile_id: profile_id).includes(:name)
   end
 
   # На выходе - массив, аналогичный tree, который у нас сейчас формируется на старте.
