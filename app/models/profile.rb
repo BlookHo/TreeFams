@@ -14,31 +14,33 @@ class Profile < ActiveRecord::Base
   end
 
 
+  # Ближний круг для профиля в дереве юзера
+  # по записям в ProfileKey
   def circle(user_id)
-    circle = []
-    #<Tree id: nil, user_id: nil, profile_id: nil, relation_id: nil,
-    # connected: false, created_at: nil, updated_at: nil, name_id: nil,
-    # is_profile_id: nil, is_name_id: nil, is_sex_id: nil>
-    # circle << Tree.new(
-    #     user_id: user_id,
-    #     profile_id: self.id,
-    #     relation_id: 0,
-    #     name_id: self.name_id,
-    #     is_profile_id: 0,
-    #     is_name_id: self.name_id,
-    #     is_sex_id: self.sex_id)
 
-    # circle << Tree.where(user_id: user_id, relation_id: 0).first
-    # author = Hashie::Mash.new({user_id:user_id, profile_id:self.id, relation_id:0})
-    ProfileKey.where(user_id: user_id, profile_id: self.id).includes(:name).each do |p_key|
-      circle << p_key
-    end
-    return circle
+    results = ProfileKey.where(user_id: user_id, profile_id: self.id).order('relation_id').includes(:name)
+
+    # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
+
+    # result_hash = results.each_with_object({}) {|result,result_hash| result_hash[result.id] = result }
+    # ids.map {|id| result_hash[id]}
+
+    # position_list =
+    # sorted_result = position_list.collect {|position_id| result.detect {|p| puts position_id } }
+    # # logger.info "========== Position list"
+    # # logger.info position_list
+    # logger.info "========== CIRCLE"
+    # logger.info  result.each {|c| puts "#{c.id} - #{c.relation_id}"}
+    # logger.info "========== Sorted CIRCLE"
+    # logger.info  sorted_result.each {|c| puts "#{c.id} - #{c.relation_id}"}
+
+    return results
   end
 
   # На выходе ближний круг для профиля в дереве user_id
+  # по записям в Tree
   def tree_circle(user_id, profile_id)
-    Tree.where(user_id: user_id, profile_id: profile_id).includes(:name)
+    Tree.where(user_id: user_id, profile_id: profile_id).order('relation_id').includes(:name)
   end
 
   # На выходе - массив, аналогичный tree, который у нас сейчас формируется на старте.
