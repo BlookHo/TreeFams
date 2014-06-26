@@ -94,7 +94,9 @@ Weafam::Application.routes.draw do
   resources :users
   resources :names
   resources :relations
-  resources :circles, only: :show
+
+
+  get 'circles/(:path)', to: "circles#show", as: :circle
 
 
   # Users and Sessions

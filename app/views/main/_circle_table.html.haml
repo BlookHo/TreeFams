@@ -1,3 +1,4 @@
+= render 'main/circle_path'
 %table.tmp_table#circle-table
   %tr
     %th Родственное отношение
@@ -12,9 +13,9 @@
       %td= relation_to_human(item.relation_id)
       %td
         = link_to item.name.to_name, profile_path(item.is_profile_id)
-        .small= item.is_profile_id  # DEBUGG TO VIEW
-        - if item.profile.circle(current_user.id).size > 0 and item.relation_id != 0
-          = link_to fa_icon('code-fork'), circle_path(item.is_profile_id), style: "margin-left:11px;color:green;", remote: true
+        - if item.profile.tree_circle(current_user.id, item.is_profile_id).size > 0 and item.relation_id != 0
+          = circle_path_helper(params[:path], item.is_profile_id, item.relation_id)
+          = link_to fa_icon('code-fork'), circle_path(circle_path_helper(params[:path], item.is_profile_id, item.relation_id)), style: "margin-left:11px;color:green;", remote: true
       %td
         .dropdown
           %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
