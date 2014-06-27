@@ -149,7 +149,7 @@
                     %td
                       - if profile.user.present?
                         -#= link_to 'Пожать руку', '#', onclick: "alert('Пожать руку с user_id: #{profile.user.id}')"
-                        = link_to 'Пожать руку', connection_of_trees_path(first_user_id: current_user.id, second_user_id: user.id)
+                        = link_to 'Пожать руку', connection_of_trees_path(first_user_id: current_user.id, second_user_id: user.id, matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash)
 
 
 
