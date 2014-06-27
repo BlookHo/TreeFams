@@ -1,4 +1,8 @@
 Weafam::Application.routes.draw do
+  get "connect_users_trees/connect_users"
+  get "connect_users_trees/connect_profiles"
+  get "connect_users_trees/connect_trees"
+  get "connect_users_trees/connect_profiles_keys"
   get "new_profile/get_profile_params"
   get "new_profile/make_new_profile"
   get "new_profile/make_tree_row"
@@ -84,6 +88,14 @@ Weafam::Application.routes.draw do
   match 'make_profilekeys_rows' => 'new_profile#make_profilekeys_rows', via: :get
   match 'add_new_profile' => 'new_profile#add_new_profile', via: :get
   match 'add_new_profile' => 'new_profile#add_new_profile', via: :post
+
+  # connect_users_trees controller
+  match 'connection_of_trees' => 'connect_users_trees#connection_of_trees', via: :get
+  match 'get_trees_to_connect' => 'connect_users_trees#get_trees_to_connect', via: :get
+  match 'connect_users' => 'connect_users_trees#connect_users', via: :get
+  match 'connect_profiles' => 'connect_users_trees#connect_profiles', via: :get
+  match 'connect_trees' => 'connect_users_trees#connect_trees', via: :get
+  match 'connect_profiles_keys' => 'connect_users_trees#connect_profiles_keys', via: :get
 
 
 

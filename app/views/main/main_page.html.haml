@@ -148,7 +148,8 @@
                         = relation_to_human( @all_match_relations_sorted[user.id][ @all_match_arr_sorted[user.id].index(profile.id) ], prefix: true )
                     %td
                       - if profile.user.present?
-                        = link_to 'Пожать руку', '#', onclick: "alert('Пожать руку с user_id: #{profile.user.id}')"
+                        -#= link_to 'Пожать руку', '#', onclick: "alert('Пожать руку с user_id: #{profile.user.id}')"
+                        = link_to 'Пожать руку', connection_of_trees_path(first_user_id: current_user.id, second_user_id: user.id)
 
 
 
