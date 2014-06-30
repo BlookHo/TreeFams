@@ -3,9 +3,9 @@
 %h3
   ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ
 %p
-  IN connection_of_trees: @current_user_id: #{@current_user_id.inspect}
+  IN connection_of_trees: who_found_user_id = @current_user_id: #{@current_user_id.inspect}
 %p
-  IN connection_of_trees: @user_id: #{@user_id.inspect}
+  IN connection_of_trees: where_found_user_id = @user_id: #{@user_id.inspect}
 %p
   IN connection_of_trees: @matched_profiles_hash: #{@matched_profiles_hash.inspect}
 %p
@@ -14,16 +14,39 @@
   IN connection_of_trees: @matched_profiles_in_tree: #{@matched_profiles_in_tree.inspect}
 %p
   IN connection_of_trees: @matched_relations_in_tree: #{@matched_relations_in_tree.inspect}
+%p
+  IN connection_of_trees: @first_tree: #{@first_tree.inspect}
+%p
+  IN connection_of_trees: @second_tree: #{@second_tree.inspect}
 
 %p
-  IN connect_trees: @first_tree: #{@first_tree.inspect}
+  IN check_unconnected: @connection_row: #{@connection_row.inspect}
 %p
-  IN connect_trees: @second_tree: #{@second_tree.inspect}
+  IN check_unconnected: @connection: #{@connection.inspect}
 %p
-  IN rewrite_profiles_in_tree: @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
+  IN check_unconnected: @conn_msg: #{@conn_msg.inspect}
+
+
 %p
-  IN rewrite_profiles_in_tree: @replaced_profiles: #{@replaced_profiles.inspect}
--#%p
--#  IN make_opposite_profiles_arr: @who_found_tree_row: #{@who_found_tree_row.inspect}
+  IN connect_trees: @where_found_profile_id: #{@where_found_profile_id.inspect}
 %p
-  IN rewrite_profiles_in_tree: @@msg: #{@msg.inspect}
+  IN connect_trees: @who_found_profile_id: #{@who_found_profile_id.inspect}
+%p
+  IN connect_trees: @@author_index: #{@author_index.inspect}
+%p
+  IN connect_trees: @@author_profile_id: #{@author_profile_id.inspect}
+
+
+
+%p
+  IN connect_trees: @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
+%p
+  IN connect_trees: @replaced_profiles: #{@replaced_profiles.inspect}
+%p
+  IN connect_trees: @where_found_to_replace: #{@where_found_to_replace.inspect}
+%p
+  IN connect_trees: @who_found_to_replace: #{@who_found_to_replace.inspect}
+%p
+  IN connect_trees: @profile_to_replace: #{@profile_to_replace.inspect}
+%p
+  IN connect_trees: @msg: #{@msg.inspect}

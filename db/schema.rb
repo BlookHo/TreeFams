@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140624132624) do
+ActiveRecord::Schema.define(version: 20140630142324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "connected_users", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "with_user_id"
+    t.boolean  "connected",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "names", force: true do |t|
     t.string   "name"
@@ -36,7 +44,6 @@ ActiveRecord::Schema.define(version: 20140624132624) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  add_index "profile_keys", ["user_id"], name: "index_profile_keys_on_user_id", unique: true, using: :btree
 
   create_table "profiles", force: true do |t|
     t.integer  "user_id"
@@ -81,7 +88,6 @@ ActiveRecord::Schema.define(version: 20140624132624) do
     t.integer  "is_name_id"
     t.integer  "is_sex_id"
   end
-  add_index "trees", ["user_id"], name: "index_trees_on_user_id", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.integer  "profile_id"
