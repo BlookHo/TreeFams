@@ -54,6 +54,20 @@ class ProfilesController < ApplicationController
   end
 
 
+  def destroy
+    @profile = Profile.where(id: params[:id]).first
+    if @profile and @profile.user_id != current_user.id
+      ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile).map(&:destroy)
+      Tree.where(:is_profile_id => 297).map(&:destroy)
+      @profile.destroy
+      flash.now[:notice] = "Профиль удален"
+    else
+      flash.now[:alert] = "Ошибка удаления профиля"
+    end
+    redirect_to :back
+  end
+
+
   private
 
   def profile_params
