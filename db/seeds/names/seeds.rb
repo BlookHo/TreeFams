@@ -162,7 +162,7 @@ Name.create([
 {name: 'домна', sex_id:0, name_freq: 0, is_approved: true, only_male: false},
 {name: 'дорофей', sex_id:1, name_freq: 0, is_approved: true, only_male: true},
 {name: 'ева', sex_id:0, name_freq: 0, is_approved: true, only_male: false},
-{name: 'евгеиня', sex_id:0, name_freq: 0, is_approved: true, only_male: false},
+{name: 'евгения', sex_id:0, name_freq: 0, is_approved: true, only_male: false},
 {name: 'евгений', sex_id:1, name_freq: 0, is_approved: true, only_male: true},
 {name: 'евграф', sex_id:1, name_freq: 0, is_approved: true, only_male: true},
 {name: 'евдоким', sex_id:1, name_freq: 0, is_approved: true, only_male: true},
