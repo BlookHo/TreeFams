@@ -14,6 +14,10 @@ class Profile < ActiveRecord::Base
   end
 
 
+  def full_name
+    [self.to_name, self.surname].join(' ')
+  end
+
   # Ближний круг для профиля в дереве юзера
   # по записям в ProfileKey
   def circle(user_id)

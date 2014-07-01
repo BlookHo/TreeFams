@@ -1,20 +1,30 @@
 class CirclesController < ApplicationController
 
-  before_filter :logged_in?,
-                :get_current_profile_id,
-                :rebuild_path_params,
-                :collect_path
+  before_filter :logged_in?
 
 
   def show
+    get_current_profile_id
+    rebuild_path_params(current_user.profile_id)
+    collect_path
     @author = Profile.find(@current_profile_id)
     @circle  = @author.circle(current_user.id)
   end
 
 
+  def show_search
+    @path_author = User.find(params[:tree_id])
+    get_current_profile_id
+    rebuild_path_params(@path_author.profile_id)
+    collect_path
+    @author = Profile.find(@current_profile_id)
+    @circle  = @author.circle(params[:tree_id])
+  end
+
+
   private
 
-  def rebuild_path_params
+  def rebuild_path_params(current_user_profile_id)
     incoming_path_profiles = []
     incoming_path_segments = []
 
@@ -31,7 +41,8 @@ class CirclesController < ApplicationController
 
     # if current profile is current_user's profile
     # reset path
-    if @current_profile_id.to_i == current_user.profile_id.to_i
+    # if @current_profile_id.to_i == current_user.profile_id.to_i
+    if @current_profile_id.to_i == current_user_profile_id.to_i
       return @path_params = nil
     end
 
@@ -43,6 +54,7 @@ class CirclesController < ApplicationController
     else
       return @path_params = params[:path]
     end
+    # return @path_params = params[:path]
   end
 
 
