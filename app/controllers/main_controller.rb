@@ -75,32 +75,47 @@ class MainController < ApplicationController
 
     session[:search_results_relations] = nil
 
-    search_results_mathced_profile_ids = []
-    @final_reduced_profiles_hash.each do |tree_id, tree_value|
-      tree_value.each do |key, value|
-        search_matched_profiels = []
-        value.each do |profile_id|
-          search_results_mathced_profile_ids << profile_id
-        end
-      end
-    end
-
-    search_results_matches_relation_ids = []
-    @final_reduced_relations_hash.each do |tree_id, tree_value|
-      tree_value.each do |key, value|
-        search_matched_profiels = []
-        value.each do |profile_id|
-          search_results_matches_relation_ids << profile_id
-        end
-      end
-    end
-
     @search_results_relations = []
-    search_results_mathced_profile_ids.each_with_index do |profile_id, index|
-      @search_results_relations << {profile_id => search_results_matches_relation_ids[index]}
+    @final_reduced_profiles_hash.each do |tree_id, tree_value|
+      tree_value.each do |matched_key, matched_value|
+        matched_value.each_with_index do |profile_id, index|
+          relation = @final_reduced_relations_hash[tree_id][matched_key][index]
+          @search_results_relations << {profile_id => {matched_key => relation}}
+        end
+      end
     end
 
     session[:search_results_relations] = @search_results_relations
+
+
+
+
+    # search_results_mathced_profile_ids = []
+    # @final_reduced_profiles_hash.each do |tree_id, tree_value|
+    #   tree_value.each do |key, value|
+    #     search_matched_profiels = []
+    #     value.each do |profile_id|
+    #       search_results_mathced_profile_ids << profile_id
+    #     end
+    #   end
+    # end
+    #
+    # search_results_matches_relation_ids = []
+    # @final_reduced_relations_hash.each do |tree_id, tree_value|
+    #   tree_value.each do |key, value|
+    #     search_matched_profiels = []
+    #     value.each do |profile_id|
+    #       search_results_matches_relation_ids << profile_id
+    #     end
+    #   end
+    # end
+    #
+    # @search_results_relations = []
+    # search_results_mathced_profile_ids.each_with_index do |profile_id, index|
+    #   @search_results_relations << {profile_id => search_results_matches_relation_ids[index]}
+    # end
+
+
 
     # Ближние круги пользователей из результатов поиска
     @search_results = []
@@ -377,6 +392,10 @@ class MainController < ApplicationController
       #@all_match_relations_hash = all_match_relations_hash # TO VIEW
       #count_users_found(profile_ids_arr) # TO VIEW
 
+    else
+      @final_reduced_profiles_hash = []
+      @final_reduced_relations_hash = []
+      @wide_user_ids_arr = []
     end
 
   end

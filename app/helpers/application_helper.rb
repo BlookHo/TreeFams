@@ -36,4 +36,17 @@ module ApplicationHelper
       "Неизвестно"
     end
   end
+
+  # Получает хеш {profile_id => relation_id}
+  # какое отношенеи к какому профилю
+  def relation_to_profile(data)
+    return '' if data.nil?
+    if data.keys.first == current_user.profile_id
+      relation_to_human(data.values.first, prefix: true)
+    else
+      [relation_to_human(data.values.first), Profile.find( data.keys.first ).full_name].join(' ')
+    end
+  end
+
+
 end
