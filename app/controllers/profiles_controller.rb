@@ -50,7 +50,22 @@ class ProfilesController < ApplicationController
       flash.now[:alert] = "Ошибка при добавления профиля. Новое имя."
       render :new
     end
+  end
 
+
+  def destroy
+    @profile = Profile.where(id: params[:id]).first
+    if @profile
+      # TODO удалять вложенные профили и свзяи при их наличии
+      # current_user.trees.where(is_profile_id: @profile.id).map(&:destroy)
+      # current_user.profile_keys.where(is_profile_id:@profile.id).map(&:destroy)
+      # current_user.profile_keys.where(profile_id:@profile.id).map(&:destroy)
+      # @profile.destroy
+      flash.now[:notice] = "Профиль удален"
+    else
+      flash.now[:alert] = "Ошибка удаления профиля"
+    end
+    redirect_to :back
   end
 
 

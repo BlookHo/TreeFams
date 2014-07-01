@@ -12,6 +12,12 @@ class CirclesController < ApplicationController
   end
 
 
+  def show_search
+    @author = Profile.find(@current_profile_id)
+    @circle  = @author.circle(params[:tree_id])
+  end
+
+
   private
 
   def rebuild_path_params

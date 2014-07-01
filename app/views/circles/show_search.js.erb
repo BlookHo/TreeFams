@@ -1,0 +1,7 @@
+$("#circle-table-<%=params[:tree_id] %>").animate({
+    left: "-=60",
+    opacity: "0"
+}, 500, function() {
+    $('#current-circle-<%=params[:tree_id] %>').html("<%= j render 'main/search_circle_table', circle: @circle, author: @author %>");
+    // $('#circle-path').html("<%= j render 'main/circle_path' %>")
+});
