@@ -74,9 +74,11 @@ class MainController < ApplicationController
     # @final_reduced_relations_hash  # {17=>{92=>[0, 8, 3, 3], 96=>[1]}}
 
     session[:search_results_relations] = nil
+    session[:all_match_relations_sorted] = nil
+
 
     @search_results_relations = []
-    @final_reduced_profiles_hash.each do |tree_id, tree_value|
+    @final_reduced_profiles_hash.each do |tree_id,  tree_value|
       tree_value.each do |matched_key, matched_value|
         matched_value.each_with_index do |profile_id, index|
           relation = @final_reduced_relations_hash[tree_id][matched_key][index]
@@ -86,6 +88,7 @@ class MainController < ApplicationController
     end
 
     session[:search_results_relations] = @search_results_relations
+    session[:all_match_relations_sorted] = @all_match_relations_sorted
 
 
 
