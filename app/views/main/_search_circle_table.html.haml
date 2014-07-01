@@ -1,11 +1,12 @@
 - @search_results_relations = session[:search_results_relations]
-%table.tmp_table.circle-table{id: "circle-table-#{author.id}"}
+- author_id = author.class == User ? author.id : params[:tree_id]
+%table.tmp_table.circle-table{id: "circle-table-#{author_id}"}
   %tr
     %th.left Родня
     %th.left Имя
     %th.left Отношение
     %th Ближний круг
-    %th= author.id
+    %th
   %tr
     %td Автор
     %td
@@ -13,7 +14,7 @@
         - if author.class == User
           = link_to author.profile.full_name, edit_profile_path(author.profile.id)
         - else
-          = link_to author.full_name, edit_profile_path(author.id)
+          = link_to [author.to_name, author.surname].join(' '), edit_profile_path(author.id)
     %td
       - if author.class == User
         = relation_to_human(@search_results_relations.find {|r| r[author.profile.id] }.try(:[], author.profile.id), prefix: true)
@@ -42,6 +43,10 @@
 
       %td
 
+%br
+%br
+%br
+%br
 
 :javascript
   closeAllDropDown();

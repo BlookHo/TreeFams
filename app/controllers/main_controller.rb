@@ -73,13 +73,6 @@ class MainController < ApplicationController
     # @final_reduced_profiles_hash   # {17=>{92=>[103, 99, 104, 105], 96=>[100]}}
     # @final_reduced_relations_hash  # {17=>{92=>[0, 8, 3, 3], 96=>[1]}}
 
-    # realations = []
-    # @final_reduced_profiles_hash[user.id].each do |key, value|
-    #   value.each_with_index do |profile_id, index|
-    #     realations << {profile_id => @final_reduced_relations_hash[user.id][key][index] }
-    #   end
-    # end
-
     session[:search_results_relations] = nil
 
     search_results_mathced_profile_ids = []
@@ -109,13 +102,14 @@ class MainController < ApplicationController
 
     session[:search_results_relations] = @search_results_relations
 
-
     # Ближние круги пользователей из результатов поиска
     @search_results = []
     User.where(id: @wide_user_ids_arr).each do |user|
       @search_results << Hashie::Mash.new( {author: user, circle: user.profile.circle(user.id)} )
     end
  end
+
+
 
   # Поиск совпадений для одного из профилей БК current_user
   # Берем параметр: profile_id из массива  = profiles_tree_arr[tree_index][6].

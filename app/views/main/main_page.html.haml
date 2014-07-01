@@ -118,8 +118,17 @@
 
     - @search_results.each do |result|
       .circle-view
-        .current-circle{id: "current-circle-#{result.author.id}"}
-          = render 'search_circle_table', circle: result.circle, author: result.author
+        - if result.author.class == User
+          .circle-path{id: "current-circle-path-#{result.author.id}"}
+            = render 'search_circle_path', author: result.author
+          .current-circle{id: "current-circle-#{result.author.id}"}
+            = render 'search_circle_table', circle: result.circle, author: result.author
+        - else
+          .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
+            = render 'search_circle_path', author: result.author
+          .current-circle{id: "current-circle-#{params[:tree_id]}"}
+            = render 'search_circle_table', circle: result.circle, author: result.author
+
 
 
     = render 'users/login_list'
