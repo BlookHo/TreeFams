@@ -1,4 +1,4 @@
-%table.tmp_table#circle-table
+%table.tmp_table#circle-table.circle-table
   %tr
     %th.left Родня
     %th.left Имя
@@ -8,8 +8,7 @@
     %td Автор
     %td
       %h2
-        = link_to @author.to_name, edit_profile_path(@author.id)
-        = @author.surname
+        = link_to @author.full_name, edit_profile_path(@author.id)
     %td
     %td
       .dropdown
@@ -24,8 +23,7 @@
     %tr
       %td= relation_to_human(item.relation_id)
       %td
-        = link_to item.name.to_name, edit_profile_path(item.is_profile_id)
-        = item.is_profile.surname
+        = link_to [item.name.to_name,item.is_profile.surname].join(' '), edit_profile_path(item.is_profile_id)
 
       %td.center
         - if item.profile.tree_circle(current_user.id, item.is_profile_id).size > 0 and item.relation_id != 0
@@ -38,7 +36,6 @@
           %ul.closed
             %li= link_to "Добавить родственника", new_profile_path(base_relation_id: item.relation_id, base_profile_id: item.is_profile_id)
             %li= link_to "Изменить", edit_profile_path(item.is_profile_id)
-            %li= link_to "Удалить", profile_path(item.is_profile_id), method: :delete, data:{confirm: "Вы уверны, что хотите удалть профиль и все его связи?"}
             %li= link_to "Общаться", '#', class: :grey
             %li= link_to "В избранные", '#', class: :grey
             %li= link_to "В избранные", '#', class: :grey

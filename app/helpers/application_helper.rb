@@ -12,6 +12,7 @@ module ApplicationHelper
   # prefix 1 - Ваш(а)
   #
   def relation_to_human(id, prefix: false)
+    return '' if id.nil?
     case id.to_i
     when  0
       prefix ? "Вы" : "Автор"

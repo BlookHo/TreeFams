@@ -50,7 +50,7 @@ class MainController < ApplicationController
    @circle = current_user.profile.circle(current_user.id)
    @author = current_user.profile
     if current_user
-# Для отладки add_profile - исключаем этот метод
+    # Для отладки add_profile - исключаем этот метод
      get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
 
      ## @bk_arr = circle_as_array(current_user.id)
@@ -68,7 +68,48 @@ class MainController < ApplicationController
       @elapsed_search_time = (end_search_time - beg_search_time).round(5)
     end
 
+
+    # Map profile -> relation search data
+    # @final_reduced_profiles_hash   # {17=>{92=>[103, 99, 104, 105], 96=>[100]}}
+    # @final_reduced_relations_hash  # {17=>{92=>[0, 8, 3, 3], 96=>[1]}}
+
+    session[:search_results_relations] = nil
+
+    search_results_mathced_profile_ids = []
+    @final_reduced_profiles_hash.each do |tree_id, tree_value|
+      tree_value.each do |key, value|
+        search_matched_profiels = []
+        value.each do |profile_id|
+          search_results_mathced_profile_ids << profile_id
+        end
+      end
+    end
+
+    search_results_matches_relation_ids = []
+    @final_reduced_relations_hash.each do |tree_id, tree_value|
+      tree_value.each do |key, value|
+        search_matched_profiels = []
+        value.each do |profile_id|
+          search_results_matches_relation_ids << profile_id
+        end
+      end
+    end
+
+    @search_results_relations = []
+    search_results_mathced_profile_ids.each_with_index do |profile_id, index|
+      @search_results_relations << {profile_id => search_results_matches_relation_ids[index]}
+    end
+
+    session[:search_results_relations] = @search_results_relations
+
+    # Ближние круги пользователей из результатов поиска
+    @search_results = []
+    User.where(id: @wide_user_ids_arr).each do |user|
+      @search_results << Hashie::Mash.new( {author: user, circle: user.profile.circle(user.id)} )
+    end
  end
+
+
 
   # Поиск совпадений для одного из профилей БК current_user
   # Берем параметр: profile_id из массива  = profiles_tree_arr[tree_index][6].

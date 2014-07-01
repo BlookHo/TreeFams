@@ -100,34 +100,59 @@
 -#  @new_test_hash_profiles: #{@new_test_hash_profiles.inspect}
 
 
+
 .content
   %h1
     = current_user.profile.name.name.mb_chars.capitalize
     \, это ваш ближний круг,
     = current_user.id # DEBUGG TO VIEW
 
-  .circle-view
-    .circle-path#current-circle-path= render 'circle_path'
-    .current-circle#current-circle= render 'circle_table', circle: @circle
+
+  #circle-view
+    #circle-path= render 'circle_path'
+    #current-circle= render 'circle_table', circle: @circle
+
 
   %div{style: "margin-top:50px;"}
-    - if @search_results.empty?
-      %h1.yellow-title Совпадений не найдено
+    - if @all_match_arr_sorted.blank?
+      %h1 Совпадений не найдено
     - else
-      %h1.yellow-title Вы или ваши родственники найдены в деревьях следующих людей:
+      %h1 Вы или ваши родственники найдены в деревьях следующих людей:
 
-    - @search_results.each do |result|
-      .circle-view
-        - if result.author.class == User
-          .circle-path{id: "current-circle-path-#{result.author.id}"}
-            = render 'search_circle_path', author: result.author
-          .current-circle{id: "current-circle-#{result.author.id}"}
-            = render 'search_circle_table', circle: result.circle, author: result.author
-        - else
-          .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
-            = render 'search_circle_path', author: result.author
-          .current-circle{id: "current-circle-#{params[:tree_id]}"}
-            = render 'search_circle_table', circle: result.circle, author: result.author
+      %table.tmp_table
+        %tr
+          %th Автор дерева
+          %th
+            Ближний круг автора, в котором
+            %span.green возможно
+            присутствуют ваши родственники:
+
+
+        - @all_match_arr_sorted.each do |key, value|
+          - user = User.where(id: key).first
+          %tr
+            %td
+              %h2= user.name.mb_chars.capitalize
+              %h2= user.id  # DEBUGG TO VIEW
+
+            %td
+              %table.results_table
+                - user.trees.each do |tree|
+                  - profile = Profile.where(id: tree.is_profile_id).first
+                  %tr
+                    %td.grey= relation_to_human(tree.relation_id)
+                    %td.name= profile.name.name.mb_chars.capitalize
+                    %td.grey= profile.id  # DEBUGG TO VIEW
+                    %td.green.italic
+                      - if @all_match_arr_sorted[user.id].include? profile.id
+                        = relation_to_human( @all_match_relations_sorted[user.id][ @all_match_arr_sorted[user.id].index(profile.id) ], prefix: true )
+                    %td
+                      - if profile.user.present?
+                        -#= link_to 'Пожать руку', '#', onclick: "alert('Пожать руку с user_id: #{profile.user.id}')"
+                        = link_to 'Пожать руку', connection_of_trees_path(first_user_id: current_user.id, second_user_id: user.id)
+
+
+
 
 
 
