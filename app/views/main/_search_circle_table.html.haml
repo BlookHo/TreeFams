@@ -6,7 +6,7 @@
     %th.left Имя
     %th.left Отношение
     %th Ближний круг
-    %th=author_id
+    %th
   %tr
     %td Автор
     %td
@@ -17,9 +17,9 @@
           = link_to [author.to_name, author.surname].join(' '), edit_profile_path(author.id)
     %td
       - if author.class == User
-        = relation_to_human(@search_results_relations.find {|r| r[author.profile.id] }.try(:[], author.profile.id), prefix: true)
+        = relation_to_profile(@search_results_relations.find {|r| r[author.profile.id] }.try(:[], author.profile.id) )
       - else
-        = relation_to_human(@search_results_relations.find {|r| r[author.id] }.try(:[], author.id), prefix: true)
+        = relation_to_profile(@search_results_relations.find {|r| r[author.id] }.try(:[], author.id) )
 
     %td
     %td
@@ -36,7 +36,7 @@
       %td
         = link_to [item.name.to_name, item.is_profile.surname].join(' '), edit_profile_path(item.is_profile_id)
       %td
-        = relation_to_human( @search_results_relations.find {|r| r[item.is_profile_id] }.try(:[], item.is_profile_id), prefix: true )
+        = relation_to_profile( @search_results_relations.find {|r| r[item.is_profile_id] }.try(:[], item.is_profile_id) )
       %td.center
         - if item.profile.tree_circle(author.id, item.is_profile_id).size > 0 and item.relation_id != 0
           = link_to fa_icon('users'), search_circle_path(author.id, circle_path_helper(@path_params, item.is_profile_id, item.relation_id)), style: "margin-left:11px;color:green;", remote: true
