@@ -7,7 +7,6 @@ class MainController < ApplicationController
     redirect_to :root if !current_user
   end
 
-
  # Отображение дерева Юзера в табличной форме.
  # @note GET /
  # @param admin_page [Integer] опциональный номер страницы
