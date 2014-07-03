@@ -5,7 +5,7 @@ $(function(){
   //   closeAllDropDown();
   // });
 
-  $(document).one('click', function(e){
+  $(document).on('click', function(e){
       if($('.dropdown').has(e.target).length === 0){
           closeAllDropDown();
       }
@@ -30,6 +30,7 @@ $(function(){
 
 function closeAllDropDown(){
   $('.dropdown ul').hide();
+  $('.relation_list').hide();
 }
 
 function toggleDropDownMenu(el){

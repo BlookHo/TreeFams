@@ -1,8 +1,8 @@
 %ul.path-list
-  %li= link_to "Вы (#{current_user.profile.to_name})", main_page_path
+  %li.author= link_to "#{current_user.profile.to_name} (это вы)", main_page_path
   - @path.try(:each) do |segment|
     %li
       %span
         = fa_icon('arrow-right')
-        = relation_to_human(segment.relation_id)
+        = relation_to_human(segment.relation_id, prefix: true)
       = link_to segment.name, "/main/circles/#{segment.link}", remote: true

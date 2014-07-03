@@ -129,11 +129,6 @@
 
 
 .content
-  %h1
-    = current_user.profile.name.name.mb_chars.capitalize
-    \, это ваш ближний круг,
-    = current_user.id # DEBUGG TO VIEW
-
   .circle-view
     .circle-path#current-circle-path= render 'circle_path'
     .current-circle#current-circle= render 'circle_table', circle: @circle
@@ -142,7 +137,7 @@
     - if @search_results.empty?
       %h1.yellow-title Совпадений не найдено
     - else
-      %h1.yellow-title Результаты поиска ващих родных:
+      %h1.yellow-title Результаты поиска ваших родных:
 
     - @search_results.each do |result|
       .circle-view

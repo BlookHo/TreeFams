@@ -2,7 +2,7 @@
   %tr
     %th.left Родня
     %th.left Имя
-    %th Ближний круг
+    %th Есть еще родня
     %th
   %tr
     %td Чьими глазами
@@ -11,20 +11,7 @@
         = link_to @author.full_name, edit_profile_path(@author.id)
     %td
     %td
-      .dropdown
-        %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
-          = fa_icon 'caret-square-o-down'
-        %ul.closed
-          -# {style: 'display:none;'}
-          -# %li= link_to "Добавить родственника", new_profile_path(base_relation_id: 0, base_profile_id: @author.id)
-          %li= link_to "Добавить родственника", '#show-relation-list', onclick: "$('.relation_list').slideToggle('fast')"
-          .relation_list
-            - Relation.relation_for_auhtor.each do |relation|
-              %li= link_to relation[:title], new_profile_path(base_relation_id: 0, base_profile_id: @author.id, relation_id: relation[:id]), remote: true
-
-          %li= link_to "Изменить", edit_profile_path(@author.id)
-          %li= link_to "Общаться", '#', class: :grey
-          %li= link_to "В избранные", '#', class: :grey
+      = render 'main/profile_dropdown_menu', base_profile_id: @author.id, base_relation_id: 0
   - circle.each_with_index do |item, index|
     %tr
       %td= relation_to_human(item.relation_id)
@@ -33,18 +20,10 @@
 
       %td.center
         - if item.profile.tree_circle(current_user.id, item.is_profile_id).size > 0 and item.relation_id != 0
-          = link_to fa_icon('users'), circle_path(circle_path_helper(@path_params, item.is_profile_id, item.relation_id)), style: "margin-left:11px;color:green;", remote: true
+          = link_to "Смотреть", circle_path(circle_path_helper(@path_params, item.is_profile_id, item.relation_id)), style: "margin-left:11px;color:green;", remote: true
 
       %td
-        .dropdown
-          %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
-            = fa_icon 'caret-square-o-down'
-          %ul.closed
-            %li= link_to "Добавить родственника", new_profile_path(base_relation_id: item.relation_id, base_profile_id: item.is_profile_id)
-            %li= link_to "Изменить", edit_profile_path(item.is_profile_id)
-            %li= link_to "Общаться", '#', class: :grey
-            %li= link_to "В избранные", '#', class: :grey
-            %li= link_to "В избранные", '#', class: :grey
+        = render 'main/profile_dropdown_menu', base_profile_id: item.is_profile_id, base_relation_id: item.relation_id
 
 
 :javascript

@@ -7,6 +7,8 @@
     color:blue;
     width:20px;
     height:20px;
+    // border:1px solid grey;
+    font-size:21px;
 }
 
 .dropdown ul{
@@ -44,8 +46,10 @@
       }
 
       &:before{
-        font-family:"Ionicons";
-        content:'\f10b';
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        content:'\f18e';
         margin-right:5px;
         color:grey;
       }

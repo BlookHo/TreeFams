@@ -2,11 +2,27 @@ ul.path-list{
   margin-top:21px;
   padding:10px;
   border:1px dotted grey;
+
   li{
     display:inline;
     margin-right:5px;
+
   }
+
   span{color:grey;}
+
+  li a{
+    font-size:18px;
+    height:32px;
+    line-height:32px;
+  }
+
+  li.author a{
+    font-weight:600;
+    font-size:26px;
+    height:32px;
+    line-height:32px;
+  }
 }
 
 

@@ -34,23 +34,27 @@ class ProfilesController < ApplicationController
 
     @profile = Profile.new(profile_params)
     @profile.user_id = 0
-    @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first
+
+    @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first 
 
     if @name
       @profile.name_id = @name.id
       if @profile.save
-
         ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
-
         flash[:notice] = "Профиль id: #{@profile.id} сохранен"
-        redirect_to :main_page
+        # redirect_to :main_page
       else
         flash.now[:alert] = "Ошибка при добавления профиля"
         render :new
       end
     else
-      flash.now[:alert] = "Ошибка при добавления профиля. Новое имя."
-      render :new
+      if params[:profile][:name].blank?
+        flash.now[:alert] = "Ошибка при добавления профиля.Вы не ввели имя."
+        render :new
+      else
+        flash.now[:warning] = "Вы указалиимя, которого нет в нашей базе, возможно, вы ошиблись!?"
+        render :new
+      end
     end
   end
 
