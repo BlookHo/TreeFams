@@ -37,121 +37,65 @@ class MainController < ApplicationController
       session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
       @tree_arr = tree_arr    # DEBUGG TO VIEW
 
-
  end
- # Поиск совпадений по дереву Юзера
- # Основной метод
+
+ ############# МЕТОДЫ ФОРМИРОВАНИЯ ХЭША ПУТЕЙ ДЛЯ РЕЗ-ТОВ ПОИСКА
+
+ # Делаем пути по результатам поиска - для отображения
  # @note GET /
   def make_search_results_paths(final_reduced_profiles_hash) #,final_reduced_relations_hash)
-    @profiles_hash = final_reduced_profiles_hash
-# TRELLO:
-# From: {36=>{221=>[218, 217, 219, 214, 220], 225=>[228]}}
-
-# делаем хэш: 36 => [
-# { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, 218=>{6=>5} },
-# { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, ... 217=> {6=>5} },
-# { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, ... 219=> {6=>5} },
-# { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, ... 214=> {6=>5} },
-# { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, ... 220=> {6=>5} },
-
-# { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, 218=>{6=>5}, 220=>{7=>0}, 228=>{1=>1} }
-# ]
-
-
-
-
-
-  # From 28:
-  #  @profiles_hash = {30=>{176=>[201], 181=>[197, 203, 202], 183=>[200, 198, 199], 186=>[204]}, 29=>{181=>[193], 183=>[190, 191, 192], 186=>[194], 189=>[220]}, 18=>{176=>[117, 115], 181=>[119]}, 19=>{176=>[124, 126]}, 31=>{183=>[209, 210]}, 23=>{176=>[147, 148]}, 21=>{176=>[132, 133]}}
-  #  @relations_hash = {30=>{176=>[3], 181=>[8, 4, 3], 183=>[6, 1, 2], 186=>[7]}, 29=>{181=>[8], 183=>[6, 1, 2], 186=>[7], 189=>[1]}, 18=>{176=>[8, 3], 181=>[8]}, 19=>{176=>[8, 3]}, 31=>{183=>[6, 1]}, 23=>{176=>[1, 2]}, 21=>{176=>[1, 2]}}
-
-
-  # DEBUGG From 29:
-  @profiles_hash = {28=>{190=>[186, 187, 188, 183, 189] , 194=>[221]},
-                     30=>{190=>[200, 198, 199, 197, 204]}}
-
-  #@relations_hash = {28=>{190=>[0, 1, 2, 6, 7], 194=>[1]} }
-  #                     30=>{190=>[0, 1, 2, 6, 7]}}
-
-  # делаем хэш хэшей Hash_of_Hashes: {
-  # 28 => [
-
-  # { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, 218=>{6=>5} },
-  # { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, ... 217=> {6=>5} },
-  # { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, ... 219=> {6=>5} },
-  # { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, ... 214=> {6=>5} },
-  # { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, ... 220=> {6=>5} },
-
-  # { 207=>{0=>0}, 212=>{3=>0}, 214=>{8=>0}, 218=>{6=>5}, 220=>{7=>0}, 228=>{1=>1} }
-  # ],
-
-  # 30 => [
-
-  # ]
-
-
-  # } # End of Hash_of_Hashes
-
     @search_path_hash = Hash.new
-    @profiles_hash.each do |k_tree,v_tree|
+    final_reduced_profiles_hash.each do |k_tree,v_tree|
       paths_arr = []
       one_path_hash = Hash.new
       start_profile = User.find(k_tree).profile_id
       one_tree_hash = get_tree_hash(k_tree)
-      @one_tree_hash = one_tree_hash    # DEBUGG_TO_VIEW
-      @start_profile = start_profile    # DEBUGG_TO_VIEW
-      @hash_to_transform = v_tree   # DEBUGG_TO_VIEW
+      #@one_tree_hash = one_tree_hash    # DEBUGG_TO_VIEW
+      #@start_profile = start_profile    # DEBUGG_TO_VIEW
+      #@hash_to_transform = v_tree   # DEBUGG_TO_VIEW
       v_tree.each do |each_k,v_tree_hash|
         results_qty = v_tree_hash.size
-        @results_qty = results_qty  # DEBUGG_TO_VIEW
-        @profiles_arr_to_transform = v_tree_hash ## DEBUGG_TO_VIEW
+        #@results_qty = results_qty  # DEBUGG_TO_VIEW
+        #@profiles_arr_to_transform = v_tree_hash ## DEBUGG_TO_VIEW
         v_tree_hash.each do |finish_profile|
-          @finish_profile = finish_profile   # DEBUGG_TO_VIEW
+          #@finish_profile = finish_profile   # DEBUGG_TO_VIEW
           one_path_hash = make_path(one_tree_hash, finish_profile, results_qty)
-          @one_path_hash = one_path_hash # DEBUGG_TO_VIEW
+          #@one_path_hash = one_path_hash # DEBUGG_TO_VIEW
           paths_arr << one_path_hash
-          @paths_arr = paths_arr # DEBUGG_TO_VIEW
+          #@paths_arr = paths_arr # DEBUGG_TO_VIEW
         end
       end
+      # Основной результат = @search_path_hash
       @search_path_hash.merge!({k_tree => paths_arr}) # наполнение хэша хэшами
-
     end
-
-    @search_path_hash_size = @search_path_hash.size if !@search_path_hash.blank? # DEBUGG_TO_VIEW
-
+    # DEBUGG_TO_VIEW
+    #@search_path_hash_size = @search_path_hash.size if !@search_path_hash.blank? # DEBUGG_TO_VIEW
   end
 
-# Делаем один path рез-тов поиска
-#
-  def make_path(tree_hash, finish_profile, results_qty)
-
-    one_path_hash = Hash.new
-    @end_profile = finish_profile
-
+  # Добавляем один хэш в один path рез-тов поиска
+  #
+  def add_one_hash_to_one_path(tree_hash, finish_profile, results_qty, end_profile)
     qty = 0
-    start_elem_arr = tree_hash.values_at(finish_profile)[0] #
-    @relation_to_next_profile = start_elem_arr[0]
-    @elem_next_profile = start_elem_arr[1]
-    qty = results_qty if @end_profile == finish_profile
-    one_path_hash.merge!(make_one_hash_in_path(@end_profile, @relation_to_next_profile, qty))
+    start_elem_arr = tree_hash.values_at(end_profile)[0] #
+    relation_to_next_profile = start_elem_arr[0]
+    elem_next_profile = start_elem_arr[1]
+    qty = results_qty if end_profile == finish_profile
+    @one_path_hash.merge!(make_one_hash_in_path(end_profile, relation_to_next_profile, qty))
+    return @one_path_hash, relation_to_next_profile, elem_next_profile
+  end
 
-    while @relation_to_next_profile != 0 do
-
-      qty = 0
-      start_elem_arr = tree_hash.values_at(@elem_next_profile)[0] #
-      @new_elem_relation = start_elem_arr[0]
-      @new_next_profile = start_elem_arr[1]
-      qty = results_qty if @elem_next_profile == finish_profile
-      one_path_hash.merge!(make_one_hash_in_path(@elem_next_profile, @new_elem_relation, qty))
-
-      @elem_next_profile = @new_next_profile
-      @relation_to_next_profile = @new_elem_relation
-
+  # Делаем один path рез-тов поиска - далее он включается в итоговый хэш
+  #
+  def make_path(tree_hash, finish_profile, results_qty)
+    @one_path_hash = Hash.new
+    end_profile = finish_profile
+    @one_path_hash, relation_to_next_profile, elem_next_profile = add_one_hash_to_one_path(tree_hash, finish_profile, results_qty, end_profile)
+    while relation_to_next_profile != 0 do
+      @one_path_hash, new_elem_relation, new_next_profile = add_one_hash_to_one_path(tree_hash, finish_profile, results_qty, elem_next_profile)
+      elem_next_profile = new_next_profile
+      relation_to_next_profile = new_elem_relation
     end
-
-    @one_path_hash = one_path_hash # DEBUGG_TO_VIEW
-    return Hash[one_path_hash.to_a.reverse] #.reverse_order - чтобы шли от автора
-
+    return Hash[@one_path_hash.to_a.reverse] #.reverse_order - чтобы шли от автора
   end
 
   # Получаем дерево в виде хэша для данного tree_user_id
@@ -176,6 +120,7 @@ class MainController < ApplicationController
     return one_hash_in_path
   end
 
+  #### КОНЕЦ МЕТОДОВ ФОРМИРОВАНИЯ ХЭША ПУТЕЙ ДЛЯ РЕЗ-ТОВ ПОИСКА
 
 
 
@@ -207,7 +152,6 @@ class MainController < ApplicationController
 
 
       # Call of make_path method
-
       make_search_results_paths(@final_reduced_profiles_hash) #,@final_reduced_relations_hash)
 
 
