@@ -179,41 +179,17 @@ class MainController < ApplicationController
     end
 
     session[:search_results_relations] = @search_results_relations
-    session[:all_match_relations_sorted] = @all_match_relations_sorted
+    session[:results_count_hash] =  @final_reduced_relations_hash
 
 
-
-
-    # search_results_mathced_profile_ids = []
-    # @final_reduced_profiles_hash.each do |tree_id, tree_value|
-    #   tree_value.each do |key, value|
-    #     search_matched_profiels = []
-    #     value.each do |profile_id|
-    #       search_results_mathced_profile_ids << profile_id
-    #     end
-    #   end
-    # end
-    #
-    # search_results_matches_relation_ids = []
-    # @final_reduced_relations_hash.each do |tree_id, tree_value|
-    #   tree_value.each do |key, value|
-    #     search_matched_profiels = []
-    #     value.each do |profile_id|
-    #       search_results_matches_relation_ids << profile_id
-    #     end
-    #   end
-    # end
-    #
-    # @search_results_relations = []
-    # search_results_mathced_profile_ids.each_with_index do |profile_id, index|
-    #   @search_results_relations << {profile_id => search_results_matches_relation_ids[index]}
-    # end
 
 
 
     # Ближние круги пользователей из результатов поиска
     @search_results = []
-    User.where(id: @wide_user_ids_arr).each do |user|
+    result_users = User.where(id: @wide_user_ids_arr)
+    sorted_result_users = @wide_user_ids_arr.collect {|id| result_users.detect {|u| u.id == id.to_i } }
+    sorted_result_users.each do |user|
       @search_results << Hashie::Mash.new( {author: user, circle: user.profile.circle(user.id)} )
     end
  end

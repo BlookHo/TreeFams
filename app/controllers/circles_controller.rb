@@ -19,6 +19,7 @@ class CirclesController < ApplicationController
     collect_path
     @author = Profile.find(@current_profile_id)
     @circle  = @author.circle(params[:tree_id])
+    @final_reduced_relations_hash = session[:final_reduced_relations_hash]
   end
 
 
