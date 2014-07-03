@@ -1,0 +1,31 @@
+#overlay {
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color:rgba(0, 0, 0, 0.85);
+    background: url(data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuNUmK/OAAAAATSURBVBhXY2RgYNgHxGAAYuwDAA78AjwwRoQYAAAAAElFTkSuQmCC) repeat scroll transparent\9; /* ie fallback png background image */
+    z-index:9999;
+    color:white;
+
+
+    .content{
+      width:500px;
+      // height:200px;
+      background:#fff;
+      position:fixed;
+      top:50%;
+      left:50%;
+      border-radius:10px;
+      margin-top:-200px; /* negative half the size of height */
+      margin-left:-250px; /* negative half the size of width */
+      padding:21px;
+    }
+
+    h1, h2, h3{
+      color:#000;
+      margin-bottom:11px;
+    }
+
+}

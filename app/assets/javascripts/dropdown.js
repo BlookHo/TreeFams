@@ -1,8 +1,20 @@
 $(function(){
   closeAllDropDown();
-  $("body").mouseup(function(){
-    closeAllDropDown();
-  });
+
+  // $("html").click(function(){
+  //   closeAllDropDown();
+  // });
+
+  $(document).one('click', function(e){
+      if($('.dropdown').has(e.target).length === 0){
+          closeAllDropDown();
+      }
+    });
+
+  // $('.dropdown').click(function(event){
+  //   // event.stopPropagation();
+  //   event.stopImmediatePropagation();
+  // });
 
    $('#alive').change(function() {
        $('#death_date_wrapper').toggle();

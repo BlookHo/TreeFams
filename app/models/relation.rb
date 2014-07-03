@@ -34,4 +34,19 @@ class Relation < ActiveRecord::Base
     }
   end
 
+
+
+  def self.relation_for_auhtor
+    [
+      {title: "Отец",   id: 1},
+      {title: "Мать",   id: 2},
+      {title: "Сын",    id: 3},
+      {title: "Дочь",   id: 4},
+      {title: "Брат",   id: 5},
+      {title: "Сестра", id: 6},
+      {title: "Муж",    id: 7},
+      {title: "Жена",   id: 8}
+    ]
+  end
+
 end

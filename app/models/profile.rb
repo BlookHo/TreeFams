@@ -24,19 +24,8 @@ class Profile < ActiveRecord::Base
 
     results = ProfileKey.where(user_id: user_id, profile_id: self.id).order('relation_id').includes(:name)
 
+    # TODO sort
     # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
-
-    # result_hash = results.each_with_object({}) {|result,result_hash| result_hash[result.id] = result }
-    # ids.map {|id| result_hash[id]}
-
-    # position_list =
-    # sorted_result = position_list.collect {|position_id| result.detect {|p| puts position_id } }
-    # # logger.info "========== Position list"
-    # # logger.info position_list
-    # logger.info "========== CIRCLE"
-    # logger.info  result.each {|c| puts "#{c.id} - #{c.relation_id}"}
-    # logger.info "========== Sorted CIRCLE"
-    # logger.info  sorted_result.each {|c| puts "#{c.id} - #{c.relation_id}"}
 
     return results
   end

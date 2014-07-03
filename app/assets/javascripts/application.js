@@ -15,3 +15,4 @@
 //= require jquery.ui.all
 //= require welcome-form.js
 //= require dropdown.js
+//= require overlay.js

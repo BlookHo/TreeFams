@@ -113,6 +113,7 @@
   .ui-helper-hidden-accessible{display:none;}
 
   ul.ui-menu {
+    z-index:10000;
   	list-style:none;
   	padding: 2px;
   	margin: 0;

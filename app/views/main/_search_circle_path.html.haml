@@ -20,7 +20,7 @@
       = @results_count_hash[author_id.to_i].values.flatten.size
       = Russian.p(@results_count_hash[author_id.to_i].values.flatten.size, "совпадение", "совпадения", "совпадений")
     - else
-      = link_to [path_author.to_name, path_author.surname].join(' dfd'), "/search/circles/#{path_author.user_id}/#{path_author.id},0", remote: true
+      = link_to [path_author.to_name, path_author.surname].join(' '), "/search/circles/#{path_author.user_id}/#{path_author.id},0", remote: true
       &nbsp;
       = @results_count_hash[author_id.to_i].values.flatten.size
       = Russian.p(@results_count_hash[author_id.to_i].values.flatten.size, "совпадение", "совпадения", "совпадений")

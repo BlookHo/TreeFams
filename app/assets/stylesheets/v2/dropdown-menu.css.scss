@@ -33,6 +33,25 @@
     }
   }
 
+  .relation_list{
+    li a{
+      padding-left:30px;
+      background-color:#f5f5f5;
+
+      &:hover{
+        background-color:blue;
+        color:#fff;
+      }
+
+      &:before{
+        font-family:"Ionicons";
+        content:'\f10b';
+        margin-right:5px;
+        color:grey;
+      }
+    }
+  }
+
   // li:last-child a{
   //   border-bottom:none;
   // }

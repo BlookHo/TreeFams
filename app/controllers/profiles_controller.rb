@@ -23,8 +23,10 @@ class ProfilesController < ApplicationController
 
   def new
     @profile = Profile.new
+    @profile.relation_id = params[:relation_id]
     @base_profile = Profile.find(params[:base_profile_id])
   end
+
 
   def create
     @base_profile = Profile.find(params[:base_profile_id])
@@ -51,6 +53,7 @@ class ProfilesController < ApplicationController
       render :new
     end
   end
+
 
 
   def destroy
