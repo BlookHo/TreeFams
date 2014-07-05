@@ -128,7 +128,8 @@ class MainController < ApplicationController
   ############# МЕТОДЫ ФОРМИРОВАНИЯ ХЭША ПУТЕЙ ДЛЯ РЕЗ-ТОВ ПОИСКА
 
   # Основной метод формирования вопросов в нестандартных ситуациях добавления профилей
-  #
+  # На выходе: сгенерированные массивы вопросов к каждому нестандартному relation
+  # для добавляемого relation.
   def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added) #
 
 #    get_circle_as_hash(user_id, profile_id)
@@ -142,82 +143,124 @@ class MainController < ApplicationController
     @sons_hash = {156 => 151 }
     @daughters_hash = {153 => 449, 157 => 293 }
 
+    @father_questions    = []  # Все вопросы относительно добавляемого Отца
+    @mother_questions    = []  # Все вопросы относительно добавляемой Матери
+    @husband_questions   = []  # Все вопросы относительно добавляемого Мужа
+    @wife_questions      = []  # Все вопросы относительно добавляемой Жены
+    @brother_questions   = []  # Все вопросы относительно добавляемого Брата
+    @sister_questions    = []  # Все вопросы относительно добавляемой Сестры
+    @son_questions       = []  # Все вопросы относительно добавляемого Сына
+    @daughter_questions  = []  # Все вопросы относительно добавляемой Дочери
 
     case relation_add_to
       when 0
         check_author_relations(relation_added, name_id_added)
-
-      #when 1
-      #  check_father_relations(relation_added)
-      #
-      #when 2
-      #  check_mother_relations(relation_added)
-      #
+      when 1
+        check_father_relations(relation_added, name_id_added)
+      when 2
+        check_mother_relations(relation_added, name_id_added)
       #when 3
-      #  check_son_relations(relation_added)
+      #  check_son_relations(relation_added, name_id_added)
       #
       #when 4
-      #  check_daughter_relations(relation_added)
+      #  check_daughter_relations(relation_added, name_id_added)
       #
       #when 5
-      #  check_brother_relations(relation_added)
+      #  check_brother_relations(relation_added, name_id_added)
       #
       #when 6
-      #  check_sister_relations(relation_added)
+      #  check_sister_relations(relation_added, name_id_added)
       #
       #when 7
-      #  check_husband_relations(relation_added)
+      #  check_husband_relations(relation_added, name_id_added)
       #
       #when 8
       #  check_wife_relations(relation_added)
 
       else
-        "Неизвестно"
-
+        @standard_msg = "Добавляемое отношение - неизвестно"
     end
-
-
-
-
 
   end
 
 
-  # Выбор группы вопросов для Автора
-  #
+  # Выбор группы вопросов для Автора в нестандартных ситуациях
+  # в завис-ти от добавляемого relation
   def check_author_relations(relation_added, added_name_id)
-
     case relation_added
-      when 1
-        @fathers_author_questions = ask_questions(1, added_name_id)
-      when 2
-        #ask_questions(relation_added)
-      when 7
-        #ask_questions(relation_added)
-      when 8
-        #ask_questions(relation_added)
-
-      else
-        "Неизвестно"
-
+      when 1 # add new father
+        ask_author_questions(1, added_name_id)
+      when 2 # add new mother
+        ask_author_questions(2, added_name_id)
+      when 7 # add new husband
+        ask_author_questions(7, added_name_id)
+      when 8 # add new wife
+        ask_author_questions(8, added_name_id)
+      else # все остальные relation_added - создают стандартные ситуации
+        @standard_msg = "Добавляемое к Автору отношение явл. СТАНДАРТНЫМ"
     end
-
-
-
   end
 
+  # Выбор группы вопросов для Отца в нестандартных ситуациях
+  # в завис-ти от добавляемого relation
+  def check_father_relations(relation_added, added_name_id)
+    case relation_added
+      when 3 # add new son
+        ask_father_questions(3, added_name_id)
+      when 4 # add new daughter
+        ask_father_questions(4, added_name_id)
+      when 8 # add new wife
+        ask_father_questions(8, added_name_id)
+      else  # все остальные relation_added - создают стандартные ситуации
+        @standard_msg = "Добавляемое к Отцу отношение явл. СТАНДАРТНЫМ"
+    end
+  end
 
-  # Генерация вопросов для Автора
+  # Выбор группы вопросов для Матери в нестандартных ситуациях
+  # в завис-ти от добавляемого relation
+  def check_mother_relations(relation_added, added_name_id)
+    case relation_added
+      when 3 # add new son
+        ask_mother_questions(3, added_name_id)
+      when 4 # add new daughter
+        ask_mother_questions(4, added_name_id)
+      when 7 # add new husband
+        ask_mother_questions(7, added_name_id)
+      else  # все остальные relation_added - создают стандартные ситуации
+        @standard_msg = "Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
+    end
+  end
+
+  # Добавляем вопросы в массив вопросов для данного хэша имен names_hash касательно добавляемого нового профиля с именем added_name_id
+  # с новым отношением added_relation.
+  # При этом в впоросе выясняется истинность отношения text_relation добавленного added_relation к рассматриваемому профилю
+  # с отношением profile_relation
+
+  def add_one_relation_questions(names_hash, added_name_id, added_relation, text_relation, profile_relation)
+    questions_arr = []
+    if !names_hash.blank?
+      names_arr = names_hash.values  # name_id array
+      if !names_arr.blank?
+        for arr_ind in 0 .. names_arr.length - 1 # YandexInflect.inflections(.
+          one_question = "Считаете ли вы #{added_relation} #{added_name_id} -  родным #{text_relation} вашего(й) #{profile_relation} #{names_arr[arr_ind]}?"
+          # Добавляем один вопрос в массив вопросов касательно нового
+          questions_arr << one_question
+        end
+      end
+    end
+    return questions_arr
+  end
+
+  # Генерация вопросов для Автора в создавшихся нестандартных ситуациях.
+  # В зависимости от того, какое relation добавляем,
+  # заполняются те массивы вопросов, которые следует задавать
   #
-  def ask_questions(added_relation, added_name_id)
-    #hash_questions = Hash.new
+  def ask_author_questions(added_relation, added_name_id)
     case added_relation
       when 1  # Добавляем Отца к Автору
 
-        @fathers_author_questions = []  # Все вопросы относительно Отца для Автора
-
-        @one_question = "Считаете ли Вы Отца #{added_name_id} - вашим родным Отцом?"
-        @fathers_author_questions << @one_question
+        @one_question = "Считаете ли вы Отца #{added_name_id} - вашим родным Отцом?"
+        @father_questions << @one_question
 
         #if !@mothers_hash.blank?
         #  names_arr = @mothers_hash.values  # name_id array
@@ -229,15 +272,15 @@ class MainController < ApplicationController
         #    end
         #  end
         #end
-        add_one_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать")  # DEBUGG_TO_VIEW
+        @father_questions << add_one_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать")  # DEBUGG_TO_VIEW
 
         if !@brothers_hash.blank?
           names_arr = @brothers_hash.values  # name_id array
           if !names_arr.blank?
             for arr_ind in 0 .. names_arr.length - 1
-              @one_question = "Считаете ли Вы Отца #{added_name_id} - родным Отцом вашего Брата #{names_arr[arr_ind]}?"
+              @one_question = "Считаете ли вы Отца #{added_name_id} - родным Отцом вашего Брата #{names_arr[arr_ind]}?"
               # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Братьев
-              @fathers_author_questions << @one_question
+              @father_questions << @one_question
             end
           end
         end
@@ -246,46 +289,186 @@ class MainController < ApplicationController
           names_arr = @sisters_hash.values  # name_id array
           if !names_arr.blank?
             for arr_ind in 0 .. names_arr.length - 1
-              @one_question = "Считаете ли Вы Отца #{added_name_id} - родным Отцом вашей Сестры #{names_arr[arr_ind]}?"
+              @one_question = "Считаете ли вы Отца #{added_name_id} - родным Отцом вашей Сестры #{names_arr[arr_ind]}?"
               # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Сестер
-              @fathers_author_questions << @one_question
+              @father_questions << @one_question
             end
           end
         end
 
       when 2  # Добавляем Мать к Автору
 
-      when 7  # Добавляем Мужа к Автору
+        @one_question = "Считаете ли вы Мать #{added_name_id} - вашей родной Матерью?"
+        @mother_questions << @one_question
 
-      when 8  # Добавляем Жену к Автору
+        @mother_questions << add_one_relation_questions(@fathers_hash, added_name_id, "Мать", "Жена", "Отец")
+
+        if !@brothers_hash.blank?
+          names_arr = @brothers_hash.values  # name_id array
+          if !names_arr.blank?
+            for arr_ind in 0 .. names_arr.length - 1
+              @one_question = "Считаете ли вы Мать #{added_name_id} - родной Матерью вашего Брата #{names_arr[arr_ind]}?"
+              # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Братьев
+              @mother_questions << @one_question
+            end
+          end
+        end
+
+        if !@sisters_hash.blank?
+          names_arr = @sisters_hash.values  # name_id array
+          if !names_arr.blank?
+            for arr_ind in 0 .. names_arr.length - 1
+              @one_question = "Считаете ли вы Мать #{added_name_id} - родной Матерью вашей Сестры #{names_arr[arr_ind]}?"
+              # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Сестер
+              @mother_questions << @one_question
+            end
+          end
+        end
+
+      when 7  # Добавляем Мужа к Автору (женщине)
+        @husband_questions << add_one_relation_questions(@sons_hash, added_name_id, "Муж", "Отец", "Сын")
+        @husband_questions << add_one_relation_questions(@daughters_hash, added_name_id, "Муж", "Отец", "Дочь")
+      when 8  # Добавляем Жену к Автору (мужчине)
+        @wife_questions << add_one_relation_questions(@sons_hash, added_name_id, "Жена", "Мать", "Сын")
+        @wife_questions << add_one_relation_questions(@daughters_hash, added_name_id, "Жена", "Мать", "Дочь")
+      else
+        "Неизвестно"
+
+    end
+
+  end
+
+  # Генерация вопросов для Отца в создавшихся нестандартных ситуациях.
+  # В зависимости от того, какое relation добавляем,
+  # заполняются те массивы вопросов, которые следует задавать
+  #
+  def ask_father_questions(added_relation, added_name_id)
+    case added_relation
+      when 3  # Добавляем Сына к Отцу (Автора)
+        @one_question = "Считаете ли вы Сына #{added_name_id} - вашим родным Братом?"
+        @son_questions << @one_question
+
+        @son_questions << add_one_relation_questions(@brothers_hash, added_name_id, "Сын", "Брат", "Брат")
+        @son_questions << add_one_relation_questions(@sisters_hash, added_name_id, "Сын", "Брат", "Сестра")
+        @son_questions << add_one_relation_questions(@mothers_hash, added_name_id, "Сын", "Сын", "Мать")
+
+      when 4  # Добавляем Дочь к Отцу (Автора)
+        @one_question = "Считаете ли вы Дочь #{added_name_id} - вашей родной Сестрой?"
+        @daughter_questions << @one_question
+
+        @daughter_questions << add_one_relation_questions(@brothers_hash, added_name_id, "Дочь", "Сестра", "Брат")
+        @daughter_questions << add_one_relation_questions(@sisters_hash, added_name_id, "Дочь", "Сестра", "Сестра")
+        @daughter_questions << add_one_relation_questions(@mothers_hash, added_name_id, "Дочь", "Дочь", "Мать")
+
+      when 8  # Добавляем Жену к Отцу (Автора)
+        @one_question = "Считаете ли вы Жену #{added_name_id} - вашей родной Матерью?"
+        @wife_questions << @one_question
+
+        @wife_questions << add_one_relation_questions(@brothers_hash, added_name_id, "Жена", "Мать", "Брат")
+        @wife_questions << add_one_relation_questions(@sisters_hash, added_name_id, "Жена", "Мать", "Сестра")
+
+      else
+        "Неизвестно"
+
+    end
+
+  end
+
+  # Генерация вопросов для Матери в создавшихся нестандартных ситуациях.
+  # В зависимости от того, какое relation добавляем,
+  # заполняются те массивы вопросов, которые следует задавать
+  #
+  def ask_mother_questions(added_relation, added_name_id)
+    case added_relation
+      when 1  # Добавляем Отца к Матери
+
+        @fathers_questions = []  # Все вопросы относительно Отца для Автора
+
+        @one_question = "Считаете ли вы Отца #{added_name_id} - вашим родным Отцом?"
+        @fathers_questions << @one_question
+
+        @fathers_questions << add_one_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать")  # DEBUGG_TO_VIEW
+
+        if !@brothers_hash.blank?
+          names_arr = @brothers_hash.values  # name_id array
+          if !names_arr.blank?
+            for arr_ind in 0 .. names_arr.length - 1
+              @one_question = "Считаете ли вы Отца #{added_name_id} - родным Отцом вашего Брата #{names_arr[arr_ind]}?"
+              # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Братьев
+              @fathers_questions << @one_question
+            end
+          end
+        end
+
+        if !@sisters_hash.blank?
+          names_arr = @sisters_hash.values  # name_id array
+          if !names_arr.blank?
+            for arr_ind in 0 .. names_arr.length - 1
+              @one_question = "Считаете ли вы Отца #{added_name_id} - родным Отцом вашей Сестры #{names_arr[arr_ind]}?"
+              # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Сестер
+              @fathers_questions << @one_question
+            end
+          end
+        end
+
+      when 2  # Добавляем Мать к Матери
+        @mothers_questions = []  # Все вопросы относительно Матери для Автора
+
+        @one_question = "Считаете ли вы Мать #{added_name_id} - вашей родной Матерью?"
+        @mothers_questions << @one_question
+
+        @mothers_questions << add_one_relation_questions(@fathers_hash, added_name_id, "Мать", "Жена", "Отец")
+
+        if !@brothers_hash.blank?
+          names_arr = @brothers_hash.values  # name_id array
+          if !names_arr.blank?
+            for arr_ind in 0 .. names_arr.length - 1
+              @one_question = "Считаете ли вы Мать #{added_name_id} - родной Матерью вашего Брата #{names_arr[arr_ind]}?"
+              # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Братьев
+              @mothers_questions << @one_question
+            end
+          end
+        end
+
+        if !@sisters_hash.blank?
+          names_arr = @sisters_hash.values  # name_id array
+          if !names_arr.blank?
+            for arr_ind in 0 .. names_arr.length - 1
+              @one_question = "Считаете ли вы Мать #{added_name_id} - родной Матерью вашей Сестры #{names_arr[arr_ind]}?"
+              # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Сестер
+              @mothers_questions << @one_question
+            end
+          end
+        end
+
+      when 7  # Добавляем Мужа к Матери
+        @husband_questions = []  # Все вопросы относительно Матери для Автора
+
+        @husband_questions << add_one_relation_questions(@sons_hash, added_name_id, "Муж", "Отец", "Сын")
+
+        @husband_questions << add_one_relation_questions(@daughters_hash, added_name_id, "Муж", "Отец", "Дочь")
+
+      when 8  # Добавляем Жену к Матери
+        @wife_questions = []  # Все вопросы относительно Матери для Автора
+
+        @wife_questions << add_one_relation_questions(@sons_hash, added_name_id, "Жена", "Мать", "Сын")
+
+        @wife_questions << add_one_relation_questions(@daughters_hash, added_name_id, "Жена", "Мать", "Дочь")
 
       else
         #hash_questions.merge!({0 => [ @question_1, "", ""] })
 
     end
 
-    return @fathers_author_questions
   end
 
 
-  # Добавляем вопросы в массив вопросов для данного хэша имен Отца касательно нового Отца и Матерей
-  #
-  def add_one_relation_questions(names_hash, added_name_id, added_relation, text_relation, profile_relation)
-    if !names_hash.blank?
-      names_arr = names_hash.values  # name_id array
-      if !names_arr.blank?
-        for arr_ind in 0 .. names_arr.length - 1
-          @one_question = "Считаете ли Вы #{added_relation} #{added_name_id} -  родным #{text_relation} вашего(й) #{profile_relation} #{names_arr[arr_ind]}?"
-          # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Матерей
-          # YandexInflect.inflections(.
-          @fathers_author_questions << @one_question
-        end
-      end
-    end
 
 
 
-  end
+
+
+
 
 
 
@@ -319,24 +502,17 @@ class MainController < ApplicationController
       # Call of make_path method
       make_search_results_paths(@final_reduced_profiles_hash) #,@final_reduced_relations_hash)
 
-     # Call of make_questions method
-    @relation_add_to = 0  # Отношение, к которому добавляем
-    @relation_added = 1   # Отношение, которое добавляем
-    @user_id = 111 #
-    @profile_id = 222
-    @name_id = 333
+      # Call of make_questions method
+      @relation_add_to = 1  # Отношение, к которому добавляем
+      @relation_added = 8   # Отношение, которое добавляем
+      @user_id = 111 #
+      @profile_id = 222
+      @name_id = 333
 
-
-    make_questions(@user_id, @profile_id, @relation_add_to, @relation_added, @name_id) #
-
+      make_questions(@user_id, @profile_id, @relation_add_to, @relation_added, @name_id) #
 
 
     end
-
-
-    # Map profile -> relation search data
-    # @final_reduced_profiles_hash   # {17=>{92=>[103, 99, 104, 105], 96=>[100]}}
-    # @final_reduced_relations_hash  # {17=>{92=>[0, 8, 3, 3], 96=>[1]}}
 
     session[:search_results_relations] = nil
     session[:all_match_relations_sorted] = nil
