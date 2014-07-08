@@ -260,8 +260,8 @@ class MainController < ApplicationController
     case added_relation
       when 1  # Добавляем Отца к Автору
 
-        @one_question = "Считаете ли вы Отца #{added_name_id} - вашим родным Отцом?"
-        @father_questions << @one_question
+        #@one_question = "Считаете ли вы Отца #{added_name_id} - вашим родным Отцом?"
+        #@father_questions << @one_question
 
         #if !@mothers_hash.blank?
         #  names_arr = @mothers_hash.values  # name_id array
@@ -452,8 +452,8 @@ class MainController < ApplicationController
       make_search_results_paths(@final_reduced_profiles_hash) #,@final_reduced_relations_hash)
 
       # Call of make_questions method
-      @relation_add_to = 2  # Отношение, к которому добавляем
-      @relation_added = 7   # Отношение, которое добавляем
+      @relation_add_to = 0  # Отношение, к которому добавляем
+      @relation_added = 1   # Отношение, которое добавляем
       @user_id = 111 #
       @profile_id = 222
       @name_id = 333
