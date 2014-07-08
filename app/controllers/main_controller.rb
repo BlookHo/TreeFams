@@ -242,6 +242,7 @@ class MainController < ApplicationController
       names_arr = names_hash.values  # name_id array
       if !names_arr.blank?
         for arr_ind in 0 .. names_arr.length - 1 # YandexInflect.inflections(.
+          @inflect_added_relation = YandexInflect.inflections(added_relation)[3]["__content__"]
           one_question = "Считаете ли вы #{added_relation} #{added_name_id} -  родным #{text_relation} вашего(й) #{profile_relation} #{names_arr[arr_ind]}?"
           # Добавляем один вопрос в массив вопросов касательно нового
           questions_arr << one_question

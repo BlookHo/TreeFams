@@ -48,8 +48,8 @@ class ProfilesController < ApplicationController
       @profile.name_id = @name.id
 
       # Validate for relation questions
-      # if relation_qustions_valid? and @profile.save
-      if @profile.save
+      if relation_qustions_valid? and @profile.save
+      #if @profile.save
         ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
 
         # only js response
