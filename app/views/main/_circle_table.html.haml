@@ -11,7 +11,7 @@
           base_profile_id: @author.id,
           base_relation_id: 0,
           link_text: @author.full_name,
-          path_link: nil
+          path_link: "/main/circles/#{@path.try(:last).try(:link)}"
     %td
   - circle.each_with_index do |item, index|
     - path_link = circle_path(circle_path_helper(@path_params, item.is_profile_id, item.relation_id))
