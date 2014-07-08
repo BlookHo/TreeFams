@@ -9,9 +9,9 @@
     = hidden_field_tag :base_profile_id, params[:base_profile_id]
     = hidden_field_tag :base_relation_id, params[:base_relation_id]
     = text_field_tag   :path_link, params[:path_link]
-
-    = f.hidden_field   :relation_id
-    = text_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
-    .actions
-      = link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class: :cancel
-      = f.submit "Добавить", class: [:btn, :green]
+    #main-new-profile-field
+      = f.hidden_field   :relation_id
+      = text_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
+      .actions
+        = link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class: :cancel
+        = f.submit "Добавить", class: [:btn, :green]

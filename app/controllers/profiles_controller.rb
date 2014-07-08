@@ -37,32 +37,47 @@ class ProfilesController < ApplicationController
 
     @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first
 
+    # Name exist and valid
     if @name
       @profile.name_id = @name.id
-      if @profile.save
+
+      # Validate for relation questions
+      if relation_qustions_valid? and @profile.save
         ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
+
+        # only js response
         # flash[:notice] = "Профиль id: #{@profile.id} сохранен"
         # redirect_to :main_page
-        @circle = current_user.profile.circle(current_user.id)
-        @author = current_user.profile
 
-        # redirect_to profile circle path
-        if !params[:path_link].blank?
+        # redirect_to to profile circle path if exist, via js
+        if params[:path_link].blank?
+          @circle = current_user.profile.circle(current_user.id)
+          @author = current_user.profile
+        else
           @path_link = params[:path_link]
         end
+
+      # Ask relations questions
       else
-        flash.now[:alert] = "Ошибка при добавления профиля"
+        flash.now[:alert] = "Задаем уточняющие вопросы"
         render :new
       end
+
+    # Name validation
     else
       if params[:profile][:name].blank?
         flash.now[:alert] = "Вы не указли имя."
         render :new
       else
-        flash.now[:warning] = "Вы указалиимя, которого нет в нашей базе, возможно, вы ошиблись!?"
+        flash.now[:warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
         render :new
       end
     end
+  end
+
+
+  def relation_qustions_valid?
+    false
   end
 
 
