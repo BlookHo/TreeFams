@@ -3,27 +3,20 @@
     %th.left Родня
     %th.left Имя
     %th Есть еще родня
-    %th
   %tr
     %td Чьими глазами
     %td
-      %h2
-        = link_to @author.full_name, edit_profile_path(@author.id)
+      %h2= render 'main/profile_dropdown_menu', base_profile_id: @author.id, base_relation_id: 0, link_text:  @author.full_name
     %td
-    %td
-      = render 'main/profile_dropdown_menu', base_profile_id: @author.id, base_relation_id: 0
   - circle.each_with_index do |item, index|
     %tr
       %td= relation_to_human(item.relation_id)
       %td
-        = link_to [item.name.to_name,item.is_profile.surname].join(' '), edit_profile_path(item.is_profile_id)
+        = render 'main/profile_dropdown_menu', base_profile_id: item.is_profile_id, base_relation_id: item.relation_id, link_text: [item.name.to_name,item.is_profile.surname].join(' ')
 
       %td.center
         - if item.profile.tree_circle(current_user.id, item.is_profile_id).size > 0 and item.relation_id != 0
           = link_to "Смотреть", circle_path(circle_path_helper(@path_params, item.is_profile_id, item.relation_id)), style: "margin-left:11px;color:green;", remote: true
-
-      %td
-        = render 'main/profile_dropdown_menu', base_profile_id: item.is_profile_id, base_relation_id: item.relation_id
 
 
 :javascript

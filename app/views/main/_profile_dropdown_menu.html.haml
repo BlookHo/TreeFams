@@ -1,6 +1,6 @@
 .dropdown
   %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
-    = fa_icon 'caret-square-o-down'
+    = link_text
   %ul.closed
     %li= link_to "Добавить родственника", '#show-relation-list', onclick: "$('.relation_list').slideToggle('fast')"
     .relation_list{style: 'display:none;'}
