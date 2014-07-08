@@ -1,5 +1,5 @@
 %ul.path-list
-  %li.author= link_to "#{current_user.profile.to_name} (это вы)", main_page_path
+  %li.author= link_to "#{current_user.profile.to_name} (это вы)", "/main/circles/", remote: true
   - @path.try(:each) do |segment|
     %li
       %span

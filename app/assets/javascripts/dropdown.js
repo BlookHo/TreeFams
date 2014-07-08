@@ -12,7 +12,6 @@ $(function(){
     });
 
 
-
    $('#alive').change(function() {
        $('#death_date_wrapper').toggle();
    });
@@ -25,6 +24,7 @@ function closeAllDropDown(){
   $('.dropdown ul').hide();
   $('.relation_list').hide();
 }
+
 
 function toggleDropDownMenu(el){
     closeAllDropDown();

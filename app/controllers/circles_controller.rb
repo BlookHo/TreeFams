@@ -4,10 +4,14 @@ class CirclesController < ApplicationController
 
 
   def show
-    get_current_profile_id
-    rebuild_path_params(current_user.profile_id)
-    collect_path
-    @author = Profile.find(@current_profile_id)
+    if !params[:path].blank?
+      get_current_profile_id
+      rebuild_path_params(current_user.profile_id)
+      collect_path
+      @author = Profile.find(@current_profile_id)
+    else
+      @author = Profile.find(current_user.profile_id)
+    end
     @circle  = @author.circle(current_user.id)
   end
 
@@ -106,6 +110,7 @@ class CirclesController < ApplicationController
     sorted_profiles = profiles_ids.collect {|id| profiles.detect {|p| p.id == id.to_i } }
     return sorted_profiles
   end
+
 
   def segment_by_index(index)
     params[:path].split('-')[0..index].join('-')

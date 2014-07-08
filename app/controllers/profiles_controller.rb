@@ -45,6 +45,11 @@ class ProfilesController < ApplicationController
         # redirect_to :main_page
         @circle = current_user.profile.circle(current_user.id)
         @author = current_user.profile
+
+        # redirect_to profile circle path
+        if !params[:path_link].blank?
+          @path_link = params[:path_link]
+        end
       else
         flash.now[:alert] = "Ошибка при добавления профиля"
         render :new
@@ -95,6 +100,7 @@ class ProfilesController < ApplicationController
   def show_dropdown_menu
     @profile = Profile.find(params[:profile_id])
     @base_relation_id = params[:base_relation_id]
+    @path_link = params[:path_link]
   end
 
 

@@ -13,7 +13,6 @@
 
 %ul.path-list
   %li
-
     - if path_author.class == User
       = link_to path_author.profile.full_name, "/search/circles/#{path_author.id}/#{path_author.profile.id},0", remote: true
       &nbsp;

@@ -860,9 +860,7 @@ class MainController < ApplicationController
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
   def relative_menu
-
     @menu_choice = "No choice yet - in Relative_menu"
-
   end
 
 
