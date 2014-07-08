@@ -37,6 +37,12 @@ class ProfilesController < ApplicationController
 
     @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first
 
+    # if new name - create
+    if !@name and !params[:profile][:name].blank? and params[:new_name_confirmation]
+      @name = Name.create(name: params[:profile][:name])
+    end
+
+
     # Name exist and valid
     if @name
       @profile.name_id = @name.id
@@ -70,7 +76,7 @@ class ProfilesController < ApplicationController
         flash.now[:alert] = "Вы не указли имя."
         render :new
       else
-        flash.now[:warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
+        flash.now[:name_warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
         render :new
       end
     end
