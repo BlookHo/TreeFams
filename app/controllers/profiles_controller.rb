@@ -35,21 +35,23 @@ class ProfilesController < ApplicationController
     @profile = Profile.new(profile_params)
     @profile.user_id = 0
 
-    @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first 
+    @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first
 
     if @name
       @profile.name_id = @name.id
       if @profile.save
         ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
-        flash[:notice] = "Профиль id: #{@profile.id} сохранен"
+        # flash[:notice] = "Профиль id: #{@profile.id} сохранен"
         # redirect_to :main_page
+        @circle = current_user.profile.circle(current_user.id)
+        @author = current_user.profile
       else
         flash.now[:alert] = "Ошибка при добавления профиля"
         render :new
       end
     else
       if params[:profile][:name].blank?
-        flash.now[:alert] = "Ошибка при добавления профиля.Вы не ввели имя."
+        flash.now[:alert] = "Вы не указли имя."
         render :new
       else
         flash.now[:warning] = "Вы указалиимя, которого нет в нашей базе, возможно, вы ошиблись!?"
@@ -87,6 +89,12 @@ class ProfilesController < ApplicationController
       flash.now[:alert] = "Ошибка удаления профиля"
     end
     redirect_to :back
+  end
+
+
+  def show_dropdown_menu
+    @profile = Profile.find(params[:profile_id])
+    @base_relation_id = params[:base_relation_id]
   end
 
 

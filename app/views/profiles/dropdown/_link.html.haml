@@ -1,0 +1,4 @@
+.dropdown{id: "dropdown_#{base_profile_id}"}
+  = link_to link_text, profile_show_dropdown_path(base_profile_id, base_relation_id: base_relation_id), remote: true
+  %ul.dropdown-content
+  -# dropdown content render here
