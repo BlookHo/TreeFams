@@ -33,12 +33,12 @@
               %li.main-item= link_to "Общаться", '#', class: :grey
               %li.main-item= link_to "В избранные", '#', class: :grey
     %td
-      Вероятно, это
       - if author.class == User
-        = relation_to_profile(@search_results_relations.find {|r| r[author.profile.id] }.try(:[], author.profile.id) )
+        - rel = relation_to_profile(@search_results_relations.find {|r| r[author.profile.id] }.try(:[], author.profile.id) )
+        = rel.blank? ? '' : 'Вероятно, это ' + rel
       - else
-        = relation_to_profile(@search_results_relations.find {|r| r[author.id] }.try(:[], author.id) )
-
+        - rel = relation_to_profile(@search_results_relations.find {|r| r[author.id] }.try(:[], author.id) )
+        = rel.blank? ? '' : 'Вероятно, это ' + rel
     %td
 
   - circle.each_with_index do |item, index|
