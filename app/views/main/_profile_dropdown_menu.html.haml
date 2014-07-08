@@ -7,6 +7,6 @@
       - Relation.relation_for_auhtor.each do |relation|
         %li.sub-item= link_to relation[:title], new_profile_path(base_relation_id: base_relation_id, base_profile_id: base_profile_id, relation_id: relation[:id]), remote: true
 
-    %li.main-item= link_to "Изменить", edit_profile_path(base_profile_id)
+    %li.main-item= link_to "O нем", edit_profile_path(base_profile_id)
     %li.main-item= link_to "Общаться", '#', class: :grey
     %li.main-item= link_to "В избранные", '#', class: :grey

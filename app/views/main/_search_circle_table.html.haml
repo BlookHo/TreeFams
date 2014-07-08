@@ -6,7 +6,7 @@
     %th.left Родня
     %th.left Имя
     %th.left Результаты поиска
-    %th Ближний круг
+    %th Его родня
 
   %tr
     %td Чьими глазами
@@ -18,7 +18,7 @@
             %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
               = author.profile.full_name
             %ul.dropdown-content
-              %li.main-item= link_to "Смотреть", edit_profile_path(author.profile.id)
+              %li.main-item= link_to "О нем", edit_profile_path(author.profile.id)
               %li.main-item= link_to "Пожать руку", '#', class: :grey
               %li.main-item= link_to "Общаться", '#', class: :grey
               %li.main-item= link_to "В избранные", '#', class: :grey
