@@ -238,13 +238,16 @@ class MainController < ApplicationController
 
   def add_one_relation_questions(names_hash, added_name_id, added_relation, text_relation, profile_relation)
     questions_arr = []
+    questions_hash = Hash.new
     if !names_hash.blank?
       names_arr = names_hash.values  # name_id array
+      profiles_arr = names_hash.keys  # profile_id array
       if !names_arr.blank?
         for arr_ind in 0 .. names_arr.length - 1 # YandexInflect.inflections(.
           one_question = "Считаете ли вы #{added_relation} #{added_name_id} -  родным #{text_relation} вашего(й) #{profile_relation} #{names_arr[arr_ind]}?"
           # Добавляем один вопрос в массив вопросов касательно нового
-          questions_arr << one_question
+          questions_hash.merge!({profiles_arr[arr_ind] => one_question})
+          questions_arr << questions_hash
         end
       end
     end
@@ -259,42 +262,9 @@ class MainController < ApplicationController
     case added_relation
       when 1  # Добавляем Отца к Автору
 
-        @one_question = "Считаете ли вы Отца #{added_name_id} - вашим родным Отцом?"
-        @father_questions << @one_question
-
-        #if !@mothers_hash.blank?
-        #  names_arr = @mothers_hash.values  # name_id array
-        #  if !names_arr.blank?
-        #    for arr_ind in 0 .. names_arr.length - 1
-        #      @one_question = "Считаете ли Вы Отца #{added_name_id} - Мужем вашей Матери #{names_arr[arr_ind]}?"
-        #      # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Матерей
-        #      @fathers_author_questions << @one_question
-        #    end
-        #  end
-        #end
-        @father_questions << add_one_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать")  # DEBUGG_TO_VIEW
-
-        if !@brothers_hash.blank?
-          names_arr = @brothers_hash.values  # name_id array
-          if !names_arr.blank?
-            for arr_ind in 0 .. names_arr.length - 1
-              @one_question = "Считаете ли вы Отца #{added_name_id} - родным Отцом вашего Брата #{names_arr[arr_ind]}?"
-              # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Братьев
-              @father_questions << @one_question
-            end
-          end
-        end
-
-        if !@sisters_hash.blank?
-          names_arr = @sisters_hash.values  # name_id array
-          if !names_arr.blank?
-            for arr_ind in 0 .. names_arr.length - 1
-              @one_question = "Считаете ли вы Отца #{added_name_id} - родным Отцом вашей Сестры #{names_arr[arr_ind]}?"
-              # Добавляем один вопрос в массив вопросов для Отца касательно нового Отца и Сестер
-              @father_questions << @one_question
-            end
-          end
-        end
+        @father_questions << add_one_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать")  #
+        @father_questions << add_one_relation_questions(@brothers_hash, added_name_id, "Отец", "Отец", "Брат")
+        @father_questions << add_one_relation_questions(@sisters_hash, added_name_id, "Отец", "Отец", "Сестра")
 
       when 2  # Добавляем Мать к Автору
 
@@ -451,8 +421,8 @@ class MainController < ApplicationController
       make_search_results_paths(@final_reduced_profiles_hash) #,@final_reduced_relations_hash)
 
       # Call of make_questions method
-      @relation_add_to = 2  # Отношение, к которому добавляем
-      @relation_added = 7   # Отношение, которое добавляем
+      @relation_add_to = 0  # Отношение, к которому добавляем
+      @relation_added = 1   # Отношение, которое добавляем
       @user_id = 111 #
       @profile_id = 222
       @name_id = 333
