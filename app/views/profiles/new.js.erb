@@ -1,3 +1,2 @@
-showOverlay();
-$('#overlay').html('<%= j render "profiles/new" %>');
+$('#dropdown_<%= @base_profile.id %> ul').html('<%= j render "profiles/new" %>');
 $('#profile_name').focus();

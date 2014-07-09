@@ -35,27 +35,56 @@ class ProfilesController < ApplicationController
     @profile = Profile.new(profile_params)
     @profile.user_id = 0
 
-    @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first 
+    @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first
 
+    # if new name - create
+    if !@name and !params[:profile][:name].blank? and params[:new_name_confirmation]
+      @name = Name.create(name: params[:profile][:name])
+    end
+
+
+    # Name exist and valid
     if @name
       @profile.name_id = @name.id
-      if @profile.save
+
+      # Validate for relation questions
+      if relation_qustions_valid? and @profile.save
+      #if @profile.save
         ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
-        flash[:notice] = "Профиль id: #{@profile.id} сохранен"
+
+        # only js response
+        # flash[:notice] = "Профиль id: #{@profile.id} сохранен"
         # redirect_to :main_page
+
+        # redirect_to to profile circle path if exist, via js
+        if params[:path_link].blank?
+          @circle = current_user.profile.circle(current_user.id)
+          @author = current_user.profile
+        else
+          @path_link = params[:path_link]
+        end
+
+      # Ask relations questions
       else
-        flash.now[:alert] = "Ошибка при добавления профиля"
+        flash.now[:alert] = "Задаем уточняющие вопросы"
         render :new
       end
+
+    # Name validation
     else
       if params[:profile][:name].blank?
-        flash.now[:alert] = "Ошибка при добавления профиля.Вы не ввели имя."
+        flash.now[:alert] = "Вы не указли имя."
         render :new
       else
-        flash.now[:warning] = "Вы указалиимя, которого нет в нашей базе, возможно, вы ошиблись!?"
+        flash.now[:name_warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
         render :new
       end
     end
+  end
+
+
+  def relation_qustions_valid?
+    false
   end
 
 
@@ -87,6 +116,13 @@ class ProfilesController < ApplicationController
       flash.now[:alert] = "Ошибка удаления профиля"
     end
     redirect_to :back
+  end
+
+
+  def show_dropdown_menu
+    @profile = Profile.find(params[:profile_id])
+    @base_relation_id = params[:base_relation_id]
+    @path_link = params[:path_link]
   end
 
 

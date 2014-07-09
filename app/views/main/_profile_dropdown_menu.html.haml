@@ -1,12 +1,12 @@
-.dropdown
+.dropdown{id: "dropdown_#{base_profile_id}"}
   %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
-    = fa_icon 'caret-square-o-down'
+    = link_text
   %ul.closed
-    %li= link_to "Добавить родственника", '#show-relation-list', onclick: "$('.relation_list').slideToggle('fast')"
+    %li.main-item= link_to "Добавить родственника", '#show-relation-list', onclick: "$('.relation_list').slideToggle('fast')"
     .relation_list{style: 'display:none;'}
       - Relation.relation_for_auhtor.each do |relation|
-        %li= link_to relation[:title], new_profile_path(base_relation_id: base_relation_id, base_profile_id: base_profile_id, relation_id: relation[:id]), remote: true
+        %li.sub-item= link_to relation[:title], new_profile_path(base_relation_id: base_relation_id, base_profile_id: base_profile_id, relation_id: relation[:id]), remote: true
 
-    %li= link_to "Изменить", edit_profile_path(base_profile_id)
-    %li= link_to "Общаться", '#', class: :grey
-    %li= link_to "В избранные", '#', class: :grey
+    %li.main-item= link_to "O нем", edit_profile_path(base_profile_id)
+    %li.main-item= link_to "Общаться", '#', class: :grey
+    %li.main-item= link_to "В избранные", '#', class: :grey

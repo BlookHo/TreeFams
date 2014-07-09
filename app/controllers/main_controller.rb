@@ -244,6 +244,7 @@ class MainController < ApplicationController
       profiles_arr = names_hash.keys  # profile_id array
       if !names_arr.blank?
         for arr_ind in 0 .. names_arr.length - 1 # YandexInflect.inflections(.
+          @inflect_added_relation = YandexInflect.inflections(added_relation)[3]["__content__"]
           one_question = "Считаете ли вы #{added_relation} #{added_name_id} -  родным #{text_relation} вашего(й) #{profile_relation} #{names_arr[arr_ind]}?"
           # Добавляем один вопрос в массив вопросов касательно нового
           questions_hash.merge!({profiles_arr[arr_ind] => one_question})
@@ -830,9 +831,7 @@ class MainController < ApplicationController
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
   def relative_menu
-
     @menu_choice = "No choice yet - in Relative_menu"
-
   end
 
 

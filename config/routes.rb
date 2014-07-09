@@ -102,7 +102,9 @@ Weafam::Application.routes.draw do
 
   resources :members, except: :index
   resources :trees
-  resources :profiles, except: :index
+  resources :profiles, except: :index do
+    get 'show-dropdowm-menu', to: 'profiles#show_dropdown_menu', as: :show_dropdown
+  end
   resources :users
   resources :names
   resources :relations
