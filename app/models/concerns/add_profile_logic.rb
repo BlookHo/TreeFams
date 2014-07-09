@@ -78,13 +78,12 @@ module AddProfileLogic
     def add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
 
       new_profile_key_row = ProfileKey.new
-      new_profile_key_row.user_id = @@current_user_id              # user_id
+      new_profile_key_row.user_id = @@current_user_id            # user_id
       new_profile_key_row.profile_id = profile_id                # profile_id
       new_profile_key_row.name_id = name_id                      # name_id
       new_profile_key_row.relation_id = new_relation_id          # relation_id
       new_profile_key_row.is_profile_id = new_profile_id         # is_profile_id
       new_profile_key_row.is_name_id = new_profile_name_id       # is_name_id
-
       new_profile_key_row.save
 
       one_profile_key_arr = []
@@ -101,8 +100,6 @@ module AddProfileLogic
 
     # Добавление нового ряда в таблицу ProfileKey
     # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
     def add_two_main_ProfileKeys_rows(profile_id, sex_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
 
       @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
