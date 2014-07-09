@@ -409,8 +409,8 @@ class MainController < ApplicationController
       make_search_results_paths(@final_reduced_profiles_hash) #,@final_reduced_relations_hash)
 
       # Call of make_questions method
-      @relation_add_to = 2  # Отношение, к которому добавляем
-      @relation_added = 7   # Отношение, которое добавляем
+      @relation_add_to = 1  # Отношение, к которому добавляем
+      @relation_added = 3   # Отношение, которое добавляем
       @user_id = 28 #
       @profile_id = 191
       @name_id = 15
