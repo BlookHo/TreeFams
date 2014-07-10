@@ -143,7 +143,7 @@ class MainController < ApplicationController
     @wives_hash = {155 => 293 }
     @husbands_hash = {185 => 111 }
     @sons_hash = {156 => 151 }
-    @daughters_hash = {153 => 212, 157 => 213 }
+    @daughters_hash = {153 => 212, 157 => 214 }
 
     case relation_add_to
       when 0
@@ -463,10 +463,10 @@ class MainController < ApplicationController
 
       # Call of make_questions method
       @relation_add_to = 1  # Отношение, к которому добавляем
-      @relation_added = 3   # Отношение, которое добавляем
+      @relation_added = 4   # Отношение, которое добавляем
       @user_id = 28 #
       @profile_id = 191
-      @name_id = 15
+      @name_id = 66
 
       make_questions(@user_id, @profile_id, @relation_add_to, @relation_added, @name_id) #
 
