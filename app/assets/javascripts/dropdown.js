@@ -1,4 +1,16 @@
 $(function(){
+
+  $('.path-results').on('click', function(){
+    // $(this).closest('.path-list').hide();
+    alert('Open list');
+    return false;
+  });
+
+});
+
+
+
+$(function(){
   closeAllDropDown();
 
 

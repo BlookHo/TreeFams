@@ -520,8 +520,9 @@ class MainController < ApplicationController
    user_paths.each do |paths|
      # results << paths
      result = []
+     prev_sex_id = nil
      paths.each do |profile_id, data|
-       result << {profile: Profile.find(profile_id), data: data, relation: data.keys.first}
+       result << {profile: Profile.find(profile_id), data: data, relation: data.keys.first, prev_sex_id: prev_sex_id}
      end
      results << result
    end

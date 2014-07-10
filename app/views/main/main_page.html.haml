@@ -190,7 +190,7 @@
             .path
               %ul.path-list
                 - path.each_with_index do |step, index|
-                  %li
+                  %li.path-results
                     - if step[:relation] != 0
                       = relation_to_human(step[:relation])
                     = link_to step[:profile].to_name, '#'
@@ -202,6 +202,9 @@
                     - else
                       %span
                         = fa_icon('arrow-right')
+              .more{style:'display:none;'}
+                = render 'search_circle_table', circle: user.profile.circle(user.id), author: user
+
 
 
     -# - @search_results.each do |result|
