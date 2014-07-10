@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
 
   # Http server Authorization only in production
-  if Rails.env =~ /producation/
+  if Rails.env =~ /production/
     http_basic_authenticate_with name: "interweb", password: "interweb"
   end
 
