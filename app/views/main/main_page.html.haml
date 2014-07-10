@@ -77,14 +77,14 @@
 -#%p
 -#  НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
 
-%p
-  ВСЕ НАЙДЕННЫЕ НОМЕРА wide ДЕРЕВЬЕВ (АВТОРОВ) @wide_user_ids_arr: #{@wide_user_ids_arr.inspect}
-
-%h4
-  ВСЕ НАЙДЕННЫЕ ПРОФИЛИ: @wide_profile_ids_arr: #{@wide_profile_ids_arr.inspect}
-
-%h4
-  @wide_amount_of_profiles: #{@wide_amount_of_profiles.inspect}
+-# %p
+-#   ВСЕ НАЙДЕННЫЕ НОМЕРА wide ДЕРЕВЬЕВ (АВТОРОВ) @wide_user_ids_arr: #{@wide_user_ids_arr.inspect}
+-#
+-# %h4
+-#   ВСЕ НАЙДЕННЫЕ ПРОФИЛИ: @wide_profile_ids_arr: #{@wide_profile_ids_arr.inspect}
+-#
+-# %h4
+-#   @wide_amount_of_profiles: #{@wide_amount_of_profiles.inspect}
 -#%h4
 -#  @complete_hash: #{@complete_hash.inspect}
 -#
@@ -94,17 +94,17 @@
 -#%p
 -#  НОМЕРА wide ОТНОШЕНИЙ @all_wide_match_relations_sorted: #{@all_wide_match_relations_sorted.inspect}
 
-%h4
-  ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
-
-%p
-  @search_results_relations: #{@search_results_relations.inspect}
-
-
-
-
-%p
-  make_search_results_paths ###########
+-# %h4
+-#   ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
+-#
+-# %p
+-#   @search_results_relations: #{@search_results_relations.inspect}
+-#
+-#
+-#
+-#
+-# %p
+-#   make_search_results_paths ###########
 -#%p
 -#  @start_profile: #{@start_profile.inspect}
 -#%p
@@ -122,46 +122,40 @@
 -#%p
 -#  @relation_to_next_profile: #{@relation_to_next_profile.inspect}
 
-%p
-  @search_path_hash: #{@search_path_hash.inspect}
+-# %p
+-#   @search_path_hash: #{@search_path_hash.inspect}
 -#%p
 -#  @search_path_hash_size: #{@search_path_hash_size.inspect}
 
 
 
-%p
-  make_questions in NON-STANDARD CASE ###########
-%p
-  Добавляем к кому: @relation_add_to: #{@relation_add_to.inspect}
-%p
-  Добавляем кого: @relation_added: #{@relation_added.inspect}
-%p
-  С именем: @name_id: #{@name_id.inspect}
-%p
-  @profile_id: #{@profile_id.inspect}
--#%p
--#  @brothers_hash: #{@brothers_hash.inspect}
--#%p
--#  @profiles_arr: #{@profiles_arr.inspect}
--#%p
--#  @one_question: #{@one_question.inspect}
--#
-%p
-  @non_standard_questions_hash: #{@non_standard_questions_hash.inspect}
-%p
-  @standard_msg: #{@standard_msg.inspect}
 
-
-
-
-
-
-
-
-
-
-
-
+-# %p
+-#   make_questions in NON-STANDARD CASE ###########
+-# %p
+-#   Добавляем к кому: @relation_add_to: #{@relation_add_to.inspect}
+-# %p
+-#   Добавляем кого: @relation_added: #{@relation_added.inspect}
+-# %p
+-#   С именем: @name_id: #{@name_id.inspect}
+-# %p
+-#   @father_questions: #{@father_questions.inspect}
+-# %p
+-#   @mother_questions: #{@mother_questions.inspect}
+-# %p
+-#   @husband_questions: #{@husband_questions.inspect}
+-# %p
+-#   @wife_questions: #{@wife_questions.inspect}
+-# %p
+-#   @brother_questions: #{@brother_questions.inspect}
+-# %p
+-#   @sister_questions: #{@sister_questions.inspect}
+-# %p
+-#   @son_questions: #{@son_questions.inspect}
+-# %p
+-#   @daughter_questions: #{@daughter_questions.inspect}
+-# %p
+-#   @standard_msg: #{@standard_msg.inspect}
 
 
 
@@ -179,18 +173,49 @@
       %h1.yellow-title Результаты поиска ваших родных:
 
 
-    - @search_results.each do |result|
-      .circle-view
-        - if result.author.class == User
-          .circle-path{id: "current-circle-path-#{result.author.id}"}
-            = render 'search_circle_path', author: result.author
-          .current-circle{id: "current-circle-#{result.author.id}"}
-            = render 'search_circle_table', circle: result.circle, author: result.author
-        - else
-          .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
-            = render 'search_circle_path', author: result.author
-          .current-circle{id: "current-circle-#{params[:tree_id]}"}
-            = render 'search_circle_table', circle: result.circle, author: result.author
+    #path-results
+      -#= @path_search_results
+      - @path_search_results.each do |result|
+        - user = result[:user]
+        - paths = result[:paths]
+        .path-result
+          .user-info
+            = image_tag 'profile-default.png', class: :avatar
+            %h1= user.profile.full_name
+            %h3
+              Найдено
+              = paths.size
+              = Russian.p(paths.size, "совпадение", "совпадения", "совпадений")
+          - paths.each do |path|
+            .path
+              %ul.path-list
+                - path.each_with_index do |step, index|
+                  %li
+                    - if step[:relation] != 0
+                      = relation_to_human(step[:relation])
+                    = link_to step[:profile].to_name, '#'
+                    -# = step[:data].inspect
+                    - if (index + 1) == path.size
+                      .span.whois
+                        Вероятно, это
+                        = relation_to_profile(@search_results_relations.find {|r| r[step[:profile].id] }.try(:[], step[:profile].id) )
+                    - else
+                      %span
+                        = fa_icon('arrow-right')
+
+
+    -# - @search_results.each do |result|
+    -#   .circle-view
+    -#     - if result.author.class == User
+    -#       .circle-path{id: "current-circle-path-#{result.author.id}"}
+    -#         = render 'search_circle_path', author: result.author
+    -#       .current-circle{id: "current-circle-#{result.author.id}"}
+    -#         = render 'search_circle_table', circle: result.circle, author: result.author
+    -#     - else
+    -#       .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
+    -#         = render 'search_circle_path', author: result.author
+    -#       .current-circle{id: "current-circle-#{params[:tree_id]}"}
+    -#         = render 'search_circle_table', circle: result.circle, author: result.author
 
 
 

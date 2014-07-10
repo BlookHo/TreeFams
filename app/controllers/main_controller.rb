@@ -542,6 +542,31 @@ class MainController < ApplicationController
     sorted_result_users.each do |user|
       @search_results << Hashie::Mash.new( {author: user, circle: user.profile.circle(user.id)} )
     end
+
+
+    # Path search results
+    @path_search_results = []
+    @search_path_hash.each do |user_id, user_paths|
+      user = User.find user_id
+      @path_search_results << {user: user, paths: collect_path_profiles(user_paths)}
+    end
+    @path_search_results
+
+ end
+
+
+
+ def collect_path_profiles(user_paths)
+   results = []
+   user_paths.each do |paths|
+     # results << paths
+     result = []
+     paths.each do |profile_id, data|
+       result << {profile: Profile.find(profile_id), data: data, relation: data.keys.first}
+     end
+     results << result
+   end
+   return results
  end
 
 
