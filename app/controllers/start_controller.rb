@@ -439,12 +439,16 @@ class StartController < ApplicationController
     # add Son & wife & husband rows
     if author_sex == 1
       son_ProfileKeys_arr << [son_name, 1, author_name, 0]
-      son_ProfileKeys_arr << [son_name, 2, wife_name, 8]
-      wife_ProfileKeys_arr << [wife_name, 3, son_name, 3]
+      if !wife_name.blank?
+        son_ProfileKeys_arr << [son_name, 2, wife_name, 8]
+        wife_ProfileKeys_arr << [wife_name, 3, son_name, 3]
+      end
     else
       son_ProfileKeys_arr << [son_name, 2, author_name, 0]
-      son_ProfileKeys_arr << [son_name, 1, husband_name, 7]
-      husband_ProfileKeys_arr << [husband_name, 3, son_name, 3]
+      if !husband_name.blank?
+        son_ProfileKeys_arr << [son_name, 1, husband_name, 7]
+        husband_ProfileKeys_arr << [husband_name, 3, son_name, 3]
+      end
     end
     @husband_ProfileKeys_arr = husband_ProfileKeys_arr # DEBUGG TO VIEW
     @wife_ProfileKeys_arr = wife_ProfileKeys_arr # DEBUGG TO VIEW
@@ -504,12 +508,16 @@ class StartController < ApplicationController
     # add Daughter & wife & husband rows
     if author_sex == 1
       daugther_ProfileKeys_arr << [daugther_name, 1, author_name, 0]
-      daugther_ProfileKeys_arr << [daugther_name, 2, wife_name, 8]
-      wife_ProfileKeys_arr << [wife_name, 4, daugther_name, 4]
+      if !wife_name.blank?
+        daugther_ProfileKeys_arr << [daugther_name, 2, wife_name, 8]
+        wife_ProfileKeys_arr << [wife_name, 4, daugther_name, 4]
+      end
     else
       daugther_ProfileKeys_arr << [daugther_name, 2, author_name, 0]
-      daugther_ProfileKeys_arr << [daugther_name, 1, husband_name, 7]
-      husband_ProfileKeys_arr << [husband_name, 4, daugther_name, 4]
+      if !husband_name.blank?
+        daugther_ProfileKeys_arr << [daugther_name, 1, husband_name, 7]
+        husband_ProfileKeys_arr << [husband_name, 4, daugther_name, 4]
+      end
     end
     @husband_ProfileKeys_arr = husband_ProfileKeys_arr # DEBUGG TO VIEW
     @wife_ProfileKeys_arr = wife_ProfileKeys_arr # DEBUGG TO VIEW

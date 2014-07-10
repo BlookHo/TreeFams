@@ -1,0 +1,123 @@
+.dropdown{
+  position:relative;
+  display:inline-block;
+}
+
+.dropdown > a{
+    color:blue;
+    // width:20px;
+    // height:20px;
+    // border:1px solid grey;
+    // font-size:21px;
+}
+
+.dropdown ul{
+  // overflow:hidden;
+  z-index:20;
+  left:0;
+  top:25px;
+  position:absolute;
+  background-color:#fff;
+  font-size:16px;
+  font-weight:normal;
+  border-radius:5px;
+  box-shadow:0 0 4px rgba(0,0,0,0.7);
+
+
+  // fix border radius
+  li.main-item:first-child a{
+    border-radius:5px 5px 0 0;
+  }
+
+  li.sub-item:first-child a{
+    border-radius:none;
+  }
+
+  // Arrows
+  &:before {
+     position: absolute;
+     top:-13px;
+     left: 12px;
+     display: block;
+     border-left: 12px solid transparent;
+     border-right: 12px solid transparent;
+     border-bottom: 12px solid rgba(0,0,0,0.4);
+     content: '';
+  }
+
+  &:after {
+     position: absolute;
+     top:-12px;
+     left: 12px;
+     display: block;
+     border-left: 12px solid transparent;
+     border-right: 12px solid transparent;
+     border-bottom: 12px solid #fff;
+     content: '';
+  }
+
+
+  // Items
+  li.main-item a,
+  li.sub-item a{
+    text-decoration:none;
+    display:inline-block;
+    padding:10px;
+    color:blue;
+    width:280px;
+    border-bottom:1px solid #ccc;
+    font-weight:normal;
+    &.grey{color:grey;}
+    &:hover{
+      background-color:blue;
+      color:#fff;
+    }
+  }
+
+  // Relations sub Items
+  .relation_list{
+    li.sub-item a{
+      padding-left:30px;
+      background-color:#f5f5f5;
+
+      &:hover{
+        background-color:blue;
+        color:#fff;
+      }
+
+      &:before{
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        content:'\f18e';
+        margin-right:5px;
+        color:grey;
+      }
+    }
+  }
+
+
+
+  li.new-profile-form{
+    padding:10px;
+    width:280px;
+
+    h2{
+      display:inline-block;
+      margin-bottom:12px;
+    }
+
+    .actions{
+      display:block;
+      height:40px;
+      line-height:40px;
+      margin-top:10px;
+      a.cancel{
+        float:left;
+
+
+      }
+      .btn{float:right;}
+    }
+  }
+}

@@ -2,6 +2,10 @@
   text-align:center;
 }
 
+.align-right{
+  text-align:right
+}
+
 
 
 .tmp_table{
@@ -31,4 +35,24 @@ table{
   .name{font-weight:bold;}
   .green{color:green;}
   .italic{font-style:italic;}
+  .center{text-align:center;}
+  .left{text-align:left;}
+}
+
+
+.control{
+  width:100%;
+  display:inline-block;
+  margin-bottom:25px;
+  position:relative;
+
+  label{
+    color:grey;
+  }
+}
+
+
+.yellow-title{
+  background-color:#fffee6;
+  padding:4px;
 }

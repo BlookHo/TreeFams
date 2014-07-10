@@ -1,4 +1,8 @@
 Weafam::Application.routes.draw do
+  get "connect_users_trees/connect_users"
+  get "connect_users_trees/connect_profiles"
+  get "connect_users_trees/connect_trees"
+  get "connect_users_trees/connect_profiles_keys"
   get "new_profile/get_profile_params"
   get "new_profile/make_new_profile"
   get "new_profile/make_tree_row"
@@ -10,12 +14,6 @@ Weafam::Application.routes.draw do
   get "admin_methods/service_method_2"
   mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
 
-
-  resources :trees
-  resources :profiles
-  resources :users
-  resources :names
-  resources :relations
 
   # admin_methods controller
   match 'service_method_1' => 'admin_methods#service_method_1', via: :get
@@ -91,9 +89,29 @@ Weafam::Application.routes.draw do
   match 'add_new_profile' => 'new_profile#add_new_profile', via: :get
   match 'add_new_profile' => 'new_profile#add_new_profile', via: :post
 
+  # connect_users_trees controller
+  match 'connection_of_trees' => 'connect_users_trees#connection_of_trees', via: :get
+  match 'get_trees_to_connect' => 'connect_users_trees#get_trees_to_connect', via: :get
+  match 'connect_users' => 'connect_users_trees#connect_users', via: :get
+  match 'connect_profiles' => 'connect_users_trees#connect_profiles', via: :get
+  match 'connect_trees' => 'connect_users_trees#connect_trees', via: :get
+  match 'connect_profiles_keys' => 'connect_users_trees#connect_profiles_keys', via: :get
 
 
 
+
+  resources :members, except: :index
+  resources :trees
+  resources :profiles, except: :index do
+    get 'show-dropdowm-menu', to: 'profiles#show_dropdown_menu', as: :show_dropdown
+  end
+  resources :users
+  resources :names
+  resources :relations
+
+
+  get 'main/circles/(:path)',   to: "circles#show", as: :circle
+  get 'search/circles/:tree_id/(:path)', to: "circles#show_search", as: :search_circle
 
 
   # Users and Sessions
@@ -108,9 +126,9 @@ Weafam::Application.routes.draw do
   get    'welcome/start/to/step/:step',    to: 'welcome#to_step',              as: :to_start_step
   get    'welcome/start/step/previous',    to: 'welcome#previous',             as: :previous
   get    'welcome/start/add/:member',      to: 'welcome#add_member_field',     as: :add_member_field
-  get 'welcome/start/show_data',           to: 'welcome#show_data',            as: :show_data
+  # get    'welcome/start/show_data',        to: 'welcome#show_data',            as: :show_data
 
-  # Debug path
+  # Debug path - Login as user
   get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
 
   root  'welcome#index'

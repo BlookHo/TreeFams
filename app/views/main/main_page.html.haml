@@ -1,77 +1,224 @@
--# %h4
--#   Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
--# %h4
--#   Их user_id: #{@users_ids_arr.inspect}
+
 -#%p
 -#  @tree_arr: #{@tree_arr.inspect}
+-#
 -#%p
--#  @tree_to_display: #{@tree_to_display.inspect}
+-#  BK_массив: @bk_arr: #{@bk_arr.inspect}
 -#%p
--#  @pr: #{@pr.inspect}
+-#  @circle: #{@circle.inspect}
+-#%p
+-#  @circle_hash: #{@circle_hash.inspect}
+-#%p
+-#  @circle_hash_mothers: #{@circle_hash_mothers.inspect}
+-#
+-#%h4
+-#  Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
+-#%h4
+-#  Их user_id: #{@users_ids_arr.inspect}
+-#%p
+-#  @relation_id_searched_arr: #{@relation_id_searched_arr.inspect}
+-#%p
+-#  @from_profile_searching: #{@from_profile_searching.inspect}
+-#%p
+-#  @profile_searched: #{@profile_searched.inspect}
+-#%p
+-#  @relation_searched: #{@relation_searched.inspect}
+-#%p
+-#  @all_profile_rows: #{@all_profile_rows.inspect}
+-#%p
+-#  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
+-#%p
+-#  @relation_match_arr: #{@relation_match_arr.inspect}
+-#%p
+-#  @relation_match_size: #{@relation_match_size.inspect}
+-#
+-#%p
+-#  @found_trees_hash: #{@found_trees_hash.inspect}
+-#%p
+-#  @found_trees_keys_arr: #{@found_trees_keys_arr.inspect}
+-#%p
+-#  @found_trees_values_arr: #{@found_trees_values_arr.inspect}
+-#
+-#%p
+-#  @found_profiles_hash: #{@found_profiles_hash.inspect}
+-#%p
+-#  @found_profiles_values_arr: #{@found_profiles_values_arr.inspect}
+-#%p
+-#  @test_wide_found_profiles_hash: #{@test_wide_found_profiles_hash.inspect}
+-#%p
+-#  @wide_found_relations_hash: #{@wide_found_relations_hash.inspect}
+-#
+-#
+-#%p
+-#  @found_profiles_hash: #{@found_profiles_hash.inspect}
+-#%p
+-#  @found_relations_hash: #{@found_relations_hash.inspect}
+-#
+-#%p
+-#  @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
+-#%p
+-#  @all_match_relations_arr: #{@all_match_relations_arr.inspect}
+-#
+-#%p
+-#  @all_wide_match_profiles_arr: #{@all_wide_match_profiles_arr.inspect}
+-#%p
+-#  @all_wide_match_hash: #{@all_wide_match_hash.inspect}
+-#%p
+-#  @all_wide_match_relations_arr: #{@all_wide_match_relations_arr.inspect}
+
+-#%h4
+-#  ВСЕ СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
+-#%h4
+-#  ПОЛНЫЙ ХЭШ ПРОФИЛЕЙ: {дерево  профили}@all_wide_match_arr_sorted: #{@all_wide_match_arr_sorted.inspect}
+
+%h4
+  ВСЕ wide СОВПАДЕНИЯ РОДНЫХ : @final_reduced_profiles_hash: #{@final_reduced_profiles_hash.inspect}
+
+-#%p
+-#  НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
+
+-# %p
+-#   ВСЕ НАЙДЕННЫЕ НОМЕРА wide ДЕРЕВЬЕВ (АВТОРОВ) @wide_user_ids_arr: #{@wide_user_ids_arr.inspect}
+-#
+-# %h4
+-#   ВСЕ НАЙДЕННЫЕ ПРОФИЛИ: @wide_profile_ids_arr: #{@wide_profile_ids_arr.inspect}
+-#
+-# %h4
+-#   @wide_amount_of_profiles: #{@wide_amount_of_profiles.inspect}
+-#%h4
+-#  @complete_hash: #{@complete_hash.inspect}
+-#
+-#
+-#%p
+-#  НОМЕРА ОТНОШЕНИЙ @all_match_relations_sorted: #{@all_match_relations_sorted.inspect}
+-#%p
+-#  НОМЕРА wide ОТНОШЕНИЙ @all_wide_match_relations_sorted: #{@all_wide_match_relations_sorted.inspect}
+
+-# %h4
+-#   ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
+-#
+-# %p
+-#   @search_results_relations: #{@search_results_relations.inspect}
+-#
+-#
+-#
+-#
+-# %p
+-#   make_search_results_paths ###########
+-#%p
+-#  @start_profile: #{@start_profile.inspect}
+-#%p
+-#  @hash_to_transform: #{@hash_to_transform.inspect}
+-#%p
+-#  @profiles_arr_to_transform: #{@profiles_arr_to_transform.inspect}
+-#%p
+-#  @finish_profile: #{@finish_profile.inspect}
+-#%p
+-#  @results_qty: #{@results_qty.inspect}
+-#%p
+-#  @one_tree_hash: #{@one_tree_hash.inspect}
+-#%p
+-#  @one_path_hash: #{@one_path_hash.inspect}
+-#%p
+-#  @relation_to_next_profile: #{@relation_to_next_profile.inspect}
+
+-# %p
+-#   @search_path_hash: #{@search_path_hash.inspect}
+-#%p
+-#  @search_path_hash_size: #{@search_path_hash_size.inspect}
 
 
 
+
+%p
+  make_questions in NON-STANDARD CASE ###########
+%p
+  Добавляем к кому: @relation_add_to: #{@relation_add_to.inspect}
+%p
+  Добавляем кого: @relation_added: #{@relation_added.inspect}
+%p
+  С именем: @name_id: #{@name_id.inspect}
+-# %p
+-#   @father_questions: #{@father_questions.inspect}
+-# %p
+-#   @mother_questions: #{@mother_questions.inspect}
+-# %p
+-#   @husband_questions: #{@husband_questions.inspect}
+-# %p
+-#   @wife_questions: #{@wife_questions.inspect}
+-# %p
+-#   @brother_questions: #{@brother_questions.inspect}
+-# %p
+-#   @sister_questions: #{@sister_questions.inspect}
+-# %p
+-#   @son_questions: #{@son_questions.inspect}
+%p
+  @non_standard_questions_hash: #{@non_standard_questions_hash.inspect}
+%p
+  @standard_msg: #{@standard_msg.inspect}
 
 
 
 
 .content
-  %h1
-    = current_user.profile.name.name.mb_chars.capitalize
-    \, это ваш ближний круг,
-    -# = current_user.id
-
-  %table.tmp_table
-    %tr
-      %th Родственное отношение к вам
-      %th Имя родственника
-      %th
-    - @tree_arr.each_with_index do |item, index|
-      %tr
-        %td= relation_to_human(item[3]) #{@tree_arr.inspect}
-        %td= Name.find(item[5]).name.mb_chars.capitalize
-        %td
-          = link_to "Добавить родственника", '#', onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
-          -#= link_to "Добавить родственника", add_new_profile_path(relation_id: item[3], profile_id: item[4], user_id: current_user.id)#, onclick: "alert('Добавить нового родственника к relation_id: #{item[3]}, profile_id: #{item[4]}, в дереве user_id: #{current_user.id}')"
+  .circle-view
+    .circle-path#current-circle-path= render 'circle_path'
+    .current-circle#current-circle= render 'circle_table', circle: @circle
 
 
   %div{style: "margin-top:50px;"}
-    - if @all_match_arr_sorted.nil?
-      %h1 Совпадений не найдено
+    - if @search_results.empty?
+      %h1.yellow-title Совпадений не найдено
     - else
-      %h1 Вы или ваши родственники найдены в деревьях следующих людей:
-
-      %table.tmp_table
-        %tr
-          %th Автор дерева
-          %th
-            Ближний круг автора, в котором
-            %span.green возможно
-            присутствуют ваши родственники:
+      %h1.yellow-title Результаты поиска ваших родных:
 
 
-        - @all_match_arr_sorted.each do |key, value|
-          - user = User.where(id: key).first
-          %tr
-            %td
-              %h2= user.name.mb_chars.capitalize
+    #path-results
+      -#= @path_search_results
+      - @path_search_results.each do |result|
+        - user = result[:user]
+        - paths = result[:paths]
+        .path-result
+          .user-info
+            = image_tag 'profile-default.png', class: :avatar
+            %h1= user.profile.full_name
+            %h3
+              Найдено
+              = paths.size
+              = Russian.p(paths.size, "совпадение", "совпадения", "совпадений")
+          - paths.each do |path|
+            .path
+              %ul.path-list
+                - path.each_with_index do |step, index|
+                  %li.path-results
+                    - if step[:relation] != 0
+                      = relation_to_human(step[:relation])
+                    = link_to step[:profile].to_name, '#'
+                    -# = step[:data].inspect
+                    - if (index + 1) == path.size
+                      .span.whois
+                        Вероятно, это
+                        = relation_to_profile(@search_results_relations.find {|r| r[step[:profile].id] }.try(:[], step[:profile].id) )
+                    - else
+                      %span
+                        = fa_icon('arrow-right')
+              .more{style:'display:none;'}
+                = render 'search_circle_table', circle: user.profile.circle(user.id), author: user
 
-            %td
-              %table.results_table
-                - user.trees.each do |tree|
-                  - profile = Profile.where(id: tree.is_profile_id).first
-                  %tr
-                    %td.grey= relation_to_human(tree.relation_id)
-                    %td.name= profile.name.name.mb_chars.capitalize
-                    %td.green.italic
-                      - if @all_match_arr_sorted[user.id].include? profile.id
-                        = relation_to_human( @all_match_relations_sorted[user.id][ @all_match_arr_sorted[user.id].index(profile.id) ], prefix: true )
-                    %td
-                      - if profile.user.present?
-                        = link_to 'Пожать руку', '#', onclick: "alert('Пожать руку с user_id: #{profile.user.id}')"
 
 
-
+    -# - @search_results.each do |result|
+    -#   .circle-view
+    -#     - if result.author.class == User
+    -#       .circle-path{id: "current-circle-path-#{result.author.id}"}
+    -#         = render 'search_circle_path', author: result.author
+    -#       .current-circle{id: "current-circle-#{result.author.id}"}
+    -#         = render 'search_circle_table', circle: result.circle, author: result.author
+    -#     - else
+    -#       .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
+    -#         = render 'search_circle_path', author: result.author
+    -#       .current-circle{id: "current-circle-#{params[:tree_id]}"}
+    -#         = render 'search_circle_table', circle: result.circle, author: result.author
 
 
 

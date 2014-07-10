@@ -37,6 +37,19 @@ gem 'gon'
 # Extend hash
 gem 'hashie'
 
+
+# Yandex inflection
+gem "yandex_inflect", "~> 0.1.2"
+# КТО      ЧТО     0
+# НЕТ КОГО ЧЕГО    1
+# КОМУ     ЧЕМУ    2
+# КОГО     ЧТО     3
+# КЕМ      ЧЕМ     4
+# О КОМ    О ЧЕМ   5
+#@inflected_word = YandexInflect.inflections(word)#[3]#["__content__"]   # DEBUGG_TO_VIEW
+
+
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 #gem 'jquery-turbolinks'
 #gem 'turbolinks'

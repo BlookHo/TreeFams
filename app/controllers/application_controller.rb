@@ -1,5 +1,11 @@
 class ApplicationController < ActionController::Base
- # include MainSearchHelper
+
+  # Http server Authorization only in production
+  if Rails.env =~ /producation/
+    http_basic_authenticate_with name: "interweb", password: "interweb"
+  end
+
+  # include MainSearchHelper
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.

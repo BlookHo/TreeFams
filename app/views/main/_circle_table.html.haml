@@ -1,0 +1,30 @@
+%table.tmp_table.circle-table#circle-table
+  %tr
+    %th.left Родня
+    %th.left Имя
+    %th Его родня
+  %tr
+    %td Чьими глазами
+    %td
+      %h2
+        = render 'profiles/dropdown/link',
+          base_profile_id: @author.id,
+          base_relation_id: 0,
+          link_text: @author.full_name,
+          path_link: "/main/circles/#{@path.try(:last).try(:link)}"
+
+    %td
+  - circle.each_with_index do |item, index|
+    - path_link = circle_path(circle_path_helper(@path_params, item.is_profile_id, item.relation_id))
+    %tr
+      %td= relation_to_human(item.relation_id)
+      %td
+        = render 'profiles/dropdown/link',
+          base_profile_id: item.is_profile_id,
+          base_relation_id: item.relation_id,
+          link_text: [item.name.to_name,item.is_profile.surname].join(' '),
+          path_link: path_link
+
+      %td.center
+        - if item.profile.tree_circle(current_user.id, item.is_profile_id).size > 0 and item.relation_id != 0
+          = link_to "Смотреть", path_link, style: "margin-left:11px;color:green;", remote: true

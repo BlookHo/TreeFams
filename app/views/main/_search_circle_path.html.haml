@@ -1,0 +1,38 @@
+- @search_results_relations = session[:search_results_relations]
+- @results_count_hash = session[:results_count_hash]
+
+- author_id = author.class == User ? author.id : params[:tree_id]
+
+- if @path_author.nil?
+  - path_author = author
+- else
+  - path_author = @path_author
+
+- path_author_relation =  relation_to_profile(@search_results_relations.find {|r| r[path_author.id] }.try(:[], path_author.id))
+
+
+%ul.path-list
+  %li
+    - if path_author.class == User
+      = link_to path_author.profile.full_name, "/search/circles/#{path_author.id}/#{path_author.profile.id},0", remote: true
+      &nbsp;
+      = @results_count_hash[author_id.to_i].values.flatten.size
+      = Russian.p(@results_count_hash[author_id.to_i].values.flatten.size, "совпадение", "совпадения", "совпадений")
+    - else
+      = link_to [path_author.to_name, path_author.surname].join(' '), "/search/circles/#{path_author.user_id}/#{path_author.id},0", remote: true
+      &nbsp;
+      = @results_count_hash[author_id.to_i].values.flatten.size
+      = Russian.p(@results_count_hash[author_id.to_i].values.flatten.size, "совпадение", "совпадения", "совпадений")
+
+
+
+
+  - @path.try(:each) do |segment|
+    %li
+      %span
+        = fa_icon('arrow-right')
+        = relation_to_human(segment.relation_id)
+      - if author.class == User
+        = link_to segment.name, "/search/circles/#{author.id}/#{segment.link}", remote: true
+      - else
+        = link_to segment.name, "/search/circles/#{params[:tree_id]}/#{segment.link}", remote: true

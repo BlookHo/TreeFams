@@ -9,10 +9,6 @@
 
 %h3 Ввод информации о НОВОМ ПРОФИЛЕ (store_mother_path, remote: true, id: 'mother_form' )
 = form_tag do
-  %div
-    = label_tag 'Введи Профиль, к которому добавляем Новый Профиль:'
-    -#= select_tag :relation_select, options_for_select(@sel_names, selected = @new_profile_relation), :prompt => 'Выбери имя' , options_for_select(@sel_names, selected = @new_profile_relation),
-    = number_field_tag :add_to_profile, :prompt => 'Введи Профиль, к которому добавляем Новый Профиль '
 
   %div
     = label_tag 'Введи имя Нового Профиля:'
@@ -26,32 +22,74 @@
   = submit_tag 'Ввод'
 
   %p
-    @pr: #{@pr.inspect}
+    К какому профилю добавляем: @profile_id: #{@profile_id.inspect}
   %p
-    @add_to_profile: #{@add_to_profile.inspect}
+    К какому родственнику добавляем: @relation_id: #{@relation_id.inspect}
   %p
-    @new_profile_name: #{@new_profile_name.inspect}
+    В чьем дереве добавляем: @user_id: #{@user_id.inspect}
   %p
-    @new_profile_sex: #{@new_profile_sex.inspect}
+    Имя профиля, к кот. добавляем: @name_id: #{@name_id.inspect}
   %p
-    @new_profile_relation: #{@new_profile_relation.inspect}
+    Пол профиля, к кот. добавляем: @sex_id: #{@sex_id.inspect}
 
   %p
     Новый профиль: @new_profile_id: #{@new_profile_id.inspect}
+  %p
+    @new_profile_name_id: #{@new_profile_name_id.inspect}
+  %p
+    @new_profile_sex: #{@new_profile_sex.inspect}
+  %p
+    @new_relation_id: #{@new_relation_id.inspect}
+
 
   %p
     Основной массив БК - из Tree: @tree_arr: #{@tree_arr.inspect}
+%p
+  Задание на формир-е рядов в ProfileKey: @profiles_key_array: #{@profiles_key_array.inspect}
+%p
+  @fathers_hash: #{@fathers_hash.inspect}
+%p
+  @mothers_hash: #{@mothers_hash.inspect}
+%p
+  @brothers_hash: #{@brothers_hash.inspect}
+%p
+  @brothers_profiles_arr: #{@brothers_profiles_arr.inspect}
+%p
+  @brothers_names_arr: #{@brothers_names_arr.inspect}
 
-  %p
-    Поисковый массив: @profiles_tree_arr: #{@profiles_tree_arr.inspect}
+  -#%p
+  -#  Поисковый массив: @profiles_tree_arr: #{@profiles_tree_arr.inspect}
+
+%p
+  @wives_hash: #{@wives_hash.inspect}
+%p
+  @husbands_hash: #{@husbands_hash.inspect}
+%p
+  @sons_hash: #{@sons_hash.inspect}
+%p
+  @daughters_hash: #{@daughters_hash.inspect}
+
+
+%p
+  @add_row_to_tree: #{@add_row_to_tree.inspect}
+%p
+  @prev_relation_id: #{@prev_relation_id.inspect}
+%p
+  @new_relation_id: #{@new_relation_id.inspect}
 
 
 
-  %h4 Переход на:  #{link_to "Просмотр и подтверждение совпадений -->", match_approval_path}
 
-  %h4 Переход на:  #{link_to "Просмотр и управление Графом дерева -->", show_graph_tree_path}
+%p
+  @one_profile_key_arr: #{@one_profile_key_arr.inspect}
+%p
+  @profile_key_arr_added: #{@profile_key_arr_added.inspect}
+
+
 
   %h4 Возврат на страницу Старт:  #{link_to "Старт -->", enter_myself_path}
   %h4 Возврат на страницу Лэндинг:  #{link_to "Landing -->", landing_path}
   %h4 Переход на страницу Админа:  #{link_to "Админ -->", admin_path}
 
+  %h4
+    Переход на Главную страницу:  #{link_to "Главная -->", main_page_path}

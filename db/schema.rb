@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140530181121) do
+ActiveRecord::Schema.define(version: 20140624132624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "adminpack"
 
   create_table "names", force: true do |t|
     t.string   "name"
@@ -42,14 +43,19 @@ ActiveRecord::Schema.define(version: 20140530181121) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "name_id"
-    t.string   "surname",          default: ""
-    t.string   "email",            default: ""
+    t.string   "surname",              default: ""
+    t.string   "email",                default: ""
     t.integer  "sex_id"
     t.integer  "avatar_id"
     t.integer  "country_id"
     t.integer  "city_id"
     t.datetime "profile_birthday"
-    t.string   "about",            default: ""
+    t.string   "about",                default: ""
+    t.datetime "profile_deathday"
+    t.string   "country"
+    t.string   "city"
+    t.string   "middle_name"
+    t.string   "relation_description"
   end
 
   create_table "relations", force: true do |t|

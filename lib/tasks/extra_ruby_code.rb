@@ -71,6 +71,59 @@ class ExtraCode
 
   end
 
+  # Для метода формирования путей для каждого из рещультатов поиска
+  # Этот вариант - без вложенного метода (закомментин)
+  # Делаем один path рез-тов поиска - далее он включается в итоговый хэш
+  #
+  def make_path(tree_hash, finish_profile, results_qty)
+    @one_path_hash = Hash.new
+    end_profile = finish_profile
+
+    #qty = 0
+    #start_elem_arr = tree_hash.values_at(finish_profile)[0] #
+    #@relation_to_next_profile = start_elem_arr[0]
+    #@elem_next_profile = start_elem_arr[1]
+    #qty = results_qty if end_profile == finish_profile
+    #@one_path_hash.merge!(make_one_hash_in_path(end_profile, @relation_to_next_profile, qty))
+
+    @one_path_hash, @relation_to_next_profile, @elem_next_profile = add_one_hash_to_one_path(tree_hash, finish_profile, results_qty, end_profile)
+
+    while @relation_to_next_profile != 0 do
+
+      #qty = 0
+      #start_elem_arr = tree_hash.values_at(@elem_next_profile)[0] #
+      #@new_elem_relation = start_elem_arr[0]
+      #@new_next_profile = start_elem_arr[1]
+      #qty = results_qty if @elem_next_profile == finish_profile
+      #@one_path_hash.merge!(make_one_hash_in_path(@elem_next_profile, @new_elem_relation, qty))
+
+      @one_path_hash, @new_elem_relation, @new_next_profile = add_one_hash_to_one_path(tree_hash, finish_profile, results_qty, @elem_next_profile)
+
+      @elem_next_profile = @new_next_profile
+      @relation_to_next_profile = @new_elem_relation
+
+    end
+    return Hash[@one_path_hash.to_a.reverse] #.reverse_order - чтобы шли от автора
+
+  end
+
+  #
+  #  Этот Метод - к вышеуказанному
+  # Добавляем один хэш в один path рез-тов поиска
+  #
+  def add_one_hash_to_one_path(tree_hash, finish_profile, results_qty, end_profile)
+
+    qty = 0
+    start_elem_arr = tree_hash.values_at(end_profile)[0] #
+    relation_to_next_profile = start_elem_arr[0]
+    elem_next_profile = start_elem_arr[1]
+    qty = results_qty if end_profile == finish_profile
+    @one_path_hash.merge!(make_one_hash_in_path(end_profile, relation_to_next_profile, qty))
+
+    return @one_path_hash, relation_to_next_profile, elem_next_profile
+  end
+
+
 
 
 

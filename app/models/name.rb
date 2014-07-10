@@ -25,4 +25,9 @@ class Name < ActiveRecord::Base
   # Женский, включает имя "не известно"
   scope :female_extended, -> { where(sex_id: 0) }
 
+
+  def to_name
+    name.try(:mb_chars).try(:capitalize)
+  end
+
 end

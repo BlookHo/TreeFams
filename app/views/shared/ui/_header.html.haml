@@ -1,8 +1,13 @@
 #header
   .container
-    %a{href: '/', class: :logo}
-      = fa_icon "leaf"
-      Мы все &mdash; родня
+    - if current_user
+      %a{href: '/main_page', class: :logo}
+        = fa_icon "leaf"
+        Мы все &mdash; родня
+    - else
+      %a{href: '/', class: :logo}
+        = fa_icon "leaf"
+        Мы все &mdash; родня
     %ul
       - if current_user
         %li= link_to current_user.email, main_page_path

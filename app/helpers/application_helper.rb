@@ -1,8 +1,18 @@
 module ApplicationHelper
 
+
+  def circle_path_helper(current_path, profile_id, relation_id)
+    if current_path.blank?
+      return profile_id.to_s+','+relation_id.to_s
+    else
+      current_path + '-' + profile_id.to_s+','+relation_id.to_s
+    end
+  end
+
   # prefix 1 - Ваш(а)
   #
   def relation_to_human(id, prefix: false)
+    return '' if id.nil?
     case id.to_i
     when  0
       prefix ? "Вы" : "Автор"
@@ -26,4 +36,17 @@ module ApplicationHelper
       "Неизвестно"
     end
   end
+
+  # Получает хеш {profile_id => relation_id}
+  # какое отношенеи к какому профилю
+  def relation_to_profile(data)
+    return '' if data.nil?
+    if data.keys.first == current_user.profile_id
+      relation_to_human(data.values.first, prefix: true)
+    else
+      [relation_to_human(data.values.first), YandexInflect.inflections(Profile.find( data.keys.first ).full_name)[1]["__content__"] ].join(' ')
+    end
+  end
+
+
 end

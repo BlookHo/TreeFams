@@ -8,7 +8,4 @@
       .footer
         = link_to '&larr; Назад'.html_safe, :previous, class: [:btn], id: :prev
         - unless current_step =~ /^have/
-          = submit_tag 'Вперед &rarr;'.html_safe, class: [:btn, :blue], id: :next, style:"float:right;"
-
-.col_2_2{style:"margin-top:50px;"}
-  -#= current_author.to_array
+          = submit_tag 'Дальше &rarr;'.html_safe, class: [:btn, :blue], id: :next, style:"float:right;"

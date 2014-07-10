@@ -13,8 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.ui.all
-//= require bootstrap/transition
-//= require bootstrap/modal
-//= require bootstrap/button
-//= require bootstrap/dropdown
-//= require_tree .
+//= require welcome-form.js
+//= require dropdown.js
+//= require overlay.js

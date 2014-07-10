@@ -1,0 +1,50 @@
+$(function(){
+
+  $('.path-results').on('click', function(){
+    // $(this).closest('.path-list').hide();
+    alert('Open list');
+    return false;
+  });
+
+});
+
+
+
+$(function(){
+  closeAllDropDown();
+
+
+  $(document).on('click', function(e){
+
+      if( $('.dropdown').has(e.target).length === 0 ){
+          if ( $('.ui-autocomplete').has(e.target).length === 0 ){
+            closeAllDropDown();
+          }
+      }
+    });
+
+
+   $('#alive').change(function() {
+       $('#death_date_wrapper').toggle();
+   });
+
+})
+
+
+
+function closeAllDropDown(){
+  $('.dropdown ul').hide();
+  $('.relation_list').hide();
+}
+
+
+function toggleDropDownMenu(el){
+    closeAllDropDown();
+    $(el).next('ul').toggle();
+};
+
+
+function toggleDropDownMenuForProfile(profile_element_id){
+    closeAllDropDown();
+    $(profile_element_id + ' ul.dropdown-content').toggle();
+};
