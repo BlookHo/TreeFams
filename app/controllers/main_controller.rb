@@ -137,7 +137,7 @@ class MainController < ApplicationController
 
 #    Тестовый circle_as_hash(user_id, profile_id)
     @fathers_hash = {173 => 45 }
-    @mothers_hash = {172 => 235 } #{172 => 354 }
+    @mothers_hash = {172 => 235 , 174 => 354 }
     @brothers_hash = {190 => 73, 191 => 66 }
     @sisters_hash = {1000 => 233, 1001 => 16}
     @wives_hash = {155 => 293 }
@@ -158,12 +158,11 @@ class MainController < ApplicationController
       #when 4
       #  check_daughter_relations(relation_added, name_id_added)
       #
-      #when 5
-      #  check_brother_relations(relation_added, name_id_added)
-      #
-      #when 6
-      #  check_sister_relations(relation_added, name_id_added)
-      #
+      when 5
+        check_brother_relations(relation_added, name_id_added)
+      when 6
+        check_sister_relations(relation_added, name_id_added)
+
       #when 7
       #  check_husband_relations(relation_added, name_id_added)
       #
@@ -171,7 +170,7 @@ class MainController < ApplicationController
       #  check_wife_relations(relation_added)
 
       else
-        @standard_msg = "Добавляемое отношение - неизвестно"
+        @standard_msg = "make_questions: Добавляемое отношение - неизвестно"
     end
 
   end
@@ -220,7 +219,41 @@ class MainController < ApplicationController
       when 7 # add new husband
         ask_mother_questions(7, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        @standard_msg = "Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
+        @standard_msg = "check_mother_relations: Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
+    end
+  end
+
+  # Выбор группы вопросов для Матери в нестандартных ситуациях
+  # в завис-ти от добавляемого relation
+  def check_brother_relations(relation_added, added_name_id)
+    case relation_added
+      when 1 # add new son
+        ask_brother_questions(1, added_name_id)
+      when 2 # add new daughter
+        ask_brother_questions(2, added_name_id)
+      when 5 # add new husband
+        ask_brother_questions(5, added_name_id)
+      when 6 # add new husband
+        ask_brother_questions(6, added_name_id)
+      else  # все остальные relation_added - создают стандартные ситуации
+        @standard_msg = "check_brother_relations: Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
+    end
+  end
+
+  # Выбор группы вопросов для Матери в нестандартных ситуациях
+  # в завис-ти от добавляемого relation
+  def check_sister_relations(relation_added, added_name_id)
+    case relation_added
+      when 1 # add new son
+        ask_sister_questions(1, added_name_id)
+      when 2 # add new daughter
+        ask_sister_questions(2, added_name_id)
+      when 5 # add new husband
+        ask_sister_questions(5, added_name_id)
+      when 6 # add new husband
+        ask_sister_questions(6, added_name_id)
+      else  # все остальные relation_added - создают стандартные ситуации
+        @standard_msg = "check_brother_relations: Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
     end
   end
 
@@ -367,6 +400,14 @@ class MainController < ApplicationController
   def ask_brother_questions(added_relation, added_name_id) # 5
     non_standard_questions_hash = Hash.new
     case added_relation
+      when 1  # Добавляем Отца к Брату
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Отец", "Отец", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Отец", "Отец", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать"))
+      when 2  # Добавляем Мать к Брату
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Мать", "Мать", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Мать", "Мать", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, added_name_id, "Мать", "Жена", "Отец"))
       when 5  # Добавляем Брата к Брату
 
         non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Сын", "Брат", "Брат"))
@@ -374,16 +415,12 @@ class MainController < ApplicationController
         non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, added_name_id, "Сын", "Сын", "Отец"))
         @standard_msg = "Добавляем Сына к Матери (Автора)"
 
-      when 6  # Добавляем Дочь к Брату
+      when 6  # Добавляем Сестру к Брату
 
         non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Дочь", "Сестра", "Брат"))
         non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Дочь", "Сестра", "Сестра"))
         non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, added_name_id, "Дочь", "Дочь", "Отец"))
 
-      when 7  # Добавляем Мужа к Матери
-
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Муж", "Отец", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Муж", "Отец", "Сестра"))
 
       else
         "Неизвестно"
@@ -398,7 +435,13 @@ class MainController < ApplicationController
   def ask_sister_questions(added_relation, added_name_id) # 6
     non_standard_questions_hash = Hash.new
     case added_relation
-      when 5  # Добавляем Брата к Сестре
+      when 1  # Добавляем к Сестре  -  Отца
+
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Отец", "Отец", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Отец", "Отец", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать"))
+
+      when 5  # Добавляем к Сестре  -  Брата
 
         non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Сын", "Брат", "Брат"))
         non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Сын", "Брат", "Сестра"))
@@ -462,8 +505,8 @@ class MainController < ApplicationController
       make_search_results_paths(@final_reduced_profiles_hash) #,@final_reduced_relations_hash)
 
       # Call of make_questions method
-      @relation_add_to = 0  # Отношение, к которому добавляем
-      @relation_added = 1   # Отношение, которое добавляем
+      @relation_add_to = 5  # Отношение, к которому добавляем
+      @relation_added = 2   # Отношение, которое добавляем
       @user_id = 28 #
       @profile_id = 191
       @name_id = 66
