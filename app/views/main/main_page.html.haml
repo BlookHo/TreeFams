@@ -129,6 +129,7 @@
 
 
 
+
 -# %p
 -#   make_questions in NON-STANDARD CASE ###########
 -# %p
@@ -159,7 +160,6 @@
 
 
 
-
 .content
   .circle-view
     .circle-path#current-circle-path= render 'circle_path'
@@ -174,7 +174,7 @@
 
 
     #path-results
-      = @path_search_results
+      -#= @path_search_results
       - @path_search_results.each do |result|
         - user = result[:user]
         - paths = result[:paths]
@@ -191,8 +191,10 @@
               %ul.path-list
                 - path.each_with_index do |step, index|
                   %li
-                    = step[:profile].to_name
-                    -#= step[:data]
+                    - if step[:relation] != 0
+                      = relation_to_human(step[:relation])
+                    = link_to step[:profile].to_name, '#'
+                    -# = step[:data].inspect
                     - if (index + 1) == path.size
                       .span.whois
                         Вероятно, это

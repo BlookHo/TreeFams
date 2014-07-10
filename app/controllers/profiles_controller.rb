@@ -37,13 +37,19 @@ class ProfilesController < ApplicationController
 
     @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first
 
+    # if new name - create
+    if !@name and !params[:profile][:name].blank? and params[:new_name_confirmation]
+      @name = Name.create(name: params[:profile][:name])
+    end
+
+
     # Name exist and valid
     if @name
       @profile.name_id = @name.id
 
       # Validate for relation questions
-      # if relation_qustions_valid? and @profile.save
-      if @profile.save
+      if relation_qustions_valid? and @profile.save
+      #if @profile.save
         ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
 
         # only js response
@@ -70,7 +76,7 @@ class ProfilesController < ApplicationController
         flash.now[:alert] = "Вы не указли имя."
         render :new
       else
-        flash.now[:warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
+        flash.now[:name_warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
         render :new
       end
     end

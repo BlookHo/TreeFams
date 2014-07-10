@@ -6,7 +6,7 @@
     %th.left Родня
     %th.left Имя
     %th.left Результаты поиска
-    %th Ближний круг
+    %th Его родня
 
   %tr
     %td Чьими глазами
@@ -18,7 +18,7 @@
             %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
               = author.profile.full_name
             %ul.dropdown-content
-              %li.main-item= link_to "Смотреть", edit_profile_path(author.profile.id)
+              %li.main-item= link_to "О нем", edit_profile_path(author.profile.id)
               %li.main-item= link_to "Пожать руку", '#', class: :grey
               %li.main-item= link_to "Общаться", '#', class: :grey
               %li.main-item= link_to "В избранные", '#', class: :grey
@@ -33,12 +33,12 @@
               %li.main-item= link_to "Общаться", '#', class: :grey
               %li.main-item= link_to "В избранные", '#', class: :grey
     %td
-      Вероятно, это
       - if author.class == User
-        = relation_to_profile(@search_results_relations.find {|r| r[author.profile.id] }.try(:[], author.profile.id) )
+        - rel = relation_to_profile(@search_results_relations.find {|r| r[author.profile.id] }.try(:[], author.profile.id) )
+        = rel.blank? ? '' : 'Вероятно, это ' + rel
       - else
-        = relation_to_profile(@search_results_relations.find {|r| r[author.id] }.try(:[], author.id) )
-
+        - rel = relation_to_profile(@search_results_relations.find {|r| r[author.id] }.try(:[], author.id) )
+        = rel.blank? ? '' : 'Вероятно, это ' + rel
     %td
 
   - circle.each_with_index do |item, index|
