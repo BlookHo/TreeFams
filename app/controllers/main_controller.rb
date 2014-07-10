@@ -436,11 +436,9 @@ class MainController < ApplicationController
     non_standard_questions_hash = Hash.new
     case added_relation
       when 1  # Добавляем к Сестре  -  Отца
-
         non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Отец", "Отец", "Брат"))
         non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Отец", "Отец", "Сестра"))
         non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать"))
-
       when 5  # Добавляем к Сестре  -  Брата
 
         non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Сын", "Брат", "Брат"))
@@ -505,8 +503,8 @@ class MainController < ApplicationController
       make_search_results_paths(@final_reduced_profiles_hash) #,@final_reduced_relations_hash)
 
       # Call of make_questions method
-      @relation_add_to = 5  # Отношение, к которому добавляем
-      @relation_added = 2   # Отношение, которое добавляем
+      @relation_add_to = 6  # Отношение, к которому добавляем
+      @relation_added = 1   # Отношение, которое добавляем
       @user_id = 28 #
       @profile_id = 191
       @name_id = 66
