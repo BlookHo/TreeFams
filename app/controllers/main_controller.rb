@@ -253,7 +253,7 @@ class MainController < ApplicationController
   # При этом в впоросе выясняется истинность отношения text_relation добавленного added_relation к рассматриваемому профилю
   # с отношением profile_relation
   def add_relation_questions(names_hash, added_name_id, added_relation, text_relation, profile_relation)
-    return [] if !names_hash.blank?
+    return [] if names_hash.blank?
     if !names_hash.blank?
       names_arr = names_hash.values  # name_id array
       profiles_arr = names_hash.keys  # profile_id array
@@ -463,7 +463,7 @@ class MainController < ApplicationController
 
       # Call of make_questions method
       @relation_add_to = 0  # Отношение, к которому добавляем
-      @relation_added = 3   # Отношение, которое добавляем
+      @relation_added = 1   # Отношение, которое добавляем
       @user_id = 28 #
       @profile_id = 191
       @name_id = 66
