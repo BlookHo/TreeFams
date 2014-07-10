@@ -1,0 +1,47 @@
+#path-results{
+  margin-top:75px;
+
+
+  .path-result{
+    padding:42px 21px 21px 21px;
+    border:1px solid #ccc;
+    position:relative;
+    margin-bottom:50px;
+  }
+
+
+  .user-info{
+      top:-30px;
+      position:absolute;
+      background:#fff;
+      width:400px;
+      padding:10px;
+      display:block;
+
+      h1{font-size:24px;}
+      h3{font-size:16px;}
+
+      .avatar{
+        width:50px;
+        height:50px;
+        border-radius:25px;
+        border:2px solid grey;
+        float:left;
+        margin:0 11px 0 0;
+      }
+    // border:1px solid green;
+  }
+
+
+  .path{
+    margin-bottom:11px;
+  }
+
+  .whois{
+    padding:4px;
+    // border:1px solid grey;
+    display:inline-block;
+    background-color:#fff7c5;
+  }
+
+}
