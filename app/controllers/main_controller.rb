@@ -140,7 +140,7 @@ class MainController < ApplicationController
     @mothers_hash = {172 => 235 , 174 => 354 }
     @brothers_hash = {190 => 73, 191 => 66 }
     @sisters_hash = {1000 => 233, 1001 => 16}
-    @wives_hash = {155 => 293 }
+    @wives_hash = {155 => 292 }
     @husbands_hash = {194 => 111 }
     @sons_hash = {156 => 151 }
     @daughters_hash = {153 => 212, 157 => 214 }
@@ -154,16 +154,10 @@ class MainController < ApplicationController
         check_mother_relations(relation_added, name_id_added)
       when 3, 4
         check_son_daughter_relations(relation_added, name_id_added)
-
       when 5, 6
         check_brother_sister_relations(relation_added, name_id_added)
-
-      #when 7
-      #  check_husband_relations(relation_added, name_id_added)
-      #
-      #when 8
-      #  check_wife_relations(relation_added)
-
+      when 7, 8
+        check_husband_wife_relations(relation_added, name_id_added)
       else
         @standard_msg = "make_questions: Добавляемое отношение - неизвестно"
     end
@@ -248,7 +242,24 @@ class MainController < ApplicationController
       when 6 # add new sister
         ask_son_daughter_questions(6, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        @standard_msg = "check_son_daughter_relations: Добавляемое к Сыну отношение явл. СТАНДАРТНЫМ"
+        @standard_msg = "check_son_daughter_relations: Добавляемое к Сыну/Дочери отношение явл. СТАНДАРТНЫМ"
+    end
+  end
+
+  # Выбор группы вопросов для Мужа/Жены в нестандартных ситуациях
+  # в завис-ти от добавляемого relation
+  def check_husband_wife_relations(relation_added, added_name_id)
+    case relation_added
+      when 3 # add new son
+        ask_husband_wife_questions(3, added_name_id)
+      when 4 # add new daughter
+        ask_husband_wife_questions(4, added_name_id)
+      when 7 # add new husband
+        ask_husband_wife_questions(7, added_name_id)
+      when 8 # add new wife
+        ask_husband_wife_questions(8, added_name_id)
+      else  # все остальные relation_added - создают стандартные ситуации
+        @standard_msg = "check_father_relations: Добавляемое к Мужа/Жены отношение явл. СТАНДАРТНЫМ"
     end
   end
 
@@ -298,9 +309,8 @@ class MainController < ApplicationController
   def add_relation_questions(names_hash, added_name_id, added_relation, text_relation, profile_relation)
     return [] if names_hash.blank?
     if !names_hash.blank?
-      names_arr = names_hash.values  # name_id array
+      names_arr = names_hash.values   # name_id array
       profiles_arr = names_hash.keys  # profile_id array
-      #@profiles_arr = profiles_arr # DEBUGG_TO_VIEW
       inflect_added_relation    = YandexInflect.inflections(added_relation)[3]["__content__"]
       inflect_text_relation     = YandexInflect.inflections(text_relation)[4]["__content__"]
       inflect_profile_relation  = YandexInflect.inflections(profile_relation)[1]["__content__"]
@@ -309,11 +319,9 @@ class MainController < ApplicationController
       if !names_arr.blank?
         questions_hash = Hash.new
         for arr_ind in 0 .. names_arr.length - 1
-          #@names_arr_arr_ind = names_arr[arr_ind] # DEBUGG_TO_VIEW
           one_question = make_one_question(names_arr[arr_ind], @profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
           # Добавляем один вопрос в хэш вопросов касательно нового отношения
           questions_hash.merge!({profiles_arr[arr_ind] => one_question})
-          #@one_question = one_question # DEBUGG_TO_VIEW
         end
       end
     end
@@ -432,9 +440,6 @@ class MainController < ApplicationController
   # заполняются те массивы вопросов, которые следует задавать
   def ask_son_daughter_questions(added_relation, added_name_id) # 3, 4
     non_standard_questions_hash = Hash.new
-    @added_relation = added_relation
-    @added_name_id = added_name_id
-
     case added_relation
       when 1  # Добавляем Отца к Сыну/Дочери - то же, что
         non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Отец", "Отец", "Сын"))
@@ -456,7 +461,36 @@ class MainController < ApplicationController
         non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Сестра", "Сестра", "Дочь"))
         non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, added_name_id, "Сестра", "Дочь", "Муж"))
         non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, added_name_id, "Сестра", "Дочь", "Жена"))
+      else
+        "Неизвестно"
+    end
+    @non_standard_questions_hash = non_standard_questions_hash   #
+  end
 
+  # Генерация вопросов для Мужa/Жены в создавшихся нестандартных ситуациях.
+  # В зависимости от того, какое relation добавляем,
+  # заполняются те массивы вопросов, которые следует задавать
+  def ask_husband_wife_questions(added_relation, added_name_id) # 7,8
+    non_standard_questions_hash = Hash.new
+    case added_relation
+      when 3  # Добавляем Сына к Мужу/Жене
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Сын", "Брат", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Сын", "Брат", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, added_name_id, "Сын", "Сын", "Жена"))
+        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, added_name_id, "Сын", "Сын", "Муж"))
+        @standard_msg = "Добавляем Сына к Мужу/Жене"
+      when 4  # Добавляем Дочь к Мужу/Жене
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Дочь", "Сестра", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Дочь", "Сестра", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, added_name_id, "Дочь", "Дочь", "Жена"))
+        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, added_name_id, "Дочь", "Дочь", "Муж"))
+        @standard_msg = "Добавляем Дочь к Мужу/Жене"
+      when 7  # Добавляем Мужа к Жене
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Муж", "Отец", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Муж", "Отец", "Дочь"))
+      when 8  # Добавляем Жену к Мужу
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Жена", "Мать", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Жена", "Мать", "Дочь"))
       else
         "Неизвестно"
     end
@@ -506,7 +540,7 @@ class MainController < ApplicationController
 
       # Call of make_questions method
       @relation_add_to = 4  # Отношение, к которому добавляем
-      @relation_added = 5   # Отношение, которое добавляем
+      @relation_added = 6   # Отношение, которое добавляем
       @user_id = 28 #
       @profile_id = 191
       @name_id = 64
