@@ -292,7 +292,7 @@ class MainController < ApplicationController
   #
   def make_one_question(one_question_name, author_profile_id, one_question_profile, added_relation, added_name, text_relation, profile_relation, which_string_1, which_string_2)
 
-    name_exist = YandexInflect.inflections(Name.find(one_question_name).name)[1]["__content__"].mb_chars.capitalize
+    name_exist = YandexInflect.inflections(Name.find(one_question_name).name)[1]["__content__"]#.mb_chars.capitalize
     if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
       # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
       one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
@@ -314,7 +314,7 @@ class MainController < ApplicationController
       inflect_added_relation    = YandexInflect.inflections(added_relation)[3]["__content__"]
       inflect_text_relation     = YandexInflect.inflections(text_relation)[4]["__content__"]
       inflect_profile_relation  = YandexInflect.inflections(profile_relation)[1]["__content__"]
-      inflect_added_name        = YandexInflect.inflections(Name.find(added_name_id).name)[3]["__content__"].mb_chars.capitalize
+      inflect_added_name        = YandexInflect.inflections(Name.find(added_name_id).name)[3]["__content__"]#.mb_chars.capitalize
       which_string_1, which_string_2 = words_case_sex_relation(profile_relation, text_relation)
       if !names_arr.blank?
         questions_hash = Hash.new
@@ -497,6 +497,89 @@ class MainController < ApplicationController
     @non_standard_questions_hash = non_standard_questions_hash   #
   end
 
+  # Формирование массива хэшей ближнего круга
+  #  для дальнейшего анализа
+  # ПОРЯДОК - ВАЖЕН, Т.К. ОПРЕДЕЛЕН ЗАРАНЕЕ!!
+  def make_one_array_of_hashes
+
+    #    Тестовый исходный circle_as_hash(user_id, profile_id)
+    @fathers_hash = {173 => 45 }
+    @mothers_hash = {172 => 235 , 174 => 354 }
+    @brothers_hash = {190 => 73, 191 => 66 }
+    @sisters_hash = {1000 => 233, 1001 => 16}
+    @wives_hash = {155 => 292 }
+    @husbands_hash = {194 => 111 }
+    @sons_hash = {156 => 151 }
+    @daughters_hash = {153 => 212, 157 => 214 }
+
+    one_array_of_circle_hashes = []
+    one_array_of_circle_hashes << @fathers_hash
+    one_array_of_circle_hashes << @mothers_hash
+    one_array_of_circle_hashes << @brothers_hash
+    one_array_of_circle_hashes << @sisters_hash
+    one_array_of_circle_hashes << @wives_hash
+    one_array_of_circle_hashes << @husbands_hash
+    one_array_of_circle_hashes << @sons_hash
+    one_array_of_circle_hashes << @daughters_hash
+
+    return one_array_of_circle_hashes
+  end
+
+
+  # Редакция хэшей ближнего кругав зависимости от ответов на вопросы
+  # в нестандартных ситуациях.
+  def circle_hash_reduction(non_standard_answers_hash, one_array_of_hashes)
+    non_standard_answers_hash.each do |key, val|
+      one_array_of_hashes.each do |one_elem_hash|
+        #@one_elem_hash = one_elem_hash # DEBUGG_TO_VIEW
+        one_elem_hash.each do |k,v|
+          one_elem_hash.delete_if {|k, v| k == key && val == false}
+        end
+      end
+    end
+    return one_array_of_hashes
+  end
+
+  # Получение обратно хэшей ближнего круга из массива сокращенных хэшей
+  # в нестандартных ситуациях.
+  # ПОРЯДОК - ВАЖЕН, Т.К. ОПРЕДЕЛЕН ЗАРАНЕЕ!!
+  def make_circle_hashes_reduced(one_array_of_reduced_hashes)
+
+    one_array_of_reduced_hashes.each_with_index do |elem, index|
+      case index
+        when 0
+          @fathers_hash = elem
+        when 1
+          @mothers_hash = elem
+        when 2
+          @brothers_hash = elem
+        when 3
+          @sisters_hash = elem
+        when 4
+          @wives_hash = elem
+        when 5
+          @husbands_hash = elem
+        when 6
+          @sons_hash = elem
+        when 7
+          @daughters_hash = elem
+        else
+          "Nothing"
+      end
+    end
+
+    @reduced_fathers_hash = @fathers_hash       # DEBUGG_TO_VIEW
+    @reduced_mothers_hash = @mothers_hash       # DEBUGG_TO_VIEW
+    @reduced_brothers_hash = @brothers_hash     # DEBUGG_TO_VIEW
+    @reduced_sisters_hash = @sisters_hash       # DEBUGG_TO_VIEW
+    @reduced_wives_hash = @wives_hash           # DEBUGG_TO_VIEW
+    @reduced_husbands_hash = @husbands_hash     # DEBUGG_TO_VIEW
+    @reduced_sons_hash = @sons_hash             # DEBUGG_TO_VIEW
+    @reduced_daughters_hash = @daughters_hash   # DEBUGG_TO_VIEW
+
+  end
+
+
 
 
 #########################################blank?
@@ -539,13 +622,23 @@ class MainController < ApplicationController
       make_search_results_paths(@final_reduced_profiles_hash) #,@final_reduced_relations_hash)
 
       # Call of make_questions method
-      @relation_add_to = 4  # Отношение, к которому добавляем
-      @relation_added = 6   # Отношение, которое добавляем
+      @relation_add_to = 0  # Отношение, к которому добавляем
+      @relation_added = 1   # Отношение, которое добавляем
       @user_id = 28 #
       @profile_id = 191
       @name_id = 64
-
       make_questions(@user_id, @profile_id, @relation_add_to, @relation_added, @name_id) #
+
+     # Call of method of making circle hashes array
+      @non_standard_answers_hash = {190=>true, 191=>false, 1000=>false, 157 => false, 155 => false,  1001=>true, 172=>true, 174=>false}  # DEBUGG_TO_VIEW
+      @one_array_of_hashes = make_one_array_of_hashes  # DEBUGG_TO_VIEW
+     # Call of method of reducing circle hashes
+      @reduced_hash = circle_hash_reduction(@non_standard_answers_hash, make_one_array_of_hashes)
+     # Call of method of getting back reducing circle hashes
+      make_circle_hashes_reduced(@reduced_hash)
+
+
+
 
 
     end
