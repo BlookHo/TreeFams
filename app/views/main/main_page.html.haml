@@ -209,14 +209,15 @@
               = paths.size
               = Russian.p(paths.size, "совпадение", "совпадения", "совпадений")
           - paths.each do |path|
+            - path_id = Digest::MD5.hexdigest(path.to_s)
             .path
-              %ul.path-list
+              %ul.path-list.path-search-list
                 - path.each_with_index do |step, index|
-                  %li.path-results
+                  %li
                     - if step[:relation] != 0
+                      = sex_id_to_human(step[:prev_sex_id])
                       = relation_to_human(step[:relation])
-                    = link_to step[:profile].to_name, '#'
-                    -# = step[:data].inspect
+                    = link_to step[:profile].to_name, "/search/circle_path/#{path_id}/#{user.id}/#{step[:profile].id},#{step[:relation]}", remote: true
                     - if (index + 1) == path.size
                       .span.whois
                         Вероятно, это
@@ -224,23 +225,24 @@
                     - else
                       %span
                         = fa_icon('arrow-right')
-              .more{style:'display:none;'}
-                = render 'search_circle_table', circle: user.profile.circle(user.id), author: user
+
+              .search-path-table{id: "search-path-table-#{path_id}", style: 'display:none;'}
+                = render 'search_circle_path_table', circle: user.profile.circle(user.id), author: user, path_id: path_id
 
 
 
-    -# - @search_results.each do |result|
-    -#   .circle-view
-    -#     - if result.author.class == User
-    -#       .circle-path{id: "current-circle-path-#{result.author.id}"}
-    -#         = render 'search_circle_path', author: result.author
-    -#       .current-circle{id: "current-circle-#{result.author.id}"}
-    -#         = render 'search_circle_table', circle: result.circle, author: result.author
-    -#     - else
-    -#       .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
-    -#         = render 'search_circle_path', author: result.author
-    -#       .current-circle{id: "current-circle-#{params[:tree_id]}"}
-    -#         = render 'search_circle_table', circle: result.circle, author: result.author
+  -# - @search_results.each do |result|
+  -#   .circle-view
+  -#     - if result.author.class == User
+  -#       .circle-path{id: "current-circle-path-#{result.author.id}"}
+  -#         = render 'search_circle_path', author: result.author
+  -#       .current-circle{id: "current-circle-#{result.author.id}"}
+  -#         = render 'search_circle_table', circle: result.circle, author: result.author
+  -#     - else
+  -#       .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
+  -#         = render 'search_circle_path', author: result.author
+  -#       .current-circle{id: "current-circle-#{params[:tree_id]}"}
+  -#         = render 'search_circle_table', circle: result.circle, author: result.author
 
 
 

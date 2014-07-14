@@ -1,11 +1,11 @@
 ul.path-list{
   margin-top:21px;
-  padding:10px;
   border:1px dotted grey;
 
   li{
     display:inline;
     margin-right:5px;
+    padding:10px;
 
   }
 
@@ -42,4 +42,25 @@ ul.path-list{
 .circle-table{
   position:relative;
   width:100%;
+}
+
+
+
+ul.path-search-list{
+  li.active{
+    background:#ff5f67;
+    position:relative;
+
+    // Arrows
+    &:before {
+       position: absolute;
+       bottom:-12px;
+       left: 12px;
+       display: block;
+       border-left: 12px solid transparent;
+       border-right: 12px solid transparent;
+       border-top: 12px solid #ff5f67;
+       content: '';
+   }
+  }
 }

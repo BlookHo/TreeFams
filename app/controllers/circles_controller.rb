@@ -27,6 +27,18 @@ class CirclesController < ApplicationController
   end
 
 
+  def show_search_path
+    @path_id = params[:path_id]
+    @path_author = User.find(params[:tree_id])
+    get_current_profile_id
+    # rebuild_path_params(@path_author.profile_id)
+    # collect_path
+    @author = Profile.find(@current_profile_id)
+    @circle  = @author.circle(params[:tree_id])
+    @final_reduced_relations_hash = session[:final_reduced_relations_hash]
+  end
+
+
   private
 
   def rebuild_path_params(current_user_profile_id)

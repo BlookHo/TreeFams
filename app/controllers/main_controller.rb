@@ -687,12 +687,15 @@ class MainController < ApplicationController
 
  def collect_path_profiles(user_paths)
    results = []
+
    user_paths.each do |paths|
      # results << paths
      result = []
      prev_sex_id = nil
      paths.each do |profile_id, data|
-       result << {profile: Profile.find(profile_id), data: data, relation: data.keys.first, prev_sex_id: prev_sex_id}
+       profile = Profile.find(profile_id)
+       result << {profile: profile, data: data, relation: data.keys.first, prev_sex_id: prev_sex_id}
+       prev_sex_id = profile.sex_id
      end
      results << result
    end

@@ -1,14 +1,12 @@
 $(function(){
 
-  $('.path-results').on('click', function(){
-    // $(this).closest('.path-list').hide();
-    alert('Open list');
-    return false;
-  });
-
-});
+  $('.path-search-list li').on('click', function(){
+    $('.path-search-list li').removeClass('active');
+    $(this).addClass('active');
+  })
 
 
+})
 
 $(function(){
   closeAllDropDown();
