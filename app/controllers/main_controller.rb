@@ -292,7 +292,7 @@ class MainController < ApplicationController
   #
   def make_one_question(one_question_name, author_profile_id, one_question_profile, added_relation, added_name, text_relation, profile_relation, which_string_1, which_string_2)
 
-    name_exist = YandexInflect.inflections(Name.find(one_question_name).name)[1]["__content__"]#.mb_chars.capitalize
+    name_exist = YandexInflect.inflections(Name.find(one_question_name).name)[1]["__content__"].mb_chars.capitalize
     if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
       # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
       one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
@@ -314,7 +314,7 @@ class MainController < ApplicationController
       inflect_added_relation    = YandexInflect.inflections(added_relation)[3]["__content__"]
       inflect_text_relation     = YandexInflect.inflections(text_relation)[4]["__content__"]
       inflect_profile_relation  = YandexInflect.inflections(profile_relation)[1]["__content__"]
-      inflect_added_name        = YandexInflect.inflections(Name.find(added_name_id).name)[3]["__content__"]#.mb_chars.capitalize
+      inflect_added_name        = YandexInflect.inflections(Name.find(added_name_id).name)[3]["__content__"].mb_chars.capitalize
       which_string_1, which_string_2 = words_case_sex_relation(profile_relation, text_relation)
       if !names_arr.blank?
         questions_hash = Hash.new
@@ -502,7 +502,7 @@ class MainController < ApplicationController
   # ПОРЯДОК - ВАЖЕН, Т.К. ОПРЕДЕЛЕН ЗАРАНЕЕ!!
   def make_one_array_of_hashes
 
-    #    Тестовый исходный circle_as_hash(user_id, profile_id)
+    # Тестовый исходный circle_as_hash(user_id, profile_id)
     @fathers_hash = {173 => 45 }
     @mothers_hash = {172 => 235 , 174 => 354 }
     @brothers_hash = {190 => 73, 191 => 66 }
