@@ -23,7 +23,7 @@ class ConnectUsersTreesController < ApplicationController
 
 
 # записывать true в первое дерево после объединения !!!
-#  обобщить методы
+# обобщить методы
 
     opposite_profiles_arr = []
     @replaced_profiles = []
