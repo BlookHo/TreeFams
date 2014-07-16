@@ -1,4 +1,7 @@
 class Profile < ActiveRecord::Base
+
+  include NewProfileQuestions
+
   belongs_to :user
   belongs_to :name
   has_many   :trees

@@ -31,6 +31,7 @@ class ProfilesController < ApplicationController
   def create
     @base_profile = Profile.find(params[:base_profile_id])
     @base_profile_id = params[:base_profile_id]
+    @base_relation_id = params[:base_relation_id]
 
     @profile = Profile.new(profile_params)
     @profile.user_id = 0
@@ -43,6 +44,7 @@ class ProfilesController < ApplicationController
     end
 
 
+
     # Name exist and valid
     if @name
       @profile.name_id = @name.id
@@ -51,10 +53,6 @@ class ProfilesController < ApplicationController
       if relation_qustions_valid? and @profile.save
       #if @profile.save
         ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
-
-        # only js response
-        # flash[:notice] = "Профиль id: #{@profile.id} сохранен"
-        # redirect_to :main_page
 
         # redirect_to to profile circle path if exist, via js
         if params[:path_link].blank?
@@ -67,6 +65,16 @@ class ProfilesController < ApplicationController
       # Ask relations questions
       else
         flash.now[:alert] = "Задаем уточняющие вопросы"
+
+        # user_id           Дерево в которое добавляем
+        # profile_id        Профиль к которому добавляем
+        # relation_add_to   Отношение К которому добавляем
+        # relation_added    Отношение КОТОРОЕ добавляем (кого добавляем)
+        # name_id_added     ID имени нового отношения
+        # make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added)
+
+        @questions = current_user.profile.make_questions(current_user.id, @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
+
         render :new
       end
 
