@@ -138,7 +138,7 @@ class MainController < ApplicationController
 #    Тестовый circle_as_hash(user_id, profile_id)
     @fathers_hash = {173 => 45 }
     @mothers_hash = {172 => 235 , 174 => 354 }
-    @brothers_hash = {190 => 73, 191 => 66 }
+    @brothers_hash = {} #190 => 73, 191 => 66 }
     @sisters_hash = {1000 => 233, 1001 => 16}
     @wives_hash = {155 => 292 }
     @husbands_hash = {194 => 111 }
@@ -307,7 +307,7 @@ class MainController < ApplicationController
   # При этом в впоросе выясняется истинность отношения text_relation добавленного added_relation к рассматриваемому профилю
   # с отношением profile_relation
   def add_relation_questions(names_hash, added_name_id, added_relation, text_relation, profile_relation)
-    return [] if names_hash.blank?
+    return {} if names_hash.blank?
     if !names_hash.blank?
       names_arr = names_hash.values   # name_id array
       profiles_arr = names_hash.keys  # profile_id array
