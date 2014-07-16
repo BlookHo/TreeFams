@@ -121,3 +121,31 @@
     }
   }
 }
+
+
+#questions-fields{
+  .question{
+    display:block;
+    margin-bottom:10px;
+    .text{
+      display:block;
+      font-style:Italic;
+      margin-bottom:10px;
+    }
+
+    .answer{
+      display:block;
+      label{
+        cursor:pointer;
+        height:14px;
+        line-height:14px;
+        font-size:14px;
+        font-weight:bold;
+
+      }
+      label:first-child{
+        margin-right:10px;
+      }
+    }
+  }
+}

@@ -8,26 +8,39 @@
     .flash.alert
       = flash[:alert]
 
-  %br
-    = @questions
-  %br
-
   = form_for @profile, remote: true do |f|
     = hidden_field_tag :base_profile_id, params[:base_profile_id]
     = hidden_field_tag :base_relation_id, params[:base_relation_id]
     = hidden_field_tag :path_link, params[:path_link]
-    #main-new-profile-field
-      = f.hidden_field   :relation_id
-      - if flash[:name_warning]
-        .flash.warning
-          = flash[:name_warning]
-      - if flash[:name_warning]
-        = check_box_tag :new_name_confirmation
-        Имя указано верно
-        %br
-        %br
+    = f.hidden_field   :relation_id
+
+    - if @questions
+      = hidden_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
+      #questions-fields
+        - @questions.each do |q|
+          .question
+            .text
+              = q.text
+            .answer
+              %label
+                = radio_button_tag "answers[#{q.id}]", 1
+                Да
+              %label
+                = radio_button_tag "answers[#{q.id}]", 0
+                Нет
+    - else
+      #main-new-profile-field
+        - if flash[:name_warning]
+          .flash.warning
+            = flash[:name_warning]
+        - if flash[:name_warning]
+          = check_box_tag :new_name_confirmation
+          Имя указано верно
+          %br
+          %br
 
       = text_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
-      .actions
-        = link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class: :cancel
-        = f.submit "Добавить", class: [:btn, :green], data: { disable_with: "Подождите..." }
+
+    .actions
+      = link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class: :cancel
+      = f.submit "Добавить", class: [:btn, :green], data: { disable_with: "Подождите..." }

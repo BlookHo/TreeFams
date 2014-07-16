@@ -50,7 +50,7 @@ class ProfilesController < ApplicationController
       @profile.name_id = @name.id
 
       # Validate for relation questions
-      if relation_qustions_valid? and @profile.save
+      if questions_valid? and @profile.save
       #if @profile.save
         ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
 
@@ -73,13 +73,16 @@ class ProfilesController < ApplicationController
         # name_id_added     ID имени нового отношения
         # make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added)
 
-        @questions = current_user.profile.make_questions(current_user.id, @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
+        questions_hash = current_user.profile.make_questions(current_user.id, @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
+        @questions = create_questions_from_hash(questions_hash)
 
         render :new
       end
 
     # Name validation
+    # reset question
     else
+      @questions = nil
       if params[:profile][:name].blank?
         flash.now[:alert] = "Вы не указли имя."
         render :new
@@ -91,9 +94,7 @@ class ProfilesController < ApplicationController
   end
 
 
-  def relation_qustions_valid?
-    false
-  end
+
 
 
 
@@ -134,7 +135,28 @@ class ProfilesController < ApplicationController
   end
 
 
+
+
   private
+
+
+  def questions_valid?
+    false
+  end
+
+
+  def create_questions_from_hash(questions_hash)
+    result = []
+    questions_hash.keys.each do |profile_id|
+      result << Hashie::Mash.new({id: profile_id, text: questions_hash[profile_id]})
+    end
+    return result
+  end
+
+
+  def parse_questions_answers
+  end
+
 
   def profile_params
     params[:profile].permit(:surname,
