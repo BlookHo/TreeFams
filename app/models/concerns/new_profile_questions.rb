@@ -70,7 +70,8 @@ module NewProfileQuestions
       when 7, 8
         check_husband_wife_relations(relation_added, name_id_added)
       else
-        @standard_msg = "make_questions: Добавляемое отношение - неизвестно"
+        # @standard_msg = "make_questions: Добавляемое отношение - неизвестно"
+        nil
     end
 
   end
@@ -96,7 +97,8 @@ module NewProfileQuestions
       when 8 # add new wife
         ask_author_questions(8, added_name_id)
       else # все остальные relation_added - создают стандартные ситуации
-        @standard_msg = "check_author_relations: Добавляемое к Автору отношение явл. СТАНДАРТНЫМ"
+        # @standard_msg = "check_author_relations: Добавляемое к Автору отношение явл. СТАНДАРТНЫМ"
+        nil
     end
   end
 
@@ -111,7 +113,8 @@ module NewProfileQuestions
       when 8 # add new wife
         ask_father_questions(8, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        @standard_msg = "check_father_relations: Добавляемое к Отцу отношение явл. СТАНДАРТНЫМ"
+        # @standard_msg = "check_father_relations: Добавляемое к Отцу отношение явл. СТАНДАРТНЫМ"
+        nil
     end
   end
 
@@ -126,7 +129,8 @@ module NewProfileQuestions
       when 7 # add new husband
         ask_mother_questions(7, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        @standard_msg = "check_mother_relations: Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
+        # @standard_msg = "check_mother_relations: Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
+        nil
     end
   end
 
@@ -143,7 +147,8 @@ module NewProfileQuestions
       when 6 # add new sister
         ask_brother_sister_questions(6, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        @standard_msg = "check_brother_sister_relations: Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
+        # @standard_msg = "check_brother_sister_relations: Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
+        nil
     end
   end
 
@@ -160,7 +165,8 @@ module NewProfileQuestions
       when 6 # add new sister
         ask_son_daughter_questions(6, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        @standard_msg = "check_son_daughter_relations: Добавляемое к Сыну/Дочери отношение явл. СТАНДАРТНЫМ"
+        # @standard_msg = "check_son_daughter_relations: Добавляемое к Сыну/Дочери отношение явл. СТАНДАРТНЫМ"
+        nil
     end
   end
 
@@ -177,7 +183,8 @@ module NewProfileQuestions
       when 8 # add new wife
         ask_husband_wife_questions(8, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        @standard_msg = "check_father_relations: Добавляемое к Мужа/Жены отношение явл. СТАНДАРТНЫМ"
+        # @standard_msg = "check_father_relations: Добавляемое к Мужа/Жены отношение явл. СТАНДАРТНЫМ"
+        nil
     end
   end
 
