@@ -30,6 +30,9 @@ module NewProfileQuestions
     # Раскладываем по переменным
     @profile_id = profile_id
 
+    # Костыль
+    @tmp_author_profile_id = User.find(user_id).profile_id
+
     @fathers_hash = circle_hashes[:fathers]
     @mothers_hash = circle_hashes[:mothers]
     @brothers_hash = circle_hashes[:brothers]
@@ -218,10 +221,16 @@ module NewProfileQuestions
   def make_one_question(one_question_name, author_profile_id, one_question_profile, added_relation, added_name, text_relation, profile_relation, which_string_1, which_string_2)
 
     name_exist = YandexInflect.inflections(Name.find(one_question_name).name)[1]["__content__"].mb_chars.capitalize
+    logger.info "BIG DEBUG =============one_question_profile==========="
+    logger.info one_question_profile
+    logger.info "BIG DEBUG ============author_profile_id============"
+    logger.info author_profile_id
+    logger.info "EDN BIG DEBUG ========================"
     if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
       # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
       one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
     else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
+      logger.info "2 BIG DEBUG ========================"
       one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{which_string_2} #{text_relation}?"
     end
 
@@ -244,7 +253,8 @@ module NewProfileQuestions
       if !names_arr.blank?
         questions_hash = Hash.new
         for arr_ind in 0 .. names_arr.length - 1
-          one_question = make_one_question(names_arr[arr_ind], @profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
+          # one_question = make_one_question(names_arr[arr_ind], @profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
+          one_question = make_one_question(names_arr[arr_ind], @tmp_author_profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
           # Добавляем один вопрос в хэш вопросов касательно нового отношения
           questions_hash.merge!({profiles_arr[arr_ind] => one_question})
         end

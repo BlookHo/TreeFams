@@ -58,6 +58,7 @@ class ProfilesController < ApplicationController
       # name_id_added     ID имени нового отношения
       # make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added)
       questions_hash = current_user.profile.make_questions(current_user.id, @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
+      # questions_hash = current_user.profile.make_questions(current_user.id, current_user.profile_id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
       @questions = create_questions_from_hash(questions_hash)
       @profile.answers_hash = params[:answers]
 
