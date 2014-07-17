@@ -23,10 +23,10 @@
               = q.text
             .answer
               %label
-                = radio_button_tag "answers[#{q.id}]", 1
+                = radio_button_tag "answers[#{q.id}]", 1,@profile.answers_hash.try(:[], "#{q.id}") == 1.to_s
                 Да
               %label
-                = radio_button_tag "answers[#{q.id}]", 0
+                = radio_button_tag "answers[#{q.id}]", 0, @profile.answers_hash.try(:[], "#{q.id}") == 0.to_s
                 Нет
     - else
       #main-new-profile-field
