@@ -285,7 +285,7 @@ module AddProfileLogic
     # определяются массивы имен всех существующих членов БК
     # @see News
     # @see News
-    def get_bk_relative_names(user_id, profile_id)
+    def get_bk_relative_names(user_id, profile_id, exclusions_hash)
 
       # @fathers_hash = {173 => 454 }
       # @mothers_hash = {} #{172 => 354 }
@@ -296,9 +296,6 @@ module AddProfileLogic
       # @sons_hash = {156 => 151 }
       # @daughters_hash = {153 => 449, 157 => 293 }
 
-
-
-
       @fathers_hash = Profile.find(profile_id).fathers_hash(user_id)
       @mothers_hash = Profile.find(profile_id).mothers_hash(user_id)
       @brothers_hash = Profile.find(profile_id).brothers_hash(user_id)
@@ -307,6 +304,19 @@ module AddProfileLogic
       @husbands_hash = Profile.find(profile_id).husbands_hash(user_id)
       @sons_hash = Profile.find(profile_id).sons_hash(user_id)
       @daughters_hash = Profile.find(profile_id).daughters_hash(user_id)
+
+
+      if exclusions_hash
+        @fathers_hash = proceed_exclusions_profile(@fathers_hash, exclusions_hash)
+        @mothers_hash = proceed_exclusions_profile(@mothers_hash, exclusions_hash)
+        @brothers_hash = proceed_exclusions_profile(@brothers_hash, exclusions_hash)
+        @sisters_hash = proceed_exclusions_profile(@sisters_hash, exclusions_hash)
+        @wives_hash = proceed_exclusions_profile(@wives_hash, exclusions_hash)
+        @husbands_hash = proceed_exclusions_profile(@husbands_hash, exclusions_hash)
+        @sons_hash = proceed_exclusions_profile(@sons_hash, exclusions_hash)
+        @daughters_hash = proceed_exclusions_profile(@daughters_hash, exclusions_hash)
+      end
+
 
       # logger.info Profile.find(profile_id).circle_as_hash(user_id)
 
@@ -321,18 +331,42 @@ module AddProfileLogic
     #
     #end
 
+
+    # Редакция хэшей ближнего кругав зависимости от ответов на вопросы
+    # в нестандартных ситуациях.
+    def proceed_exclusions_profile(members_hash, exclusions_hash)
+      logger.info "==============================DDDDDDDD"
+      logger.info exclusions_hash
+      logger.info "==============================DDDDDDDD"
+      exclusions_hash.each do |key, val|
+          members_hash.each do |k,v|
+            members_hash.delete_if {|k, v| k.to_i == key.to_i && val.to_i == 0.to_i}
+          end
+      end
+      return members_hash
+    end
+
+
     # Добавление нового профиля для любого профиля дерева
     # Запись во все таблицы
     # @note GET /
     # @param admin_page [Integer] опциональный номер страницы
     # @see News
-    def add_new_profile(base_profile, base_relation_id, new_profile, new_relation_id, author_user)
+    # exclusions_hash - по умоланию nil
+    # или же, в него передается hash, уточняющий нестандартные свзяи {profile_id => boolean} / {"143" => '0'}
+    # профили в exclusions_hash с значение 0/false исключаются из генерации связей
+    def add_new_profile(base_profile, base_relation_id, new_profile, new_relation_id, author_user, exclusions_hash: nil)
+
+
+      logger.info "============INCOMING==================DDDDDDDD"
+      logger.info exclusions_hash
+      logger.info "==============================DDDDDDDD"
 
       #get_acceptable_relations # ИД для общей работы
 
       # get_profile_params(base_profile, base_relation_id, new_profile, new_relation_id)  # Получить от Алексея из вьюхи добавления нового профиля
 
-      get_bk_relative_names(author_user.id, base_profile.id)   # Получить от Алексея
+      get_bk_relative_names(author_user.id, base_profile.id, exclusions_hash)   # Получить от Алексея
 
       # make_new_profile # Получить от Алексея
 

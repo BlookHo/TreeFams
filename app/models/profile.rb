@@ -6,7 +6,7 @@ class Profile < ActiveRecord::Base
   belongs_to :name
   has_many   :trees
 
-  attr_accessor :profile_name, :relation_id
+  attr_accessor :profile_name, :relation_id, :answers_hash
 
   before_save do
     self.sex_id = name.try(:sex_id)

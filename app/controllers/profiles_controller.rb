@@ -59,12 +59,13 @@ class ProfilesController < ApplicationController
       # make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added)
       questions_hash = current_user.profile.make_questions(current_user.id, @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
       @questions = create_questions_from_hash(questions_hash)
+      @profile.answers_hash = params[:answers]
 
 
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
-      #if @profile.save
-        ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user)
+
+        ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user, exclusions_hash: @profile.answers_hash)
 
         # redirect_to to profile circle path if exist, via js
         if params[:path_link].blank?
@@ -76,7 +77,7 @@ class ProfilesController < ApplicationController
 
       # Ask relations questions
       else
-        flash.now[:alert] = "Задаем уточняющие вопросы"
+        flash.now[:alert] = "Уточняющие вопросы"
         render :new
       end
 
@@ -84,6 +85,8 @@ class ProfilesController < ApplicationController
     # reset question
     else
       @questions = nil
+      @profile.answers_hash = nil
+
       if params[:profile][:name].blank?
         flash.now[:alert] = "Вы не указли имя."
         render :new
@@ -155,10 +158,6 @@ class ProfilesController < ApplicationController
       result << Hashie::Mash.new({id: profile_id, text: questions_hash[profile_id]})
     end
     return result
-  end
-
-
-  def parse_questions_answers
   end
 
 
