@@ -17,6 +17,7 @@ class CirclesController < ApplicationController
 
 
   def show_search
+    @path_id = params[:path_id]
     @path_author = User.find(params[:tree_id])
     get_current_profile_id
     rebuild_path_params(@path_author.profile_id)

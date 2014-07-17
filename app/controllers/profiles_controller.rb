@@ -64,7 +64,6 @@ class ProfilesController < ApplicationController
 
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
-
         ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user, exclusions_hash: @profile.answers_hash)
 
         # redirect_to to profile circle path if exist, via js
