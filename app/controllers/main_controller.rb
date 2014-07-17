@@ -630,12 +630,12 @@ class MainController < ApplicationController
       make_questions(@user_id, @profile_id, @relation_add_to, @relation_added, @name_id) #
 
      # Call of method of making circle hashes array
-      @non_standard_answers_hash = {190=>true, 191=>false, 1000=>false, 157 => false, 155 => false,  1001=>true, 172=>true, 174=>false}  # DEBUGG_TO_VIEW
-      @one_array_of_hashes = make_one_array_of_hashes  # DEBUGG_TO_VIEW
+     @non_standard_answers_hash = {190=>true, 191=>false, 1000=>false, 157 => false, 155 => false,  1001=>true, 172=>true, 174=>false}  # DEBUGG_TO_VIEW
+     @one_array_of_hashes = make_one_array_of_hashes  # DEBUGG_TO_VIEW
      # Call of method of reducing circle hashes
-      @reduced_hash = circle_hash_reduction(@non_standard_answers_hash, make_one_array_of_hashes)
+     @reduced_hash = circle_hash_reduction(@non_standard_answers_hash, make_one_array_of_hashes)
      # Call of method of getting back reducing circle hashes
-      make_circle_hashes_reduced(@reduced_hash)
+     make_circle_hashes_reduced(@reduced_hash)
 
 
 
