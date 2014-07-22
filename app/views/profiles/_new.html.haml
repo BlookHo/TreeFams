@@ -17,17 +17,25 @@
     - if @questions
       = hidden_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
       #questions-fields
-        - @questions.each do |q|
-          .question
-            .text
-              = q.text
-            .answer
-              %label
-                = radio_button_tag "answers[#{q.id}]", 1,@profile.answers_hash.try(:[], "#{q.id}") == 1.to_s
-                Да
-              %label
-                = radio_button_tag "answers[#{q.id}]", 0, @profile.answers_hash.try(:[], "#{q.id}") == 0.to_s
-                Нет
+        - if @profile.answers_hash.nil?
+          - q = @questions.first
+        - else
+          - q = @questions.delete_if {|q| @profile.answers_hash.try(:keys).include? q.id.to_s}.first
+
+        - # keep answers
+        - @profile.answers_hash.try(:each) do |answer_id, answer_value|
+          = hidden_field_tag "answers[#{answer_id}]", answer_value
+
+        .question
+          .text
+            = q.text
+          .answer
+            %label.btn.green
+              = radio_button_tag "answers[#{q.id}]", 1, @profile.answers_hash.try(:[], "#{q.id}") == 1.to_s, onclick: "$('#new_profile').submit()"
+              Да
+            %label.btn.red
+              = radio_button_tag "answers[#{q.id}]", 0, @profile.answers_hash.try(:[], "#{q.id}") == 0.to_s, onclick: "$('#new_profile').submit()"
+              Нет
     - else
       #main-new-profile-field
         - if flash[:name_warning]
@@ -41,6 +49,7 @@
 
       = text_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
 
-    .actions
-      = link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class: :cancel
-      = f.submit "Добавить", class: [:btn, :green], data: { disable_with: "Подождите..." }
+    - unless @questions
+      .actions
+        = link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class: :cancel
+        = f.submit "Добавить", class: [:btn, :green], data: { disable_with: "Подождите..." }

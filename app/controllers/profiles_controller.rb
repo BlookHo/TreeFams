@@ -77,7 +77,7 @@ class ProfilesController < ApplicationController
 
       # Ask relations questions
       else
-        flash.now[:alert] = "Уточняющие вопросы"
+        # flash.now[:alert] = "Уточняющие вопросы"
         render :new
       end
 
