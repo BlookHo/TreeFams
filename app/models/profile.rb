@@ -21,6 +21,20 @@ class Profile < ActiveRecord::Base
     [self.to_name, self.surname].join(' ')
   end
 
+
+  # Эксперименты по выводу кругов в объедененных деревьях
+  def exp_circle(user_ids)
+    if user_ids.kind_of? Fixnum
+      circle(user_id)
+    elsif user_ids.kind_of? Array
+      results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name)
+      # TODO
+      # results нужно почистить на дубликаты
+      results.uniq!
+    end
+    return results
+  end
+
   # Ближний круг для профиля в дереве юзера
   # по записям в ProfileKey
   def circle(user_id)
