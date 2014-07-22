@@ -35,7 +35,6 @@ class Relation < ActiveRecord::Base
   end
 
 
-
   def self.relation_for_auhtor
     [
       {title: "Отец",   id: 1},
@@ -47,6 +46,46 @@ class Relation < ActiveRecord::Base
       {title: "Муж",    id: 7},
       {title: "Жена",   id: 8}
     ]
+  end
+
+
+  # Невозможные отношения к добавляемуму профилю
+  def self.invalid_relation_ids_to(base_relation_id: base_relation_id, base_sex_id: base_sex_id)
+    base_relation_id = base_relation_id.to_i
+    base_sex_id = base_sex_id.to_i
+    # К Автору мужчине (нельзя добавить мужа)
+    if base_relation_id == 0 and base_sex_id = 1
+      [7]
+    # К Автору женщине (нельзя добавить жену)
+    elsif base_relation_id == 0 and base_sex_id = 0
+      [8]
+    # К Отцу (нельзя добавить мужа)
+    elsif base_relation_id == 1
+      [7]
+    # К Матери (нельзя добавить жену)
+    elsif base_relation_id == 2
+      [8]
+    # К Сыну (нельзя добавить мужа)
+    elsif base_relation_id == 3
+      [7]
+    # К Дочери (нельзя добавить жену)
+    elsif base_relation_id == 4
+      [8]
+    # К Брату (нельзя добавить мужа)
+    elsif base_relation_id == 4
+      [7]
+    # К Сестре (нельзя добавить жену)
+    elsif base_relation_id == 4
+      [8]
+    # К Мужу (нельзя добавить мужа)
+    elsif base_relation_id == 4
+      [7]
+    # К Жене (нельзя добавить жену)
+    elsif base_relation_id == 8
+      [8]
+    else
+      []
+    end
   end
 
 end
