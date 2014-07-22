@@ -145,19 +145,21 @@ class ProfilesController < ApplicationController
 
 
   def questions_valid?(questions_hash)
+    return true if questions_hash.blank?
     questions_hash.try(:size) == params[:answers].try(:size)
   end
 
 
   def create_questions_from_hash(questions_hash)
-    logger.info "=== debugging ========="
+    logger.info "=== debugging create_questions_from_hash========="
     logger.info questions_hash
-    return nil if questions_hash.nil?
+    logger.info questions_hash.blank?
+    return nil if questions_hash.blank?
     result = []
     questions_hash.keys.each do |profile_id|
       result << Hashie::Mash.new({id: profile_id, text: questions_hash[profile_id]})
     end
-    return result
+    result
   end
 
 
