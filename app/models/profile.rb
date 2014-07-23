@@ -33,16 +33,12 @@ class Profile < ActiveRecord::Base
     end
   end
 
-
   # Ближний круг для профиля в дереве юзера
   # по записям в ProfileKey
   def circle(user_id)
-
     results = ProfileKey.where(user_id: user_id, profile_id: self.id).order('relation_id').includes(:name)
-
     # TODO sort
     # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
-
     return results
   end
 
@@ -96,6 +92,7 @@ class Profile < ActiveRecord::Base
     end
     return fathers
   end
+
 
   #  { profile_id => name_id, profile_id => name_id, ... }
   def fathers_hash(user_id)
