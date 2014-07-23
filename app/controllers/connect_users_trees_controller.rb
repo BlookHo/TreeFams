@@ -139,6 +139,34 @@ class ConnectUsersTreesController < ApplicationController
     return connection
   end
 
+  # Получение массива соединенных Юзеров
+  # для заданного "стартового" Юзера
+  #
+  def get_users_connected(current_user_id)
+
+    connected_users_arr = []
+    connected_users_arr << current_user_id
+    first_users_arr = ConnectedUser.where(user_id: current_user_id).where(connected: true).pluck(:with_user_id)
+    if first_users_arr.blank?
+      first_users_arr = ConnectedUser.where(with_user_id: current_user_id).where(connected: true).pluck(:user_id)
+    end
+    one_connected_users_arr = first_users_arr
+    if !one_connected_users_arr.blank?
+      connected_users_arr << one_connected_users_arr
+      connected_users_arr.flatten!.uniq! if !connected_users_arr.blank?
+      one_connected_users_arr.each do |conn_arr_el|
+        next_connected_users_arr = ConnectedUser.where("(user_id = #{conn_arr_el} or with_user_id = #{conn_arr_el})").where(connected: true).pluck(:user_id, :with_user_id)
+        if !next_connected_users_arr.blank?
+          one_connected_users_arr << next_connected_users_arr
+          one_connected_users_arr.flatten!.uniq! if !one_connected_users_arr.blank?
+          connected_users_arr << next_connected_users_arr
+          connected_users_arr.flatten!.uniq! if !connected_users_arr.blank?
+        end
+      end
+    end
+    return connected_users_arr
+  end
+
   def connection_of_trees
 
     @current_user_id = params[:first_user_id]# ||= 'default value'
@@ -151,18 +179,23 @@ class ConnectUsersTreesController < ApplicationController
     @first_tree = tree_arr(@current_user_id)
     @second_tree = tree_arr(@user_id)
 
-    #@current_user_id = 323
-    #@user_id = 42
+    @current_user_id = 77 # DEBUGG_TO_VIEW
+    @user_id = 333 # DEBUGG_TO_VIEW
+    @start_connected_user_id = 200 # DEBUGG_TO_VIEW
+  #     connect_users(@current_user_id, @user_id) # DEBUGG_TO_VIEW
+    @connected_users_arr = get_users_connected(@start_connected_user_id)
 
     if !check_connected(@current_user_id, @user_id) # IF NOT CONNECTED
-      connect_trees(@current_user_id, @user_id, @matched_profiles_in_tree, @matched_relations_in_tree)
-      connect_users(@current_user_id, @user_id)
+    #  connect_trees(@current_user_id, @user_id, @matched_profiles_in_tree, @matched_relations_in_tree)
 
-      connect_profiles
+    #  connect_users(@current_user_id, @user_id)
 
-      connect_profiles_keys
-
-      @conn_msg = "Connection exists" ## DEBUGG_TO_VIEW
+    #
+    #  connect_profiles
+    #
+    #  connect_profiles_keys
+    #
+    #  @conn_msg = "Connection exists" ## DEBUGG_TO_VIEW
     else
       logger.info "Users ALREADY CONNECTED! Current_user=#{@current_user_id.inspect}, user_id=#{@user_id.inspect}."
       @conn_msg = "Users ALREADY CONNECTED!"

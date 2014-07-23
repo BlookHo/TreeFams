@@ -6,6 +6,15 @@
   IN connection_of_trees: who_found_user_id = @current_user_id: #{@current_user_id.inspect}
 %p
   IN connection_of_trees: where_found_user_id = @user_id: #{@user_id.inspect}
+
+%p
+  IN get_users_connected: @@one_connected_users_arr #{@one_connected_users_arr.inspect}
+%p
+  IN get_users_connected: @next_connected_users_arr #{@next_connected_users_arr.inspect}
+%p
+  IN get_users_connected: @connected_users_arr #{@connected_users_arr.inspect}
+
+
 %p
   IN connection_of_trees: @matched_profiles_hash: #{@matched_profiles_hash.inspect}
 %p
