@@ -15,6 +15,7 @@
     = f.hidden_field   :relation_id
 
     - if @questions
+      -#= @questions.inspect
       = hidden_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
       #questions-fields
         - @questions.each do |q|

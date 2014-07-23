@@ -72,13 +72,13 @@ class Relation < ActiveRecord::Base
     elsif base_relation_id == 4
       [8]
     # К Брату (нельзя добавить мужа)
-    elsif base_relation_id == 4
+    elsif base_relation_id == 5
       [7]
     # К Сестре (нельзя добавить жену)
-    elsif base_relation_id == 4
+    elsif base_relation_id == 6
       [8]
     # К Мужу (нельзя добавить мужа)
-    elsif base_relation_id == 4
+    elsif base_relation_id == 7
       [7]
     # К Жене (нельзя добавить жену)
     elsif base_relation_id == 8
