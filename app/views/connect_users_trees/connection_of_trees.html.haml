@@ -6,13 +6,15 @@
   IN connection_of_trees: who_found_user_id = @current_user_id: #{@current_user_id.inspect}
 %p
   IN connection_of_trees: where_found_user_id = @user_id: #{@user_id.inspect}
+%p
+  IN connection_of_trees: @start_connected_user_id: #{@start_connected_user_id.inspect}
 
+-#%p
+-#  IN get_connected_users: @@one_connected_users_arr #{@one_connected_users_arr.inspect}
+-#%p
+-#  IN get_connected_users: @next_connected_users_arr #{@next_connected_users_arr.inspect}
 %p
-  IN get_users_connected: @@one_connected_users_arr #{@one_connected_users_arr.inspect}
-%p
-  IN get_users_connected: @next_connected_users_arr #{@next_connected_users_arr.inspect}
-%p
-  IN get_users_connected: @connected_users_arr #{@connected_users_arr.inspect}
+  IN get_connected_users: @connected_users_arr #{@connected_users_arr.inspect}
 
 
 %p
@@ -37,6 +39,8 @@
 
 
 %p
+  IN connect_trees: @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
+%p
   IN connect_trees: @where_found_profile_id: #{@where_found_profile_id.inspect}
 %p
   IN connect_trees: @who_found_profile_id: #{@who_found_profile_id.inspect}
@@ -44,6 +48,9 @@
   IN connect_trees: @@author_index: #{@author_index.inspect}
 %p
   IN connect_trees: @@author_profile_id: #{@author_profile_id.inspect}
+
+%p
+  IN connect_trees: @replaced: #{@replaced.inspect}
 
 
 

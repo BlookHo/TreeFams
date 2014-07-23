@@ -24,6 +24,8 @@ class ConnectUsersTreesController < ApplicationController
 
 # записывать true в первое дерево после объединения !!!
 # обобщить методы
+ logger.info "========== IN CONNECT_TREES"
+ logger.info matched_profiles_arr
 
     opposite_profiles_arr = []
     @replaced_profiles = []
@@ -64,6 +66,8 @@ class ConnectUsersTreesController < ApplicationController
 
       for arr_ind in 0 .. matched_profiles_arr.length-1
         one_profile = matched_profiles_arr[arr_ind]
+        logger.info one_profile
+        # Замена профилей в круге автора
         where_found_to_replace = Tree.where(:user_id => where_found_user_id.to_i, :is_profile_id => one_profile.to_i)[0]
         if !where_found_to_replace.blank?
             @where_found_to_replace = where_found_to_replace ## DEBUGG_TO_VIEW
@@ -74,7 +78,21 @@ class ConnectUsersTreesController < ApplicationController
           where_found_to_replace.profile_id = author_profile_id # Rewrite of Profiles_ids
           where_found_to_replace.connected = true # Rewrite of Profiles_ids
             @profile_to_replace = author_profile_id # Rewrite of Author Profile_id
-  #        where_found_to_replace.save
+
+         where_found_to_replace.save
+
+        end
+        # Замена профилей в добавленных
+        where_found_to_replace = Tree.where(:user_id => where_found_user_id.to_i, :profile_id => one_profile.to_i)[0]
+        if !where_found_to_replace.blank?
+          @where_found_to_replace = where_found_to_replace ## DEBUGG_TO_VIEW
+          @replaced_profiles << opposite_profiles_arr[arr_ind] ## DEBUGG_TO_VIEW
+          @replaced_profiles << "replace ADDED profiles_id" ## DEBUGG_TO_VIEW
+          @replaced_profiles << where_found_to_replace.profile_id ## DEBUGG_TO_VIEW
+          where_found_to_replace.profile_id = opposite_profiles_arr[arr_ind] # Rewrite of Profiles_ids
+          where_found_to_replace.connected = true # Rewrite of Profiles_ids
+
+             where_found_to_replace.save
         end
       end
 
@@ -82,10 +100,13 @@ class ConnectUsersTreesController < ApplicationController
       @msg = "who_found_user_id > where_found_user_id" ## DEBUGG_TO_VIEW
       @replaced_profiles << who_found_user_id ## DEBUGG_TO_VIEW
 
+      if !who_found_tree_row.blank?
       author_index = opposite_profiles_arr.index(who_found_tree_row.profile_id)
       author_profile_id = matched_profiles_arr[author_index]
         @author_profile_id = author_profile_id # DEBUGG_TO_VIEW
+      end
 
+      # Замена профилей в круге автора
       for arr_ind in 0 .. opposite_profiles_arr.length-1
         one_profile = opposite_profiles_arr[arr_ind]
         who_found_to_replace = Tree.where(:user_id => who_found_user_id.to_i, :is_profile_id => one_profile.to_i)[0]
@@ -98,7 +119,24 @@ class ConnectUsersTreesController < ApplicationController
           who_found_to_replace.profile_id = @author_profile_id # Rewrite of Profiles_ids
           who_found_to_replace.connected = true # Rewrite of Profiles_ids
             @profile_to_replace = @author_profile_id # Rewrite of Author Profile_id
-  #        who_found_to_replace.save
+
+         who_found_to_replace.save
+
+        end
+
+        # Замена профилей в добавленных
+        who_found_to_replace = Tree.where(:user_id => who_found_user_id.to_i, :profile_id => one_profile.to_i)[0]
+        if !who_found_to_replace.blank?
+          @who_found_to_replace = who_found_to_replace ## DEBUGG_TO_VIEW
+          @replaced_profiles << matched_profiles_arr[arr_ind] ## DEBUGG_TO_VIEW
+          @replaced_profiles << "replace ADDED profiles_id" ## DEBUGG_TO_VIEW
+          @replaced_profiles << who_found_to_replace.profile_id ## DEBUGG_TO_VIEW
+          who_found_to_replace.profile_id = matched_profiles_arr[arr_ind]  # Rewrite of Profiles_ids
+          who_found_to_replace.connected = true # Rewrite of Profiles_ids
+
+             who_found_to_replace.save
+          @replaced = who_found_to_replace.profile_id ## DEBUGG_TO_VIEW
+
         end
       end
 
@@ -142,7 +180,7 @@ class ConnectUsersTreesController < ApplicationController
   # Получение массива соединенных Юзеров
   # для заданного "стартового" Юзера
   #
-  def get_users_connected(current_user_id)
+  def get_connected_users(current_user_id)
 
     connected_users_arr = []
     connected_users_arr << current_user_id
@@ -171,22 +209,27 @@ class ConnectUsersTreesController < ApplicationController
 
     @current_user_id = params[:first_user_id]# ||= 'default value'
     @user_id = params[:second_user_id]
-    @matched_profiles_hash = params[:matched_profiles]
-    @matched_relations_hash = params[:matched_relations]
+    @matched_profiles_hash = params[:matched_profiles]  # @final_reduced_profiles_hash
+    @matched_relations_hash = params[:matched_relations]  # @final_reduced_relations_hash
     @matched_profiles_in_tree = @matched_profiles_hash.values_at(@user_id)[0].values.flatten
     @matched_relations_in_tree = @matched_relations_hash.values_at(@user_id)[0].values.flatten
 
     @first_tree = tree_arr(@current_user_id)
     @second_tree = tree_arr(@user_id)
 
-    @current_user_id = 77 # DEBUGG_TO_VIEW
-    @user_id = 333 # DEBUGG_TO_VIEW
-    @start_connected_user_id = 200 # DEBUGG_TO_VIEW
+ #   @current_user_id = 35 # DEBUGG_TO_VIEW
+ #   @user_id = 333 # DEBUGG_TO_VIEW
+    @start_connected_user_id = @current_user_id.to_i #200 # DEBUGG_TO_VIEW
   #     connect_users(@current_user_id, @user_id) # DEBUGG_TO_VIEW
-    @connected_users_arr = get_users_connected(@start_connected_user_id)
+    @connected_users_arr = get_connected_users(@start_connected_user_id)
+#    connect_trees(@current_user_id, @user_id, @matched_profiles_in_tree, @matched_relations_in_tree)
 
-    if !check_connected(@current_user_id, @user_id) # IF NOT CONNECTED
-    #  connect_trees(@current_user_id, @user_id, @matched_profiles_in_tree, @matched_relations_in_tree)
+    if !@connected_users_arr.include?(@user_id) # IF NOT CONNECTED
+      logger.info "In check" "#{@connected_users_arr.include?(@user_id).inspect}" # false
+
+
+      #   if !check_connected(@current_user_id, @user_id) # IF NOT CONNECTED
+        connect_trees(@current_user_id, @user_id, @matched_profiles_in_tree, @matched_relations_in_tree)
 
     #  connect_users(@current_user_id, @user_id)
 
