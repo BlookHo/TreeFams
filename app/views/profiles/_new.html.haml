@@ -30,7 +30,7 @@
 
         .question
           .text
-            = q.text
+            = q.text.html_safe
           .answer
             %label.btn.green
               = radio_button_tag "answers[#{q.id}]", 1, @profile.answers_hash.try(:[], "#{q.id}") == 1.to_s, onclick: "$('#new_profile').submit()"

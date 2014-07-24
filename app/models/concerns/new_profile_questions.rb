@@ -26,15 +26,17 @@ module NewProfileQuestions
     # @daughters_hash = {153 => 212, 157 => 214 }
 
 
-    profile_id = 230
-    logger.info "=====in get_circle_as_hash========"
-    logger.info profile_id
+    # profile_id = 230
+    # logger.info "=====in get_circle_as_hash========"
+    # logger.info profile_id
 
     # Собираем хеш ближнего круга
     circle_hashes = get_circle_as_hash(user_id, author_profile_id)
 
     # Раскладываем по переменным
     @profile_id = profile_id
+
+    @incoming_author_profile_id = author_profile_id
 
     # Костыль
     @tmp_author_profile_id = User.find(user_id).profile_id
@@ -235,12 +237,31 @@ module NewProfileQuestions
     logger.info "BIG DEBUG ============author_profile_id============"
     logger.info author_profile_id
     logger.info "EDN BIG DEBUG ========================"
-    if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
-      # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
-      one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
-    else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
-      logger.info "2 BIG DEBUG ========================"
-      one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{which_string_2} #{text_relation}?"
+
+
+    # if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
+    #   # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
+    #   one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
+    # else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
+    #   logger.info "2 BIG DEBUG ========================"
+    #   one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{which_string_2} #{text_relation}?"
+    # end
+    if @incoming_author_profile_id != author_profile_id
+      if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
+        # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
+        one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} <strike>#{which_string_1}</strike> #{profile_relation} #{name_exist}?"
+      else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
+        logger.info "2 BIG DEBUG ========================"
+        one_question = "Считаете ли вы #{added_relation} #{added_name} - <strike>#{which_string_2}</strike> #{text_relation}?"
+      end
+    else
+      if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
+        # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
+        one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
+      else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
+        logger.info "2 BIG DEBUG ========================"
+        one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{which_string_2} #{text_relation}?"
+      end
     end
 
     return one_question
