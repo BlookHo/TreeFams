@@ -31,7 +31,9 @@ class ProfilesController < ApplicationController
   def create
     @base_profile = Profile.find(params[:base_profile_id])
     @base_profile_id = params[:base_profile_id]
+    @author_profile_id = params[:author_profile_id]
     @base_relation_id = params[:base_relation_id]
+
 
     @profile = Profile.new(profile_params)
     @profile.user_id = 0
@@ -57,7 +59,7 @@ class ProfilesController < ApplicationController
       # relation_added    Отношение КОТОРОЕ добавляем (кого добавляем)
       # name_id_added     ID имени нового отношения
       # make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added)
-      questions_hash = current_user.profile.make_questions(current_user.id, @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
+      questions_hash = current_user.profile.make_questions(current_user.id, @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i, @author_profile_id)
       # questions_hash = current_user.profile.make_questions(current_user.id, current_user.profile_id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
       @questions = create_questions_from_hash(questions_hash)
       @profile.answers_hash = params[:answers]
@@ -133,6 +135,7 @@ class ProfilesController < ApplicationController
 
 
   def show_dropdown_menu
+    @author_profile_id = params[:author_profile_id]
     @profile = Profile.find(params[:profile_id])
     @base_relation_id = params[:base_relation_id]
     @path_link = params[:path_link]

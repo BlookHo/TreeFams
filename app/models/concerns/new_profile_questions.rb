@@ -12,7 +12,8 @@ module NewProfileQuestions
   # relation_add_to   Отношение К которому добавляем
   # relation_added    Отношение КОТОРОЕ добавляем (кого добавляем)
   # name_id_added     ID имени нового отношения
-  def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added)
+  # author_profile_id  ID профиля автора (центра) круга, для кого нужно собирать хеши и относительно кого строются вопросы
+  def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added, author_profile_id)
 
     # Тестовый circle_as_hash(user_id, profile_id)
     # @fathers_hash = {173 => 45 }
@@ -30,7 +31,7 @@ module NewProfileQuestions
     logger.info profile_id
 
     # Собираем хеш ближнего круга
-    circle_hashes = get_circle_as_hash(user_id, profile_id)
+    circle_hashes = get_circle_as_hash(user_id, author_profile_id)
 
     # Раскладываем по переменным
     @profile_id = profile_id
