@@ -66,7 +66,9 @@ module NewProfileQuestions
         check_father_relations(relation_added, name_id_added)
       when 2
         check_mother_relations(relation_added, name_id_added)
-      when 3, 4
+      when 3
+        check_son_daughter_relations(relation_added, name_id_added)
+      when 4
         check_son_daughter_relations(relation_added, name_id_added)
       when 5, 6
         check_brother_sister_relations(relation_added, name_id_added)
