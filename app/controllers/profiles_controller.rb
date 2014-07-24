@@ -109,7 +109,7 @@ class ProfilesController < ApplicationController
     @profile = Profile.where(id: params[:id]).first
 
     if @profile.tree_circle(current_user.id, @profile.id).size > 0
-      flash[:alert] = "Вы можете удалить только последний профиль в цепочки родных"
+      flash[:alert] = "Вы можете удалить только последнего родственника в цепочке"
     else
       if @profile and @profile.user_id != current_user.id
         ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
