@@ -20,27 +20,66 @@
       = hidden_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
       #questions-fields
         - if @profile.answers_hash.nil?
-          - q = @questions.first
+          - current_question = @questions.first
         - else
           -#- q = @questions.delete_if {|q| @profile.answers_hash.try(:keys).include? q.id.to_s}.first
-          - q = @questions.select {|q| !( @profile.answers_hash.try(:keys).include? q.id.to_s) }.first
+          - current_question = @questions.select {|q| !( @profile.answers_hash.try(:keys).include? q.id.to_s) }.first
 
         - # keep answers
         - @profile.answers_hash.try(:each) do |answer_id, answer_value|
           = hidden_field_tag "answers[#{answer_id}]", answer_value
 
-        = @questions.size
+        - @questions.each do |q|
+          .question{id: "question-#{q.id}", "data-id" => q.id}
+            -#= current_question
+            .text
+              = q.text.html_safe
+            .answer
+              %label.btn.green
+                = radio_button_tag "answers[#{q.id}]", 1, @profile.answers_hash.try(:[], "#{q.id}") == 1.to_s, onclick: "$('#new_profile').submit()"
+                Да
+              %label.btn.red
+                = radio_button_tag "answers[#{q.id}]", 0, @profile.answers_hash.try(:[], "#{q.id}") == 0.to_s, onclick: "$('#new_profile').submit()"
+                Нет
 
-        .question
-          .text
-            = q.text.html_safe
-          .answer
-            %label.btn.green
-              = radio_button_tag "answers[#{q.id}]", 1, @profile.answers_hash.try(:[], "#{q.id}") == 1.to_s, onclick: "$('#new_profile').submit()"
-              Да
-            %label.btn.red
-              = radio_button_tag "answers[#{q.id}]", 0, @profile.answers_hash.try(:[], "#{q.id}") == 0.to_s, onclick: "$('#new_profile').submit()"
-              Нет
+        = link_to 'Показать предыдущий вопрос', '#', id: "showPreviousQuestion"
+
+      :javascript
+        $(function(){
+          var current_question = #{current_question.id};
+          var questions = $('.question');
+          var question_ids = [];
+          $.each(questions, function(index, value){
+            question_ids.push( $(value).data('id') );
+          })
+          var current_question_index = $.inArray(current_question, question_ids);
+
+          console.log(question_ids);
+          console.log(current_question)
+          console.log(current_question_index)
+
+          $(questions).hide();
+          var current_element = $(questions)[current_question_index];
+          $(current_element).fadeIn();
+
+          $('#showPreviousQuestion').on('click', function(){
+            if (current_question_index != 0){
+              $(questions).hide();
+              var current_element = $(questions)[current_question_index - 1];
+              $(current_element).fadeIn();
+              current_question_index = current_question_index -1;
+              return false;
+            }
+            return false;
+          })
+
+
+
+        })
+
+
+
+
     - else
       #main-new-profile-field
         - if flash[:name_warning]
