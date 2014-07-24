@@ -106,25 +106,9 @@ class ProfilesController < ApplicationController
 
   def destroy
     @profile = Profile.where(id: params[:id]).first
-    if @profile
-      # TODO удалять вложенные профили и свзяи при их наличии
-      # current_user.trees.where(is_profile_id: @profile.id).map(&:destroy)
-      # current_user.profile_keys.where(is_profile_id:@profile.id).map(&:destroy)
-      # current_user.profile_keys.where(profile_id:@profile.id).map(&:destroy)
-      # @profile.destroy
-      flash.now[:notice] = "Профиль удален"
-    else
-      flash.now[:alert] = "Ошибка удаления профиля"
-    end
-    redirect_to :back
-  end
-
-
-  def destroy
-    @profile = Profile.where(id: params[:id]).first
     if @profile and @profile.user_id != current_user.id
-      ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile).map(&:destroy)
-      Tree.where(:is_profile_id => 297).map(&:destroy)
+      ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
+      Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
       @profile.destroy
       flash.now[:notice] = "Профиль удален"
     else
