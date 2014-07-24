@@ -1,7 +1,6 @@
 .dropdown{
   position:relative !important;
   display:inline-block;
-  border:1px solid grey;
 }
 
 .dropdown > a{
@@ -15,7 +14,7 @@
 .dropdown ul{
   z-index:20;
   left:100px;
-  top:-15px;
+  top:-10px;
   position:absolute;
   background-color:#fff;
   font-size:16px;

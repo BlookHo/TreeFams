@@ -22,11 +22,14 @@
         - if @profile.answers_hash.nil?
           - q = @questions.first
         - else
-          - q = @questions.delete_if {|q| @profile.answers_hash.try(:keys).include? q.id.to_s}.first
+          -#- q = @questions.delete_if {|q| @profile.answers_hash.try(:keys).include? q.id.to_s}.first
+          - q = @questions.select {|q| !( @profile.answers_hash.try(:keys).include? q.id.to_s) }.first
 
         - # keep answers
         - @profile.answers_hash.try(:each) do |answer_id, answer_value|
           = hidden_field_tag "answers[#{answer_id}]", answer_value
+
+        = @questions.size
 
         .question
           .text
