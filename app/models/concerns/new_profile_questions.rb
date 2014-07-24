@@ -24,6 +24,11 @@ module NewProfileQuestions
     # @sons_hash = {156 => 151 }
     # @daughters_hash = {153 => 212, 157 => 214 }
 
+
+    profile_id = 230
+    logger.info "=====in get_circle_as_hash========"
+    logger.info profile_id
+
     # Собираем хеш ближнего круга
     circle_hashes = get_circle_as_hash(user_id, profile_id)
 
@@ -42,22 +47,22 @@ module NewProfileQuestions
     @sons_hash = circle_hashes[:sons]
     @daughters_hash = circle_hashes[:daughters]
 
-    # logger.info "=====@fathers_hash========"
-    # logger.info @fathers_hash
-    # logger.info "=====@mothers_hash========"
-    # logger.info @mothers_hash
-    # logger.info "=====@brothers_hash========"
-    # logger.info @brothers_hash
-    # logger.info "=====@sisters_hash========"
-    # logger.info @sisters_hash
-    # logger.info "=====@wives_hash========"
-    # logger.info @wives_hash
-    # logger.info "=====@husbands_hash========"
-    # logger.info @husbands_hash
-    # logger.info "=====@sons_hash========"
-    # logger.info @sons_hash
-    # logger.info "=====@daughters_hash========"
-    # logger.info @daughters_hash
+    logger.info "=====@fathers_hash========"
+    logger.info @fathers_hash
+    logger.info "=====@mothers_hash========"
+    logger.info @mothers_hash
+    logger.info "=====@brothers_hash========"
+    logger.info @brothers_hash
+    logger.info "=====@sisters_hash========"
+    logger.info @sisters_hash
+    logger.info "=====@wives_hash========"
+    logger.info @wives_hash
+    logger.info "=====@husbands_hash========"
+    logger.info @husbands_hash
+    logger.info "=====@sons_hash========"
+    logger.info @sons_hash
+    logger.info "=====@daughters_hash========"
+    logger.info @daughters_hash
 
     case relation_add_to
       when 0
