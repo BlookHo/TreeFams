@@ -24,6 +24,11 @@ module NewProfileQuestions
     # @sons_hash = {156 => 151 }
     # @daughters_hash = {153 => 212, 157 => 214 }
 
+
+    profile_id = 230
+    logger.info "=====in get_circle_as_hash========"
+    logger.info profile_id
+
     # Собираем хеш ближнего круга
     circle_hashes = get_circle_as_hash(user_id, profile_id)
 
