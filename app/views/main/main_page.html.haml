@@ -1,4 +1,197 @@
 
+-#%p
+-#  @tree_arr: #{@tree_arr.inspect}
+-#
+-#%p
+-#  BK_массив: @bk_arr: #{@bk_arr.inspect}
+-#%p
+-#  @circle: #{@circle.inspect}
+-#%p
+-#  @circle_hash: #{@circle_hash.inspect}
+-#%p
+-#  @circle_hash_mothers: #{@circle_hash_mothers.inspect}
+-#
+-#%h4
+-#  Найдено #{@amount_of_profiles.inspect} совпадений профилей родных, в том числе #{@count.inspect} зарегистрированных пользователей.
+-#%h4
+-#  Их user_id: #{@users_ids_arr.inspect}
+-#%p
+-#  @relation_id_searched_arr: #{@relation_id_searched_arr.inspect}
+-#%p
+-#  @from_profile_searching: #{@from_profile_searching.inspect}
+-#%p
+-#  @profile_searched: #{@profile_searched.inspect}
+-#%p
+-#  @relation_searched: #{@relation_searched.inspect}
+-#%p
+-#  @all_profile_rows: #{@all_profile_rows.inspect}
+-#%p
+-#  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
+-#%p
+-#  @relation_match_arr: #{@relation_match_arr.inspect}
+-#%p
+-#  @relation_match_size: #{@relation_match_size.inspect}
+-#
+-#%p
+-#  @found_trees_hash: #{@found_trees_hash.inspect}
+-#%p
+-#  @found_trees_keys_arr: #{@found_trees_keys_arr.inspect}
+-#%p
+-#  @found_trees_values_arr: #{@found_trees_values_arr.inspect}
+-#
+-#%p
+-#  @found_profiles_hash: #{@found_profiles_hash.inspect}
+-#%p
+-#  @found_profiles_values_arr: #{@found_profiles_values_arr.inspect}
+-#%p
+-#  @test_wide_found_profiles_hash: #{@test_wide_found_profiles_hash.inspect}
+-#%p
+-#  @wide_found_relations_hash: #{@wide_found_relations_hash.inspect}
+-#
+-#
+-#%p
+-#  @found_profiles_hash: #{@found_profiles_hash.inspect}
+-#%p
+-#  @found_relations_hash: #{@found_relations_hash.inspect}
+-#
+-#%p
+-#  @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
+-#%p
+-#  @all_match_relations_arr: #{@all_match_relations_arr.inspect}
+-#
+-#%p
+-#  @all_wide_match_profiles_arr: #{@all_wide_match_profiles_arr.inspect}
+-#%p
+-#  @all_wide_match_hash: #{@all_wide_match_hash.inspect}
+-#%p
+-#  @all_wide_match_relations_arr: #{@all_wide_match_relations_arr.inspect}
+
+-#%h4
+-#  ВСЕ СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
+-#%h4
+-#  ПОЛНЫЙ ХЭШ ПРОФИЛЕЙ: {дерево  профили}@all_wide_match_arr_sorted: #{@all_wide_match_arr_sorted.inspect}
+
+%h4
+  ВСЕ wide СОВПАДЕНИЯ РОДНЫХ : @final_reduced_profiles_hash: #{@final_reduced_profiles_hash.inspect}
+
+-#%p
+-#  НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
+
+-# %p
+-#   ВСЕ НАЙДЕННЫЕ НОМЕРА wide ДЕРЕВЬЕВ (АВТОРОВ) @wide_user_ids_arr: #{@wide_user_ids_arr.inspect}
+-#
+-# %h4
+-#   ВСЕ НАЙДЕННЫЕ ПРОФИЛИ: @wide_profile_ids_arr: #{@wide_profile_ids_arr.inspect}
+-#
+-# %h4
+-#   @wide_amount_of_profiles: #{@wide_amount_of_profiles.inspect}
+-#%h4
+-#  @complete_hash: #{@complete_hash.inspect}
+-#
+-#
+-#%p
+-#  НОМЕРА ОТНОШЕНИЙ @all_match_relations_sorted: #{@all_match_relations_sorted.inspect}
+-#%p
+-#  НОМЕРА wide ОТНОШЕНИЙ @all_wide_match_relations_sorted: #{@all_wide_match_relations_sorted.inspect}
+
+-# %h4
+-#   ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
+-#
+-# %p
+-#   @search_results_relations: #{@search_results_relations.inspect}
+-#
+-#
+-#
+-#
+-# %p
+-#   make_search_results_paths ###########
+-#%p
+-#  @start_profile: #{@start_profile.inspect}
+-#%p
+-#  @hash_to_transform: #{@hash_to_transform.inspect}
+-#%p
+-#  @profiles_arr_to_transform: #{@profiles_arr_to_transform.inspect}
+-#%p
+-#  @finish_profile: #{@finish_profile.inspect}
+-#%p
+-#  @results_qty: #{@results_qty.inspect}
+-#%p
+-#  @one_tree_hash: #{@one_tree_hash.inspect}
+-#%p
+-#  @one_path_hash: #{@one_path_hash.inspect}
+-#%p
+-#  @relation_to_next_profile: #{@relation_to_next_profile.inspect}
+
+-# %p
+-#   @search_path_hash: #{@search_path_hash.inspect}
+-#%p
+-#  @search_path_hash_size: #{@search_path_hash_size.inspect}
+
+
+
+
+%p
+  make_questions in NON-STANDARD CASE ###########
+%p
+  Добавляем к кому: @relation_add_to: #{@relation_add_to.inspect}
+%p
+  Добавляем кого: @relation_added: #{@relation_added.inspect}
+%p
+  С именем: @name_id: #{@name_id.inspect}
+
+%p
+  @non_standard_questions_hash: #{@non_standard_questions_hash.inspect}
+-#%p
+-#  @standard_msg: #{@standard_msg.inspect}
+
+
+%p
+  circle_hash_reduction in NON-STANDARD CASE ###########
+%p
+  @fathers_hash: #{@fathers_hash.inspect}
+%p
+  @mothers_hash: #{@mothers_hash.inspect}
+%p
+  @brothers_hash: #{@brothers_hash.inspect}
+%p
+  @sisters_hash: #{@sisters_hash.inspect}
+%p
+  @wives_hash: #{@wives_hash.inspect}
+%p
+  @husbands_hash: #{@husbands_hash.inspect}
+%p
+  @sons_hash: #{@sons_hash.inspect}
+%p
+  @daughters_hash: #{@daughters_hash.inspect}
+
+
+%p
+  @non_standard_answers_hash: #{@non_standard_answers_hash.inspect}
+%p
+  @one_array_of_hashes: #{@one_array_of_hashes.inspect}
+-#%p
+-#  @one_elem_hash: #{@one_elem_hash.inspect}
+%p
+  @reduced_hash: #{@reduced_hash.inspect}
+%p
+  @reduced_fathers_hash: #{@reduced_fathers_hash.inspect}
+%p
+  @reduced_mothers_hash: #{@reduced_mothers_hash.inspect}
+%p
+  @reduced_brothers_hash: #{@reduced_brothers_hash.inspect}
+%p
+  @reduced_sisters_hash: #{@reduced_sisters_hash.inspect}
+%p
+  @reduced_wives_hash: #{@reduced_wives_hash.inspect}
+%p
+  @reduced_husbands_hash: #{@reduced_husbands_hash.inspect}
+%p
+  @reduced_sons_hash: #{@reduced_sons_hash.inspect}
+%p
+  @reduced_daughters_hash: #{@reduced_daughters_hash.inspect}
+
+
+
 .content
   .circle-view
     .circle-path#current-circle-path= render 'circle_path'
