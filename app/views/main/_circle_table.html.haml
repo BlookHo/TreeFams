@@ -8,6 +8,7 @@
     %td
       %h2
         = render 'profiles/dropdown/link',
+          author_profile_id: @author.id,
           base_profile_id: @author.id,
           base_relation_id: 0,
           link_text: @author.full_name,
@@ -20,6 +21,7 @@
       %td= relation_to_human(item.relation_id)
       %td
         = render 'profiles/dropdown/link',
+          author_profile_id: @author.id,
           base_profile_id: item.is_profile_id,
           base_relation_id: item.relation_id,
           link_text: [item.name.to_name,item.is_profile.surname].join(' '),

@@ -110,8 +110,9 @@ Weafam::Application.routes.draw do
   resources :relations
 
 
-  get 'main/circles/(:path)',   to: "circles#show", as: :circle
-  get 'search/circles/:tree_id/(:path)', to: "circles#show_search", as: :search_circle
+  get 'main/circles/(:path)',                          to: "circles#show",            as: :circle
+  get 'search/circles/:path_id/:tree_id/(:path)',               to: "circles#show_search",     as: :search_circle
+  get 'search/circle_path/:path_id/:tree_id/(:path)',  to: "circles#show_search_path", as: :search_circle_path
 
 
   # Users and Sessions

@@ -1,9 +1,12 @@
 class Profile < ActiveRecord::Base
+
+  include NewProfileQuestions
+
   belongs_to :user
   belongs_to :name
   has_many   :trees
 
-  attr_accessor :profile_name, :relation_id
+  attr_accessor :profile_name, :relation_id, :answers_hash
 
   before_save do
     self.sex_id = name.try(:sex_id)
@@ -18,15 +21,24 @@ class Profile < ActiveRecord::Base
     [self.to_name, self.surname].join(' ')
   end
 
+
+  # Эксперименты по выводу кругов в объедененных деревьях
+  # получает на вход id деревьев из которых надо собрать ближний круг
+  def exp_circle(user_ids)
+    if user_ids.kind_of? Fixnum
+      return circle(user_ids)
+    elsif user_ids.kind_of? Array
+      results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name)
+      return results.uniq!
+    end
+  end
+
   # Ближний круг для профиля в дереве юзера
   # по записям в ProfileKey
   def circle(user_id)
-
     results = ProfileKey.where(user_id: user_id, profile_id: self.id).order('relation_id').includes(:name)
-
     # TODO sort
     # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
-
     return results
   end
 
@@ -44,6 +56,7 @@ class Profile < ActiveRecord::Base
 
   def circle_as_hash(user_id)
     {
+      author: {"profile_id" => self.id, "name_id" => self.name_id, "sex_id" => self.sex_id },
       mothers: mothers_hash(user_id),
       fathers: fathers_hash(user_id),
       sons: sons_hash(user_id),
@@ -80,6 +93,7 @@ class Profile < ActiveRecord::Base
     end
     return fathers
   end
+
 
   #  { profile_id => name_id, profile_id => name_id, ... }
   def fathers_hash(user_id)

@@ -49,4 +49,15 @@ module ApplicationHelper
   end
 
 
+  def sex_id_to_human(sex_id)
+    if sex_id and sex_id == 0
+      return 'eё'
+    elsif sex_id and sex_id == 1
+      return 'его'
+    else
+      return nil
+    end
+  end
+
+
 end
