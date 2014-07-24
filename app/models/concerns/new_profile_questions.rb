@@ -15,31 +15,12 @@ module NewProfileQuestions
   # author_profile_id  ID профиля автора (центра) круга, для кого нужно собирать хеши и относительно кого строются вопросы
   def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added, author_profile_id)
 
-    # Тестовый circle_as_hash(user_id, profile_id)
-    # @fathers_hash = {173 => 45 }
-    # @mothers_hash = {172 => 235 , 174 => 354 }
-    # @brothers_hash = {190 => 73, 191 => 66 }
-    # @sisters_hash = {1000 => 233, 1001 => 16}
-    # @wives_hash = {155 => 292 }
-    # @husbands_hash = {194 => 111 }
-    # @sons_hash = {156 => 151 }
-    # @daughters_hash = {153 => 212, 157 => 214 }
-
-
-    # profile_id = 230
-    # logger.info "=====in get_circle_as_hash========"
-    # logger.info profile_id
-
     # Собираем хеш ближнего круга
     circle_hashes = get_circle_as_hash(user_id, author_profile_id)
 
-    # Раскладываем по переменным
-    @profile_id = profile_id
+    @incoming_author_profile_id = author_profile_id # автор текущего круга
 
-    @incoming_author_profile_id = author_profile_id
-
-    # Костыль
-    @tmp_author_profile_id = User.find(user_id).profile_id
+    @tmp_author_profile_id = User.find(user_id).profile_id  # Главный автор - Юзер
 
     @fathers_hash = circle_hashes[:fathers]
     @mothers_hash = circle_hashes[:mothers]
@@ -49,6 +30,16 @@ module NewProfileQuestions
     @husbands_hash = circle_hashes[:husbands]
     @sons_hash = circle_hashes[:sons]
     @daughters_hash = circle_hashes[:daughters]
+
+    @author_hash = circle_hashes[:author] # Инфа о текущем авторе
+    tmp_author_hash = {@author_hash["profile_id"] => @author_hash["name_id"]}
+
+    # Включение в списки братьев или сестер автора в завис-ти от его пола
+    if @author_hash["sex_id"] == 1
+      @brothers_hash.merge!(tmp_author_hash)
+    else
+      @sisters_hash.merge!(tmp_author_hash)
+    end
 
     logger.info "=====@fathers_hash========"
     logger.info @fathers_hash
@@ -239,28 +230,25 @@ module NewProfileQuestions
     logger.info "EDN BIG DEBUG ========================"
 
 
-    # if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
+    #if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
     #   # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
     #   one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
-    # else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
+    #else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
     #   logger.info "2 BIG DEBUG ========================"
     #   one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{which_string_2} #{text_relation}?"
-    # end
-    if @incoming_author_profile_id != author_profile_id
-      if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
-        # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
-        one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} <strike>#{which_string_1}</strike> #{profile_relation} #{name_exist}?"
-      else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
-        logger.info "2 BIG DEBUG ========================"
-        one_question = "Считаете ли вы #{added_relation} #{added_name} - <strike>#{which_string_2}</strike> #{text_relation}?"
-      end
+    #end
+
+    if @incoming_author_profile_id.to_i != author_profile_id
+      ## one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
+      #  one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} <strike>1 #{which_string_1} #{profile_relation} </strike> #{name_exist}?"
+        one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{name_exist}?"
     else
       if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
         # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
-        one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
+        one_question = "Считаете ли вы #{added_relation} #{added_name} - #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
       else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
         logger.info "2 BIG DEBUG ========================"
-        one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{which_string_2} #{text_relation}?"
+        one_question = "Считаете ли вы #{added_relation} #{added_name} - #{which_string_2} #{text_relation}?"
       end
     end
 
@@ -284,7 +272,7 @@ module NewProfileQuestions
         questions_hash = Hash.new
         for arr_ind in 0 .. names_arr.length - 1
           # one_question = make_one_question(names_arr[arr_ind], @profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
-          one_question = make_one_question(names_arr[arr_ind], @profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
+          one_question = make_one_question(names_arr[arr_ind], @tmp_author_profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
           # Добавляем один вопрос в хэш вопросов касательно нового отношения
           questions_hash.merge!({profiles_arr[arr_ind] => one_question})
         end
@@ -300,6 +288,7 @@ module NewProfileQuestions
     non_standard_questions_hash = Hash.new
     case added_relation
       when 1  # Добавляем Отца к Автору - то же, что 5,6 - 1
+
         non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Отец", "Отец", "Брат"))
         non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Отец", "Отец", "Сестра"))
         non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать"))

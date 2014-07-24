@@ -56,6 +56,7 @@ class Profile < ActiveRecord::Base
 
   def circle_as_hash(user_id)
     {
+      author: {"profile_id" => self.id, "name_id" => self.name_id, "sex_id" => self.sex_id },
       mothers: mothers_hash(user_id),
       fathers: fathers_hash(user_id),
       sons: sons_hash(user_id),
