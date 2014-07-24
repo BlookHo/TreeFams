@@ -16,3 +16,4 @@
 //= require welcome-form.js
 //= require dropdown.js
 //= require overlay.js
+//= require new_profile_questions.js

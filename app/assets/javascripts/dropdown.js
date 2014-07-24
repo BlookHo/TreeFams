@@ -13,7 +13,6 @@ $(function(){
 
 
   $(document).on('click', function(e){
-
       if( $('.dropdown').has(e.target).length === 0 ){
           if ( $('.ui-autocomplete').has(e.target).length === 0 ){
             closeAllDropDown();
