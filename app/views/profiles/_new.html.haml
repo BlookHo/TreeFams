@@ -68,10 +68,21 @@
               var current_element = $(questions)[current_question_index - 1];
               $(current_element).fadeIn();
               current_question_index = current_question_index -1;
-              return false;
+
+              if (current_question_index == 0){
+                $('#showPreviousQuestion').hide();
+              }else{
+                $('#showPreviousQuestion').show();
+              }
             }
             return false;
-          })
+          });
+
+          if (current_question_index == 0){
+            $('#showPreviousQuestion').hide();
+          }
+
+
 
 
 
