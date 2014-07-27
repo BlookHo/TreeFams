@@ -2,6 +2,9 @@
 
 %h3
   ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ
+
+%p
+  IN connect_trees: @msg: #{@msg.inspect}
 %p
   IN connection_of_trees: who_found_user_id = @current_user_id: #{@current_user_id.inspect}
 %p
@@ -30,39 +33,40 @@
 %p
   IN connection_of_trees: @second_tree: #{@second_tree.inspect}
 
-%p
-  IN check_unconnected: @connection_row: #{@connection_row.inspect}
-%p
-  IN check_unconnected: @connection: #{@connection.inspect}
-%p
-  IN check_unconnected: @conn_msg: #{@conn_msg.inspect}
+
+-#%p
+-#  IN connect_trees: @@author_index: #{@author_index.inspect}
+-#%p
+-#  IN connect_trees: @@author_profile_id: #{@author_profile_id.inspect}
+-#%p
+-#  IN connect_trees: @where_found_tree_row: #{@where_found_tree_row.inspect}
+-#%p
+-#  IN connect_trees: @who_found_tree_row: #{@who_found_tree_row.inspect}
 
 
 %p
-  IN connect_trees: @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
+  IN connect_trees
 %p
-  IN connect_trees: @where_found_profile_id: #{@where_found_profile_id.inspect}
+  @matched_profiles_arr: #{@matched_profiles_arr.inspect}
 %p
-  IN connect_trees: @who_found_profile_id: #{@who_found_profile_id.inspect}
+  @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
+-#%p
+-#  IN connect_trees: @where_found_to_replace: #{@where_found_to_replace.inspect}
+-#%p
+-#  IN connect_trees: @who_found_to_replace: #{@who_found_to_replace.inspect}
+-#%p
+-#  IN connect_trees: @profile_to_replace: #{@profile_to_replace.inspect}
 %p
-  IN connect_trees: @@author_index: #{@author_index.inspect}
+  @rewrite_tree_arr: #{@rewrite_tree_arr.inspect}
 %p
-  IN connect_trees: @@author_profile_id: #{@author_profile_id.inspect}
+  @rewrite_profilekey_arr: #{@rewrite_profilekey_arr.inspect}
+-#%p
+-#  IN connect_trees: @test_saved_profiles: #{@test_saved_profiles.inspect}
+-#%p
+-#  IN connect_trees: @arr_to_rewrite: #{@arr_to_rewrite.inspect}
+%p
+  @save_in_tree: #{@save_in_tree.inspect}
+%p
+  @save_in_profilekey: #{@save_in_profilekey.inspect}
 
-%p
-  IN connect_trees: @replaced: #{@replaced.inspect}
 
-
-
-%p
-  IN connect_trees: @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
-%p
-  IN connect_trees: @replaced_profiles: #{@replaced_profiles.inspect}
-%p
-  IN connect_trees: @where_found_to_replace: #{@where_found_to_replace.inspect}
-%p
-  IN connect_trees: @who_found_to_replace: #{@who_found_to_replace.inspect}
-%p
-  IN connect_trees: @profile_to_replace: #{@profile_to_replace.inspect}
-%p
-  IN connect_trees: @msg: #{@msg.inspect}

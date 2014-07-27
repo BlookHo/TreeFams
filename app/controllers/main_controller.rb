@@ -78,6 +78,17 @@ class MainController < ApplicationController
   end
 
 
+  # Получение дерева из таблицы
+  def get_tree(user_id)
+    tree_of_user = Tree.where(:user_id => user_id)
+    return tree_of_user
+  end
+
+  # Получение дерева в виде массива
+  def tree_arr(user_id)
+    get_tree(user_id).map {|t|  [t.user_id, t.profile_id, t.name_id, t.relation_id, t.is_profile_id, t.is_name_id, t.is_sex_id] }
+  end
+
 
 # Поиск совпадений по дереву Юзера
 # Основной метод
@@ -90,6 +101,8 @@ class MainController < ApplicationController
     if current_user
 # Для отладки add_profile - исключаем этот метод
      get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
+
+     @new_tree_arr = tree_arr(current_user.id)
 
      @connected_users_arr = []
 
