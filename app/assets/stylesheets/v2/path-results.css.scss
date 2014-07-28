@@ -2,11 +2,25 @@
   margin-top:75px;
 
 
+  a.open-search-results-link{
+    left:-10px;
+    top:-10px;
+    position:absolute;
+    z-index:100;
+    padding:4px;
+    background-color:#fff;
+  }
+
+
+
   .path-result{
     padding:42px 21px 21px 21px;
-    border:1px solid #ccc;
     position:relative;
     margin-bottom:50px;
+
+    &.closed{border:none;}
+    &.open{border:1px solid #ccc;}
+
   }
 
 
