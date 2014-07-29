@@ -215,21 +215,21 @@ class MainController < ApplicationController
       # Call of make_path method
       make_search_results_paths(@final_reduced_profiles_hash) #,@final_reduced_relations_hash)
 
-      # Call of make_questions method
-      @relation_add_to = 5  # Отношение, к которому добавляем
-      @relation_added = 6   # Отношение, которое добавляем
-      @user_id = 28 #
-      @profile_id = 191
-      @name_id = 64
-      make_questions(@user_id, @profile_id, @relation_add_to, @relation_added, @name_id) #
-
-     # Call of method of making circle hashes array
-     @non_standard_answers_hash = {190=>true, 191=>false, 1000=>false, 157 => false, 155 => false,  1001=>true, 172=>true, 174=>false}  # DEBUGG_TO_VIEW
-     @one_array_of_hashes = make_one_array_of_hashes  # DEBUGG_TO_VIEW
-     # Call of method of reducing circle hashes
-     @reduced_hash = circle_hash_reduction(@non_standard_answers_hash, make_one_array_of_hashes)
-     # Call of method of getting back reducing circle hashes
-     make_circle_hashes_reduced(@reduced_hash)
+     # # Call of make_questions method
+     # @relation_add_to = 5  # Отношение, к которому добавляем
+     # @relation_added = 6   # Отношение, которое добавляем
+     # @user_id = 28 #
+     # @profile_id = 191
+     # @name_id = 64
+     # #make_questions(@user_id, @profile_id, @relation_add_to, @relation_added, @name_id) #
+     #
+     ## Call of method of making circle hashes array
+     #@non_standard_answers_hash = {190=>true, 191=>false, 1000=>false, 157 => false, 155 => false,  1001=>true, 172=>true, 174=>false}  # DEBUGG_TO_VIEW
+     #@one_array_of_hashes = make_one_array_of_hashes  # DEBUGG_TO_VIEW
+     ## Call of method of reducing circle hashes
+     #@reduced_hash = circle_hash_reduction(@non_standard_answers_hash, make_one_array_of_hashes)
+     ## Call of method of getting back reducing circle hashes
+     #make_circle_hashes_reduced(@reduced_hash)
 
 
 
