@@ -1,2 +1,20 @@
 #profile
   = render 'profile_header'
+.col_1_2
+  Кол-во редакция профиля:
+  = @profile_datas.size
+  %br
+  %br
+  Вы смотрите редакцию
+  %select
+    - @profile_datas.each do |data|
+      %option= data.creator.name.mb_chars.capitalize
+
+  %br
+  %br
+  %hr
+  %ul
+    %li= @profile.name.to_name
+    %li= @profile_data.middle_name.mb_chars.capitalize
+    %li= @profile_data.last_name.mb_chars.capitalize
+    %li= @profile_data.biography

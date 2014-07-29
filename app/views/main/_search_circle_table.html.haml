@@ -13,7 +13,6 @@
     %td
       %h2
         - if author.class == User
-          -#= link_to author.profile.full_name, edit_profile_path(author.profile.id)
           .dropdown
             %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
               = author.profile.full_name
