@@ -17,7 +17,7 @@
 
     - if @questions
       -#= @questions.inspect
-      = hidden_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
+      = hidden_field_tag :profile_name, (@profile.to_name || params.try(:[], :profile).try(:[], :name))
       #questions-fields
         - if @profile.answers_hash.nil?
           - current_question = @questions.first
@@ -102,7 +102,7 @@
           %br
           %br
 
-      = text_field_tag "profile[name]", (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
+      = text_field_tag :profile_name, (@profile.to_name || params.try(:[], :profile).try(:[], :name)), class: [:autocomplete_field], placeholder: "Имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
 
     - unless @questions
       .actions
