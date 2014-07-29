@@ -14,7 +14,7 @@ class Profile < ActiveRecord::Base
   # Create default profile_data on profile create
   # after_create :create_profile_data
   # def create_profile_data
-  #   self.profile_datas.create!(creator_id: 54)
+  #   self.profile_datas.create!(creator_id: current_user.id)
   # end
 
   before_save do
