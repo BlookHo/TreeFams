@@ -19,7 +19,7 @@ class ConnectUsersTreesController < ApplicationController
       new_users_connection = ConnectedUser.new
       new_users_connection.user_id = current_user_id
       new_users_connection.with_user_id = user_id
-      new_users_connection.connected = true
+      #new_users_connection.connected = true
       new_users_connection.save
     else
       logger.info "Connection of Users - INVALID! Current_user=#{current_user_id.inspect} EQUALS TO user_id=#{user_id.inspect}"
@@ -27,40 +27,6 @@ class ConnectUsersTreesController < ApplicationController
 
     #### UPDATE USERS table!
 
-  end
-
-  def connect_profiles
-
-    ##### DELETE MATCHED ID IN Profiles
-
-  end
-
-  # Получение массива соединенных Юзеров
-  # для заданного "стартового" Юзера
-  #
-  def get_connected_users(current_user_id)
-
-    connected_users_arr = []
-    connected_users_arr << current_user_id
-    first_users_arr = ConnectedUser.where(user_id: current_user_id).where(connected: true).pluck(:with_user_id)
-    if first_users_arr.blank?
-      first_users_arr = ConnectedUser.where(with_user_id: current_user_id).where(connected: true).pluck(:user_id)
-    end
-    one_connected_users_arr = first_users_arr
-    if !one_connected_users_arr.blank?
-      connected_users_arr << one_connected_users_arr
-      connected_users_arr.flatten!.uniq! if !connected_users_arr.blank?
-      one_connected_users_arr.each do |conn_arr_el|
-        next_connected_users_arr = ConnectedUser.where("(user_id = #{conn_arr_el} or with_user_id = #{conn_arr_el})").where(connected: true).pluck(:user_id, :with_user_id)
-        if !next_connected_users_arr.blank?
-          one_connected_users_arr << next_connected_users_arr
-          one_connected_users_arr.flatten!.uniq! if !one_connected_users_arr.blank?
-          connected_users_arr << next_connected_users_arr
-          connected_users_arr.flatten!.uniq! if !connected_users_arr.blank?
-        end
-      end
-    end
-    return connected_users_arr
   end
 
   # Общий метод дла накапливания массива для перезаписи профилей в таблицах
@@ -196,6 +162,8 @@ class ConnectUsersTreesController < ApplicationController
     @matched_profiles_arr = matched_profiles_arr # DEBUGG_TO_VIEW
     logger.info "=IN CONNECT_TREES: matched_profiles_arr = #{matched_profiles_arr}; opposite_profiles_arr = #{opposite_profiles_arr} "
 
+
+
     rewrite_tree_arr = []
     rewrite_tree_arr1 = []
     rewrite_tree_arr2 = []
@@ -211,6 +179,14 @@ class ConnectUsersTreesController < ApplicationController
         # меняем profile_id в matched_profiles_arr на profile_id из opposite_profiles_arr
         one_profile = matched_profiles_arr[arr_ind] # profile_id для замены
         logger.info one_profile
+
+
+
+        #########  Вставить перезапись profile_id's & update User
+        ## in: matched_profiles_arr - найден в поиске
+        ## in: opposite_profiles_arr - противоположные, найденным в поиске
+
+
 
         # Получение массивов для Замены профилей в Tree
         one_arr1 = get_rewrite_profiles_ids(Tree, "profile_id", where_found_user_id.to_i, one_profile.to_i, opposite_profiles_arr[arr_ind].to_i)
@@ -229,6 +205,13 @@ class ConnectUsersTreesController < ApplicationController
       # если where_found_user_id - более ранний по времени создания
       # значит его профилями в where_found_user_id (из matched_profiles_arr)- заменяем более поздние, т.е. - в who_found_user_id (из opposite_profiles_arr).
       @msg = "who_found_user_id > where_found_user_id" ## DEBUGG_TO_VIEW
+
+
+      #########  Вставить перезапись profile_id's & update User
+      ## in: matched_profiles_arr - найден в поиске
+      ## in: opposite_profiles_arr - противоположные, найденным в поиске
+
+
 
       for arr_ind in 0 .. opposite_profiles_arr.length-1 # ищем этот profile_id для его замены
         # меняем profile_id из matched_profiles_arr на profile_id из opposite_profiles_arr
@@ -281,21 +264,17 @@ class ConnectUsersTreesController < ApplicationController
     #@current_user_id = 35 # DEBUGG_TO_VIEW
     #@user_id = 334 # DEBUGG_TO_VIEW
 
-    @start_connected_user_id = @current_user_id.to_i #200 # DEBUGG_TO_VIEW
+    @start_connected_user_id = 35 #@current_user_id.to_i #200 # DEBUGG_TO_VIEW
 
   #     connect_users(@current_user_id, @user_id) # made by Alexey
 
-    @connected_users_arr = get_connected_users(@start_connected_user_id) # DEBUGG_TO_VIEW
+    @connected_users_arr = current_user.get_connected_users # DEBUGG_TO_VIEW
 
     connect_trees(@current_user_id, @user_id, @matched_profiles_in_tree, @matched_relations_in_tree)
 
     if !@connected_users_arr.include?(@user_id.to_i) # check_connection  IF NOT CONNECTED
       logger.info "In check: NOT CONNECTED - #{@connected_users_arr.include?(@user_id).inspect}" # == false
 #      connect_trees(@current_user_id, @user_id, @matched_profiles_in_tree, @matched_relations_in_tree)
-
-
-    #  connect_profiles # made by Alexey
-
     #  @conn_msg = "Connection established!! " ## DEBUGG_TO_VIEW
     else
       logger.info "Users ALREADY CONNECTED! Current_user=#{@current_user_id.inspect}, user_id=#{@user_id.inspect}."

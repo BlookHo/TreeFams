@@ -32,7 +32,7 @@ class Profile < ActiveRecord::Base
 
   # Эксперименты по выводу кругов в объедененных деревьях
   # получает на вход id деревьев из которых надо собрать ближний круг
-  def exp_circle(user_ids)
+  def circle(user_ids)
     if user_ids.kind_of? Fixnum
       return circle(user_ids)
     elsif user_ids.kind_of? Array
@@ -43,7 +43,7 @@ class Profile < ActiveRecord::Base
 
   # Ближний круг для профиля в дереве юзера
   # по записям в ProfileKey
-  def circle(user_id)
+  def old_circle(user_id)
     results = ProfileKey.where(user_id: user_id, profile_id: self.id).order('relation_id').includes(:name)
     # TODO sort
     # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
