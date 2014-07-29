@@ -33,22 +33,18 @@ class Profile < ActiveRecord::Base
   # Эксперименты по выводу кругов в объедененных деревьях
   # получает на вход id деревьев из которых надо собрать ближний круг
   def circle(user_ids)
-    if user_ids.kind_of? Fixnum
-      return main_circle(user_ids)
-    elsif user_ids.kind_of? Array
       results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name)
       return results.uniq!
-    end
   end
 
   # Ближний круг для профиля в дереве юзера
   # по записям в ProfileKey
-  def main_circle(user_id)
-    results = ProfileKey.where(user_id: user_id, profile_id: self.id).order('relation_id').includes(:name)
-    # TODO sort
-    # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
-    return results
-  end
+  # def main_circle(user_id)
+  #   results = ProfileKey.where(user_id: user_id, profile_id: self.id).order('relation_id').includes(:name)
+  #   # TODO sort
+  #   # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
+  #   return results
+  # end
 
   # На выходе ближний круг для профиля в дереве user_id
   # по записям в Tree
