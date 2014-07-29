@@ -11,11 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20140729062749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "adminpack"
+
+  create_table "connected_users", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "with_user_id"
+    t.boolean  "connected",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "names", force: true do |t|
     t.string   "name"
