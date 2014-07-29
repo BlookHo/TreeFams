@@ -35,6 +35,9 @@ class ProfilesController < ApplicationController
 
 
   def create
+
+    logger.info "==== Start add new profile!!!"
+
     @base_profile = Profile.find(params[:base_profile_id])
     @base_profile_id = params[:base_profile_id]
     @author_profile_id = params[:author_profile_id]
@@ -45,6 +48,8 @@ class ProfilesController < ApplicationController
     @profile.user_id = 0
 
     @name = Name.where(name: params[:profile][:name].mb_chars.downcase).first
+
+    logger.info "==== Start add new profile!!!"
 
     # if new name - create
     if !@name and !params[:profile][:name].blank? and params[:new_name_confirmation]
@@ -175,16 +180,17 @@ class ProfilesController < ApplicationController
 
 
 
-  # def profile_params
-  #   params[:profile].permit(:surname,
-  #                           :profile_birthday,
-  #                           :profile_deathday,
-  #                           :country,
-  #                           :city,
-  #                           :about,
-  #                           :profile_name,
-  #                           :relation_id,
-  #                           :profile_datas_attributes =>[:id, :middle_name, :last_name])
-  # end
+  def profile_params
+    params[:profile].permit(:name,
+                            :surname,
+                            :profile_birthday,
+                            :profile_deathday,
+                            :country,
+                            :city,
+                            :about,
+                            :profile_name,
+                            :relation_id,
+                            :profile_datas_attributes =>[:id, :middle_name, :last_name])
+  end
 
 end

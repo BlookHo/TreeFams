@@ -216,7 +216,8 @@
               Найдено
               = paths.size
               = Russian.p(paths.size, "совпадение", "совпадения", "совпадений")
-          = link_to "Пожать руку", '#', class: :handshake
+          -#= link_to "Пожать руку", '#', class: :handshake
+          = link_to 'Пожать руку', connection_of_trees_path(first_user_id: current_user.id, second_user_id: user.id, matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash), class: :handshake
           .results{style: 'display:none;', id: "results-#{user.id}"}
             - paths.each do |path|
               - path_id = Digest::MD5.hexdigest(path.to_s)

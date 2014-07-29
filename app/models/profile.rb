@@ -12,10 +12,10 @@ class Profile < ActiveRecord::Base
   accepts_nested_attributes_for :profile_datas
 
   # Create default profile_data on profile create
-  after_create :create_profile_data
-  def create_profile_data
-    self.profile_datas.create!(creator_id: self.user_id)
-  end
+  # after_create :create_profile_data
+  # def create_profile_data
+  #   self.profile_datas.create!(creator_id: 54)
+  # end
 
   before_save do
     self.sex_id = name.try(:sex_id)

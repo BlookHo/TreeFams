@@ -54,10 +54,10 @@ class Relation < ActiveRecord::Base
     base_relation_id = base_relation_id.to_i
     base_sex_id = base_sex_id.to_i
     # К Автору мужчине (нельзя добавить мужа)
-    if base_relation_id == 0 and base_sex_id = 1
+    if base_relation_id == 0 and base_sex_id == 1
       [7]
     # К Автору женщине (нельзя добавить жену)
-    elsif base_relation_id == 0 and base_sex_id = 0
+    elsif base_relation_id == 0 and base_sex_id == 0
       [8]
     # К Отцу (нельзя добавить мужа)
     elsif base_relation_id == 1
