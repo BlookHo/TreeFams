@@ -8,25 +8,13 @@ class Profile < ActiveRecord::Base
   belongs_to :name
   has_many   :trees
 
-
   has_many   :profile_datas, dependent: :destroy
   accepts_nested_attributes_for :profile_datas
 
-  # , :reject_if => :check_profile_data
-  # def check_profile_data(profile_data_attr)
-  #     logger.info "Reject check #{profile_data_attr}"
-  #     if _profile_data = ProfileData.find(profile_data_attr['id'])
-  #       self.profile_data = _profile_data
-  #       return true
-  #     end
-  #     return false
-  #   end
-
-
-  # Create default profile data
+  # Create default profile_data on profile create
   after_create :create_profile_data
   def create_profile_data
-    self.profile_datas.create!(creator_id: self.user_id)
+    self.profile_datas.create!(creator_id: current_user.id)
   end
 
   before_save do

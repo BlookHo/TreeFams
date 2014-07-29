@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
 
   # User profile
   has_one  :profile,  dependent: :destroy
-  has_many :trees,   dependent: :destroy
+  has_many :trees,    dependent: :destroy
   has_many :profile_keys, dependent: :destroy
 
 
