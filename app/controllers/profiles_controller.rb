@@ -4,16 +4,21 @@ class ProfilesController < ApplicationController
 
   def show
     @profile = Profile.where(id: params[:id]).first
+    @profile_datas = @profile.profile_datas
+    @profile_data = @profile_datas.first
   end
 
 
   def edit
-    @profile = Profile.where(id: params[:id]).first
+    @profile = Profile.find(params[:profile_id])
+    @profile_data = @profile.profile_datas.where(creator_id: current_user.id).first
   end
+
 
   def update
     @profile = Profile.find(params[:id])
-    if @profile.update_attributes(profile_params)
+    @profile_data = @profile.profile_datas.where(creator_id: current_user.id).first
+    if @profile_data.update_attributes(profile_data_params)
       redirect_to profile_path(@profile), :notice => "Профиль сохранен!"
     else
       render :edit, :alert => "Ошибки при сохранении профиля!"
@@ -26,6 +31,7 @@ class ProfilesController < ApplicationController
     @profile.relation_id = params[:relation_id]
     @base_profile = Profile.find(params[:base_profile_id])
   end
+
 
 
   def create
@@ -163,15 +169,22 @@ class ProfilesController < ApplicationController
   end
 
 
-  def profile_params
-    params[:profile].permit(:surname,
-                            :profile_birthday,
-                            :profile_deathday,
-                            :country,
-                            :city,
-                            :about,
-                            :profile_name,
-                            :relation_id)
+  def profile_data_params
+    params[:profile_data].permit(:middle_name, :last_name, :biography)
   end
+
+
+
+  # def profile_params
+  #   params[:profile].permit(:surname,
+  #                           :profile_birthday,
+  #                           :profile_deathday,
+  #                           :country,
+  #                           :city,
+  #                           :about,
+  #                           :profile_name,
+  #                           :relation_id,
+  #                           :profile_datas_attributes =>[:id, :middle_name, :last_name])
+  # end
 
 end

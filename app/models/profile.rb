@@ -1,12 +1,33 @@
 class Profile < ActiveRecord::Base
 
+  attr_accessor :profile_name, :relation_id, :answers_hash
+
   include NewProfileQuestions
 
   belongs_to :user
   belongs_to :name
   has_many   :trees
 
-  attr_accessor :profile_name, :relation_id, :answers_hash
+
+  has_many   :profile_datas, dependent: :destroy
+  accepts_nested_attributes_for :profile_datas
+
+  # , :reject_if => :check_profile_data
+  # def check_profile_data(profile_data_attr)
+  #     logger.info "Reject check #{profile_data_attr}"
+  #     if _profile_data = ProfileData.find(profile_data_attr['id'])
+  #       self.profile_data = _profile_data
+  #       return true
+  #     end
+  #     return false
+  #   end
+
+
+  # Create default profile data
+  after_create :create_profile_data
+  def create_profile_data
+    self.profile_datas.create!(creator_id: self.user_id)
+  end
 
   before_save do
     self.sex_id = name.try(:sex_id)
@@ -15,7 +36,6 @@ class Profile < ActiveRecord::Base
   def to_name
     name.try(:name).try(:mb_chars).try(:capitalize)
   end
-
 
   def full_name
     [self.to_name, self.surname].join(' ')

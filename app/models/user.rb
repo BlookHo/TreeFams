@@ -16,9 +16,8 @@ class User < ActiveRecord::Base
 
 
   def name
-    profile.name.name
+    profile.name.name.capitalize
   end
-
 
   private
 
