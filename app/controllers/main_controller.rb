@@ -8,38 +8,38 @@ class MainController < ApplicationController
   end
 
 
- # Отображение дерева Юзера в табличной форме.
- # @note GET /
- # @param admin_page [Integer] опциональный номер страницы
- # @see News
- def get_user_tree(user_id)
-
-
-    user_tree = Tree.where(:user_id => user_id)
-    row_arr = []
-    tree_arr = []
-
-    user_tree.each do |tree_row|
-      row_arr[0] = tree_row.user_id              # user_id ID От_Профиля
-      row_arr[1] = tree_row.profile_id           # ID От_Профиля (From_Profile)
-      row_arr[2] = tree_row.name_id              # name_id ID От_Профиля
-      row_arr[3] = tree_row.relation_id          # ID Родства От_Профиля с К_Профилю (To_Profile)
-      row_arr[4] = tree_row.is_profile_id        # ID К_Профиля
-      row_arr[5] = tree_row.is_name_id           # name_id К_Профиля
-      row_arr[6] = tree_row.is_sex_id            # sex К_Профиля
-      row_arr[7] = tree_row.connected            # Объединено дерево К_Профиля с другим деревом
-
-      tree_arr << row_arr
-      row_arr = []
-
-    end
-
-    #session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
-    @tree_arr = tree_arr    # DEBUGG TO VIEW
-    return tree_arr
-
- end
-
+ ## Отображение дерева Юзера в табличной форме.
+ ## @note GET /
+ ## @param admin_page [Integer] опциональный номер страницы
+ ## @see News
+ #def get_user_tree(user_id)
+ #
+ #
+ #   user_tree = Tree.where(:user_id => user_id)
+ #   row_arr = []
+ #   tree_arr = []
+ #
+ #   user_tree.each do |tree_row|
+ #     row_arr[0] = tree_row.user_id              # user_id ID От_Профиля
+ #     row_arr[1] = tree_row.profile_id           # ID От_Профиля (From_Profile)
+ #     row_arr[2] = tree_row.name_id              # name_id ID От_Профиля
+ #     row_arr[3] = tree_row.relation_id          # ID Родства От_Профиля с К_Профилю (To_Profile)
+ #     row_arr[4] = tree_row.is_profile_id        # ID К_Профиля
+ #     row_arr[5] = tree_row.is_name_id           # name_id К_Профиля
+ #     row_arr[6] = tree_row.is_sex_id            # sex К_Профиля
+ #     row_arr[7] = tree_row.connected            # Объединено дерево К_Профиля с другим деревом
+ #
+ #     tree_arr << row_arr
+ #     row_arr = []
+ #
+ #   end
+ #
+ #   #session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
+ #   @tree_arr = tree_arr    # DEBUGG TO VIEW
+ #   return tree_arr
+ #
+ #end
+ #
 
  ############# МЕТОДЫ ФОРМИРОВАНИЯ ХЭША ПУТЕЙ ДЛЯ РЕЗ-ТОВ ПОИСКА
 
@@ -121,17 +121,15 @@ class MainController < ApplicationController
 
   # Получение массива дерева соединенных Юзеров из Tree
   #  На входе - массив соединенных Юзеров
-  # # @note GET /
-  # @param admin_page [Integer] опциональный номер страницы
-  # @see News
   def get_connected_users_tree(connected_users_arr)
 
     tree_arr = []
+    check_tree_arr = [] # "опорный массив" - для удаления повторных элементов при формировании tree_arr
     connected_users_arr.each do |one_user|
 
       user_tree = Tree.where(:user_id => one_user)
       row_arr = []
-#      tree_arr = []
+      check_row_arr = []
 
       user_tree.each do |tree_row|
         row_arr[0] = tree_row.user_id              # user_id ID От_Профиля
@@ -143,39 +141,45 @@ class MainController < ApplicationController
         row_arr[6] = tree_row.is_sex_id            # sex К_Профиля
         row_arr[7] = tree_row.connected            # Объединено дерево К_Профиля с другим деревом
 
-        if !tree_arr.include?(row_arr) #
-          @row_arr = row_arr    # DEBUGG TO VIEW
+        check_row_arr[0] = tree_row.profile_id           # ID От_Профиля (From_Profile)
+        check_row_arr[1] = tree_row.name_id              # name_id ID От_Профиля
+        check_row_arr[2] = tree_row.relation_id          # ID Родства От_Профиля с К_Профилю (To_Profile)
+        check_row_arr[3] = tree_row.is_profile_id        # ID К_Профиля
+        check_row_arr[4] = tree_row.is_name_id           # name_id К_Профиля
+        check_row_arr[5] = tree_row.is_sex_id            # sex К_Профиля
+
+        #logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.include?(row_arr).inspect}" # == false
+        #logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.inspect} --- #{row_arr}"
+        if !check_tree_arr.include?(check_row_arr) # контроль на наличие повторов
           tree_arr << row_arr
-          logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.include?(row_arr).inspect}" # == false
-          logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.inspect}, #{row_arr}"
+          check_tree_arr << check_row_arr
         end
         row_arr = []
-
+        check_row_arr = []
       end
 
     end
-
     #session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
-    @tree_arr = tree_arr    # DEBUGG TO VIEW
 
+    @len_check_tree = check_tree_arr.length  if !check_tree_arr.blank?
     return tree_arr
 
   end
 
 
-  # Получение дерева из таблицы
-  def get_tree(user_id)
-    tree_of_user = Tree.where(:user_id => user_id)
-    @tree_of_user = tree_of_user    # DEBUGG TO VIEW
-
-    return tree_of_user
-  end
-
-  # Получение дерева в виде массива
-  def tree_arr(user_id)
-    get_tree(user_id).map {|t|  [t.user_id, t.profile_id, t.name_id, t.relation_id, t.is_profile_id, t.is_name_id, t.is_sex_id] }
-  end
-
+  ## Получение дерева из таблицы
+  #def get_tree(user_id)
+  #  tree_of_user = Tree.where(:user_id => user_id)
+  #  @tree_of_user = tree_of_user    # DEBUGG TO VIEW
+  #
+  #  return tree_of_user
+  #end
+  #
+  ## Получение дерева в виде массива
+  #def tree_arr(user_id)
+  #  get_tree(user_id).map {|t|  [t.user_id, t.profile_id, t.name_id, t.relation_id, t.is_profile_id, t.is_name_id, t.is_sex_id] }
+  #end
+  #
 
 
 # ГЛАВНЫЙ СТАРТОВЫЙ МЕТОД ПОИСКА совпадений по дереву Юзера
@@ -189,7 +193,7 @@ class MainController < ApplicationController
     @user_id = 33 # DEBUGG_TO_VIEW
 
     if current_user
-     tree_arr = get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
+     #tree_arr = get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
 
      #@tree_arr= [[32, 212, 419, 0, 212, 419, 1, false],
      #            [32, 212, 419, 1, 213, 196, 1, false],
@@ -201,28 +205,103 @@ class MainController < ApplicationController
 
      @connected_users_arr = current_user.get_connected_users # DEBUGG_TO_VIEW
 
-     @new_tree_arr = tree_arr(@connected_users_arr)
+  #  @connected_users_arr = [30,29]
+
+          #@new_tree_arr = tree_arr(@connected_users_arr)
+
+     @new_tree_arr = get_connected_users_tree(@connected_users_arr)
      @new_tree_arr_length = @new_tree_arr.length if !@new_tree_arr.blank?
 
-     #@new_tree_arr = [[32, 212, 419, 0, 212, 419, 1],
-     #                 [32, 212, 419, 1, 213, 196, 1],
-     #                 [32, 212, 419, 2, 214, 173, 0],
-     #                 [32, 212, 419, 5, 215, 40, 1],
-     #                          [32, 215, 40, 8, 237, 48, 0],
-     #                          [32, 212, 419, 3, 225, 343, 1],
-     #                 [33, 215, 40, 5, 212, 419, 1],
-     #                 [33, 215, 40, 1, 213, 196, 1],
-     #                 [33, 215, 40, 2, 214, 173, 0],
-     #                 [33, 215, 40, 0, 215, 40, 1],
-     #                      [33, 212, 419, 3, 225, 343, 1],
-     #                      [33, 215, 40, 8, 237, 48, 0],
-     #                 [33, 237, 48, 1, 240, 110, 1],
-     #                 [32, 225, 343, 8, 241, 214, 0]]
+     #tree_arr = get_connected_users_tree(@connected_users_arr) # 32 33
+     #
+     #tree_arr =  [[32, 212, 419, 0, 212, 419, 1, false],  # 32 33
+     #             [32, 212, 419, 1, 213, 196, 1, false],
+     #             [32, 212, 419, 2, 214, 173, 0, false],
+     #                [32, 212, 419, 5, 215, 40, 1, false],
+     #             [32, 215, 40, 8, 237, 48, 0, false],
+     #             [32, 212, 419, 3, 225, 343, 1, false],
+     #             [32, 225, 343, 8, 241, 214, 0, false],
+     #                 #[33, 215, 40, 5, 212, 419, 1, true],
+     #             [33, 215, 40, 1, 213, 196, 1, true],
+     #             [33, 215, 40, 2, 214, 173, 0, true],
+     #             [33, 215, 40, 0, 215, 40, 1, true],
+     #             [33, 237, 48, 1, 240, 110, 1, false]]
 
+  # 28 Nikola 15  @tree_arr:
+  # [[28, 176, 343, 0, 176, 343, 1, false],
+    # [28, 176, 343, 1, 177, 194, 1, false],
+    # [28, 176, 343, 2, 178, 354, 0, false],
+    # [28, 176, 343, 5, 179, 422, 1, false],
+    # [28, 176, 343, 8, 180, 48, 0, false],
+    # [28, 176, 343, 3, 181, 370, 1, false],
+  # [28, 176, 343, 4, 182, 173, 0, false],
+  # [28, 181, 370, 8, 183, 147, 0, false],
+  # [28, 181, 370, 4, 184, 30, 0, false],
+  # [28, 181, 370, 3, 185, 340, 1, false],
+  # [28, 183, 147, 6, 186, 331, 0, false],
+    # [28, 183, 147, 1, 187, 110, 1, false],
+    # [28, 183, 147, 2, 188, 97, 0, false],
+    # [28, 186, 331, 7, 189, 351, 1, false],
+    # [28, 189, 351, 1, 221, 231, 1, false]]
+
+  # 29 Nat 8  @tree_arr:
+    # [[29, 190, 331, 0, 190, 331, 0, false],
+    # [29, 190, 331, 1, 191, 110, 1, false],
+    # [29, 190, 331, 2, 192, 97, 0, false],
+    # [29, 190, 331, 6, 193, 147, 0, false],
+    # [29, 190, 331, 7, 194, 351, 1, false],
+  # [29, 190, 331, 3, 195, 73, 1, false],
+  # [29, 190, 331, 4, 196, 506, 0, false],
+  # [29, 194, 351, 1, 220, 231, 1, false]]
+
+  # 30 Darja 9  @tree_arr:
+    # [[30, 197, 147, 0, 197, 147, 0, false],
+    # [30, 197, 147, 1, 198, 110, 1, false],
+    # [30, 197, 147, 2, 199, 97, 0, false],
+    # [30, 197, 147, 6, 200, 331, 0, false],
+    # [30, 197, 147, 7, 201, 370, 1, false],
+  # [30, 197, 147, 3, 202, 340, 1, false],
+  # [30, 197, 147, 4, 203, 30, 0, false],
+  # [30, 200, 331, 7, 204, 351, 1, false],
+  # [30, 204, 351, 1, 222, 231, 1, false]]
+
+ # [28,30,29] 32    @new_tree_arr:
+   # [[28, 176, 343, 0, 176, 343, 1, false],
+   # [28, 176, 343, 1, 177, 194, 1, false],
+   # [28, 176, 343, 2, 178, 354, 0, false],
+   # [28, 176, 343, 5, 179, 422, 1, false],
+   # [28, 176, 343, 8, 180, 48, 0, false],
+ # [28, 176, 343, 3, 181, 370, 1, false],
+ # [28, 176, 343, 4, 182, 173, 0, false],
+ # [28, 181, 370, 8, 183, 147, 0, false],
+ # [28, 181, 370, 4, 184, 30, 0, false],
+ # [28, 181, 370, 3, 185, 340, 1, false],
+   # [28, 183, 147, 6, 186, 331, 0, false],
+   # [28, 183, 147, 1, 187, 110, 1, false],
+   # [28, 183, 147, 2, 188, 97, 0, false],
+   # [28, 186, 331, 7, 189, 351, 1, false],
+   # [28, 189, 351, 1, 221, 231, 1, false],
+ # [30, 197, 147, 0, 197, 147, 0, false],
+ # [30, 197, 147, 1, 198, 110, 1, false],
+ # [30, 197, 147, 2, 199, 97, 0, false],
+ # [30, 197, 147, 6, 200, 331, 0, false],
+ # [30, 197, 147, 7, 201, 370, 1, false],
+   # [30, 197, 147, 3, 202, 340, 1, false],
+   # [30, 197, 147, 4, 203, 30, 0, false],
+   # [30, 200, 331, 7, 204, 351, 1, false],
+   # [30, 204, 351, 1, 222, 231, 1, false],
+   # [29, 190, 331, 0, 190, 331, 0, false],
+ # [29, 190, 331, 1, 191, 110, 1, false],
+ # [29, 190, 331, 2, 192, 97, 0, false],
+ # [29, 190, 331, 6, 193, 147, 0, false],
+ # [29, 190, 331, 7, 194, 351, 1, false],
+ # [29, 190, 331, 3, 195, 73, 1, false],
+   # [29, 190, 331, 4, 196, 506, 0, false],
+   # [29, 194, 351, 1, 220, 231, 1, false]]
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
-      search_profiles_tree_match(tree_arr)    # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
+      search_profiles_tree_match(@new_tree_arr)    # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
 
       end_search_time = Time.now   # Конец отсечки времени поиска
       @elapsed_search_time = (end_search_time - beg_search_time).round(5)
@@ -230,7 +309,6 @@ class MainController < ApplicationController
 
       # Call of make_path method
       make_search_results_paths(@final_reduced_profiles_hash) #
-
 
     end
 
@@ -562,6 +640,7 @@ class MainController < ApplicationController
     end
     return amount_found
   end
+
   # Подсчет количества найденных Юзеров среди найденных Профилей
   # @note GET
   # На входе: массив профилей all_profiles_arr: profile_id
@@ -579,44 +658,6 @@ class MainController < ApplicationController
       end
     end
   end
-
-  # Подтверждение совпадения родственника в дереве Юзера.
-  # @note GET /
-  # @param admin_page [Integer] опциональный номер страницы
-  # @see News
-  def match_approval
-
-    @session_id = request.session_options[:id]    # ?
-
-    if user_signed_in?
-
-      @new_approved_qty = 3
-      @total_approved_qty = @@approved_match_qty + @new_approved_qty
-      @rest_to_approve = @@match_qty - @total_approved_qty
-
-      @triplex_arr = []
-      make_one_triplex_arr(current_user.id,@triplex_arr,nil,1,2)   # @triplex_arr - ready!
-
-      # Поиск братьев/сестер по триплекс-массиву
-      # У братьев/сестер - те же отец и мать.
-      # [profile_id, sex_id, name_id, relation_id]
-      # @triplex_arr: [[22, 0, 506, nil], [23, 1, 45, 1], [24, 0, 453, 2]]
-      search_bros_sist(@triplex_arr)  # найдены общие отцы с потенциальными братьями/сестрами
-
-    end
-
-  end
-
-  # Отображение меню действий для родственника в дереве Юзера.
-  # @note GET /
-  # @param admin_page [Integer] опциональный номер страницы
-  # @see News
-  def relative_menu
-    @menu_choice = "No choice yet - in Relative_menu"
-  end
-
-
-
 
 
 
