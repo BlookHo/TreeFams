@@ -1,9 +1,25 @@
 
 %p
   @tree_arr: #{@tree_arr.inspect}
+%p
+  Connected Users Search:
+%p
+  who_found_user_id = @current_user.id: #{@current_user_id.inspect}
+%p
+  where_found_user_id = @user_id: #{@user_id.inspect}
+%p
+  @connected_users_arr: #{@connected_users_arr.inspect}
 
 %p
+  @tree_of_user: #{@tree_of_user.inspect}
+%p
+  @tree_of_user Length: #{@tree_of_user.length.inspect}
+%p
   @new_tree_arr: #{@new_tree_arr.inspect}
+%p
+  @new_tree_arr Length: #{@new_tree_arr_length.inspect}
+%p
+  @row_arr : #{@row_arr.inspect}
 
 -#%p
 -#  BK_массив: @bk_arr: #{@bk_arr.inspect}
@@ -20,16 +36,16 @@
 -#  Их user_id: #{@users_ids_arr.inspect}
 -#%p
 -#  @relation_id_searched_arr: #{@relation_id_searched_arr.inspect}
-%p
-  @from_profile_searching: #{@from_profile_searching.inspect}
-%p
-  @profile_searched: #{@profile_searched.inspect}
+-#%p
+-#  @from_profile_searching: #{@from_profile_searching.inspect}
+-#%p
+-#  @profile_searched: #{@profile_searched.inspect}
 -#%p
 -#  @relation_searched: #{@relation_searched.inspect}
-%p
-  @all_profile_rows: #{@all_profile_rows.inspect}
-%p
-  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
+-#%p
+-#  @all_profile_rows: #{@all_profile_rows.inspect}
+-#%p
+-#  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
 -#%p
 -#  @relation_match_arr: #{@relation_match_arr.inspect}
 -#%p
@@ -47,7 +63,7 @@
 -#%p
 -#  @found_profiles_values_arr: #{@found_profiles_values_arr.inspect}
 -#%p
--#  @test_wide_found_profiles_hash: #{@test_wide_found_profiles_hash.inspect}
+-#  @wide_found_profiles_hash: #{@wide_found_profiles_hash.inspect}
 -#%p
 -#  @wide_found_relations_hash: #{@wide_found_relations_hash.inspect}
 -#
@@ -97,38 +113,19 @@
 -#%p
 -#  НОМЕРА wide ОТНОШЕНИЙ @all_wide_match_relations_sorted: #{@all_wide_match_relations_sorted.inspect}
 
--# %h4
--#   ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
--#
--# %p
--#   @search_results_relations: #{@search_results_relations.inspect}
--#
--#
--#
--#
--# %p
--#   make_search_results_paths ###########
--#%p
--#  @start_profile: #{@start_profile.inspect}
--#%p
--#  @hash_to_transform: #{@hash_to_transform.inspect}
--#%p
--#  @profiles_arr_to_transform: #{@profiles_arr_to_transform.inspect}
--#%p
--#  @finish_profile: #{@finish_profile.inspect}
--#%p
--#  @results_qty: #{@results_qty.inspect}
--#%p
--#  @one_tree_hash: #{@one_tree_hash.inspect}
--#%p
--#  @one_path_hash: #{@one_path_hash.inspect}
--#%p
--#  @relation_to_next_profile: #{@relation_to_next_profile.inspect}
+%h4
+  ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
 
--# %p
--#   @search_path_hash: #{@search_path_hash.inspect}
+%p
+  @elapsed_search_time: #{@elapsed_search_time.inspect}
+-#
+-#
+-#
+-#
 -#%p
--#  @search_path_hash_size: #{@search_path_hash_size.inspect}
+-#  make_search_results_paths ###########
+%p
+  @search_path_hash: #{@search_path_hash.inspect}
 
 
 

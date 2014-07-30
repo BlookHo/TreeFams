@@ -27,7 +27,7 @@
             %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
               = [author.to_name, author.surname].join(' ')
             %ul.dropdown-content
-              %li.main-item= link_to "Смотреть", edit_profile_path(author.id)
+              %li.main-item= link_to "Смотреть", profile_edit_data_path(author.id)
               %li.main-item= link_to "Пожать руку", '#', class: :grey
               %li.main-item= link_to "Общаться", '#', class: :grey
               %li.main-item= link_to "В избранные", '#', class: :grey
@@ -48,7 +48,7 @@
           %a{href:'#', onclick:"toggleDropDownMenu(this);return false;"}
             = [item.name.to_name, item.is_profile.surname].join(' ')
           %ul.dropdown-content
-            %li.main-item= link_to "Смотреть", edit_profile_path(item.is_profile_id)
+            %li.main-item= link_to "Смотреть", profile_edit_data_path(item.is_profile_id)
             %li.main-item= link_to "Пожать руку", '#', class: :grey
             %li.main-item= link_to "Общаться", '#', class: :grey
             %li.main-item= link_to "В избранные", '#', class: :grey
