@@ -1,4 +1,5 @@
-module NewProfileQuestions
+# Модуль генерации вопросов при добавлении нового профиля с нестандартными отношениями
+module ProfileQuestions
 
   extend ActiveSupport::Concern
 
