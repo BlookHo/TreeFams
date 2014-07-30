@@ -9,13 +9,15 @@ module ProfileMerge
       logger.info "Starting merge profile"
 
       main_profile_ids.each_with_index do |profile_id, index|
-        main_profile = Profile.find profile_id
-        opposite_profile = Profile.find(opposite_profile_ids[index])
+        main_profile = Profile.find profile_id.to_i
+        opposite_profile = Profile.find(opposite_profile_ids[index].to_i)
 
 
         logger.info "Данный из профиля  #{opposite_profile.id} будут перенесены в профиль #{main_profile.id}"
         # перенос profile_datas
-        # main_profile.profile_datas << opposite_profile.profile_datas
+   #      main_profile.profile_datas << opposite_profile.profile_datas
+
+        # перезаписать и e-mail
 
         # обновление profile_id у юзера, владельца профиля
         # В случаи, если юзер есть у main_profile - ничего не делаем:
@@ -24,13 +26,16 @@ module ProfileMerge
         # то линкуем юзера к новому профилю
         if opposite_profile.user.present?
           logger.info "Юзер  #{opposite_profile.user.id} будут перелинкован на профиль #{main_profile.id}"
-          # opposite_profile.user.update_column(:profile_id, main_profile.id)
+           opposite_profile.user.update_column(:profile_id, main_profile.id)
+        # кроме того здесь нужно писать прежний user_id в поле user_id Profiles для профиля юзера,
+          # чей профиль будет удален
+
         end
 
 
         logger.info "Профиля  #{opposite_profile.id} будет удален"
         # Удаление opposite_profile
-        # opposite_profile.destroy
+         opposite_profile.destroy
       end
     end
 
