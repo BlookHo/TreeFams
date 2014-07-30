@@ -10,7 +10,6 @@
 
 - path_author_relation =  relation_to_profile(@search_results_relations.find {|r| r[path_author.id] }.try(:[], path_author.id))
 
-
 %ul.path-list
   %li
     - if path_author.class == User

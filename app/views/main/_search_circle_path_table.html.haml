@@ -26,7 +26,7 @@
         = rel
       %td.center
         - if item.profile.tree_circle(author_id, item.is_profile_id).size > 0 and item.relation_id != 0
-          = link_to "Cмотреть", search_circle_path(path_id, author_id, circle_path_helper(@path_params, item.is_profile_id, item.relation_id)), style: "margin-left:11px;color:green;", remote: true
+          = link_to "-Cмотреть", search_circle_path(path_id, author_id, circle_path_helper(@path_params, item.is_profile_id, item.relation_id)), style: "margin-left:11px;color:green;", remote: true
 
 :javascript
   closeAllDropDown();
