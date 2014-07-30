@@ -10,13 +10,6 @@
 %p
   IN connection_of_trees: where_found_user_id = @user_id: #{@user_id.inspect}
 %p
-  IN connection_of_trees: @start_connected_user_id: #{@start_connected_user_id.inspect}
-
--#%p
--#  IN get_connected_users: @@one_connected_users_arr #{@one_connected_users_arr.inspect}
--#%p
--#  IN get_connected_users: @next_connected_users_arr #{@next_connected_users_arr.inspect}
-%p
   IN get_connected_users: @connected_users_arr #{@connected_users_arr.inspect}
 
 
@@ -34,36 +27,12 @@
   IN connection_of_trees: @second_tree: #{@second_tree.inspect}
 
 
--#%p
--#  IN connect_trees: @@author_index: #{@author_index.inspect}
--#%p
--#  IN connect_trees: @@author_profile_id: #{@author_profile_id.inspect}
--#%p
--#  IN connect_trees: @where_found_tree_row: #{@where_found_tree_row.inspect}
--#%p
--#  IN connect_trees: @who_found_tree_row: #{@who_found_tree_row.inspect}
-
-
 %p
   IN connect_trees
 %p
-  @matched_profiles_arr: #{@matched_profiles_arr.inspect}
+  @matched_profiles_arr: #{@match_profiles_arr.inspect}
 %p
   @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
--#%p
--#  IN connect_trees: @where_found_to_replace: #{@where_found_to_replace.inspect}
--#%p
--#  IN connect_trees: @who_found_to_replace: #{@who_found_to_replace.inspect}
--#%p
--#  IN connect_trees: @profile_to_replace: #{@profile_to_replace.inspect}
-%p
-  @rewrite_tree_arr: #{@rewrite_tree_arr.inspect}
-%p
-  @rewrite_profilekey_arr: #{@rewrite_profilekey_arr.inspect}
--#%p
--#  IN connect_trees: @test_saved_profiles: #{@test_saved_profiles.inspect}
--#%p
--#  IN connect_trees: @arr_to_rewrite: #{@arr_to_rewrite.inspect}
 %p
   @save_in_tree: #{@save_in_tree.inspect}
 %p
