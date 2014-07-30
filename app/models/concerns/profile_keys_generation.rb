@@ -1,4 +1,5 @@
-module AddProfileLogic
+# Модуль генерации profile_keys при добавлении нового отношени (профиля) в дереов пользователя
+module ProfileKeysGeneration
   extend ActiveSupport::Concern
 
   module ClassMethods

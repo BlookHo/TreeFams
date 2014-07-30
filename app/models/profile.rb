@@ -2,7 +2,8 @@ class Profile < ActiveRecord::Base
 
   attr_accessor :profile_name, :relation_id, :answers_hash
 
-  include NewProfileQuestions
+  include ProfileQuestions
+  include ProfileMerge
 
   belongs_to :user
   belongs_to :name
@@ -10,12 +11,6 @@ class Profile < ActiveRecord::Base
 
   has_many   :profile_datas, dependent: :destroy
   accepts_nested_attributes_for :profile_datas
-
-  # Create default profile_data on profile create
-  # after_create :create_profile_data
-  # def create_profile_data
-  #   self.profile_datas.create!(creator_id: current_user.id)
-  # end
 
   before_save do
     self.sex_id = name.try(:sex_id)
@@ -29,22 +24,14 @@ class Profile < ActiveRecord::Base
     [self.to_name, self.surname].join(' ')
   end
 
-
   # Эксперименты по выводу кругов в объедененных деревьях
   # получает на вход id деревьев из которых надо собрать ближний круг
   def circle(user_ids)
       results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name)
       return results.uniq!
+      # TODO sort by ids order
+      # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
   end
-
-  # Ближний круг для профиля в дереве юзера
-  # по записям в ProfileKey
-  # def main_circle(user_id)
-  #   results = ProfileKey.where(user_id: user_id, profile_id: self.id).order('relation_id').includes(:name)
-  #   # TODO sort
-  #   # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
-  #   return results
-  # end
 
   # На выходе ближний круг для профиля в дереве user_id
   # по записям в Tree

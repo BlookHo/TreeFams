@@ -176,8 +176,11 @@ class ConnectUsersTreesController < ApplicationController
 
 
         #########  Вставить перезапись profile_id's & update User
-        ## in: match_profiles_arr - найден в поиске
-        ## in: opposite_profiles_arr - противоположные, найденным в поиске
+        ## (остаются): opposite_profiles_arr - противоположные, найденным в поиске
+        ## (уходят): match_profiles_arr - найден в поиске
+        # Первым параметром идут те профили, которые остаются
+        Profile.merge(opposite_profiles_arr, match_profiles_arr)
+
 
 
 
@@ -201,8 +204,11 @@ class ConnectUsersTreesController < ApplicationController
 
 
       #########  Вставить перезапись profile_id's & update User
-      ## in: match_profiles_arr - найден в поиске
-      ## in: opposite_profiles_arr - противоположные, найденным в поиске
+      ## (уходят):   opposite_profiles_arr - противоположные, найденным в поиске
+      ## (остаются): match_profiles_arr - найден в поиске
+      # Первым параметром идут те профили, которые остаются
+      Profile.merge(match_profiles_arr, opposite_profiles_arr)
+
 
 
 
@@ -332,4 +338,3 @@ end
 #      [796, "is_profile_id", 215, "-->", 215]],
 #     [[867, "is_profile_id", 225, "-->", 225]],
 #     [[811, "is_profile_id", 237, "-->", 237]]]
-
