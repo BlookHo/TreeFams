@@ -28,9 +28,7 @@ class Profile < ActiveRecord::Base
   # получает на вход id деревьев из которых надо собрать ближний круг
   def circle(user_ids)
       results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name)
-      return results.uniq!
-      # TODO sort by ids order
-      # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
+      return results
   end
 
   # На выходе ближний круг для профиля в дереве user_id

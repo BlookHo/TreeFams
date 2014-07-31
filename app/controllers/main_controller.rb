@@ -172,7 +172,9 @@ class MainController < ApplicationController
 # Основной метод
  def main_page
 
-    @circle = current_user.profile.circle(current_user.id)
+    # @circle = current_user.profile.circle(current_user.id)
+
+    @circle = current_user.profile.circle(current_user.get_connected_users)
     @author = current_user.profile
 
     @current_user_id = current_user.id # DEBUGG_TO_VIEW
