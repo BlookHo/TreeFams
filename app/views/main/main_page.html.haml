@@ -181,7 +181,7 @@
               Содержит
               = paths.size
               общих
-              = Russian.p(paths.size, "родственника", "родственников")
+              = Russian.p(paths.size, "родственника", "родственников", "родственников")
           -#= link_to 'Объединиться', connection_of_trees_path(current_user_id: current_user.id, user_id_to_connect: user.id, matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash), class: :handshake
           .results{style: 'display:none;', id: "results-#{user.id}"}
             - paths.each do |path|
