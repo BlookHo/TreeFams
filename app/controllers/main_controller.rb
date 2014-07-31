@@ -14,20 +14,43 @@ class MainController < ApplicationController
  # @note GET /
   def make_search_results_paths(final_reduced_profiles_hash) #,final_reduced_relations_hash)
     @search_path_hash = Hash.new
+    @new_search_path_hash = Hash.new  # NEW_PATH_W_START_PROFILE
     final_reduced_profiles_hash.each do |k_tree,v_tree|
       paths_arr = []
+      new_paths_arr = []
       one_path_hash = Hash.new
-      start_profile = User.find(k_tree).profile_id
+
+      one_wide_hash = Hash.new  # NEW_PATH_W_START_PROFILE
+      val_arr = []  # NEW_PATH_W_START_PROFILE
+
+      #start_profile = User.find(k_tree).profile_id
       one_tree_hash = get_tree_hash(k_tree)
+      @one_tree_hash = one_tree_hash # DEBUGG_TO_VIEW
       v_tree.each do |each_k,v_tree_hash|
         results_qty = v_tree_hash.size
+        @v_tree_hash = v_tree_hash # DEBUGG_TO_VIEW
         v_tree_hash.each do |finish_profile|
           one_path_hash = make_path(one_tree_hash, finish_profile, results_qty)
+          @one_path_hash = one_path_hash # DEBUGG_TO_VIEW
           paths_arr << one_path_hash
+
+          val_arr = one_wide_hash.values_at(each_k).flatten.compact  # NEW_PATH_W_START_PROFILE
+          #logger.info "DEBUG IN make_search_results_paths: before << #{@val_arr.inspect}"
+          val_arr << one_path_hash   # NEW_PATH_W_START_PROFILE
+          #logger.info "DEBUG IN make_search_results_paths: after << #{@val_arr.inspect}"
+          one_wide_hash.merge!({each_k => val_arr})  # NEW_PATH_W_START_PROFILE
+          @one_wide_hash = one_wide_hash # DEBUGG_TO_VIEW
+          #new_paths_arr << one_wide_hash
+
         end
+        #new_paths_arr << one_wide_hash
       end
+
+
       # Основной результат = @search_path_hash
       @search_path_hash.merge!({k_tree => paths_arr}) # наполнение хэша хэшами
+      # Основной результат = @new_search_path_hash
+      @new_search_path_hash.merge!({k_tree => one_wide_hash}) # # NEW_PATH_W_START_PROFILE  наполнение хэша хэшами  # NEW_PATH_W_START_PROFILE
     end
   end
 
@@ -196,19 +219,82 @@ class MainController < ApplicationController
      #}}
 
      #@search_path_hash = {35=>[
-     #    {242=>{0=>0}, 243=>{1=>5}},
+     #    {242=>{0=>0}, 243=>{1=>5}},                   # 265
      #    {242=>{0=>0}, 243=>{1=>0}, 249=>{1=>5}},
      #    {242=>{0=>0}, 243=>{1=>0}, 250=>{2=>5}},
      #    {242=>{0=>0}, 243=>{1=>0}, 248=>{5=>5}},
      #    {242=>{0=>5}},
 
-     #    {242=>{0=>0}, 245=>{8=>1}},
+     #    {242=>{0=>0}, 245=>{8=>1}},                   # 269
 
-     #    {242=>{0=>0}, 243=>{1=>4}},
+     #    {242=>{0=>0}, 243=>{1=>4}},                   # 268
      #    {242=>{0=>0}, 243=>{1=>0}, 249=>{1=>4}},
      #    {242=>{0=>0}, 243=>{1=>0}, 250=>{2=>4}},
      #    {242=>{0=>0}, 243=>{1=>0}, 248=>{5=>4}}
      #]}
+
+     #@ne_search_path_hash= {35=>{                    # OKK
+     #    265=>[{242=>{0=>0}, 243=>{1=>5}},
+     #          {242=>{0=>0}, 243=>{1=>0}, 249=>{1=>5}},
+     #          {242=>{0=>0}, 243=>{1=>0}, 250=>{2=>5}},
+     #          {242=>{0=>0}, 243=>{1=>0}, 248=>{5=>5}},
+     #          {242=>{0=>5}}
+     #         ],
+     #
+     #    269=>[{242=>{0=>0}, 245=>{8=>1}}
+     #         ],
+     #
+     #    268=>[{242=>{0=>0}, 243=>{1=>4}},
+     #          {242=>{0=>0}, 243=>{1=>0}, 249=>{1=>4}},
+     #          {242=>{0=>0}, 243=>{1=>0}, 250=>{2=>4}},
+     #          {242=>{0=>0}, 243=>{1=>0}, 248=>{5=>4}}
+     #         ]
+     # }
+     #}
+
+     # Search Regged = 35
+     #@earch_path_hash = {38=>[
+     #    {265=>{0=>0}, 269=>{3=>3}},
+     #    {265=>{0=>3}},
+     #    {265=>{0=>0}, 269=>{3=>0}, 271=>{8=>3}},
+     #    {265=>{0=>0}, 268=>{5=>3}},
+     #    {265=>{0=>0}, 266=>{1=>3}},
+     #    {265=>{0=>0}, 267=>{2=>3}}],
+     #                    39=>[
+     #    {268=>{0=>0}, 265=>{5=>0}, 269=>{3=>2}},
+     #    {268=>{0=>0}, 265=>{5=>2}},
+     #    {268=>{0=>3}},
+     #    {268=>{0=>0}, 266=>{1=>3}},
+     #    {268=>{0=>0}, 267=>{2=>3}}],
+     #                    28=>[
+     #    {176=>{0=>2}},
+     #    {176=>{0=>0}, 181=>{3=>2}}]
+     #     }
+     #{38=>{242=>[269, 265, 271], 243=>[268, 266, 267]},
+     # 39=>{242=>[269, 265], 243=>[268, 266, 267]},
+     # 28=>{242=>[176, 181]}}
+     #
+     #@ew_search_path_hash= {38=>
+     #     {242=>[
+     #         {265=>{0=>0}, 269=>{3=>3}},
+     #         {265=>{0=>3}},
+     #         {265=>{0=>0}, 269=>{3=>0}, 271=>{8=>3}}],
+     #      243=>[
+     #          {265=>{0=>0}, 268=>{5=>3}},
+     #          {265=>{0=>0}, 266=>{1=>3}},
+     #          {265=>{0=>0}, 267=>{2=>3}}]},
+     #                       39=>
+     #       {242=>[
+     #           {268=>{0=>0}, 265=>{5=>0}, 269=>{3=>2}},
+     #           {268=>{0=>0}, 265=>{5=>2}}],
+     #        243=>[
+     #            {268=>{0=>3}},
+     #            {268=>{0=>0}, 266=>{1=>3}},
+     #            {268=>{0=>0}, 267=>{2=>3}}]},
+     #                       28=>
+     #         {242=>[{176=>{0=>2}},
+     #                {176=>{0=>0}, 181=>{3=>2}}]}}
+
 
 
      # Search Connected 38 + 39 in 35   Regged = 39
