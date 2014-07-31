@@ -1,5 +1,3 @@
-
-
 .content
   .circle-view
     .circle-path#current-circle-path= render 'circle_path'
@@ -49,20 +47,6 @@
 
                 .search-path-table{id: "search-path-table-#{path_id}", style: 'display:none;'}
                   = render 'search_circle_path_table', circle: user.profile.circle(user.id), author: user, path_id: path_id
-
-  -# - @search_results.each do |result|
-  -#   .circle-view
-  -#     - if result.author.class == User
-  -#       .circle-path{id: "current-circle-path-#{result.author.id}"}
-  -#         = render 'search_circle_path', author: result.author
-  -#       .current-circle{id: "current-circle-#{result.author.id}"}
-  -#         = render 'search_circle_table', circle: result.circle, author: result.author
-  -#     - else
-  -#       .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
-  -#         = render 'search_circle_path', author: result.author
-  -#       .current-circle{id: "current-circle-#{params[:tree_id]}"}
-  -#         = render 'search_circle_table', circle: result.circle, author: result.author
-
 
 
 
