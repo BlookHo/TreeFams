@@ -133,6 +133,18 @@ class MainController < ApplicationController
 
   end
 
+  ## Эксперименты по выводу кругов в объедененных деревьях
+  ## получает на вход id деревьев из которых надо собрать ближний круг , profile_id: self.id
+  #def circle(user_ids)
+  #  results = ProfileKey.where(user_id: user_ids).order('relation_id').includes(:name)
+  #  return results.uniq!
+  #  # TODO sort by ids order
+  #  # http://stackoverflow.com/questions/801824/clean-way-to-find-activerecord-objects-by-id-in-the-order-specified
+  #end
+  #
+  #
+
+
 # ГЛАВНЫЙ СТАРТОВЫЙ МЕТОД ПОИСКА совпадений по дереву Юзера
 # Основной метод
  def main_page
@@ -141,18 +153,8 @@ class MainController < ApplicationController
     @author = current_user.profile
 
     @current_user_id = current_user.id # DEBUGG_TO_VIEW
- #   @user_id = 33 # DEBUGG_TO_VIEW
 
     if current_user
-     #tree_arr = get_user_tree(current_user.id) # Получение массива дерева текущего Юзера из Tree
-
-     #@tree_arr= [[32, 212, 419, 0, 212, 419, 1, false],
-     #            [32, 212, 419, 1, 213, 196, 1, false],
-     #            [32, 212, 419, 2, 214, 173, 0, false],
-     #            [32, 212, 419, 5, 215, 40, 1, false],
-     #            [32, 215, 40, 8, 237, 48, 0, false],
-     #            [32, 212, 419, 3, 225, 343, 1, false],
-     #            [32, 225, 343, 8, 241, 214, 0, false]]
 
      @connected_users_arr = current_user.get_connected_users # DEBUGG_TO_VIEW
 
@@ -162,25 +164,13 @@ class MainController < ApplicationController
      @new_tree_arr = get_connected_users_tree(@connected_users_arr)
      @new_tree_arr_length = @new_tree_arr.length if !@new_tree_arr.blank?
 
-     #tree_arr = get_connected_users_tree(@connected_users_arr) # 32 33
-     #
-     #tree_arr =  [[32, 212, 419, 0, 212, 419, 1, false],  # 32 33
-     #             [32, 212, 419, 1, 213, 196, 1, false],
-     #             [32, 212, 419, 2, 214, 173, 0, false],
-     #                [32, 212, 419, 5, 215, 40, 1, false],
-     #             [32, 215, 40, 8, 237, 48, 0, false],
-     #             [32, 212, 419, 3, 225, 343, 1, false],
-     #             [32, 225, 343, 8, 241, 214, 0, false],
-     #                 #[33, 215, 40, 5, 212, 419, 1, true],
-     #             [33, 215, 40, 1, 213, 196, 1, true],
-     #             [33, 215, 40, 2, 214, 173, 0, true],
-     #             [33, 215, 40, 0, 215, 40, 1, true],
-     #             [33, 237, 48, 1, 240, 110, 1, false]]
-
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
  #    @connected_users_arr = [current_user.id]    # DEBUGG_TO_VIEW
+
+     #@circle_result = circle(@connected_users_arr)  # DEBUGG_TO_VIEW
+     #@circle_result_len = @circle_result.length if !@circle_result.blank?  # DEBUGG_TO_VIEW
 
       search_profiles_tree_match(@connected_users_arr, @new_tree_arr)    # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
 
@@ -190,6 +180,68 @@ class MainController < ApplicationController
 
       # Call of make_path method
       make_search_results_paths(@final_reduced_profiles_hash) #
+
+      # Search Connected 38 + 39 in 35   Regged = 38
+
+     #@final_reduced_profiles_hash= {35=>{
+     #    265=>[243, 249, 250, 248, 242],
+     #    269=>[245],
+     #    268=>[243, 249, 250, 248]
+     #}}
+     #
+     #@final_reduced_relations_hash= {35=>{
+     #    265=>[0, 1, 2, 5, 3],
+     #    269=>[8],
+     #    268=>[5, 1, 2, 0]
+     #}}
+
+     #@search_path_hash = {35=>[
+     #    {242=>{0=>0}, 243=>{1=>5}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 249=>{1=>5}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 250=>{2=>5}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 248=>{5=>5}},
+     #    {242=>{0=>5}},
+
+     #    {242=>{0=>0}, 245=>{8=>1}},
+
+     #    {242=>{0=>0}, 243=>{1=>4}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 249=>{1=>4}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 250=>{2=>4}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 248=>{5=>4}}
+     #]}
+
+
+     # Search Connected 38 + 39 in 35   Regged = 39
+
+     #@final_reduced_profiles_hash= {35=>{
+     #    268=>[243, 249, 250, 248],
+     #    265=>[242, 243, 249, 250, 248],
+     #    269=>[245]
+     #}}
+     #
+     #
+     #@final_reduced_relations_hash= {35=>{
+     #    268=>[5, 1, 2, 0],
+     #    265=>[3, 0, 1, 2, 5],
+     #    269=>[8]
+     #}}
+     #
+     #@search_path_hash= {35=>[
+     #    {242=>{0=>0}, 243=>{1=>4}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 249=>{1=>4}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 250=>{2=>4}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 248=>{5=>4}},
+     #
+     #    {242=>{0=>5}},
+     #    {242=>{0=>0}, 243=>{1=>5}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 249=>{1=>5}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 250=>{2=>5}},
+     #    {242=>{0=>0}, 243=>{1=>0}, 248=>{5=>5}},
+     #
+     #    {242=>{0=>0}, 245=>{8=>1}}
+     #]}
+     #
+
 
     end
 

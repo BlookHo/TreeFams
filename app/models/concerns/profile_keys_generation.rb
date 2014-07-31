@@ -4,22 +4,6 @@ module ProfileKeysGeneration
 
   module ClassMethods
 
-    #ПЛАН РАБОТ
-
-    #Б) потом - сохранение ряда в Tree - я
-    #В) методы генерации рядов в ProfileKey - для каждой комбинации (кому-кого) - я
-    #
-    #Г) Итог: отображение присоединенного профиля на main_page - Алексей
-    #в виде пометки у профиля Кому. При нажатии - показ ближнего круга его же, с выделением в БК добавленных профилей
-    #При нажатии на добавленного - показ его БК, с возможностью удаления родни из его БК.
-    #При этом должен работать метод пометки соответствующих рядов в ProfileKey как удаленных.
-    #Для этого ввести новое поле в табл. PrjfileKey - relation_deleted
-    #
-    #Д) После решения вопроса с сохранением рядов в ProfileKey,
-    # отладка поиска с получением расширеных Хэшей - я
-    #Е) Одновременно - отображение рез-тов с учетом wide_arr results - Алексей
-    #
-
     # Сохранение нового ряда для добавленного профиля в таблице Tree.
     # @note GET /
     # @param admin_page [Integer] опциональный номер страницы
@@ -48,9 +32,6 @@ module ProfileKeysGeneration
     # @see News
     def make_tree_row(profile_id, sex_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, author_user)
 
-       # tree_arr = session[:tree_arr][:value] if !session[:tree_arr].blank?
-       # @tree_arr = tree_arr    # DEBUGG TO VIEW
-
        # Дополнение в Tree
        @add_row_to_tree = []
        @add_row_to_tree = [author_user.id, profile_id, sex_id, name_id, new_relation_id.to_i, new_profile_id, new_profile_name_id, new_profile_sex, false]
@@ -61,14 +42,6 @@ module ProfileKeysGeneration
 
        return @add_row_to_tree
 
-       # @add_to_tree = [24, 154, 73, 2, 172, 354, 0, false]
-
-      #tree_arr = [[24, 153, 449, 0, 153, 449, 0, false],
-      #            [24, 153, 449, 1, 154, 73, 1, false],
-      #            [24, 153, 449, 2, 155, 293, 0, false],
-      #            [24, 153, 449, 5, 156, 151, 1, false],
-      #            [24, 153, 449, 6, 157, 293, 0, false],
-      #            [24, 154, 73, 2, 172, 354, 0, false]]      # Дополнение в Tree @add_to_tree
 
     end
 
