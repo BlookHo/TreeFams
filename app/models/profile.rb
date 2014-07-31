@@ -5,7 +5,7 @@ class Profile < ActiveRecord::Base
   include ProfileQuestions
   include ProfileMerge
 
-  belongs_to :user
+  has_one    :user
   belongs_to :name
   has_many   :trees
 

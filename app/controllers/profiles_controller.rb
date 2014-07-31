@@ -11,13 +11,13 @@ class ProfilesController < ApplicationController
 
   def edit
     @profile = Profile.find(params[:profile_id])
-    @profile_data = @profile.profile_datas.where(creator_id: current_user.id).first
+    @profile_data = find_or_create_profile_data
   end
 
 
   def update
     @profile = Profile.find(params[:id])
-    @profile_data = @profile.profile_datas.where(creator_id: current_user.id).first
+    @profile_data = find_or_create_profile_data
     if @profile_data.update_attributes(profile_data_params)
       redirect_to profile_path(@profile), :notice => "Профиль сохранен!"
     else
@@ -150,7 +150,6 @@ class ProfilesController < ApplicationController
 
 
   def questions_valid?(questions_hash)
-
     # return true if questions_hash.blank?
     return true if questions_hash.nil?
     questions_hash.try(:size) == params[:answers].try(:size)
@@ -171,6 +170,15 @@ class ProfilesController < ApplicationController
       end
       result
     end
+  end
+
+
+  def find_or_create_profile_data
+    profile_data = @profile.profile_datas.where(creator_id: current_user.id).first
+    if profile_data.nil?
+      profile_data = @profile.profile_datas.create(creator_id: current_user.id)
+    end
+    return profile_data
   end
 
 
