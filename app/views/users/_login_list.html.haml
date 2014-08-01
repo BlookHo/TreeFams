@@ -7,5 +7,5 @@
           \#
           = user.id
         %td= user.profile.name.name.mb_chars.capitalize
-        %td= user.profile.email
+        %td= user.email
         %td= link_to "Войти под этим пользователем", login_as_user_path(user.id)

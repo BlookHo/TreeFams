@@ -27,14 +27,14 @@ class Profile < ActiveRecord::Base
   # Эксперименты по выводу кругов в объедененных деревьях
   # получает на вход id деревьев из которых надо собрать ближний круг
   def circle(user_ids)
-      results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name)
+      results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name).uniq_by(&:is_profile_id)
       return results
   end
 
   # На выходе ближний круг для профиля в дереве user_id
   # по записям в Tree
-  def tree_circle(user_id, profile_id)
-    Tree.where(user_id: user_id, profile_id: profile_id).order('relation_id').includes(:name)
+  def tree_circle(user_ids, profile_id)
+    Tree.where(user_id: user_ids, profile_id: profile_id).order('relation_id').includes(:name)
   end
 
   # На выходе - массив, аналогичный tree, который у нас сейчас формируется на старте.

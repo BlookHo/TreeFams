@@ -28,5 +28,5 @@
           path_link: path_link
 
       %td.center
-        - if item.profile.tree_circle(current_user.id, item.is_profile_id).size > 0 and item.relation_id != 0
+        - if item.profile.tree_circle(current_user.get_connected_users, item.is_profile_id).size > 0 and item.relation_id != 0
           = link_to "Смотреть", path_link, style: "margin-left:11px;color:green;", remote: true
