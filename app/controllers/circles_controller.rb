@@ -12,7 +12,7 @@ class CirclesController < ApplicationController
     else
       @author = Profile.find(current_user.profile_id)
     end
-    @circle  = @author.circle(current_user.id)
+    @circle  = @author.circle(current_user.get_connected_users)
   end
 
 

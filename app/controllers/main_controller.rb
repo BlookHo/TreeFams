@@ -368,15 +368,51 @@ class MainController < ApplicationController
     end
     @path_search_results
 
+
+    @search_results_data = collect_search_results_data(@new_search_path_hash)
+
+ end
+
+
+
+ def collect_search_results_data(data_hash)
+   results = []
+   data_hash.each do |user_id, result_data|
+     user = User.find user_id
+     result = {
+               user_id: user.id,
+               user_name: user.profile.name.to_name,
+               user_sex_id: user.profile.sex_id,
+               connected: user.get_connected_users.size > 1,
+               results: collect_search_results_for_profiles(result_data)
+              }
+     results << Hashie::Mash.new(result)
+   end
+   results
+ end
+
+
+
+ def collect_search_results_for_profiles(data)
+   results = []
+   data.each do |profile_id, path_data|
+     profile = Profile.find(profile_id)
+     result = {
+                profile_id: profile.id,
+                profile_name: profile.name.to_name,
+                results_count: path_data.size,
+                results: collect_path_profiles(path_data)
+              }
+     results << result
+   end
+   results
  end
 
 
 
  def collect_path_profiles(user_paths)
    results = []
-
    user_paths.each do |paths|
-     # results << paths
      result = []
      prev_sex_id = nil
      paths.each do |profile_id, data|

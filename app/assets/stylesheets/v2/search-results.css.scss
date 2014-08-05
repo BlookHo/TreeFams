@@ -1,0 +1,53 @@
+#search-results{
+
+  .handshake{float:right;font-size:14px;margin-top:5px;}
+
+  margin-top:21px;
+
+  h1{
+    font-size:24px;border-bottom:1px solid #ccc;
+    span{display:block;font-weight:normal;color:grey;font-size:12px;}
+  }
+  h2{font-size:18px;}
+  h5{font-size:14px;color:grey;font-style:italic;}
+
+  ul{
+    li{margin-bottom:16px;}
+  }
+
+  ul ul{
+    margin-left:31px;
+    margin-top:11px;
+
+  }
+
+  ul ul ul{
+    margin-left:11px;
+    padding-bottom:11px;
+    li{display:inline;}
+  }
+
+
+
+  .whois{
+    padding:4px;
+    // border:1px solid grey;
+    display:inline-block;
+    background-color:#fff7c5;
+    position:relative;
+    margin-left:12px;
+    font-size:15px;
+    // Arrows
+    &:before {
+       position: absolute;
+       top:3px;
+       left: -8px;
+       display: block;
+       border-top: 8px solid transparent;
+       border-bottom: 8px solid transparent;
+       border-right: 8px solid #fff7c5;
+       content: '';
+    }
+
+  }
+}

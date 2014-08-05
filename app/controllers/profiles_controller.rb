@@ -30,6 +30,7 @@ class ProfilesController < ApplicationController
     @profile = Profile.new
     @profile.relation_id = params[:relation_id]
     @base_profile = Profile.find(params[:base_profile_id])
+    @profile.tree_id = @base_profile.tree_id
   end
 
 
@@ -46,6 +47,7 @@ class ProfilesController < ApplicationController
 
     @profile = Profile.new(profile_params)
     @profile.user_id = 0
+    @profile.tree_id = @base_profile.tree_id
 
     @name = Name.where(name: params[:profile_name].mb_chars.downcase).first
 
@@ -70,15 +72,21 @@ class ProfilesController < ApplicationController
       # relation_added    Отношение КОТОРОЕ добавляем (кого добавляем)
       # name_id_added     ID имени нового отношения
       # make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added)
-      questions_hash = current_user.profile.make_questions(current_user.id, @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i, @author_profile_id)
-      # questions_hash = current_user.profile.make_questions(current_user.id, current_user.profile_id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
+
+      #
+      questions_hash = current_user.profile.make_questions(current_user.id,
+      @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i,
+      @profile.name_id.to_i, @author_profile_id, current_user.get_connected_users )
+
       @questions = create_questions_from_hash(questions_hash)
       @profile.answers_hash = params[:answers]
 
 
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
-        ProfileKey.add_new_profile(@base_profile, @base_relation_id, @profile, @profile.relation_id, current_user, exclusions_hash: @profile.answers_hash)
+        ProfileKey.add_new_profile(@base_profile,
+            @base_relation_id, @profile, @profile.relation_id, current_user,
+            exclusions_hash: @profile.answers_hash, tree_ids: current_user.get_connected_users)
 
         # redirect_to to profile circle path if exist, via js
         if params[:path_link].blank?

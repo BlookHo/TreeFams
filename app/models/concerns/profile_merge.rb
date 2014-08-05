@@ -29,6 +29,7 @@ module ProfileMerge
           logger.info "Юзер  #{opposite_profile.user.id} будут перелинкован на профиль #{main_profile.id}"
           opposite_profile.user.update_column(:profile_id, main_profile.id)
           main_profile.update_column(:user_id, opposite_profile.user_id)
+          main_profile.update_column(:tree_id, opposite_profile.tree_id)
           # кроме того здесь нужно писать прежний user_id в поле user_id Profiles для профиля юзера,
           # чей профиль будет удален
           # Зачем, если он будет удален?
