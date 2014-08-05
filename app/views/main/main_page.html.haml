@@ -174,17 +174,32 @@
             %li
               %h1
                 = data.user_name
+                - if data.connected
+                  %strong (объединенное дерево)
+
+                %span
+                  Содержит
+                  - counter = data.results.map{|p| p.results_count}.inject(:+)
+                  = counter
+                  = Russian.p(counter, "общего", "общих", "общих")
+                  с вами
+                  = Russian.p(counter, "родственника", "родственников", "родственников")
+                  в своем древе
+
+
                 = link_to 'Объединиться', connection_of_trees_path(current_user_id: current_user.id, user_id_to_connect: user.id, matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash), class: :handshake
               %ul
                 - data.results.each do |profile|
                   %li
                     %h3
-                      = profile.profile_name
-                    %h5
-                      Содержит
-                      = profile.results_count
-                      общих
-                      = Russian.p(profile.results_count, "родственника", "родственников", "родственников")
+                      Для
+                      = YandexInflect.inflections(profile.profile_name)[1]["__content__"].mb_chars.capitalize
+                      из вашего дерева найдены:
+                    -# %h5
+                    -#   Содержит
+                    -#   = profile.results_count
+                    -#   = Russian.p(profile.results_count, "общего", "общих", "общих")
+                    -#   = Russian.p(profile.results_count, "родственника", "родственников", "родственников")
 
                     %ul
                       - profile.results.each do |path|
@@ -195,7 +210,6 @@
                               - if step[:relation] != 0
                                 = sex_id_to_human(step[:prev_sex_id])
                                 = relation_to_human(step[:relation])
-                              = step[:profile].to_name
                               = link_to step[:profile].to_name, "/search/circle_path/#{path_id}/#{data.user_id}/#{step[:profile].id},#{step[:relation]}", remote: true
                               - if (index + 1) == path.size
                                 .span.whois

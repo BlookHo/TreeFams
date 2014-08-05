@@ -8,7 +8,8 @@ module ProfileQuestions
   # Основной метод формирования вопросов в нестандартных ситуациях добавления профилей
   # На выходе: сгенерированные массивы вопросов к каждому нестандартному relation
   # для добавляемого relation.
-  # user_id           Дерево в которое добавляем
+
+  # user_id           Дерево в которое добавляем или массив деревеье
   # profile_id        Профиль к которому добавляем
   # relation_add_to   Отношение К которому добавляем
   # relation_added    Отношение КОТОРОЕ добавляем (кого добавляем)
@@ -22,6 +23,7 @@ module ProfileQuestions
     @incoming_author_profile_id = author_profile_id # автор текущего круга
 
     @tmp_author_profile_id = User.find(user_id).profile_id  # Главный автор - Юзер
+
 
     @fathers_hash = circle_hashes[:fathers]
     @mothers_hash = circle_hashes[:mothers]

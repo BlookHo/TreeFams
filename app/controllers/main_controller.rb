@@ -383,6 +383,7 @@ class MainController < ApplicationController
                user_id: user.id,
                user_name: user.profile.name.to_name,
                user_sex_id: user.profile.sex_id,
+               connected: user.get_connected_users.size > 1,
                results: collect_search_results_for_profiles(result_data)
               }
      results << Hashie::Mash.new(result)

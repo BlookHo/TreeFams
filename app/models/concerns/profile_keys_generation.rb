@@ -340,7 +340,8 @@ module ProfileKeysGeneration
 
       # get_profile_params(base_profile, base_relation_id, new_profile, new_relation_id)  # Получить от Алексея из вьюхи добавления нового профиля
 
-      get_bk_relative_names(author_user.id, base_profile.id, exclusions_hash)   # Получить от Алексея
+      # get_bk_relative_names(author_user.id, base_profile.id, exclusions_hash)   # Получить от Алексея
+      get_bk_relative_names(author_user, base_profile.id, exclusions_hash)   # Получить от Алексея
 
       # make_new_profile # Получить от Алексея
 

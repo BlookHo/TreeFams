@@ -46,6 +46,7 @@ class ProfilesController < ApplicationController
 
     @profile = Profile.new(profile_params)
     @profile.user_id = 0
+    @profile.tree_id = @base_profile.tree_id
 
     @name = Name.where(name: params[:profile_name].mb_chars.downcase).first
 
@@ -70,6 +71,8 @@ class ProfilesController < ApplicationController
       # relation_added    Отношение КОТОРОЕ добавляем (кого добавляем)
       # name_id_added     ID имени нового отношения
       # make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added)
+
+      #
       questions_hash = current_user.profile.make_questions(current_user.id, @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i, @author_profile_id)
       # questions_hash = current_user.profile.make_questions(current_user.id, current_user.profile_id, @base_relation_id.to_i, @profile.relation_id.to_i, @profile.name_id.to_i)
       @questions = create_questions_from_hash(questions_hash)
