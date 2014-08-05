@@ -170,6 +170,7 @@
       #search-results
         %ul
           - @search_results_data.each do |data|
+            - user = User.find(data.user_id)
             %li
               %h1= data.user_name
               %ul
@@ -193,6 +194,7 @@
                                 = sex_id_to_human(step[:prev_sex_id])
                                 = relation_to_human(step[:relation])
                               = step[:profile].to_name
+                              = link_to step[:profile].to_name, "/search/circle_path/#{path_id}/#{data.user_id}/#{step[:profile].id},#{step[:relation]}", remote: true
                               - if (index + 1) == path.size
                                 .span.whois
                                   Вероятно, это
@@ -200,6 +202,9 @@
                               - else
                                 %span
                                   = fa_icon('arrow-right')
+                          .search-path-table{id: "search-path-table-#{path_id}", style: 'display:none;'}
+                            = render 'search_circle_path_table', circle: user.profile.circle(user.id), author: user, path_id: path_id
+
 
 
 
