@@ -172,7 +172,9 @@
           - @search_results_data.each do |data|
             - user = User.find(data.user_id)
             %li
-              %h1= data.user_name
+              %h1
+                = data.user_name
+                = link_to 'Объединиться', connection_of_trees_path(current_user_id: current_user.id, user_id_to_connect: user.id, matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash), class: :handshake
               %ul
                 - data.results.each do |profile|
                   %li
