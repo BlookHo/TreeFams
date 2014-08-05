@@ -1,41 +1,4 @@
-%section.admin
-
 %h3
-  ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ
-
-%p
-  IN connect_trees: @msg: #{@msg.inspect}
-%p
-  IN connection_of_trees: who_found_user_id = @current_user_id: #{@current_user_id.inspect}
-%p
-  IN connection_of_trees: where_found_user_id = @user_id: #{@user_id.inspect}
-%p
-  IN get_connected_users: @connected_users_arr #{@connected_users_arr.inspect}
-
-
-%p
-  IN connection_of_trees: @matched_profiles_hash: #{@matched_profiles_hash.inspect}
-%p
-  IN connection_of_trees: @matched_relations_hash: #{@matched_relations_hash.inspect}
-%p
-  IN connection_of_trees: @matched_profiles_in_tree: #{@matched_profiles_in_tree.inspect}
-%p
-  IN connection_of_trees: @matched_relations_in_tree: #{@matched_relations_in_tree.inspect}
-%p
-  IN connection_of_trees: @first_tree: #{@first_tree.inspect}
-%p
-  IN connection_of_trees: @second_tree: #{@second_tree.inspect}
-
-
-%p
-  IN connect_trees
-%p
-  @matched_profiles_arr: #{@match_profiles_arr.inspect}
-%p
-  @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
-%p
-  @save_in_tree: #{@save_in_tree.inspect}
-%p
-  @save_in_profilekey: #{@save_in_profilekey.inspect}
-
-
+  ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ ЗАВЕРШЕН!
+%br
+= link_to "Продолжить", main_page_path
