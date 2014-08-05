@@ -15,10 +15,11 @@ module ProfileQuestions
   # relation_added    Отношение КОТОРОЕ добавляем (кого добавляем)
   # name_id_added     ID имени нового отношения
   # author_profile_id  ID профиля автора (центра) круга, для кого нужно собирать хеши и относительно кого строются вопросы
-  def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added, author_profile_id)
+  # user_ids - Id всех объединенных юзеров
+  def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added, author_profile_id, user_ids)
 
     # Собираем хеш ближнего круга
-    circle_hashes = get_circle_as_hash(user_id, author_profile_id)
+    circle_hashes = get_circle_as_hash(user_ids, author_profile_id)
 
     @incoming_author_profile_id = author_profile_id # автор текущего круга
 
