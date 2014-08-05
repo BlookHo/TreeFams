@@ -167,6 +167,45 @@
     - else
       %h1.yellow-title Возможно, мы нашли ваших родственников:
 
+      #search-results
+        %ul
+          - @search_results_data.each do |data|
+            %li
+              %h1= data.user_name
+              %ul
+                - data.results.each do |profile|
+                  %li
+                    %h3
+                      = profile.profile_name
+                    %h5
+                      Содержит
+                      = profile.results_count
+                      общих
+                      = Russian.p(profile.results_count, "родственника", "родственников", "родственников")
+
+                    %ul
+                      - profile.results.each do |path|
+                        - path_id = Digest::MD5.hexdigest(path.to_s)
+                        %ul
+                          - path.each_with_index do |step, index|
+                            %li
+                              - if step[:relation] != 0
+                                = sex_id_to_human(step[:prev_sex_id])
+                                = relation_to_human(step[:relation])
+                              = step[:profile].to_name
+                              - if (index + 1) == path.size
+                                .span.whois
+                                  Вероятно, это
+                                  = relation_to_profile(@search_results_relations.find {|r| r[step[:profile].id] }.try(:[], step[:profile].id) )
+                              - else
+                                %span
+                                  = fa_icon('arrow-right')
+
+
+
+
+
+
 
     #path-results
       - @path_search_results.each do |result|
