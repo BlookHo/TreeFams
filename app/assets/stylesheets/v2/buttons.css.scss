@@ -23,7 +23,7 @@ input[type=submit].btn{
 
 
   // disabled button
-  &.disabled{
+  &:disabled{
     pointer-events: none;
     opacity:0.5;
   }
