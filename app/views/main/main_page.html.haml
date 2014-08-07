@@ -160,8 +160,8 @@
     .circle-path#current-circle-path= render 'circle_path'
     %h5{style:"padding:10px 0 0 10px"}
       В вашем дереве
-      %strong{style:'font-weight:700;color:green;'}= @new_tree_arr_length
-      = Russian.p(@new_tree_arr_length, "родственника", "родственников", "родственников")
+      %strong{style:'font-weight:700;color:green;'}= @qty_of_tree_profiles
+      = Russian.p(@qty_of_tree_profiles, "родственника", "родственников", "родственников")
     .current-circle#current-circle= render 'circle_table', circle: @circle
 
 
