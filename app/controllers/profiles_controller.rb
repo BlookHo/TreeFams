@@ -123,7 +123,7 @@ class ProfilesController < ApplicationController
 
 
 
-  def destroy
+  def old_destroy
 
     @profile = Profile.where(id: params[:id]).first
 
@@ -141,6 +141,30 @@ class ProfilesController < ApplicationController
     end
 
 
+    redirect_to :back
+  end
+
+
+
+  def destroy
+
+    @profile = Profile.where(id: params[:id]).first
+
+    if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
+      flash[:alert] = "Вы можете удалить только последнего родственника в цепочке"
+    elsif @profile.user.present?
+      flash[:alert] = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
+    elsif @profile.user_id == current_user.id
+      flash[:alert] = "Вы не можете удалить свой профиль"
+    else
+        ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
+        Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
+        @profile.destroy
+        flash[:notice] = "Профиль удален"
+      else
+        flash[:alert] = "Ошибка удаления профиля"
+      end
+    end
     redirect_to :back
   end
 
