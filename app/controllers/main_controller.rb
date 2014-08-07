@@ -187,8 +187,9 @@ class MainController < ApplicationController
     #@connected_users_arr = [current_user.id]    # DEBUGG_TO_VIEW
 
      @new_tree_arr = get_connected_users_tree(@connected_users_arr)
-     @qty_of_tree_profiles = @new_tree_arr.length if !@new_tree_arr.blank?
-
+     @qty_of_profiles = @new_tree_arr.map {|p| p[4] }.uniq!
+     # @qty_of_tree_profiles = @new_tree_arr.length if !@new_tree_arr.blank?
+     @qty_of_tree_profiles = @qty_of_profiles.size
 
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
