@@ -8,6 +8,8 @@ module ProfileMerge
     def merge(main_profile_ids, opposite_profile_ids)
       logger.info "Starting merge profile"
 
+      profiles_to_delete = []
+
       main_profile_ids.each_with_index do |profile_id, index|
 
         main_profile     = Profile.find(profile_id)
@@ -36,9 +38,15 @@ module ProfileMerge
         end
         logger.info "Профиля  #{opposite_profile.id} будет удален"
         # Удаление opposite_profile
-        opposite_profile.destroy
+        # opposite_profile.destroy
+        # Cобираем профили, которые потом надо удалить
+        profiles_to_delete << opposite_profile
       end
+      profiles_to_delete.map(&:destroy)
     end
+
+
+
 
   end
 end
