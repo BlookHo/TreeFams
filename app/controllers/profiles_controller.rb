@@ -145,7 +145,7 @@ class ProfilesController < ApplicationController
 
 
 
-<<<<<<< HEAD
+
   def new_destroy
 
     # @profile = Profile.where(id: params[:id]).first
@@ -166,6 +166,7 @@ class ProfilesController < ApplicationController
     #   end
     # end
     # redirect_to :back
+  end
 
 
   def destroy
