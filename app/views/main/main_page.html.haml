@@ -76,44 +76,44 @@
 
 
 
-    %h5 (предыдущий вариант результатов поиска)
-
-    #path-results
-      - @path_search_results.each do |result|
-        - user = result[:user]
-        - paths = result[:paths]
-        .path-result{id: "path-results-#{user.id}"}
-          = link_to fa_icon("plus-square-o"), '#', onclick: "showSearchResluts(#{user.id}); return false;", class: "open-search-results-link"
-          .user-info
-            = image_tag 'profile-default.png', class: :avatar
-            %h1= user.profile.full_name
-            %h3
-              Содержит
-              = paths.size
-              общих
-              = Russian.p(paths.size, "родственника", "родственников", "родственников")
-          = link_to 'Объединиться', connection_of_trees_path(current_user_id: current_user.id, user_id_to_connect: user.id, matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash), class: :handshake
-          .results{style: 'display:none;', id: "results-#{user.id}"}
-            - paths.each do |path|
-              - path_id = Digest::MD5.hexdigest(path.to_s)
-              .path
-                %ul.path-list.path-search-list
-                  - path.each_with_index do |step, index|
-                    %li
-                      - if step[:relation] != 0
-                        = sex_id_to_human(step[:prev_sex_id])
-                        = relation_to_human(step[:relation])
-                      = link_to step[:profile].to_name, "/search/circle_path/#{path_id}/#{user.id}/#{step[:profile].id},#{step[:relation]}", remote: true
-                      - if (index + 1) == path.size
-                        .span.whois
-                          Вероятно, это
-                          = relation_to_profile(@search_results_relations.find {|r| r[step[:profile].id] }.try(:[], step[:profile].id) )
-                      - else
-                        %span
-                          = fa_icon('arrow-right')
-
-                .search-path-table{id: "search-path-table-#{path_id}", style: 'display:none;'}
-                  = render 'search_circle_path_table', circle: user.profile.circle(user.id), author: user, path_id: path_id
+    -# %h5 (предыдущий вариант результатов поиска)
+    -#
+    -# #path-results
+    -#   - @path_search_results.each do |result|
+    -#     - user = result[:user]
+    -#     - paths = result[:paths]
+    -#     .path-result{id: "path-results-#{user.id}"}
+    -#       = link_to fa_icon("plus-square-o"), '#', onclick: "showSearchResluts(#{user.id}); return false;", class: "open-search-results-link"
+    -#       .user-info
+    -#         = image_tag 'profile-default.png', class: :avatar
+    -#         %h1= user.profile.full_name
+    -#         %h3
+    -#           Содержит
+    -#           = paths.size
+    -#           общих
+    -#           = Russian.p(paths.size, "родственника", "родственников", "родственников")
+    -#       = link_to 'Объединиться', connection_of_trees_path(current_user_id: current_user.id, user_id_to_connect: user.id, matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash), class: :handshake
+    -#       .results{style: 'display:none;', id: "results-#{user.id}"}
+    -#         - paths.each do |path|
+    -#           - path_id = Digest::MD5.hexdigest(path.to_s)
+    -#           .path
+    -#             %ul.path-list.path-search-list
+    -#               - path.each_with_index do |step, index|
+    -#                 %li
+    -#                   - if step[:relation] != 0
+    -#                     = sex_id_to_human(step[:prev_sex_id])
+    -#                     = relation_to_human(step[:relation])
+    -#                   = link_to step[:profile].to_name, "/search/circle_path/#{path_id}/#{user.id}/#{step[:profile].id},#{step[:relation]}", remote: true
+    -#                   - if (index + 1) == path.size
+    -#                     .span.whois
+    -#                       Вероятно, это
+    -#                       = relation_to_profile(@search_results_relations.find {|r| r[step[:profile].id] }.try(:[], step[:profile].id) )
+    -#                   - else
+    -#                     %span
+    -#                       = fa_icon('arrow-right')
+    -#
+    -#             .search-path-table{id: "search-path-table-#{path_id}", style: 'display:none;'}
+    -#               = render 'search_circle_path_table', circle: user.profile.circle(user.id), author: user, path_id: path_id
 
 
 

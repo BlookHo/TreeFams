@@ -155,6 +155,8 @@ class ConnectUsersTreesController < ApplicationController
   def connect_trees(who_found_user_id, where_found_user_id, match_profiles_arr, match_relations_arr)
 
     opposite_profiles_arr = get_opposite_profiles(who_found_user_id, where_found_user_id, match_profiles_arr, match_relations_arr)
+    # @opposite_profiles_arr = opposite_profiles_arr.uniq! # DEBUGG_TO_VIEW
+    # @match_profiles_arr = match_profiles_arr.uniq! # DEBUGG_TO_VIEW
     @opposite_profiles_arr = opposite_profiles_arr # DEBUGG_TO_VIEW
     @match_profiles_arr = match_profiles_arr # DEBUGG_TO_VIEW
     logger.info "DEBUG IN CONNECT_TREES: match_profiles_arr = #{match_profiles_arr}; opposite_profiles_arr = #{opposite_profiles_arr} "
@@ -384,5 +386,3 @@ end
   #
   #  ВСЕ wide СОВПАДЕНИЯ РОДНЫХ : @final_reduced_profiles_hash: {35=>{268=>[243, 249, 250, 248], 265=>[242, 243, 249, 250, 248], 269=>[245]}}
   #  ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: {35=>{268=>[5, 1, 2, 0], 265=>[3, 0, 1, 2, 5], 269=>[8]}}
-
-
