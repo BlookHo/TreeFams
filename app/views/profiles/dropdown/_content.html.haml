@@ -13,5 +13,5 @@
 %li.main-item= link_to "О нём", profile_edit_data_path(@profile.id)
 %li.main-item= link_to "Общаться", '#', class: :grey
 %li.main-item= link_to "В избранные", '#', class: :grey
-- if current_user.get_connected_users.size > 1
+- if current_user.get_connected_users.size < 2
   %li.main-item= link_to "Удалить профиль", profile_path(@profile), class: :red, method: :delete

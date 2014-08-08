@@ -122,7 +122,6 @@ class ProfilesController < ApplicationController
 
 
 
-
   def destroy
 
     @profile = Profile.where(id: params[:id]).first
