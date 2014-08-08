@@ -123,7 +123,7 @@ class ProfilesController < ApplicationController
 
 
 
-  def old_destroy
+  def destroy
 
     @profile = Profile.where(id: params[:id]).first
 
@@ -146,7 +146,7 @@ class ProfilesController < ApplicationController
 
 
 
-  def destroy
+  def new_destroy
 
     # @profile = Profile.where(id: params[:id]).first
     #
