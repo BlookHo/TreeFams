@@ -9,16 +9,17 @@ module Search
     #@author = self.profile # DEBUGG_TO_VIEW
     #@current_user_id = self.id # DEBUGG_TO_VIEW
 
-    connected_users_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
-    author_tree_arr = get_connected_tree(connected_users_arr) # Массив объединенного дерева из Tree
+    connected_author_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
+    author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
     qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
-    search_profiles_tree_match(connected_users_arr, author_tree_arr) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
+    search_profiles_tree_match(connected_author_arr, author_tree_arr) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
 
     results = {
       final_reduced_profiles_hash: @final_reduced_profiles_hash,
       final_reduced_relations_hash: @final_reduced_relations_hash,
       wide_user_ids_arr: @wide_user_ids_arr,
+      connected_author_arr: connected_author_arr,
       qty_of_tree_profiles: qty_of_tree_profiles
     }
 
@@ -26,46 +27,46 @@ module Search
   end
 
 
-  # Получение массива дерева соединенных Юзеров из Tree
-  #  На входе - массив соединенных Юзеров
-  # Используется 2 массива для исключения повторов
-  def get_connected_tree(connected_users_arr)
-    tree_arr = []
-    check_tree_arr = [] # "опорный массив" - для удаления повторных элементов при формировании tree_arr
-    connected_users_arr.each do |one_user|
-      user_tree = Tree.where(:user_id => one_user)
-      row_arr = []
-      check_row_arr = []
-
-      user_tree.each do |tree_row|
-        row_arr[0] = tree_row.user_id              # user_id ID От_Профиля
-        row_arr[1] = tree_row.profile_id           # ID От_Профиля (From_Profile)
-        row_arr[2] = tree_row.name_id              # name_id ID От_Профиля
-        row_arr[3] = tree_row.relation_id          # ID Родства От_Профиля с К_Профилю (To_Profile)
-        row_arr[4] = tree_row.is_profile_id        # ID К_Профиля
-        row_arr[5] = tree_row.is_name_id           # name_id К_Профиля
-        row_arr[6] = tree_row.is_sex_id            # sex К_Профиля
-        row_arr[7] = tree_row.connected            # Объединено дерево К_Профиля с другим деревом
-
-        check_row_arr[0] = tree_row.profile_id           # ID От_Профиля (From_Profile)
-        check_row_arr[1] = tree_row.name_id              # name_id ID От_Профиля
-        check_row_arr[2] = tree_row.relation_id          # ID Родства От_Профиля с К_Профилю (To_Profile)
-        check_row_arr[3] = tree_row.is_profile_id        # ID К_Профиля
-        check_row_arr[4] = tree_row.is_name_id           # name_id К_Профиля
-        check_row_arr[5] = tree_row.is_sex_id            # sex К_Профиля
-
-        #logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.include?(row_arr).inspect}" # == false
-        #logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.inspect} --- #{row_arr}"
-        if !check_tree_arr.include?(check_row_arr) # контроль на наличие повторов
-          tree_arr << row_arr
-          check_tree_arr << check_row_arr
-        end
-        row_arr = []
-        check_row_arr = []
-      end
-    end
-    return tree_arr
-  end
+  ## Получение массива дерева соединенных Юзеров из Tree
+  ##  На входе - массив соединенных Юзеров
+  ## Используется 2 массива для исключения повторов
+  #def get_connected_tree(connected_users_arr)
+  #  tree_arr = []
+  #  check_tree_arr = [] # "опорный массив" - для удаления повторных элементов при формировании tree_arr
+  #  connected_users_arr.each do |one_user|
+  #    user_tree = Tree.where(:user_id => one_user)
+  #    row_arr = []
+  #    check_row_arr = []
+  #
+  #    user_tree.each do |tree_row|
+  #      row_arr[0] = tree_row.user_id              # user_id ID От_Профиля
+  #      row_arr[1] = tree_row.profile_id           # ID От_Профиля (From_Profile)
+  #      row_arr[2] = tree_row.name_id              # name_id ID От_Профиля
+  #      row_arr[3] = tree_row.relation_id          # ID Родства От_Профиля с К_Профилю (To_Profile)
+  #      row_arr[4] = tree_row.is_profile_id        # ID К_Профиля
+  #      row_arr[5] = tree_row.is_name_id           # name_id К_Профиля
+  #      row_arr[6] = tree_row.is_sex_id            # sex К_Профиля
+  #      row_arr[7] = tree_row.connected            # Объединено дерево К_Профиля с другим деревом
+  #
+  #      check_row_arr[0] = tree_row.profile_id           # ID От_Профиля (From_Profile)
+  #      check_row_arr[1] = tree_row.name_id              # name_id ID От_Профиля
+  #      check_row_arr[2] = tree_row.relation_id          # ID Родства От_Профиля с К_Профилю (To_Profile)
+  #      check_row_arr[3] = tree_row.is_profile_id        # ID К_Профиля
+  #      check_row_arr[4] = tree_row.is_name_id           # name_id К_Профиля
+  #      check_row_arr[5] = tree_row.is_sex_id            # sex К_Профиля
+  #
+  #      #logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.include?(row_arr).inspect}" # == false
+  #      #logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.inspect} --- #{row_arr}"
+  #      if !check_tree_arr.include?(check_row_arr) # контроль на наличие повторов
+  #        tree_arr << row_arr
+  #        check_tree_arr << check_row_arr
+  #      end
+  #      row_arr = []
+  #      check_row_arr = []
+  #    end
+  #  end
+  #  return tree_arr
+  #end
 
   # Поиск совпадений для одного из профилей БК current_user
   # Берем параметр: profile_id из массива  = profiles_tree_arr[tree_index][6].
@@ -289,7 +290,7 @@ module Search
   def reduce_hash(input_hash)
     reduced_hash = Hash.new
     input_hash.each do |k, v|
-      if v.values.flatten.size > 1  # НАСТРОЙКА УДАЛЕНИЯ МАЛЫХ СОВПАДЕНИЙ
+      if v.values.flatten.size > 0#1  # НАСТРОЙКА УДАЛЕНИЯ МАЛЫХ СОВПАДЕНИЙ
         reduced_hash.merge!({k => v}) #
       end
     end

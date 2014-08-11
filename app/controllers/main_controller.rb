@@ -121,11 +121,6 @@ class MainController < ApplicationController
       @circle = current_user.profile.circle(current_user.get_connected_users) # Нужно To view
       @author = current_user.profile  # Нужно To view
 
-      # Для отладки
-      @author_id = current_user.id # DEBUGG_TO_VIEW
-      @connected_users_arr = current_user.get_connected_users # DEBUGG_TO_VIEW
-      @author_connected_tree_arr = get_connected_users_tree(@connected_users_arr) # DEBUGG_TO_VIEW
-      @len_author_tree = @author_connected_tree_arr.length  if !@author_connected_tree_arr.blank?  # DEBUGG_TO_VIEW
 
       ################################
       ######## Основной поиск от дерева Автора (вместе с соединенными)
@@ -140,6 +135,14 @@ class MainController < ApplicationController
       @final_reduced_relations_hash = search_results[:final_reduced_relations_hash]
       @wide_user_ids_arr = search_results[:wide_user_ids_arr]
       @qty_of_tree_profiles = search_results[:qty_of_tree_profiles] # To view
+      @connected_author_arr = search_results[:connected_author_arr]
+
+
+      # Для отладки # DEBUGG_TO_VIEW
+      @author_id = current_user.id # DEBUGG_TO_VIEW
+      @author_connected_tree_arr = get_connected_users_tree(@connected_author_arr) # DEBUGG_TO_VIEW
+      @len_author_tree = @author_connected_tree_arr.length  if !@author_connected_tree_arr.blank?  # DEBUGG_TO_VIEW
+
 
       ################################
       ######## Запуск метода формирования путей
