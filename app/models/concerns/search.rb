@@ -1,55 +1,38 @@
 module Search
   extend ActiveSupport::Concern
-
+  include SearchHelper
 
 
   def start_search(with_path: true)
-    # @circle = current_user.profile.circle(current_user.id)
+    # @circle = current_user.profile.circle(current_user.id)  # DEBUGG_TO_VIEW
+    #@circle = self.profile.circle(self.get_connected_users)  # DEBUGG_TO_VIEW
+    #@author = self.profile # DEBUGG_TO_VIEW
+    #@current_user_id = self.id # DEBUGG_TO_VIEW
 
-    @circle = self.profile.circle(self.get_connected_users)
-    @author = self.profile
+    connected_users_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
+    author_tree_arr = get_connected_tree(connected_users_arr) # Массив объединенного дерева из Tree
+    qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
-    @current_user_id = self.id # DEBUGG_TO_VIEW
+    search_profiles_tree_match(connected_users_arr, author_tree_arr) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
 
+    results = {
+      final_reduced_profiles_hash: @final_reduced_profiles_hash,
+      final_reduced_relations_hash: @final_reduced_relations_hash,
+      wide_user_ids_arr: @wide_user_ids_arr,
+      qty_of_tree_profiles: qty_of_tree_profiles
+    }
 
-     @connected_users_arr = self.get_connected_users # DEBUGG_TO_VIEW
-
- #   @connected_users_arr = [32,33]   # DEBUGG_TO_VIEW
-    #@connected_users_arr = [current_user.id]    # DEBUGG_TO_VIEW
-
-     @new_tree_arr = get_connected_users_tree(@connected_users_arr)
-     @new_tree_arr_length = @new_tree_arr.length if !@new_tree_arr.blank?
-
-
-      beg_search_time = Time.now   # Начало отсечки времени поиска
-
- #    @connected_users_arr = [current_user.id]    # DEBUGG_TO_VIEW
-
-     #@circle_result = circle(@connected_users_arr)  # DEBUGG_TO_VIEW
-     #@circle_result_len = @circle_result.length if !@circle_result.blank?  # DEBUGG_TO_VIEW
-
-      search_profiles_tree_match(@connected_users_arr, @new_tree_arr)    # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
-
-      end_search_time = Time.now   # Конец отсечки времени поиска
-      @elapsed_search_time = (end_search_time - beg_search_time).round(5)
-
-
-      results = {
-        final_reduced_profiles_hash: @final_reduced_profiles_hash,
-        final_reduced_relations_hash: @final_reduced_relations_hash,
-        wide_user_ids_arr: @wide_user_ids_arr
-      }
+    return results
   end
 
 
   # Получение массива дерева соединенных Юзеров из Tree
   #  На входе - массив соединенных Юзеров
-  def get_connected_users_tree(connected_users_arr)
-
+  # Используется 2 массива для исключения повторов
+  def get_connected_tree(connected_users_arr)
     tree_arr = []
     check_tree_arr = [] # "опорный массив" - для удаления повторных элементов при формировании tree_arr
     connected_users_arr.each do |one_user|
-
       user_tree = Tree.where(:user_id => one_user)
       row_arr = []
       check_row_arr = []
@@ -80,16 +63,9 @@ module Search
         row_arr = []
         check_row_arr = []
       end
-
     end
-    #session[:tree_arr] = {:value => tree_arr, :updated_at => Time.current}
-
-    @len_check_tree = check_tree_arr.length  if !check_tree_arr.blank?
     return tree_arr
-
   end
-
-
 
   # Поиск совпадений для одного из профилей БК current_user
   # Берем параметр: profile_id из массива  = profiles_tree_arr[tree_index][6].
