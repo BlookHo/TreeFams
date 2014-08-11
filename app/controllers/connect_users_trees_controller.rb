@@ -2,19 +2,6 @@ class ConnectUsersTreesController < ApplicationController
   include SearchHelper
 
 
-  ## Получение дерева из таблицы
-  #def get_tree(user_id)
-  #  tree_of_user = Tree.where(:user_id => user_id)
-  #  return tree_of_user
-  #end
-  #
-  ## Получение дерева в виде массива
-  #def tree_arr(user_id)
-  #  get_tree(user_id).map {|t|  [t.user_id, t.profile_id, t.name_id, t.relation_id, t.is_profile_id, t.is_name_id, t.is_sex_id] }
-  #end
-  #
-
-
   def connect_users(current_user_id, user_id)
 
     if current_user_id != user_id
@@ -82,7 +69,7 @@ class ConnectUsersTreesController < ApplicationController
             "No field"
         end
 
- #      table_row.save  ####
+  #    table_row.save  ####
 
         test_arr[0] = table_row.id # DEBUGG_TO_VIEW
         test_arr[2] = rewrite_arr[arr_ind][0][2] # DEBUGG_TO_VIEW
@@ -110,7 +97,7 @@ class ConnectUsersTreesController < ApplicationController
               "No field"
           end
 
- #       table_row.save  ####
+  #     table_row.save  ####
 
           test_arr[0] = table_row.id # DEBUGG_TO_VIEW
           test_arr[2] = one_arr[2] # DEBUGG_TO_VIEW
@@ -131,12 +118,12 @@ class ConnectUsersTreesController < ApplicationController
 
   # Метод дла получения массива обратных профилей для
   # перезаписи профилей в таблицах
-  # opposite_profiles_arr
+  # opposite_profiles_arr # DEBUGG_TO_VIEW
   # who_conn_users_arr - массив id, входящих в объед-ное дерево автора (того, кто соединяется)
   # with_who_con_usrs_ar - массив id, входящих в объед-ное дерево того, с кем соединяется автор
   # found_profiles, found_relations
   def get_opposite_profiles(who_conn_users_arr, with_who_con_usrs_ar, found_profiles, found_relations)
-    opposite_profiles_arr = []
+    opposite_profiles_arr = []  # DEBUGG_TO_VIEW
     profiles_to_rewrite = [] # - массив профилей, которые остаются
     profiles_to_destroy = [] # - массив профилей, которые удаляются
     @rewrite_and_destroy_hash = Hash.new
@@ -153,7 +140,7 @@ class ConnectUsersTreesController < ApplicationController
             who_found_tree_row = Tree.where(:user_id => one_user_in_conn_tree, :is_name_id => where_found_tree_row.is_name_id.to_i, :relation_id => one_relation,:is_sex_id => where_found_tree_row.is_sex_id.to_i)[0]
 
             if !who_found_tree_row.blank?
-              opposite_profiles_arr << who_found_tree_row.is_profile_id
+              opposite_profiles_arr << who_found_tree_row.is_profile_id # DEBUGG_TO_VIEW
               if who_found_tree_row.is_profile_id < found_profiles[arr_ind].to_i
                 profiles_to_rewrite << who_found_tree_row.is_profile_id
                 profiles_to_destroy << found_profiles[arr_ind].to_i
@@ -265,6 +252,23 @@ class ConnectUsersTreesController < ApplicationController
 
   end
 
+  # Управляемый Метод для изготовления 2-х синхронных UNIQ массивов
+  # Вход:
+  #def make_uniq_arrays(found_profiles, found_relations)
+  #  found_profiles_uniq = []
+  #  found_relations_uniq = []
+  #
+  #  found_profiles_uniq << found_profiles[0]
+  #  found_relations_uniq << found_relations[0]
+  #  for arr_ind in 1 .. found_profiles.length-1
+  #    if !found_profiles_uniq.include?(found_profiles[arr_ind].to_i) # для исключения случая,
+  #      found_profiles_uniq << found_profiles[arr_ind]
+  #      found_relations_uniq << found_relations[arr_ind]
+  #    end
+  #  end
+  #
+  #  return found_profiles_uniq, found_relations_uniq
+  #end
 
 
   # Главный стартовый метод дла перезаписи профилей в таблицах
@@ -287,13 +291,12 @@ class ConnectUsersTreesController < ApplicationController
     @current_user_id = current_user_id # DEBUGG_TO_VIEW
     @user_id = user_id # DEBUGG_TO_VIEW
     who_connect_users_arr = current_user.get_connected_users # DEBUGG_TO_VIEW
+    @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
 
     # Проверка: может быть дерево автора уже было соединено с выбранным юзером?
     if !who_connect_users_arr.include?(user_id.to_i) # check_connection: IF NOT CONNECTED
       logger.info "DEBUG IN connection_of_trees: NOT CONNECTED - #{who_connect_users_arr.include?(user_id).inspect}" # == false
 
-      #who_connect_users_arr = User.find(current_user_id).get_connected_users #
-      @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
       with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
       @with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
       @first_tree = get_connected_tree(who_connect_users_arr) # # DEBUGG_TO_VIEW Массив объединенного дерева из Tree
@@ -313,15 +316,12 @@ class ConnectUsersTreesController < ApplicationController
       #@wide_user_ids_arr = search_results[:wide_user_ids_arr] # не нужно
       #@qty_of_tree_profiles = search_results[:qty_of_tree_profiles] #  # не нужно To view
 
-
       ######## Обработка результатов поиска для определения профилей для перезаписи
-      ########## !!!!!!!!! СОБИРАТЬ МАССИВЫ ПРОФИЛЕЙ ПО ВСЕМ ЮЗЕРАМ В ДЕРЕВЬЯХ - Т.Е.
-      # ПО ВСЕМУ @with_whom_connect_users_arr!!!.
+      ######## !! СОБИРАЕМ МАССИВЫ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ВСЕМ ЮЗЕРАМ В ДЕРЕВЬЯХ - Т.Е.
+      # ПО ВСЕМУ @with_whom_connect_users_arr.
       matched_profiles_in_tree = []
       matched_relations_in_tree = []
 
-      #matched_profiles_in_tree = @final_reduced_profiles_hash.values_at(user_id.to_i)[0].values.flatten
-      #matched_relations_in_tree = @final_reduced_relations_hash.values_at(user_id.to_i)[0].values.flatten
       users_in_results = @final_reduced_profiles_hash.keys # users, найденные в поиске
       with_whom_connect_users_arr.each do |user_id_in_conn_tree|
         if users_in_results.include?(user_id_in_conn_tree.to_i) # для исключения случая,
@@ -334,13 +334,18 @@ class ConnectUsersTreesController < ApplicationController
         end
       end
       found_profiles = matched_profiles_in_tree.flatten(1)  # get one dimension arr
-      @found_profiles = found_profiles # DEBUGG_TO_VIEW
+      @found_profiles = found_profiles#.uniq # DEBUGG_TO_VIEW
       found_relations = matched_relations_in_tree.flatten(1) # get one dimension arr
-      @found_relations = found_relations # DEBUGG_TO_VIEW
+      @found_relations = found_relations#.uniq # DEBUGG_TO_VIEW
       @matched_profiles_in_tree = matched_profiles_in_tree # DEBUGG_TO_VIEW
-      @matched_relations_in_tree = matched_relations_in_tree # DEBUGG_TO_VIEW
+
+      # Управляемый Метод для изготовления 2-х синхронных UNIQ массивов: found_profiles_uniq, found_relations_uniq
+      #found_profiles_uniq, found_relations_uniq = make_uniq_arrays(found_profiles, found_relations)
+      #@found_profiles_uniq = found_profiles_uniq # DEBUGG_TO_VIEW
+      #@found_relations_uniq = found_relations_uniq # DEBUGG_TO_VIEW
 
       # Определение массивов профилей для перезаписи
+      #@rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, found_profiles_uniq, found_relations_uniq)
       @rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, found_profiles, found_relations)
         @opposite_profiles_arr = opposite_profiles_arr # DEBUGG_TO_VIEW
         @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
@@ -349,7 +354,7 @@ class ConnectUsersTreesController < ApplicationController
       connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
 
       # Заполнение таблицы - записью о том, что деревья с current_user_id и user_id - соединились
-#      connect_users(current_user_id.to_i, user_id.to_i)
+  #    connect_users(current_user_id.to_i, user_id.to_i)
     else
       logger.info "DEBUG IN connection_of_trees: USERS ALREADY CONNECTED! Current_user_arr =#{who_connect_users_arr.inspect}, user_id_arr=#{with_whom_connect_users_arr.inspect}."
     end

@@ -4,20 +4,20 @@
   ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ
 
 %p
-  Кто соединился: Автор: #{@current_user_id.inspect}
+  Кто хочет соединиться: Автор: #{@current_user_id.inspect}
 %p
   @who_connect_users_arr: #{@who_connect_users_arr.inspect}
 %p
   @first_tree: #{@first_tree.inspect}
 %p
-  Выбран, с кем хочет соединиться: #{@user_id.inspect}
+  Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@user_id.inspect}
 %p
   @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
 %p
   @second_tree: #{@second_tree.inspect}
 
 %h4
-  Повторный запуск ПОИСКА:
+  Запуск ПОИСКА:
 %h4
   ВСЕ wide СОВПАДЕНИЯ РОДНЫХ : @final_reduced_profiles_hash: #{@final_reduced_profiles_hash.inspect}
 %h4
@@ -30,6 +30,12 @@
   @matched_profiles_in_tree: #{@matched_profiles_in_tree.inspect}
 %p
   @found_profiles: #{@found_profiles.inspect}
+%p
+  @found_relations: #{@found_relations.inspect}
+%p
+  @found_profiles_uniq: #{@found_profiles_uniq.inspect}
+%p
+  @found_relations_uniq: #{@found_relations_uniq.inspect}
 -#%p
 -#  @one_profile: #{@one_profile.inspect}
 -#%p
@@ -42,14 +48,14 @@
   @profiles_to_rewrite: #{@profiles_to_rewrite.inspect}
 %p
   @profiles_to_destroy: #{@profiles_to_destroy.inspect}
-%p
-  @rewrite_tree_arr1: #{@rewrite_tree_arr1.inspect}
-%p
-  @rewrite_tree_arr2: #{@rewrite_tree_arr2.inspect}
-%p
-  @rewrite_profilekey_arr1: #{@rewrite_profilekey_arr1.inspect}
-%p
-  @rewrite_profilekey_arr2: #{@rewrite_profilekey_arr2.inspect}
+-#%p
+-#  @rewrite_tree_arr1: #{@rewrite_tree_arr1.inspect}
+-#%p
+-#  @rewrite_tree_arr2: #{@rewrite_tree_arr2.inspect}
+-#%p
+-#  @rewrite_profilekey_arr1: #{@rewrite_profilekey_arr1.inspect}
+-#%p
+-#  @rewrite_profilekey_arr2: #{@rewrite_profilekey_arr2.inspect}
 
 %p
   @save_in_tree: #{@save_in_tree.inspect}
