@@ -6,7 +6,7 @@ module ProfileMerge
     # main_profile_ids - массив профилей, которые остаются
     # opposite_profile_ids - массив профилей, которые удаляются, а их данные переносятся в opposite_profile_ids
     def merge(main_profile_ids, opposite_profile_ids)
-      logger.info "Starting merge profile"
+      logger.info "Starting merge profile: to_rewrite = #{main_profile_ids},  to_destroy = #{opposite_profile_ids}"
 
       main_profile_ids.each_with_index do |profile_id, index|
 

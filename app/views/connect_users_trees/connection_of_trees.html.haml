@@ -4,38 +4,75 @@
   ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ
 
 %p
-  IN connect_trees: @msg: #{@msg.inspect}
+  Кто хочет соединиться: Автор: #{@current_user_id.inspect}
 %p
-  IN connection_of_trees: who_found_user_id = @current_user_id: #{@current_user_id.inspect}
+  @who_connect_users_arr: #{@who_connect_users_arr.inspect}
 %p
-  IN connection_of_trees: where_found_user_id = @user_id: #{@user_id.inspect}
+  @first_tree: #{@first_tree.inspect}
 %p
-  IN get_connected_users: @connected_users_arr #{@connected_users_arr.inspect}
+  Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@user_id.inspect}
+%p
+  @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
+%p
+  @second_tree: #{@second_tree.inspect}
+
+%h4
+  Запуск ПОИСКА:
+%h4
+  ВСЕ wide СОВПАДЕНИЯ РОДНЫХ : @final_reduced_profiles_hash: #{@final_reduced_profiles_hash.inspect}
+%h4
+  ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
+%p
+  Длительность поиска: #{@elapsed_search_time.inspect}
 
 
 %p
-  IN connection_of_trees: @matched_profiles_hash: #{@matched_profiles_hash.inspect}
+  @users_in_results: #{@users_in_results.inspect}
 %p
-  IN connection_of_trees: @matched_relations_hash: #{@matched_relations_hash.inspect}
+  @matched_profiles_in_tree: #{@matched_profiles_in_tree.inspect}
 %p
-  IN connection_of_trees: @matched_profiles_in_tree: #{@matched_profiles_in_tree.inspect}
+  @found_profiles: #{@found_profiles.inspect}
 %p
-  IN connection_of_trees: @matched_relations_in_tree: #{@matched_relations_in_tree.inspect}
+  @found_relations: #{@found_relations.inspect}
+-#%p
+-#  @found_profiles_uniq: #{@found_profiles_uniq.inspect}
+-#%p
+-#  @found_relations_uniq: #{@found_relations_uniq.inspect}
+-#%p
+-#  @one_profile: #{@one_profile.inspect}
+-#%p
+-#  @where_found_tree_row: #{@where_found_tree_row.inspect}
 %p
-  IN connection_of_trees: @first_tree: #{@first_tree.inspect}
-%p
-  IN connection_of_trees: @second_tree: #{@second_tree.inspect}
-
-
-%p
-  IN connect_trees
-%p
-  @matched_profiles_arr: #{@match_profiles_arr.inspect}
+  @rewrite_and_destroy_hash: #{@rewrite_and_destroy_hash.inspect}
 %p
   @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
 %p
+  @profiles_to_rewrite: #{@profiles_to_rewrite.inspect}
+%p
+  @profiles_to_destroy: #{@profiles_to_destroy.inspect}
+-#%p
+-#  @rewrite_tree_arr1: #{@rewrite_tree_arr1.inspect}
+-#%p
+-#  @rewrite_tree_arr2: #{@rewrite_tree_arr2.inspect}
+-#%p
+-#  @rewrite_profilekey_arr1: #{@rewrite_profilekey_arr1.inspect}
+-#%p
+-#  @rewrite_profilekey_arr2: #{@rewrite_profilekey_arr2.inspect}
+
+%p
   @save_in_tree: #{@save_in_tree.inspect}
 %p
+  @save_in_tree_LEN: #{@save_in_tree_LEN.inspect}
+%p
   @save_in_profilekey: #{@save_in_profilekey.inspect}
+%p
+  @save_in_profilekey_LEN: #{@save_in_profilekey_LEN.inspect}
+
+
+
+
+
+
+
 
 

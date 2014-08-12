@@ -24,7 +24,7 @@
           author_profile_id: @author.id,
           base_profile_id: item.is_profile_id,
           base_relation_id: item.relation_id,
-          link_text: [item.name.to_name,item.is_profile.surname].join(' '),
+          link_text: item.name.to_name,
           path_link: path_link
 
       %td.center

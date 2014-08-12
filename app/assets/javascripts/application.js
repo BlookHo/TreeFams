@@ -18,3 +18,11 @@
 //= require overlay.js
 //= require new_profile_questions.js
 //= require path-results.js
+
+
+
+$(function(){
+  $('form#welcome_form').on('submit', function() {
+    $('#next').attr('disabled', true);
+  });
+})
