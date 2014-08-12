@@ -38,7 +38,6 @@ module ProfileMerge
         # Удаление opposite_profile
         opposite_profile.destroy
       end
-
     end
 
   end
