@@ -69,7 +69,7 @@ class ConnectUsersTreesController < ApplicationController
             "No field"
         end
 
-  #    table_row.save  ####
+      table_row.save  ####
 
         test_arr[0] = table_row.id # DEBUGG_TO_VIEW
         test_arr[2] = rewrite_arr[arr_ind][0][2] # DEBUGG_TO_VIEW
@@ -97,7 +97,7 @@ class ConnectUsersTreesController < ApplicationController
               "No field"
           end
 
-  #     table_row.save  ####
+       table_row.save  ####
 
           test_arr[0] = table_row.id # DEBUGG_TO_VIEW
           test_arr[2] = one_arr[2] # DEBUGG_TO_VIEW
@@ -323,6 +323,7 @@ class ConnectUsersTreesController < ApplicationController
       matched_relations_in_tree = []
 
       users_in_results = @final_reduced_profiles_hash.keys # users, найденные в поиске
+      @users_in_results = users_in_results#.uniq # DEBUGG_TO_VIEW
       with_whom_connect_users_arr.each do |user_id_in_conn_tree|
         if users_in_results.include?(user_id_in_conn_tree.to_i) # для исключения случая,
           # когда в рез-тах поиска (@final_reduced_profiles_hash)
@@ -354,7 +355,7 @@ class ConnectUsersTreesController < ApplicationController
       connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
 
       # Заполнение таблицы - записью о том, что деревья с current_user_id и user_id - соединились
-  #    connect_users(current_user_id.to_i, user_id.to_i)
+      connect_users(current_user_id.to_i, user_id.to_i)
     else
       logger.info "DEBUG IN connection_of_trees: USERS ALREADY CONNECTED! Current_user_arr =#{who_connect_users_arr.inspect}, user_id_arr=#{with_whom_connect_users_arr.inspect}."
     end
