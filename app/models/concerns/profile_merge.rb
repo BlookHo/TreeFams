@@ -15,7 +15,7 @@ module ProfileMerge
 
         logger.info "Данный из профиля  #{opposite_profile.id} будут перенесены в профиль #{main_profile.id}"
         # перенос profile_datas
-        # main_profile.profile_datas << opposite_profile.profile_datas
+        main_profile.profile_datas << opposite_profile.profile_datas
 
         # e-mail хранится в юзере
         # перезаписать и e-mail
