@@ -3,7 +3,7 @@ module Search
   include SearchHelper
 
 
-  def start_search(with_path: true)
+  def start_search
     # @circle = current_user.profile.circle(current_user.id)  # DEBUGG_TO_VIEW
     #@circle = self.profile.circle(self.get_connected_users)  # DEBUGG_TO_VIEW
     #@author = self.profile # DEBUGG_TO_VIEW

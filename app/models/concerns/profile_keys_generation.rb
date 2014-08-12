@@ -29,28 +29,28 @@ module ProfileKeysGeneration
         @add_row_to_tree = [author_user.id, profile_id, sex_id, name_id, new_relation_id.to_i, new_profile_id, new_profile_name_id, new_profile_sex, false]
     end
 
-    # Добавление нового ряда к профилю в таблицу Tree
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    def make_tree_row(profile_id, sex_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, author_user)
-
-      #  # Дополнение в Tree
-       @add_row_to_tree = []
-       @add_row_to_tree = [author_user.id, profile_id, sex_id, name_id, new_relation_id.to_i, new_profile_id, new_profile_name_id, new_profile_sex, false]
-
-       save_new_tree_row(@add_row_to_tree)
-
-       # tree_arr << @add_row_to_tree
-
-       return @add_row_to_tree
-
-
-      #  author_user.each do |line|
-      #  end
-
-
-    end
+    ## Добавление нового ряда к профилю в таблицу Tree
+    ## @note GET /
+    ## @param admin_page [Integer] опциональный номер страницы
+    ## @see News
+    #def make_tree_row(profile_id, sex_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, author_user)
+    #
+    #  #  # Дополнение в Tree
+    #   @add_row_to_tree = []
+    #   @add_row_to_tree = [author_user.id, profile_id, sex_id, name_id, new_relation_id.to_i, new_profile_id, new_profile_name_id, new_profile_sex, false]
+    #
+    #   save_new_tree_row(@add_row_to_tree)
+    #
+    #   # tree_arr << @add_row_to_tree
+    #
+    #   return @add_row_to_tree
+    #
+    #
+    #  #  author_user.each do |line|
+    #  #  end
+    #
+    #
+    #end
 
     # Добавление нового ряда в таблицу ProfileKey
     # @note GET /
