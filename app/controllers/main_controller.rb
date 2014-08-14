@@ -164,8 +164,8 @@ class MainController < ApplicationController
       ################################
       ######## Запуск метода формирования путей
       ######## отображения рез-тов на Главной
-      #make_search_results_paths(@final_reduced_profiles_hash) #
-      make_search_results_paths({}) #
+      make_search_results_paths(@final_reduced_profiles_hash) #
+      #make_search_results_paths({}) # # DEBUGG_TO_VIEW
 
     end
 
