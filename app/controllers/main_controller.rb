@@ -17,6 +17,23 @@ class MainController < ApplicationController
  # Делаем пути по результатам поиска - для отображения
  # @note GET /
   def make_search_results_paths(final_reduced_profiles_hash) #,final_reduced_relations_hash)
+
+  # For 92: => {:final_reduced_profiles_hash=>
+  # {89=>{749=>[724, 745, 746, 748, 747, 715, 725]},
+  # 87=>{749=>[724, 745, 746, 748, 747]},
+  # 90=>{749=>[724, 745, 746, 748, 747]},
+  # 86=>{749=>[724, 745, 746, 748, 747]},
+  # 88=>{749=>[724, 745, 746, 748, 747]},
+  # 85=>{749=>[724, 745, 746, 748, 747]}},
+  # :final_reduced_relations_hash=>
+  # {89=>{749=>[0, 1, 2, 5, 5, 8, 3]},
+  # 87=>{749=>[0, 1, 2, 5, 5]},
+  # 90=>{749=>[0, 1, 2, 5, 5]},
+  # 86=>{749=>[0, 1, 2, 5, 5]},
+  # 88=>{749=>[0, 1, 2, 5, 5]},
+  # 85=>{749=>[0, 1, 2, 5, 5]}},
+  # :wide_user_ids_arr=>[89, 87, 90, 86, 88, 85], :connected_author_arr=>[92], :qty_of_tree_profiles=>7}
+
     @search_path_hash = Hash.new
     @new_search_path_hash = Hash.new  # NEW_PATH_W_START_PROFILE
     final_reduced_profiles_hash.each do |k_tree,v_tree|
@@ -147,7 +164,8 @@ class MainController < ApplicationController
       ################################
       ######## Запуск метода формирования путей
       ######## отображения рез-тов на Главной
-      make_search_results_paths(@final_reduced_profiles_hash) #
+      #make_search_results_paths(@final_reduced_profiles_hash) #
+      make_search_results_paths({}) #
 
     end
 
