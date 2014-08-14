@@ -348,14 +348,31 @@ class ConnectUsersTreesController < ApplicationController
       # Определение массивов профилей для перезаписи
       #@rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, found_profiles_uniq, found_relations_uniq)
       @rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, found_profiles, found_relations)
-        @opposite_profiles_arr = opposite_profiles_arr # DEBUGG_TO_VIEW
-        @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
-        @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
-      # Собственно - соединение деревьев = перезапись профилей в таблицах
-      connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+      # Контроль корректности массивов перед объединением
+      if !@profiles_to_rewrite.blank? && !@profiles_to_destroy.blank?
+        logger.info "Connection proceed. Array(s) - Dont blank."
+        @test_arrrs_blank = "Connection proceed. Array(s) - Dont blank "
+        if @profiles_to_rewrite.size == @profiles_to_destroy.size
+          logger.info "Ok to connect. Connection array(s) - Equal. Size = #{@profiles_to_rewrite.size}."
+          @test_arrrs = "Ok to connect. Connection array(s) - Equal. Size = #{@profiles_to_rewrite.size} "
+            @opposite_profiles_arr = opposite_profiles_arr # DEBUGG_TO_VIEW
+            @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
+            @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
 
-      # Заполнение таблицы - записью о том, что деревья с current_user_id и user_id - соединились
-      connect_users(current_user_id.to_i, user_id.to_i)
+          # Собственно - соединение деревьев = перезапись профилей в таблицах
+          connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+          # Заполнение таблицы - записью о том, что деревья с current_user_id и user_id - соединились
+          connect_users(current_user_id.to_i, user_id.to_i)
+
+        else
+         logger.info "STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}."
+         @test_arrrs = "STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}"
+        end
+      else
+        logger.info "STOP connection! Connection array(s) - blank! ."
+        @test_arrrs_blank = "STOP connection! Connection array(s) - blank! "
+      end
+
     else
       logger.info "DEBUG IN connection_of_trees: USERS ALREADY CONNECTED! Current_user_arr =#{who_connect_users_arr.inspect}, user_id_arr=#{with_whom_connect_users_arr.inspect}."
     end
