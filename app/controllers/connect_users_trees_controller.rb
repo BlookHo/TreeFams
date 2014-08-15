@@ -159,6 +159,9 @@ class ConnectUsersTreesController < ApplicationController
 
       end
     end
+    @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
+    @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
+    logger.info "Массивы для объединения: To_rewrite arr = #{profiles_to_rewrite}; To_destroy arr = #{profiles_to_destroy}."
 
     return @rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy
   end
@@ -313,8 +316,6 @@ class ConnectUsersTreesController < ApplicationController
       ######## Сбор части рез-тов поиска, необходимых для объединения:
       @final_reduced_profiles_hash = search_results[:final_reduced_profiles_hash]
       @final_reduced_relations_hash = search_results[:final_reduced_relations_hash]
-      #@wide_user_ids_arr = search_results[:wide_user_ids_arr] # не нужно
-      #@qty_of_tree_profiles = search_results[:qty_of_tree_profiles] #  # не нужно To view
 
       ######## Обработка результатов поиска для определения профилей для перезаписи
       ######## !! СОБИРАЕМ МАССИВЫ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ВСЕМ ЮЗЕРАМ В ДЕРЕВЬЯХ - Т.Е.
@@ -342,8 +343,6 @@ class ConnectUsersTreesController < ApplicationController
 
       # Управляемый Метод для изготовления 2-х синхронных UNIQ массивов: found_profiles_uniq, found_relations_uniq
       #found_profiles_uniq, found_relations_uniq = make_uniq_arrays(found_profiles, found_relations)
-      #@found_profiles_uniq = found_profiles_uniq # DEBUGG_TO_VIEW
-      #@found_relations_uniq = found_relations_uniq # DEBUGG_TO_VIEW
 
       # Определение массивов профилей для перезаписи
       #@rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, found_profiles_uniq, found_relations_uniq)

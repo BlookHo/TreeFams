@@ -138,22 +138,6 @@ class MainController < ApplicationController
       @circle = current_user.profile.circle(current_user.get_connected_users) # Нужно To view
       @author = current_user.profile  # Нужно To view
 
-      #@profiles_to_rewrite = [4, 6] #[23,25,27]
-      #@profiles_to_destroy = [5,8] #[33,35,37]
-      #
-      #if !@profiles_to_rewrite.blank? && !@profiles_to_destroy.blank?
-      #  @test_arrrs_blank = "Connection proceed. array(s) - Dont blank "
-      #  if @profiles_to_rewrite.size == @profiles_to_destroy.size
-      #
-      #    @test_arrrs = "Ok to connect. Connection array(s) - Equal. Size = #{@profiles_to_rewrite.size} "
-      #
-      #  else
-      #    @test_arrrs = "STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}"
-      #  end
-      #else
-      #  @test_arrrs_blank = "STOP connection! Connection array(s) - blank! "
-      #end
-
       ################################
       ######## Основной поиск от дерева Автора (вместе с соединенными)
       ######## среди других деревьев в ProfileKeys.
@@ -180,7 +164,7 @@ class MainController < ApplicationController
       ######## Запуск метода формирования путей
       ######## отображения рез-тов на Главной
       make_search_results_paths(@final_reduced_profiles_hash) #
-      #make_search_results_paths({}) # # DEBUGG_TO_VIEW
+  #    make_search_results_paths({}) # # DEBUGG_TO_VIEW
 
     end
 

@@ -39,7 +39,7 @@ module ProfileMerge
         ## Удаление opposite_profile
         profiles_to_delete << opposite_profile
       end
-      logger.info "Профиля  #{opposite_profile.id} будет удален"
+      #logger.info "Профиля  #{opposite_profile.id} будет удален"
       # Удаление opposite_profile
       profiles_to_delete.uniq.map(&:destroy)
     end

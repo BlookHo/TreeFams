@@ -50,12 +50,16 @@ module Search
    #@relation_searched = relation_id_searched   # DEBUGG TO VIEW
    #@all_profile_rows = all_profile_rows   # DEBUGG_TO_VIEW
 
+  @search_exclude_users = [85,86,87,88,89,90,91,92] # временный массив исключения косых юзеров из поиска DEBUGG_TO_VIEW
+# убрать потом из строки 62!!!!!
+
    if !all_profile_rows.blank?
      @all_profile_rows_len = all_profile_rows.length if !all_profile_rows.blank? #_DEBUGG_TO_VIEW
      # размер ближнего круга профиля в дереве current_user.id
      all_profile_rows.each do |relation_row|
 #       relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => relation_row.name_id).where(:relation_id => relation_row.relation_id).where(:is_name_id => relation_row.is_name_id).select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
-        relation_match_arr = ProfileKey.where.not(user_id: connected_users).where(:name_id => relation_row.name_id, :relation_id => relation_row.relation_id, :is_name_id => relation_row.is_name_id).select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+
+        relation_match_arr = ProfileKey.where.not(user_id: @search_exclude_users).where.not(user_id: connected_users).where(:name_id => relation_row.name_id, :relation_id => relation_row.relation_id, :is_name_id => relation_row.is_name_id).select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
         if !relation_match_arr.blank?
           row_arr = []
           relation_match_arr.each do |tree_row|
