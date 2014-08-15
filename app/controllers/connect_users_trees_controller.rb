@@ -287,94 +287,112 @@ class ConnectUsersTreesController < ApplicationController
   # в таблицах Tree & ProfileKey.
   def connection_of_trees
 
+
+
     # link current_user_id: current_user.id,  , matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash
     #current_user_id = params[:current_user_id] #
     current_user_id = current_user.id #
     user_id = params[:user_id_to_connect] #
-    @current_user_id = current_user_id # DEBUGG_TO_VIEW
-    @user_id = user_id # DEBUGG_TO_VIEW
-    who_connect_users_arr = current_user.get_connected_users # DEBUGG_TO_VIEW
-    @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
+    connected_user = User.find(user_id)
 
-    # Проверка: может быть дерево автора уже было соединено с выбранным юзером?
-    if !who_connect_users_arr.include?(user_id.to_i) # check_connection: IF NOT CONNECTED
-      logger.info "DEBUG IN connection_of_trees: NOT CONNECTED - #{who_connect_users_arr.include?(user_id).inspect}" # == false
 
-      with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
-      @with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
-      @first_tree = get_connected_tree(who_connect_users_arr) # # DEBUGG_TO_VIEW Массив объединенного дерева из Tree
-      @second_tree = get_connected_tree(with_whom_connect_users_arr) # # DEBUGG_TO_VIEW Массив объединенного дерева из Tree
-
-      ################################
-      ######## ПОВТОРНЫЙ запуск Основного метода поиска от дерева Автора (вместе с соединенными с ним)
-      ######## среди других деревьев.
-      beg_search_time = Time.now   # Начало отсечки времени поиска
-      search_results = current_user.start_search  #####  Запуск поиска
-      end_search_time = Time.now   # Конец отсечки времени поиска
-      @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
-
-      ######## Сбор части рез-тов поиска, необходимых для объединения:
-      @final_reduced_profiles_hash = search_results[:final_reduced_profiles_hash]
-      @final_reduced_relations_hash = search_results[:final_reduced_relations_hash]
-
-      ######## Обработка результатов поиска для определения профилей для перезаписи
-      ######## !! СОБИРАЕМ МАССИВЫ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ВСЕМ ЮЗЕРАМ В ДЕРЕВЬЯХ - Т.Е.
-      # ПО ВСЕМУ @with_whom_connect_users_arr.
-      matched_profiles_in_tree = []
-      matched_relations_in_tree = []
-
-      users_in_results = @final_reduced_profiles_hash.keys # users, найденные в поиске
-      @users_in_results = users_in_results#.uniq # DEBUGG_TO_VIEW
-      with_whom_connect_users_arr.each do |user_id_in_conn_tree|
-        if users_in_results.include?(user_id_in_conn_tree.to_i) # для исключения случая,
-          # когда в рез-тах поиска (@final_reduced_profiles_hash)
-          # не для всех юзеров из объед-го дерева (with_whom_connect_users_arr) - есть рез-ты
-          matched_profiles_arr = @final_reduced_profiles_hash.values_at(user_id_in_conn_tree.to_i)[0].values.flatten
-          matched_relations_arr = @final_reduced_relations_hash.values_at(user_id_in_conn_tree.to_i)[0].values.flatten
-          matched_profiles_in_tree << matched_profiles_arr
-          matched_relations_in_tree << matched_relations_arr
-        end
-      end
-      found_profiles = matched_profiles_in_tree.flatten(1)  # get one dimension arr
-      @found_profiles = found_profiles#.uniq # DEBUGG_TO_VIEW
-      found_relations = matched_relations_in_tree.flatten(1) # get one dimension arr
-      @found_relations = found_relations#.uniq # DEBUGG_TO_VIEW
-      @matched_profiles_in_tree = matched_profiles_in_tree # DEBUGG_TO_VIEW
-
-      # Управляемый Метод для изготовления 2-х синхронных UNIQ массивов: found_profiles_uniq, found_relations_uniq
-      #found_profiles_uniq, found_relations_uniq = make_uniq_arrays(found_profiles, found_relations)
-
-      # Определение массивов профилей для перезаписи
-      #@rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, found_profiles_uniq, found_relations_uniq)
-      @rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, found_profiles, found_relations)
-      # Контроль корректности массивов перед объединением
-      if !@profiles_to_rewrite.blank? && !@profiles_to_destroy.blank?
-        logger.info "Connection proceed. Array(s) - Dont blank."
-        @test_arrrs_blank = "Connection proceed. Array(s) - Dont blank "
-        if @profiles_to_rewrite.size == @profiles_to_destroy.size
-          logger.info "Ok to connect. Connection array(s) - Equal. Size = #{@profiles_to_rewrite.size}."
-          @test_arrrs = "Ok to connect. Connection array(s) - Equal. Size = #{@profiles_to_rewrite.size} "
-            @opposite_profiles_arr = opposite_profiles_arr # DEBUGG_TO_VIEW
-            @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
-            @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
-
-          # Собственно - соединение деревьев = перезапись профилей в таблицах
-          connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
-          # Заполнение таблицы - записью о том, что деревья с current_user_id и user_id - соединились
-          connect_users(current_user_id.to_i, user_id.to_i)
-
-        else
-         logger.info "STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}."
-         @test_arrrs = "STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}"
-        end
-      else
-        logger.info "STOP connection! Connection array(s) - blank! ."
-        @test_arrrs_blank = "STOP connection! Connection array(s) - blank! "
-      end
-
+    # Check users lock status and connect if all ok
+    if current_user.tree_is_locked? or connected_user.tree_is_locked?
+      redirect_to :back, :alert => "Дерево находится в процессе реорганизации, повторите попытку позже"
     else
-      logger.info "DEBUG IN connection_of_trees: USERS ALREADY CONNECTED! Current_user_arr =#{who_connect_users_arr.inspect}, user_id_arr=#{with_whom_connect_users_arr.inspect}."
-    end
+
+          current_user.lock!
+          connected_user.lock!
+
+            @current_user_id = current_user_id # DEBUGG_TO_VIEW
+            @user_id = user_id # DEBUGG_TO_VIEW
+            who_connect_users_arr = current_user.get_connected_users # DEBUGG_TO_VIEW
+            @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
+
+            # Проверка: может быть дерево автора уже было соединено с выбранным юзером?
+            if !who_connect_users_arr.include?(user_id.to_i) # check_connection: IF NOT CONNECTED
+              logger.info "DEBUG IN connection_of_trees: NOT CONNECTED - #{who_connect_users_arr.include?(user_id).inspect}" # == false
+
+              with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
+              @with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
+              @first_tree = get_connected_tree(who_connect_users_arr) # # DEBUGG_TO_VIEW Массив объединенного дерева из Tree
+              @second_tree = get_connected_tree(with_whom_connect_users_arr) # # DEBUGG_TO_VIEW Массив объединенного дерева из Tree
+
+              ################################
+              ######## ПОВТОРНЫЙ запуск Основного метода поиска от дерева Автора (вместе с соединенными с ним)
+              ######## среди других деревьев.
+              beg_search_time = Time.now   # Начало отсечки времени поиска
+              search_results = current_user.start_search  #####  Запуск поиска
+              end_search_time = Time.now   # Конец отсечки времени поиска
+              @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
+
+              ######## Сбор части рез-тов поиска, необходимых для объединения:
+              @final_reduced_profiles_hash = search_results[:final_reduced_profiles_hash]
+              @final_reduced_relations_hash = search_results[:final_reduced_relations_hash]
+
+              ######## Обработка результатов поиска для определения профилей для перезаписи
+              ######## !! СОБИРАЕМ МАССИВЫ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ВСЕМ ЮЗЕРАМ В ДЕРЕВЬЯХ - Т.Е.
+              # ПО ВСЕМУ @with_whom_connect_users_arr.
+              matched_profiles_in_tree = []
+              matched_relations_in_tree = []
+
+              users_in_results = @final_reduced_profiles_hash.keys # users, найденные в поиске
+              @users_in_results = users_in_results#.uniq # DEBUGG_TO_VIEW
+              with_whom_connect_users_arr.each do |user_id_in_conn_tree|
+                if users_in_results.include?(user_id_in_conn_tree.to_i) # для исключения случая,
+                  # когда в рез-тах поиска (@final_reduced_profiles_hash)
+                  # не для всех юзеров из объед-го дерева (with_whom_connect_users_arr) - есть рез-ты
+                  matched_profiles_arr = @final_reduced_profiles_hash.values_at(user_id_in_conn_tree.to_i)[0].values.flatten
+                  matched_relations_arr = @final_reduced_relations_hash.values_at(user_id_in_conn_tree.to_i)[0].values.flatten
+                  matched_profiles_in_tree << matched_profiles_arr
+                  matched_relations_in_tree << matched_relations_arr
+                end
+              end
+              found_profiles = matched_profiles_in_tree.flatten(1)  # get one dimension arr
+              @found_profiles = found_profiles#.uniq # DEBUGG_TO_VIEW
+              found_relations = matched_relations_in_tree.flatten(1) # get one dimension arr
+              @found_relations = found_relations#.uniq # DEBUGG_TO_VIEW
+              @matched_profiles_in_tree = matched_profiles_in_tree # DEBUGG_TO_VIEW
+
+              # Управляемый Метод для изготовления 2-х синхронных UNIQ массивов: found_profiles_uniq, found_relations_uniq
+              #found_profiles_uniq, found_relations_uniq = make_uniq_arrays(found_profiles, found_relations)
+
+              # Определение массивов профилей для перезаписи
+              #@rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, found_profiles_uniq, found_relations_uniq)
+              @rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, found_profiles, found_relations)
+              # Контроль корректности массивов перед объединением
+              if !@profiles_to_rewrite.blank? && !@profiles_to_destroy.blank?
+                logger.info "Connection proceed. Array(s) - Dont blank."
+                @test_arrrs_blank = "Connection proceed. Array(s) - Dont blank "
+                if @profiles_to_rewrite.size == @profiles_to_destroy.size
+                  logger.info "Ok to connect. Connection array(s) - Equal. Size = #{@profiles_to_rewrite.size}."
+                  @test_arrrs = "Ok to connect. Connection array(s) - Equal. Size = #{@profiles_to_rewrite.size} "
+                    @opposite_profiles_arr = opposite_profiles_arr # DEBUGG_TO_VIEW
+                    @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
+                    @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
+
+                  # Собственно - соединение деревьев = перезапись профилей в таблицах
+                  connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+                  # Заполнение таблицы - записью о том, что деревья с current_user_id и user_id - соединились
+                  connect_users(current_user_id.to_i, user_id.to_i)
+
+                else
+                 logger.info "STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}."
+                 @test_arrrs = "STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}"
+                end
+              else
+                logger.info "STOP connection! Connection array(s) - blank! ."
+                @test_arrrs_blank = "STOP connection! Connection array(s) - blank! "
+              end
+
+            else
+              logger.info "DEBUG IN connection_of_trees: USERS ALREADY CONNECTED! Current_user_arr =#{who_connect_users_arr.inspect}, user_id_arr=#{with_whom_connect_users_arr.inspect}."
+            end
+
+            # Afrer all unlock unlock user tree
+            current_user.unlock_tree!
+            connected_user.unlock_tree!
+      end
 
   end
 
@@ -383,4 +401,3 @@ class ConnectUsersTreesController < ApplicationController
 end
 
 # DEBUGG_TO_VIEW
-
