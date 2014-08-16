@@ -256,7 +256,7 @@ module ProfileKeysGeneration
         when 8
           add_wife_to_ProfileKeys(new_profile_id, new_profile_name_id)
         else
-          logger.info "======== ERRROR"
+          logger.info "No add to ProfileKeys: new_relation_id = #{new_relation_id} "
       end
 
     end
@@ -375,6 +375,9 @@ module ProfileKeysGeneration
         @relation_id = base_relation_id
         make_profilekeys_rows(@relation_id, @add_row_to_tree)
       end
+
+      logger.info "In add_new_profile tree_ids = #{tree_ids} - DEBUG"
+      logger.info "last @@current_user_id = #{@@current_user_id} - DEBUG"
 
       logger.info "============== DEBUG"
       logger.info @add_row_to_tree

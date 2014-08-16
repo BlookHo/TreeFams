@@ -1120,22 +1120,34 @@ class StartController < ApplicationController
   # @param admin_page [Integer] опциональный номер страницы
   # @see
   def save_tree(profiles_arr_w_ids)
+    logger.info "DEBUG IN save_tree: profiles_arr_w_ids = #{profiles_arr_w_ids}; "
+    test_arr = []
     for arr_i in 0 .. profiles_arr_w_ids.length-1
       new_tree = Tree.new
       new_tree.user_id = current_user.id                    # user_id ID От_Профиля (From_Profile)
+        test_arr << current_user.id # DEBUG_FOR_LOG
       new_tree.profile_id = current_user.profile_id         # profile_id От_Профиля
+        test_arr << current_user.profile_id # DEBUG_FOR_LOG
       new_tree.name_id = Profile.find(current_user.profile_id).name_id       # name_id От_Профиля
-
+        test_arr << Profile.find(current_user.profile_id).name_id  # DEBUG_FOR_LOG
       new_tree.relation_id = profiles_arr_w_ids[arr_i][4]   # relation_id ID Родства От_Профиля с К_Профилю (To_Profile)
-
+        test_arr << profiles_arr_w_ids[arr_i][4] # DEBUG_FOR_LOG
       new_tree.is_profile_id = profiles_arr_w_ids[arr_i][0] # is_profile_id К_Профиля
+        test_arr <<  profiles_arr_w_ids[arr_i][0] # DEBUG_FOR_LOG
       new_tree.is_name_id = profiles_arr_w_ids[arr_i][2]    # is_name_id К_Профиля
+        test_arr << profiles_arr_w_ids[arr_i][2] # DEBUG_FOR_LOG
       new_tree.is_sex_id = profiles_arr_w_ids[arr_i][3]     # is_sex_id К_Профиля
+        test_arr << profiles_arr_w_ids[arr_i][3] # DEBUG_FOR_LOG
 
       new_tree.connected = false           # Пока не Объединено дерево К_Профиля с другим деревом
 
       new_tree.save
+      logger.info "DEBUG: test_arr = #{test_arr}; "
+      test_arr = []
+
     end
+    logger.info "============== DEBUG IN save_tree - END"
+
   end
 
   # Занесение для current_user в поле profile_id значения id из таблицы Profile
