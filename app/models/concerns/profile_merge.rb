@@ -17,7 +17,7 @@ module ProfileMerge
 
         # перенос profile_datas
         main_profile.profile_datas << opposite_profile.profile_datas
-      
+
         # e-mail хранится в юзере
         # перезаписать и e-mail
 
@@ -42,7 +42,6 @@ module ProfileMerge
       #logger.info "Профиля  #{opposite_profile.id} будет удален"
       # Удаление opposite_profile
       profiles_to_delete.uniq.map(&:destroy)
-
 
     end
 
