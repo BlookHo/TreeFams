@@ -17,7 +17,7 @@ module ProfileMerge
 
         # перенос profile_datas
         main_profile.profile_datas << opposite_profile.profile_datas
-
+      
         # e-mail хранится в юзере
         # перезаписать и e-mail
 
