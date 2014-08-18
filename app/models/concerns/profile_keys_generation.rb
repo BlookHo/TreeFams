@@ -9,62 +9,44 @@ module ProfileKeysGeneration
     # @param admin_page [Integer] опциональный номер страницы
     # @see
     # def save_new_tree_row(add_row_to_tree)
-    def save_new_tree_row(profile_id, sex_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, author_user, tree_id)
+    def save_new_tree_row(base_profile_id, base_sex_id, base_name_id,
+                          new_relation_id,
+                          new_profile_id, new_profile_name_id, new_profile_sex,
+                          tree_id)
         new_tree = Tree.new
+          # Базовый профиль = base_profile - профиль, к которому добавляем новый профиль
+          new_tree.user_id        = tree_id          # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый (user_id ID От_Профиля (From_Profile))
+          new_tree.profile_id     = base_profile_id  # base_profile.id - profile_id базового профиля # От_Профиля
+          new_tree.name_id        = base_name_id     # base_profile.name_id   # name_id базового профиля # От_Профиля
 
-        new_tree.user_id        = tree_id                    # user_id ID От_Профиля (From_Profile)
-        new_tree.profile_id     = profile_id #current_user.profile_id         # profile_id От_Профиля
-        new_tree.name_id        = name_id #Profile.find(current_user.profile_id).name_id       # name_id От_Профиля
+          new_tree.relation_id    = new_relation_id  # ID добавляемого Родства - кого добавляем (отца, сына, жену и т.д.) От_Профиля с К_Профилю
 
-        new_tree.relation_id    = new_relation_id #profiles_arr_w_ids[arr_i][4]   # relation_id ID Родства От_Профиля с К_Профилю (To_Profile)
-
-        new_tree.is_profile_id  = new_profile_id #profiles_arr_w_ids[arr_i][0] # is_profile_id К_Профиля
-        new_tree.is_name_id     = new_profile_name_id#profiles_arr_w_ids[arr_i][2]    # is_name_id К_Профиля
-        new_tree.is_sex_id      = new_profile_sex #profiles_arr_w_ids[arr_i][3]     # is_sex_id К_Профиля
-
-        # new_tree.connected      = add_row_to_tree[8] #false           # Пока не Объединено дерево К_Профиля с другим деревом
+          new_tree.is_profile_id  = new_profile_id      # is_profile_id нового К_Профиля
+          new_tree.is_name_id     = new_profile_name_id # is_name_id нового К_Профиля
+          new_tree.is_sex_id      = new_profile_sex     # is_sex_id нового К_Профиля
 
         new_tree.save
+        #id   user_id, profile_id, new_relation_id  conn-ted  dates   name_id  is new_profile_id  is new_profile_name_id  is new_profile_sex
+        #1053;127     ;1052        ;8              ;FALSE;   "2014-"; 370     ;1053               ;354                    ;0
 
-        @add_row_to_tree = [author_user.id, profile_id, sex_id, name_id, new_relation_id.to_i, new_profile_id, new_profile_name_id, new_profile_sex, false]
-    end
+        @add_row_to_tree = [ #author_user.id, # Главный автор= юзер на сайте -- не иcп-ся
+                            base_profile_id, base_sex_id, base_name_id,
+                            new_relation_id.to_i, new_profile_id, new_profile_name_id]
+     end
 
-    ## Добавление нового ряда к профилю в таблицу Tree
-    ## @note GET /
-    ## @param admin_page [Integer] опциональный номер страницы
-    ## @see News
-    #def make_tree_row(profile_id, sex_id, name_id, new_relation_id, new_profile_id, new_profile_name_id, new_profile_sex, author_user)
-    #
-    #  #  # Дополнение в Tree
-    #   @add_row_to_tree = []
-    #   @add_row_to_tree = [author_user.id, profile_id, sex_id, name_id, new_relation_id.to_i, new_profile_id, new_profile_name_id, new_profile_sex, false]
-    #
-    #   save_new_tree_row(@add_row_to_tree)
-    #
-    #   # tree_arr << @add_row_to_tree
-    #
-    #   return @add_row_to_tree
-    #
-    #
-    #  #  author_user.each do |line|
-    #  #  end
-    #
-    #
-    #end
-
-    # Добавление нового ряда в таблицу ProfileKey
+     # Добавление нового ряда в таблицу ProfileKey
     # @note GET /
     # @param admin_page [Integer] опциональный номер страницы
     # @see News
     def add_new_ProfileKey_row(profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
 
       new_profile_key_row = ProfileKey.new
-      new_profile_key_row.user_id = @@current_user_id            # user_id
-      new_profile_key_row.profile_id = profile_id                # profile_id
-      new_profile_key_row.name_id = name_id                      # name_id
-      new_profile_key_row.relation_id = new_relation_id          # relation_id
-      new_profile_key_row.is_profile_id = new_profile_id         # is_profile_id
-      new_profile_key_row.is_name_id = new_profile_name_id       # is_name_id
+        new_profile_key_row.user_id = @@current_user_id            # - from cycle:
+        new_profile_key_row.profile_id = profile_id                # profile_id
+        new_profile_key_row.name_id = name_id                      # name_id
+        new_profile_key_row.relation_id = new_relation_id          # relation_id
+        new_profile_key_row.is_profile_id = new_profile_id         # is_profile_id
+        new_profile_key_row.is_name_id = new_profile_name_id       # is_name_id
       new_profile_key_row.save
 
       one_profile_key_arr = []
@@ -75,7 +57,9 @@ module ProfileKeysGeneration
       one_profile_key_arr[4] = new_profile_id
       one_profile_key_arr[5] = new_profile_name_id
 
-      @one_profile_key_arr = one_profile_key_arr
+      @one_profile_key_arr = one_profile_key_arr   # DEBUGG_TO_VIEW
+      logger.info "============ In add_new_ProfileKey_row =============="
+      logger.info "one_profile_key_arr = #{one_profile_key_arr}"
 
     end
 
@@ -219,23 +203,16 @@ module ProfileKeysGeneration
     # Добавление новых рядов по профилю в таблицу ProfileKey
     # @note GET /
     # @see News
-    def  make_profilekeys_rows(relation_id, add_row_to_tree)
+    def  make_profilekeys_rows(add_row_to_tree)
 
-      @prev_relation_id = relation_id  # DEBUGG_TO_VIEW
+      profile_id = add_row_to_tree[0]
+      sex_id = add_row_to_tree[1]  # исп-ся для определения обратного relation в завис-ти от пола базового профиля, к кому добавляем
+      name_id = add_row_to_tree[2]
+      new_relation_id = add_row_to_tree[3]
+      new_profile_id = add_row_to_tree[4]
+      new_profile_name_id = add_row_to_tree[5]
 
-      #@add_row_to_tree = add_row_to_tree
-      # [current_user.id, @profile_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
-
-      #user_id = add_row_to_tree[0] # current_user
-      profile_id = add_row_to_tree[1]
-      sex_id = add_row_to_tree[2]
-      name_id = add_row_to_tree[3]
-      new_relation_id = add_row_to_tree[4]
-      new_profile_id = add_row_to_tree[5]
-      new_profile_name_id = add_row_to_tree[6]
-      #new_sex_id = add_row_to_tree[7] # no use here
-
-      @profile_key_arr_added = []    # DEBUGG_TO_VIEW
+      @profile_key_arr_added = [] #
       add_two_main_ProfileKeys_rows(profile_id, sex_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
 
       case new_relation_id
@@ -264,28 +241,21 @@ module ProfileKeysGeneration
 
     # @note GET /
     # определяются массивы имен всех существующих членов БК
+    # @see News tree_ids
     # @see News
-    # @see News
-    def get_bk_relative_names(user_id, profile_id, exclusions_hash)
+    def get_bk_relative_names(tree_ids, base_profile_id, exclusions_hash)
 
-      # @fathers_hash = {173 => 454 }
-      # @mothers_hash = {} #{172 => 354 }
-      # @brothers_hash = {190 => 400, 191 => 444 }
-      # @sisters_hash = {1000 => 500, 1001 => 555}
-      # @wives_hash = {155 => 293 }
-      # @husbands_hash = {185 => 993 }
-      # @sons_hash = {156 => 151 }
-      # @daughters_hash = {153 => 449, 157 => 293 }
+      logger.info "============ In get_bk_relative_names ==================DDDDDDDD"
+      logger.info "tree_ids = #{tree_ids}, base_profile_id = #{base_profile_id}, exclusions_hash = #{exclusions_hash},"
 
-      @fathers_hash = Profile.find(profile_id).fathers_hash(user_id)
-      @mothers_hash = Profile.find(profile_id).mothers_hash(user_id)
-      @brothers_hash = Profile.find(profile_id).brothers_hash(user_id)
-      @sisters_hash = Profile.find(profile_id).sisters_hash(user_id)
-      @wives_hash = Profile.find(profile_id).wives_hash(user_id)
-      @husbands_hash = Profile.find(profile_id).husbands_hash(user_id)
-      @sons_hash = Profile.find(profile_id).sons_hash(user_id)
-      @daughters_hash = Profile.find(profile_id).daughters_hash(user_id)
-
+      @fathers_hash = Profile.find(base_profile_id).fathers_hash(tree_ids)
+      @mothers_hash = Profile.find(base_profile_id).mothers_hash(tree_ids)
+      @brothers_hash = Profile.find(base_profile_id).brothers_hash(tree_ids)
+      @sisters_hash = Profile.find(base_profile_id).sisters_hash(tree_ids)
+      @wives_hash = Profile.find(base_profile_id).wives_hash(tree_ids)
+      @husbands_hash = Profile.find(base_profile_id).husbands_hash(tree_ids)
+      @sons_hash = Profile.find(base_profile_id).sons_hash(tree_ids)
+      @daughters_hash = Profile.find(base_profile_id).daughters_hash(tree_ids)
 
       if exclusions_hash
         @fathers_hash = proceed_exclusions_profile(@fathers_hash, exclusions_hash)
@@ -298,19 +268,9 @@ module ProfileKeysGeneration
         @daughters_hash = proceed_exclusions_profile(@daughters_hash, exclusions_hash)
       end
 
-
-      # logger.info Profile.find(profile_id).circle_as_hash(user_id)
-
+      logger.info Profile.find(base_profile_id).circle_as_hash(tree_ids)
+      logger.info "============ Out get_bk_relative_names =============="
     end
-
-    ## Определение наборов допустимых новых отношений new_relations_arr, для relation_id профиля, к которому добавляем новый профиль
-    ## @note GET /
-    ## @see News
-    #def get_acceptable_relations
-    #
-    #
-    #
-    #end
 
 
     # Редакция хэшей ближнего кругав зависимости от ответов на вопросы
@@ -336,59 +296,51 @@ module ProfileKeysGeneration
     # exclusions_hash - по умоланию nil
     # или же, в него передается hash, уточняющий нестандартные свзяи {profile_id => boolean} / {"143" => '0'}
     # профили в exclusions_hash с значение 0/false исключаются из генерации связей
-    def add_new_profile(base_profile, base_relation_id, new_profile, new_relation_id, author_user, exclusions_hash: nil, tree_ids: tree_ids)
+    def add_new_profile(base_profile,
+                        new_profile, new_relation_id,
+                #     current_author_user, # не иcп-ся
+                        exclusions_hash: nil,
+                        tree_ids: tree_ids) # [trees connected] [126, 127]
 
+      logger.info "============ In add_new_profile ==================DDDDDDDD"
+      logger.info "base_profile.id = #{base_profile.id}, new_profile.id = #{new_profile.id}, new_relation_id = #{new_relation_id},"
+      logger.info "exclusions_hash = #{exclusions_hash}, tree_ids = #{tree_ids},"
+      logger.info "base_profile.tree_id #{base_profile.tree_id}"
+        # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый
+        # в это же дерево надо добавлять запись о новом профиле - в save_new_tree_row ???
 
-      logger.info "============INCOMING==================DDDDDDDD"
-      logger.info exclusions_hash
-      logger.info "====== BASE PROFILE TREE ID #{base_profile.tree_id}"
-      logger.info "==============================DDDDDDDD"
-
-      #get_acceptable_relations # ИД для общей работы
-
-      # get_profile_params(base_profile, base_relation_id, new_profile, new_relation_id)  # Получить от Алексея из вьюхи добавления нового профиля
-
-      # get_bk_relative_names(author_user.id, base_profile.id, exclusions_hash)   # Получить от Алексея
       get_bk_relative_names(tree_ids, base_profile.id, exclusions_hash)   # Получить от Алексея
+      # сбор circles
 
-      # make_new_profile # Получить от Алексея
+      @profile_id = base_profile.id # DEBUGG_TO_VIEW
+      @sex_id = base_profile.sex_id # DEBUGG_TO_VIEW
+      @name_id = base_profile.name_id # DEBUGG_TO_VIEW
+      @new_relation_id = new_relation_id # DEBUGG_TO_VIEW
+      @new_profile_id = new_profile.id # DEBUGG_TO_VIEW
+      @new_profile_name_id = new_profile.name_id # DEBUGG_TO_VIEW
+      @new_profile_sex = new_profile.sex_id # DEBUGG_TO_VIEW
 
-      @profile_id = base_profile.id
-      @sex_id = base_profile.sex_id
-      @name_id = base_profile.name_id
-      @new_relation_id = new_relation_id
-      @new_profile_id = new_profile.id
-      @new_profile_name_id = new_profile.name_id
-      @new_profile_sex = new_profile.sex_id
+      add_row_to_tree = save_new_tree_row(base_profile.id, base_profile.sex_id,
+                                           base_profile.name_id, new_relation_id,
+                                           new_profile.id, new_profile.name_id, new_profile.sex_id,
+                                  #  current_author_user, # не иcп-ся
+                                           base_profile.tree_id) # это чтобы в поле tree_id записать для нового профиля,
+                                                                 # в каком дереве профиль создали
+      # add_row_to_tree - это рабочий массив с данными для формирования рядов в таблице ProfileKey.
+      @add_row_to_tree = add_row_to_tree # DEBUGG_TO_VIEW
 
-      @add_row_to_tree = save_new_tree_row(@profile_id, @sex_id, @name_id, @new_relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, author_user, base_profile.tree_id)
-
-
-      # @@current_user_id = author_user.id
-      # @relation_id = base_relation_id
-      # #@add_row_to_tree = [current_user.id, @profile_id, @name_id, @relation_id, @new_profile_id, @new_profile_name_id, @new_profile_sex, false]
-      # make_profilekeys_rows(@relation_id, @add_row_to_tree)
-      #
-
+      logger.info " @add_row_to_tree = #{add_row_to_tree} "
+      logger.info "Before cycle: "
       tree_ids.each do |tree_id|
         @@current_user_id = tree_id
-        @relation_id = base_relation_id
-        make_profilekeys_rows(@relation_id, @add_row_to_tree)
+        #make_profilekeys_rows(@relation_id, @add_row_to_tree)
+        logger.info "In cycle: make_profilekeys_rows: tree_ids = #{tree_ids} "
+        logger.info "@@current_user_id = #{@@current_user_id} "
+        make_profilekeys_rows(add_row_to_tree)
       end
 
-      logger.info "In add_new_profile tree_ids = #{tree_ids} - DEBUG"
-      logger.info "last @@current_user_id = #{@@current_user_id} - DEBUG"
-
-      logger.info "============== DEBUG"
-      logger.info @add_row_to_tree
-      logger.info "============== DEBUG"
-
-      logger.info "============================= DEBUG ================"
-      logger.info @profile_key_arr_added
-      logger.info "============================= DEBUG ================"
-
+      logger.info "======= add_new_profile ================= END ================"
     end
-
 
   end
 

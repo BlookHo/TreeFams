@@ -37,28 +37,26 @@ class ProfilesController < ApplicationController
 
   def create
 
-    logger.info "==== Start add new profile!!!"
+    logger.info "==== Profiles_controller.Create ===== Start add new profile!!!"
 
-    @base_profile = Profile.find(params[:base_profile_id])
-    @base_profile_id = params[:base_profile_id]
-    @author_profile_id = params[:author_profile_id]
-    @base_relation_id = params[:base_relation_id]
+    @base_profile = Profile.find(params[:base_profile_id]) # Старый профиль, к которому добавляем
+    @base_profile_id = params[:base_profile_id] #  профиль того, к кому добавляем
+    @author_profile_id = params[:author_profile_id] # текущий автор отображаемого круга
+    @base_relation_id = params[:base_relation_id] # relation того, к кому добавляем, к автору отображаемого круга
 
+    @profile = Profile.new(profile_params)  # Новый добавляемый профиль
+    @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
+    @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
 
-    @profile = Profile.new(profile_params)
-    @profile.user_id = 0
-    @profile.tree_id = @base_profile.tree_id
+    logger.info " @author_profile_id = #{@author_profile_id}, @profile.tree_id = #{@profile.tree_id} "
 
     @name = Name.where(name: params[:profile_name].mb_chars.downcase).first
-
-    logger.info "==== Start add new profile!!!"
+    #  :profile_name = имя нового профиля
 
     # if new name - create
     if !@name and !params[:profile_name].blank? and params[:new_name_confirmation]
       @name = Name.create(name: params[:profile_name])
     end
-
-
 
     # Name exist and valid:
     # 1. collect questions
@@ -66,14 +64,6 @@ class ProfilesController < ApplicationController
     if @name
       @profile.name_id = @name.id
 
-      # user_id           Дерево в которое добавляем
-      # profile_id        Профиль к которому добавляем
-      # relation_add_to   Отношение К которому добавляем
-      # relation_added    Отношение КОТОРОЕ добавляем (кого добавляем)
-      # name_id_added     ID имени нового отношения
-      # make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added)
-
-      #
       questions_hash = current_user.profile.make_questions(current_user.id,
       @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i,
       @profile.name_id.to_i, @author_profile_id, current_user.get_connected_users )
@@ -81,12 +71,19 @@ class ProfilesController < ApplicationController
       @questions = create_questions_from_hash(questions_hash)
       @profile.answers_hash = params[:answers]
 
+      logger.info "==== Вопросы по новому профилю ====== "
+      logger.info " @questions = #{@questions}, @profile.answers_hash = #{@profile.answers_hash} "
 
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
+        logger.info "==== Start ProfileKey.add_new_profile ====== "
         ProfileKey.add_new_profile(@base_profile,
-            @base_relation_id, @profile, @profile.relation_id, current_user,
-            exclusions_hash: @profile.answers_hash, tree_ids: current_user.get_connected_users)
+                             #      @base_relation_id, # не иcп-ся
+            @profile, @profile.relation_id,
+         #   current_user, # не иcп-ся
+            exclusions_hash: @profile.answers_hash,
+            tree_ids: current_user.get_connected_users) # old one
+     #   tree_ids: [current_user.id]) # new one
 
         # redirect_to to profile circle path if exist, via js
         if params[:path_link].blank?
