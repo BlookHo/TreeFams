@@ -78,12 +78,9 @@ class ProfilesController < ApplicationController
       if questions_valid?(questions_hash) and @profile.save
         logger.info "==== Start ProfileKey.add_new_profile ====== "
         ProfileKey.add_new_profile(@base_profile,
-                             #      @base_relation_id, # не иcп-ся
             @profile, @profile.relation_id,
-         #   current_user, # не иcп-ся
             exclusions_hash: @profile.answers_hash,
-            tree_ids: current_user.get_connected_users) # old one
-     #   tree_ids: [current_user.id]) # new one
+            tree_ids: current_user.get_connected_users) #
 
         # redirect_to to profile circle path if exist, via js
         if params[:path_link].blank?

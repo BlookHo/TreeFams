@@ -297,9 +297,8 @@ module ProfileKeysGeneration
     # профили в exclusions_hash с значение 0/false исключаются из генерации связей
     def add_new_profile(base_profile,
                         new_profile, new_relation_id,
-                #     current_author_user, # не иcп-ся
                         exclusions_hash: nil,
-                        tree_ids: tree_ids) # [trees connected] [126, 127]
+                        tree_ids: tree_ids) # [trees connected] типа [126, 127]
 
       logger.info "============ In add_new_profile ==================DDDDDDDD"
       logger.info "base_profile.id = #{base_profile.id}, new_profile.id = #{new_profile.id}, new_relation_id = #{new_relation_id},"
@@ -322,14 +321,12 @@ module ProfileKeysGeneration
       add_row_to_tree = save_new_tree_row(base_profile.id, base_profile.sex_id,
                                            base_profile.name_id, new_relation_id,
                                            new_profile.id, new_profile.name_id, new_profile.sex_id,
-                                  #  current_author_user, # не иcп-ся
                                            base_profile.tree_id) # это чтобы в поле tree_id записать для нового профиля,
                                                                  # в каком дереве профиль создали
       # add_row_to_tree - это рабочий массив с данными для формирования рядов в таблице ProfileKey.
       @add_row_to_tree = add_row_to_tree # DEBUGG_TO_VIEW
       logger.info " @add_row_to_tree = #{add_row_to_tree} "
 
-      logger.info "Before cycle: tree_ids = #{tree_ids}"
       # промеж-я version - ProfileKey rows -> только в те из объед-ных деревея, где есть base_profile.id, - профиль к кот-му добавляем
       #modified_tree_ids_Tr = []
       #tree_ids.each do |tree_id|
@@ -357,13 +354,10 @@ module ProfileKeysGeneration
       #  make_profilekeys_rows(add_row_to_tree)
       #end
 
-      @@current_user_id = base_profile.tree_id   # DEBUGG_TO_VIEW
-        logger.info "In cycle: make_profilekeys_rows: tree_ids = #{tree_ids} "
-        logger.info "@@current_user_id = #{@@current_user_id} "
-        make_profilekeys_rows(base_profile.tree_id, add_row_to_tree)
+      logger.info "Before: make_profilekeys_rows:: base_profile.tree_id = #{base_profile.tree_id}, tree_ids = #{tree_ids} "
+      make_profilekeys_rows(base_profile.tree_id, add_row_to_tree)
 
-
-      logger.info "======= add_new_profile ================= END ================"
+      logger.info "======= add_new_profile = END ================"
     end
 
   end
