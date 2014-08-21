@@ -50,7 +50,7 @@ module Search
    #@relation_searched = relation_id_searched   # DEBUGG TO VIEW
    #@all_profile_rows = all_profile_rows   # DEBUGG_TO_VIEW
 
-  @search_exclude_users = [85,86,87,88,89,90,91,92] # временный массив исключения косых юзеров из поиска DEBUGG_TO_VIEW
+  @search_exclude_users = [85,86,87,88,89,90,91,92, 143, 144,145,146,147,148,149,150,151,152,153,154,156,157,158] # временный массив исключения косых юзеров из поиска DEBUGG_TO_VIEW
 # убрать потом из строки 62!!!!!
 
    if !all_profile_rows.blank?
