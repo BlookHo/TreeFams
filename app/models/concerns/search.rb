@@ -13,17 +13,11 @@ module Search
     author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
     qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
-    author_tree_arr =
-        [
-         [41, 281, 373, 0, 281, 373, 1, false],
-         #[41, 281, 373, 1, 282, 377, 1, false],
-         #[41, 281, 373, 2, 283, 36, 0, false],
-         #[41, 281, 373, 5, 284, 141, 1, false],
-         #[41, 281, 373, 5, 285, 194, 1, false],
-         #[41, 281, 373, 8, 286, 441, 0, false],
-         [41, 281, 373, 3, 287, 141, 1, false],
-         [41, 281, 373, 3, 288, 194, 1, false]
-        ]
+    #author_tree_arr = # DEBUGG_TO_VIEW
+    #    [
+
+    #    ]
+
     @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
     logger.info "======================= Start search ========================= "
     logger.info " author_tree_arr = #{author_tree_arr} "
@@ -68,7 +62,7 @@ module Search
 
   #@search_exclude_users = [85,86,87,88,89,90,91,92] # временный массив исключения косых юзеров из поиска DEBUGG_TO_VIEW
    @search_exclude_users = [] # временный массив исключения косых юзеров из поиска DEBUGG_TO_VIEW
-# убрать потом из строки 62!!!!!
+# убрать потом !!!
 
    if !all_profile_rows.blank?
      @all_profile_rows_len = all_profile_rows.length if !all_profile_rows.blank? #_DEBUGG_TO_VIEW
@@ -80,14 +74,14 @@ module Search
 
         relation_match_arr = ProfileKey.where.not(user_id: @search_exclude_users).where.not(user_id: connected_users).where(:name_id => relation_row.name_id, :relation_id => relation_row.relation_id, :is_name_id => relation_row.is_name_id).select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
         if !relation_match_arr.blank?
-          row_arr = []
+          #row_arr = []   # DEBUGG_TO_VIEW
           relation_match_arr.each do |tree_row|
-            row_arr[0] = tree_row.user_id              # ID Автора
-            row_arr[1] = tree_row.profile_id           # ID От_Профиля
-            row_arr[2] = tree_row.name_id              # ID Имени От_Профиля
-            row_arr[3] = tree_row.relation_id          # ID Родства От_Профиля с другим К_Профиля
-            row_arr[4] = tree_row.is_profile_id        # ID другого К_Профиля
-            row_arr[5] = tree_row.is_name_id           # ID Имени К_Профиля
+            #row_arr[0] = tree_row.user_id              # ID Автора
+            #row_arr[1] = tree_row.profile_id           # ID От_Профиля
+            #row_arr[2] = tree_row.name_id              # ID Имени От_Профиля
+            #row_arr[3] = tree_row.relation_id          # ID Родства От_Профиля с другим К_Профиля
+            #row_arr[4] = tree_row.is_profile_id        # ID другого К_Профиля
+            #row_arr[5] = tree_row.is_name_id           # ID Имени К_Профиля
 
      #       all_relation_match_arr << row_arr
       #      logger.info "IN get_relation_match- searching: row_arr = #{row_arr}, all_relation_match_arr = #{all_relation_match_arr}"
@@ -115,29 +109,29 @@ module Search
      # всех видов отношений в блжнем круге для разыскиваемого профиля.
      if relation_id_searched != 0 # Для всех профилей, кот-е не явл. current_user
        # Исключение из результатов поиска
-       #if all_profile_rows.length > 3
+       if all_profile_rows.length > 3
 
- #      found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length - 1 } #
+       found_trees_hash.delete_if {|key, value|  value <= 2 } #  all_profile_rows.length - 1 } #
        #found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length } #
        # all_profile_rows.length = размер ближнего круга профиля в дереве current_user.id
-       #else
+       else
        #  # Если маленький БК
-       #  found_trees_hash.delete_if {|key, value|  value <= 2  }  # 1 .. 3 = НАСТРОЙКА!!
-       #end
+         found_trees_hash.delete_if {|key, value|  value <= 1  }  # 1 .. 3 = НАСТРОЙКА!!
+       end
 
      else
-       #if all_profile_rows.length <= 3
-       #  found_trees_hash.delete_if {|key, value|  value <= 0 } #all_profile_rows.length  }  # 1 .. 3 = НАСТРОЙКА!!
+       if all_profile_rows.length > 3 #<= 3
+        found_trees_hash.delete_if {|key, value|  value <= 2 } #all_profile_rows.length  }  # 1 .. 3 = НАСТРОЙКА!!
        #  # Исключение из результатов поиска групп с малым кол-вом совпадений в других деревьях or value < all_profile_rows.length
-       #else
+       else
        #  # Если маленький БК
-       #  found_trees_hash.delete_if {|key, value|  value <= 0  }  # 1 .. 2 = НАСТРОЙКА!!
-       #end
+         found_trees_hash.delete_if {|key, value|  value <= 1  }  # 1 .. 2 = НАСТРОЙКА!!
+       end
      end
 
    end
+   logger.info " ******* IN get_relation_match- Results: found_trees_hash = #{found_trees_hash}, wide_found_profiles_hash = #{wide_found_profiles_hash}, wide_found_relations_hash = #{wide_found_relations_hash}"
 
-   logger.info "IN get_relation_match- Results: wide_found_profiles_hash = #{wide_found_profiles_hash}"
 
 
    ##### КОРРЕКТИРОВКА результатов поиска на основе настройки результатов поиска - см.выше

@@ -142,19 +142,12 @@ class MainController < ApplicationController
 
       connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
       author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
-      qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
+  #    qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
-      author_tree_arr =
-          [
-              [41, 281, 373, 0, 281, 373, 1, false],
-              #[41, 281, 373, 1, 282, 377, 1, false],
-              #[41, 281, 373, 2, 283, 36, 0, false],
-              #[41, 281, 373, 5, 284, 141, 1, false],
-              #[41, 281, 373, 5, 285, 194, 1, false],
-              #[41, 281, 373, 8, 286, 441, 0, false],
-              [41, 281, 373, 3, 287, 141, 1, false],
-              [41, 281, 373, 3, 288, 194, 1, false]
-          ]
+      #author_tree_arr = # DEBUGG_TO_VIEW
+      #    [
+
+      #    ]
       @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
 # DEBUGG_TO_VIEW
 
@@ -185,8 +178,8 @@ class MainController < ApplicationController
       ######## Запуск метода формирования путей
       ######## отображения рез-тов на Главной
 
-   #   make_search_results_paths(@final_reduced_profiles_hash) #
-     make_search_results_paths({})  # DEBUGG_TO_VIEW
+      make_search_results_paths(@final_reduced_profiles_hash) #
+   #  make_search_results_paths({})  # DEBUGG_TO_VIEW
 
 
     end
