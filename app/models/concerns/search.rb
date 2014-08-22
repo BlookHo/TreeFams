@@ -1,7 +1,7 @@
 module Search
   extend ActiveSupport::Concern
   include SearchHelper
-
+#  require "awesome_print"
 
   def start_search
     # @circle = current_user.profile.circle(current_user.id)  # DEBUGG_TO_VIEW
@@ -24,6 +24,16 @@ module Search
     #    [159, 1365, 373, 3, 1371, 141, 1, false],
     #    [159, 1365, 373, 3, 1372, 194, 1, false]
     #    ]
+
+    #[
+    #    [160, 1373, 36, 0, 1373, 36, 0, false],
+    #    #[160, 1373, 36, 1, 1374, 419, 1, false],
+    #    #[160, 1373, 36, 2, 1375, 233, 0, false],
+    #    #[160, 1373, 36, 7, 1376, 377, 1, false],
+    #    [160, 1373, 36, 3, 1377, 373, 1, false],
+    #    [160, 1373, 36, 3, 1378, 141, 1, false],
+    #    [160, 1373, 36, 3, 1379, 194, 1, false]
+    #]
 
     #@author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
     logger.info "======================= Start search ========================= "
@@ -60,12 +70,13 @@ module Search
    #all_profile_rows = ProfileKey.where(:user_id => current_user.id).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id)
    all_profile_rows = ProfileKey.where(:user_id => connected_users).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
    # поиск массива записей ближнего круга для каждого профиля в дереве Юзера
-   logger.info "IN get_relation_match:: all_profile_rows: user_id = #{all_profile_rows[0].user_id}, profile_id = #{all_profile_rows[0].profile_id}, name_id = #{all_profile_rows[0].name_id}, relation_id = #{all_profile_rows[0].relation_id}, is_name_id = #{all_profile_rows[0].is_name_id}, is_profile_id = #{all_profile_rows[0].is_profile_id} "
-
-   #@from_profile_searching = from_profile_searching  # DEBUGG_TO_VIEW
-   #@profile_searched = profile_id_searched   # DEBUGG_TO_VIEW
-   #@relation_searched = relation_id_searched   # DEBUGG TO VIEW
-   #@all_profile_rows = all_profile_rows   # DEBUGG_TO_VIEW
+   logger.info "IN get_relation_match:: all_profile_rows: #{all_profile_rows} "
+#   logger.info "IN get_relation_match:: all_profile_rows: user_id = #{all_profile_rows[0].user_id}, profile_id = #{all_profile_rows[0].profile_id}, name_id = #{all_profile_rows[0].name_id}, relation_id = #{all_profile_rows[0].relation_id}, is_name_id = #{all_profile_rows[0].is_name_id}, is_profile_id = #{all_profile_rows[0].is_profile_id} "
+   all_profile_rows.each do |row| # DEBUGG_TO_VIEW
+     logger.debug "all_profile_rows: #{row.attributes.inspect} " # DEBUGG_TO_VIEW
+   end  # DEBUGG_TO_VIEW
+   qty_of_results = 0 # Начало подсчета результатов поиска (сумма успешных поисков в противоположном дереве)
+                      # В relation_match_arr.each do |tree_row|
 
   #@search_exclude_users = [85,86,87,88,89,90,91,92] # временный массив исключения косых юзеров из поиска DEBUGG_TO_VIEW
    @search_exclude_users = [] # временный массив исключения косых юзеров из поиска DEBUGG_TO_VIEW
@@ -74,7 +85,7 @@ module Search
    if !all_profile_rows.blank?
      @all_profile_rows_len = all_profile_rows.length if !all_profile_rows.blank? #_DEBUGG_TO_VIEW
      # размер ближнего круга профиля в дереве current_user.id
-     logger.info "IN get_relation_match:: @all_profile_rows_len = #{@all_profile_rows_len}"
+     logger.info ":: @all_profile_rows_len = #{@all_profile_rows_len}"
      all_profile_rows.each do |relation_row|
 #       relation_match_arr = ProfileKey.where.not(user_id: current_user.id).where(:name_id => relation_row.name_id).where(:relation_id => relation_row.relation_id).where(:is_name_id => relation_row.is_name_id).select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
        logger.info "IN each.all_profile_rows: user_id = #{relation_row.user_id}, profile_id = #{relation_row.profile_id}, name_id = #{relation_row.name_id}, relation_id = #{relation_row.relation_id}, is_name_id = #{relation_row.is_name_id}, is_profile_id = #{relation_row.is_profile_id} "
@@ -83,6 +94,7 @@ module Search
         if !relation_match_arr.blank?
           #row_arr = []   # DEBUGG_TO_VIEW
           relation_match_arr.each do |tree_row|
+            logger.debug "relation_match_arr: #{tree_row.attributes.inspect} " # DEBUGG_TO_VIEW
             #row_arr[0] = tree_row.user_id              # ID Автора
             #row_arr[1] = tree_row.profile_id           # ID От_Профиля
             #row_arr[2] = tree_row.name_id              # ID Имени От_Профиля
@@ -92,20 +104,25 @@ module Search
 
      #       all_relation_match_arr << row_arr
       #      logger.info "IN get_relation_match- searching: row_arr = #{row_arr}, all_relation_match_arr = #{all_relation_match_arr}"
-            row_arr = []
-            logger.info "IN each.relation_match_arr: user_id = #{tree_row.user_id}, profile_id = #{tree_row.profile_id}, name_id = #{tree_row.name_id}, relation_id = #{tree_row.relation_id}, is_profile_id = #{tree_row.is_profile_id}, is_name_id = #{tree_row.is_name_id}  "
+       #     row_arr = []
+            #logger.info "IN each.relation_match_arr: user_id = #{tree_row.user_id}, profile_id = #{tree_row.profile_id}, name_id = #{tree_row.name_id}, relation_id = #{tree_row.relation_id}, is_profile_id = #{tree_row.is_profile_id}, is_name_id = #{tree_row.is_name_id}  "
 
             fill_hash(found_trees_hash, tree_row.user_id) # наполнение хэша найденными user_id = trees и частотой их обнаружения
+            qty_of_results += 1
 
             wide_found_profiles_hash.merge!({tree_row.user_id  => {from_profile_searching => [tree_row.profile_id]} } ) # наполнение хэша найденными profile_id
             wide_found_relations_hash.merge!({tree_row.user_id  => {from_profile_searching => [relation_id_searched]} } ) # наполнение хэша найденными relation_id
-            logger.info "IN get_relation_match- searching: found_trees_hash = #{found_trees_hash}, wide_found_profiles_hash = #{wide_found_profiles_hash}, wide_found_relations_hash = #{wide_found_relations_hash}"
+            logger.info "IN - searching: qty_of_results = #{qty_of_results}, found_trees_hash = #{found_trees_hash}, wide_found_profiles_hash = #{wide_found_profiles_hash}, wide_found_relations_hash = #{wide_found_relations_hash}"
 
           end
+
           #@relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
-        else
+#        else
          # @relation_match_arr = relation_match_arr   # DEBUGG TO VIEW
         end
+       
+
+
      end
      #@relation_id_searched_arr << relation_id_searched  #_DEBUGG_TO_VIEW
 

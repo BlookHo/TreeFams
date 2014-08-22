@@ -120,3 +120,15 @@ gem 'rvm-capistrano', '1.5.1', group: :development
 
 # Админка
 gem 'rails_admin'
+
+group :console do
+  # does not work !!!
+  gem 'pry' #
+
+  gem 'hirb' # даёт прекрасное расположение хэша модели, в стиле mysql.
+
+  gem 'wirble' #   — даёт подсветку.
+
+  gem 'awesome_print', :require => 'ap'
+
+end
