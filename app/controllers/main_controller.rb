@@ -146,9 +146,16 @@ class MainController < ApplicationController
 
       #author_tree_arr = # DEBUGG_TO_VIEW
       #    [
-
+      #        [159, 1365, 373, 0, 1365, 373, 1, false],
+      #        #[159, 1365, 373, 1, 1366, 377, 1, false],
+      #        #[159, 1365, 373, 2, 1367, 36, 0, false],
+      #        #[159, 1365, 373, 5, 1368, 141, 1, false],
+      #        #[159, 1365, 373, 5, 1369, 194, 1, false],
+      #        #[159, 1365, 373, 8, 1370, 441, 0, false],
+      #        [159, 1365, 373, 3, 1371, 141, 1, false],
+      #        [159, 1365, 373, 3, 1372, 194, 1, false]
       #    ]
-      @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
+     @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
 # DEBUGG_TO_VIEW
 
 
