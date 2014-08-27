@@ -13,26 +13,29 @@ module Search
     author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
     qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
-  #  author_tree_arr = # DEBUGG_TO_VIEW
-    #[
+   #author_tree_arr = # DEBUGG_TO_VIEW
+   # [ # from 3 to 4
      #[3, 16, 123, 0, 16, 123, 1, false],
      #[3, 16, 123, 1, 17, 123, 1, false],
      #[3, 16, 123, 2, 18, 98, 0, false],
-     #[3, 16, 123, 5, 19, 130, 1, false],
+ #    [3, 16, 123, 5, 19, 130, 1, false],
      #[3, 16, 123, 5, 20, 125, 1, false],
      #[3, 16, 123, 8, 21, 84, 0, false],
      #[3, 16, 123, 3, 22, 123, 1, false],
      #[3, 16, 123, 3, 23, 125, 1, false]
-   # ]
-    #[
-    #    [160, 1373, 36, 0, 1373, 36, 0, false],
-    ##    #[160, 1373, 36, 1, 1374, 419, 1, false],
-    ##    #[160, 1373, 36, 2, 1375, 233, 0, false],
-    ##    #[160, 1373, 36, 7, 1376, 377, 1, false],
-    #    [160, 1373, 36, 3, 1377, 373, 1, false],
-    #    [160, 1373, 36, 3, 1378, 141, 1, false],
-    #    [160, 1373, 36, 3, 1379, 194, 1, false]
-    #]
+ #   ]
+   #     [  # # from 4 to 3
+   #         [4, 24, 98, 0, 24, 98, 0, false],
+   #         [4, 24, 98, 1, 25, 123, 1, false]
+   #     #    [4, 24, 98, 2, 26, 98, 0, false],
+        #    [4, 24, 98, 7, 27, 123, 1, false],
+        #    [4, 24, 98, 3, 28, 123, 1, false],
+        #    [4, 24, 98, 3, 29, 125, 1, false],
+        #    [4, 24, 98, 3, 30, 130, 1, false],
+        #    [4, 29, 125, 8, 31, 48, 0, false],
+        #    [4, 28, 123, 8, 34, 84, 0, false],
+        #    [4, 28, 123, 3, 35, 125, 1, false]
+        #]
 
     #@author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
     logger.info "======================= RUN start_search ========================= "
@@ -61,53 +64,13 @@ module Search
       logger.debug "#{string_to_add} № #{row_no.inspect}: #{row.attributes.inspect} " # DEBUGG_TO_LOGG
       #logger.debug "=== === ::: запись № #{row_no.inspect} = relation_match_arr.each: #{row.attributes.inspect} " # DEBUGG_TO_LOGG
     end  # DEBUGG_TO_LOGG
-    logger.info " "
+    #logger.info " END SHOW_IN_LOGGER"
   end
 
   # На выходе ближний круг для профиля в дереве user_id
   # по записям в ProfileKey
   def profile_near_circle(user_ids, profile_id)
     Tree.where(user_id: user_ids).where("profile_id = #{profile_id} or is_profile_id = #{profile_id}").order('relation_id').includes(:name)
-  end
-
-  # Сохранение результатов поиска в рабочих Хэшах
-  #
-  def collect_search_results(found_user_id, found_profile_id)
-
-    logger.info "=== === Накопление результатов по деревьям (в методе *collect_search_results*) "
-
-    # ВАЖНО: формируется массив найденных профилей для одной группы relation_match_arr
-    current_profiles_arr << tree_row.profile_id  # Если в нем не окажется профиля из предыдущих, то такой профиль удаляется как результат
-    logger.info "=== === 1. Текущий массив найденных профилей: #{current_profiles_arr}"
-    fill_hash(res_hash, tree_row.profile_id) # наполнение хэша найденными profile_id и частотой их обнаружения = 1
-    # Формирование ХЭШа с результатами: Сколько раз какой профиль был найден.
-    logger.info "=== === 2. Hash найденных профилей: #{res_hash} "
-    trees_res_hash.merge!({tree_row.user_id  => res_hash } ) # наполнение хэша накопленные Hash найденных профилей: #{res_hash}
-    logger.info "=== === 3. Trees Hash найденных профилей: #{trees_res_hash} "   #
-    # Его структура: {tree_id => {profile_id => частота появления profile_id в рез-тах поиска}}/
-
-    ## ??? ВАЖНЫЙ УЧАСТОК: ОПРЕДЕЛЕНИЕ ПРАВИЛЬНОГО ПРОФИЛЯ В КАЧЕСТВЕ СООТВЕТСТВИЯ ИСКОМОМУ
-    #trees_res_hash.each_pair {|key,val_hash|  key == tree_row.user_id; qty_arr = val_hash.values
-    #max_qty = qty_arr.sort.last
-    #@right_profile = val_hash.key(max_qty)
-    #logger.info "=== === 4. ВАЖНО: Из Trees Hash : @right_profile = #{@right_profile}"
-    #} #
-    #
-    #fill_hash(found_trees_hash, tree_row.user_id) # наполнение хэша найденными user_id = trees и частотой их обнаружения
-    #logger.info "=== === 5. found_trees_hash = #{found_trees_hash} "
-    #
-    #wide_found_profiles_arr << {from_profile_searching => [@right_profile]} # DEBUGG_TO_LOGG
-    #wide_found_relations_arr << {from_profile_searching => [relation_id_searched]} # DEBUGG_TO_LOGG
-    #
-    #wide_found_profiles_hash.merge!({tree_row.user_id  => {from_profile_searching => [@right_profile]} } ) # наполнение хэша найденными profile_id
-    #wide_found_relations_hash.merge!({tree_row.user_id  => {from_profile_searching => [relation_id_searched]} } ) # наполнение хэша найденными relation_id
-    #logger.info "=== === 6. wide_found_profiles_hash = #{wide_found_profiles_hash}, wide_found_relations_hash = #{wide_found_relations_hash}"
-    #logger.info "=== === 7. wide_found_profiles_arr = #{wide_found_profiles_arr}, wide_found_relations_arr = #{wide_found_relations_arr}"
-    #logger.info "=== === 8. общее кол-во сохранений профилей = #{qty_of_results} из relation_match_arr"
-    #logger.info " "
-      # end of collect_search_results(tree_row, from_profile_searching, relation_id_searched)
-
-
   end
 
 
@@ -118,11 +81,197 @@ module Search
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
   # На выходе: @all_match_arr по данному виду родства
- def hard_search_match(connected_users, from_profile_searching, profile_id_searched, relation_id_searched)
+  def hard_search_match(connected_users, from_profile_searching, profile_id_searched, relation_id_searched)
+
+    hard_search_profiles_hash = Hash.new  #
+    hard_search_relations_hash = Hash.new  #
+    logger.info " "
+    logger.info "-------- СТАРТ hard_search_match для одной итерации ---------"
+    all_profile_rows = ProfileKey.where(:user_id => connected_users).where(:profile_id => profile_id_searched).select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id, :id)
+    # поиск массива записей ближнего круга для каждого профиля в дереве Юзера
+    logger.info "Ближний круг - Все записи об ИСКОМОМ ПРОФИЛЕ = #{profile_id_searched.inspect} в ИСХОДНОМ (объединенном) дереве зарег-го Юзера"
+    show_in_logger(all_profile_rows, "all_profile_rows - запись" )  # DEBUGG_TO_LOGG
+
+    all_profile_rows_No = 1 # текущий номер записи из all_profile_rows - для Logger
+    if !all_profile_rows.blank?
+      @all_profile_rows_len = all_profile_rows.length if !all_profile_rows.blank? #DEBUGG_TO_LOGG
+      # размер ближнего круга профиля в дереве current_user.id
+      logger.info "кол-во записей об ИСКОМОМ ПРОФИЛЕ = #{@all_profile_rows_len}"
+      res_hash = Hash.new  # Hash найденных профилей = {profile_id => qty}
+      trees_res_hash = Hash.new  # Hash найденных профилей = {tree => {profile_id => qty}} для одной записи из all_profile_rows
+      got_result = false  # Признак того, что в не было рез-тата, значит - надо выходить из метода
+
+      all_profile_rows.each do |relation_row|
+        if !got_result
+        logger.info " "
+        logger.info "=== ПОИСК ПРОФИЛЯ < #{profile_id_searched.inspect} > по записи о нем № #{all_profile_rows_No}: #{relation_row.attributes.inspect}"
+        logger.info "=== ИЩЕМ: Имя = #{relation_row.name_id.inspect} --- Отношение = #{relation_row.relation_id} --- К Имени = #{relation_row.is_name_id}  "
+
+        @search_exclude_users = [] # временный массив исключения косых юзеров из поиска DEBUGG_TO_LOGG
+        relation_match_arr = ProfileKey.where.not(user_id: @search_exclude_users).where.not(user_id: connected_users).where(:name_id => relation_row.name_id, :relation_id => relation_row.relation_id, :is_name_id => relation_row.is_name_id).select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+        if !relation_match_arr.blank?  # Значит, есть совпадения(е)  в пространстве поиска ProfileKey для 1 записи из all_profile_rows.
+          show_in_logger(relation_match_arr, "=== РЕЗУЛЬТАТ ПОИСКА" )  # DEBUGG_TO_LOGG
+          if relation_id_searched != 0 # Ищем не Автора
+            #########################################################
+            logger.info "** ищем ОТНОШЕНИЕ не Автора - relation_id = #{relation_id_searched}"
+            #########################################################
+              qty_of_results = 1  # Счетчик кол-ва циклов по найденным результатам DEBUGG_TO_LOGG
+              relation_match_arr.each do |tree_row|  # Цикл по найденным профилям (рядам из ProfileKey)
+                logger.info " "
+                logger.info "НАЙДЕН ПРОФИЛЬ #{tree_row.profile_id} В ДЕРЕВЕ #{tree_row.user_id} ДЛЯ ИСКОМОГО ПРОФИЛЯ #{profile_id_searched.inspect} -  "
+                with_whom_connect_users_arr = User.find(tree_row.user_id).get_connected_users  ##найти БК для найденного профиля tree_row в дереве tree_row
+                logger.info "=== connected trees with #{tree_row.user_id} = with_whom_connect_users_arr #{with_whom_connect_users_arr.inspect}"
+                found_profile_circle = ProfileKey.where(user_id: with_whom_connect_users_arr, profile_id: tree_row.profile_id).order('relation_id')#.includes(:name, :is_name_id)
+                if !found_profile_circle.blank?
+                  logger.info "=== БЛИЖНИЙ КРУГ НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} "
+                  show_in_logger(found_profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
+
+                  found_bk_arr = []
+                  search_bk_arr = []
+                  found_profile_circle.each do |found_bk_row|
+                    found_bk_arr << found_bk_row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
+                  end
+                  logger.debug "found_bk_arr  = #{found_bk_arr} "
+
+                  all_profile_rows.each do |search_bk_row|
+                    search_bk_arr << search_bk_row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
+                  end
+                  logger.debug "search_bk_arr = #{search_bk_arr} "
+                  if !got_result
+                    if found_profile_circle.size.inspect == all_profile_rows.size.inspect
+                      logger.info "ПОДРОБНОЕ СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ"
+
+                      if found_bk_arr - search_bk_arr == []
+                        compare_rezult = true
+                        got_result = true
+                        logger.info "BKs - EQUAL   compare_rezult = #{compare_rezult}, got_result = #{got_result}  "
+                      else
+                        compare_rezult = false
+                        logger.info "BKs - UNEQUAL   compare_rezult = #{compare_rezult} "
+                      end
+                    else
+                      logger.info "СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ - БК найденного профиля и БК искомого - разной длины -> ОНИ РАЗНЫЕ"
+                      if  all_profile_rows.size.inspect > found_profile_circle.size.inspect
+                        rez_arr = found_bk_arr & search_bk_arr #
+                        logger.info "BKs - UNEQUAL all_profile_rows.size > found_profile_circle.size "
+                        got_result = false
+                        compare_rezult = false
+                        logger.info "got_result = #{got_result} "
+                        logger.info "compare_rezult = #{compare_rezult} "
+
+                      end
+                    end
+
+                  end
+                else
+                  logger.info "СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ - БК найденного профиля - НЕ НАЙДЕН"
+                  compare_rezult = false
+                end
+
+                logger.info " "
+                logger.info "= repeat display = БЛИЖНИЙ КРУГ ИСКОМОГО ПРОФИЛЯ = #{profile_id_searched} "
+                if !all_profile_rows.blank?
+                  show_in_logger(all_profile_rows, "= ряд " )  # DEBUGG_TO_LOGG
+                end
+                logger.info " "
+
+                if compare_rezult # БК профилей - одинаковые
+
+                  hard_search_profiles_hash.merge!({tree_row.user_id  => {from_profile_searching => [tree_row.profile_id]} } ) # наполнение хэша найденными profile_id
+                  hard_search_relations_hash.merge!({tree_row.user_id  => {from_profile_searching => [relation_id_searched]} } ) # наполнение хэша найденными relation_id
+                  logger.info "= make_one_result:    hard_search_profiles_hash = #{hard_search_profiles_hash}"
+                  logger.info "= make_one_result:    hard_search_relations_hash = #{hard_search_relations_hash}"
+
+                else
+                  #########################################################
+                  logger.info " "
+                  logger.info "=== НЕТ результата!"
+                  logger.info "=== В деревьях сайта ничего не найдено для записи № #{all_profile_rows_No}: #{relation_row.attributes.inspect} === "
+                end
+                qty_of_results += 1  # подсчет кол-ва рядов в relation_match_arr, которые входят в результат по очереди
+
+            end  # ОСНОВНОЙ ЦИКЛ ПОИСКА завершение поиска НЕ Автора и НЕ в 1-й раз
+
+          else # Ищем Автора
+            #########################################################
+            logger.info "** ищем ОТНОШЕНИЕ Автора - relation_id = #{relation_id_searched}"
+            # Здесь - особый порядок поиска
+            # заносим все найденные рез-ты в 1-й раз в
+            #########################################################
+            qty_of_results = 1  # Счетчик кол-ва циклов по найденным результатам DEBUGG_TO_LOGG
+            current_profiles_arr = []   # Текущий массив найденных профилей DEBUGG_TO_LOGG
+            relation_match_arr.each do |tree_row|  # Цикл по найденным результатам
+              logger.info " "
+              logger.info "=== В ДЕРЕВЕ #{tree_row.user_id} ДЛЯ ИСКОМОГО ПРОФИЛЯ #{profile_id_searched.inspect} - НАЙДЕН НЕКИЙ ПРОФИЛЬ #{tree_row.profile_id} "
+              logger.info "=== === Накопление ПЕРВЫХ результатов по деревьям - collect_search_results"
+
+              fill_hash(res_hash, tree_row.profile_id) # наполнение хэша найденными profile_id и частотой их обнаружения = 1
+              # Формирование ХЭШа с результатами: Сколько раз какой профиль был найден.
+              logger.info "=== автор 2. Hash найденных профилей: #{res_hash} "
+              trees_res_hash.merge!({tree_row.user_id  => res_hash } ) # наполнение хэша накопленные Hash найденных профилей: #{res_hash}
+              logger.info "=== автор 3. Trees Hash найденных профилей: #{trees_res_hash} "   #
+              # Его структура: {tree_id => {profile_id => частота появления profile_id в рез-тах поиска}}/
+
+              # ??? ВАЖНЫЙ УЧАСТОК: ОПРЕДЕЛЕНИЕ ПРАВИЛЬНОГО ПРОФИЛЯ В КАЧЕСТВЕ СООТВЕТСТВИЯ ИСКОМОМУ
+              trees_res_hash.each_pair {|key,val_hash|  key == tree_row.user_id; qty_arr = val_hash.values
+              max_qty = qty_arr.sort.last
+              @right_profile = val_hash.key(max_qty)
+              logger.info "=== автор 4. ВАЖНО: Из Trees Hash : @right_profile = #{@right_profile}"
+              } #
+
+              hard_search_profiles_hash.merge!({tree_row.user_id  => {from_profile_searching => [@right_profile]} } ) # наполнение хэша найденными profile_id
+              hard_search_relations_hash.merge!({tree_row.user_id  => {from_profile_searching => [relation_id_searched]} } ) # наполнение хэша найденными relation_id
+              logger.info "=== автор 5a. hard_search_profiles_hash = #{hard_search_profiles_hash}"
+              logger.info "=== автор 5b. hard_search_relations_hash = #{hard_search_relations_hash}"
+
+              profiles_included_arr = [@right_profile] #
+              logger.info "=== автор 6. массив найденных профилей: #{profiles_included_arr}"
+
+              qty_of_results += 1  # подсчет кол-ва рядов в relation_match_arr, которые входят в результат по очереди
+
+            end
+            ########## Завершение поиска Автора ###############################################
+
+          end
+
+        else
+          #########################################################
+          logger.info "=== НЕТ результата!"
+          logger.info "=== В деревьях сайта ничего не найдено для записи № #{all_profile_rows_No}: #{relation_row.attributes.inspect} === "
+          got_result = true
+          logger.info "got_result: #{got_result} "   #
+        end
+
+        all_profile_rows_No += 1 # Подсчет номера по порядку очередной записи об искомом профиле
+        end
+      end
+
+    end
+
+    ################## ЗДЕСЬ АНАЛИЗ ПОЛУЧЕННЫХ СОВПАДЕНИЙ по всем деревьям/
+    logger.info "ПОСЛЕ ВСЕХ рядов all_profile_rows"
+    logger.info "FINAL === ===  hard_search_profiles_hash = #{hard_search_profiles_hash}"
+    logger.info "FINAL === ===  hard_search_relations_hash = #{hard_search_relations_hash}"
+
+    ##### ИТОГОВЫЕ РАСШИРЕННЫЕ результаты поиска
+    logger.info " *** РЕЗУЛЬТАТ ПОИСКА ПОСЛЕ ОЧЕРЕДНОЙ ОДНОЙ ИТЕРАЦИИ - ЗАПУСКА HARD_SEARCH по tree_arr"
+
+    @all_wide_match_profiles_arr << hard_search_profiles_hash if !hard_search_profiles_hash.blank? # Заполнение выходного массива хэшей
+    @all_wide_match_relations_arr << hard_search_relations_hash if !hard_search_relations_hash.empty? # Заполнение выходного массива хэшей
+    logger.info " *** @all_wide_match_profiles_arr = #{@all_wide_match_profiles_arr}"
+    logger.info " *** @all_wide_match_relations_arr = #{@all_wide_match_relations_arr}"
+
+   return @all_wide_match_profiles_arr, @all_wide_match_relations_arr
+
+  end
+
+  def hard_search_match_old(connected_users, from_profile_searching, profile_id_searched, relation_id_searched)
 
    found_trees_hash = Hash.new     #{ 0 => []}
    wide_found_profiles_arr = Array.new  #
    wide_found_relations_arr = Array.new  #
+
+   found_profiles_hash = Hash.new  #   { tree.id => [ { profile_searched => [ result_profile1,result_profile1] } ] }
 
    hard_search_profiles_hash = Hash.new  #
    hard_search_relations_hash = Hash.new  #
@@ -181,29 +330,22 @@ module Search
              relation_match_arr.each do |tree_row|  # Цикл по найденным результатам
                logger.info " "
                logger.info "=== 1-й В ДЕРЕВЕ #{tree_row.user_id} ДЛЯ ИСКОМОГО ПРОФИЛЯ #{profile_id_searched.inspect} - НАЙДЕН НЕКИЙ ПРОФИЛЬ #{tree_row.profile_id} "
-               logger.info "=== 1-й === Накопление ПЕРВЫХ результатов по деревьям - collect_search_results"
-
-               # collect_search_results(tree_row, from_profile_searching, relation_id_searched)
-               @right_profile = find_right_profile(tree_row)
-               logger.info "=== CHECK : right_prof = #{@right_profile}"
 
                current_profiles_arr << tree_row.profile_id  # Если в нем не окажется профиля из предыдущих, то такой профиль удаляется как результат
-               logger.info "=== 1-й === 2. Текущий массив найденных профилей: current_profiles_arr = #{current_profiles_arr}"
+               logger.info "=== 1-й === 1. Текущий массив найденных профилей: current_profiles_arr = #{current_profiles_arr}"
 
-               #fill_hash(res_hash, tree_row.profile_id) # наполнение хэша найденными profile_id и частотой их обнаружения = 1
-               ## Формирование ХЭШа с результатами: Сколько раз какой профиль был найден.
-               #logger.info "=== 1-й === 3. Hash найденных профилей: #{res_hash} "
-               #trees_res_hash.merge!({tree_row.user_id  => res_hash } ) # наполнение хэша накопленные Hash найденных профилей: #{res_hash}
-               #logger.info "=== 1-й === 4. Trees Hash найденных профилей: #{trees_res_hash} "   #
-               ## Его структура: {tree_id => {profile_id => частота появления profile_id в рез-тах поиска}}/
-               #
-               ## ??? ВАЖНЫЙ УЧАСТОК: ОПРЕДЕЛЕНИЕ ПРАВИЛЬНОГО ПРОФИЛЯ В КАЧЕСТВЕ СООТВЕТСТВИЯ ИСКОМОМУ
-               #trees_res_hash.each_pair {|key,val_hash|  key == tree_row.user_id; qty_arr = val_hash.values
-               #max_qty = qty_arr.sort.last
-               #@right_profile = val_hash.key(max_qty)
-               #} #
+               found_profiles_hash.merge!({tree_row.user_id => { profile_id_searched  => current_profiles_arr } } ) #
+               logger.info "=== 1-й === 1. Текущий HASH найденных профилей: found_profiles_hash = #{found_profiles_hash}"
 
-               logger.info "=== автор 4. ВАЖНО: Из Trees Hash : @right_profile = #{@right_profile}"
+               fill_hash(res_hash, tree_row.profile_id) # наполнение хэша найденными profile_id и частотой их обнаружения = 1
+               # Формирование ХЭШа с результатами: Сколько раз какой профиль был найден.
+               #logger.info "=== Hash найденных профилей: #{res_hash} "
+               trees_res_hash.merge!({tree_row.user_id  => res_hash } ) # наполнение хэша накопленные Hash найденных профилей: #{res_hash}
+               #logger.info "=== Trees Hash найденных профилей: #{trees_res_hash} "   #
+               # Его структура: {tree_id => {profile_id => частота появления profile_id в рез-тах поиска}}/
+
+               @right_profile = find_right_profile(tree_row)
+               logger.info "=== 1-й === 2. ВАЖНО: Из Trees Hash : @right_profile = #{@right_profile}"
 
                hard_search_profiles_hash.merge!({tree_row.user_id  => {from_profile_searching => [@right_profile]} } ) # наполнение хэша найденными profile_id
                hard_search_relations_hash.merge!({tree_row.user_id  => {from_profile_searching => [relation_id_searched]} } ) # наполнение хэша найденными relation_id
@@ -214,21 +356,10 @@ module Search
 
              end
              #########################################################
-             # сбор общего массива найденных профилей по всем зацепленным деревьям
-              #    trees_res_hash =  {4=>{27=>1, 28=>2, 29=>3,},5=>{27=>4},6=>{27=>5},7=>{27=>6} }  # DEBUG_TO_LOGGER
-             #logger.info " "
-             #profiles_included_arr = []
-             #trees_res_hash.each_pair {|key, val_hash|
-             #  one_arr_profiles = val_hash.keys
-             #  profiles_included_arr << one_arr_profiles
-             #  logger.info "=== 1-й === 5. сбор массива profiles_included_arr Из Trees Hash : one_arr_profiles = #{one_arr_profiles}"
-             #}
              profiles_included_arr = current_profiles_arr #
              profiles_included_arr = profiles_included_arr.flatten.uniq # выравнивание массива и удал-е дубликатов
-             logger.info "=== 1-й === 6. массив найденных профилей profiles_included_arr для 1-й записи: profiles_included_arr = #{profiles_included_arr}"
-             first_rez_collect = false  # Установка Признака того, что это - уже не первый по порядку поиск (не Автора)
-             #@all_found_profiles_arr << profiles_included_arr
-             #logger.info "=== 1-й === 7. Текущий итоговый массив найденных профилей для всех деревьев, обнаруженных в поиске: @all_found_profiles_arr = #{@all_found_profiles_arr}"
+             logger.info "=== 1-й === 6. массив найденных профилей для 1-й записи: profiles_included_arr = #{profiles_included_arr}"
+             first_rez_collect = false  # Установка Признака того, что далее будет уже не первый по порядку поиск (не Автора)
              #########################################################
 
            else # Далее - "!!! УЖЕ НЕ в 1-й раз cохранение рез-тов поиска !!!
@@ -248,34 +379,16 @@ module Search
                  logger.info "=== ПОВТОРНО НАЙДЕН ПРОФИЛЬ из ранее найденных - Накопление результатов"
                  #########################################################
 
-                 logger.info "=== === Накопление результатов по деревьям (в методе *collect_search_results*) "
-
-                 # collect_search_results(tree_row, from_profile_searching, relation_id_searched)
                  current_profiles_arr << tree_row.profile_id  # Если в нем не окажется профиля из предыдущих, то такой профиль удаляется как результат
-                 logger.info "=== 1-й === 2. Текущий массив найденных профилей: current_profiles_arr = #{current_profiles_arr}"
+                 logger.info "=== === 1. Текущий массив найденных профилей: current_profiles_arr = #{current_profiles_arr}"
 
-                 #@right_profile = find_right_profile(tree_row)
-                 #logger.info "=== CHECK : right_prof = #{@right_profile}"
-
-                 fill_hash(res_hash, tree_row.profile_id) # наполнение хэша найденными profile_id и частотой их обнаружения = 1
-                 # Формирование ХЭШа с результатами: Сколько раз какой профиль был найден.
-                 logger.info "=== 1-й === 3. Hash найденных профилей: #{res_hash} "
-                 trees_res_hash.merge!({tree_row.user_id  => res_hash } ) # наполнение хэша накопленные Hash найденных профилей: #{res_hash}
-                 logger.info "=== 1-й === 4. Trees Hash найденных профилей: #{trees_res_hash} "   #
-                 # Его структура: {tree_id => {profile_id => частота появления profile_id в рез-тах поиска}}/
-
-                 # ВАЖНЫЙ УЧАСТОК: ОПРЕДЕЛЕНИЕ ПРАВИЛЬНОГО ПРОФИЛЯ В КАЧЕСТВЕ СООТВЕТСТВИЯ ИСКОМОМУ
-                 trees_res_hash.each_pair {|key,val_hash|  key == tree_row.user_id; qty_arr = val_hash.values
-                 max_qty = qty_arr.sort.last
-                 @right_profile = val_hash.key(max_qty)
-                 } #
-                 logger.info "=== автор 4. ВАЖНО: Из Trees Hash : @right_profile = #{@right_profile}"
+                 @right_profile = find_right_profile(tree_row)
+                 logger.info "=== === 2. ВАЖНО: Из Trees Hash : @right_profile = #{@right_profile}"
 
                  hard_search_profiles_hash.merge!({tree_row.user_id  => {from_profile_searching => [@right_profile]} } ) # наполнение хэша найденными profile_id
                  hard_search_relations_hash.merge!({tree_row.user_id  => {from_profile_searching => [relation_id_searched]} } ) # наполнение хэша найденными relation_id
-                 logger.info "=== 1-й === 1a. hard_search_profiles_hash = #{hard_search_profiles_hash}"
-                 logger.info "=== 1-й === 1b. hard_search_relations_hash = #{hard_search_relations_hash}"
-                 # end of collect_search_results(tree_row, from_profile_searching, relation_id_searched)
+                 logger.info "=== === 3a. hard_search_profiles_hash = #{hard_search_profiles_hash}"
+                 logger.info "=== === 3b. hard_search_relations_hash = #{hard_search_relations_hash}"
 
                else
                  #########################################################
@@ -380,6 +493,7 @@ module Search
           logger.info "=== Trees Hash НЕнайденных профилей: #{trees_res_hash} "   #
           #########################################################
 
+
        end
 
        all_profile_rows_No += 1 # Подсчет номера по порядку очередной записи об искомом профиле
@@ -388,68 +502,45 @@ module Search
      @all_found_profiles_arr << profiles_included_arr
      logger.info "=== === Текущий итоговый массив найденных профилей для всех деревьев, обнаруженных в поиске: @all_found_profiles_arr = #{@all_found_profiles_arr}"
 
-
-     #logger.info ""
-     #logger.info "ПОСЛЕ РЯДОВ all_profile_rows ДЛЯ ОДНОЙ ИТЕРАЦИИ ПОИСКА tree_arr"
-     #logger.info " *** текущий РЕЗУЛЬТАТ ПОИСКА: @hard_search_result_profiles = #{@hard_search_result_profiles}"
-     #logger.info " *** текущий РЕЗУЛЬТАТ ПОИСКА: @hard_search_result_relations = #{@hard_search_result_relations}"
-
-
    end
 
    ################## ЗДЕСЬ АНАЛИЗ ПОЛУЧЕННЫХ СОВПАДЕНИЙ по всем деревьям/
    logger.info "ПОСЛЕ ВСЕХ рядов all_profile_rows"
-   #logger.info "FINALFINAL === === После ряда № = #{all_profile_rows_No}  all_profile_rows:"
    logger.info "FINAL === ===  hard_search_profiles_hash = #{hard_search_profiles_hash}"
    logger.info "FINAL === ===  hard_search_relations_hash = #{hard_search_relations_hash}"
    #logger.info "FINAL === ===  Полный массив найденных профилей: profiles_included_arr = #{profiles_included_arr}"
    #logger.info "FINAL === ===  Trees Hash найденных профилей: #{trees_res_hash} "   #
-   logger.info "FINAL === Итоговый массив найденных профилей для всех деревьев, обнаруженных в поиске: @all_found_profiles_arr = #{@all_found_profiles_arr}"
+   #logger.info "FINAL === Итоговый массив найденных профилей для всех деревьев, обнаруженных в поиске: @all_found_profiles_arr = #{@all_found_profiles_arr}"
 
    ##### КОРРЕКТИРОВКА результатов поиска на основе результатов поиска - содержания Хэша trees_res_hash
-   hard_search_profiles_hash.delete_if {|key, value| !trees_res_hash.keys.include?(key)} # Убираем из хэша профилей
-#   hard_search_profiles_hash.delete_if {|key, value| !all_found_profiles_arr.include?(key)} # Убираем из хэша профилей
+#   hard_search_profiles_hash.delete_if {|key, value| !trees_res_hash.keys.include?(key)} # Убираем из хэша профилей
+  #   hard_search_profiles_hash.delete_if {|key, value| !all_found_profiles_arr.include?(key)} # Убираем из хэша профилей
    # На выходе ХЭШ: {user_id  => profile_id} - найденные деревья с найденным профилем в них.
-   @hard_search_profiles_hash = hard_search_profiles_hash
-   hard_search_relations_hash.delete_if {|key, value| !trees_res_hash.keys.include?(key)} # Убираем из хэша профилей
-   logger.info " *** после настройки рез-тов поиска: hard_search_profiles_hash = #{hard_search_profiles_hash}, hard_search_relations_hash = #{hard_search_relations_hash}"
+   #@hard_search_profiles_hash = hard_search_profiles_hash
+#  hard_search_relations_hash.delete_if {|key, value| !trees_res_hash.keys.include?(key)} # Убираем из хэша профилей
+#   logger.info " *** после настройки рез-тов поиска: hard_search_profiles_hash = #{hard_search_profiles_hash}, hard_search_relations_hash = #{hard_search_relations_hash}"
 
    ##### ИТОГОВЫЕ РАСШИРЕННЫЕ результаты поиска
+   ##### ИТОГОВЫЕ РАСШИРЕННЫЕ результаты поиска
+   @all_wide_match_profiles_arr << hard_search_profiles_hash if !hard_search_profiles_hash.blank? # Заполнение выходного массива хэшей
+   @all_wide_match_relations_arr << hard_search_relations_hash if !hard_search_relations_hash.empty? # Заполнение выходного массива хэшей
+   logger.info " *** РЕЗУЛЬТАТ ПОИСКА из get_relation_match: @all_wide_match_profiles_arr = #{@all_wide_match_profiles_arr}"
 
-   @hard_search_result_profiles << hard_search_profiles_hash if !hard_search_profiles_hash.blank? # Заполнение выходного массива хэшей
-   @hard_search_result_relations << hard_search_relations_hash if !hard_search_relations_hash.empty? # Заполнение выходного массива хэшей
-   logger.info " *** РЕЗУЛЬТАТ ПОИСКА ПОСЛЕ ОЧЕРЕДНОЙ ОДНОЙ ИТЕРАЦИИ - ЗАПУСКА HARD_SEARCH по tree_arr"
-   logger.info " *** @hard_search_result_profiles = #{@hard_search_result_profiles}"
-   logger.info " *** @hard_search_result_relations = #{@hard_search_result_relations}"
-
-   @new_all_found_profiles_arr = @all_found_profiles_arr.flatten.uniq
-   logger.info " *** @new_all_found_profiles_arr = #{@new_all_found_profiles_arr}"
+   #@hard_search_result_profiles << hard_search_profiles_hash if !hard_search_profiles_hash.blank? # Заполнение выходного массива хэшей
+   #@hard_search_result_relations << hard_search_relations_hash if !hard_search_relations_hash.empty? # Заполнение выходного массива хэшей
+   #logger.info " *** РЕЗУЛЬТАТ ПОИСКА ПОСЛЕ ОЧЕРЕДНОЙ ОДНОЙ ИТЕРАЦИИ - ЗАПУСКА HARD_SEARCH по tree_arr"
+   #logger.info " *** @hard_search_result_profiles = #{@hard_search_result_profiles}"
+   #logger.info " *** @hard_search_result_relations = #{@hard_search_result_relations}"
+   #
+   #@new_all_found_profiles_arr = @all_found_profiles_arr.flatten.uniq
+   #logger.info " *** @new_all_found_profiles_arr = #{@new_all_found_profiles_arr}"
 
  #  @hard_search_result_profiles = [{4=>{16=>[28]}}, {4=>{16=>[27]}}, {4=>{16=>[24]}}, {4=>{16=>[30]}}, {4=>{16=>[29]}}, {4=>{16=>[35]}}]
  #  *** @new_search_profiles_arr =  [{4=>{16=>[28]}}, {4=>{16=>[27]}}, {4=>{16=>[24]}}, {4=>{16=>[30]}}, {4=>{16=>[29]}}]
 
-  @all_wide_match_profiles_arr, @all_wide_match_relations_arr =  main_exclude_search_hashes(@hard_search_result_profiles, @hard_search_result_relations, @new_all_found_profiles_arr)
+  #@all_wide_match_profiles_arr, @all_wide_match_relations_arr =  main_exclude_search_hashes(@hard_search_result_profiles, @hard_search_result_relations, @new_all_found_profiles_arr)
 
-   #
-   #@new_search_profiles_arr = []
-   #@new_search_relations_arr = []
-   #@hard_search_result_profiles.each_with_index do |k, index| #,val_hash|
-   #  one_elem_value_hash = k.values[0].values.flatten[0]
-   #  if @new_all_found_profiles_arr.include?(one_elem_value_hash)
-   #    @new_search_profiles_arr << k
-   #    @new_search_relations_arr << @hard_search_result_relations[index]
-   #  end
-   #  logger.info " *** k = #{k}, one_elem_value_hash = #{one_elem_value_hash}"
-   #
-   #
-   #end
-   #logger.info " *** @new_search_profiles_arr = #{@new_search_profiles_arr}"
-   #logger.info " *** @@new_search_relations_arr = #{@new_search_relations_arr}"
-   #
-
-
-   #@all_wide_match_profiles_arr = @new_search_profiles_arr
-   #@all_wide_match_relations_arr = @new_search_relations_arr
+   return @all_wide_match_profiles_arr, @all_wide_match_relations_arr
 
  end
 
@@ -459,13 +550,17 @@ module Search
   def main_exclude_search_hashes(input_profiles_hash, input_relations_hash, profiles_array)
    new_search_profiles_arr = []
    new_search_relations_arr = []
+   test_array = profiles_array
    input_profiles_hash.each_with_index do |k, index| #,val_hash|
      one_elem_value_hash = k.values[0].values.flatten[0]
-     if profiles_array.include?(one_elem_value_hash)
+     if test_array.include?(one_elem_value_hash)
        new_search_profiles_arr << k
        new_search_relations_arr << input_relations_hash[index]
+       test_array = test_array - [one_elem_value_hash]
      end
-     logger.info " *** k = #{k}, one_elem_value_hash = #{one_elem_value_hash}"
+     logger.info " *** k = #{k}, test_array = #{test_array}, one_elem_value_hash = #{one_elem_value_hash}"
+     logger.info " *** new_search_profiles_arr = #{new_search_profiles_arr}"
+     logger.info " *** new_search_relations_arr = #{new_search_relations_arr}"
    end
 
    logger.info " *** new_search_profiles_arr = #{new_search_profiles_arr}"
@@ -485,20 +580,20 @@ def find_right_profile(tree_row)
 
   fill_hash(res_hash, tree_row.profile_id) # наполнение хэша найденными profile_id и частотой их обнаружения = 1
   # Формирование ХЭШа с результатами: Сколько раз какой профиль был найден.
-  logger.info "=== автор 2. Hash найденных профилей: #{res_hash} "
+  #logger.info "=== Hash найденных профилей: #{res_hash} "
   trees_res_hash.merge!({tree_row.user_id  => res_hash } ) # наполнение хэша накопленные Hash найденных профилей: #{res_hash}
-  logger.info "=== автор 3. Trees Hash найденных профилей: #{trees_res_hash} "   #
+  #logger.info "=== Trees Hash найденных профилей: #{trees_res_hash} "   #
   # Его структура: {tree_id => {profile_id => частота появления profile_id в рез-тах поиска}}/
 
-  # ??? ВАЖНЫЙ УЧАСТОК: ОПРЕДЕЛЕНИЕ ПРАВИЛЬНОГО ПРОФИЛЯ В КАЧЕСТВЕ СООТВЕТСТВИЯ ИСКОМОМУ
+  # ВАЖНЫЙ УЧАСТОК: ОПРЕДЕЛЕНИЕ ПРАВИЛЬНОГО ПРОФИЛЯ В КАЧЕСТВЕ СООТВЕТСТВИЯ ИСКОМОМУ
   trees_res_hash.each_pair {|key,val_hash|  key == tree_row.user_id; qty_arr = val_hash.values
   max_qty = qty_arr.sort.last
   right_profile = val_hash.key(max_qty)
-  logger.info "=== автор 4. ВАЖНО: Из Trees Hash : @right_profile = #{right_profile}"
-  @right_profil = right_profile
-  } #
+  #logger.info "=== Из Trees Hash : @right_profile = #{right_profile}"
+  @right_profile_id = right_profile
+  }
 
-  return @right_profil
+  return @right_profile_id
 
 end
 
@@ -751,7 +846,7 @@ end
         logger.info "***** ПОИСК: #{i+1}-я ИТЕРАЦИЯ in search_profiles_from_tree*** Ищем по этому элементу из дерева Юзера: tree_arr[i] = #{tree_arr[i]}"
         logger.info "***** из дерева (объед-х деревьев): #{connected_users_arr}; От профиля: #{from_profile_searching};  Ищем профиль: #{profile_id_searched};"
         logger.info "***** от имени (name_id): #{name_id_searched}; ищем отношение (relation_id) = #{relation_id_searched}, Ищем имя (is_name_id) = #{is_name_id_searched}  "
-        hard_search_match(connected_users_arr, from_profile_searching, profile_id_searched, relation_id_searched)       # На выходе: @all_match_arr по данному дереву
+        @all_wide_match_profiles_arr, @all_wide_match_relations_arr = hard_search_match(connected_users_arr, from_profile_searching, profile_id_searched, relation_id_searched)       # На выходе: @all_match_arr по данному дереву
   #      soft_search_match(connected_users_arr, from_profile_searching, profile_id_searched, relation_id_searched)       # На выходе: @all_match_arr по данному дереву
       end
     end
