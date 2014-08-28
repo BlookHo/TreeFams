@@ -104,6 +104,36 @@ module Search
     return found_bk_arr # Сделан БК в виде массива Хэшей
   end
 
+  # Метод сравнения 2-х БК профилей
+  # этот метод требует развития - что делать, когда два БК не равны?
+  # Означает ли это, что надо давать сразу отрицат-й ответ?.
+  # На входе - два массива Хэшей = 2 БК
+  # На выходе: compare_rezult = false or true.
+  def  compare_two_BK(found_bk_arr, search_bk_arr)
+    if found_bk_arr.size.inspect == search_bk_arr.size.inspect
+      logger.info "ПОДРОБНОЕ СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ"
+
+      if found_bk_arr - search_bk_arr == []
+        compare_rezult = true
+        logger.info "BKs - EQUAL   compare_rezult = #{compare_rezult} "
+      else
+        compare_rezult = false
+        logger.info "BKs - UNEQUAL   compare_rezult = #{compare_rezult} "
+      end
+    else
+      logger.info "СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ - БК найденного профиля и БК искомого - разной длины -> ОНИ РАЗНЫЕ"
+      if  search_bk_arr.size.inspect > found_bk_arr.size.inspect
+        rez_arr = found_bk_arr & search_bk_arr #
+        logger.info "BKs - UNEQUAL all_profile_rows.size > found_profile_circle.size "
+        compare_rezult = false
+        #logger.info "go_on_all_profile_rows = #{go_on_all_profile_rows} "
+        logger.info "compare_rezult = #{compare_rezult} "
+
+      end
+    end
+    return compare_rezult
+  end
+
   # ЖЕСТКИЙ Поиск совпадений для одного из профилей БК current_user
   # Берем параметр: profile_id из массива  = profiles_tree_arr[i][6].
   # @note GET /
@@ -167,35 +197,11 @@ module Search
                   if !found_profile_circle.blank? # Если БК - найден
                     logger.info "=== БЛИЖНИЙ КРУГ НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} "
                     show_in_logger(found_profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
-
                     # Преобразования БК в массивы Хэшей по аттрибутам
                     found_bk_arr = make_arr_hash_BK(found_profile_circle)
                     search_bk_arr = make_arr_hash_BK(all_profile_rows)
-
                     # Метод сравнения 2-х БК профилей
-                    # На выходе: compare_rezult = false or true.
-                      if found_profile_circle.size.inspect == all_profile_rows.size.inspect
-                        logger.info "ПОДРОБНОЕ СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ"
-
-                        if found_bk_arr - search_bk_arr == []
-                          compare_rezult = true
-                          logger.info "BKs - EQUAL   compare_rezult = #{compare_rezult}, go_on_all_profile_rows = #{go_on_all_profile_rows}  "
-                        else
-                          compare_rezult = false
-                          logger.info "BKs - UNEQUAL   compare_rezult = #{compare_rezult} "
-                        end
-                      else
-                        logger.info "СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ - БК найденного профиля и БК искомого - разной длины -> ОНИ РАЗНЫЕ"
-                        if  all_profile_rows.size.inspect > found_profile_circle.size.inspect
-                          rez_arr = found_bk_arr & search_bk_arr #
-                          logger.info "BKs - UNEQUAL all_profile_rows.size > found_profile_circle.size "
-                          compare_rezult = false
-                          #logger.info "go_on_all_profile_rows = #{go_on_all_profile_rows} "
-                          logger.info "compare_rezult = #{compare_rezult} "
-
-                        end
-                      end
-
+                    compare_rezult = compare_two_BK(found_bk_arr,search_bk_arr)
                   else
                     logger.info "БК найденного профиля - НЕ НАЙДЕН! (ПЕРЕД СРАВНЕНИЕМ ДВУХ БЛИЖНИХ КРУГОВ)"
                     compare_rezult = false  # Отрицательный рез-тат для поиска
@@ -207,7 +213,6 @@ module Search
                   end
 
                   if compare_rezult # БК профилей - одинаковые
-
                     logger.info "   After compare_rezult CHECK"
                     logger.info "=== ПОЛОЖИТЕЛЬНЫЙ результат поиска профиля #{tree_row.profile_id} по сравнению БК с профилем #{from_profile_searching}. Оба БК - равны. Этот профиль заносим в РЕЗУЛЬТАТ и в список УСПЕШНО проверенных для исключения повтора ПОИСКА"
                     pos_profiles_arr << tree_row.profile_id #
@@ -220,7 +225,6 @@ module Search
 
                     searched_n_found_profiles_hash.merge!({tree_row.user_id => { profile_id_searched  => pos_profiles_arr } } ) #
                     logger.info "= make_one_result:    searched_n_found_profiles_hash = #{searched_n_found_profiles_hash}"
-
                   else
                     #########################################################
                     logger.info "   After compare_rezult CHECK"
@@ -326,7 +330,7 @@ module Search
     @all_searched_n_found_profiles_hash << searched_n_found_profiles_hash if !searched_n_found_profiles_hash.empty? # Заполнение выходного массива хэшей
     logger.info " *** @all_searched_n_found_profiles_hash = #{@all_searched_n_found_profiles_hash}"
 
-  end
+  end # Конец метода поиска hard_search_match
 
   def hard_search_match_old(connected_users, from_profile_searching, profile_id_searched, relation_id_searched)
 
