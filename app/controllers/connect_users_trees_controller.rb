@@ -408,7 +408,7 @@ class ConnectUsersTreesController < ApplicationController
               ######## ПОВТОРНЫЙ запуск Основного метода поиска от дерева Автора (вместе с соединенными с ним)
               ######## среди других деревьев.
               beg_search_time = Time.now   # Начало отсечки времени поиска
-              search_results = current_user.start_search  #####  Запуск поиска
+              search_results = current_user.start_hard_search  #####  Запуск ЖЕСТКОГО поиска
               end_search_time = Time.now   # Конец отсечки времени поиска
               @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
 
@@ -466,10 +466,10 @@ class ConnectUsersTreesController < ApplicationController
                   @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
 
                   ######## Собственно Главный метод соединения деревьев = перезапись профилей в таблицах
-                  connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+    #              connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
 
                   ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-                 connect_users(current_user_id.to_i, user_id.to_i)
+     #            connect_users(current_user_id.to_i, user_id.to_i)
 
                 else
                  logger.info "ERROR - STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}."
