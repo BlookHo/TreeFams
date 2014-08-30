@@ -17,60 +17,36 @@
   @second_tree: #{@second_tree.inspect}
 
 %h4
-  Запуск ПОИСКА:
+  Запуск Жесткого ПОИСКА:
 %h4
   ВСЕ wide СОВПАДЕНИЯ РОДНЫХ : @final_reduced_profiles_hash: #{@final_reduced_profiles_hash.inspect}
 %h4
   ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
 %p
   Длительность поиска: #{@elapsed_search_time.inspect}
+
 %h4
   Определение массивов ПЕРЕЗАПИСИ ПРОФИЛЕЙ:
-%p
-  @profiles_rewrite: #{@profiles_rewrite.inspect}
-%p
-  @profiles_destroy: #{@profiles_destroy.inspect}
-%p
-  @output_relations: #{@output_relations.inspect}
-
 
 %p
-  @users_in_results: #{@users_in_results.inspect}
-%p
-  @matched_profiles_in_tree: #{@matched_profiles_in_tree.inspect}
-%p
-  @found_profiles: #{@found_profiles.inspect}
-%p
-  @found_relations: #{@found_relations.inspect}
--#%p
--#  @found_profiles_uniq: #{@found_profiles_uniq.inspect}
--#%p
--#  @found_relations_uniq: #{@found_relations_uniq.inspect}
--#%p
--#  @one_profile: #{@one_profile.inspect}
--#%p
--#  @where_found_tree_row: #{@where_found_tree_row.inspect}
-%p
-  @test_arrrs_blank: #{@test_arrrs_blank.inspect}
-%p
-  @test_arrrs: #{@test_arrrs.inspect}
+  @final_searched_and_found_profiles_arr: #{@final_searched_and_found_profiles_arr.inspect}
 
 %p
-  @rewrite_and_destroy_hash: #{@rewrite_and_destroy_hash.inspect}
+  @final_trees_search_results_arr: #{@final_trees_search_results_arr.inspect}
+
+%h4
+  Массивы перезаписи из SEARCH_HARD
 %p
-  @opposite_profiles_arr: #{@opposite_profiles_arr.inspect}
+  @profiles_searched_arr: #{@profiles_searched_arr.inspect}
+%p
+  @profiles_found_arr: #{@profiles_found_arr.inspect}
+
+%h4
+  Массивы перезаписи, найденные в Connect_Users
 %p
   @profiles_to_rewrite: #{@profiles_to_rewrite.inspect}
 %p
   @profiles_to_destroy: #{@profiles_to_destroy.inspect}
--#%p
--#  @rewrite_tree_arr1: #{@rewrite_tree_arr1.inspect}
--#%p
--#  @rewrite_tree_arr2: #{@rewrite_tree_arr2.inspect}
--#%p
--#  @rewrite_profilekey_arr1: #{@rewrite_profilekey_arr1.inspect}
--#%p
--#  @rewrite_profilekey_arr2: #{@rewrite_profilekey_arr2.inspect}
 
 %p
   @save_in_tree: #{@save_in_tree.inspect}

@@ -1,5 +1,103 @@
 module SearchHelper
 
+  # Метод сравнения 2-х БК профилей
+  # этот метод требует развития - что делать, когда два БК не равны?
+  # Означает ли это, что надо давать сразу отрицат-й ответ?.
+  # На входе - два массива Хэшей = 2 БК
+  # На выходе: compare_rezult = false or true.
+  def  compare_two_BK(found_bk_arr, search_bk_arr)
+    if found_bk_arr.size.inspect == search_bk_arr.size.inspect
+      logger.info "ПОДРОБНОЕ СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ"
+
+      if found_bk_arr - search_bk_arr == []
+        #bk_arr  = [
+        #    {"name_id"=>130, "relation_id"=>1, "is_name_id"=>123},
+        #    {"name_id"=>130, "relation_id"=>2, "is_name_id"=>98},
+        #    {"name_id"=>130, "relation_id"=>5, "is_name_id"=>123},
+        #    {"name_id"=>130, "relation_id"=>5, "is_name_id"=>125}
+        #]
+
+        bk_arr_w_profiles  = [
+            {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
+            {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>29, "is_name_id"=>125},
+            {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>30, "is_name_id"=>130},
+            {"profile_id"=>27, "name_id"=>123, "relation_id"=>8, "is_profile_id"=>24, "is_name_id"=>98}
+        ]
+
+
+        #bk_arr  = [
+        #    {"name_id"=>130, "relation_id"=>1, "is_name_id"=>123},
+        #    {"name_id"=>130, "relation_id"=>2, "is_name_id"=>98},
+        #    {"name_id"=>130, "relation_id"=>5, "is_name_id"=>123},
+        #    {"name_id"=>130, "relation_id"=>5, "is_name_id"=>125}
+        #]
+        # get
+
+        bk_arr_w_profiles  = [
+            {"name_id"=>123, "relation_id"=>3, "is_name_id"=>123, "profile_id"=>17, "is_profile_id"=>16},
+            {"name_id"=>123, "relation_id"=>8, "is_name_id"=>98, "profile_id"=>17, "is_profile_id"=>18},
+            {"name_id"=>123, "relation_id"=>3, "is_name_id"=>130, "profile_id"=>17, "is_profile_id"=>19},
+            {"name_id"=>123, "relation_id"=>3, "is_name_id"=>125, "profile_id"=>17, "is_profile_id"=>20}
+        ]
+
+        # Метод выделения массива значений Поля из массива Хэшей
+
+
+
+
+
+        compare_rezult = true
+        logger.info "BKs - EQUAL   compare_rezult = #{compare_rezult} "
+      else
+        compare_rezult = false
+        logger.info "BKs - UNEQUAL   compare_rezult = #{compare_rezult} "
+      end
+    else
+      logger.info "СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ - БК найденного профиля и БК искомого - разной длины -> ОНИ РАЗНЫЕ"
+      if  search_bk_arr.size.inspect > found_bk_arr.size.inspect
+        rez_arr = found_bk_arr & search_bk_arr #
+        logger.info "BKs - UNEQUAL all_profile_rows.size > found_profile_circle.size "
+        compare_rezult = false
+        #logger.info "go_on_all_profile_rows = #{go_on_all_profile_rows} "
+        logger.info "compare_rezult = #{compare_rezult} "
+
+      end
+    end
+    return compare_rezult
+  end
+
+  # МЕТОД Получения БК для любого одного профиля из дерева
+  # ИСп-ся в Жестком поиске - в hard_search_match
+  def get_one_profile_BK(profile_id, user_id)
+    with_whom_connect_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля tree_row в дереве tree_row
+    if !with_whom_connect_users_arr.blank?
+      logger.info "=get_one_profile_BK= connected trees with #{user_id} = with_whom_connect_users_arr #{with_whom_connect_users_arr.inspect}"
+      found_profile_circle = ProfileKey.where(user_id: with_whom_connect_users_arr, profile_id: profile_id).order('relation_id')
+      if !found_profile_circle.blank?
+        return found_profile_circle # Найден БК
+      else
+        logger.info "=get_one_profile_BK= Не найден БК для Профиля #{profile_id} у такого Юзера #{user_id}"
+      end
+    else
+      logger.info "=get_one_profile_BK= Нет такого Юзера #{user_id} или не найдены его with_whom_connect_users_arr #{with_whom_connect_users_arr.inspect}"
+    end
+  end
+
+  # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
+  # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
+  # ИСп-ся в Жестком поиске - в hard_search_match
+  def make_arr_hash_BK(bk_rows)
+    bk_arr = []
+    bk_arr_w_profiles = []
+    bk_rows.each do |found_bk_row|
+      bk_arr << found_bk_row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
+      bk_arr_w_profiles << found_bk_row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
+    end
+    logger.debug "bk_arr  = #{bk_arr}"
+    logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
+    return bk_arr, bk_arr_w_profiles # Сделан БК в виде массива Хэшей
+  end
+
   # Служебный метод для отладки - для LOGGER
   # Показывает массив в logger
   def show_in_logger(arr_to_log, string_to_add)
@@ -68,65 +166,6 @@ module SearchHelper
       end
     end
     return tree_arr
-  end
-
-  # МЕТОД Получения БК для любого одного профиля из дерева
-  # ИСп-ся в Жестком поиске - в hard_search_match
-  def get_one_profile_BK(profile_id, user_id)
-    with_whom_connect_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля tree_row в дереве tree_row
-    if !with_whom_connect_users_arr.blank?
-      logger.info "=get_one_profile_BK= connected trees with #{user_id} = with_whom_connect_users_arr #{with_whom_connect_users_arr.inspect}"
-      found_profile_circle = ProfileKey.where(user_id: with_whom_connect_users_arr, profile_id: profile_id).order('relation_id')
-      if !found_profile_circle.blank?
-        return found_profile_circle # Найден БК
-      else
-        logger.info "=get_one_profile_BK= Не найден БК для Профиля #{profile_id} у такого Юзера #{user_id}"
-      end
-    else
-      logger.info "=get_one_profile_BK= Нет такого Юзера #{user_id} или не найдены его with_whom_connect_users_arr #{with_whom_connect_users_arr.inspect}"
-    end
-  end
-
-  # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
-  # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
-  # ИСп-ся в Жестком поиске - в hard_search_match
-  def make_arr_hash_BK(bk_rows)
-    found_bk_arr = []
-    bk_rows.each do |found_bk_row|
-      found_bk_arr << found_bk_row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
-    end
-    logger.debug "bk_arr  = #{found_bk_arr} "
-    return found_bk_arr # Сделан БК в виде массива Хэшей
-  end
-
-  # Метод сравнения 2-х БК профилей
-  # этот метод требует развития - что делать, когда два БК не равны?
-  # Означает ли это, что надо давать сразу отрицат-й ответ?.
-  # На входе - два массива Хэшей = 2 БК
-  # На выходе: compare_rezult = false or true.
-  def  compare_two_BK(found_bk_arr, search_bk_arr)
-    if found_bk_arr.size.inspect == search_bk_arr.size.inspect
-      logger.info "ПОДРОБНОЕ СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ"
-
-      if found_bk_arr - search_bk_arr == []
-        compare_rezult = true
-        logger.info "BKs - EQUAL   compare_rezult = #{compare_rezult} "
-      else
-        compare_rezult = false
-        logger.info "BKs - UNEQUAL   compare_rezult = #{compare_rezult} "
-      end
-    else
-      logger.info "СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ - БК найденного профиля и БК искомого - разной длины -> ОНИ РАЗНЫЕ"
-      if  search_bk_arr.size.inspect > found_bk_arr.size.inspect
-        rez_arr = found_bk_arr & search_bk_arr #
-        logger.info "BKs - UNEQUAL all_profile_rows.size > found_profile_circle.size "
-        compare_rezult = false
-        #logger.info "go_on_all_profile_rows = #{go_on_all_profile_rows} "
-        logger.info "compare_rezult = #{compare_rezult} "
-
-      end
-    end
-    return compare_rezult
   end
 
 

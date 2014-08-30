@@ -194,7 +194,7 @@ class ConnectUsersTreesController < ApplicationController
     logger.info " Готовы Массивы для объединения: To_rewrite arr = #{profiles_to_rewrite}; To_destroy arr = #{profiles_to_destroy}, (для контроля и отладки): profiles_relations = #{profiles_relations}."
     logger.info "============== get_opposite_profiles = DEBUG END ========================="
 
-    return profiles_to_rewrite, profiles_to_destroy, profiles_relations
+    return profiles_to_rewrite, profiles_to_destroy#, profiles_relations
   end
 
 
@@ -366,6 +366,31 @@ class ConnectUsersTreesController < ApplicationController
   #  return found_profiles_uniq, found_relations_uniq
   #end
 
+  # Метод определения массивов перезаписи профилей при объединении деревьев
+  # На входе: рез-тат жесткого поиска совпавших профилей - при совпадении их БК
+  # Далее начинаем цикл по профилям, кот-е участвуют в БК совпавших профилей при жестком поиске
+  # Поэтапное наполнение массивов перезаписи
+  #
+  #
+  #
+  # /
+  def get_rewrite_profiles_by_bk(who_conn_users_arr, with_who_con_usrs_ar, searched_profiles_hash, searched_relations_hash)
+    profiles_to_rewrite = [] # - массив профилей, которые остаются
+    profiles_to_destroy = [] # - массив профилей, которые удаляются
+    profiles_relations = [] # - массив отношений, для тех, которые сохраняются в массивах
+
+
+
+
+
+
+    logger.info " Готовы Массивы для объединения: To_rewrite arr = #{profiles_to_rewrite}; To_destroy arr = #{profiles_to_destroy}, (для контроля и отладки): profiles_relations = #{profiles_relations}."
+    logger.info "============== get_opposite_profiles = DEBUG END ========================="
+
+    return profiles_to_rewrite, profiles_to_destroy#, profiles_relations
+
+  end
+
 
   ######## Главный стартовый метод дла перезаписи профилей в таблицах
   # Вход:
@@ -388,12 +413,12 @@ class ConnectUsersTreesController < ApplicationController
     connected_user = User.find(user_id) # For lock check
 
     ######## Check users lock status and connect if all ok
-    if current_user.tree_is_locked? or connected_user.tree_is_locked?
-      redirect_to :back, :alert => "Дерево находится в процессе реорганизации, повторите попытку позже"
-    else
-          ######## Check users lock status and connect if all ok
-          current_user.lock!
-          connected_user.lock!
+ #   if current_user.tree_is_locked? or connected_user.tree_is_locked?
+ #     redirect_to :back, :alert => "Дерево находится в процессе реорганизации, повторите попытку позже"
+ #   else
+ #         ######## Check users lock status and connect if all ok
+ #         current_user.lock!
+ #         connected_user.lock!
 
             who_connect_users_arr = current_user.get_connected_users
             @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
@@ -405,22 +430,48 @@ class ConnectUsersTreesController < ApplicationController
               @first_tree = get_connected_tree(who_connect_users_arr) # # DEBUGG_TO_VIEW Массив объединенного дерева из Tree
               @second_tree = get_connected_tree(with_whom_connect_users_arr) # # DEBUGG_TO_VIEW Массив объединенного дерева из Tree
 
-              ######## ПОВТОРНЫЙ запуск Основного метода поиска от дерева Автора (вместе с соединенными с ним)
-              ######## среди других деревьев.
+              ######## запуск Жесткого метода поиска от дерева Автора (вместе с соединенными с ним)
+              ######## Для точного определения массивов профилей для перезаписи
               beg_search_time = Time.now   # Начало отсечки времени поиска
+              ##############################################################################
               search_results = current_user.start_hard_search  #####  Запуск ЖЕСТКОГО поиска
+              ##############################################################################
               end_search_time = Time.now   # Конец отсечки времени поиска
               @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
 
               ######## Сбор рез-тов поиска, необходимых для объединения:
+              # !!!! ЗДЕСЬ - ВАЖЕН ПОРЯДОК ПРИСВАИВАНИЯ !!! - КАК ВПОЛУЧЕНИИ search_results!/
               @final_reduced_profiles_hash = search_results[:final_reduced_profiles_hash]
               @final_reduced_relations_hash = search_results[:final_reduced_relations_hash]
+              @wide_user_ids_arr = search_results[:wide_user_ids_arr],
+              @final_searched_and_found_profiles_arr = search_results[:final_searched_and_found_profiles_arr],
+              @final_trees_search_results_arr = search_results[:final_trees_search_results_arr]
+
+              @profiles_searched_arr = search_results[:profiles_searched_arr]
+              @profiles_found_arr = search_results[:profiles_found_arr]
+
+              logger.info "** IN connection_of_trees ******** @final_searched_and_found_profiles_arr = #{@final_searched_and_found_profiles_arr}"
+
 
               ######## Определение массивов профилей для перезаписи
-              profiles_to_rewrite, profiles_to_destroy, output_relations = get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, @final_reduced_profiles_hash, @final_reduced_relations_hash)
+              ##############################################################################
+              #profiles_to_rewrite, profiles_to_destroy, output_relations =
+              #  get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, @final_reduced_profiles_hash, @final_reduced_relations_hash)
+              ##############################################################################
+
+              ##### NEW METHOD - TO DETERMINE REWRITE & DESTROY PROFILES BEFORE TREES CONNECTION
+
+#              profiles_to_rewrite, profiles_to_destroy, output_relations =
+                  profiles_to_rewrite, profiles_to_destroy =
+                      get_rewrite_profiles_by_bk(who_connect_users_arr, with_whom_connect_users_arr, @final_reduced_profiles_hash, @final_reduced_relations_hash)
+
+
+
+              ##### END OF NEW METHOD
+
               @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
               @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
-              @output_relations = output_relations # DEBUGG_TO_VIEW
+           #   @output_relations = output_relations # DEBUGG_TO_VIEW
 
 
               ######## Обработка результатов поиска для определения профилей для перезаписи
@@ -486,10 +537,9 @@ class ConnectUsersTreesController < ApplicationController
             end
 
             ######## Afrer all unlock unlock user tree
-            current_user.unlock_tree!
-            connected_user.unlock_tree!
-
-      end
+ #           current_user.unlock_tree!
+ #           connected_user.unlock_tree!
+ #     end
 
   end
 
