@@ -10,42 +10,6 @@ module SearchHelper
       logger.info "ПОДРОБНОЕ СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ"
 
       if found_bk_arr - search_bk_arr == []
-        #bk_arr  = [
-        #    {"name_id"=>130, "relation_id"=>1, "is_name_id"=>123},
-        #    {"name_id"=>130, "relation_id"=>2, "is_name_id"=>98},
-        #    {"name_id"=>130, "relation_id"=>5, "is_name_id"=>123},
-        #    {"name_id"=>130, "relation_id"=>5, "is_name_id"=>125}
-        #]
-
-        bk_arr_w_profiles  = [
-            {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
-            {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>29, "is_name_id"=>125},
-            {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>30, "is_name_id"=>130},
-            {"profile_id"=>27, "name_id"=>123, "relation_id"=>8, "is_profile_id"=>24, "is_name_id"=>98}
-        ]
-
-
-        #bk_arr  = [
-        #    {"name_id"=>130, "relation_id"=>1, "is_name_id"=>123},
-        #    {"name_id"=>130, "relation_id"=>2, "is_name_id"=>98},
-        #    {"name_id"=>130, "relation_id"=>5, "is_name_id"=>123},
-        #    {"name_id"=>130, "relation_id"=>5, "is_name_id"=>125}
-        #]
-        # get
-
-        bk_arr_w_profiles  = [
-            {"name_id"=>123, "relation_id"=>3, "is_name_id"=>123, "profile_id"=>17, "is_profile_id"=>16},
-            {"name_id"=>123, "relation_id"=>8, "is_name_id"=>98, "profile_id"=>17, "is_profile_id"=>18},
-            {"name_id"=>123, "relation_id"=>3, "is_name_id"=>130, "profile_id"=>17, "is_profile_id"=>19},
-            {"name_id"=>123, "relation_id"=>3, "is_name_id"=>125, "profile_id"=>17, "is_profile_id"=>20}
-        ]
-
-        # Метод выделения массива значений Поля из массива Хэшей
-
-
-
-
-
         compare_rezult = true
         logger.info "BKs - EQUAL   compare_rezult = #{compare_rezult} "
       else
@@ -64,6 +28,18 @@ module SearchHelper
       end
     end
     return compare_rezult
+  end
+
+  # метод получения массива значений одного поля = key в массиве хэшей
+  # На входе:         bk_arr_w_profiles  = [
+  #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
+  #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>29, "is_name_id"=>125},
+  #    .... ]
+  # На выходе: field_arr = [28, 29, 30, 24]
+  def get_field_array(bk_arr_w_profiles, field_name_str)
+    field_values_arr = bk_arr_w_profiles.map{|x| x[field_name_str]}
+ #   logger.info "Массив значений хэшей с  key= is_profile_id : field_values_arr = #{field_values_arr}     "
+    return field_values_arr
   end
 
   # МЕТОД Получения БК для любого одного профиля из дерева
