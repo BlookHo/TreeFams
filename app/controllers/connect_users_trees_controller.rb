@@ -448,21 +448,49 @@ class ConnectUsersTreesController < ApplicationController
               @final_hard_profiles_to_connect_arr = search_results[:final_hard_profiles_to_connect_arr],
               @final_trees_search_results_arr = search_results[:final_trees_search_results_arr]
 
+              @final_pos_profiles_arr = search_results[:final_pos_profiles_arr]
               @final_profiles_searched_arr = search_results[:final_profiles_searched_arr]
               @final_profiles_found_arr = search_results[:final_profiles_found_arr]
 
               logger.info ""
               logger.info ""
               logger.info "** IN connection_of_trees ******** @final_hard_profiles_to_connect_arr = #{@final_hard_profiles_to_connect_arr}"
+              logger.info "** IN connection_of_trees ******** @final_pos_profiles_arr = #{@final_pos_profiles_arr}"
+              logger.info "** IN connection_of_trees ******** @final_profiles_searched_arr = #{@final_profiles_searched_arr}, @final_profiles_found_arr = #{@final_profiles_found_arr}"
 
 
               ######## Дальнейшее Определение массивов профилей для перезаписи
               ##############################################################################
-              #profiles_to_rewrite, profiles_to_destroy, output_relations =
-              #  get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, @final_reduced_profiles_hash, @final_reduced_relations_hash)
-              ##############################################################################
-
               ##### NEW METHOD - TO DETERMINE REWRITE & DESTROY PROFILES BEFORE TREES CONNECTION
+              who_connect_users_arr = current_user.get_connected_users
+              with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
+
+              @final_profiles_searched_arr.each_with_index do |profile_searched, index|
+                if !@final_pos_profiles_arr.include?(profile_searched)
+                  logger.info "=== profile_searched = #{profile_searched} "
+                  profile_searched_user_id = Profile.find(profile_searched).tree_id
+                  searched_profile_circle = get_one_profile_BK(profile_searched, profile_searched_user_id)
+                  logger.info "=== БЛИЖНИЙ КРУГ НАЙДЕННОГО ПРОФИЛЯ = #{profile_searched} "
+                  show_in_logger(searched_profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
+
+                  profile_found = @final_profiles_found_arr[index]
+                  logger.info "=== profile_found = #{profile_found} "
+                  profile_found_user_id = Profile.find(profile_found).tree_id
+                  found_profile_circle = get_one_profile_BK(profile_found, profile_found_user_id)
+                  logger.info "=== БЛИЖНИЙ КРУГ НАЙДЕННОГО ПРОФИЛЯ = #{profile_found} "
+                  show_in_logger(found_profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
+
+
+
+
+                end
+
+
+
+
+              end
+
+
 
 #              profiles_to_rewrite, profiles_to_destroy, output_relations =
                   profiles_to_rewrite, profiles_to_destroy =
