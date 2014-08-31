@@ -444,16 +444,19 @@ class ConnectUsersTreesController < ApplicationController
               @final_reduced_profiles_hash = search_results[:final_reduced_profiles_hash]
               @final_reduced_relations_hash = search_results[:final_reduced_relations_hash]
               @wide_user_ids_arr = search_results[:wide_user_ids_arr],
-              @final_searched_and_found_profiles_arr = search_results[:final_searched_and_found_profiles_arr],
+
+              @final_hard_profiles_to_connect_arr = search_results[:final_hard_profiles_to_connect_arr],
               @final_trees_search_results_arr = search_results[:final_trees_search_results_arr]
 
-              @profiles_searched_arr = search_results[:profiles_searched_arr]
-              @profiles_found_arr = search_results[:profiles_found_arr]
+              @final_profiles_searched_arr = search_results[:final_profiles_searched_arr]
+              @final_profiles_found_arr = search_results[:final_profiles_found_arr]
 
-              logger.info "** IN connection_of_trees ******** @final_searched_and_found_profiles_arr = #{@final_searched_and_found_profiles_arr}"
+              logger.info ""
+              logger.info ""
+              logger.info "** IN connection_of_trees ******** @final_hard_profiles_to_connect_arr = #{@final_hard_profiles_to_connect_arr}"
 
 
-              ######## Определение массивов профилей для перезаписи
+              ######## Дальнейшее Определение массивов профилей для перезаписи
               ##############################################################################
               #profiles_to_rewrite, profiles_to_destroy, output_relations =
               #  get_opposite_profiles(who_connect_users_arr, with_whom_connect_users_arr, @final_reduced_profiles_hash, @final_reduced_relations_hash)

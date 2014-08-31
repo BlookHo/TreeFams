@@ -1,5 +1,12 @@
 module SearchHelper
 
+  # Метод сортировки массива хэшей по нескольким ключам
+  def sort_hash_array(hash_arr_to_sort)
+    sorted_hash_arr = hash_arr_to_sort.sort_by {|h| [ h['name_id'],h['relation_id'],h['is_name_id'] ]}
+    return sorted_hash_arr
+  end
+
+
   # Метод сравнения 2-х БК профилей
   # этот метод требует развития - что делать, когда два БК не равны?
   # Означает ли это, что надо давать сразу отрицат-й ответ?.
@@ -30,6 +37,49 @@ module SearchHelper
     return compare_rezult
   end
 
+# ВАРИАНТ № 1
+  # метод получения массива значений одного поля = key в массиве хэшей
+  # На входе:         bk_arr_w_profiles  = [
+  #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
+  #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>29, "is_name_id"=>125},
+  #    .... ]
+  # На выходе: field_arr = [28, 29, 30, 24]
+  def get_fields_arrays_from_bk(bk_arr_searched, bk_arr_found)
+    field_arr_searched = []
+    field_arr_found = []
+    rez = false
+
+    #   logger.info "Массив значений хэшей с  key= is_profile_id : field_values_arr = #{field_values_arr}     "
+    bk_arr_searched.each_with_index do |one_searched_row, index|
+  #    logger.info "one_searched_row = #{one_searched_row} "
+      name_id_s = one_searched_row.values_at('name_id')
+      relation_id_s = one_searched_row.values_at('relation_id')
+      is_name_id_s = one_searched_row.values_at('is_name_id')
+ #     logger.info "name_id_s = #{name_id_s}, relation_id_s = #{relation_id_s}, is_name_id_s = #{is_name_id_s} "
+      bk_arr_found.each_with_index do |one_found_row, index|
+ #       logger.info "one_found_row = #{one_found_row} "
+        name_id_f = one_found_row.values_at('name_id')
+        relation_id_f = one_found_row.values_at('relation_id')
+        is_name_id_f = one_found_row.values_at('is_name_id')
+ #       logger.info "name_id_f = #{name_id_f}, relation_id_f = #{relation_id_f}, is_name_id_f = #{is_name_id_f} "
+
+        if name_id_s == name_id_f && relation_id_s == relation_id_f && is_name_id_s == is_name_id_f
+          rez = true
+          field_arr_searched << one_searched_row.values_at('is_profile_id')
+          field_arr_found << one_found_row.values_at('is_profile_id')
+  #        logger.info "rez = #{rez}, field_arr_searched = #{field_arr_searched}, field_arr_found = #{field_arr_found}, "
+
+        end
+
+      end
+
+    end
+
+    return field_arr_searched, field_arr_found
+  end
+
+
+# ВАРИАНТ № 2
   # метод получения массива значений одного поля = key в массиве хэшей
   # На входе:         bk_arr_w_profiles  = [
   #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
@@ -65,9 +115,13 @@ module SearchHelper
   def make_arr_hash_BK(bk_rows)
     bk_arr = []
     bk_arr_w_profiles = []
-    bk_rows.each do |found_bk_row|
-      bk_arr << found_bk_row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
-      bk_arr_w_profiles << found_bk_row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
+    bk_rows.each do |row|
+
+      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
+      bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
+      #logger.debug "row  = #{row}"
+      #logger.debug "bk_arr  = #{bk_arr}"
+      #logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
     end
     logger.debug "bk_arr  = #{bk_arr}"
     logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
