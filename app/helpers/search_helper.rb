@@ -35,25 +35,28 @@ module SearchHelper
   #
   #  end
 
-    def  compare_two_BK(found_bk_arr, search_bk_arr)
+  def  compare_two_BK(found_bk_arr, search_bk_arr)
 
     if !found_bk_arr.blank?
       if !search_bk_arr.blank?
 
-        logger.info "СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
+        logger.info "in compare_two_BK: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
         if found_bk_arr.size.inspect == search_bk_arr.size.inspect
-          if found_bk_arr - search_bk_arr == []
+          rez_bk_arr = found_bk_arr - search_bk_arr
+ #         if found_bk_arr - search_bk_arr == []
+          if rez_bk_arr == []
             compare_rezult = true
-            logger.info "BKs Size = EQUAL, Содержание - ОДИНАКОВОЕ. (Разность = [])"
+            logger.info " BKs Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) rez_bk_arr = #{rez_bk_arr}"
           else
+            rez_bk_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
             compare_rezult = false
-            logger.info "BKs Size = EQUAL, Содержание - РАЗНОЕ. (Разность - НЕ != [])"
+            logger.info "BKs Size = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) rez_bk_arr = #{rez_bk_arr}"
           end
 
         else
             rez_bk_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
             compare_rezult = false
-            logger.info "BKs - SIZE = UNEQUAL, Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != [])"
+            logger.info "BKs - SIZE = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != [])"
         end
 
       else
@@ -63,7 +66,6 @@ module SearchHelper
       logger.info "Error in compare_two_BK. Нет БК для Профиля: found_bk_arr = #{found_bk_arr}"
     end
 
-    #logger.info "compare_rezult = #{compare_rezult} "
     return compare_rezult, rez_bk_arr
   end
 
@@ -77,7 +79,7 @@ module SearchHelper
   def get_fields_arrays_from_bk(bk_arr_searched, bk_arr_found)
     field_arr_searched = []
     field_arr_found = []
-    rez = false
+    new_connection_hash = {}
 
     #   logger.info "Массив значений хэшей с  key= is_profile_id : field_values_arr = #{field_values_arr}     "
     bk_arr_searched.each_with_index do |one_searched_row, index|
@@ -94,9 +96,11 @@ module SearchHelper
  #       logger.info "name_id_f = #{name_id_f}, relation_id_f = #{relation_id_f}, is_name_id_f = #{is_name_id_f} "
 
         if name_id_s == name_id_f && relation_id_s == relation_id_f && is_name_id_s == is_name_id_f
-          rez = true
+         # rez = true
           field_arr_searched << one_searched_row.values_at('is_profile_id')
           field_arr_found << one_found_row.values_at('is_profile_id')
+          new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]}) # make new el-t of hash
+
   #        logger.info "rez = #{rez}, field_arr_searched = #{field_arr_searched}, field_arr_found = #{field_arr_found}, "
 
         end
@@ -105,7 +109,7 @@ module SearchHelper
 
     end
 
-    return field_arr_searched, field_arr_found
+    return field_arr_searched, field_arr_found, new_connection_hash
   end
 
 

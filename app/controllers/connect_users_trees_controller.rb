@@ -454,6 +454,32 @@ class ConnectUsersTreesController < ApplicationController
 
               logger.info ""
               logger.info "** IN connection_of_trees ******** "
+
+              bk_arr1  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
+                          {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
+                          {"name_id"=>125, "relation_id"=>5, "is_name_id"=>123},  # -
+                          {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
+
+              bk_arr2  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
+                          {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
+                        #  {"name_id"=>125, "relation_id"=>5, "is_name_id"=>123},
+                          {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130},
+                          {"name_id"=>125, "relation_id"=>8, "is_name_id"=>48}]
+
+              compare_rezult12, rez_bk_arr12 = compare_two_BK(bk_arr1, bk_arr2)
+              logger.info " compare_rezult = #{compare_rezult12}"
+              logger.info " ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_arr12 = #{rez_bk_arr12}"
+              rez_bk_arr = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
+                            {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
+                            {"name_id"=>125, "relation_id"=>5, "is_name_id"=>123},
+                            {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
+
+              rez_bk_arr12 = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
+                              {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
+                              {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
+
+
+
               logger.info "@final_hard_profiles_to_connect_arr = #{@final_hard_profiles_to_connect_arr}"
               logger.info "@final_pos_profiles_arr = #{@final_pos_profiles_arr}"
               logger.info "@final_profiles_searched_arr = #{@final_profiles_searched_arr}, @final_profiles_found_arr = #{@final_profiles_found_arr}"
@@ -496,60 +522,21 @@ class ConnectUsersTreesController < ApplicationController
                   logger.info " compare_rezult = #{compare_rezult}"
                   logger.info " ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_arr = #{rez_bk_arr}"
 
-                  bk_arr1  = [{"name_id"=>123, "relation_id"=>1, "is_name_id"=>123},
-                              {"name_id"=>123, "relation_id"=>2, "is_name_id"=>98},
-                              {"name_id"=>123, "relation_id"=>3, "is_name_id"=>125},
+                  if !rez_bk_arr.blank? # Если есть какое-то пересечение при сравнении 2-х БК
 
-                              {"name_id"=>123, "relation_id"=>3, "is_name_id"=>123},  # extr
+                    #ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_profiles_arr = []
+                    new_field_arr_searched, new_field_arr_found, new_connection_hash = get_fields_arrays_from_bk(search_bk_profiles_arr, found_bk_profiles_arr )
+                    new_field_arr_searched = new_field_arr_searched.flatten(1)
+                    new_field_arr_found = new_field_arr_found.flatten(1)
+                    logger.info "=ВАРИАНТ Extraxt is_profile_id из пересечения 2-х БК если оно есть"
+                    logger.info " new_field_arr_searched = #{new_field_arr_searched},    new_field_arr_found = #{new_field_arr_found} "
+                    logger.info " new_connection_hash = #{new_connection_hash} "
 
-                              {"name_id"=>123, "relation_id"=>5, "is_name_id"=>125},
-                              {"name_id"=>123, "relation_id"=>5, "is_name_id"=>130},
-                              {"name_id"=>123, "relation_id"=>8, "is_name_id"=>84}]
+                    logger.info " "
 
-                  bk_arr2  = [{"name_id"=>123, "relation_id"=>1, "is_name_id"=>123},
-                              {"name_id"=>123, "relation_id"=>2, "is_name_id"=>98},
-                              {"name_id"=>123, "relation_id"=>3, "is_name_id"=>125},
-                              {"name_id"=>123, "relation_id"=>5, "is_name_id"=>125},
-                              {"name_id"=>123, "relation_id"=>5, "is_name_id"=>130},
-                              {"name_id"=>123, "relation_id"=>8, "is_name_id"=>84}]
+                  end
 
-                  #ПЕРЕСЕЧЕНИЕ двух БК:
-                  rez_bk_arr = [{"name_id"=>123, "relation_id"=>1, "is_name_id"=>123},
-                                {"name_id"=>123, "relation_id"=>2, "is_name_id"=>98},
-                                {"name_id"=>123, "relation_id"=>3, "is_name_id"=>125},
-                                {"name_id"=>123, "relation_id"=>5, "is_name_id"=>125},
-                                {"name_id"=>123, "relation_id"=>5, "is_name_id"=>130},
-                                {"name_id"=>123, "relation_id"=>8, "is_name_id"=>84}]
 
- bk_arr_w_profiles1  = [{"name_id"=>123, "relation_id"=>1, "is_profile_id"=>17, "is_name_id"=>123},
-                        {"name_id"=>123, "relation_id"=>2, "is_profile_id"=>18, "is_name_id"=>98},
-                        {"name_id"=>123, "relation_id"=>3, "is_profile_id"=>23, "is_name_id"=>125}, ###
-
-                        {"name_id"=>123, "relation_id"=>3, "is_profile_id"=>22, "is_name_id"=>123}, # extr
-
-                        {"name_id"=>123, "relation_id"=>5, "is_profile_id"=>20, "is_name_id"=>125},
-                        {"name_id"=>123, "relation_id"=>5, "is_profile_id"=>19, "is_name_id"=>130},
-                        {"name_id"=>123, "relation_id"=>8, "is_profile_id"=>21, "is_name_id"=>84}]  ###
-
- bk_arr_w_profiles2  = [{"name_id"=>123, "relation_id"=>1, "is_profile_id"=>27, "is_name_id"=>123},
-                        {"name_id"=>123, "relation_id"=>2, "is_profile_id"=>24, "is_name_id"=>98},
-                        {"name_id"=>123, "relation_id"=>3, "is_profile_id"=>35, "is_name_id"=>125}, ###
-                        {"name_id"=>123, "relation_id"=>5, "is_profile_id"=>29, "is_name_id"=>125},
-                        {"name_id"=>123, "relation_id"=>5, "is_profile_id"=>30, "is_name_id"=>130},
-                        {"name_id"=>123, "relation_id"=>8, "is_profile_id"=>34, "is_name_id"=>84}]  ###
-
-                  #ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_profiles_arr = []
-
-                  compare_profiles_rezult, rez_bk_profiles_arr = compare_two_BK(found_bk_profiles_arr, search_bk_profiles_arr)
-                  logger.info " compare_profiles_rezult = #{compare_profiles_rezult}"
-                  logger.info " ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_profiles_arr = #{rez_bk_profiles_arr}"
-
-                  #new_field_arr_searched, new_field_arr_found = get_fields_arrays_from_bk(search_bk_profiles_arr, found_bk_profiles_arr )
-                  #field_arr_searched = field_arr_searched.flatten(1)
-                  #field_arr_found = field_arr_found.flatten(1)
-                  #logger.info "=ВАРИАНТ № 1== В БЛИЖНем КРУГе НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} - Массивы профилей is_profiles :       field_arr_searched = #{field_arr_searched},    field_arr_found = #{field_arr_found} "
-
-                  logger.info " "
                 end
 
               end
