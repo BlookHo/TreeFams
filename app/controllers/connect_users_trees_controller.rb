@@ -453,46 +453,109 @@ class ConnectUsersTreesController < ApplicationController
               @final_profiles_found_arr = search_results[:final_profiles_found_arr]
 
               logger.info ""
-              logger.info ""
-              logger.info "** IN connection_of_trees ******** @final_hard_profiles_to_connect_arr = #{@final_hard_profiles_to_connect_arr}"
-              logger.info "** IN connection_of_trees ******** @final_pos_profiles_arr = #{@final_pos_profiles_arr}"
-              logger.info "** IN connection_of_trees ******** @final_profiles_searched_arr = #{@final_profiles_searched_arr}, @final_profiles_found_arr = #{@final_profiles_found_arr}"
-
-
-              ######## Дальнейшее Определение массивов профилей для перезаписи
-              ##############################################################################
-              ##### NEW METHOD - TO DETERMINE REWRITE & DESTROY PROFILES BEFORE TREES CONNECTION
+              logger.info "** IN connection_of_trees ******** "
+              logger.info "@final_hard_profiles_to_connect_arr = #{@final_hard_profiles_to_connect_arr}"
+              logger.info "@final_pos_profiles_arr = #{@final_pos_profiles_arr}"
+              logger.info "@final_profiles_searched_arr = #{@final_profiles_searched_arr}, @final_profiles_found_arr = #{@final_profiles_found_arr}"
               who_connect_users_arr = current_user.get_connected_users
               with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
+              logger.info "who_connect_users_arr = #{who_connect_users_arr}, with_whom_connect_users_arr = #{with_whom_connect_users_arr}"
 
-              @final_profiles_searched_arr.each_with_index do |profile_searched, index|
-                if !@final_pos_profiles_arr.include?(profile_searched)
-                  logger.info "=== profile_searched = #{profile_searched} "
+              ################ TO DO!!! IN HARD SEARCH ##################
+              @final_search_profiles_step_arr = [[17, 19], [16, 20, 18]] # from hard_search
+              @final_found_profiles_step_arr = [[27, 30], [28, 29, 24]] # from hard_search
+              logger.info "@final_search_profiles_step_arr = #{@final_search_profiles_step_arr}"
+              logger.info "@final_found_profiles_step_arr = #{@final_found_profiles_step_arr}"
+
+              ######## Дальнейшее Определение массивов профилей для перезаписи ПО ДАННЫМ ИЗ Hard_Search
+              ##############################################################################
+              logger.info "##### NEW METHOD - TO DETERMINE REWRITE & DESTROY PROFILES BEFORE TREES CONNECTION"
+              for arr_ind in 1 .. @final_search_profiles_step_arr.size - 1
+                one_search_arr = @final_search_profiles_step_arr[arr_ind]
+                one_found_arr = @final_found_profiles_step_arr[arr_ind]
+                logger.info "one_search_arr = #{one_search_arr}, one_found_arr = #{one_found_arr}"
+                one_search_arr.each_with_index do |profile_searched, index|
+                  logger.info "one_search_arr=profile_searched = #{profile_searched}, index = #{index}"
+                  profile_found = one_found_arr[index]
+                  logger.info "one_found_arr=profile_found = #{profile_found}, index = #{index}"
+
                   profile_searched_user_id = Profile.find(profile_searched).tree_id
                   searched_profile_circle = get_one_profile_BK(profile_searched, profile_searched_user_id)
-                  logger.info "=== БЛИЖНИЙ КРУГ НАЙДЕННОГО ПРОФИЛЯ = #{profile_searched} "
+                  logger.info "=== БЛИЖНИЙ КРУГ ИСКОМОГО ПРОФИЛЯ = #{profile_searched} "
                   show_in_logger(searched_profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
+                  search_bk_arr, search_bk_profiles_arr = make_arr_hash_BK(searched_profile_circle)
 
-                  profile_found = @final_profiles_found_arr[index]
-                  logger.info "=== profile_found = #{profile_found} "
                   profile_found_user_id = Profile.find(profile_found).tree_id
                   found_profile_circle = get_one_profile_BK(profile_found, profile_found_user_id)
                   logger.info "=== БЛИЖНИЙ КРУГ НАЙДЕННОГО ПРОФИЛЯ = #{profile_found} "
                   show_in_logger(found_profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
+                  found_bk_arr, found_bk_profiles_arr = make_arr_hash_BK(found_profile_circle)
 
+                  logger.info " Compare_two_BK: ИСКОМОГО ПРОФИЛЯ = #{profile_searched} и НАЙДЕННОГО ПРОФИЛЯ = #{profile_found}:"
+                  compare_rezult, rez_bk_arr = compare_two_BK(found_bk_arr, search_bk_arr)
+                  logger.info " compare_rezult = #{compare_rezult}"
+                  logger.info " ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_arr = #{rez_bk_arr}"
 
+                  bk_arr1  = [{"name_id"=>123, "relation_id"=>1, "is_name_id"=>123},
+                              {"name_id"=>123, "relation_id"=>2, "is_name_id"=>98},
+                              {"name_id"=>123, "relation_id"=>3, "is_name_id"=>125},
 
+                              {"name_id"=>123, "relation_id"=>3, "is_name_id"=>123},  # extr
 
+                              {"name_id"=>123, "relation_id"=>5, "is_name_id"=>125},
+                              {"name_id"=>123, "relation_id"=>5, "is_name_id"=>130},
+                              {"name_id"=>123, "relation_id"=>8, "is_name_id"=>84}]
+
+                  bk_arr2  = [{"name_id"=>123, "relation_id"=>1, "is_name_id"=>123},
+                              {"name_id"=>123, "relation_id"=>2, "is_name_id"=>98},
+                              {"name_id"=>123, "relation_id"=>3, "is_name_id"=>125},
+                              {"name_id"=>123, "relation_id"=>5, "is_name_id"=>125},
+                              {"name_id"=>123, "relation_id"=>5, "is_name_id"=>130},
+                              {"name_id"=>123, "relation_id"=>8, "is_name_id"=>84}]
+
+                  #ПЕРЕСЕЧЕНИЕ двух БК:
+                  rez_bk_arr = [{"name_id"=>123, "relation_id"=>1, "is_name_id"=>123},
+                                {"name_id"=>123, "relation_id"=>2, "is_name_id"=>98},
+                                {"name_id"=>123, "relation_id"=>3, "is_name_id"=>125},
+                                {"name_id"=>123, "relation_id"=>5, "is_name_id"=>125},
+                                {"name_id"=>123, "relation_id"=>5, "is_name_id"=>130},
+                                {"name_id"=>123, "relation_id"=>8, "is_name_id"=>84}]
+
+ bk_arr_w_profiles1  = [{"name_id"=>123, "relation_id"=>1, "is_profile_id"=>17, "is_name_id"=>123},
+                        {"name_id"=>123, "relation_id"=>2, "is_profile_id"=>18, "is_name_id"=>98},
+                        {"name_id"=>123, "relation_id"=>3, "is_profile_id"=>23, "is_name_id"=>125}, ###
+
+                        {"name_id"=>123, "relation_id"=>3, "is_profile_id"=>22, "is_name_id"=>123}, # extr
+
+                        {"name_id"=>123, "relation_id"=>5, "is_profile_id"=>20, "is_name_id"=>125},
+                        {"name_id"=>123, "relation_id"=>5, "is_profile_id"=>19, "is_name_id"=>130},
+                        {"name_id"=>123, "relation_id"=>8, "is_profile_id"=>21, "is_name_id"=>84}]  ###
+
+ bk_arr_w_profiles2  = [{"name_id"=>123, "relation_id"=>1, "is_profile_id"=>27, "is_name_id"=>123},
+                        {"name_id"=>123, "relation_id"=>2, "is_profile_id"=>24, "is_name_id"=>98},
+                        {"name_id"=>123, "relation_id"=>3, "is_profile_id"=>35, "is_name_id"=>125}, ###
+                        {"name_id"=>123, "relation_id"=>5, "is_profile_id"=>29, "is_name_id"=>125},
+                        {"name_id"=>123, "relation_id"=>5, "is_profile_id"=>30, "is_name_id"=>130},
+                        {"name_id"=>123, "relation_id"=>8, "is_profile_id"=>34, "is_name_id"=>84}]  ###
+
+                  #ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_profiles_arr = []
+
+                  compare_profiles_rezult, rez_bk_profiles_arr = compare_two_BK(found_bk_profiles_arr, search_bk_profiles_arr)
+                  logger.info " compare_profiles_rezult = #{compare_profiles_rezult}"
+                  logger.info " ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_profiles_arr = #{rez_bk_profiles_arr}"
+
+                  #new_field_arr_searched, new_field_arr_found = get_fields_arrays_from_bk(search_bk_profiles_arr, found_bk_profiles_arr )
+                  #field_arr_searched = field_arr_searched.flatten(1)
+                  #field_arr_found = field_arr_found.flatten(1)
+                  #logger.info "=ВАРИАНТ № 1== В БЛИЖНем КРУГе НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} - Массивы профилей is_profiles :       field_arr_searched = #{field_arr_searched},    field_arr_found = #{field_arr_found} "
+
+                  logger.info " "
                 end
-
-
-
 
               end
 
 
 
-#              profiles_to_rewrite, profiles_to_destroy, output_relations =
                   profiles_to_rewrite, profiles_to_destroy =
                       get_rewrite_profiles_by_bk(who_connect_users_arr, with_whom_connect_users_arr, @final_reduced_profiles_hash, @final_reduced_relations_hash)
 

@@ -271,7 +271,7 @@ module SearchHard
                   found_bk_arr, found_bk_profiles_arr = make_arr_hash_BK(found_profile_circle)
                   search_bk_arr, search_bk_profiles_arr = make_arr_hash_BK(all_profile_rows)
                   # Метод сравнения 2-х БК профилей
-                  compare_rezult = compare_two_BK(found_bk_arr,search_bk_arr)
+                  compare_rezult, rez_bk_arr = compare_two_BK(found_bk_arr,search_bk_arr)
                 else
                   logger.info "БК найденного профиля - НЕ НАЙДЕН! (ПЕРЕД СРАВНЕНИЕМ ДВУХ БЛИЖНИХ КРУГОВ)"
                   compare_rezult = false  # Отрицательный рез-тат для поиска
@@ -283,7 +283,7 @@ module SearchHard
                 end
 
 
-                 if compare_rezult # БК профилей - одинаковые
+                if compare_rezult # БК профилей - одинаковые
                   logger.info "   After compare_rezult CHECK"
                   logger.info "=== ПОЛОЖИТЕЛЬНЫЙ результат поиска профиля #{tree_row.profile_id} по сравнению БК с профилем #{profile_id_searched}. Оба БК - равны. Этот профиль заносим в РЕЗУЛЬТАТ и в список УСПЕШНО проверенных для исключения повтора ПОИСКА"
 

@@ -12,29 +12,59 @@ module SearchHelper
   # Означает ли это, что надо давать сразу отрицат-й ответ?.
   # На входе - два массива Хэшей = 2 БК
   # На выходе: compare_rezult = false or true.
-  def  compare_two_BK(found_bk_arr, search_bk_arr)
-    if found_bk_arr.size.inspect == search_bk_arr.size.inspect
-      logger.info "ПОДРОБНОЕ СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ"
+  #def  compare_two_BK_old(found_bk_arr, search_bk_arr)
+  #  if found_bk_arr.size.inspect == search_bk_arr.size.inspect
+  #    logger.info "ПОДРОБНОЕ СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ"
+  #
+  #    if found_bk_arr - search_bk_arr == []
+  #      compare_rezult = true
+  #      logger.info "BKs - EQUAL   compare_rezult = #{compare_rezult} "
+  #    else
+  #      logger.info "СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ - БК найденного профиля и БК искомого - разной длины -> ОНИ РАЗНЫЕ"
+  #      if  search_bk_arr.size.inspect > found_bk_arr.size.inspect
+  #        rez_arr = found_bk_arr & search_bk_arr #
+  #        logger.info "BKs - UNEQUAL all_profile_rows.size > found_profile_circle.size "
+  #        compare_rezult = false
+  #        #logger.info "go_on_all_profile_rows = #{go_on_all_profile_rows} "
+  #        logger.info "compare_rezult = #{compare_rezult} "
+  #
+  #      end
+  #    end
+  #    return compare_rezult
+  #  end
+  #
+  #  end
 
-      if found_bk_arr - search_bk_arr == []
-        compare_rezult = true
-        logger.info "BKs - EQUAL   compare_rezult = #{compare_rezult} "
+    def  compare_two_BK(found_bk_arr, search_bk_arr)
+
+    if !found_bk_arr.blank?
+      if !search_bk_arr.blank?
+
+        logger.info "СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
+        if found_bk_arr.size.inspect == search_bk_arr.size.inspect
+          if found_bk_arr - search_bk_arr == []
+            compare_rezult = true
+            logger.info "BKs Size = EQUAL, Содержание - ОДИНАКОВОЕ. (Разность = [])"
+          else
+            compare_rezult = false
+            logger.info "BKs Size = EQUAL, Содержание - РАЗНОЕ. (Разность - НЕ != [])"
+          end
+
+        else
+            rez_bk_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
+            compare_rezult = false
+            logger.info "BKs - SIZE = UNEQUAL, Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != [])"
+        end
+
       else
-        compare_rezult = false
-        logger.info "BKs - UNEQUAL   compare_rezult = #{compare_rezult} "
+        logger.info "Error in compare_two_BK. Нет БК для Профиля: search_bk_arr = #{search_bk_arr}"
       end
     else
-      logger.info "СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ - БК найденного профиля и БК искомого - разной длины -> ОНИ РАЗНЫЕ"
-      if  search_bk_arr.size.inspect > found_bk_arr.size.inspect
-        rez_arr = found_bk_arr & search_bk_arr #
-        logger.info "BKs - UNEQUAL all_profile_rows.size > found_profile_circle.size "
-        compare_rezult = false
-        #logger.info "go_on_all_profile_rows = #{go_on_all_profile_rows} "
-        logger.info "compare_rezult = #{compare_rezult} "
-
-      end
+      logger.info "Error in compare_two_BK. Нет БК для Профиля: found_bk_arr = #{found_bk_arr}"
     end
-    return compare_rezult
+
+    #logger.info "compare_rezult = #{compare_rezult} "
+    return compare_rezult, rez_bk_arr
   end
 
 # ВАРИАНТ № 1
@@ -95,17 +125,18 @@ module SearchHelper
   # МЕТОД Получения БК для любого одного профиля из дерева
   # ИСп-ся в Жестком поиске - в hard_search_match
   def get_one_profile_BK(profile_id, user_id)
-    with_whom_connect_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля tree_row в дереве tree_row
-    if !with_whom_connect_users_arr.blank?
-      logger.info "=get_one_profile_BK= connected trees with #{user_id} = with_whom_connect_users_arr #{with_whom_connect_users_arr.inspect}"
-      found_profile_circle = ProfileKey.where(user_id: with_whom_connect_users_arr, profile_id: profile_id).order('relation_id')
+    logger.info "=in get_one_profile_BK="
+    connected_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля
+    if !connected_users_arr.blank?
+      logger.info "Для Юзера = #{user_id} : connected_users_arr = #{connected_users_arr.inspect}"
+      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id).order('relation_id')
       if !found_profile_circle.blank?
         return found_profile_circle # Найден БК
       else
-        logger.info "=get_one_profile_BK= Не найден БК для Профиля #{profile_id} у такого Юзера #{user_id}"
+        logger.info "Error in get_one_profile_BK. Не найден БК для Профиля = #{profile_id} у такого Юзера = #{user_id}"
       end
     else
-      logger.info "=get_one_profile_BK= Нет такого Юзера #{user_id} или не найдены его with_whom_connect_users_arr #{with_whom_connect_users_arr.inspect}"
+      logger.info "Error in get_one_profile_BK. Нет такого Юзера = #{user_id} или не найдены его connected_users_arr = #{connected_users_arr.inspect}"
     end
   end
 
@@ -118,7 +149,7 @@ module SearchHelper
     bk_rows.each do |row|
 
       bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
-      bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
+      bk_arr_w_profiles << row.attributes.except('id','user_id','profile_id','created_at','updated_at') # for further analyze
       #logger.debug "row  = #{row}"
       #logger.debug "bk_arr  = #{bk_arr}"
       #logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
