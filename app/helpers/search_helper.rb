@@ -29,7 +29,6 @@ module SearchHelper
         logger.info "in compare_two_BK: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
         if found_bk_arr.size.inspect == search_bk_arr.size.inspect
           rez_bk_arr = found_bk_arr - search_bk_arr
- #         if found_bk_arr - search_bk_arr == []
           if rez_bk_arr == []
             compare_rezult = true
             logger.info " BKs Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) rez_bk_arr = #{rez_bk_arr}"
@@ -79,8 +78,8 @@ module SearchHelper
   #                {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
   #
 
-# ВАРИАНТ № 1
   # метод получения массива значений одного поля = key в массиве хэшей
+  # без необходимости предварительной сортировки, кот-я может исказить рез-т/
   # На входе:         bk_arr_w_profiles  = [
   #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
   #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>29, "is_name_id"=>125},
@@ -146,7 +145,7 @@ module SearchHelper
   # МЕТОД Получения БК для любого одного профиля из дерева
   # ИСп-ся в Жестком поиске - в hard_search_match
   def get_one_profile_BK(profile_id, user_id)
-    logger.info "=in get_one_profile_BK="
+    # logger.info "=in get_one_profile_BK="
     connected_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля
     if !connected_users_arr.blank?
      # logger.info "Для Юзера = #{user_id} : connected_users_arr = #{connected_users_arr.inspect}"
@@ -175,8 +174,8 @@ module SearchHelper
       #logger.debug "bk_arr  = #{bk_arr}"
       #logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
     end
-    logger.debug "bk_arr  = #{bk_arr}"
-    logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
+    #logger.debug "bk_arr  = #{bk_arr}"
+    #logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
     return bk_arr, bk_arr_w_profiles # Сделан БК в виде массива Хэшей
   end
 

@@ -445,6 +445,9 @@ class ConnectUsersTreesController < ApplicationController
               @final_pos_profiles_arr = search_results[:final_pos_profiles_arr]
               @final_profiles_searched_arr = search_results[:final_profiles_searched_arr]
               @final_profiles_found_arr = search_results[:final_profiles_found_arr]
+              @final_search_profiles_step_arr = search_results[:final_search_profiles_step_arr]
+              @final_found_profiles_step_arr = search_results[:final_found_profiles_step_arr]
+
 
               logger.info ""
               logger.info "** IN connection_of_trees ******** "
@@ -456,11 +459,10 @@ class ConnectUsersTreesController < ApplicationController
               with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
               logger.info "who_connect_users_arr = #{who_connect_users_arr}, with_whom_connect_users_arr = #{with_whom_connect_users_arr}"
               current_profiles_connect_hash = {}
-       #       current_profiles_connect_hash = @final_hard_profiles_to_connect_hash
 
               logger.info "################ TO DO!!! IN HARD SEARCH ##################"
-              @final_search_profiles_step_arr = [[17, 19], [16, 20, 18]] # from hard_search
-              @final_found_profiles_step_arr = [[27, 30], [28, 29, 24]] # from hard_search
+              #@final_search_profiles_step_arr = [[17, 19], [16, 20, 18]] # from hard_search
+              #@final_found_profiles_step_arr = [[27, 30], [28, 29, 24]] # from hard_search
               logger.info "@final_search_profiles_step_arr = #{@final_search_profiles_step_arr}"
               logger.info "@final_found_profiles_step_arr = #{@final_found_profiles_step_arr}"
 
