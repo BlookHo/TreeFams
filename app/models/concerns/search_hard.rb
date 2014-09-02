@@ -7,7 +7,7 @@ module SearchHard
 
     connected_author_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
     author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
-    qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
+ #   qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
     #author_tree_arr = # DEBUGG_TO_VIEW
     # [ # from 3 to 4
@@ -40,15 +40,7 @@ module SearchHard
     hard_search_profiles_from_tree(connected_author_arr, author_tree_arr) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
 
     results = {
-        final_reduced_profiles_hash: @final_reduced_profiles_hash,
-        final_reduced_relations_hash: @final_reduced_relations_hash,
-        wide_user_ids_arr: @wide_user_ids_arr,
-
-        connected_author_arr: connected_author_arr,
-        qty_of_tree_profiles: qty_of_tree_profiles,
-        final_hard_profiles_to_connect_arr: @final_hard_profiles_to_connect_arr,
-        final_trees_search_results_arr: @final_trees_search_results_arr,
-
+        final_hard_profiles_to_connect_hash: @final_hard_profiles_to_connect_hash,
         final_pos_profiles_arr: @final_pos_profiles_arr,
         final_profiles_searched_arr: @final_profiles_searched_arr,
         final_profiles_found_arr: @final_profiles_found_arr
@@ -67,31 +59,25 @@ module SearchHard
     @tree_to_display = []
     @tree_row = []
 
-    ##### Будущие результаты поиска
-    @all_match_trees_arr = []     # Массив совпадений деревьев
-    @all_match_profiles_arr = []  # Массив совпадений профилей
-    @all_match_relations_arr = []  # Массив совпадений отношений
-    #####
+    ##### Будущие результаты поиска? Исп-ся в hard_search - может еще где
+    @all_neg_profiles_arr = []             # Широкий Массив НЕ совпадений профилей
+    #@all_found_profiles_arr = []           # Итоговый массив найденных профилей
 
-    # Исп-ся в hard_search - может еще где
-    @all_wide_match_profiles_arr = []     # Широкий Массив совпадений профилей
-    @all_wide_match_relations_arr = []     # Широкий Массив совпадений отношений
+    ############### Используется в Search_Hard #########################
 
-    @final_searched_and_found_profiles_arr = []  #
-    @final_hard_profiles_to_connect_arr = []  #
+    @final_pos_profiles_arr = []           # # # Широкий Массив совпадений профилей
+    @final_searched_and_found_profiles_arr = []  # ????? На выходе - Зачем так?
+    #  @final_searched_and_found_profiles_arr = [{17=>27, 16=>28, 20=>29, 19=>30, 18=>24}, {19=>30, 17=>27, 18=>24, 16=>28, 20=>29}]
+    @final_profiles_searched_arr = []      # # #
+    @final_profiles_found_arr = []         # # #
 
-    @final_profiles_searched_arr = []  #
-    @final_profiles_found_arr = []  #
-
-    @final_trees_search_results_arr = []  # Широкий Массив совпадений профилей
-    @final_pos_profiles_arr = []          # Широкий Массив совпадений профилей
-    @all_neg_profiles_arr = []          # Широкий Массив НЕ совпадений профилей
-
-    @hard_search_result_profiles = []     #
-    @hard_search_result_relations = []     #
-    @all_found_profiles_arr = []  # Итоговый массив найденных профилей
-
-    @relation_id_searched_arr = []     #_DEBUGG_TO_VIEW Ok
+    ################ Передается To connection#############################################
+    @final_hard_profiles_to_connect_hash = {}   # # # Итоговый ХЭШ профилей для соединения после search_hard
+    @final_search_profiles_step_arr = []        # To connection
+     #   [[17, 19], [16, 20, 18]] #
+    @final_found_profiles_step_arr = []         # To connection
+     #   [[27, 30], [28, 29, 24]] #
+    #####################################################################
 
     logger.info "======================= Запуск цикла поиска по всему массиву заданий ========================= "
     if !tree_arr.blank?
@@ -111,57 +97,20 @@ module SearchHard
 
         ###############  ЗАПУСК ЖЕСТКОГО ПОИСКА ДЛЯ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ
         hard_search_match(connected_users_arr, from_profile_searching, profile_id_searched, relation_id_searched)       # На выходе: @all_match_arr по данному дереву
-        # 2-я версия жесткого поиска
-        #   hard_search_match_old(connected_users_arr, from_profile_searching, profile_id_searched, relation_id_searched)       # На выходе: @all_match_arr по данному дереву
+        ################################################################
       end
     end
 
+    logger.info ""
+    logger.info "=========== После всего цикла по tree_arr - итоговый результат поиска: @final_pos_profiles_arr = #{@final_pos_profiles_arr}"
+    logger.info "=========== ПЕРЕД ПЕРЕХОДОМ В CONNECTION "
 
-    logger.info "=========== После всего цикла по tree_arr - итоговый результат поиска: @all_wide_match_profiles_arr = #{@all_wide_match_profiles_arr}"
-    logger.info "=========== ПЕРЕХОД В CONNECTION "
-
-    #### расширенные РЕЗУЛЬТАТЫ ПОИСКА:
-    if !@all_wide_match_profiles_arr.blank?
-      #### PROFILES
-      all_wide_match_hash = join_arr_of_hashes(@all_wide_match_profiles_arr) if !@all_wide_match_profiles_arr.blank?  # Если найдены совпадения - в @all_match_arr
-      #@all_wide_match_hash = all_wide_match_hash  #_DEBUGG_TO_VIEW
-      @all_wide_match_arr_sorted = Hash[all_wide_match_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
-
-      #@complete_hash = make_complete_hash(@all_wide_match_arr_sorted)  #_DEBUGG_TO_VIEW
-
-      logger.info "********** @all_wide_match_arr_sorted = #{@all_wide_match_arr_sorted} "
-      # @final_reduced_profiles_hash = итоговый Хаш массивов найденных профилей
-      # Здесь - исключаем из результатов - те, в кот-х найдено всего одно совпадение
-      # см. метод reduce_hash
-      # То же - симметрично повторяется для relations
-      @final_reduced_profiles_hash = reduce_hash(make_complete_hash(@all_wide_match_arr_sorted))  # TO VIEW
-      logger.info "********** @final_reduced_profiles_hash = #{@final_reduced_profiles_hash} "
-
-      # @wide_user_ids_arr = итоговый массив найденных деревьев
-      @wide_user_ids_arr = @final_reduced_profiles_hash.keys.flatten  #
-
-      # @wide_profile_ids_arr = итоговый массив хашей найденных профилей
-      @wide_profile_ids_arr = @final_reduced_profiles_hash.values.flatten #
-
-      # @wide_amount_of_profiles = Подсчет количества найденных Профилей в массиве Хэшей
-      @wide_amount_of_profiles = count_profiles_in_hash(@wide_profile_ids_arr)
-
-      #### RELATIONS
-      all_wide_match_relations_hash = join_arr_of_hashes(@all_wide_match_relations_arr) if !@all_wide_match_relations_arr.blank?  # Если найдены совпадения - в @all_match_arr
-      @all_wide_match_relations_sorted = Hash[all_wide_match_relations_hash.sort_by { |k, v| v.size }.reverse] #  Ok Sorting of input hash by values.size arrays Descend
-
-      @final_reduced_relations_hash = reduce_hash(make_complete_hash(@all_wide_match_relations_sorted))  # TO VIEW
-      logger.info "********** @final_reduced_relations_hash = #{@final_reduced_relations_hash} "
-
-      logger.info "********** @final_trees_search_results_arr = #{@final_trees_search_results_arr} "
+    ####  ОБРАБОТКА РЕЗУЛЬТАТОВ ПОИСКА:
+    if !@final_pos_profiles_arr.blank?  # Если были найдены полож-е рез-ты
 
       # Итоговый массив жестко УСПЕШНО позитивно проверенных по БК профилей ДЛЯ ОДНОЙ ИТЕРАЦИИ
       @final_pos_profiles_arr = @final_pos_profiles_arr.flatten(1)
-      logger.info "FINAL @final_pos_profiles_arr = #{@final_pos_profiles_arr}"
-      # @all_neg_profiles_arr - NO USE!?
-      #@all_neg_profiles_arr = @all_neg_profiles_arr.flatten(1) # Итоговый массив жестко негативно проверенных профилей
-      #logger.info "FINAL @all_neg_profiles_arr = #{@all_neg_profiles_arr}"
-
+      logger.info "********** @final_pos_profiles_arr = #{@final_pos_profiles_arr}"
       # Сбор массивов пар профилей из итогового Хэша по итогам search_hard
       profiles_searched_arr = []     #
       profiles_found_arr  = []     #
@@ -183,20 +132,21 @@ module SearchHard
         if !@final_profiles_searched_arr.include?(one_profile)
           @final_profiles_searched_arr << one_profile
           @final_profiles_found_arr << profiles_found_arr[index]
-          @final_hard_profiles_to_connect_arr << {one_profile => profiles_found_arr[index]}
+          @final_hard_profiles_to_connect_hash.merge!({one_profile => profiles_found_arr[index]}) # make new el-t of hash
         end
       end
+      logger.info ""
       logger.info "********** @final_profiles_searched_arr = #{@final_profiles_searched_arr}, @final_profiles_found_arr = #{@final_profiles_found_arr}, "
-      logger.info "********** @final_hard_profiles_to_connect_arr = #{@final_hard_profiles_to_connect_arr}"
+      logger.info "********** @final_hard_profiles_to_connect_hash = #{@final_hard_profiles_to_connect_hash}"
 
+      logger.info "################ TO DO!!! IN HARD SEARCH ##################"
+
+
+      logger.info "********** @final_search_profiles_step_arr = #{@final_search_profiles_step_arr}"
+      logger.info "********** @final_found_profiles_step_arr = #{@final_found_profiles_step_arr}"
 
     else
-      @final_reduced_profiles_hash = []
-      @final_reduced_relations_hash = []
-      @wide_user_ids_arr = []
-      @final_searched_and_found_profiles_arr = []
       @final_pos_profiles_arr = []
-      @final_trees_search_results_arr = []
       @profiles_searched_arr = []
       @profiles_found_arr = []
       logger.info "********** @profiles_searched_arr = #{@profiles_searched_arr}, @profiles_found_arr = #{@profiles_found_arr}, "
@@ -214,10 +164,10 @@ module SearchHard
   def hard_search_match(connected_users, from_profile_searching, profile_id_searched, relation_id_searched)
 
     # Текущие Хэши - для одной итерации поиска
-    hard_search_profiles_hash = Hash.new  # Хэш найденных профилей
-    hard_search_relations_hash = Hash.new # Хэш найденных отношений - соответствущий Хэшу профилей
+    #hard_search_profiles_hash = Hash.new  # Хэш найденных профилей
+    #hard_search_relations_hash = Hash.new # Хэш найденных отношений - соответствущий Хэшу профилей
     searching_and_find_profiles_hash = Hash.new    #  Главный ХАШ соответствия профилей для перезаписи
-    final_trees_search_results_hash = Hash.new    # Хэш соответствий Искомого профиля - найденным. Для использования при объединении
+    #final_trees_search_results_hash = Hash.new    # Хэш соответствий Искомого профиля - найденным. Для использования при объединении
     # По идее - не должно быть массива найденных профилей - для одного искомого
     # Это и есть некорректность, ведущая к дублированию (?).
     # Структура Хэша - { tree.id => [ { profile_searched => [ result_profile1,result_profile1] } ] }
@@ -268,8 +218,8 @@ module SearchHard
                   logger.info "=== БЛИЖНИЙ КРУГ НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} "
                   show_in_logger(found_profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
                   # Преобразования БК в массивы Хэшей по аттрибутам
-                  found_bk_arr, found_bk_profiles_arr = make_arr_hash_BK(found_profile_circle)
-                  search_bk_arr, search_bk_profiles_arr = make_arr_hash_BK(all_profile_rows)
+                  search_bk_arr, search_bk_is_profiles_arr = make_arr_hash_BK(all_profile_rows)
+                  found_bk_arr, found_bk_is_profiles_arr = make_arr_hash_BK(found_profile_circle)
                   # Метод сравнения 2-х БК профилей
                   compare_rezult, rez_bk_arr = compare_two_BK(found_bk_arr,search_bk_arr)
                 else
@@ -279,45 +229,37 @@ module SearchHard
                   logger.info "= Для профиля #{tree_row.profile_id} не найден БК - этот профиль заносим в список НЕ УСПЕШНО проверенных (с отриц.рез-том) для исключения повтора ПОИСКА"
                   neg_profiles_arr << tree_row.profile_id #
                   logger.info "=== Список НЕ УСПЕШНО проверенных профилей: neg_profiles_arr = #{neg_profiles_arr}"
-
                 end
-
 
                 if compare_rezult # БК профилей - одинаковые
                   logger.info "   After compare_rezult CHECK"
                   logger.info "=== ПОЛОЖИТЕЛЬНЫЙ результат поиска профиля #{tree_row.profile_id} по сравнению БК с профилем #{profile_id_searched}. Оба БК - равны. Этот профиль заносим в РЕЗУЛЬТАТ и в список УСПЕШНО проверенных для исключения повтора ПОИСКА"
 
-                  # ВАРИАНТ № 1
-                  field_arr_searched, field_arr_found = get_fields_arrays_from_bk(search_bk_profiles_arr, found_bk_profiles_arr )
-                  field_arr_searched = field_arr_searched.flatten(1)
-                  field_arr_found = field_arr_found.flatten(1)
-                  logger.info "=ВАРИАНТ № 1== В БЛИЖНем КРУГе НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} - Массивы профилей is_profiles :       field_arr_searched = #{field_arr_searched},    field_arr_found = #{field_arr_found} "
-
-                  # ВАРИАНТ № 2
-                  search_bk_profiles_arr_sorted = sort_hash_array(search_bk_profiles_arr)
-                  found_bk_profiles_arr_sorted = sort_hash_array(found_bk_profiles_arr)
-                  search_bk_is_profiles_arr = get_field_array(search_bk_profiles_arr_sorted, "is_profile_id")
-                  found_bk_is_profiles_arr = get_field_array(found_bk_profiles_arr_sorted, "is_profile_id")
-                  logger.info "=ВАРИАНТ № 2== В БЛИЖНем КРУГе НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} - Массивы профилей is_profiles : search_bk_is_profiles_arr = #{search_bk_is_profiles_arr}, found_bk_is_profiles_arr = #{found_bk_is_profiles_arr}"
+                  # Находим массивы значеий полей is_profile для обоих БК
+                  searched_is_profile_arr, found_is_profile_arr = get_fields_arrays_from_bk(search_bk_is_profiles_arr, found_bk_is_profiles_arr )
+                  searched_is_profile_arr = searched_is_profile_arr.flatten(1)
+                  found_is_profile_arr = found_is_profile_arr.flatten(1)
 
                   def searching_and_find_profiles(found_bk_is_profiles_arr,search_bk_is_profiles_arr)
                     search_n_find_profiles_hash = Hash.new
                     search_bk_is_profiles_arr.each_with_index do |arr_el, index|
-                      search_n_find_profiles_hash.merge!( arr_el  => found_bk_is_profiles_arr[index] ) # Главный ХАШ соответствия профилей для перезаписи
+                      search_n_find_profiles_hash.merge!( { arr_el  => found_bk_is_profiles_arr[index] } ) # Главный ХАШ соответствия профилей для перезаписи
                     end
                     return search_n_find_profiles_hash
                   end
 
-                  search_n_find_profiles_hash = searching_and_find_profiles(found_bk_is_profiles_arr,search_bk_is_profiles_arr)
+                  # Получаем Главный ХАШ соответствия профилей для перезаписи
+                  # Находим Хэш значений Для 2-х массивов значений полей is_profile двух БК.
+                  search_n_find_profiles_hash = searching_and_find_profiles(found_is_profile_arr,searched_is_profile_arr)
                   logger.info "search_n_find_profiles_hash = #{search_n_find_profiles_hash}"
-
                   pos_profiles_arr << tree_row.profile_id #
-                  logger.info "=== Список УСПЕШНО проверенных профилей: pos_profiles_arr = #{pos_profiles_arr}"
+                  logger.info "=== ЗАНОСИМ В Список УСПЕШНО проверенных профилей: pos_profiles_arr = #{pos_profiles_arr}"
 
-                  hard_search_profiles_hash.merge!({tree_row.user_id  => {from_profile_searching => [tree_row.profile_id]} } ) # наполнение хэша найденными profile_id
-                  hard_search_relations_hash.merge!({tree_row.user_id  => {from_profile_searching => [relation_id_searched]} } ) # наполнение хэша найденными relation_id
-                  logger.info "hard_search_profiles_hash = #{hard_search_profiles_hash}"
-                  logger.info "hard_search_relations_hash = #{hard_search_relations_hash}"
+                  # Делать здесь:
+                  #@final_search_profiles_step_arr = [[17, 19], [16, 20, 18]] # from hard_search
+                  #@final_found_profiles_step_arr = [[27, 30], [28, 29, 24]] # from hard_search
+
+
 
                   ############### Основная запись найденного профиля
                   # по совпадению БК.
@@ -327,11 +269,7 @@ module SearchHard
                   searching_and_find_profiles_hash.merge!( search_n_find_profiles_hash ) # Главный ХАШ соответствия профилей для перезаписи
                   logger.info "searching_and_find_profiles_hash = #{searching_and_find_profiles_hash}"
 
-
                   ###########################
-
-                  final_trees_search_results_hash.merge!({tree_row.user_id => { profile_id_searched  => pos_profiles_arr } } ) #
-                  logger.info "final_trees_search_results_hash = #{final_trees_search_results_hash}"
                 else
                   #########################################################
                   logger.info "   After compare_rezult CHECK"
@@ -353,7 +291,6 @@ module SearchHard
             logger.info "=== В деревьях сайта ничего не найдено для записи № #{all_profile_rows_No}: #{relation_row.attributes.inspect} === "
             go_on_all_profile_rows = false  # Уст-ка признака ПРОДОЛЖАТЬ в false
             logger.info "!!!!! go_on_all_profile_rows: #{go_on_all_profile_rows} "   #
-            logger.info "В @all_wide_match_profiles_arr - ничего не заносим в этой итерации Поиска "   #
 
           end # end if !relation_match_arr.blank?
 
@@ -365,41 +302,20 @@ module SearchHard
 
     end
 
-    logger.info "РЕЗУЛЬТАТЫ ПОСЛЕ ОДНОЙ ИТЕРАЦИИ - ВСЕХ рядов all_profile_rows"
-    logger.info "=== ===  hard_search_profiles_hash = #{hard_search_profiles_hash}"
-    logger.info "=== ===  hard_search_relations_hash = #{hard_search_relations_hash}"
+    logger.info "НАКОПЛЕННЫЕ РЕЗУЛЬТАТЫ ПОСЛЕ ОЧЕРЕДНОЙ ОДНОЙ ИТЕРАЦИИ - ВСЕХ рядов all_profile_rows"
     logger.info "=== ===  searching_and_find_profiles_hash = #{searching_and_find_profiles_hash}"
-    logger.info "=== ===  final_trees_search_results_hash = #{final_trees_search_results_hash}"
     logger.info "=== Список УСПЕШНО проверенных профилей: pos_profiles_arr = #{pos_profiles_arr}"
     logger.info "=== Список НЕ УСПЕШНО проверенных профилей: neg_profiles_arr = #{neg_profiles_arr}"
 
-    logger.info "НАКОПЛЕННЫЕ РЕЗУЛЬТАТЫ ПОИСКА ПОСЛЕ ОЧЕРЕДНОЙ ОДНОЙ ИТЕРАЦИИ - ЗАПУСКА HARD_SEARCH по ВСЕМУ tree_arr"
-
-    # Для дальнейшего формирования итогов поиска
-    # @all_wide_match_profiles_arr: [{4=>{16=>[27]}}, {4=>{16=>[30]}}]
-    # @all_wide_match_relations_arr: [{4=>{16=>[1]}}, {4=>{16=>[5]}}]
-    @all_wide_match_profiles_arr << hard_search_profiles_hash if !hard_search_profiles_hash.blank? # Заполнение выходного массива хэшей
-    @all_wide_match_relations_arr << hard_search_relations_hash if !hard_search_relations_hash.empty? # Заполнение выходного массива хэшей
-    logger.info "FINAL @all_wide_match_profiles_arr = #{@all_wide_match_profiles_arr}"
-    logger.info "FINAL @all_wide_match_relations_arr = #{@all_wide_match_relations_arr}"
-
-    # Пары совпавших профилей @final_searched_and_found_profiles_arr:  [{17=>27, 16=>28, 20=>29, 19=>30, 18=>24}, {19=>30, 17=>27, 18=>24, 16=>28, 20=>29}]
+    # Накапливание Пар совпавших профилей @final_searched_and_found_profiles_arr:  [{17=>27, 16=>28, 20=>29, 19=>30, 18=>24}, {19=>30, 17=>27, 18=>24, 16=>28, 20=>29}]
     @final_searched_and_found_profiles_arr << searching_and_find_profiles_hash if !searching_and_find_profiles_hash.empty? # Заполнение выходного массива хэшей
     logger.info "FINAL @final_searched_and_found_profiles_arr = #{@final_searched_and_found_profiles_arr}"
-
-    # @all_pos_profiles_arr = [[27], [30]]
-    # @all_neg_profiles_arr = [[28, 27], [25, 28], [24, 26], [29, 35], [34], [28], [29, 35]] - NO USE!?
     @final_pos_profiles_arr << pos_profiles_arr if !pos_profiles_arr.empty? # Заполнение выходного массива профилей проверенных ДЛЯ ОДНОЙ ИТЕРАЦИИ по БК УСПЕШНО
     logger.info "FINAL @final_pos_profiles_arr = #{@final_pos_profiles_arr}"
     @all_neg_profiles_arr << neg_profiles_arr if !neg_profiles_arr.empty? # Заполнение выходного массива профилей проверенных ДЛЯ ОДНОЙ ИТЕРАЦИИ по БК НЕ УСПЕШНО
     logger.info "FINAL @all_neg_profiles_arr = #{@all_neg_profiles_arr}"
 
-    # [{4=>{17=>[27]}}, {4=>{19=>[30]}}]
-    @final_trees_search_results_arr << final_trees_search_results_hash if !final_trees_search_results_hash.empty? # Заполнение выходного массива хэшей
-    logger.info "FINAL @final_trees_search_results_arr = #{@final_trees_search_results_arr}"
-
   end # Конец метода поиска hard_search_match
-
 
 
 end

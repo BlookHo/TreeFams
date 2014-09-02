@@ -441,53 +441,24 @@ class ConnectUsersTreesController < ApplicationController
 
               ######## Сбор рез-тов поиска, необходимых для объединения:
               # !!!! ЗДЕСЬ - ВАЖЕН ПОРЯДОК ПРИСВАИВАНИЯ !!! - КАК ВПОЛУЧЕНИИ search_results!/
-              @final_reduced_profiles_hash = search_results[:final_reduced_profiles_hash]
-              @final_reduced_relations_hash = search_results[:final_reduced_relations_hash]
-              @wide_user_ids_arr = search_results[:wide_user_ids_arr],
-
-              @final_hard_profiles_to_connect_arr = search_results[:final_hard_profiles_to_connect_arr],
-              @final_trees_search_results_arr = search_results[:final_trees_search_results_arr]
-
+              @final_hard_profiles_to_connect_hash = search_results[:final_hard_profiles_to_connect_hash]
               @final_pos_profiles_arr = search_results[:final_pos_profiles_arr]
               @final_profiles_searched_arr = search_results[:final_profiles_searched_arr]
               @final_profiles_found_arr = search_results[:final_profiles_found_arr]
 
               logger.info ""
               logger.info "** IN connection_of_trees ******** "
-
-              bk_arr1  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
-                          {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
-                          {"name_id"=>125, "relation_id"=>5, "is_name_id"=>123},  # -
-                          {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
-
-              bk_arr2  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
-                          {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
-                        #  {"name_id"=>125, "relation_id"=>5, "is_name_id"=>123},
-                          {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130},
-                          {"name_id"=>125, "relation_id"=>8, "is_name_id"=>48}]
-
-              compare_rezult12, rez_bk_arr12 = compare_two_BK(bk_arr1, bk_arr2)
-              logger.info " compare_rezult = #{compare_rezult12}"
-              logger.info " ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_arr12 = #{rez_bk_arr12}"
-              rez_bk_arr = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
-                            {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
-                            {"name_id"=>125, "relation_id"=>5, "is_name_id"=>123},
-                            {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
-
-              rez_bk_arr12 = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
-                              {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
-                              {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
-
-
-
-              logger.info "@final_hard_profiles_to_connect_arr = #{@final_hard_profiles_to_connect_arr}"
-              logger.info "@final_pos_profiles_arr = #{@final_pos_profiles_arr}"
-              logger.info "@final_profiles_searched_arr = #{@final_profiles_searched_arr}, @final_profiles_found_arr = #{@final_profiles_found_arr}"
+              logger.info "@final_hard_profiles_to_connect_hash = #{@final_hard_profiles_to_connect_hash}"
+              # Текущий Хэш профилей для объдинения
+              # Получен из search_hard
+              # Далее - его наращивание новыми парами профилей для объединения.
               who_connect_users_arr = current_user.get_connected_users
               with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
               logger.info "who_connect_users_arr = #{who_connect_users_arr}, with_whom_connect_users_arr = #{with_whom_connect_users_arr}"
+              current_profiles_connect_hash = {}
+       #       current_profiles_connect_hash = @final_hard_profiles_to_connect_hash
 
-              ################ TO DO!!! IN HARD SEARCH ##################
+              logger.info "################ TO DO!!! IN HARD SEARCH ##################"
               @final_search_profiles_step_arr = [[17, 19], [16, 20, 18]] # from hard_search
               @final_found_profiles_step_arr = [[27, 30], [28, 29, 24]] # from hard_search
               logger.info "@final_search_profiles_step_arr = #{@final_search_profiles_step_arr}"
@@ -500,6 +471,8 @@ class ConnectUsersTreesController < ApplicationController
                 one_search_arr = @final_search_profiles_step_arr[arr_ind]
                 one_found_arr = @final_found_profiles_step_arr[arr_ind]
                 logger.info "one_search_arr = #{one_search_arr}, one_found_arr = #{one_found_arr}"
+                #new_connection_hash = {}
+
                 one_search_arr.each_with_index do |profile_searched, index|
                   logger.info "one_search_arr=profile_searched = #{profile_searched}, index = #{index}"
                   profile_found = one_found_arr[index]
@@ -522,29 +495,50 @@ class ConnectUsersTreesController < ApplicationController
                   logger.info " compare_rezult = #{compare_rezult}"
                   logger.info " ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_arr = #{rez_bk_arr}"
 
-                  if !rez_bk_arr.blank? # Если есть какое-то пересечение при сравнении 2-х БК
+                  if !rez_bk_arr.blank? # Если rez_bk_arr != [] - есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х БК
 
-                    #ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_profiles_arr = []
                     new_field_arr_searched, new_field_arr_found, new_connection_hash = get_fields_arrays_from_bk(search_bk_profiles_arr, found_bk_profiles_arr )
                     new_field_arr_searched = new_field_arr_searched.flatten(1)
                     new_field_arr_found = new_field_arr_found.flatten(1)
                     logger.info "=ВАРИАНТ Extraxt is_profile_id из пересечения 2-х БК если оно есть"
-                    logger.info " new_field_arr_searched = #{new_field_arr_searched},    new_field_arr_found = #{new_field_arr_found} "
+                    logger.info " new_field_arr_searched = #{new_field_arr_searched}, new_field_arr_found = #{new_field_arr_found} "
                     logger.info " new_connection_hash = #{new_connection_hash} "
-
                     logger.info " "
-
+                  else
+                    new_connection_hash = {}
                   end
 
+                  @new_connection_hash = new_connection_hash  # DEBUGG_TO_VIEW
+                  diff_hash = current_profiles_connect_hash.diff(new_connection_hash) ###
+                  # ## DEPRECATION WARNING: Hash#diff is no longer used inside of Rails, and is being deprecated with no replacement.
+
+                  logger.info " current_profiles_connect_hash = #{current_profiles_connect_hash} "
+                  logger.info " new_connection_hash = #{new_connection_hash} "
+                  logger.info " diff_hash = #{diff_hash} "
+                  logger.info " "
+
+                  current_profiles_connect_hash = current_profiles_connect_hash.merge!(diff_hash)
+                  logger.info "current_profiles_connect_hash = #{current_profiles_connect_hash} "
+                  logger.info " "
 
                 end
+                current_profiles_connect_hash = current_profiles_connect_hash.merge!(current_profiles_connect_hash)
 
               end
 
+              logger.info "@final_hard_profiles_to_connect_hash = #{@final_hard_profiles_to_connect_hash}"
+              logger.info "ALL current_profiles_connect_hash = #{current_profiles_connect_hash} "
+              logger.info " "
 
+              profiles_to_rewrite = current_profiles_connect_hash.keys
+              profiles_to_destroy = current_profiles_connect_hash.values
 
-                  profiles_to_rewrite, profiles_to_destroy =
-                      get_rewrite_profiles_by_bk(who_connect_users_arr, with_whom_connect_users_arr, @final_reduced_profiles_hash, @final_reduced_relations_hash)
+              logger.info "@final_profiles_searched_arr = #{@final_profiles_searched_arr}, @final_profiles_found_arr = #{@final_profiles_found_arr}"
+              logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
+              logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
+
+                         #profiles_to_rewrite, profiles_to_destroy =
+                  #    get_rewrite_profiles_by_bk(who_connect_users_arr, with_whom_connect_users_arr, @final_reduced_profiles_hash, @final_reduced_relations_hash)
 
 
 

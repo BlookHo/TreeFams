@@ -1,5 +1,14 @@
 module SearchHelper
 
+  # Метод суммы двух хэшей без уничтожения значений при совпадениях ключей
+  # hash_one = {17=>27, 16=>28, 20=>29, 19=>30, 18=>24}
+  # hash_two = {16=>28, 23=>35, 21=>34}
+  # sum_hash = {17=>27, 16=>[28, 28], 20=>29, 19=>30, 18=>24, 23=>35, 21=>34}
+  def sun_two_hashes(hash_one, hash_two)
+    sum_hash = hash_one.merge(hash_two){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
+    return sum_hash
+  end
+
   # Метод сортировки массива хэшей по нескольким ключам
   def sort_hash_array(hash_arr_to_sort)
     sorted_hash_arr = hash_arr_to_sort.sort_by {|h| [ h['name_id'],h['relation_id'],h['is_name_id'] ]}
@@ -12,29 +21,6 @@ module SearchHelper
   # Означает ли это, что надо давать сразу отрицат-й ответ?.
   # На входе - два массива Хэшей = 2 БК
   # На выходе: compare_rezult = false or true.
-  #def  compare_two_BK_old(found_bk_arr, search_bk_arr)
-  #  if found_bk_arr.size.inspect == search_bk_arr.size.inspect
-  #    logger.info "ПОДРОБНОЕ СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ"
-  #
-  #    if found_bk_arr - search_bk_arr == []
-  #      compare_rezult = true
-  #      logger.info "BKs - EQUAL   compare_rezult = #{compare_rezult} "
-  #    else
-  #      logger.info "СРАВНЕНИЕ ДВУХ БЛИЖНИХ КРУГОВ - БК найденного профиля и БК искомого - разной длины -> ОНИ РАЗНЫЕ"
-  #      if  search_bk_arr.size.inspect > found_bk_arr.size.inspect
-  #        rez_arr = found_bk_arr & search_bk_arr #
-  #        logger.info "BKs - UNEQUAL all_profile_rows.size > found_profile_circle.size "
-  #        compare_rezult = false
-  #        #logger.info "go_on_all_profile_rows = #{go_on_all_profile_rows} "
-  #        logger.info "compare_rezult = #{compare_rezult} "
-  #
-  #      end
-  #    end
-  #    return compare_rezult
-  #  end
-  #
-  #  end
-
   def  compare_two_BK(found_bk_arr, search_bk_arr)
 
     if !found_bk_arr.blank?
@@ -68,6 +54,30 @@ module SearchHelper
 
     return compare_rezult, rez_bk_arr
   end
+  # TEST COMPARE 2 BK
+  # bk_arr1  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
+  #            {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
+  #            {"name_id"=>125, "relation_id"=>5, "is_name_id"=>123},  # -
+  #            {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
+  #
+  #bk_arr2  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
+  #            {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
+  #          #  {"name_id"=>125, "relation_id"=>5, "is_name_id"=>123},
+  #            {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130},
+  #            {"name_id"=>125, "relation_id"=>8, "is_name_id"=>48}]
+  #
+  #compare_rezult12, rez_bk_arr12 = compare_two_BK(bk_arr1, bk_arr2)
+  #logger.info " compare_rezult = #{compare_rezult12}"
+  #logger.info " ПЕРЕСЕЧЕНИЕ двух БК: rez_bk_arr12 = #{rez_bk_arr12}"
+  #rez_bk_arr = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
+  #              {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
+  #              {"name_id"=>125, "relation_id"=>5, "is_name_id"=>123},
+  #              {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
+  #
+  #rez_bk_arr12 = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
+  #                {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
+  #                {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
+  #
 
 # ВАРИАНТ № 1
   # метод получения массива значений одного поля = key в массиве хэшей
@@ -113,6 +123,13 @@ module SearchHelper
   end
 
 
+  ## ВАРИАНТ № 2
+  #search_bk_profiles_arr_sorted = sort_hash_array(search_bk_profiles_arr)
+  #found_bk_profiles_arr_sorted = sort_hash_array(found_bk_profiles_arr)
+  #search_bk_is_profiles_arr = get_field_array(search_bk_profiles_arr_sorted, "is_profile_id")
+  #found_bk_is_profiles_arr = get_field_array(found_bk_profiles_arr_sorted, "is_profile_id")
+  #logger.info "=ВАРИАНТ № 2== В БЛИЖНем КРУГе НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} - Массивы профилей is_profiles : search_bk_is_profiles_arr = #{search_bk_is_profiles_arr}, found_bk_is_profiles_arr = #{found_bk_is_profiles_arr}"
+
 # ВАРИАНТ № 2
   # метод получения массива значений одного поля = key в массиве хэшей
   # На входе:         bk_arr_w_profiles  = [
@@ -132,7 +149,7 @@ module SearchHelper
     logger.info "=in get_one_profile_BK="
     connected_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля
     if !connected_users_arr.blank?
-      logger.info "Для Юзера = #{user_id} : connected_users_arr = #{connected_users_arr.inspect}"
+     # logger.info "Для Юзера = #{user_id} : connected_users_arr = #{connected_users_arr.inspect}"
       found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id).order('relation_id')
       if !found_profile_circle.blank?
         return found_profile_circle # Найден БК
