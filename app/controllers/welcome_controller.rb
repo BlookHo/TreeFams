@@ -20,21 +20,21 @@ class WelcomeController < ApplicationController
     end
 
     # PLACE TO DELETE AND RESET DATABASE FOR DEBUGG
-    #ConnectedUser.delete_all             # DEBUGG
-    #ConnectedUser.reset_pk_sequence
-    #
-    #User.delete_all             # DEBUGG
-    #User.reset_pk_sequence
-    #
-    #Tree.delete_all             # DEBUGG
-    #Tree.reset_pk_sequence
-    #
-    #Profile.delete_all          # DEBUGG
-    #Profile.reset_pk_sequence
-    #
-    #ProfileKey.delete_all             # DEBUGG
-    #ProfileKey.reset_pk_sequence
-    #
+    ConnectedUser.delete_all             # DEBUGG
+    ConnectedUser.reset_pk_sequence
+
+    User.delete_all             # DEBUGG
+    User.reset_pk_sequence
+
+    Tree.delete_all             # DEBUGG
+    Tree.reset_pk_sequence
+
+    Profile.delete_all          # DEBUGG
+    Profile.reset_pk_sequence
+
+    ProfileKey.delete_all             # DEBUGG
+    ProfileKey.reset_pk_sequence
+
 
     redirect_to :main_page
   end
