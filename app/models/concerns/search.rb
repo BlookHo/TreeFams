@@ -2,7 +2,7 @@ module Search
   extend ActiveSupport::Concern
   include SearchHelper
 
-  def start_search
+  def start_search    # Запуск мягкого поиска для объединения
 
     connected_author_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
     author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
@@ -58,6 +58,8 @@ module Search
     @tree_arr_len = tree_arr.length  # DEBUGG TO VIEW
     @tree_to_display = []
     @tree_row = []
+
+    #@type_search_message = "Работает SEARCH_SOFT"
 
     ##### Будущие результаты поиска
     @all_match_trees_arr = []     # Массив совпадений деревьев

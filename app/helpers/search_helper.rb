@@ -121,6 +121,30 @@ module SearchHelper
     return field_arr_searched, field_arr_found, new_connection_hash
   end
 
+  def get_step_arrs(pos_profiles_arr, profiles_to_connect_hash)
+    search_profiles_step_arr = []
+    found_profiles_step_arr = []
+    search_step_arr1 = []
+    found_step_arr1 = []
+    search_step_arr2 = []
+    found_step_arr2 = []
+    profiles_to_connect_hash.each do |key,val|
+      if pos_profiles_arr.include?(val)
+        search_step_arr1 << key
+        found_step_arr1 << val
+      else
+        search_step_arr2 << key
+        found_step_arr2 << val
+      end
+    end
+    search_profiles_step_arr << search_step_arr1
+    found_profiles_step_arr << found_step_arr1
+    search_profiles_step_arr << search_step_arr2
+    found_profiles_step_arr << found_step_arr2
+
+    return search_profiles_step_arr, found_profiles_step_arr
+  end
+
 
   ## ВАРИАНТ № 2
   #search_bk_profiles_arr_sorted = sort_hash_array(search_bk_profiles_arr)
@@ -359,6 +383,23 @@ module SearchHelper
     end
   end
 
+  ##Управляемый Метод для изготовления 2-х синхронных UNIQ массивов
+  ##Вход:
+  #def make_uniq_arrays(found_profiles, found_relations)
+  #  found_profiles_uniq = []
+  #  found_relations_uniq = []
+  #
+  #  found_profiles_uniq << found_profiles[0]
+  #  found_relations_uniq << found_relations[0]
+  #  for arr_ind in 1 .. found_profiles.length-1
+  #    if !found_profiles_uniq.include?(found_profiles[arr_ind].to_i) # для исключения случая,
+  #      found_profiles_uniq << found_profiles[arr_ind]
+  #      found_relations_uniq << found_relations[arr_ind]
+  #    end
+  #  end
+  #
+  #  return found_profiles_uniq, found_relations_uniq
+  #end
 
 
 

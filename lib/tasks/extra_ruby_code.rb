@@ -17,6 +17,104 @@ class ExtraCode
   end
 
 
+  # СТАРЫЙ МЕТОД ОПРЕДЕЛЕНИЯ СОВПАДАЮЩИХ ПРОФИЛЕЙ ДЛЯ ПЕРЕЗАПИСИ ПРИ ОБЪЕДИНЕНИИ
+  # Метод дла получения массива обратных профилей для
+  # перезаписи профилей в таблицах
+  # opposite_profiles_arr # DEBUGG_TO_VIEW
+  # who_conn_users_arr - массив id, входящих в объед-ное дерево автора (того, кто соединяется)
+  # with_who_con_usrs_ar - массив id, входящих в объед-ное дерево того, с кем соединяется автор
+  # found_profiles, found_relations
+
+  ######## Обработка результатов поиска для определения профилей для перезаписи
+  ######## для метода get_opposite_profiles_old
+  # !! СОБИРАЕМ МАССИВЫ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ВСЕМ ЮЗЕРАМ В ДЕРЕВЬЯХ - Т.Е.
+  # ПО ВСЕМУ @with_whom_connect_users_arr.
+  #matched_profiles_in_tree = []
+  #matched_relations_in_tree = []
+  #users_in_results = @final_reduced_profiles_hash.keys # users, найденные в поиске
+  #@users_in_results = users_in_results#.uniq # DEBUGG_TO_VIEW
+  #with_whom_connect_users_arr.each do |user_id_in_conn_tree|
+  #  if users_in_results.include?(user_id_in_conn_tree.to_i) # для исключения случая,
+  #    # когда в рез-тах поиска (@final_reduced_profiles_hash)
+  #    # не для всех юзеров из объед-го дерева (with_whom_connect_users_arr) - есть рез-ты
+  #    matched_profiles_arr = @final_reduced_profiles_hash.values_at(user_id_in_conn_tree.to_i)[0].values.flatten
+  #    matched_relations_arr = @final_reduced_relations_hash.values_at(user_id_in_conn_tree.to_i)[0].values.flatten
+  #    matched_profiles_in_tree << matched_profiles_arr
+  #    matched_relations_in_tree << matched_relations_arr
+  #  end
+  #end
+  #found_profiles = matched_profiles_in_tree.flatten(1)  # get one dimension arr
+  #@found_profiles = found_profiles#.uniq # DEBUGG_TO_VIEW
+  #found_relations = matched_relations_in_tree.flatten(1) # get one dimension arr
+  #@found_relations = found_relations#.uniq # DEBUGG_TO_VIEW
+  #@matched_profiles_in_tree = matched_profiles_in_tree # DEBUGG_TO_VIEW
+
+  # Управляемый Метод для изготовления 2-х синхронных UNIQ массивов: found_profiles_uniq, found_relations_uniq
+  #found_profiles_uniq, found_relations_uniq = make_uniq_arrays(found_profiles, found_relations)
+
+  def get_opposite_profiles_old(who_conn_users_arr, with_who_con_usrs_ar, found_profiles, found_relations)
+    opposite_profiles_arr = []  # DEBUGG_TO_VIEW
+    profiles_to_rewrite = [] # - массив профилей, которые остаются
+    profiles_to_destroy = [] # - массив профилей, которые удаляются
+    profiles_relations = [] # - массив отношений, для тех, которые сохраняются в массивах
+    @rewrite_and_destroy_hash = Hash.new
+    logger.info "DEBUG in get_opposite_profiles: START "
+    logger.info " Input users: who_conn_users_arr = #{who_conn_users_arr},  with_who_con_usrs_ar = #{with_who_con_usrs_ar}"
+    logger.info " Input arrays: found_profiles = #{found_profiles},  found_relations = #{found_relations}"
+
+    for arr_ind in 0 .. found_profiles.length-1
+      one_profile = found_profiles[arr_ind]
+      #@one_profile = one_profile # DEBUGG_TO_VIEW
+      one_relation = found_relations[arr_ind]
+      logger.info " For:  one_profile = #{one_profile},  one_relation = #{one_relation}"
+      logger.info " Before each: with_who_con_usrs_ar = #{with_who_con_usrs_ar}"
+      with_who_con_usrs_ar.each do |one_user_in_tree|
+        logger.info " In with_who-Each:  with_who_con_usrs_ar[each] = #{one_user_in_tree} "
+        where_found_tree_row = Tree.where(:user_id => one_user_in_tree, :is_profile_id => one_profile.to_i)[0]
+        #@where_found_tree_row = where_found_tree_row # DEBUGG_TO_VIEW
+        if !where_found_tree_row.blank?
+          logger.info " In with-Each:  where_found_tree_row.is_name_id = #{where_found_tree_row.is_name_id} "
+          logger.info " Before each: who_conn_users_arr = #{who_conn_users_arr} "
+          who_conn_users_arr.each do |one_user_in_conn_tree|
+            logger.info " In who_conn-Each:  who_conn_users_arr[each] = #{one_user_in_conn_tree} "
+            who_found_tree_row = Tree.where(:user_id => one_user_in_conn_tree, :is_name_id => where_found_tree_row.is_name_id.to_i, :relation_id => one_relation,:is_sex_id => where_found_tree_row.is_sex_id.to_i)[0]
+
+            if !who_found_tree_row.blank?
+              logger.info " In who_conn-Each:  who_found_tree_row.is_profile_id = #{who_found_tree_row.is_profile_id} "
+              opposite_profiles_arr << who_found_tree_row.is_profile_id # DEBUGG_TO_VIEW
+              if who_found_tree_row.is_profile_id < found_profiles[arr_ind].to_i
+                profiles_to_rewrite << who_found_tree_row.is_profile_id
+                profiles_to_destroy << found_profiles[arr_ind].to_i
+                @rewrite_and_destroy_hash.merge!({who_found_tree_row.is_profile_id => found_profiles[arr_ind].to_i})
+                # NB перезапись под одним key, если несколько записей!
+                profiles_relations << one_relation.to_i
+              else
+                profiles_to_rewrite << found_profiles[arr_ind].to_i
+                profiles_to_destroy  << who_found_tree_row.is_profile_id
+                @rewrite_and_destroy_hash.merge!({found_profiles[arr_ind].to_i => who_found_tree_row.is_profile_id})
+                # NB перезапись под одним key, если несколько записей!
+                profiles_relations << one_relation.to_i
+              end
+            end
+            logger.info "Growing: To_rewrite arr = #{profiles_to_rewrite}; To_destroy arr = #{profiles_to_destroy}."
+            logger.info "Growing: @profiles_relations = #{profiles_relations};"
+
+          end
+        end
+
+      end
+    end
+    @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
+    @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
+    @profiles_relations = profiles_relations # DEBUGG_TO_VIEW
+    logger.info "Final Массивы для объединения: To_rewrite arr = #{profiles_to_rewrite}; To_destroy arr = #{profiles_to_destroy}."
+    logger.info "Final Массив relations для объединения: @profiles_relations = #{profiles_relations};"
+    logger.info "DEBUG in get_opposite_profiles: END"
+
+    return @rewrite_and_destroy_hash, opposite_profiles_arr, profiles_to_rewrite, profiles_to_destroy, profiles_relations
+  end
+
+
 
   MainController
 

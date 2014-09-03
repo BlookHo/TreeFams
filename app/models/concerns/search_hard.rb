@@ -136,30 +136,6 @@ module SearchHard
       logger.info "********** @final_profiles_searched_arr = #{@final_profiles_searched_arr}, @final_profiles_found_arr = #{@final_profiles_found_arr}, "
       logger.info "********** @final_hard_profiles_to_connect_hash = #{@final_hard_profiles_to_connect_hash}"
 
-  def get_step_arrs(pos_profiles_arr, profiles_to_connect_hash)
-      search_profiles_step_arr = []
-      found_profiles_step_arr = []
-      search_step_arr1 = []
-      found_step_arr1 = []
-      search_step_arr2 = []
-      found_step_arr2 = []
-      profiles_to_connect_hash.each do |key,val|
-        if pos_profiles_arr.include?(val)
-          search_step_arr1 << key
-          found_step_arr1 << val
-        else
-          search_step_arr2 << key
-          found_step_arr2 << val
-        end
-      end
-      search_profiles_step_arr << search_step_arr1
-      found_profiles_step_arr << found_step_arr1
-      search_profiles_step_arr << search_step_arr2
-      found_profiles_step_arr << found_step_arr2
-
-     return search_profiles_step_arr, found_profiles_step_arr
-  end
-
       @final_search_profiles_step_arr, @final_found_profiles_step_arr = get_step_arrs(@final_pos_profiles_arr, @final_hard_profiles_to_connect_hash)
       logger.info "@final_search_profiles_step_arr = #{@final_search_profiles_step_arr}, @final_found_profiles_step_arr = #{@final_found_profiles_step_arr}"
 
