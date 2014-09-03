@@ -147,7 +147,8 @@ class MainController < ApplicationController
       ######## среди других деревьев в ProfileKeys.
       beg_search_time = Time.now   # Начало отсечки времени поиска
       #search_profiles_tree_match(@connected_users_arr, @new_tree_arr)    # Старый вариант запуска поиска
-      search_results = current_user.start_search  #####  Запуск поиска
+   #   search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
+      search_results = current_user.start_search  #####  Запуск поиска с right_profile
       end_search_time = Time.now   # Конец отсечки времени поиска
       @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
       ######## Сбор рез-тов поиска:

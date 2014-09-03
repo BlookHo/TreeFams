@@ -446,10 +446,12 @@ class ConnectUsersTreesController < ApplicationController
               # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
 
               ##############################################################################
-              search_results = current_user.start_search  ##
+          #    search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
+
+              search_results = current_user.start_search  ## Запуск поиска с right_profile
               ###  Запуск МЯГКОГО поиска
               profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(search_results, who_connect_users_arr, with_whom_connect_users_arr)
-              ##  Запуск МЯГКОГО определения совпадающих профилей для объединения
+              #  Запуск МЯГКОГО определения совпадающих профилей для объединения
               # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
 
               ##############################################################################
@@ -475,7 +477,7 @@ class ConnectUsersTreesController < ApplicationController
                   # Проверка найденных массивов перезаписи перед объединением - на повторы
                   complete_dubles_hash = check_duplications(@profiles_to_rewrite, @profiles_to_destroy)
 
-                  if complete_dubles_hash.blank? # Если НЕТ дублирования в массивах
+                  if complete_dubles_hash.empty? # Если НЕТ дублирования в массивах
 
                     @test_arrrs_doubles = "Ok to connect. Connection array(s): - НЕТ Дублирований  "
                     logger.info "Ok to connect. НЕТ Дублирований.  complete_dubles_hash = #{complete_dubles_hash};"
@@ -580,6 +582,9 @@ class ConnectUsersTreesController < ApplicationController
     return complete_dubles_hash
 
   end
+
+
+
 
 
 end
