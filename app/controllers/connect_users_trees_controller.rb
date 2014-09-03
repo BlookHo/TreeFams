@@ -568,6 +568,14 @@ class ConnectUsersTreesController < ApplicationController
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_rewrite) if !indexs_hash_rewrite.blank?
 
     logger.info " complete_dubles_hash = #{complete_dubles_hash};"
+    @complete_dubles_hash = complete_dubles_hash
+
+    if @complete_dubles_hash.empty?
+      @rez_duble = true
+    else
+      @rez_duble = false
+
+    end
 
     return complete_dubles_hash
 
