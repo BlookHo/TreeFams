@@ -349,24 +349,24 @@ end
       # всех видов отношений в блжнем круге для разыскиваемого профиля.
       if relation_id_searched != 0 # Для всех профилей, кот-е не явл. current_user
         # Исключение из результатов поиска
-        if all_profile_rows.length > 3
-
-          found_trees_hash.delete_if {|key, value|  value <= 2 } #  all_profile_rows.length - 1 } #
-          #found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length } #
-          # all_profile_rows.length = размер ближнего круга профиля в дереве current_user.id
-        else
-          #  # Если маленький БК
-          found_trees_hash.delete_if {|key, value|  value <= 1  }  # 1 .. 3 = НАСТРОЙКА!!
-        end
+        #if all_profile_rows.length > 3
+        #
+        #  found_trees_hash.delete_if {|key, value|  value <= 2 } #  all_profile_rows.length - 1 } #
+        #  #found_trees_hash.delete_if {|key, value|  value < all_profile_rows.length } #
+        #  # all_profile_rows.length = размер ближнего круга профиля в дереве current_user.id
+        #else
+        #  #  # Если маленький БК
+        #  found_trees_hash.delete_if {|key, value|  value <= 1  }  # 1 .. 3 = НАСТРОЙКА!!
+        #end
 
       else
-        if all_profile_rows.length > 3 #<= 3
-          found_trees_hash.delete_if {|key, value|  value <= 2 } #all_profile_rows.length  }  # 1 .. 3 = НАСТРОЙКА!!
-          #  # Исключение из результатов поиска групп с малым кол-вом совпадений в других деревьях or value < all_profile_rows.length
-        else
-          #  # Если маленький БК
-          found_trees_hash.delete_if {|key, value|  value <= 1  }  # 1 .. 2 = НАСТРОЙКА!!
-        end
+        #if all_profile_rows.length > 3 #<= 3
+        #  found_trees_hash.delete_if {|key, value|  value <= 2 } #all_profile_rows.length  }  # 1 .. 3 = НАСТРОЙКА!!
+        #  #  # Исключение из результатов поиска групп с малым кол-вом совпадений в других деревьях or value < all_profile_rows.length
+        #else
+        #  #  # Если маленький БК
+        #  found_trees_hash.delete_if {|key, value|  value <= 1  }  # 1 .. 2 = НАСТРОЙКА!!
+        #end
 
       end
 
