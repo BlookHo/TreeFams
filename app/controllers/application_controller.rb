@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
   def get_connected_users_tree(connected_users_arr)
     # Этот метод оставлен здесь для отладочного отображения
     # tree_arr
-    # В search.rb исп-ся get_connected_tree(connected_users_arr)
+    # В search_soft.rb исп-ся get_connected_tree(connected_users_arr)
 
     tree_arr = []
     check_tree_arr = [] # "опорный массив" - для удаления повторных элементов при формировании tree_arr

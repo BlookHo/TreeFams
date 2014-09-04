@@ -115,6 +115,8 @@ class ConnectUsersTreesController < ApplicationController
 
   end
 
+
+
   # Для SEARCH_SOFT!
   # Метод дла получения массива обратных профилей для
   # перезаписи профилей в таблицах
@@ -391,6 +393,109 @@ class ConnectUsersTreesController < ApplicationController
 
   end ## END OF NEW METHOD определения массивов для перезаписи
 
+  #####  Запуск поиска 1-й версии - самый первый
+  # ПЕРВЫЙ МЕТОД ОПРЕДЕЛЕНИЯ СОВПАДАЮЩИХ ПРОФИЛЕЙ ДЛЯ ПЕРЕЗАПИСИ ПРИ ОБЪЕДИНЕНИИ
+  # Метод дла получения массива обратных профилей для
+  # перезаписи профилей в таблицах
+  # opposite_profiles_arr # DEBUGG_TO_VIEW
+  # who_conn_users_arr - массив id, входящих в объед-ное дерево автора (того, кто соединяется)
+  # with_who_con_usrs_ar - массив id, входящих в объед-ное дерево того, с кем соединяется автор
+  # found_profiles, found_relations
+
+  # Управляемый Метод для изготовления 2-х синхронных UNIQ массивов: found_profiles_uniq, found_relations_uniq
+  #found_profiles_uniq, found_relations_uniq = make_uniq_arrays(found_profiles, found_relations)
+
+  def get_opposite_profiles_first(search_results,who_conn_users_arr, with_who_con_usrs_ar) #, final_reduced_profiles_hash, final_reduced_relations_hash)
+
+    final_reduced_profiles_hash = search_results[:final_reduced_profiles_hash]
+    final_reduced_relations_hash = search_results[:final_reduced_relations_hash]
+
+    ######## Обработка результатов поиска для определения профилей для перезаписи
+    ######## для метода get_opposite_profiles_old
+    # !! СОБИРАЕМ МАССИВЫ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ВСЕМ ЮЗЕРАМ В ДЕРЕВЬЯХ - Т.Е.
+    # ПО ВСЕМУ @with_whom_connect_users_arr.
+    matched_profiles_in_tree = []
+    matched_relations_in_tree = []
+    users_in_results = final_reduced_profiles_hash.keys # users, найденные в поиске
+    @users_in_results = users_in_results#.uniq # DEBUGG_TO_VIEW
+    with_who_con_usrs_ar.each do |user_id_in_conn_tree|
+      if users_in_results.include?(user_id_in_conn_tree.to_i) # для исключения случая,
+        # когда в рез-тах поиска (@final_reduced_profiles_hash)
+        # не для всех юзеров из объед-го дерева (with_whom_connect_users_arr) - есть рез-ты
+        matched_profiles_arr = final_reduced_profiles_hash.values_at(user_id_in_conn_tree.to_i)[0].values.flatten
+        matched_relations_arr = final_reduced_relations_hash.values_at(user_id_in_conn_tree.to_i)[0].values.flatten
+        matched_profiles_in_tree << matched_profiles_arr
+        matched_relations_in_tree << matched_relations_arr
+      end
+    end
+    found_profiles = matched_profiles_in_tree.flatten(1)  # get one dimension arr
+    @found_profiles = found_profiles#.uniq # DEBUGG_TO_VIEW
+    found_relations = matched_relations_in_tree.flatten(1) # get one dimension arr
+    @found_relations = found_relations#.uniq # DEBUGG_TO_VIEW
+    @matched_profiles_in_tree = matched_profiles_in_tree # DEBUGG_TO_VIEW
+
+
+    opposite_profiles_arr = []  # DEBUGG_TO_VIEW
+    profiles_to_rewrite = [] # - массив профилей, которые остаются
+    profiles_to_destroy = [] # - массив профилей, которые удаляются
+    profiles_relations = [] # - массив отношений, для тех, которые сохраняются в массивах
+    @rewrite_and_destroy_hash = Hash.new
+    logger.info "DEBUG in get_opposite_profiles: START "
+    logger.info " Input users: who_conn_users_arr = #{who_conn_users_arr},  with_who_con_usrs_ar = #{with_who_con_usrs_ar}"
+    logger.info " Input arrays: found_profiles = #{found_profiles},  found_relations = #{found_relations}"
+
+    for arr_ind in 0 .. found_profiles.length-1
+      one_profile = found_profiles[arr_ind]
+      #@one_profile = one_profile # DEBUGG_TO_VIEW
+      one_relation = found_relations[arr_ind]
+      logger.info " For:  one_profile = #{one_profile},  one_relation = #{one_relation}"
+      logger.info " Before each: with_who_con_usrs_ar = #{with_who_con_usrs_ar}"
+      with_who_con_usrs_ar.each do |one_user_in_tree|
+        logger.info " In with_who-Each:  with_who_con_usrs_ar[each] = #{one_user_in_tree} "
+        where_found_tree_row = Tree.where(:user_id => one_user_in_tree, :is_profile_id => one_profile.to_i)[0]
+        #@where_found_tree_row = where_found_tree_row # DEBUGG_TO_VIEW
+        if !where_found_tree_row.blank?
+          logger.info " In with-Each:  where_found_tree_row.is_name_id = #{where_found_tree_row.is_name_id} "
+          logger.info " Before each: who_conn_users_arr = #{who_conn_users_arr} "
+          who_conn_users_arr.each do |one_user_in_conn_tree|
+            logger.info " In who_conn-Each:  who_conn_users_arr[each] = #{one_user_in_conn_tree} "
+            who_found_tree_row = Tree.where(:user_id => one_user_in_conn_tree, :is_name_id => where_found_tree_row.is_name_id.to_i, :relation_id => one_relation,:is_sex_id => where_found_tree_row.is_sex_id.to_i)[0]
+
+            if !who_found_tree_row.blank?
+              logger.info " In who_conn-Each:  who_found_tree_row.is_profile_id = #{who_found_tree_row.is_profile_id} "
+              opposite_profiles_arr << who_found_tree_row.is_profile_id # DEBUGG_TO_VIEW
+              if who_found_tree_row.is_profile_id < found_profiles[arr_ind].to_i
+                profiles_to_rewrite << who_found_tree_row.is_profile_id
+                profiles_to_destroy << found_profiles[arr_ind].to_i
+                @rewrite_and_destroy_hash.merge!({who_found_tree_row.is_profile_id => found_profiles[arr_ind].to_i})
+                # NB перезапись под одним key, если несколько записей!
+                profiles_relations << one_relation.to_i
+              else
+                profiles_to_rewrite << found_profiles[arr_ind].to_i
+                profiles_to_destroy  << who_found_tree_row.is_profile_id
+                @rewrite_and_destroy_hash.merge!({found_profiles[arr_ind].to_i => who_found_tree_row.is_profile_id})
+                # NB перезапись под одним key, если несколько записей!
+                profiles_relations << one_relation.to_i
+              end
+            end
+            logger.info "Growing: To_rewrite arr = #{profiles_to_rewrite}; To_destroy arr = #{profiles_to_destroy}."
+            logger.info "Growing: @profiles_relations = #{profiles_relations};"
+
+          end
+        end
+
+      end
+    end
+    @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
+    @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
+    @profiles_relations = profiles_relations # DEBUGG_TO_VIEW
+    logger.info "Final Массивы для объединения: To_rewrite arr = #{profiles_to_rewrite}; To_destroy arr = #{profiles_to_destroy}."
+    logger.info "Final Массив relations для объединения: @profiles_relations = #{profiles_relations};"
+    logger.info "DEBUG in get_opposite_profiles: END"
+
+    return profiles_to_rewrite, profiles_to_destroy
+  end
+
   ######## Главный стартовый метод дла перезаписи профилей в таблицах
   # Вход:
   # current_user_id = params[:current_user_id] = who_found_user_id - Автор дерева, который ищет
@@ -437,22 +542,26 @@ class ConnectUsersTreesController < ApplicationController
               beg_search_time = Time.now   # Начало отсечки времени поиска
 
               ##############################################################################
-              ##### ВЫБОР ВИДА ПОИСКА: start_hard_search (жесткий) или start_search (мягкий)
+              ##### ВЫБОР ВИДА ПОИСКА: start_hard_search (жесткий - по совпадению БК),
+              # или start_search_first (1-й версии - самый первый),
+              # или start_search (мягкий - 2-я версия, с определением right_profile по макс. кол-ву совпадений),
               ##############################################################################
-              #search_results = current_user.start_hard_search  ##
-              ####  Запуск ЖЕСТКОГО поиска
-              #profiles_to_rewrite, profiles_to_destroy =  get_rewrite_profiles_by_bk(search_results) ##
-              #####  Запуск ЖЕСТКОГО определения совпадающих профилей для объединения
+              #####  Запуск ЖЕСТКОГО поиска
+       #       search_results = current_user.start_hard_search  ##
               # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
+       #      profiles_to_rewrite, profiles_to_destroy =  get_rewrite_profiles_by_bk(search_results) ##
 
               ##############################################################################
-          #    search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
-
-              search_results = current_user.start_search  ## Запуск поиска с right_profile
-              ###  Запуск МЯГКОГО поиска
-              profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(search_results, who_connect_users_arr, with_whom_connect_users_arr)
-              #  Запуск МЯГКОГО определения совпадающих профилей для объединения
+              #####  Запуск поиска 1-й версии - самый первый
+              search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
               # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
+              profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles_first(search_results, who_connect_users_arr, with_whom_connect_users_arr) #, final_reduced_profiles_hash, final_reduced_relations_hash)
+
+              ##############################################################################
+              #####  Запуск МЯГКОГО поиска - 2-я версия
+       #      search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
+              # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
+       #      profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(search_results, who_connect_users_arr, with_whom_connect_users_arr)
 
               ##############################################################################
 
@@ -484,10 +593,10 @@ class ConnectUsersTreesController < ApplicationController
 
                     ###################################################################
                     ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-                                  connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+                       #           connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
                     ####################################################################
                     ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-                                connect_users(current_user_id.to_i, user_id.to_i)
+                        #        connect_users(current_user_id.to_i, user_id.to_i)
                     ##################################################################
                   else
                     logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"
@@ -523,8 +632,8 @@ class ConnectUsersTreesController < ApplicationController
   # .
   def check_duplications(profiles_to_rewrite, profiles_to_destroy)
 
-    logger.info "In check_duplicationst"
-    logger.info " profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy}."
+    #logger.info "In check_duplicationst"
+    #logger.info " profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy}."
 
     # Извлечение из массива - повторяющиеся эл-ты в виде массива
     def repeated(array)
@@ -534,7 +643,7 @@ class ConnectUsersTreesController < ApplicationController
     end
 
     repeated_destroy = repeated(profiles_to_destroy)
-    logger.info " repeated_destroy = #{repeated_destroy};"
+    #logger.info " repeated_destroy = #{repeated_destroy};"
     indexs_hash_destroy = {}
     if !repeated_destroy.blank?
       for i in 0 .. repeated_destroy.length-1
@@ -547,10 +656,10 @@ class ConnectUsersTreesController < ApplicationController
         indexs_hash_destroy.merge!(repeated_destroy[i] => arr_of_dubles)
       end
     end
-    logger.info "indexs_hash_destroy = #{indexs_hash_destroy};"
+    #logger.info "indexs_hash_destroy = #{indexs_hash_destroy};"
 
     repeated_rewrite = repeated(profiles_to_rewrite)
-    logger.info " repeated_rewrite = #{repeated_rewrite};"
+    #logger.info " repeated_rewrite = #{repeated_rewrite};"
     indexs_hash_rewrite = {}
     if !repeated_rewrite.blank?
       for i in 0 .. repeated_rewrite.length-1
@@ -563,21 +672,20 @@ class ConnectUsersTreesController < ApplicationController
         indexs_hash_rewrite.merge!(repeated_rewrite[i] => arr_of_dubles)
       end
     end
-    logger.info "indexs_hash_rewrite = #{indexs_hash_rewrite};"
+    #logger.info "indexs_hash_rewrite = #{indexs_hash_rewrite};"
 
     complete_dubles_hash = {}
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_destroy) if !indexs_hash_destroy.blank?
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_rewrite) if !indexs_hash_rewrite.blank?
 
-    logger.info " complete_dubles_hash = #{complete_dubles_hash};"
-    @complete_dubles_hash = complete_dubles_hash
+    #logger.info " complete_dubles_hash = #{complete_dubles_hash};"
+    @complete_dubles_hash = complete_dubles_hash # DEBUGG_TO_VIEW
 
-    if @complete_dubles_hash.empty?
-      @rez_duble = true
-    else
-      @rez_duble = false
-
-    end
+    #if @complete_dubles_hash.empty? # DEBUGG_TO_VIEW
+    #  @rez_duble = true
+    #else
+    #  @rez_duble = false
+    #end
 
     return complete_dubles_hash
 
@@ -588,3 +696,21 @@ class ConnectUsersTreesController < ApplicationController
 
 
 end
+
+#Trees - до объединения 5 и 6
+#
+#34;5;34;0;FALSE;"2014-09-03 17:13:05.120538";"2014-09-03 17:13:05.120538";28;34;28;1
+#35;5;34;1;FALSE;"2014-09-03 17:13:05.140774";"2014-09-03 17:13:05.140774";28;35;422;1
+#36;5;34;2;FALSE;"2014-09-03 17:13:05.163513";"2014-09-03 17:13:05.163513";28;36;31;0
+#37;5;34;5;FALSE;"2014-09-03 17:13:05.185214";"2014-09-03 17:13:05.185214";28;37;340;1
+#38;5;34;8;FALSE;"2014-09-03 17:13:05.207905";"2014-09-03 17:13:05.207905";28;38;98;0
+#39;5;34;3;FALSE;"2014-09-03 17:13:05.22938";"2014-09-03 17:13:05.22938";28;39;271;1
+#40;5;34;3;FALSE;"2014-09-03 17:13:05.251475";"2014-09-03 17:13:05.251475";28;40;284;1
+#41;6;41;0;FALSE;"2014-09-03 17:14:14.129685";"2014-09-03 17:14:14.129685";98;41;98;0
+#42;6;41;1;FALSE;"2014-09-03 17:14:14.142026";"2014-09-03 17:14:14.142026";98;42;343;1
+#43;6;41;2;FALSE;"2014-09-03 17:14:14.153521";"2014-09-03 17:14:14.153521";98;43;214;0
+#44;6;41;5;FALSE;"2014-09-03 17:14:14.173317";"2014-09-03 17:14:14.173317";98;44;340;1
+#45;6;41;7;FALSE;"2014-09-03 17:14:14.186444";"2014-09-03 17:14:14.186444";98;45;28;1
+#46;6;41;3;FALSE;"2014-09-03 17:14:14.197927";"2014-09-03 17:14:14.197927";98;46;284;1
+
+

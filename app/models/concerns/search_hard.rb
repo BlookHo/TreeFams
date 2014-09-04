@@ -2,6 +2,7 @@ module SearchHard
   extend ActiveSupport::Concern
   include SearchHelper
 
+  #####  Запуск ЖЕСТКОГО поиска
 
   def start_hard_search # Запуск жесткого поиска для объединения
 
@@ -51,6 +52,7 @@ module SearchHard
     return results
   end
 
+  #####  Запуск ЖЕСТКОГО поиска
   # Основной поиск по дереву Автора - Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
@@ -149,6 +151,7 @@ module SearchHard
   end
 
 
+  #####  Запуск ЖЕСТКОГО поиска
   # ЖЕСТКИЙ Поиск совпадений для одного из профилей БК current_user
   # Берем параметр: profile_id из массива  = profiles_tree_arr[i][6].
   # Единый подход к поиску для всех relation_id

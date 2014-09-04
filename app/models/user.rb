@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
-  include Search
+  include SearchSoft
   include SearchHard
+  include SearchFirst
   include UserLock
 
   has_secure_password

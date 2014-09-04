@@ -146,9 +146,22 @@ class MainController < ApplicationController
       ######## Основной поиск от дерева Автора (вместе с соединенными)
       ######## среди других деревьев в ProfileKeys.
       beg_search_time = Time.now   # Начало отсечки времени поиска
-      #search_profiles_tree_match(@connected_users_arr, @new_tree_arr)    # Старый вариант запуска поиска
-   #   search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
-      search_results = current_user.start_search  #####  Запуск поиска с right_profile
+
+      ##############################################################################
+      ##### ВЫБОР ВИДА ПОИСКА: start_hard_search (жесткий - по совпадению БК),
+      # или start_search_first (1-й версии - самый первый),
+      # или start_search (мягкий - 2-я версия, с определением right_profile по макс. кол-ву совпадений),
+      ##############################################################################
+
+      #####  Запуск ЖЕСТКОГО поиска
+      #search_results = current_user.start_hard_search  ##
+
+      #####  Запуск поиска 1-й версии - самый первый
+      search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
+
+      #####  Запуск МЯГКОГО поиска - 2-я версия
+      #search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
+
       end_search_time = Time.now   # Конец отсечки времени поиска
       @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
       ######## Сбор рез-тов поиска:
