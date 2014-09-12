@@ -232,6 +232,56 @@ module SearchHelper
     end
   end
 
+  # Автоматическое наполнение хэша сущностями и
+  # количестpвом появлений каждой сущности.
+  # @note GET /
+  # @param admin_page [Integer] опциональный номер страницы
+  # @see Place = main_contrl.,
+  ################# FILLING OF HASH WITH KEYS AND/OR VALUES
+  def fill_arrays_in_hash(one_hash, tree, profile, relation) # Filling of hash with keys and values, according to key occurance
+   # rez_hash = Hash.new
+    logger.info " !!!!!!!!!!!!!!!! In fill_arrays_in_hash_"
+    logger.info " tree = #{tree}, profile = #{profile} , relation = #{relation} "
+
+    test_tree = one_hash.key?(tree) # Is profile_searched in one_hash?
+    if test_tree == false #  "key = profile_searched YET NOT in hash - make new hash in hash"
+
+      one_hash.merge!(tree => { profile => [relation] } ) # include new profile_searched with new profile with new array in hash
+
+    else
+
+      current_hash = one_hash.fetch(tree) # get hash for tree
+      #current_hash = one_hash.values_at(tree) # get hash for tree
+      #current_hash.to_h
+      logger.info " current_hash = #{current_hash} "
+      test_profile_found = current_hash.key?(profile) # Is  elem in one_hash?
+      if test_profile_found == false #  "key=profile NOT Found in hash"
+        current_hash.merge!({profile => [relation]}) # include profile with new array in hash
+        logger.info " new current_hash = #{current_hash} "
+        one_hash.merge!(tree => current_hash ) # наполнение хэша соответствиями найденных профилей и найденных отношений
+        logger.info " one_hash = #{one_hash} "
+
+      else  #  "Found in hash"
+        value_array = current_hash.values_at(profile)
+        value_array << relation
+        value_array = value_array.flatten(1)
+        current_hash.merge!(profile => value_array ) # наполнение хэша соответствиями найденных профилей и найденных отношений
+        logger.info " current_hash = #{current_hash} "
+        one_hash.merge!(tree => current_hash ) # наполнение хэша соответствиями найденных профилей и найденных отношений
+        logger.info " one_hash = #{one_hash} "
+
+      end
+
+    end
+
+    return one_hash
+
+  end
+
+
+
+
+
   # Получение массива дерева соединенных Юзеров из Tree
   #  На входе - массив соединенных Юзеров
   # Используется 2 массива для исключения повторов

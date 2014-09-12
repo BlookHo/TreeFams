@@ -141,6 +141,39 @@ class MainController < ApplicationController
       @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
 # DEBUGG_TO_VIEW
 
+      @new_method_profiles_found_arr = #{11=> [12,13], 23 => [14,15], 10=>[3,4,5] }
+    {
+        10 => { 59=>[1, 7, 3, 3, 3], 55=>[7, 3, 3, 3], 54=>[3], 51=>[3]} ,
+        11 => { 68=>[8, 3, 3, 3, 1, 2], 62=>[8, 3, 3, 3, 1, 2], 67=>[3, 3, 2], 69=>[2]} ,
+        12 => { 71=>[2, 1, 5, 5], 76=>[2, 1, 5, 5]}
+    }
+
+
+      #[
+      # 65=>{
+      #       10 => { 59=>[1, 7, 3, 3, 3], 55=>[7, 3, 3, 3], 54=>[3], 51=>[3]} ,
+      #       11 => { 68=>[8, 3, 3, 3, 1, 2], 62=>[8, 3, 3, 3, 1, 2], 67=>[3, 3, 2], 69=>[2]} ,
+      #       12 => { 71=>[2, 1, 5, 5], 76=>[2, 1, 5, 5]}
+      #       },
+      # 66=>{
+      #     10 => { 51=>[1, 7, 3, 3, 3], 55=>[7, 3, 3, 3], 54=>[3], 57=>[3]} ,
+      #     11 => { 69=>[8, 3, 3, 3, 1, 2], 62=>[8, 3, 3, 3, 1, 2], 67=>[3, 3, 2], 66=>[2]} ,
+      #     12 => { 71=>[2, 1, 5, 5], 76=>[2, 1, 5, 5]}
+      # },
+      # 67=>{
+      #     10 => { 59=>[1, 7, 3, 3, 3], 55=>[7, 3, 3, 3], 54=>[3], 51=>[3]} ,
+      #     11 => { 68=>[8, 3, 3, 3, 1, 2], 62=>[8, 3, 3, 3, 1, 2], 67=>[3, 3, 2], 66=>[2]} ,
+      #     12 => { 71=>[2, 1, 5, 5], 76=>[2, 1, 5, 5]}
+      # }
+      #]
+
+
+
+      tree = 11
+      tree_row_profile_id = 68
+      relation_row_relation_id = 10
+      @new_method_profiles_found_arr = fill_arrays_in_hash(@new_method_profiles_found_arr, tree, tree_row_profile_id, relation_row_relation_id)
+
 
       ################################
       ######## Основной поиск от дерева Автора (вместе с соединенными)
@@ -157,10 +190,10 @@ class MainController < ApplicationController
       #search_results = current_user.start_hard_search  ##
 
       #####  Запуск поиска 1-й версии - самый первый
-      search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
+      #search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
 
       #####  Запуск МЯГКОГО поиска - 2-я версия
-      #search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
+      search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
 
       end_search_time = Time.now   # Конец отсечки времени поиска
       @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
@@ -171,6 +204,7 @@ class MainController < ApplicationController
       @qty_of_tree_profiles = search_results[:qty_of_tree_profiles] # To view
       @connected_author_arr = search_results[:connected_author_arr]
 
+      @new_profiles_found_arr = search_results[:new_profiles_found_arr]
 
       # Для отладки # DEBUGG_TO_VIEW
       @author_id = current_user.id # DEBUGG_TO_VIEW
@@ -182,8 +216,8 @@ class MainController < ApplicationController
       ######## Запуск метода формирования путей
       ######## отображения рез-тов на Главной
 
-      make_search_results_paths(@final_reduced_profiles_hash) #
-   #  make_search_results_paths({})  # DEBUGG_TO_VIEW
+    #  make_search_results_paths(@final_reduced_profiles_hash) #
+     make_search_results_paths({})  # DEBUGG_TO_VIEW
 
 
     end

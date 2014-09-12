@@ -553,15 +553,15 @@ class ConnectUsersTreesController < ApplicationController
 
               ##############################################################################
               #####  Запуск поиска 1-й версии - самый первый
-              search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
+       #       search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
               # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-              profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles_first(search_results, who_connect_users_arr, with_whom_connect_users_arr) #, final_reduced_profiles_hash, final_reduced_relations_hash)
+       #       profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles_first(search_results, who_connect_users_arr, with_whom_connect_users_arr) #, final_reduced_profiles_hash, final_reduced_relations_hash)
 
               ##############################################################################
               #####  Запуск МЯГКОГО поиска - 2-я версия
-       #      search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
+             search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
               # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-       #      profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(search_results, who_connect_users_arr, with_whom_connect_users_arr)
+             profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(search_results, who_connect_users_arr, with_whom_connect_users_arr)
 
               ##############################################################################
 
@@ -593,10 +593,10 @@ class ConnectUsersTreesController < ApplicationController
 
                     ###################################################################
                     ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-                                  connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+                      #            connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
                     ####################################################################
                     ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-                               connect_users(current_user_id.to_i, user_id.to_i)
+                       #        connect_users(current_user_id.to_i, user_id.to_i)
                     ##################################################################
                   else
                     logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"
