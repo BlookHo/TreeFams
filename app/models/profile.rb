@@ -24,6 +24,7 @@ class Profile < ActiveRecord::Base
     [self.to_name, self.surname].join(' ')
   end
 
+
   # Эксперименты по выводу кругов в объедененных деревьях
   # получает на вход id деревьев из которых надо собрать ближний круг
   def circle(user_ids)

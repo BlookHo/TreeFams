@@ -232,6 +232,29 @@ module SearchHelper
     end
   end
 
+  # NEW SEARCH method
+  # получает на вход id деревьев из которых надо собрать ближний круг profile_id
+  # в виде двух хэшей: хэш профилей и хэш их отношений к self.id
+  def profile_circle_hash(user_ids, profile_id)
+
+    profiles_circle_hash = Hash.new
+    profiles_arr = []
+    relations_circle_hash = Hash.new
+    relations_arr = []
+    profiles_arr << profile_id
+    relations_arr << 0
+    rows = ProfileKey.where(user_id: user_ids, profile_id: profile_id).order('relation_id')#.includes(:profile_id, :relation_id).uniq_by(&:is_profile_id)
+    rows.each do |row|
+      profiles_arr << row.is_profile_id
+      relations_arr << row.relation_id
+    end
+    profiles_circle_hash.merge!(profile_id => profiles_arr ) #
+    relations_circle_hash.merge!(profile_id => relations_arr ) #
+    return profiles_circle_hash, relations_circle_hash
+
+  end
+
+  # NEW SEARCH method
   # Автоматическое наполнение хэша сущностями и
   # количестpвом появлений каждой сущности.
   # @note GET /
