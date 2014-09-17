@@ -15,7 +15,15 @@ module SearchHelper
     return sorted_hash_arr
   end
 
+  # Метод получения НЕ общей части 2-х БК профилей
+  def get_delta_bk(first_bk, second_bk, common_bk_arr)
+    #one = (first_bk - common_bk_arr)
+    #two = (second_bk - common_bk_arr)
+    #logger.info " get_delta_bk: one = #{one}, two = #{two}"
+    delta_bk = (first_bk - common_bk_arr) + (second_bk - common_bk_arr)
 
+    return delta_bk
+  end
   # Метод сравнения 2-х БК профилей
   # этот метод требует развития - что делать, когда два БК не равны?
   # Означает ли это, что надо давать сразу отрицат-й ответ?.
@@ -25,23 +33,25 @@ module SearchHelper
 
     if !found_bk_arr.blank?
       if !search_bk_arr.blank?
-
+        delta = []
         logger.info "in compare_two_BK: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
         if found_bk_arr.size.inspect == search_bk_arr.size.inspect
-          rez_bk_arr = found_bk_arr - search_bk_arr
-          if rez_bk_arr == []
+          common_bk_arr = found_bk_arr - search_bk_arr
+          if common_bk_arr == []
             compare_rezult = true
-            logger.info " BKs Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) rez_bk_arr = #{rez_bk_arr}"
+            logger.info " BKs Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_bk_arr = #{common_bk_arr}"
           else
-            rez_bk_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
+            common_bk_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
             compare_rezult = false
-            logger.info "BKs Size = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) rez_bk_arr = #{rez_bk_arr}"
+            logger.info "BKs Size = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_bk_arr = #{common_bk_arr}"
+            delta = get_delta_bk(found_bk_arr, search_bk_arr, common_bk_arr)
           end
 
         else
-            rez_bk_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
-            compare_rezult = false
-            logger.info "BKs - SIZE = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != [])"
+          common_bk_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
+          compare_rezult = false
+          logger.info "BKs - SIZE = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != [])"
+          delta = get_delta_bk(found_bk_arr, search_bk_arr, common_bk_arr)
         end
 
       else
@@ -51,7 +61,7 @@ module SearchHelper
       logger.info "Error in compare_two_BK. Нет БК для Профиля: found_bk_arr = #{found_bk_arr}"
     end
 
-    return compare_rezult, rez_bk_arr
+    return compare_rezult, common_bk_arr, delta
   end
   # TEST COMPARE 2 BK
   # bk_arr1  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
