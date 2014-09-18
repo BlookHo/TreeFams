@@ -184,11 +184,9 @@ def get_new_hash(concern_hash)
   return new_concern_hash, new_keys, new_values
 end
 
-      keys_arr = []
-      vals_arr = []
+      # COMPLETE HARD SEARCH STRUCTURE
+
       concern_hash = {1 => 5, 2 => 15, 3 => 25, 6 => 30, 7 => 35}
-      #keys_arr << concern_hash.keys
-      #vals_arr << concern_hash.values
 
       final_concern_hash = concern_hash
       final_keys_arr = concern_hash.keys
@@ -196,13 +194,11 @@ end
       @repeat = false
 
       until concern_hash.empty?
+        logger.info "** IN UNTIL top: concern_hash = #{concern_hash}"
         new_hash, new_keys, new_values = get_new_hash(concern_hash)
         @repeat = true
         concern_hash = new_hash
-        logger.info "** IN UNTIL top: concern_hash = #{concern_hash}"
         if !new_hash.empty?
-          keys_arr <<  new_keys
-          vals_arr <<  new_values
           final_concern_hash.merge!(new_hash)
           final_keys_arr << new_keys
           final_vals_arr << new_values
@@ -211,12 +207,16 @@ end
 
         end
         logger.info "** IN UNTIL : concern_hash = #{concern_hash}, new_keys = #{new_keys}, new_values = #{new_values} "
+        logger.info " "
 
       end
-      logger.info "** After Test: final_concern_hash = #{final_concern_hash} "
-      logger.info "** After Test: final_keys_arr = #{final_keys_arr} "
-      logger.info "** After Test: final_vals_arr = #{final_vals_arr} "
+
+      logger.info "** After COMPLETE HARD SEARCH: final_concern_hash = #{final_concern_hash} "
+      logger.info "**  final_keys_arr = #{final_keys_arr} "
+      logger.info "**  final_vals_arr = #{final_vals_arr} "
       logger.info " "
+
+      # END OF COMPLETE HARD SEARCH STRUCTURE
 
 
       # NEW METHOD "HARD COMPLETE SEARCH"- TO DO
