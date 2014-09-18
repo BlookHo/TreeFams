@@ -1,5 +1,20 @@
 module SearchHelper
 
+  # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
+  #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
+  #new_conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 79=>62}
+  # hash_1 -does not change
+  # 79=>62 - найти те эл-ты in hash_2, кот-е отс-ют в hash_1
+  # add 79=>62 to hash_1
+  # Result: {72=>58, 75=>59, 76=>61, 77=>60, 78=>57, 79=>62} /
+  def add_to_hash(hash_1,hash_2)
+    arr_key1 = hash_1.keys
+    hash_2.each do |k,v|
+      hash_1 = hash_1.merge!( k => v) if !arr_key1.include?(k)
+    end
+    #logger.info "@@@@@ hash_1 = #{hash_1} "
+  end
+
   # Метод суммы двух хэшей без уничтожения значений при совпадениях ключей
   # hash_one = {17=>27, 16=>28, 20=>29, 19=>30, 18=>24}
   # hash_two = {16=>28, 23=>35, 21=>34}

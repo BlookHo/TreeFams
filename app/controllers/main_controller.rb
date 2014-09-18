@@ -133,6 +133,92 @@ class MainController < ApplicationController
       @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
 # DEBUGG_TO_VIEW
 
+def get_new_hash(concern_hash)
+      a = 0
+      logger.info "** get_new_hash begin: concern_hash = #{concern_hash} "
+      new_concern_hash = {}
+      new_keys = []
+      new_values = []
+      concern_hash.each do |el|
+
+        if a == 1 && !@repeat
+
+          new_hash = {4 => 10, 5 => 20}  # New pairs  ЕСТЬ НОВЫЕ пары совпадающих профилей
+          logger.info "** IN if == 1: new_hash = #{new_hash}"
+          new_concern_hash.merge!(new_hash)
+          new_keys << new_hash.keys
+          new_keys = new_keys.flatten(1)
+          new_values << new_hash.values
+          new_values = new_values.flatten(1)
+          logger.info "** IN if == 1: new_concern_hash = #{new_concern_hash}, new_keys = #{new_keys}, new_values = #{new_values} "
+        end
+
+        if a == 2 && !@repeat
+          new_hash = {8 => 50, 9 => 60} # New pairs
+          new_concern_hash.merge!(new_hash)
+          new_keys << new_hash.keys
+          new_values << new_hash.values
+          new_keys = new_keys.flatten(1)
+          new_values = new_values.flatten(1)
+          logger.info "** IN if == 2: new_concern_hash = #{new_concern_hash}, new_keys = #{new_keys}, new_values = #{new_values} "
+        end
+
+        if a == 3 && @repeat
+          new_hash = {} # No New pairs - НЕТ НОВОЙ пары совпадающих профилей
+          # НЕТ пересечения 2-х БК.
+          logger.info "** IN if == 3: new_hash = #{new_hash}"
+          if !new_hash.empty?
+            new_concern_hash.merge!(new_hash)
+            new_keys << new_hash.keys
+            new_values << new_hash.values
+          end
+        else
+          logger.info "** IN NOT if == 3: @repeat = #{@repeat}"
+        end
+
+        a += 1
+        logger.info "** IN Test: a = #{a}"
+      end
+      logger.info "** End of Test: new_concern_hash = #{new_concern_hash}, new_keys = #{new_keys}, new_values = #{new_values} "
+
+  return new_concern_hash, new_keys, new_values
+end
+
+      keys_arr = []
+      vals_arr = []
+      concern_hash = {1 => 5, 2 => 15, 3 => 25, 6 => 30, 7 => 35}
+      #keys_arr << concern_hash.keys
+      #vals_arr << concern_hash.values
+
+      final_concern_hash = concern_hash
+      final_keys_arr = concern_hash.keys
+      final_vals_arr = concern_hash.values
+      @repeat = false
+
+      until concern_hash.empty?
+        new_hash, new_keys, new_values = get_new_hash(concern_hash)
+        @repeat = true
+        concern_hash = new_hash
+        logger.info "** IN UNTIL top: concern_hash = #{concern_hash}"
+        if !new_hash.empty?
+          keys_arr <<  new_keys
+          vals_arr <<  new_values
+          final_concern_hash.merge!(new_hash)
+          final_keys_arr << new_keys
+          final_vals_arr << new_values
+          final_keys_arr = final_keys_arr.flatten(1)
+          final_vals_arr = final_vals_arr.flatten(1)
+
+        end
+        logger.info "** IN UNTIL : concern_hash = #{concern_hash}, new_keys = #{new_keys}, new_values = #{new_values} "
+
+      end
+      logger.info "** After Test: final_concern_hash = #{final_concern_hash} "
+      logger.info "** After Test: final_keys_arr = #{final_keys_arr} "
+      logger.info "** After Test: final_vals_arr = #{final_vals_arr} "
+      logger.info " "
+
+
       # NEW METHOD "HARD COMPLETE SEARCH"- TO DO
       # Input: start tree No, tree No to connect
       # @max_power_profiles_pairs_hash
@@ -169,7 +255,9 @@ class MainController < ApplicationController
         max_power_profiles_pairs_hash.each do |searched_profile, trees_hash|
           init_searched_profiles_arr << searched_profile
           trees_hash.each do |tree_key, found_profile|
-            if tree_key == connected_user
+            # ЗДЕСЬ !! ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ?
+            if tree_key == connected_user #connected_user.each
+
               init_found_profiles_arr << found_profile
               connection_hash.merge!( searched_profile => found_profile )
             end
@@ -211,22 +299,20 @@ class MainController < ApplicationController
         @new_connection_hash = new_connection_hash  # DEBUGG_TO_VIEW
 
         if !new_connection_hash.empty?
-    init_searched_profiles_arr = [72, 75, 76, 77, 78], init_found_profiles_arr = [58, 59, 61, 60, 57]
-    connection_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
-
-    new_field_arr_searched = [72, 75, 76, 77, 79], new_field_arr_found = [58, 59, 61, 60, 62]
-    new_connection_hash = {72=>58, 75=>59, 76=>61, 77=>60, 79=>62}
-
-
-
+          add_to_hash(connection_hash, new_connection_hash)
+          logger.info "@@@@@ connection_hash = #{connection_hash} "
         end
 
+        logger.info "connection_hash = #{connection_hash} "
+        logger.info " "
+        profiles_to_rewrite = connection_hash.keys
+        profiles_to_destroy = connection_hash.values
 
-        logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
-        logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
         return profiles_to_rewrite, profiles_to_destroy
 
       end
+
+
 
       start_tree = 11
       connected_user = 9
