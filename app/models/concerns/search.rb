@@ -1,16 +1,16 @@
-module SearchSoft
+module Search
   extend ActiveSupport::Concern
   include SearchHelper
 
-  def start_search_soft    # Запуск мягкого поиска для объединения
+  def start_search    # Запуск мягкого поиска для объединения
 
     connected_author_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
     author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
     qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
-   #author_tree_arr = # DEBUGG_TO_VIEW
-   #     [
-        #]
+    #author_tree_arr = # DEBUGG_TO_VIEW
+    # [
+    #   ]
 
     logger.info "======================= RUN start_search ========================= "
     logger.info "Общее задание на поиск от зарег-го Юзера - весь массив заданий (author_tree_arr)"
@@ -19,193 +19,19 @@ module SearchSoft
     search_profiles_from_tree(connected_author_arr, author_tree_arr) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
 
     results = {
-      final_reduced_profiles_hash: @final_reduced_profiles_hash,
-      final_reduced_relations_hash: @final_reduced_relations_hash,
-      wide_user_ids_arr: @wide_user_ids_arr,
-      connected_author_arr: connected_author_arr,
-      qty_of_tree_profiles: qty_of_tree_profiles,
-      ############################# NEW METHODS ############
-      new_profiles_found_arr: @new_profiles_found_arr,
-      new_profiles_relations_arr: @new_profiles_relations_arr
+        final_reduced_profiles_hash: @final_reduced_profiles_hash,
+        final_reduced_relations_hash: @final_reduced_relations_hash,
+        wide_user_ids_arr: @wide_user_ids_arr,
 
-      ######################################################
+        connected_author_arr: connected_author_arr,
+        qty_of_tree_profiles: qty_of_tree_profiles,
+        ############################# NEW METHODS ############
+        new_profiles_found_arr: @new_profiles_found_arr,
+        new_profiles_relations_arr: @new_profiles_relations_arr
+
+        ######################################################
 
     }
-
-
-# from 9 to 10, 11 trees
-    [{57=>[1, 2, 5, 5, 8, 3, 3]},
-     {58=>[3, 8, 3, 3, 1, 2]},
-     {59=>[7, 3, 3, 3, 1]},
-     {60=>[1, 2, 5, 5]},
-     {61=>[1, 2, 5, 5]},
-     {62=>[7, 3, 3]},
-     {63=>[1, 2, 5]},
-     {64=>[1, 2, 5]},
-     {80=>[3, 8]},
-     {81=>[3, 7]},
-     {82=>[4]}]
-
-    [{57=>{10=>{71=>[1, 2, 5, 5, 8, 3], 68=>[2, 3, 3]},
-           11=>{78=>[1, 2, 5, 5, 8], 72=>[2, 3, 3]}}},
-     {58=>{10=>{68=>[3, 8, 3, 3, 1, 2], 71=>[3, 2]},
-           11=>{72=>[3, 8, 3, 3, 1, 2], 78=>[2]}}},
-     {59=>{10=>{65=>[7, 3, 3, 3, 1], 85=>[3]},
-           11=>{75=>[7, 3, 3, 3], 74=>[3]}}},
-     {60=>{10=>{70=>[1, 2, 5, 5], 87=>[1]},
-           11=>{77=>[1, 2, 5, 5]}}},
-     {61=>{10=>{69=>[1, 2, 5, 5]},
-           11=>{76=>[1, 2, 5, 5]}}},
-     {62=>{11=>{79=>[7]},
-           10=>{86=>[7, 3]}}},
-     {63=>{10=>{71=>[1, 5]},
-           11=>{78=>[1, 5]}}},
-     {64=>{10=>{70=>[1, 5], 87=>[1, 2]},
-           11=>{77=>[1, 5]}}},
-     {80=>{11=>{73=>[3, 8]},
-           10=>{84=>[3, 8], 70=>[8]}}},
-     {81=>{10=>{65=>[3], 85=>[3, 7], 83=>[7]},
-           11=>{74=>[3, 7], 75=>[3]}}},
-     {82=>{10=>{66=>[4]}}}]
-
-
-# from 10 to 9, 11 trees - TO CHECK!!
-    [{65=>[1, 2, 7, 3, 3, 3]},
-     {66=>[4, 8]},
-     {67=>[7, 4]},
-     {68=>[8, 3, 3, 3, 1, 2]},
-     {69=>[2, 1, 5, 5]},
-     {70=>[2, 1, 5, 5, 8]},
-     {71=>[2, 1, 5, 5, 8, 3]},
-     {83=>[7]},
-     {84=>[3, 8]},
-     {85=>[3, 7]},
-     {86=>[7, 3]},
-     {87=>[1, 2]}]
-
-    [{65=>{9=>{59=>[1, 7, 3, 3, 3], 81=>[3]},
-           11=>{75=>[7, 3, 3, 3], 74=>[3]}}},
-     {66=>{9=>{82=>[4]}}},
-     {68=>{9=>{58=>[8, 3, 3, 3, 1, 2], 57=>[3, 3, 2]},
-           11=>{72=>[8, 3, 3, 3, 1, 2], 78=>[2]}}},
-     {69=>{9=>{61=>[2, 1, 5, 5]},
-           11=>{76=>[2, 1, 5, 5]}}},
-     {70=>{9=>{60=>[2, 1, 5, 5], 64=>[1, 5], 80=>[8]},
-           11=>{77=>[2, 1, 5, 5], 73=>[8]}}},
-     {71=>{9=>{57=>[2, 1, 5, 5, 8, 3], 58=>[2, 3], 63=>[1, 5]},
-           11=>{72=>[2, 3], 78=>[2, 1, 5, 5, 8]}}},
-     {83=>{11=>{74=>[7]},
-           9=>{81=>[7]}}},
-     {84=>{11=>{73=>[3, 8]},
-           9=>{80=>[3, 8]}}},
-     {85=>{9=>{59=>[3], 81=>[3, 7]},
-           11=>{74=>[3, 7], 75=>[3]}}},
-     {86=>{9=>{62=>[7, 3]},
-           11=>{79=>[7]}}},
-     {87=>{9=>{60=>[1], 64=>[1, 2]},
-           11=>{77=>[1]}}}]
-
-
-
-# from 11 to 9, 10 trees -  - for 11
-
-    # @new_profiles_found_arr:
-    # Исх.представление для метода select_certainty
-    [{72=>{9=>{58=>[1, 2, 3, 3, 3, 8], 57=>[2, 3, 3]},
-           10=>{68=>[1, 2, 3, 3, 3, 8], 71=>[2, 3]}}},
-     {73=>{9=>{80=>[3, 8]}, # exclude!
-           10=>{84=>[3, 8], 70=>[8]}}},  # exclude!
-     {74=>{9=>{59=>[3], 81=>[3, 7]},  # exclude!
-           10=>{65=>[3], 85=>[3, 7], 83=>[7]}}},  # exclude!
-     {75=>{9=>{59=>[3, 3, 3, 7], 81=>[3]},
-           10=>{65=>[3, 3, 3, 7], 85=>[3]}}},
-     {76=>{9=>{61=>[1, 2, 5, 5]},
-           10=>{69=>[1, 2, 5, 5]}}},
-     {77=>{9=>{60=>[1, 2, 5, 5], 64=>[1, 5]},
-           10=>{70=>[1, 2, 5, 5], 87=>[1]}}},
-     {78=>{9=>{57=>[1, 2, 5, 5, 8], 63=>[1, 5], 58=>[2]},
-           10=>{71=>[1, 2, 5, 5, 8], 68=>[2]}}},
-     {79=>{9=>{62=>[7]},  # exclude!
-           10=>{86=>[7]}}}]  # exclude!
-
-    # @new_selected_profiles_found_arr: - FOR @certainty_koeff = 4 (for 0-8 relations)
-    # МАССИВ ДОСТОВЕРНЫХ РЕЗ-ТОВ ПОИСКА ДЛЯ КАЖДОГО ИСКОМОГО ПРОФИЛЯ ИЗ ИСКОМОГО ДЕРЕВА
-    # - УСТАНОВЛЕНЫ ДОСТОВЕРНЫЕ СООТВЕТСТВИЯ НАЙДЕННЫМ ПРОФИЛЯМ В ДРУГИХ ДЕРЕВЬЯХ
-    # КРИТЕРИЙ - ЗНАЧЕНИЕ КОЭФ-ТА ДОСТОВЕРНОСТИ СООТВЕТСТВИЯ = 4
-    # Промежуточное представление для метода select_certainty
-    [{72=>{9=>{58=>[1, 2, 3, 3, 3, 8]},
-           10=>{68=>[1, 2, 3, 3, 3, 8]}}},
-     {75=>{9=>{59=>[3, 3, 3, 7]},
-           10=>{65=>[3, 3, 3, 7]}}},
-     {76=>{9=>{61=>[1, 2, 5, 5]},
-           10=>{69=>[1, 2, 5, 5]}}},
-     {77=>{9=>{60=>[1, 2, 5, 5]},
-           10=>{70=>[1, 2, 5, 5]}}},
-     {78=>{9=>{57=>[1, 2, 5, 5, 8]},
-           10=>{71=>[1, 2, 5, 5, 8]}}}, ]
-    #  или, может, представить массив достоверных соответствий так:
-    # итоговое представление на выходе метода select_certainty
-    # т.е. профилю 72 из искомого дерева 11 в дереве 9 точно соответствует профиль 58, в дереве 10 - профиль 68
-
-    [{72=>{9=>58, 10=>68}},
-     {75=>{9=>59, 10=>65}},
-     {76=>{9=>61, 10=>69}},
-     {77=>{9=>60, 10=>70}},
-     {78=>{9=>57, 10=>71}} ]
-
-    #@new_profiles_relations_arr: - for 11
-    [{72=>{73=>1, 74=>2, 76=>3, 77=>3, 78=>3, 75=>8}},
-     {73=>{72=>3, 74=>8}},
-     {74=>{72=>3, 73=>7}},
-     {75=>{76=>3, 77=>3, 78=>3, 72=>7}},
-     {76=>{72=>1, 75=>2, 77=>5, 78=>5}},
-     {77=>{72=>1, 75=>2, 76=>5, 78=>5}},
-     {78=>{72=>1, 75=>2, 76=>5, 77=>5, 79=>8}},
-     {79=>{78=>7}}]
-
-    # НОВЫЕ Ж/Б ХЭШИ ПОИСКА ДЛЯ ПОСТРОЕНИЯ ПУТЕЙ - КОРРЕКТНЫЕ!!
-    {9=>{72=>[58, 61, 60, 57, 59],
-         75=>[59, 61, 60, 57, 58],
-         76=>[61, 58, 59, 60, 57],
-         77=>[60, 58, 59, 61, 57],
-         78=>[57, 58, 59, 61, 60]},
-
-     10=>{72=>[68, 69, 70, 71, 65],
-          75=>[65, 69, 70, 71, 68],
-          76=>[69, 68, 65, 70, 71],
-          77=>[70, 68, 65, 69, 71],
-          78=>[71, 68, 65, 69, 70]}
-    }
-
-    {9=>{72=>[0, 3, 3, 3, 8],
-         75=>[0, 3, 3, 3, 7],
-         76=>[0, 1, 2, 5, 5],
-         77=>[0, 1, 2, 5, 5],
-         78=>[0, 1, 2, 5, 5]},
-
-     10=>{72=>[0, 3, 3, 3, 8],
-          75=>[0, 3, 3, 3, 7],
-          76=>[0, 1, 2, 5, 5],
-          77=>[0, 1, 2, 5, 5],
-          78=>[0, 1, 2, 5, 5]}
-    }
-
-
-    # СТАРЫЕ ХЭШИ ПОИСКА ДЛЯ ПОСТРОЕНИЯ ПУТЕЙ - НЕКОРРЕКТНЫЕ!!
-    #@final_reduced_profiles_hash:
-    {10=>{72=>[58, 80, 81, 59, 69, 60, 57]},
-     9=>{72=>[58, 80, 81, 59, 61, 60, 57]}}
-    # @final_reduced_relations_hash:
-    {10=>{72=>[0, 1, 2, 8, 3, 3, 3]},
-     9=>{72=>[0, 1, 2, 8, 3, 3, 3]}}
-
-    #to do and check:
-    #- придумать критерий - отсеивания недостоверных - см.ниже
-    #- если найден опорный профиль, то как найти прямые соответствия между профилями в случае дублей
-    #- как отловить ситуацию, когда дублей нет, а соответствие - неверное (может это исчезнет при увеличении
-    #кол-ва relations)
-    # - организовать сравнение кол-ва найденных relations с исходным кол-вом relations для profile_id_searched /
-    #- организовать увеличение relations в таблицах для теста
 
     return results
   end
@@ -216,29 +42,10 @@ module SearchSoft
   # @see News
   def search_profiles_from_tree(connected_users_arr, tree_arr)
 
-    @tree_arr_len = tree_arr.length  # DEBUGG TO VIEW
-    @tree_to_display = []
-    @tree_row = []
-
-    #@type_search_message = "Работает SEARCH_SOFT"
-
-    ##### Будущие результаты поиска
+    ##### OLD результаты поиска
     @all_match_trees_arr = []     # Массив совпадений деревьев
     @all_match_profiles_arr = []  # Массив совпадений профилей
     @all_match_relations_arr = []  # Массив совпадений отношений
-    #####
-
-
-    ############################# NEW METHODS ############
-    @new_profiles_found_arr = []     #
-    @new_profiles_to_profiles_arr = []     #
-
-    @new_profiles_relations_arr = []     #
-    @new_pairs_profiles_relations_arr = []     #
-    ######################################################
-
-
-
     @all_wide_match_profiles_arr = []     # Широкий Массив совпадений профилей
     @all_wide_match_relations_arr = []     # Широкий Массив совпадений отношений
     @all_searched_n_found_profiles_hash = []  # Широкий Массив совпадений профилей
@@ -250,6 +57,14 @@ module SearchSoft
     @all_found_profiles_arr = []  # Итоговый массив найденных профилей
 
     @relation_id_searched_arr = []     #_DEBUGG_TO_VIEW Ok
+    #####
+
+    ##### NEW METHOD ############
+    @new_profiles_found_arr = []     #
+    @new_profiles_to_profiles_arr = []     #
+
+    @new_profiles_relations_arr = []     #
+    @new_pairs_profiles_relations_arr = []     #
 
     logger.info "======================= Запуск цикла поиска по всему массиву заданий ========================= "
     if !tree_arr.blank?
@@ -268,11 +83,10 @@ module SearchSoft
         logger.info "***** от имени (name_id): #{name_id_searched}; ищем отношение (relation_id) = #{relation_id_searched}, Ищем имя (is_name_id) = #{is_name_id_searched}  "
 
         ###############  ЗАПУСК НОВОГО ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ РЕЗУЛЬТАТОВ
-        soft_search_match(connected_users_arr, from_profile_searching, profile_id_searched, relation_id_searched)       # На выходе: @all_match_arr по данному дереву
+        search_match(connected_users_arr, from_profile_searching, profile_id_searched, relation_id_searched)       # На выходе: @all_match_arr по данному дереву
 
       end
     end
-
 
     logger.info "=========== После всего цикла по tree_arr - результат поиска: @all_wide_match_profiles_arr = #{@all_wide_match_profiles_arr}"
 
@@ -321,6 +135,7 @@ module SearchSoft
       #@all_match_relations_hash = all_match_relations_hash # TO VIEW
       #count_users_found(profile_ids_arr) # TO VIEW
 
+
     else
       @final_reduced_profiles_hash = []
       @final_reduced_relations_hash = []
@@ -333,7 +148,7 @@ module SearchSoft
   # Берем параметр: profile_id из массива  = profiles_tree_arr[i][6].
   # @note GET /
   # @see News
-  def soft_search_match(connected_users, from_profile_searching, profile_id_searched, relation_id_searched)
+  def search_match(connected_users, from_profile_searching, profile_id_searched, relation_id_searched)
 
     found_trees_hash = Hash.new     #{ 0 => []}
     all_relation_match_arr = []     #
@@ -548,67 +363,7 @@ module SearchSoft
   end
 
 
-  # На выходе ближний круг для профиля в дереве user_id
-  # по записям в ProfileKey
-  def profile_near_circle(user_ids, profile_id)
-    Tree.where(user_id: user_ids).where("profile_id = #{profile_id} or is_profile_id = #{profile_id}").order('relation_id').includes(:name)
-  end
 
 
 
-  # ВАЖНО! Исключение из Хэша результатов тех элементов,
-  # которые отсутствуют в массиве отобранных профилей по-жесткому
-  def main_exclude_search_hashes(input_profiles_hash, input_relations_hash, profiles_array)
-   new_search_profiles_arr = []
-   new_search_relations_arr = []
-   test_array = profiles_array
-   input_profiles_hash.each_with_index do |k, index| #,val_hash|
-     one_elem_value_hash = k.values[0].values.flatten[0]
-     if test_array.include?(one_elem_value_hash)
-       new_search_profiles_arr << k
-       new_search_relations_arr << input_relations_hash[index]
-       test_array = test_array - [one_elem_value_hash]
-     end
-     logger.info " *** k = #{k}, test_array = #{test_array}, one_elem_value_hash = #{one_elem_value_hash}"
-     logger.info " *** new_search_profiles_arr = #{new_search_profiles_arr}"
-     logger.info " *** new_search_relations_arr = #{new_search_relations_arr}"
-   end
-
-   logger.info " *** new_search_profiles_arr = #{new_search_profiles_arr}"
-   logger.info " *** new_search_relations_arr = #{new_search_relations_arr}"
-
-   return new_search_profiles_arr, new_search_relations_arr
- end
-
-
-def find_right_profile(tree_row)
-
-  res_hash = Hash.new  # Hash найденных профилей = {profile_id => qty}
-  trees_res_hash = Hash.new  # Hash найденных профилей = {tree => {profile_id => qty}} для одной записи из all_profile_rows
-
-  fill_hash(res_hash, tree_row.profile_id) # наполнение хэша найденными profile_id и частотой их обнаружения = 1
-  # Формирование ХЭШа с результатами: Сколько раз какой профиль был найден.
-  #logger.info "=== Hash найденных профилей: #{res_hash} "
-  trees_res_hash.merge!({tree_row.user_id  => res_hash } ) # наполнение хэша накопленные Hash найденных профилей: #{res_hash}
-  #logger.info "=== Trees Hash найденных профилей: #{trees_res_hash} "   #
-  # Его структура: {tree_id => {profile_id => частота появления profile_id в рез-тах поиска}}/
-
-  # ВАЖНЫЙ УЧАСТОК: ОПРЕДЕЛЕНИЕ ПРАВИЛЬНОГО ПРОФИЛЯ В КАЧЕСТВЕ СООТВЕТСТВИЯ ИСКОМОМУ
-  trees_res_hash.each_pair {|key,val_hash|  key == tree_row.user_id; qty_arr = val_hash.values
-  max_qty = qty_arr.sort.last
-  right_profile = val_hash.key(max_qty)
-  #logger.info "=== Из Trees Hash : @right_profile = #{right_profile}"
-  @right_profile_id = right_profile
-  }
-
-  return @right_profile_id
-
-end
-
-
-
-
-
-
-
-end # End of search_soft module
+end # End of search module
