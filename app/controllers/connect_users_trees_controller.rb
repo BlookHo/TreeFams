@@ -546,10 +546,17 @@ class ConnectUsersTreesController < ApplicationController
               # или start_search_first (1-й версии - самый первый),
               # или start_search (мягкий - 2-я версия, с определением right_profile по макс. кол-ву совпадений),
               ##############################################################################
-              #####  Запуск ЖЕСТКОГО поиска
-       #       search_results = current_user.start_hard_search  ##
-              # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-       #      profiles_to_rewrite, profiles_to_destroy =  get_rewrite_profiles_by_bk(search_results) ##
+              #####  Запуск ДОСТОВЕРНОГО поиска - ПОСЛЕДНЯЯ ВЕРСИЯ
+              #####  Запуск НОВОГО поиска С @certainty_koeff
+              search_results = current_user.start_search  ##
+              # ПОЛНОЕ Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
+       #
+       # hard_complete_search(connected_user, uniq_profiles_hash ) ПОСЛЕДНЯЯ ВЕРСИЯ
+       #    profiles_to_rewrite, profiles_to_destroy =  get_rewrite_profiles_by_bk(search_results) ##
+              profiles_to_rewrite, profiles_to_destroy = hard_complete_search(connected_user, uniq_profiles_pairs_hash )
+              logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
+              logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
+              logger.info " "
 
               ##############################################################################
               #####  Запуск поиска 1-й версии - самый первый
@@ -559,9 +566,9 @@ class ConnectUsersTreesController < ApplicationController
 
               ##############################################################################
               #####  Запуск МЯГКОГО поиска - 2-я версия
-             search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
+             #search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
               # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-             profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(search_results, who_connect_users_arr, with_whom_connect_users_arr)
+            # profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(search_results, who_connect_users_arr, with_whom_connect_users_arr)
 
               ##############################################################################
 

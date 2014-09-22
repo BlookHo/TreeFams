@@ -1,5 +1,60 @@
 module SearchHelper
 
+  ############################# NEW METHODS ############
+  # ПОЛУЧЕНИЕ ПАР СООТВЕТСТВИЙ ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ МНОЖЕСТВ СОВПАДЕНИЙ ОТНОШЕНИЙ
+  # Вход
+  # Выход
+  # .
+  def get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
+    max_power_profiles_pairs_hash = {}
+    duplicated_profiles_pairs_hash = {}
+    profiles_found_arr.each do |hash_in_arr|
+      #logger.info " hash_in_arr = #{hash_in_arr} "
+      hash_in_arr.each do |searched_profile, profile_trees_relations|
+        #logger.info " searched_profile = #{searched_profile} "
+        max_power_pairs_hash = {}
+        duplicated_pairs_hash = {}
+        profile_trees_relations.each do |key_tree, profile_relations_hash|
+          tree_selected = key_tree
+          #logger.info " tree_selected = #{tree_selected} "
+          #profile_relations_hash = {58=>[1, 2, 3, 3, 3, 8], 59=>[1, 2, 3, 3, 3,9 ], 60=>[1, 2, 3, 3], 57=>[2, 3, 3]}
+          logger.info " profile_relations_hash = #{profile_relations_hash} "
+          reduced_profile_relations_hash = reduce_profile_relations(profile_relations_hash, certainty_koeff)
+          if !reduced_profile_relations_hash.empty?
+            profiles_powers_hash = make_profiles_power_hash(reduced_profile_relations_hash)
+            max_profiles_powers_hash, max_power = get_max_power_profiles_hash(profiles_powers_hash)
+
+            # Выявление дубликатов ##########
+            if max_profiles_powers_hash.size == 1 # один профиль с максимальной мощностью
+              # НАРАЩИВАНИЕ ХЭША ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ certain_max_power_pairs_hash
+              profile_selected = max_profiles_powers_hash.key(max_power)
+
+              max_power_pairs_hash.merge!(key_tree => profile_selected )
+              #logger.info " SAVE key_tree = #{key_tree}, max_power_pairs_hash = #{max_power_pairs_hash}  "
+            else # больше одного профиля с максимальной мощностью
+              # НАРАЩИВАНИЕ ХЭША ПРОФИЛЕЙ-ДУПЛИКАТОВ duplicated_pairs_hash
+              # ЕСЛИ НАЙДЕНО БОЛЬШЕ 1 ПАРЫ ПРОФИЛЕЙ С ОДИНАК. МАКС. МОЩНОСТЬЮ
+              # Т.Е. ДУПЛИКАТ ТИПА 1 К 2
+              # ЗАНОСИМ В ХЭШ ДУПЛИКАТОВ.
+              duplicated_pairs_hash.merge!(key_tree => max_profiles_powers_hash )
+              #logger.info " SKIP , PUT in DUPLICATES_HASH,  duplicated_profiles_pairs_hash = #{duplicated_profiles_pairs_hash} "
+            end
+
+          end
+
+        end
+        max_power_profiles_pairs_hash.merge!(searched_profile => max_power_pairs_hash ) if !max_power_pairs_hash.empty?
+        duplicated_profiles_pairs_hash.merge!(searched_profile => duplicated_pairs_hash ) if !duplicated_pairs_hash.empty?
+
+      end
+
+    end
+    return max_power_profiles_pairs_hash, duplicated_profiles_pairs_hash
+
+  end # End of method
+
+
+
   # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
   #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
   #new_conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 79=>62}
@@ -39,12 +94,88 @@ module SearchHelper
 
     return delta_bk
   end
-  # Метод сравнения 2-х БК профилей
+
+  # Взять Бл.круг одного профиля
+  # получить массивы триад для дальнейшего сравнения
+  # показать в Логгере
+  #
+  # /
+  def have_profile_circle(profile_id)
+    profile_user_id = Profile.find(profile_id).tree_id
+    profile_circle = get_one_profile_circle(profile_id, profile_user_id)
+    logger.info "=== КРУГ ПРОФИЛЯ = #{profile_id} "
+    show_in_logger(profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
+    circle_arr, circle_profiles_arr, circle_is_profiles_arr = make_arr_hash_BK(profile_circle)
+
+    return circle_arr, circle_profiles_arr, circle_is_profiles_arr
+  end
+
+  # NB !! ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ? - проверить действие order('user_id',??
+  # МЕТОД Получения БК для любого одного профиля из дерева
+  # ИСп-ся в Жестком поиске - в hard_search_match
+  def get_one_profile_circle(profile_id, user_id)
+    # logger.info "=in get_one_profile_BK="
+    connected_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля
+    if !connected_users_arr.blank?
+      # logger.info "Для Юзера = #{user_id} : connected_users_arr = #{connected_users_arr.inspect}"
+      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id).order('user_id','relation_id','is_name_id' )
+      if !found_profile_circle.blank?
+        return found_profile_circle # Найден БК
+      else
+        logger.info "Error in get_one_profile_BK. Не найден БК для Профиля = #{profile_id} у такого Юзера = #{user_id}"
+      end
+    else
+      logger.info "Error in get_one_profile_BK. Нет такого Юзера = #{user_id} или не найдены его connected_users_arr = #{connected_users_arr.inspect}"
+    end
+  end
+
+  # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
+  # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
+  # ИСп-ся в Жестком поиске - в hard_search_match
+  def make_arr_hash_BK(bk_rows)
+    bk_arr = []
+    bk_arr_w_profiles = []
+    is_profiles_arr = []
+    bk_rows.each do |row|
+
+      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
+      bk_arr_w_profiles << row.attributes.except('id','user_id','profile_id','created_at','updated_at') # for further analyze
+      is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
+      #logger.debug "row  = #{row}"
+      #logger.debug "bk_arr  = #{bk_arr}"
+      #logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
+    end
+    is_profiles_arr = is_profiles_arr.flatten(1)
+    #logger.debug "bk_arr  = #{bk_arr}"
+    logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
+    return bk_arr, bk_arr_w_profiles, is_profiles_arr # Сделан БК в виде массива Хэшей
+  end
+
+  # МЕТОД Вявления дубликатов в Круге
+  # NB !! Вставить проверку и действия ЕСЛИ В БК ЕСТЬ СОВЕРШЕННО
+  # ОДИНАКОВЫЕ ЭЛ-ТЫ: ИМЯ - ОТНОШЕНИЕ - ИМЯ
+  # Например, два одинаковых по имени брата и т.п.
+  # Действия: Отловить, Сформировать хэш дубликатов, Вытащить его наружу
+  # И прекратить объединение деревьев !
+  # !
+  # ИСп-ся в Жестком поиске - в hard_complete_search
+  def find_circle_duplicates(circle)
+    logger.info " in find_circle_duplicates"
+    diplicates_hash = {}
+    circle.each do |k,v|
+      #logger.info " k = in find_circle_duplicates"
+
+    end
+    logger.info " diplicates_hash: #{diplicates_hash}"
+
+    return diplicates_hash
+  end
+    # Метод сравнения 2-х БК профилей
   # этот метод требует развития - что делать, когда два БК не равны?
   # Означает ли это, что надо давать сразу отрицат-й ответ?.
   # На входе - два массива Хэшей = 2 БК
   # На выходе: compare_rezult = false or true.
-  def  compare_two_BK(found_bk_arr, search_bk_arr)
+  def  compare_two_circles(found_bk_arr, search_bk_arr)
 
     if !found_bk_arr.blank?
       if !search_bk_arr.blank?
@@ -191,42 +322,6 @@ module SearchHelper
     return field_values_arr
   end
 
-  # МЕТОД Получения БК для любого одного профиля из дерева
-  # ИСп-ся в Жестком поиске - в hard_search_match
-  def get_one_profile_BK(profile_id, user_id)
-    # logger.info "=in get_one_profile_BK="
-    connected_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля
-    if !connected_users_arr.blank?
-     # logger.info "Для Юзера = #{user_id} : connected_users_arr = #{connected_users_arr.inspect}"
-      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id).order('relation_id')
-      if !found_profile_circle.blank?
-        return found_profile_circle # Найден БК
-      else
-        logger.info "Error in get_one_profile_BK. Не найден БК для Профиля = #{profile_id} у такого Юзера = #{user_id}"
-      end
-    else
-      logger.info "Error in get_one_profile_BK. Нет такого Юзера = #{user_id} или не найдены его connected_users_arr = #{connected_users_arr.inspect}"
-    end
-  end
-
-  # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
-  # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
-  # ИСп-ся в Жестком поиске - в hard_search_match
-  def make_arr_hash_BK(bk_rows)
-    bk_arr = []
-    bk_arr_w_profiles = []
-    bk_rows.each do |row|
-
-      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
-      bk_arr_w_profiles << row.attributes.except('id','user_id','profile_id','created_at','updated_at') # for further analyze
-      #logger.debug "row  = #{row}"
-      #logger.debug "bk_arr  = #{bk_arr}"
-      #logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
-    end
-    #logger.debug "bk_arr  = #{bk_arr}"
-    #logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
-    return bk_arr, bk_arr_w_profiles # Сделан БК в виде массива Хэшей
-  end
 
   # Служебный метод для отладки - для LOGGER
   # Показывает массив в logger
