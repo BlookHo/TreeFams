@@ -77,6 +77,28 @@ module SearchHelper
     return max_profiles_powers_hash, max_power
   end
 
+  # Получение хэша профилей с максимальными значениями совпадений
+  def get_profiles_match_hash(profiles_with_match_hash, max_profiles_powers_hash)
+    new_profiles_with_match_hash = profiles_with_match_hash
+    profiles_arr = new_profiles_with_match_hash.keys
+    if max_profiles_powers_hash.size == 1
+      one_profile = max_profiles_powers_hash.keys[0]
+      one_match = max_profiles_powers_hash.values_at(one_profile)[0]
+      logger.info " IN get_profiles_match_hash profiles_arr = #{profiles_arr}, one_profile = #{one_profile}, one_match = #{one_match},  "
+      if profiles_arr.include?(one_profile)
+        match_in_hash = new_profiles_with_match_hash.values_at(one_profile)[0]
+        if one_match > match_in_hash
+          new_profiles_with_match_hash = profiles_with_match_hash.merge!(max_profiles_powers_hash ) if !max_profiles_powers_hash.empty?
+        end
+      else
+        new_profiles_with_match_hash = profiles_with_match_hash.merge!(max_profiles_powers_hash ) if !max_profiles_powers_hash.empty?
+      end
+    else
+      logger.info "ERROR IN get_profiles_match_hash profiles_arr: max_profiles_powers_hash.size != 1 "
+    end
+    return new_profiles_with_match_hash
+  end
+
   # ПОЛУЧЕНИЕ ПАР СООТВЕТСТВИЙ ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ МНОЖЕСТВ СОВПАДЕНИЙ ОТНОШЕНИЙ
   # Вход
   # Выход
@@ -84,16 +106,18 @@ module SearchHelper
   def get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
     max_power_profiles_pairs_hash = {}  # Профили с макс-м кол-вом совпадений для одного соответствия в дереве
     profiles_with_match_hash = {} # Порофили, отсортир-е по кол-ву совпадений
+    new_profiles_with_match_hash = {}
     duplicates_pairs_One_to_Many_hash = {}  # Дубликаты ТИПА 1 К 2 - One_to_Many пар профилей
     profiles_found_arr.each do |hash_in_arr|
       #logger.info " hash_in_arr = #{hash_in_arr} "
       hash_in_arr.each do |searched_profile, profile_trees_relations|
         #logger.info " searched_profile = #{searched_profile} "
         max_power_pairs_hash = {}
+       # new_profiles_with_match_hash = {}
         duplicates_One_to_Many_hash = {}
         profile_trees_relations.each do |key_tree, profile_relations_hash|
           #tree_selected = key_tree
-          profiles_powers_hash = {}
+          #profiles_powers_hash = {}
           #logger.info " tree_selected = #{tree_selected} "
           #profile_relations_hash = {58=>[1, 2, 3, 3, 3, 8], 59=>[1, 2, 3, 3, 3,9 ], 60=>[1, 2, 3, 3], 57=>[2, 3, 3]}
           logger.info " profile_relations_hash = #{profile_relations_hash} "
@@ -109,6 +133,9 @@ module SearchHelper
 
               max_power_pairs_hash.merge!(key_tree => profile_selected )
               #logger.info " SAVE key_tree = #{key_tree}, max_power_pairs_hash = #{max_power_pairs_hash}  "
+
+              new_profiles_with_match_hash = get_profiles_match_hash(profiles_with_match_hash, max_profiles_powers_hash)
+
             else # больше одного профиля с максимальной мощностью
               # НАРАЩИВАНИЕ ХЭША ПРОФИЛЕЙ-ДУПЛИКАТОВ duplicates_One_to_Many_hash
               # ЕСЛИ НАЙДЕНО БОЛЬШЕ 1 ПАРЫ ПРОФИЛЕЙ С ОДИНАК. МАКС. МОЩНОСТЬЮ
@@ -119,11 +146,9 @@ module SearchHelper
 
           end
 
-          profiles_with_match_hash.merge!(profiles_powers_hash ) if !profiles_powers_hash.empty?
-
         end
 
-        profiles_with_match_hash = Hash[profiles_with_match_hash.sort_by { |k, v| v }.reverse] #  Ok Sorting of input hash by values Descend
+        new_profiles_with_match_hash = Hash[new_profiles_with_match_hash.sort_by { |k, v| v }.reverse] #  Ok Sorting of input hash by values Descend
 
         max_power_profiles_pairs_hash.merge!(searched_profile => max_power_pairs_hash ) if !max_power_pairs_hash.empty?
 
@@ -132,7 +157,7 @@ module SearchHelper
       end
 
     end
-    return max_power_profiles_pairs_hash, duplicates_pairs_One_to_Many_hash, profiles_with_match_hash
+    return max_power_profiles_pairs_hash, duplicates_pairs_One_to_Many_hash, new_profiles_with_match_hash
 
   end # End of method
 
