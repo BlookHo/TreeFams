@@ -129,7 +129,7 @@ class MainController < ApplicationController
       @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
 
       ##### КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ ##########
-      @certainty_koeff = 3 # (for 0-8 relations)
+      @certain_koeff = 3 # (for 0-8 relations)
       ###############
 
       {72=>{9=>58, 10=>68}, #CK = 5
@@ -205,13 +205,13 @@ class MainController < ApplicationController
   # connected_user = с каким деревом объед-ся
   #
   # Input: 1. @max_power_profiles_pairs_hash
-  def hard_complete_search(connected_user, uniq_profiles_hash )
+  def hard_complete_search(with_whom_connect_users_arr, uniq_profiles_hash )
     logger.info "** IN hard_complete_search *** "
     final_profiles_to_rewrite = []
     final_profiles_to_destroy = []
     if !uniq_profiles_hash.empty?
 
-      init_connection_hash = make_init_connection_hash(connected_user,uniq_profiles_hash)
+      init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr,uniq_profiles_hash)
       logger.info " init_connection_hash = #{init_connection_hash}"
 
       final_connection_hash = init_connection_hash
@@ -306,27 +306,77 @@ class MainController < ApplicationController
   end
 
 
-      start_tree = 11
-      connected_user = 9
-      uniq_profiles_pairs_hash =
-          {72=>{9=>58, 10=>68},
-           75=>{9=>59, 10=>65},
-           76=>{9=>61, 10=>69},
-           77=>{9=>60, 10=>70},
-           78=>{9=>57, 10=>71}}
-      profiles_to_rewrite = [72, 75, 76, 77, 78, 73, 74, 79]
-      profiles_to_destroy = [58, 59, 61, 60, 57, 80, 81, 62]
-
-      #start_tree = 9
-      #connected_user = 11
+      #start_tree = 11
+      #connected_user = 9
       #uniq_profiles_pairs_hash =
-      #{57=>{10=>71, 11=>78},
-      # 58=>{11=>72, 10=>68},
-      # 59=>{10=>65, 11=>75},
-      # 60=>{10=>70, 11=>77},
-      # 61=>{10=>69, 11=>76}}
-      #profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
-      #profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
+      #    {72=>{9=>58, 10=>68},
+      #     75=>{9=>59, 10=>65},
+      #     76=>{9=>61, 10=>69},
+      #     77=>{9=>60, 10=>70},
+      #     78=>{9=>57, 10=>71}}
+      #profiles_to_rewrite = [72, 75, 76, 77, 78, 73, 74, 79]
+      #profiles_to_destroy = [58, 59, 61, 60, 57, 80, 81, 62]
+
+      start_tree = 9
+      with_whom_connect_users_arr = 11
+      # ck = 2
+      uniq_profiles_pairs_hash =
+      {58=>{10=>68, 11=>72},
+       59=>{10=>65, 11=>75},
+       60=>{10=>70},
+       61=>{10=>69, 11=>76},
+       62=>{10=>86},
+       80=>{10=>84, 11=>73},
+       81=>{10=>85, 11=>74}}
+      #One_to_Many_hash:
+      {64=>{10=>{70=>2, 87=>2}}}
+      #Many_to_One_hash:
+      {63=>{10=>71, 11=>78},
+       64=>{11=>77},
+       57=>{10=>71, 11=>78},
+       60=>{11=>77}}
+      # ALL profiles_to_rewrite = [58, 59, 61, 80, 81, 57, 60, 62]
+      # ALL profiles_to_destroy = [72, 75, 76, 73, 74, 78, 77, 79]
+
+      # ck = 3
+      {57=>{10=>71, 11=>78},
+       58=>{10=>68, 11=>72},
+       59=>{10=>65, 11=>75},
+       60=>{10=>70, 11=>77},
+       61=>{10=>69, 11=>76}}
+      #ALL profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
+      #ALL profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
+
+      # ck = 4
+      {57=>{10=>71, 11=>78},
+       58=>{10=>68, 11=>72},
+       59=>{10=>65, 11=>75},
+       60=>{10=>70, 11=>77},
+       61=>{10=>69, 11=>76}}
+      [57, 58, 59, 60, 61, 62, 80, 81]
+      [78, 72, 75, 77, 76, 79, 73, 74]
+      #ALL profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
+      #ALL profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
+
+      # ck = 5
+      {57=>{10=>71, 11=>78},
+       58=>{10=>68, 11=>72},
+       59=>{10=>65}}
+      #ALL profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
+      #ALL profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
+
+      # ck = 6
+      {57=>{10=>71},
+       58=>{10=>68, 11=>72}}
+      #ALL profiles_to_rewrite = [58, 80, 81, 57, 60, 61, 59, 62]
+      #ALL profiles_to_destroy = [72, 73, 74, 78, 77, 76, 75, 79]
+
+      # ck = 7
+      {}
+      #ALL profiles_to_rewrite = []
+      #ALL profiles_to_destroy = []
+
+
 
       #start_tree = 9
       #connected_user = 10
@@ -351,8 +401,7 @@ class MainController < ApplicationController
       #profiles_to_destroy = [75, 72, 76, 77, 78, 73, 74, 79]
 
 
-
-      profiles_to_rewrite, profiles_to_destroy = hard_complete_search(connected_user, uniq_profiles_pairs_hash )
+      profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs_hash )
 
       logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
       logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
@@ -443,6 +492,8 @@ class MainController < ApplicationController
        60=>{10=>70, 11=>77},
        61=>{10=>69, 11=>76}}
 
+
+
       # 1 to 2
       [{1=>{2=>{11=>[3, 3, 8]}}},
        {4=>{2=>{7=>[3, 3, 7]}}},
@@ -453,6 +504,7 @@ class MainController < ApplicationController
        4=>{2=>7},
        5=>{2=>12},
        6=>{2=>13}}
+
 
       # 2 to 1
       [{7=>{1=>{4=>[3, 3, 7]}}},
@@ -466,7 +518,7 @@ class MainController < ApplicationController
        13=>{1=>6}}
 
 
-      # 5 to 6
+      # 5 to 6 - для certain_koeff = 2
       [{34=>{6=>{45=>[3, 8]}}},
        {38=>{6=>{41=>[3, 7]}}},
        {40=>{6=>{46=>[1, 2]}}}]
@@ -477,83 +529,6 @@ class MainController < ApplicationController
 
 
 
-      # ИЗЪЯТИЕ ПРОФИЛЕЙ С МАЛОЙ МОЩНОСТЬЮ НАЙДЕННЫХ ОТНОШЕНИЙ
-      def reduce_profile_relations(profile_relations_hash, certainty_koeff)      ###################
-        reduced_profile_relations_hash = profile_relations_hash.select {|k,v| v.size >= certainty_koeff }
-        logger.info " reduced_profile_relations_hash = #{reduced_profile_relations_hash} "
-        ###############
-        return reduced_profile_relations_hash
-      end
-
-      # ПРЕВРАЩЕНИЕ ХЭША ПРОФИЛЕЙ С НАЙДЕННЫМИ ОТНОШЕНИЯМИ В ХЭШ ПРОФИЛЕЙ С МОЩНОСТЯМИ ОТНОШЕНИЙ
-      def make_profiles_power_hash(reduced_profile_relations_hash)
-        profiles_powers_hash = {}
-        reduced_profile_relations_hash.each { |k, v_arr | profiles_powers_hash.merge!( k => v_arr.size) }
-        logger.info " profiles_powers_hash = #{profiles_powers_hash} "
-        return profiles_powers_hash
-      end
-
-      # ПРЕВРАЩЕНИЕ ХЭША ПРОФИЛЕЙ С МОЩНОСТЯМИ ОТНОШЕНИЙ В ХЭШ ПРОФИЛЯ(ЕЙ) С МАКСИМАЛЬНОЙ(МИ) МОЩНОСТЬЮ
-      def get_max_power_profiles_hash(profiles_powers_hash)
-        max_power = profiles_powers_hash.values.max
-        max_profiles_powers_hash = profiles_powers_hash.select { |k, v| v == max_power}
-        logger.info " max profiles_powers_hash = #{max_profiles_powers_hash} "
-        return max_profiles_powers_hash, max_power
-      end
-
-
-    ## ПОЛУЧЕНИЕ ПАР СООТВЕТСТВИЙ ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ МНОЖЕСТВ СОВПАДЕНИЙ ОТНОШЕНИЙ
-    ## Вход
-    ## Выход
-    ## .
-    #def get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
-    #  max_power_profiles_pairs_hash = {}
-    #  duplicated_profiles_pairs_hash = {}
-    #  profiles_found_arr.each do |hash_in_arr|
-    #    #logger.info " hash_in_arr = #{hash_in_arr} "
-    #    hash_in_arr.each do |searched_profile, profile_trees_relations|
-    #      #logger.info " searched_profile = #{searched_profile} "
-    #      max_power_pairs_hash = {}
-    #      duplicated_pairs_hash = {}
-    #      profile_trees_relations.each do |key_tree, profile_relations_hash|
-    #        tree_selected = key_tree
-    #        #logger.info " tree_selected = #{tree_selected} "
-    #        #profile_relations_hash = {58=>[1, 2, 3, 3, 3, 8], 59=>[1, 2, 3, 3, 3,9 ], 60=>[1, 2, 3, 3], 57=>[2, 3, 3]}
-    #        logger.info " profile_relations_hash = #{profile_relations_hash} "
-    #        reduced_profile_relations_hash = reduce_profile_relations(profile_relations_hash, certainty_koeff)
-    #        if !reduced_profile_relations_hash.empty?
-    #          profiles_powers_hash = make_profiles_power_hash(reduced_profile_relations_hash)
-    #          max_profiles_powers_hash, max_power = get_max_power_profiles_hash(profiles_powers_hash)
-    #
-    #          # Выявление дубликатов ##########
-    #          if max_profiles_powers_hash.size == 1 # один профиль с максимальной мощностью
-    #            # НАРАЩИВАНИЕ ХЭША ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ certain_max_power_pairs_hash
-    #            profile_selected = max_profiles_powers_hash.key(max_power)
-    #
-    #            max_power_pairs_hash.merge!(key_tree => profile_selected )
-    #            #logger.info " SAVE key_tree = #{key_tree}, max_power_pairs_hash = #{max_power_pairs_hash}  "
-    #          else # больше одного профиля с максимальной мощностью
-    #            # НАРАЩИВАНИЕ ХЭША ПРОФИЛЕЙ-ДУПЛИКАТОВ duplicated_pairs_hash
-    #            # ЕСЛИ НАЙДЕНО БОЛЬШЕ 1 ПАРЫ ПРОФИЛЕЙ С ОДИНАК. МАКС. МОЩНОСТЬЮ
-    #            # Т.Е. ДУПЛИКАТ ТИПА 1 К 2
-    #            # ЗАНОСИМ В ХЭШ ДУПЛИКАТОВ.
-    #            duplicated_pairs_hash.merge!(key_tree => max_profiles_powers_hash )
-    #            #logger.info " SKIP , PUT in DUPLICATES_HASH,  duplicated_profiles_pairs_hash = #{duplicated_profiles_pairs_hash} "
-    #          end
-    #
-    #        end
-    #
-    #      end
-    #      max_power_profiles_pairs_hash.merge!(searched_profile => max_power_pairs_hash ) if !max_power_pairs_hash.empty?
-    #      duplicated_profiles_pairs_hash.merge!(searched_profile => duplicated_pairs_hash ) if !duplicated_pairs_hash.empty?
-    #
-    #    end
-    #
-    #  end
-    #  return max_power_profiles_pairs_hash, duplicated_profiles_pairs_hash
-    #
-    #end # End of method
-
 
       ################################
       ######## Основной поиск от дерева Автора (вместе с соединенными)
@@ -561,13 +536,15 @@ class MainController < ApplicationController
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
       ##############################################################################
-      ##### ВЫБОР ВИДА ПОИСКА: start_hard_search (жесткий - по совпадению БК),
+      ##### ВЫБОР ВИДА ПОИСКА:
+      # start_search(@certain_koeff) - Запуск НОВОГО поиска С @certainty_koeff - последняя версия
+      # start_hard_search (жесткий - по совпадению БК),
       # или start_search_first (1-й версии - самый первый),
       # или start_search (мягкий - 2-я версия, с определением right_profile по макс. кол-ву совпадений),
       ##############################################################################
 
       #####  Запуск НОВОГО поиска С @certainty_koeff - последняя версия
-      search_results = current_user.start_search(@certainty_koeff)  ##
+      search_results = current_user.start_search(@certain_koeff)  ##
 
       #####  Запуск ЖЕСТКОГО поиска
       #search_results = current_user.start_hard_search  ##
@@ -580,17 +557,20 @@ class MainController < ApplicationController
 
       end_search_time = Time.now   # Конец отсечки времени поиска
       @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
-      ######## Сбор рез-тов поиска:
 
+      ######## Сбор рез-тов поиска:
       @connected_author_arr = search_results[:connected_author_arr]
       @qty_of_tree_profiles = search_results[:qty_of_tree_profiles] # To view
       ############################# NEW METHOD ############
       @new_profiles_relations_arr = search_results[:new_profiles_relations_arr]
       @new_profiles_found_arr = search_results[:new_profiles_found_arr]
       @uniq_profiles_pairs_hash = search_results[:uniq_profiles_pairs_hash]
-      @double_profiles_pairs_hash = search_results[:double_profiles_pairs_hash]
-      ######################################################
+      @profiles_with_match_hash = search_results[:profiles_with_match_hash]
 
+      @duplicates_pairs_One_to_Many_hash = search_results[:duplicates_pairs_One_to_Many_hash]
+      @duplicates_pairs_Many_to_One_hash = search_results[:duplicates_pairs_Many_to_One_hash]
+
+      ######################################################
 
       # @new_profiles_found_arr = searched unconcerned results for searched tree (11) - for analyzis
       [{72=>{9=>{58=>[1, 2, 3, 3, 3, 8], 57=>[2, 3, 3]}, 10=>{68=>[1, 2, 3, 3, 3, 8], 71=>[2, 3]}}},
@@ -613,10 +593,6 @@ class MainController < ApplicationController
        {78=>{72=>1, 75=>2, 76=>5, 77=>5, 79=>8}},
        {79=>{78=>7}}]
 
-      #######################################################
-      ######## Запуск метода выбора пар профилей с максимальной мощностью множеств совпадений отношений
-      # по результатам поиска из всего полученного множества результатов @new_profiles_found_arr.
-      max_power_profiles_pairs_hash, duplicated_profiles_pairs_hash = get_certain_profiles_pairs(@new_profiles_found_arr, @certainty_koeff)
 
     #  max_power_profiles_pairs_hash = # test w/dubbles
       {72=>{9=>58, 10=>68},
@@ -626,55 +602,6 @@ class MainController < ApplicationController
        76=>{9=>61, 10=>69},
        77=>{9=>60, 10=>71}, #    77=>{9=>60, 10=>70},
        78=>{9=>57, 10=>71}}
-
-      @max_power_profiles_pairs_hash = max_power_profiles_pairs_hash #
-      @duplicated_profiles_pairs_hash = duplicated_profiles_pairs_hash #
-
-      #######################################################
-      # ПРОВЕРКА ХЭША ПАР ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ НА НАЛИЧИЕ ДУБЛИКАТОВ
-      # ТИПА 2 К 1
-      # Не должно остаться в хэше пар - пар для одного дерева с одним профилем
-      uniq_profiles_pairs_hash, double_profiles_pairs_hash = duplicates_out(max_power_profiles_pairs_hash)  # Ok
-      # Exclude empty hashes
-      uniq_profiles_pairs_hash.delete_if { |k,v|  v == {} }
-      logger.info "** After dups_out: uniq_profiles_pairs_hash = #{uniq_profiles_pairs_hash}, double_profiles_pairs_hash = #{double_profiles_pairs_hash}"
-
-
-
-      ######## сформирован итоговый Хэш uniq_profiles_pairs_hash достоверных пар результатов поиска
-      ######## для отображения их на Главной
-      # (аналог старых недостоверных @final_reduced_profiles_hash  и  @final_reduced_relations_hash)
-      # для дальнейшего формирования путей ?
-      # А также Хэш дубликатов double_profiles_pairs_hash, в случае их выявления
-
-
-      ############# ИТОГОВЫЕ РЕЗУЛЬТАТЫ ПОИСКА ##########################################
-      @uniq_profiles_pairs_hash = uniq_profiles_pairs_hash #
-      @double_profiles_pairs_hash = double_profiles_pairs_hash #
-
-      # Сбор дубликатов всех видов в один хэш
-      duplicated_profiles_pairs_hash.merge!(double_profiles_pairs_hash) if !double_profiles_pairs_hash.empty?
-      logger.info "** Final DUPPS: duplicated_profiles_pairs_hash = #{duplicated_profiles_pairs_hash}"
-
-
-      ############### TEST ########################################
-      # NB !! Вставить проверку и действия ЕСЛИ ПРИСУТСТВИЯ КАЖДОГО ПРОФИЛЯ В ЕГО РОДНОМ ДЕРЕВЕ
-      # СБОР ВСЕХ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ДЕРЕВЬЯМ
-      trees_profiles_hash = collect_trees_profiles(uniq_profiles_pairs_hash)
-      logger.info "** collect_trees_profiles begin: trees_profiles_hash = #{trees_profiles_hash} "
-      ################ TEST #######################################
-      # ПРОВЕРКА ПРИСУТСТВИЯ КАЖДОГО ПРОФИЛЯ В ЕГО РОДНОМ ДЕРЕВЕ
-      def check_profiles_tree_uniqness(trees_profiles_hash)
-        check_results_hash = {}
-        new_uniq_profiles_hash = {}
-        trees_profiles_hash.each_with_index do |(k, v), index|
-
-        end
-        return check_results_hash, new_uniq_profiles_hash
-      end
-      check_results_hash, new_uniq_profiles_hash = check_profiles_tree_uniqness(uniq_profiles_pairs_hash)
-      logger.info "** After check_uniqness: new_uniq_profiles_hash = #{new_uniq_profiles_hash}, check_results_hash = #{check_results_hash}"
-      # After method Get all found profiles for trees
 
 
 

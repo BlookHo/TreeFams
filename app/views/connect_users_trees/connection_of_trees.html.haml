@@ -17,33 +17,22 @@
   @second_tree: #{@second_tree.inspect}
 
 %h4
-  Запуск Жесткого ПОИСКА:
+  параметр ПОИСКА: @certain_koeff_for_connect = #{@certain_koeff_for_connect.inspect}
 %h4
-  ВСЕ wide СОВПАДЕНИЯ РОДНЫХ : @final_reduced_profiles_hash: #{@final_reduced_profiles_hash.inspect}
+  ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: @uniq_profiles_pairs_hash: #{@uniq_profiles_pairs_hash.inspect}
 %h4
-  ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : @duplicates_pairs_One_to_Many_hash: #{@duplicates_pairs_One_to_Many_hash.inspect}
+%h4
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : @duplicates_pairs_Many_to_One_hash: #{@duplicates_pairs_Many_to_One_hash.inspect}
 %p
   Длительность поиска: #{@elapsed_search_time.inspect}
 
 %h4
   Определение массивов ПЕРЕЗАПИСИ ПРОФИЛЕЙ:
 
-%p
-  @final_trees_search_results_arr: #{@final_trees_search_results_arr.inspect}
 
-%h4
-  Хэш и Массивы перезаписи, найденные в ПОИСКЕ и ОБЪЕДИНЕНИИ
 -#%p
 -#  ВИД ПОИСКА: @type_search_message: #{@type_search_message.inspect}
-%p
-  @final_hard_profiles_to_connect_hash: #{@final_hard_profiles_to_connect_hash.inspect}
-%p
-  @final_pos_profiles_arr: #{@final_pos_profiles_arr.inspect}
-%p
-  @final_profiles_searched_arr: #{@final_profiles_searched_arr.inspect}
-%p
-  @final_profiles_found_arr: #{@final_profiles_found_arr.inspect}
-
 
 %h4
   Массивы перезаписи, найденные в Connect_Users

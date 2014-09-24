@@ -1,21 +1,99 @@
 module SearchHelper
 
   ############################# NEW METHODS ############
+
+  # "EXCLUDE Many_to_One DUPLICATES"
+  # Extract duplicates hashes from input hash
+  def duplicates_out(start_hash)
+    # Initaialize empty hash
+    duplicates_Many_to_One = {}
+    uniqs = start_hash
+
+    # Collect duplicates
+    start_hash.each_with_index do |(k, v), index|
+      start_hash.each do |key, value|
+        next if k == key
+        intersection = start_hash[key] & start_hash[k]
+        if duplicates_Many_to_One.has_key?(key)
+          duplicates_Many_to_One[key][intersection.keys.first] = intersection[intersection.keys.first] if !intersection.empty?
+        else
+          duplicates_Many_to_One[key] = intersection if !intersection.empty?
+        end
+      end
+    end
+
+    # Collect uniqs
+    duplicates_Many_to_One.each do |key, value|
+      value.each do |k, v|
+        uniqs[key].delete_if { |kk,vv|  kk == k && vv = v }
+      end
+    end
+    logger.info "** In  duplicates_out: duplicates_Many_to_One = #{duplicates_Many_to_One}"
+
+     return uniqs, duplicates_Many_to_One
+  end
+
+
+
+  # СБОР ВСЕХ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ДЕРЕВЬЯМ
+  def collect_trees_profiles(start_hash)
+
+    results = {}
+    start_hash.each do |key, value|
+      value.each do |k, v|
+        if results.has_key? k
+          results[k].push v
+        else
+          results[k] = [v]
+        end
+      end
+    end
+    return results
+
+  end
+
+
+  # ИЗЪЯТИЕ ПРОФИЛЕЙ С МАЛОЙ МОЩНОСТЬЮ НАЙДЕННЫХ ОТНОШЕНИЙ
+  def reduce_profile_relations(profile_relations_hash, certainty_koeff)      ###################
+    reduced_profile_relations_hash = profile_relations_hash.select {|k,v| v.size >= certainty_koeff }
+    logger.info " reduced_profile_relations_hash = #{reduced_profile_relations_hash} "
+    ###############
+    return reduced_profile_relations_hash
+  end
+
+  # ПРЕВРАЩЕНИЕ ХЭША ПРОФИЛЕЙ С НАЙДЕННЫМИ ОТНОШЕНИЯМИ В ХЭШ ПРОФИЛЕЙ С МОЩНОСТЯМИ ОТНОШЕНИЙ
+  def make_profiles_power_hash(reduced_profile_relations_hash)
+    profiles_powers_hash = {}
+    reduced_profile_relations_hash.each { |k, v_arr | profiles_powers_hash.merge!( k => v_arr.size) }
+    logger.info " profiles_powers_hash = #{profiles_powers_hash} "
+    return profiles_powers_hash
+  end
+
+  # ПРЕВРАЩЕНИЕ ХЭША ПРОФИЛЕЙ С МОЩНОСТЯМИ ОТНОШЕНИЙ В ХЭШ ПРОФИЛЯ(ЕЙ) С МАКСИМАЛЬНОЙ(МИ) МОЩНОСТЬЮ
+  def get_max_power_profiles_hash(profiles_powers_hash)
+    max_power = profiles_powers_hash.values.max
+    max_profiles_powers_hash = profiles_powers_hash.select { |k, v| v == max_power}
+    logger.info " max profiles_powers_hash = #{max_profiles_powers_hash} "
+    return max_profiles_powers_hash, max_power
+  end
+
   # ПОЛУЧЕНИЕ ПАР СООТВЕТСТВИЙ ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ МНОЖЕСТВ СОВПАДЕНИЙ ОТНОШЕНИЙ
   # Вход
   # Выход
   # .
   def get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
-    max_power_profiles_pairs_hash = {}
-    duplicated_profiles_pairs_hash = {}
+    max_power_profiles_pairs_hash = {}  # Профили с макс-м кол-вом совпадений для одного соответствия в дереве
+    profiles_with_match_hash = {} # Порофили, отсортир-е по кол-ву совпадений
+    duplicates_pairs_One_to_Many_hash = {}  # Дубликаты ТИПА 1 К 2 - One_to_Many пар профилей
     profiles_found_arr.each do |hash_in_arr|
       #logger.info " hash_in_arr = #{hash_in_arr} "
       hash_in_arr.each do |searched_profile, profile_trees_relations|
         #logger.info " searched_profile = #{searched_profile} "
         max_power_pairs_hash = {}
-        duplicated_pairs_hash = {}
+        duplicates_One_to_Many_hash = {}
         profile_trees_relations.each do |key_tree, profile_relations_hash|
-          tree_selected = key_tree
+          #tree_selected = key_tree
+          profiles_powers_hash = {}
           #logger.info " tree_selected = #{tree_selected} "
           #profile_relations_hash = {58=>[1, 2, 3, 3, 3, 8], 59=>[1, 2, 3, 3, 3,9 ], 60=>[1, 2, 3, 3], 57=>[2, 3, 3]}
           logger.info " profile_relations_hash = #{profile_relations_hash} "
@@ -24,7 +102,7 @@ module SearchHelper
             profiles_powers_hash = make_profiles_power_hash(reduced_profile_relations_hash)
             max_profiles_powers_hash, max_power = get_max_power_profiles_hash(profiles_powers_hash)
 
-            # Выявление дубликатов ##########
+            # Выявление дубликатов ТИПА 1 К 2 - One_to_Many
             if max_profiles_powers_hash.size == 1 # один профиль с максимальной мощностью
               # НАРАЩИВАНИЕ ХЭША ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ certain_max_power_pairs_hash
               profile_selected = max_profiles_powers_hash.key(max_power)
@@ -32,24 +110,29 @@ module SearchHelper
               max_power_pairs_hash.merge!(key_tree => profile_selected )
               #logger.info " SAVE key_tree = #{key_tree}, max_power_pairs_hash = #{max_power_pairs_hash}  "
             else # больше одного профиля с максимальной мощностью
-              # НАРАЩИВАНИЕ ХЭША ПРОФИЛЕЙ-ДУПЛИКАТОВ duplicated_pairs_hash
+              # НАРАЩИВАНИЕ ХЭША ПРОФИЛЕЙ-ДУПЛИКАТОВ duplicates_One_to_Many_hash
               # ЕСЛИ НАЙДЕНО БОЛЬШЕ 1 ПАРЫ ПРОФИЛЕЙ С ОДИНАК. МАКС. МОЩНОСТЬЮ
-              # Т.Е. ДУПЛИКАТ ТИПА 1 К 2
-              # ЗАНОСИМ В ХЭШ ДУПЛИКАТОВ.
-              duplicated_pairs_hash.merge!(key_tree => max_profiles_powers_hash )
-              #logger.info " SKIP , PUT in DUPLICATES_HASH,  duplicated_profiles_pairs_hash = #{duplicated_profiles_pairs_hash} "
+              # Т.Е. ДУПЛИКАТ ТИПА 1 К 2 - One_to_Many, => ЗАНОСИМ В ХЭШ ДУПЛИКАТОВ.
+              duplicates_One_to_Many_hash.merge!(key_tree => max_profiles_powers_hash )
+              #logger.info " PUT in DUPLICATES_HASH,  duplicated_profiles_pairs_hash = #{duplicated_profiles_pairs_hash} "
             end
 
           end
 
+          profiles_with_match_hash.merge!(profiles_powers_hash ) if !profiles_powers_hash.empty?
+
         end
+
+        profiles_with_match_hash = Hash[profiles_with_match_hash.sort_by { |k, v| v }.reverse] #  Ok Sorting of input hash by values Descend
+
         max_power_profiles_pairs_hash.merge!(searched_profile => max_power_pairs_hash ) if !max_power_pairs_hash.empty?
-        duplicated_profiles_pairs_hash.merge!(searched_profile => duplicated_pairs_hash ) if !duplicated_pairs_hash.empty?
+
+        duplicates_pairs_One_to_Many_hash.merge!(searched_profile => duplicates_One_to_Many_hash ) if !duplicates_One_to_Many_hash.empty?
 
       end
 
     end
-    return max_power_profiles_pairs_hash, duplicated_profiles_pairs_hash
+    return max_power_profiles_pairs_hash, duplicates_pairs_One_to_Many_hash, profiles_with_match_hash
 
   end # End of method
 
@@ -411,6 +494,7 @@ module SearchHelper
 
 
 
+  # ИСПОЛЬЗУЕТСЯ В МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
   # Получение массива дерева соединенных Юзеров из Tree
   #  На входе - массив соединенных Юзеров
   # Используется 2 массива для исключения повторов

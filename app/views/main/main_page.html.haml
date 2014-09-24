@@ -14,6 +14,9 @@
 %p
   В дереве родственников: @qty_of_tree_profiles: #{@qty_of_tree_profiles.inspect}
 
+-#= text_field_tag: certain_koeff
+
+
 -#%p
 -#  @all_profile_rows: #{@all_profile_rows.inspect}
 -#%p
@@ -54,17 +57,21 @@
 
 
 %h4
-  КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ: @certainty_koeff: #{@certainty_koeff.inspect}
+  КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ: @certain_koeff: #{@certain_koeff.inspect}
 %h4
-  СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (ХЭШ ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ: {профиль искомый -> профиль -> его отношение к искомому} )  @new_profiles_relations_arr: #{@new_profiles_relations_arr.inspect}
+  СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ: {профиль искомый -> профиль -> его отношение к искомому} )  @new_profiles_relations_arr: #{@new_profiles_relations_arr.inspect}
 %h4
-  НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (ХЭШ): {профиль искомый -> дерево -> профиль найденный -> [ массив совпавших отношений с искомым профилем ]  @new_profiles_found_arr: #{@new_profiles_found_arr.inspect}
+  НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив): {профиль искомый -> дерево -> профиль найденный -> [ массив совпавших отношений с искомым профилем ]  @new_profiles_found_arr: #{@new_profiles_found_arr.inspect}
 %h4
-  ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ: {профиль искомый -> { дерево -> профиль найденный} } @max_power_profiles_pairs_hash: #{@max_power_profiles_pairs_hash.inspect}
+  ПРОФИЛИ, ОТСОРТИРОВАННЫЕ ПО КОЛ-ВУ СОВПАДЕНИЙ: {профиль искомый -> кол-во совпадений} @profiles_with_match_hash: #{@profiles_with_match_hash.inspect}
 %h4
   ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: {профиль искомый -> { дерево -> профиль найденный} } @uniq_profiles_pairs_hash: #{@uniq_profiles_pairs_hash.inspect}
+-#%h4
+-#  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ: {профиль искомый -> { дерево -> профиль найденный} } @duplicated_profiles_pairs_hash: #{@duplicated_profiles_pairs_hash.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ: {профиль искомый -> { дерево -> профиль найденный} } @duplicated_profiles_pairs_hash: #{@duplicated_profiles_pairs_hash.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} } @duplicates_pairs_One_to_Many_hash: #{@duplicates_pairs_One_to_Many_hash.inspect}
+%h4
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : {профиль искомый -> { дерево -> профиль найденный},...  } @duplicates_pairs_Many_to_One_hash: #{@duplicates_pairs_Many_to_One_hash.inspect}
 
 
 %p
