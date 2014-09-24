@@ -129,8 +129,9 @@ class MainController < ApplicationController
       @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
 
       ##### КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ ##########
-      @certain_koeff = 4 # (for 0-8 relations)
+      @certain_koeff = params[:certain_koeff] || 4 # (for 0-8 relations)
       ###############
+
 
       {72=>{9=>58, 10=>68}, #CK = 5
        78=>{9=>57, 10=>71}}

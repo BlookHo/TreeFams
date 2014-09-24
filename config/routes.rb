@@ -35,7 +35,7 @@ Weafam::Application.routes.draw do
 
   #todo: убрать путаницу в названиях методов main и start
   # main controller
-  match 'main_page' => 'main#main_page', via: :get
+  match 'main_page' => 'main#main_page', via: [:get, :post]
   match 'search_tree_match' => 'main#search_tree_match', via: :get
   match 'relative_menu' =>   'main#relative_menu', via: :get
   match 'match_approval' => 'main#match_approval', via: :get

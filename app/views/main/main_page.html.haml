@@ -96,6 +96,13 @@
 
 
 -#- @uniq_profiles_pairs_hash = {72=>{9=>58, 10=>68}, 73=>{9=>80, 10=>84}, 74=>{9=>81, 10=>85, 12=>93}, 75=>{10=>65}, 76=>{9=>61, 10=>69}, 77=>{9=>60}, 79=>{12=>101}}
+
+
+.content
+  = form_tag('/main_page') do
+    = select_tag :certain_koeff, options_for_select([1,2,3,4,5,6,7,8,9,10], selected: @certain_koeff)
+    = submit_tag 'Запустить поиск'
+
 .content
   %h2 Результаты поиска
   %table.tmp_table
