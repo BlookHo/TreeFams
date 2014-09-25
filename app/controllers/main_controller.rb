@@ -132,38 +132,10 @@ class MainController < ApplicationController
       @certain_koeff = params[:certain_koeff].to_i || 4 # (for 0-8 relations)
       ###############
 
-
-      {72=>{9=>58, 10=>68}, #CK = 5
-       78=>{9=>57, 10=>71}}
-
-      {72=>{9=>58, 10=>68}, #CK = 4
-       75=>{9=>59, 10=>65},
-       76=>{9=>61, 10=>69},
-       77=>{9=>60, 10=>70},
-       78=>{9=>57, 10=>71}}
-
-      {72=>{9=>58, 10=>68},  #CK = 2
-       73=>{9=>80, 10=>84},
-       74=>{9=>81, 10=>85},
-       75=>{9=>59, 10=>65},
-       76=>{9=>61, 10=>69},
-       77=>{9=>60, 10=>70},
-       78=>{9=>57, 10=>71}}
-
-      {72=>{9=>58, 10=>68}, # o #CK = 1
-       73=>{9=>80, 10=>84}, # o
-       74=>{9=>81, 10=>85}, # o
-       75=>{9=>59, 10=>65}, # o
-       76=>{9=>61, 10=>69}, # o
-       77=>{9=>60, 10=>70}, # o
-       78=>{9=>57, 10=>71}, # o
-       79=>{9=>62, 10=>86}} # o
-
       # DEBUGG_TO_VIEW
 
 
-
-
+  # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # NB !! ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ?
   # Вставить проверку и действия
   # .
@@ -194,7 +166,7 @@ class MainController < ApplicationController
   end
 
 
-  # NEW METHOD "HARD COMPLETE SEARCH"- TO DO
+  # NEW METHOD "HARD COMPLETE SEARCH"
   # Input: start tree No, tree No to connect
   # сбор полного хэша достоверных пар профилей для объединения
   # @max_power_profiles_pairs_hash
@@ -321,7 +293,6 @@ class MainController < ApplicationController
       start_tree = 9
       with_whom_connect_users_arr = 11
       # ck = 2
-      uniq_profiles_pairs_hash =
       {58=>{10=>68, 11=>72},
        59=>{10=>65, 11=>75},
        60=>{10=>70},
@@ -348,16 +319,21 @@ class MainController < ApplicationController
       #ALL profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
       #ALL profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
 
+      ##################################
       # ck = 4
+      uniq_profiles_pairs_hash =
       {57=>{10=>71, 11=>78},
        58=>{10=>68, 11=>72},
        59=>{10=>65, 11=>75},
        60=>{10=>70, 11=>77},
        61=>{10=>69, 11=>76}}
+
       [57, 58, 59, 60, 61, 62, 80, 81]
       [78, 72, 75, 77, 76, 79, 73, 74]
+
       #ALL profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
       #ALL profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
+      #####################################
 
       # ck = 5
       {57=>{10=>71, 11=>78},
@@ -411,6 +387,143 @@ class MainController < ApplicationController
       logger.info " "
 
 
+      profile_circle_1_hash = {
+          'f1' => 58, 'f2' => 100, 'm1' => 59, 's1' => 63, 's2' => 64, 'b1' => 60, 'b2' => 61, 'b3' => 66, 'w1' => 62 }
+
+      profile_circle_2_hash = {
+          'f1' => 58, 'f2' => 100, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
+
+
+      logger.info " COMPARE HASHES"
+
+      def get_row_data(one_row_hash)
+        if !one_row_hash.empty?
+          relation_val = one_row_hash.values_at('relation_id')[0]
+          is_profile_val = one_row_hash.values_at('is_profile_id')[0]
+        end
+        return relation_val, is_profile_val
+      end
+
+      def get_name_letter(relation_val)
+        name_letter = ""
+        case relation_val
+          when 1
+            name_letter = "f"
+          when 2
+            name_letter = "m"
+          when 3  # son
+            name_letter = "s"
+          when 4
+            name_letter = "d"
+          when 5
+            name_letter = "b"
+          when 6  # sIster
+            name_letter = "i"
+          when 7
+            name_letter = "h"
+          when 8
+            name_letter = "w"
+          else
+            logger.info "ERROR: No relation_id in Circle "
+        end
+        return name_letter
+      end
+
+      # Получаем кол-во для нового имени отношения в хэш круга
+      def name_next_qty(circle_keys_arr, name)
+        name_qty = 0
+        circle_keys_arr.each do |one_name_key|
+          name_qty += 1 if one_name_key.first == name
+        end
+        name_qty += 1
+        return name_qty
+      end
+
+      # Получаем новое  имя отношения в хэш круга
+      def get_new_elem_name(circle_keys_arr, name)
+        name_qty = name_next_qty(circle_keys_arr, name)
+        new_name = name.concat(name_qty.to_s)
+        return new_name
+      end
+
+      # input: circle_arr
+      # На выходе: profile_circle_hash = {'f1' => 58, 'f2' => 100, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
+      def convert_circle_to_hash(circle_arr)
+        profile_circle_hash = {}
+        circle_arr.each do |one_row_hash|
+          circle_keys_arr = profile_circle_hash.keys
+          relation_val, is_profile_val = get_row_data(one_row_hash)
+          name_letter = get_name_letter(relation_val)
+          # Получаем новое по порядку имя отношения в новый элемент хэша круга
+          new_name = get_new_elem_name(circle_keys_arr, name_letter)
+          # Наращиваем круг в виде хэша
+          profile_circle_hash.merge!( new_name => is_profile_val )
+        end
+         return profile_circle_hash
+      end
+
+      def rewrite_profiles_in_circle(profile_circle_hash, profiles_to_rewrite, profiles_to_destroy)
+        new_found_profile_circle_hash = {}
+        profile_circle_hash.each do | key, profile_val|
+          index = profiles_to_destroy.index(profile_val)
+          if !index.blank?
+            rewrited_profile_val = profiles_to_rewrite[index]
+            new_found_profile_circle_hash.merge!( key => rewrited_profile_val )
+          else
+            new_found_profile_circle_hash.merge!( key => 0)
+            # если нет такого профиля в противоположном массиве, то
+            # заполняем профиль=0
+          end
+        end
+        return new_found_profile_circle_hash
+      end
+
+
+    def check_rewrite_power(profiles_to_rewrite, profiles_to_destroy)
+
+      high_power_results_hash = {}
+      low_power_results_hash = {}
+
+      profiles_to_rewrite.each_with_index do |one_profile_rewr, index|
+        one_profile_destr = profiles_to_destroy[index]
+
+        # Получение Кругов для первой пары профилей -
+        # для последующего сравнения и анализа
+        search_bk_arr, search_bk_profiles_arr, search_is_profiles_arr, search_relations_arr = have_profile_circle(one_profile_rewr)
+        found_bk_arr, found_bk_profiles_arr, found_is_profiles_arr, found_relations_arr = have_profile_circle(one_profile_destr)
+
+        search_profile_circle_hash = convert_circle_to_hash(search_bk_profiles_arr)
+        found_profile_circle_hash = convert_circle_to_hash(found_bk_profiles_arr)
+
+        # перезапись профилей на основе массивов перезаписи
+        found_profile_circle_hash = rewrite_profiles_in_circle(found_profile_circle_hash, profiles_to_rewrite, profiles_to_destroy)
+        #logger.info "rewrited found_profile_circle_hash = #{found_profile_circle_hash}"
+
+        # определение пересечения (общей части) двух Кругов в виде хэшей
+        common_hash = search_profile_circle_hash & found_profile_circle_hash
+        # определение мощности пересечения
+        common_hash_power = 0
+        common_hash_power = common_hash.size if !common_hash.empty?
+        # занесение пар профилей в различные хэши по мощности
+        common_hash_power >= @certain_koeff ?
+            high_power_results_hash.merge!(one_profile_rewr => one_profile_destr) :
+            low_power_results_hash.merge!(one_profile_rewr => one_profile_destr)
+
+      end
+
+      return high_power_results_hash, low_power_results_hash
+
+    end
+
+      profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
+      profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
+
+      high_power_results_hash, low_power_results_hash = check_rewrite_power(profiles_to_rewrite, profiles_to_destroy)
+      logger.info " high_power_results_hash = #{high_power_results_hash}"
+      logger.info " low_power_results_hash = #{low_power_results_hash}"
+
+      high_power_results_hash = {57=>78, 58=>72, 59=>75, 60=>77, 61=>76}
+      low_power_results_hash = {62=>79, 80=>73, 81=>74}
 
 
 # Исх.представление для метода select_certainty
