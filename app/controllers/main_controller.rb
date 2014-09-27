@@ -113,6 +113,32 @@ class MainController < ApplicationController
 
 
 
+  # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
+  def get_name_letter(relation_val)
+    name_letter = ""
+    case relation_val
+      when 1
+        name_letter = "f"
+      when 2
+        name_letter = "m"
+      when 3  # son
+        name_letter = "s"
+      when 4
+        name_letter = "d"
+      when 5
+        name_letter = "b"
+      when 6  # sIster
+        name_letter = "i"
+      when 7
+        name_letter = "h"
+      when 8
+        name_letter = "w"
+      else
+        logger.info "ERROR: No relation_id in Circle "
+    end
+    return name_letter
+  end
+
 
 # ГЛАВНЫЙ СТАРТОВЫЙ МЕТОД ПОИСКА совпадений по дереву Юзера
  def main_page
@@ -133,6 +159,95 @@ class MainController < ApplicationController
       ###############
 
       # DEBUGG_TO_VIEW
+
+
+      @profiles_match_hash = {71=>6, 72=>6, 68=>6, 78=>5, 65=>5, 75=>4, 70=>4, 77=>4, 69=>4, 76=>4}
+
+      @uniq_hash = {57=>{10=>71, 11=>78},
+                    58=>{10=>68, 11=>72},
+                    59=>{10=>65, 11=>75},
+                    60=>{10=>70, 11=>77},
+                    61=>{10=>69, 11=>76}}
+
+      #    :by_trees => [
+      #        {:found_tree_id => 10, :found_profile_ids => [23,75,45]},
+      #        {:found_tree_id => 11, :found_profile_ids => [23,75,45]}
+
+      #search_results = {
+      #    :by_profiles => [
+      #{:search_profile_id => 57,
+      # :found_tree_id => 10,
+      # :found_profile_id => 71,
+      # :count => 6},
+
+    # make final sorted by_trees search results
+    def fill_hash_w_val_arr(filling_hash, input_key, input_val)
+      test = filling_hash.key?(input_key) # Is elem w/input_key in filling_hash?
+      if test == false #  "NOT Found in hash"
+        filling_hash.merge!({input_key => [input_val]}) # include new elem in hash
+      else  #  "Found in hash"
+        ids_arr = filling_hash.values_at(input_key)[0]
+        ids_arr << input_val
+        filling_hash[input_key] = ids_arr # store new arr val
+      end
+    end
+
+    # make final sorted by_trees search results
+    def make_by_trees_results(filling_hash)
+      by_trees = []
+      filling_hash.each do |tree_id, profiles_ids|
+        one_tree_hash = {}
+        one_tree_hash.merge!(:found_tree_id => tree_id)
+        one_tree_hash.merge!(:found_profile_ids => profiles_ids)
+        by_trees << one_tree_hash
+      end
+      return by_trees
+    end
+
+    # make final search results for view
+    def make_search_results(uniq_hash, profiles_match_hash)
+      by_profiles = []
+      filling_hash = {}
+      uniq_hash.each do |search_profile_id, found_hash|
+        found_hash.each do |found_tree_id, found_profile_id|
+          # make fill_hash for by_trees search results
+          fill_hash_w_val_arr(filling_hash, found_tree_id, found_profile_id)
+
+          # make fill_hash for by_profiles search results
+          one_result_hash = {}
+          count = 0
+          one_result_hash.merge!(:search_profile_id => search_profile_id)
+          one_result_hash.merge!(:found_tree_id => found_tree_id)
+          one_result_hash.merge!(:found_profile_id => found_profile_id)
+          count = profiles_match_hash.values_at(found_profile_id)[0] if !profiles_match_hash.empty?
+          one_result_hash.merge!(:count => count)
+          by_profiles << one_result_hash
+
+        end
+      end
+
+      # make final sorted by_profiles search results
+      by_profiles = by_profiles.sort_by {|h| [ h[:count] ]}.reverse
+      # make final by_trees search results
+      by_trees = make_by_trees_results(filling_hash)
+
+      return by_profiles, by_trees
+    end
+
+      by_profiles, by_trees = make_search_results(@uniq_hash, @profiles_match_hash)
+      logger.info " by_profiles = #{by_profiles} "
+      logger.info " by_trees = #{by_trees} "
+
+
+
+
+
+      #profile_searched = 59
+      #search_bk_arr, search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
+      ##found_bk_arr, found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
+      #logger.info " search_is_profiles_arr = #{search_is_profiles_arr} " #", found_is_profiles_arr = #{found_is_profiles_arr} "
+      #logger.info " "
+
 
 
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
@@ -184,7 +299,7 @@ class MainController < ApplicationController
     final_profiles_to_destroy = []
     if !uniq_profiles_hash.empty?
 
-      init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr,uniq_profiles_hash)
+      init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_hash)
       logger.info " init_connection_hash = #{init_connection_hash}"
 
       final_connection_hash = init_connection_hash
@@ -393,9 +508,16 @@ class MainController < ApplicationController
       profile_circle_2_hash = {
           'f1' => 58, 'f2' => 100, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
 
-
+      # НОВЫЕ МЕТОДЫ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
+      # 1.ПОЛУЧЕНИЯ КРУГА ПО ПРОФИЛЮ
+      # 2.ПРЕОБРАЗОВАНИЕ КРУГА В ХЭШ (см.выше)
+      # 3.СРАВНЕНИЕ ХЭШЕЙ - ПЕРЕСЕЧЕНИЕ И ОПРЕДЛЕНИЕ МОЩНОСТИ СОВПАДЕНИЯ
+      # 4 ФОРМИРОВАНИЕ 2-Х СПРАВОЧНЫХ ХЭШЕЙ - ПО МОЩНОСТИ
+      # СОРТИРОВКА ПАР ПРОФИЛЕЙ ПО МОЩНОСТИ ИХ ПЕРЕСЕЧЕНИЯ
+      # .
       logger.info " COMPARE HASHES"
 
+      # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
       def get_row_data(one_row_hash)
         if !one_row_hash.empty?
           relation_val = one_row_hash.values_at('relation_id')[0]
@@ -404,31 +526,34 @@ class MainController < ApplicationController
         return relation_val, is_profile_val
       end
 
-      def get_name_letter(relation_val)
-        name_letter = ""
-        case relation_val
-          when 1
-            name_letter = "f"
-          when 2
-            name_letter = "m"
-          when 3  # son
-            name_letter = "s"
-          when 4
-            name_letter = "d"
-          when 5
-            name_letter = "b"
-          when 6  # sIster
-            name_letter = "i"
-          when 7
-            name_letter = "h"
-          when 8
-            name_letter = "w"
-          else
-            logger.info "ERROR: No relation_id in Circle "
-        end
-        return name_letter
-      end
+      ## ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
+      #def get_name_letter(relation_val)
+      #  name_letter = ""
+      #  case relation_val
+      #    when 1
+      #      name_letter = "f"
+      #    when 2
+      #      name_letter = "m"
+      #    when 3  # son
+      #      name_letter = "s"
+      #    when 4
+      #      name_letter = "d"
+      #    when 5
+      #      name_letter = "b"
+      #    when 6  # sIster
+      #      name_letter = "i"
+      #    when 7
+      #      name_letter = "h"
+      #    when 8
+      #      name_letter = "w"
+      #    else
+      #      logger.info "ERROR: No relation_id in Circle "
+      #  end
+      #  return name_letter
+      #end
+      #
 
+      # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
       # Получаем кол-во для нового имени отношения в хэш круга
       def name_next_qty(circle_keys_arr, name)
         name_qty = 0
@@ -439,6 +564,7 @@ class MainController < ApplicationController
         return name_qty
       end
 
+      # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
       # Получаем новое  имя отношения в хэш круга
       def get_new_elem_name(circle_keys_arr, name)
         name_qty = name_next_qty(circle_keys_arr, name)
@@ -446,6 +572,7 @@ class MainController < ApplicationController
         return new_name
       end
 
+      # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
       # input: circle_arr
       # На выходе: profile_circle_hash = {'f1' => 58, 'f2' => 100, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
       def convert_circle_to_hash(circle_arr)
@@ -462,6 +589,7 @@ class MainController < ApplicationController
          return profile_circle_hash
       end
 
+      # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
       def rewrite_profiles_in_circle(profile_circle_hash, profiles_to_rewrite, profiles_to_destroy)
         new_found_profile_circle_hash = {}
         profile_circle_hash.each do | key, profile_val|
@@ -479,7 +607,8 @@ class MainController < ApplicationController
       end
 
 
-    def check_rewrite_power(profiles_to_rewrite, profiles_to_destroy)
+      # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
+      def check_rewrite_power(profiles_to_rewrite, profiles_to_destroy)
 
       high_power_results_hash = {}
       low_power_results_hash = {}
@@ -525,8 +654,10 @@ class MainController < ApplicationController
       high_power_results_hash = {57=>78, 58=>72, 59=>75, 60=>77, 61=>76}
       low_power_results_hash = {62=>79, 80=>73, 81=>74}
 
+      # КОНЕЦ НОВЫХ МЕТОДОВ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
 
-# Исх.представление для метода select_certainty
+
+      # Исх.представление для метода select_certainty
 # from 11 to 9,10
 #      [{72=>{9=>{58=>[1, 2, 3, 3, 3, 8], 57=>[2, 3, 3]},
 #             10=>{68=>[1, 2, 3, 3, 3, 8], 71=>[2, 3]}}},# ]
@@ -680,6 +811,10 @@ class MainController < ApplicationController
       @new_profiles_found_arr = search_results[:new_profiles_found_arr]
       @uniq_profiles_pairs_hash = search_results[:uniq_profiles_pairs_hash]
       @profiles_with_match_hash = search_results[:profiles_with_match_hash]
+
+      ############# РЕЗУЛЬТАТЫ ПОИСКА для отображения на Главной ##########################################
+      @by_profiles = search_results[:by_profiles]
+      @by_trees = search_results[:by_trees]
 
       @duplicates_pairs_One_to_Many_hash = search_results[:duplicates_pairs_One_to_Many_hash]
       @duplicates_pairs_Many_to_One_hash = search_results[:duplicates_pairs_Many_to_One_hash]

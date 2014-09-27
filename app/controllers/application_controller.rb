@@ -50,7 +50,6 @@ class ApplicationController < ActionController::Base
   # Получение массива дерева соединенных Юзеров из Tree
   #  На входе - массив соединенных Юзеров
   def get_connected_users_tree(connected_users_arr)
-    # Этот метод оставлен здесь для отладочного отображения
     # tree_arr
     # В search_soft.rb исп-ся get_connected_tree(connected_users_arr)
 

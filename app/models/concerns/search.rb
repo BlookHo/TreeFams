@@ -22,11 +22,15 @@ module Search
     results = {
         connected_author_arr: connected_author_arr,
         qty_of_tree_profiles: qty_of_tree_profiles,
-        ############################# NEW METHOD ############
+        ############### РЕЗУЛЬТАТЫ ПОИСКА ######## NEW METHOD ############
         new_profiles_relations_arr: @new_profiles_relations_arr,
         new_profiles_found_arr: @new_profiles_found_arr,
         uniq_profiles_pairs_hash: @uniq_profiles_pairs_hash,
         profiles_with_match_hash: @profiles_with_match_hash,
+
+        ############# РЕЗУЛЬТАТЫ ПОИСКА для отображения на Главной ##########################################
+        by_profiles: @by_profiles,
+        by_trees: @by_trees,
 
         duplicates_pairs_One_to_Many_hash: @duplicates_pairs_One_to_Many_hash,
         duplicates_pairs_Many_to_One_hash: @duplicates_pairs_Many_to_One_hash
@@ -95,12 +99,75 @@ module Search
       logger.info "** Final RESULTS: (after dups_out) uniq_profiles_pairs_hash = #{uniq_profiles_pairs_hash}"
       logger.info "** Final RESULTS: (after dups_out) duplicates_pairs_Many_to_One_hash = #{duplicates_pairs_Many_to_One_hash}"
 
-      ############# ИТОГОВЫЕ РЕЗУЛЬТАТЫ ПОИСКА ##########################################
+      ############# РЕЗУЛЬТАТЫ ПОИСКА ##########################################
       @uniq_profiles_pairs_hash = uniq_profiles_pairs_hash #
       @profiles_with_match_hash = profiles_with_match_hash #
 
       @duplicates_pairs_One_to_Many_hash = duplicates_pairs_One_to_Many_hash #
       @duplicates_pairs_Many_to_One_hash = duplicates_pairs_Many_to_One_hash #
+
+      ############# РЕЗУЛЬТАТЫ ПОИСКА для отображения на Главной ##########################################
+
+      # make final sorted by_trees search results
+      def fill_hash_w_val_arr(filling_hash, input_key, input_val)
+        test = filling_hash.key?(input_key) # Is elem w/input_key in filling_hash?
+        if test == false #  "NOT Found in hash"
+          filling_hash.merge!({input_key => [input_val]}) # include new elem in hash
+        else  #  "Found in hash"
+          ids_arr = filling_hash.values_at(input_key)[0]
+          ids_arr << input_val
+          filling_hash[input_key] = ids_arr # store new arr val
+        end
+      end
+
+      # make final sorted by_trees search results
+      def make_by_trees_results(filling_hash)
+        by_trees = []
+        filling_hash.each do |tree_id, profiles_ids|
+          one_tree_hash = {}
+          one_tree_hash.merge!(:found_tree_id => tree_id)
+          one_tree_hash.merge!(:found_profile_ids => profiles_ids)
+          by_trees << one_tree_hash
+        end
+        return by_trees
+      end
+
+      # make final search results for view
+      def make_search_results(uniq_hash, profiles_match_hash)
+        by_profiles = []
+        filling_hash = {}
+        uniq_hash.each do |search_profile_id, found_hash|
+          found_hash.each do |found_tree_id, found_profile_id|
+            # make fill_hash for by_trees search results
+            fill_hash_w_val_arr(filling_hash, found_tree_id, found_profile_id)
+
+            # make fill_hash for by_profiles search results
+            one_result_hash = {}
+            count = 0
+            one_result_hash.merge!(:search_profile_id => search_profile_id)
+            one_result_hash.merge!(:found_tree_id => found_tree_id)
+            one_result_hash.merge!(:found_profile_id => found_profile_id)
+            count = profiles_match_hash.values_at(found_profile_id)[0] if !profiles_match_hash.empty?
+            one_result_hash.merge!(:count => count)
+            by_profiles << one_result_hash
+
+          end
+        end
+
+        # make final sorted by_profiles search results
+        by_profiles = by_profiles.sort_by {|h| [ h[:count] ]}.reverse
+        # make final by_trees search results
+        by_trees = make_by_trees_results(filling_hash)
+
+        return by_profiles, by_trees
+      end
+
+      by_profiles, by_trees = make_search_results(uniq_profiles_pairs_hash, profiles_with_match_hash)
+      logger.info " by_profiles = #{by_profiles} "
+      logger.info " by_trees = #{by_trees} "
+      @by_profiles = by_profiles #
+      @by_trees = by_trees #
+
 
 
       ## Сбор дубликатов всех видов в один хэш

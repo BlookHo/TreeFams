@@ -66,8 +66,12 @@
   ПРОФИЛИ, ОТСОРТИРОВАННЫЕ ПО КОЛ-ВУ СОВПАДЕНИЙ: {профиль искомый -> кол-во совпадений} @profiles_with_match_hash: #{@profiles_with_match_hash.inspect}
 %h4
   ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: {профиль искомый -> { дерево -> профиль найденный} } @uniq_profiles_pairs_hash: #{@uniq_profiles_pairs_hash.inspect}
--#%h4
--#  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ: {профиль искомый -> { дерево -> профиль найденный} } @duplicated_profiles_pairs_hash: #{@duplicated_profiles_pairs_hash.inspect}
+%h4
+  ИТОГОВЫЕ РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ
+%h4
+  @by_profiles: #{@by_profiles.inspect}
+%h4
+  @by_trees: #{@by_trees.inspect}
 %h4
   ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} } @duplicates_pairs_One_to_Many_hash: #{@duplicates_pairs_One_to_Many_hash.inspect}
 %h4

@@ -94,7 +94,7 @@ class StartController < ApplicationController
   # @see News
   def add_father_to_ProfileKeys(profiles_array)
 
-    #profiles_array = [[nil, author_name, true], [1, father_name, true]].
+    #profiles_array = [[0, author_name, true], [1, father_name, true]].
     author_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о father
     father_ProfileKeys_arr = []  # Массив для записи в ProfileKeys рядов о father
 
