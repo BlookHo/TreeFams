@@ -783,13 +783,6 @@ class ConnectUsersTreesController < ApplicationController
 
   end
 
-  # ck = 2
-  #ALL profiles_to_rewrite = [58, 59, 61, 80, 81, 57, 60, 62]
-  #ALL profiles_to_destroy = [72, 75, 76, 73, 74, 78, 77, 79]
-
-  # ck = 4
-  # @profiles_to_rewrite: [57, 58, 59, 60, 61, 62, 80, 81]
-  # @profiles_to_destroy: [78, 72, 75, 77, 76, 79, 73, 74]
 
   # ИСПОЛЬЗУЕТСЯ В МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
   # Проверка найденных массивов перезаписи при объединении - на повторы

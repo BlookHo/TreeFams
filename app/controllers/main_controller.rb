@@ -12,133 +12,6 @@ class MainController < ApplicationController
   end
 
 
- ############# МЕТОДЫ ФОРМИРОВАНИЯ ХЭША ПУТЕЙ ДЛЯ РЕЗ-ТОВ ПОИСКА
-
- # Делаем пути по результатам поиска - для отображения
- # @note GET /
-  def make_search_results_paths(final_reduced_profiles_hash) #,final_reduced_relations_hash)
-
-
-    @search_path_hash = Hash.new
-    @new_search_path_hash = Hash.new  # NEW_PATH_W_START_PROFILE
-    final_reduced_profiles_hash.each do |k_tree,v_tree|
-      paths_arr = []
-      new_paths_arr = []
-      one_path_hash = Hash.new
-
-      one_wide_hash = Hash.new  # NEW_PATH_W_START_PROFILE
-      val_arr = []  # NEW_PATH_W_START_PROFILE
-
-      #start_profile = User.find(k_tree).profile_id
-      one_tree_hash = get_tree_hash(k_tree)
-      @one_tree_hash = one_tree_hash # DEBUGG_TO_VIEW
-      v_tree.each do |each_k,v_tree_hash|
-        results_qty = v_tree_hash.size
-        @v_tree_hash = v_tree_hash # DEBUGG_TO_VIEW
-        v_tree_hash.each do |finish_profile|
-          one_path_hash = make_path(one_tree_hash, finish_profile, results_qty)
-          @one_path_hash = one_path_hash # DEBUGG_TO_VIEW
-          paths_arr << one_path_hash
-
-          val_arr = one_wide_hash.values_at(each_k).flatten.compact  # NEW_PATH_W_START_PROFILE
-          #logger.info "DEBUG IN make_search_results_paths: before << #{@val_arr.inspect}"
-          val_arr << one_path_hash   # NEW_PATH_W_START_PROFILE
-          #logger.info "DEBUG IN make_search_results_paths: after << #{@val_arr.inspect}"
-          one_wide_hash.merge!({each_k => val_arr})  # NEW_PATH_W_START_PROFILE
-          @one_wide_hash = one_wide_hash # DEBUGG_TO_VIEW
-          #new_paths_arr << one_wide_hash
-
-        end
-        #new_paths_arr << one_wide_hash
-      end
-
-
-      # Основной результат = @search_path_hash
-      @search_path_hash.merge!({k_tree => paths_arr}) # наполнение хэша хэшами
-      # Основной результат = @new_search_path_hash
-      @new_search_path_hash.merge!({k_tree => one_wide_hash}) # # NEW_PATH_W_START_PROFILE  наполнение хэша хэшами  # NEW_PATH_W_START_PROFILE
-    end
-  end
-
-  # Добавляем один хэш в один path рез-тов поиска
-  #
-  def add_one_hash_to_one_path(tree_hash, finish_profile, results_qty, end_profile)
-    qty = 0
-    start_elem_arr = tree_hash.values_at(end_profile)[0] #
-    relation_to_next_profile = start_elem_arr[0]
-    elem_next_profile = start_elem_arr[1]
-    qty = results_qty if end_profile == finish_profile
-    @one_path_hash.merge!(make_one_hash_in_path(end_profile, relation_to_next_profile, qty))
-    return @one_path_hash, relation_to_next_profile, elem_next_profile
-  end
-
-  # Делаем один path рез-тов поиска - далее он включается в итоговый хэш
-  #
-  def make_path(tree_hash, finish_profile, results_qty)
-    @one_path_hash = Hash.new
-    end_profile = finish_profile
-    @one_path_hash, relation_to_next_profile, elem_next_profile = add_one_hash_to_one_path(tree_hash, finish_profile, results_qty, end_profile)
-    while relation_to_next_profile != 0 do
-      @one_path_hash, new_elem_relation, new_next_profile = add_one_hash_to_one_path(tree_hash, finish_profile, results_qty, elem_next_profile)
-      elem_next_profile = new_next_profile
-      relation_to_next_profile = new_elem_relation
-    end
-    return Hash[@one_path_hash.to_a.reverse] #.reverse_order - чтобы шли от автора
-  end
-
-  # Получаем дерево в виде хэша для данного tree_user_id
-  #
-  def get_tree_hash(tree_user_id)
-    return {} if tree_user_id.blank?
-    tree_hash = Hash.new
-    user_tree = Tree.where(:user_id => tree_user_id)  #
-    if !user_tree.blank?
-      user_tree.each do |tree_row|
-        tree_hash.merge!({tree_row.is_profile_id => [tree_row.relation_id, tree_row.profile_id]})
-      end
-      return tree_hash
-    end
-  end
-
-  # Делаем один хэш в один path рез-тов поиска
-  #
-  def make_one_hash_in_path(one_profile, one_relation, results_qty)
-    one_hash_in_path = Hash.new
-    one_hash_in_path.merge!({one_profile => {one_relation => results_qty}})
-    return one_hash_in_path
-  end
-
-  #### КОНЕЦ МЕТОДОВ ФОРМИРОВАНИЯ ХЭША ПУТЕЙ ДЛЯ РЕЗ-ТОВ ПОИСКА
-
-
-
-
-  # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
-  def get_name_letter(relation_val)
-    name_letter = ""
-    case relation_val
-      when 1
-        name_letter = "f"
-      when 2
-        name_letter = "m"
-      when 3  # son
-        name_letter = "s"
-      when 4
-        name_letter = "d"
-      when 5
-        name_letter = "b"
-      when 6  # sIster
-        name_letter = "i"
-      when 7
-        name_letter = "h"
-      when 8
-        name_letter = "w"
-      else
-        logger.info "ERROR: No relation_id in Circle "
-    end
-    return name_letter
-  end
-
 
 # ГЛАВНЫЙ СТАРТОВЫЙ МЕТОД ПОИСКА совпадений по дереву Юзера
  def main_page
@@ -168,86 +41,6 @@ class MainController < ApplicationController
                     59=>{10=>65, 11=>75},
                     60=>{10=>70, 11=>77},
                     61=>{10=>69, 11=>76}}
-
-      #    :by_trees => [
-      #        {:found_tree_id => 10, :found_profile_ids => [23,75,45]},
-      #        {:found_tree_id => 11, :found_profile_ids => [23,75,45]}
-
-      #search_results = {
-      #    :by_profiles => [
-      #{:search_profile_id => 57,
-      # :found_tree_id => 10,
-      # :found_profile_id => 71,
-      # :count => 6},
-
-    # make final sorted by_trees search results
-    def fill_hash_w_val_arr(filling_hash, input_key, input_val)
-      test = filling_hash.key?(input_key) # Is elem w/input_key in filling_hash?
-      if test == false #  "NOT Found in hash"
-        filling_hash.merge!({input_key => [input_val]}) # include new elem in hash
-      else  #  "Found in hash"
-        ids_arr = filling_hash.values_at(input_key)[0]
-        ids_arr << input_val
-        filling_hash[input_key] = ids_arr # store new arr val
-      end
-    end
-
-    # make final sorted by_trees search results
-    def make_by_trees_results(filling_hash)
-      by_trees = []
-      filling_hash.each do |tree_id, profiles_ids|
-        one_tree_hash = {}
-        one_tree_hash.merge!(:found_tree_id => tree_id)
-        one_tree_hash.merge!(:found_profile_ids => profiles_ids)
-        by_trees << one_tree_hash
-      end
-      return by_trees
-    end
-
-    # make final search results for view
-    def make_search_results(uniq_hash, profiles_match_hash)
-      by_profiles = []
-      filling_hash = {}
-      uniq_hash.each do |search_profile_id, found_hash|
-        found_hash.each do |found_tree_id, found_profile_id|
-          # make fill_hash for by_trees search results
-          fill_hash_w_val_arr(filling_hash, found_tree_id, found_profile_id)
-
-          # make fill_hash for by_profiles search results
-          one_result_hash = {}
-          count = 0
-          one_result_hash.merge!(:search_profile_id => search_profile_id)
-          one_result_hash.merge!(:found_tree_id => found_tree_id)
-          one_result_hash.merge!(:found_profile_id => found_profile_id)
-          count = profiles_match_hash.values_at(found_profile_id)[0] if !profiles_match_hash.empty?
-          one_result_hash.merge!(:count => count)
-          by_profiles << one_result_hash
-
-        end
-      end
-
-      # make final sorted by_profiles search results
-      by_profiles = by_profiles.sort_by {|h| [ h[:count] ]}.reverse
-      # make final by_trees search results
-      by_trees = make_by_trees_results(filling_hash)
-
-      return by_profiles, by_trees
-    end
-
-      by_profiles, by_trees = make_search_results(@uniq_hash, @profiles_match_hash)
-      logger.info " by_profiles = #{by_profiles} "
-      logger.info " by_trees = #{by_trees} "
-
-
-
-
-
-      #profile_searched = 59
-      #search_bk_arr, search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
-      ##found_bk_arr, found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
-      #logger.info " search_is_profiles_arr = #{search_is_profiles_arr} " #", found_is_profiles_arr = #{found_is_profiles_arr} "
-      #logger.info " "
-
 
 
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
@@ -303,8 +96,8 @@ class MainController < ApplicationController
       logger.info " init_connection_hash = #{init_connection_hash}"
 
       final_connection_hash = init_connection_hash
-      final_profiles_to_rewrite = init_connection_hash.keys
-      final_profiles_to_destroy = init_connection_hash.values
+      #final_profiles_to_rewrite = init_connection_hash.keys
+      #final_profiles_to_destroy = init_connection_hash.values
       # начало сбора полного хэша достоверных пар профилей для объединения
       until init_connection_hash.empty?
         logger.info "** IN UNTIL top: init_connection_hash = #{init_connection_hash}"
@@ -407,6 +200,7 @@ class MainController < ApplicationController
 
       start_tree = 9
       with_whom_connect_users_arr = 11
+      @with_whom_connect_users_arr = with_whom_connect_users_arr
       # ck = 2
       {58=>{10=>68, 11=>72},
        59=>{10=>65, 11=>75},
@@ -465,10 +259,6 @@ class MainController < ApplicationController
 
       # ck = 7
       {}
-      #ALL profiles_to_rewrite = []
-      #ALL profiles_to_destroy = []
-
-
 
       #start_tree = 9
       #connected_user = 10
@@ -495,6 +285,8 @@ class MainController < ApplicationController
 
       profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs_hash )
 
+      @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
+      @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
       logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
       logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
       logger.info " "
@@ -502,11 +294,8 @@ class MainController < ApplicationController
       logger.info " "
 
 
-      profile_circle_1_hash = {
-          'f1' => 58, 'f2' => 100, 'm1' => 59, 's1' => 63, 's2' => 64, 'b1' => 60, 'b2' => 61, 'b3' => 66, 'w1' => 62 }
 
-      profile_circle_2_hash = {
-          'f1' => 58, 'f2' => 100, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
+      #   ТЕСТ НАЙДЕННЫХ ПРОФИЛЕЙ - РАСПРЕДЕЛЕНИЕ ПО МОЩНОСТИ СОВПАДЕНИЙ:
 
       # НОВЫЕ МЕТОДЫ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
       # 1.ПОЛУЧЕНИЯ КРУГА ПО ПРОФИЛЮ
@@ -517,6 +306,12 @@ class MainController < ApplicationController
       # .
       logger.info " COMPARE HASHES"
 
+      profile_circle_1_hash = {
+          'f1' => 58, 'f2' => 100, 'm1' => 59, 's1' => 63, 's2' => 64, 'b1' => 60, 'b2' => 61, 'b3' => 66, 'w1' => 62 }
+
+      profile_circle_2_hash = {
+          'f1' => 58, 'f2' => 100, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
+
       # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
       def get_row_data(one_row_hash)
         if !one_row_hash.empty?
@@ -526,32 +321,32 @@ class MainController < ApplicationController
         return relation_val, is_profile_val
       end
 
-      ## ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
-      #def get_name_letter(relation_val)
-      #  name_letter = ""
-      #  case relation_val
-      #    when 1
-      #      name_letter = "f"
-      #    when 2
-      #      name_letter = "m"
-      #    when 3  # son
-      #      name_letter = "s"
-      #    when 4
-      #      name_letter = "d"
-      #    when 5
-      #      name_letter = "b"
-      #    when 6  # sIster
-      #      name_letter = "i"
-      #    when 7
-      #      name_letter = "h"
-      #    when 8
-      #      name_letter = "w"
-      #    else
-      #      logger.info "ERROR: No relation_id in Circle "
-      #  end
-      #  return name_letter
-      #end
-      #
+      # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
+      def get_name_letter(relation_val)
+        name_letter = ""
+        case relation_val
+          when 1
+            name_letter = "f"
+          when 2
+            name_letter = "m"
+          when 3  # son
+            name_letter = "s"
+          when 4
+            name_letter = "d"
+          when 5
+            name_letter = "b"
+          when 6  # sIster
+            name_letter = "i"
+          when 7
+            name_letter = "h"
+          when 8
+            name_letter = "w"
+          else
+            logger.info "ERROR: No relation_id in Circle "
+        end
+        return name_letter
+      end
+
 
       # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
       # Получаем кол-во для нового имени отношения в хэш круга
@@ -650,33 +445,16 @@ class MainController < ApplicationController
       high_power_results_hash, low_power_results_hash = check_rewrite_power(profiles_to_rewrite, profiles_to_destroy)
       logger.info " high_power_results_hash = #{high_power_results_hash}"
       logger.info " low_power_results_hash = #{low_power_results_hash}"
+      @high_power_results_hash = high_power_results_hash
+      @low_power_results_hash = low_power_results_hash
 
-      high_power_results_hash = {57=>78, 58=>72, 59=>75, 60=>77, 61=>76}
-      low_power_results_hash = {62=>79, 80=>73, 81=>74}
+      #high_power_results_hash = {57=>78, 58=>72, 59=>75, 60=>77, 61=>76}
+      #low_power_results_hash = {62=>79, 80=>73, 81=>74}
 
-      # КОНЕЦ НОВЫХ МЕТОДОВ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
+      # КОНЕЦ   ТЕСТ НАЙДЕННЫХ ПРОФИЛЕЙ - РАСПРЕДЕЛЕНИЕ ПО МОЩНОСТИ СОВПАДЕНИЙ:
+      # НОВЫХ МЕТОДОВ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
 
 
-      # Исх.представление для метода select_certainty
-# from 11 to 9,10
-#      [{72=>{9=>{58=>[1, 2, 3, 3, 3, 8], 57=>[2, 3, 3]},
-#             10=>{68=>[1, 2, 3, 3, 3, 8], 71=>[2, 3]}}},# ]
-#
-#       {73=>{9=>{80=>[3, 8]}, # exclude!
-#             10=>{84=>[3, 8], 70=>[8]}}},  # exclude!
-#       {74=>{9=>{59=>[3], 81=>[3, 7]},  # exclude!
-#             10=>{65=>[3], 85=>[3, 7], 83=>[7]}}},  # exclude!
-#       {75=>{9=>{59=>[3, 3, 3, 7], 81=>[3]},
-#             10=>{65=>[3, 3, 3, 7], 85=>[3]}}},
-#          #   10=>{65=>[3, 3, 3, 7], 85=>[3,3,3,3]}}}, # test for duplicated
-#       {76=>{9=>{61=>[1, 2, 5, 5]},
-#             10=>{69=>[1, 2, 5, 5]}}},
-#       {77=>{9=>{60=>[1, 2, 5, 5], 64=>[1, 5]},
-#             10=>{70=>[1, 2, 5, 5], 87=>[1]}}},
-#       {78=>{9=>{57=>[1, 2, 5, 5, 8], 63=>[1, 5], 58=>[2]},
-#             10=>{71=>[1, 2, 5, 5, 8], 68=>[2]}}},
-#       {79=>{9=>{62=>[7]},  # exclude!
-#             10=>{86=>[7]}}}]  # exclude!
 # from 11 to 9,10
 #          {72=>{9=>58, 10=>68},
 #           75=>{9=>59, 10=>65},
@@ -686,26 +464,6 @@ class MainController < ApplicationController
 
 
 # from 10 to 11,9
-#      [{65=>{9=>{59=>[1, 3, 3, 3, 7], 81=>[3]},
-#             11=>{75=>[3, 3, 3, 7], 74=>[3]}}},
-#       {66=>{9=>{82=>[4]}}},
-#       {68=>{11=>{72=>[1, 2, 3, 3, 3, 8], 78=>[2]},
-#             9=>{58=>[1, 2, 3, 3, 3, 8], 57=>[2, 3, 3]}}},
-#       {69=>{9=>{61=>[1, 2, 5, 5]},
-#             11=>{76=>[1, 2, 5, 5]}}},
-#       {70=>{9=>{60=>[1, 2, 5, 5], 64=>[1, 5], 80=>[8]},
-#             11=>{77=>[1, 2, 5, 5], 73=>[8]}}},
-#       {71=>{9=>{57=>[1, 2, 3, 5, 5, 8], 63=>[1, 5], 58=>[2, 3]},
-#             11=>{78=>[1, 2, 5, 5, 8], 72=>[2, 3]}}},
-#       {83=>{11=>{74=>[7]}, 9=>{81=>[7]}}},
-#       {84=>{11=>{73=>[3, 8]},
-#             9=>{80=>[3, 8]}}},
-#       {85=>{9=>{59=>[3], 81=>[3, 7]},
-#             11=>{74=>[3, 7], 75=>[3]}}},
-#       {86=>{9=>{62=>[3, 7]},
-#             11=>{79=>[7]}}},
-#       {87=>{9=>{60=>[1], 64=>[1, 2]},
-#             11=>{77=>[1]}}}]
 
       # from 10 to 11,9
       #{65=>{9=>59, 11=>75},
@@ -715,21 +473,6 @@ class MainController < ApplicationController
       # 71=>{9=>57, 11=>78}}
 
 # from 9 to 11,10
-      [{57=>{10=>{71=>[1, 2, 3, 5, 5, 8], 68=>[2, 3, 3]},
-             11=>{78=>[1, 2, 5, 5, 8], 72=>[2, 3, 3]}}},
-       {58=>{11=>{72=>[1, 2, 3, 3, 3, 8], 78=>[2]},
-             10=>{68=>[1, 2, 3, 3, 3, 8], 71=>[2, 3]}}},
-       {59=>{10=>{65=>[1, 3, 3, 3, 7], 85=>[3]},
-             11=>{74=>[3], 75=>[3, 3, 3, 7]}}},
-       {60=>{10=>{70=>[1, 2, 5, 5], 87=>[1]},
-             11=>{77=>[1, 2, 5, 5]}}},
-       {61=>{10=>{69=>[1, 2, 5, 5]}, 11=>{76=>[1, 2, 5, 5]}}},
-       {62=>{10=>{86=>[3, 7]}, 11=>{79=>[7]}}},
-       {63=>{10=>{71=>[1, 5]}, 11=>{78=>[1, 5]}}},
-       {64=>{10=>{70=>[1, 5], 87=>[1, 2]}, 11=>{77=>[1, 5]}}},
-       {80=>{11=>{73=>[3, 8]}, 10=>{84=>[3, 8], 70=>[8]}}},
-       {81=>{10=>{65=>[3], 85=>[3, 7], 83=>[7]}, 11=>{74=>[3, 7], 75=>[3]}}},
-       {82=>{10=>{66=>[4]}}}]
 
       {57=>{10=>71, 11=>78},
        58=>{11=>72, 10=>68},
@@ -738,55 +481,10 @@ class MainController < ApplicationController
        61=>{10=>69, 11=>76}}
 
 
-
-      # 1 to 2
-      [{1=>{2=>{11=>[3, 3, 8]}}},
-       {4=>{2=>{7=>[3, 3, 7]}}},
-       {5=>{2=>{12=>[1, 2, 5]}}},
-       {6=>{2=>{13=>[1, 2, 5]}}}]
-
-      {1=>{2=>11},
-       4=>{2=>7},
-       5=>{2=>12},
-       6=>{2=>13}}
-
-
-      # 2 to 1
-      [{7=>{1=>{4=>[3, 3, 7]}}},
-       {11=>{1=>{1=>[3, 3, 8]}}},
-       {12=>{1=>{5=>[1, 2, 5]}}},
-       {13=>{1=>{6=>[1, 2, 5]}}}]
-
-      {7=>{1=>4},
-       11=>{1=>1},
-       12=>{1=>5},
-       13=>{1=>6}}
-
-
-      # 5 to 6 - для certain_koeff = 2
-      [{34=>{6=>{45=>[3, 8]}}},
-       {38=>{6=>{41=>[3, 7]}}},
-       {40=>{6=>{46=>[1, 2]}}}]
-
-      {34=>{6=>45},
-       38=>{6=>41},
-       40=>{6=>46}}
-
-
-
-
       ################################
       ######## Основной поиск от дерева Автора (вместе с соединенными)
       ######## среди других деревьев в ProfileKeys.
       beg_search_time = Time.now   # Начало отсечки времени поиска
-
-      ##############################################################################
-      ##### ВЫБОР ВИДА ПОИСКА:
-      # start_search(@certain_koeff) - Запуск НОВОГО поиска С @certainty_koeff - последняя версия
-      # start_hard_search (жесткий - по совпадению БК),
-      # или start_search_first (1-й версии - самый первый),
-      # или start_search (мягкий - 2-я версия, с определением right_profile по макс. кол-ву совпадений),
-      ##############################################################################
 
       #####  Запуск НОВОГО поиска С @certainty_koeff - последняя версия
       search_results = current_user.start_search(@certain_koeff)  ##
@@ -818,196 +516,20 @@ class MainController < ApplicationController
 
       @duplicates_pairs_One_to_Many_hash = search_results[:duplicates_pairs_One_to_Many_hash]
       @duplicates_pairs_Many_to_One_hash = search_results[:duplicates_pairs_Many_to_One_hash]
-
       ######################################################
-
-      # @new_profiles_found_arr = searched unconcerned results for searched tree (11) - for analyzis
-      [{72=>{9=>{58=>[1, 2, 3, 3, 3, 8], 57=>[2, 3, 3]}, 10=>{68=>[1, 2, 3, 3, 3, 8], 71=>[2, 3]}}},
-       {73=>{9=>{80=>[3, 8]}, 10=>{84=>[3, 8], 70=>[8]}}},
-       {74=>{9=>{59=>[3], 81=>[3, 7]}, 10=>{65=>[3], 85=>[3, 7], 83=>[7]}}},
-       {75=>{9=>{59=>[3, 3, 3, 7], 81=>[3]}, 10=>{65=>[3, 3, 3, 7], 85=>[3]}}},
-       {76=>{9=>{61=>[1, 2, 5, 5]}, 10=>{69=>[1, 2, 5, 5]}}},
-       {77=>{9=>{60=>[1, 2, 5, 5], 64=>[1, 5]}, 10=>{70=>[1, 2, 5, 5], 87=>[1]}}},
-       {78=>{9=>{57=>[1, 2, 5, 5, 8], 63=>[1, 5], 58=>[2]}, 10=>{71=>[1, 2, 5, 5, 8], 68=>[2]}}},
-       {79=>{9=>{62=>[7]}, 10=>{86=>[7]}}}]
-
-
-      # searched tree structure (11) - for what?
-      [{72=>{73=>1, 74=>2, 76=>3, 77=>3, 78=>3, 75=>8}},
-       {73=>{72=>3, 74=>8}},
-       {74=>{72=>3, 73=>7}},
-       {75=>{76=>3, 77=>3, 78=>3, 72=>7}},
-       {76=>{72=>1, 75=>2, 77=>5, 78=>5}},
-       {77=>{72=>1, 75=>2, 76=>5, 78=>5}},
-       {78=>{72=>1, 75=>2, 76=>5, 77=>5, 79=>8}},
-       {79=>{78=>7}}]
-
-
-    #  max_power_profiles_pairs_hash = # test w/dubbles
-      {72=>{9=>58, 10=>68},
-       73=>{9=>80, 10=>84},
-       74=>{9=>81, 10=>85},
-       75=>{9=>57, 10=>65},   # 75=>{9=>59, 10=>65},
-       76=>{9=>61, 10=>69},
-       77=>{9=>60, 10=>71}, #    77=>{9=>60, 10=>70},
-       78=>{9=>57, 10=>71}}
-
-
-
-
-      # 7 to 8 tree
-      # @new_profiles_found_arr
-      [{47=>{8=>{56=>[1, 2], 55=>[3, 8], 53=>[8]}}},  # !! duplicates! 1 to 2
-       {48=>{8=>{55=>[3, 8], 53=>[8]}}},
-       {49=>{8=>{52=>[3, 7], 54=>[7]}}},
-       {50=>{8=>{52=>[3, 7], 54=>[7]}}},
-       {51=>{8=>{56=>[1, 2]}}}]
-
-      # @duplicated_profiles_pairs_hash
-      {47=>{8=>{56=>2, 55=>2}}} # All duplicates!
-      { 47=>{8=>[56, 55]} } # same All duplicates!
-
-      # @max_power_profiles_pairs_hash
-      {48=>{8=>55},
-       49=>{8=>52}, # !! duplicates! 2 to 1
-       50=>{8=>52}, # !! duplicates! 2 to 1
-       51=>{8=>56}}
-
-
-
-      ################################
-      ######## Запуск метода формирования путей
-      ######## отображения рез-тов на Главной
-      #@final_reduced_profiles_hash =
-      #{9=>{72=>[58, 61, 60, 57, 59],
-      #     75=>[59, 61, 60, 57, 58],
-      #     76=>[61, 58, 59, 60, 57],
-      #     77=>[60, 58, 59, 61, 57],
-      #     78=>[57, 58, 59, 61, 60]},
-      #
-      # 10=>{72=>[68, 69, 70, 71, 65],
-      #      75=>[65, 69, 70, 71, 68],
-      #      76=>[69, 68, 65, 70, 71],
-      #      77=>[70, 68, 65, 69, 71],
-      #      78=>[71, 68, 65, 69, 70]}
-      #}
-      #
-      #@final_reduced_relations_hash =
-      #{9=>{72=>[0, 3, 3, 3, 8],
-      #     75=>[0, 3, 3, 3, 7],
-      #     76=>[0, 1, 2, 5, 5],
-      #     77=>[0, 1, 2, 5, 5],
-      #     78=>[0, 1, 2, 5, 5]},
-      #
-      # 10=>{72=>[0, 3, 3, 3, 8],
-      #      75=>[0, 3, 3, 3, 7],
-      #      76=>[0, 1, 2, 5, 5],
-      #      77=>[0, 1, 2, 5, 5],
-      #      78=>[0, 1, 2, 5, 5]}
-      #}
-
-      #  make_search_results_paths(@final_reduced_profiles_hash) #
-      @final_reduced_profiles_hash = {}
-      @final_reduced_relations_hash = {}
-      @wide_user_ids_arr =[]
-      make_search_results_paths({})  # DEBUGG_TO_VIEW
 
 
       # Для отладки # DEBUGG_TO_VIEW
       @author_id = current_user.id # DEBUGG_TO_VIEW
       @author_connected_tree_arr = get_connected_users_tree(@connected_author_arr) # DEBUGG_TO_VIEW
       @len_author_tree = @author_connected_tree_arr.length  if !@author_connected_tree_arr.blank?  # DEBUGG_TO_VIEW
-
-
+      search_results = {}
+      @search_results = search_results
 
     end
 
 
-    ################################
-    ########## Методы формирования отображения рез-тов на Главной
-    session[:search_results_relations] = nil
-    session[:all_match_relations_sorted] = nil
 
-    @search_results_relations = []
-    @final_reduced_profiles_hash.each do |tree_id,  tree_value|
-      tree_value.each do |matched_key, matched_value|
-        matched_value.each_with_index do |profile_id, index|
-          relation = @final_reduced_relations_hash[tree_id][matched_key][index]
-          @search_results_relations << {profile_id => {matched_key => relation}}
-        end
-      end
-    end
-
-    session[:search_results_relations] = @search_results_relations
-    session[:results_count_hash] =  @final_reduced_relations_hash
-
-    # Ближние круги пользователей из результатов поиска
-    @search_results = []
-    result_users = User.where(id: @wide_user_ids_arr)
-    sorted_result_users = @wide_user_ids_arr.collect {|id| result_users.detect {|u| u.id == id.to_i } }
-    sorted_result_users.each do |user|
-      @search_results << Hashie::Mash.new( {author: user, circle: user.profile.circle(user.id)} )
-    end
-
-    # Path search results
-    @path_search_results = []
-    @search_path_hash.each do |user_id, user_paths|
-      user = User.find user_id
-      @path_search_results << {user: user, paths: collect_path_profiles(user_paths)}
-    end
-    @path_search_results
-
-    @search_results_data = collect_search_results_data(@new_search_path_hash)
-
- end
-
-
- def collect_search_results_data(data_hash)
-   results = []
-   data_hash.each do |user_id, result_data|
-     user = User.find user_id
-     result = {
-               user_id: user.id,
-               user_name: user.profile.name.to_name,
-               user_sex_id: user.profile.sex_id,
-               connected: user.get_connected_users.size > 1,
-               results: collect_search_results_for_profiles(result_data)
-              }
-     results << Hashie::Mash.new(result)
-   end
-   results
- end
-
-
- def collect_search_results_for_profiles(data)
-   results = []
-   data.each do |profile_id, path_data|
-     profile = Profile.find(profile_id)
-     result = {
-                profile_id: profile.id,
-                profile_name: profile.name.to_name,
-                results_count: path_data.size,
-                results: collect_path_profiles(path_data)
-              }
-     results << result
-   end
-   results
- end
-
-
- def collect_path_profiles(user_paths)
-   results = []
-   user_paths.each do |paths|
-     result = []
-     prev_sex_id = nil
-     paths.each do |profile_id, data|
-       profile = Profile.find(profile_id)
-       result << {profile: profile, data: data, relation: data.keys.first, prev_sex_id: prev_sex_id}
-       prev_sex_id = profile.sex_id
-     end
-     results << result
-   end
-   return results
  end
 
 

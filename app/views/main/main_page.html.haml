@@ -52,8 +52,6 @@
 -# %p
 -#   ВСЕ НАЙДЕННЫЕ НОМЕРА wide ДЕРЕВЬЕВ (АВТОРОВ) @wide_user_ids_arr: #{@wide_user_ids_arr.inspect}
 -#
--# %h4
--#   ВСЕ НАЙДЕННЫЕ ПРОФИЛИ: @wide_profile_ids_arr: #{@wide_profile_ids_arr.inspect}
 
 
 %h4
@@ -66,6 +64,16 @@
   ПРОФИЛИ, ОТСОРТИРОВАННЫЕ ПО КОЛ-ВУ СОВПАДЕНИЙ: {профиль искомый -> кол-во совпадений} @profiles_with_match_hash: #{@profiles_with_match_hash.inspect}
 %h4
   ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: {профиль искомый -> { дерево -> профиль найденный} } @uniq_profiles_pairs_hash: #{@uniq_profiles_pairs_hash.inspect}
+
+
+%h4
+  ТЕСТ НАЙДЕННЫХ ПРОФИЛЕЙ - РАСПРЕДЕЛЕНИЕ ПО МОЩНОСТИ СОВПАДЕНИЙ:
+%h4
+  @high_power_results_hash: #{@high_power_results_hash.inspect}
+%h4
+  @low_power_results_hash: #{@low_power_results_hash.inspect}
+
+
 %h4
   ИТОГОВЫЕ РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ
 %h4
@@ -82,6 +90,14 @@
   Длительность поиска: @elapsed_search_time: #{@elapsed_search_time.inspect}
 
 
+%h4
+  Массивы перезаписи, найденные в Connect_Users
+%p
+  @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
+%p
+  @profiles_to_rewrite: #{@profiles_to_rewrite.inspect}
+%p
+  @profiles_to_destroy: #{@profiles_to_destroy.inspect}
 
 
 -#%p

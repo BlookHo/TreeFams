@@ -97,4 +97,101 @@ module ProfilePath
 
    #### КОНЕЦ МЕТОДОВ ФОРМИРОВАНИЯ ХЭША ПУТЕЙ ДЛЯ РЕЗ-ТОВ ПОИСКА
 
+
+   #  make_search_results_paths(@final_reduced_profiles_hash) #
+  @final_reduced_profiles_hash = {}
+  @final_reduced_relations_hash = {}
+  @wide_user_ids_arr =[]
+  make_search_results_paths({})  # DEBUGG_TO_VIEW
+
+
+
+  ################################
+   ########## Методы формирования отображения рез-тов на Главной
+  session[:search_results_relations] = nil
+  session[:all_match_relations_sorted] = nil
+
+  @search_results_relations = []
+  @final_reduced_profiles_hash.each do |tree_id,  tree_value|
+    tree_value.each do |matched_key, matched_value|
+      matched_value.each_with_index do |profile_id, index|
+        relation = @final_reduced_relations_hash[tree_id][matched_key][index]
+        @search_results_relations << {profile_id => {matched_key => relation}}
+      end
+    end
+  end
+
+  session[:search_results_relations] = @search_results_relations
+  session[:results_count_hash] =  @final_reduced_relations_hash
+
+  # Ближние круги пользователей из результатов поиска
+  @search_results = []
+  result_users = User.where(id: @wide_user_ids_arr)
+  sorted_result_users = @wide_user_ids_arr.collect {|id| result_users.detect {|u| u.id == id.to_i } }
+  sorted_result_users.each do |user|
+    @search_results << Hashie::Mash.new( {author: user, circle: user.profile.circle(user.id)} )
+  end
+
+  # Path search results
+  @path_search_results = []
+  @search_path_hash.each do |user_id, user_paths|
+    user = User.find user_id
+    @path_search_results << {user: user, paths: collect_path_profiles(user_paths)}
+  end
+  @path_search_results
+
+  @search_results_data = collect_search_results_data(@new_search_path_hash)
+
+
+  def collect_search_results_data(data_hash)
+    results = []
+    data_hash.each do |user_id, result_data|
+      user = User.find user_id
+      result = {
+          user_id: user.id,
+          user_name: user.profile.name.to_name,
+          user_sex_id: user.profile.sex_id,
+          connected: user.get_connected_users.size > 1,
+          results: collect_search_results_for_profiles(result_data)
+      }
+      results << Hashie::Mash.new(result)
+    end
+    results
+  end
+
+
+  def collect_search_results_for_profiles(data)
+    results = []
+    data.each do |profile_id, path_data|
+      profile = Profile.find(profile_id)
+      result = {
+          profile_id: profile.id,
+          profile_name: profile.name.to_name,
+          results_count: path_data.size,
+          results: collect_path_profiles(path_data)
+      }
+      results << result
+    end
+    results
+  end
+
+
+  def collect_path_profiles(user_paths)
+    results = []
+    user_paths.each do |paths|
+      result = []
+      prev_sex_id = nil
+      paths.each do |profile_id, data|
+        profile = Profile.find(profile_id)
+        result << {profile: profile, data: data, relation: data.keys.first, prev_sex_id: prev_sex_id}
+        prev_sex_id = profile.sex_id
+      end
+      results << result
+    end
+    return results
+  end
+
+
+
+
 end

@@ -47,6 +47,22 @@
 -#%p
 -#  @diff_hash: #{@diff_hash.inspect}
 
+- if @complete_dubles_hash.empty?
+  %h1 Дубликатов нет. Деревья объединяются...
+- else
+  %h1 Информация при объединении деревьев: объединить нельзя, т.к. есть дубликаты:
+  = @complete_dubles_hash
+  %br/
+  = @test_arrrs_dubl
+  %br/
+  = @test_arrrs_size
+  %br/
+  = @test_arrrs_blank
+
+
+
+
+
 %p
   @save_in_tree: #{@save_in_tree.inspect}
 %p

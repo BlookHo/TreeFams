@@ -195,6 +195,9 @@ module Search
       check_results_hash, new_uniq_profiles_hash = check_profiles_tree_uniqness(uniq_profiles_pairs_hash)
       logger.info "** After check_uniqness: new_uniq_profiles_hash = #{new_uniq_profiles_hash}, check_results_hash = #{check_results_hash}"
       # After method Get all found profiles for trees
+      #### ДОДЕЛАТЬ! ########### TEST ########################################
+
+
 
     else
       logger.info "** NO SEARCH RESULTS **"
