@@ -2,6 +2,25 @@
 
 %h3
   ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ
+%p
+  @stop_connection: #{@stop_connection.inspect}
+
+
+
+
+- if !@stop_connection
+  %h1 Дубликатов нет. Деревья объединяются...
+- else
+  %h1 Информация при объединении деревьев: объединить нельзя, т.к. есть дубликаты:
+  = @complete_dubles_hash
+  %br/
+  = @test_arrrs_dubl
+  %br/
+  = @test_arrrs_size
+  %br/
+  = @test_arrrs_blank
+
+
 
 %p
   Кто хочет соединиться: Автор: #{@current_user_id.inspect}
@@ -21,9 +40,9 @@
 %h4
   ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: @uniq_profiles_pairs_hash: #{@uniq_profiles_pairs_hash.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : @duplicates_pairs_One_to_Many_hash: #{@duplicates_pairs_One_to_Many_hash.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : @duplicates_One_to_Many_hash: #{@duplicates_One_to_Many_hash.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : @duplicates_pairs_Many_to_One_hash: #{@duplicates_pairs_Many_to_One_hash.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : @duplicates_Many_to_One_hash: #{@duplicates_Many_to_One_hash.inspect}
 %p
   Длительность поиска: #{@elapsed_search_time.inspect}
 
@@ -46,18 +65,6 @@
 -#  @new_connection_hash: #{@new_connection_hash.inspect}
 -#%p
 -#  @diff_hash: #{@diff_hash.inspect}
-
-- if @complete_dubles_hash.empty?
-  %h1 Дубликатов нет. Деревья объединяются...
-- else
-  %h1 Информация при объединении деревьев: объединить нельзя, т.к. есть дубликаты:
-  = @complete_dubles_hash
-  %br/
-  = @test_arrrs_dubl
-  %br/
-  = @test_arrrs_size
-  %br/
-  = @test_arrrs_blank
 
 
 

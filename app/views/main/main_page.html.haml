@@ -14,76 +14,42 @@
 %p
   В дереве родственников: @qty_of_tree_profiles: #{@qty_of_tree_profiles.inspect}
 
--#= text_field_tag: certain_koeff
-
-
--#%p
--#  @all_profile_rows: #{@all_profile_rows.inspect}
--#%p
--#  @all_profile_rows_len: #{@all_profile_rows_len.inspect}
--#%p
--#  @relation_match_arr: #{@relation_match_arr.inspect}
--#%p
--#  @relation_match_size: #{@relation_match_size.inspect}
--#%p
--#  @found_profiles_hash: #{@found_profiles_hash.inspect}
--#%p
--#  @found_relations_hash: #{@found_relations_hash.inspect}
--#%p
--#  @all_match_profiles_arr: #{@all_match_profiles_arr.inspect}
--#%p
--#  @all_match_relations_arr: #{@all_match_relations_arr.inspect}
--#%p
--#  @all_wide_match_profiles_arr: #{@all_wide_match_profiles_arr.inspect}
--#%p
--#  @all_wide_match_hash: #{@all_wide_match_hash.inspect}
--#%p
--#  @all_wide_match_relations_arr: #{@all_wide_match_relations_arr.inspect}
--#%h4
--#  ВСЕ СОВПАДЕНИЯ РОДНЫХ: {дерево  профили}@all_match_arr_sorted: #{@all_match_arr_sorted.inspect}
--#%h4
--#  ПОЛНЫЙ ХЭШ ПРОФИЛЕЙ: {дерево  профили}@all_wide_match_arr_sorted: #{@all_wide_match_arr_sorted.inspect}
--#%h4
--#  ВСЕ wide СОВПАДЕНИЯ РОДНЫХ : @final_reduced_profiles_hash: #{@final_reduced_profiles_hash.inspect}
--#%h4
--#  ВСЕ wide НАЙДЕННЫЕ НОМЕРА ОТНОШЕНИй: @final_reduced_relations_hash: #{@final_reduced_relations_hash.inspect}
--#%p
--#  НОМЕРА ДЕРЕВЬЕВ (АВТОРОВ) @user_ids_arr: #{@user_ids_arr.inspect}
--# %p
--#   ВСЕ НАЙДЕННЫЕ НОМЕРА wide ДЕРЕВЬЕВ (АВТОРОВ) @wide_user_ids_arr: #{@wide_user_ids_arr.inspect}
--#
-
 
 %h4
   КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ: @certain_koeff: #{@certain_koeff.inspect}
 %h4
-  СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ: {профиль искомый -> профиль -> его отношение к искомому} )  @new_profiles_relations_arr: #{@new_profiles_relations_arr.inspect}
+  СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ:
+  %h4    {профиль искомый -> профиль -> его отношение к искомому} )
+  %h4    @profiles_relations_arr: #{@profiles_relations_arr.inspect}
 %h4
-  НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив): {профиль искомый -> дерево -> профиль найденный -> [ массив совпавших отношений с искомым профилем ]  @new_profiles_found_arr: #{@new_profiles_found_arr.inspect}
+  НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив):
+  %h4     {профиль искомый -> дерево -> профиль найденный -> [ массив совпавших отношений с искомым профилем ]
+  %h4     @new_profiles_found_arr: #{@new_profiles_found_arr.inspect}
 %h4
-  ПРОФИЛИ, ОТСОРТИРОВАННЫЕ ПО КОЛ-ВУ СОВПАДЕНИЙ: {профиль искомый -> кол-во совпадений} @profiles_with_match_hash: #{@profiles_with_match_hash.inspect}
+  ПРОФИЛИ, ОТСОРТИРОВАННЫЕ ПО КОЛ-ВУ СОВПАДЕНИЙ:
+  %h4     {профиль искомый -> кол-во совпадений}
+  %h4     @profiles_with_match_hash: #{@profiles_with_match_hash.inspect}
 %h4
-  ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: {профиль искомый -> { дерево -> профиль найденный} } @uniq_profiles_pairs_hash: #{@uniq_profiles_pairs_hash.inspect}
+  ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ:
+  %h4  {профиль искомый -> { дерево -> профиль найденный} }
+  %h4  @uniq_profiles_pairs_hash: #{@uniq_profiles_pairs_hash.inspect}
 
 
 %h4
   ТЕСТ НАЙДЕННЫХ ПРОФИЛЕЙ - РАСПРЕДЕЛЕНИЕ ПО МОЩНОСТИ СОВПАДЕНИЙ:
-%h4
-  @high_power_results_hash: #{@high_power_results_hash.inspect}
-%h4
-  @low_power_results_hash: #{@low_power_results_hash.inspect}
-
+  %h4   @high_power_results_hash: #{@high_power_results_hash.inspect}
+  %h4   @low_power_results_hash: #{@low_power_results_hash.inspect}
 
 %h4
   ИТОГОВЫЕ РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ
+  %h4  ###### @by_profiles: #{@by_profiles.inspect}
+  %h4  ###### @by_trees   : #{@by_trees.inspect}
 %h4
-  Результаты поиска для Главной @by_profiles: #{@by_profiles.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} }
+  %h4  @duplicates_One_to_Many_hash: #{@duplicates_One_to_Many_hash.inspect}
 %h4
-  Результаты поиска для Главной @by_trees: #{@by_trees.inspect}
-%h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} } @duplicates_pairs_One_to_Many_hash: #{@duplicates_pairs_One_to_Many_hash.inspect}
-%h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : {профиль искомый -> { дерево -> профиль найденный},...  } @duplicates_pairs_Many_to_One_hash: #{@duplicates_pairs_Many_to_One_hash.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : {профиль искомый -> { дерево -> профиль найденный},...  }
+  %h4  @duplicates_Many_to_One_hash: #{@duplicates_Many_to_One_hash.inspect}
 
 
 %p
@@ -172,7 +138,7 @@
 
 
   %div{style: "margin-top:50px;"}
-    - if @search_results.empty?
+    - if @search_res.empty?
       %h1.yellow-title Совпадений не найдено
     - else
       %h1.yellow-title Возможно, мы нашли ваших родственников:

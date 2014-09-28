@@ -74,8 +74,8 @@ module SearchHelper
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "SEARCH.rb"
   # ПРЕВРАЩЕНИЕ ХЭША ПРОФИЛЕЙ С МОЩНОСТЯМИ ОТНОШЕНИЙ В ХЭШ ПРОФИЛЯ(ЕЙ) С МАКСИМАЛЬНОЙ(МИ) МОЩНОСТЬЮ
   def get_max_power_profiles_hash(profiles_powers_hash)
-    max_power = profiles_powers_hash.values.max
-    max_profiles_powers_hash = profiles_powers_hash.select { |k, v| v == max_power}
+    max_power = profiles_powers_hash.values.max # определение значения макс-й мощности
+    max_profiles_powers_hash = profiles_powers_hash.select { |k, v| v == max_power} # выбор эл-тов хэша с макс-й мощностью
     logger.info " max profiles_powers_hash = #{max_profiles_powers_hash} "
     return max_profiles_powers_hash, max_power
   end
@@ -88,7 +88,7 @@ module SearchHelper
     if max_profiles_powers_hash.size == 1
       one_profile = max_profiles_powers_hash.keys[0]
       one_match = max_profiles_powers_hash.values_at(one_profile)[0]
-      logger.info " IN get_profiles_match_hash profiles_arr = #{profiles_arr}, one_profile = #{one_profile}, one_match = #{one_match},  "
+      logger.info " IN get_profiles_match_hash:: new_profiles_with_match_hash = #{new_profiles_with_match_hash}, profiles_arr = #{profiles_arr}, one_profile = #{one_profile}, one_match = #{one_match},  "
       if profiles_arr.include?(one_profile)
         match_in_hash = new_profiles_with_match_hash.values_at(one_profile)[0]
         if one_match > match_in_hash
@@ -109,6 +109,7 @@ module SearchHelper
   # Выход
   # .
   def get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
+    logger.info " profiles_found_arr = #{profiles_found_arr} "
     max_power_profiles_pairs_hash = {}  # Профили с макс-м кол-вом совпадений для одного соответствия в дереве
     profiles_with_match_hash = {} # Порофили, отсортир-е по кол-ву совпадений
     new_profiles_with_match_hash = {}
@@ -118,7 +119,7 @@ module SearchHelper
       hash_in_arr.each do |searched_profile, profile_trees_relations|
         #logger.info " searched_profile = #{searched_profile} "
         max_power_pairs_hash = {}
-       # new_profiles_with_match_hash = {}
+        # new_profiles_with_match_hash = {}
         duplicates_One_to_Many_hash = {}
         profile_trees_relations.each do |key_tree, profile_relations_hash|
           logger.info " profile_relations_hash = #{profile_relations_hash} "
@@ -190,13 +191,13 @@ module SearchHelper
 
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Метод получения НЕ общей части 2-х БК профилей
-  def get_delta_bk(first_bk, second_bk, common_bk_arr)
-    #one = (first_bk - common_bk_arr)
-    #two = (second_bk - common_bk_arr)
+  def get_circles_delta(first_bk, second_bk, common_circle_arr)
+    #one = (first_bk - common_circle_arr)
+    #two = (second_bk - common_circle_arr)
     #logger.info " get_delta_bk: one = #{one}, two = #{two}"
-    delta_bk = (first_bk - common_bk_arr) + (second_bk - common_bk_arr)
+    circles_delta = (first_bk - common_circle_arr) + (second_bk - common_circle_arr)
 
-    return delta_bk
+    return circles_delta
   end
 
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
@@ -255,6 +256,7 @@ module SearchHelper
     return bk_arr, bk_arr_w_profiles, is_profiles_arr, relations_arr # Сделан БК в виде массива Хэшей
   end
 
+  # NO USE!!!!
   # МЕТОД Вявления дубликатов в Круге
   # NB !! Вставить проверку и действия ЕСЛИ В БК ЕСТЬ СОВЕРШЕННО
   # ОДИНАКОВЫЕ ЭЛ-ТЫ: ИМЯ - ОТНОШЕНИЕ - ИМЯ
@@ -285,24 +287,24 @@ module SearchHelper
     if !found_bk_arr.blank?
       if !search_bk_arr.blank?
         delta = []
-        logger.info "in compare_two_BK: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
+        logger.info "in compare_two_circles: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
         if found_bk_arr.size.inspect == search_bk_arr.size.inspect
-          common_bk_arr = found_bk_arr - search_bk_arr
-          if common_bk_arr == []
+          common_circle_arr = found_bk_arr - search_bk_arr
+          if common_circle_arr == []
             compare_rezult = true
-            logger.info " BKs Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_bk_arr = #{common_bk_arr}"
+            logger.info " circles Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_circle_arr = #{common_circle_arr}"
           else
-            common_bk_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
+            common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
             compare_rezult = false
-            logger.info "BKs Size = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_bk_arr = #{common_bk_arr}"
-            delta = get_delta_bk(found_bk_arr, search_bk_arr, common_bk_arr)
+            logger.info "circles Size = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
+            delta = get_circles_delta(found_bk_arr, search_bk_arr, common_circle_arr)
           end
 
         else
-          common_bk_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
+          common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
           compare_rezult = false
-          logger.info "BKs - SIZE = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != [])"
-          delta = get_delta_bk(found_bk_arr, search_bk_arr, common_bk_arr)
+          logger.info "BKs - SIZE = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х circles - НЕ != [])"
+          delta = get_circles_delta(found_bk_arr, search_bk_arr, common_circle_arr)
         end
 
       else
@@ -312,7 +314,7 @@ module SearchHelper
       logger.info "Error in compare_two_BK. Нет БК для Профиля: found_bk_arr = #{found_bk_arr}"
     end
 
-    return compare_rezult, common_bk_arr, delta
+    return compare_rezult, common_circle_arr, delta
   end
   # TEST COMPARE 2 BK
   # bk_arr1  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
@@ -372,7 +374,7 @@ module SearchHelper
           field_arr_found << one_found_row.values_at('is_profile_id')
           new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]}) # make new el-t of hash
 
-  #        logger.info "rez = #{rez}, field_arr_searched = #{field_arr_searched}, field_arr_found = #{field_arr_found}, "
+          #logger.info "field_arr_searched = #{field_arr_searched}, field_arr_found = #{field_arr_found}, "
 
         end
 
@@ -458,27 +460,27 @@ module SearchHelper
     end
   end
 
-  # NEW SEARCH method
-  # получает на вход id деревьев из которых надо собрать ближний круг profile_id
-  # в виде двух хэшей: хэш профилей и хэш их отношений к self.id
-  def profile_circle_hash(user_ids, profile_id)
-
-    profiles_circle_hash = Hash.new
-    profiles_arr = []
-    relations_circle_hash = Hash.new
-    relations_arr = []
-    profiles_arr << profile_id
-    relations_arr << 0
-    rows = ProfileKey.where(user_id: user_ids, profile_id: profile_id).order('relation_id')#.includes(:profile_id, :relation_id).uniq_by(&:is_profile_id)
-    rows.each do |row|
-      profiles_arr << row.is_profile_id
-      relations_arr << row.relation_id
-    end
-    profiles_circle_hash.merge!(profile_id => profiles_arr ) #
-    relations_circle_hash.merge!(profile_id => relations_arr ) #
-    return profiles_circle_hash, relations_circle_hash
-
-  end
+  ## NEW SEARCH method
+  ## получает на вход id деревьев из которых надо собрать ближний круг profile_id
+  ## в виде двух хэшей: хэш профилей и хэш их отношений к self.id
+  #def profile_circle_hash(user_ids, profile_id)
+  #
+  #  profiles_circle_hash = Hash.new
+  #  profiles_arr = []
+  #  relations_circle_hash = Hash.new
+  #  relations_arr = []
+  #  profiles_arr << profile_id
+  #  relations_arr << 0
+  #  rows = ProfileKey.where(user_id: user_ids, profile_id: profile_id).order('relation_id')#.includes(:profile_id, :relation_id).uniq_by(&:is_profile_id)
+  #  rows.each do |row|
+  #    profiles_arr << row.is_profile_id
+  #    relations_arr << row.relation_id
+  #  end
+  #  profiles_circle_hash.merge!(profile_id => profiles_arr ) #
+  #  relations_circle_hash.merge!(profile_id => relations_arr ) #
+  #  return profiles_circle_hash, relations_circle_hash
+  #
+  #end
 
   # NEW SEARCH method
   # Автоматическое наполнение хэша сущностями и
@@ -511,6 +513,7 @@ module SearchHelper
       end
     end
 
+    logger.info " one_hash = #{one_hash} "
     return one_hash
 
   end

@@ -5,12 +5,9 @@ class MainController < ApplicationController
 
   include SearchHelper
 
-
-
   def check_user
     redirect_to :root if !current_user
   end
-
 
 
 # ГЛАВНЫЙ СТАРТОВЫЙ МЕТОД ПОИСКА совпадений по дереву Юзера
@@ -28,22 +25,17 @@ class MainController < ApplicationController
       @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
 
       ##### КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ ##########
-      @certain_koeff = params[:certain_koeff].to_i || 4 # (for 0-8 relations)
+      @certain_koeff = params[:certain_koeff] || 4 # (for 0-8 relations)
+      @certain_koeff = @certain_koeff.to_i
       ###############
+      #logger.info "@certain_koeff = #{@certain_koeff}"
 
-      # DEBUGG_TO_VIEW
+      # PLACE for DEBUGG_TO_VIEW
 
-
-      @profiles_match_hash = {71=>6, 72=>6, 68=>6, 78=>5, 65=>5, 75=>4, 70=>4, 77=>4, 69=>4, 76=>4}
-
-      @uniq_hash = {57=>{10=>71, 11=>78},
-                    58=>{10=>68, 11=>72},
-                    59=>{10=>65, 11=>75},
-                    60=>{10=>70, 11=>77},
-                    61=>{10=>69, 11=>76}}
+      #
 
 
-  # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
+  # ДАЛЕЕ: ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # NB !! ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ?
   # Вставить проверку и действия
   # .
@@ -282,16 +274,16 @@ class MainController < ApplicationController
       #profiles_to_rewrite = [65, 68, 69, 70, 71, 84, 85, 86]
       #profiles_to_destroy = [75, 72, 76, 77, 78, 73, 74, 79]
 
+  ### @@@@@@@@@@@@@@@@@@@@@@
+  #    profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs_hash )
+  #    logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
+  #    logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
+  #    logger.info " "
+  #    @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
+  #    @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
+      logger.info " "
+      logger.info " "
 
-      profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs_hash )
-
-      @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
-      @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
-      logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
-      logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
-      logger.info " "
-      logger.info " "
-      logger.info " "
 
 
 
@@ -429,7 +421,7 @@ class MainController < ApplicationController
         common_hash_power = 0
         common_hash_power = common_hash.size if !common_hash.empty?
         # занесение пар профилей в различные хэши по мощности
-        common_hash_power >= @certain_koeff ?
+        common_hash_power >= @certain_koeff.to_i ?
             high_power_results_hash.merge!(one_profile_rewr => one_profile_destr) :
             low_power_results_hash.merge!(one_profile_rewr => one_profile_destr)
 
@@ -442,11 +434,13 @@ class MainController < ApplicationController
       profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
       profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
 
-      high_power_results_hash, low_power_results_hash = check_rewrite_power(profiles_to_rewrite, profiles_to_destroy)
-      logger.info " high_power_results_hash = #{high_power_results_hash}"
-      logger.info " low_power_results_hash = #{low_power_results_hash}"
-      @high_power_results_hash = high_power_results_hash
-      @low_power_results_hash = low_power_results_hash
+       ### @@@@@@@@@@@@@@@@@@@@@@
+      #high_power_results_hash, low_power_results_hash =
+      #  check_rewrite_power(profiles_to_rewrite, profiles_to_destroy)
+      #logger.info " high_power_results_hash = #{high_power_results_hash}"
+      #logger.info " low_power_results_hash = #{low_power_results_hash}"
+      #@high_power_results_hash = high_power_results_hash
+      #@low_power_results_hash = low_power_results_hash
 
       #high_power_results_hash = {57=>78, 58=>72, 59=>75, 60=>77, 61=>76}
       #low_power_results_hash = {62=>79, 80=>73, 81=>74}
@@ -482,8 +476,8 @@ class MainController < ApplicationController
 
 
       ################################
-      ######## Основной поиск от дерева Автора (вместе с соединенными)
-      ######## среди других деревьев в ProfileKeys.
+      ##### Основной поиск от дерева Автора (вместе с соединенными)
+      ##### среди других деревьев в ProfileKeys.
       beg_search_time = Time.now   # Начало отсечки времени поиска
 
       #####  Запуск НОВОГО поиска С @certainty_koeff - последняя версия
@@ -505,7 +499,7 @@ class MainController < ApplicationController
       @connected_author_arr = search_results[:connected_author_arr]
       @qty_of_tree_profiles = search_results[:qty_of_tree_profiles] # To view
       ############################# NEW METHOD ############
-      @new_profiles_relations_arr = search_results[:new_profiles_relations_arr]
+      @profiles_relations_arr = search_results[:profiles_relations_arr]
       @new_profiles_found_arr = search_results[:new_profiles_found_arr]
       @uniq_profiles_pairs_hash = search_results[:uniq_profiles_pairs_hash]
       @profiles_with_match_hash = search_results[:profiles_with_match_hash]
@@ -514,8 +508,8 @@ class MainController < ApplicationController
       @by_profiles = search_results[:by_profiles]
       @by_trees = search_results[:by_trees]
 
-      @duplicates_pairs_One_to_Many_hash = search_results[:duplicates_pairs_One_to_Many_hash]
-      @duplicates_pairs_Many_to_One_hash = search_results[:duplicates_pairs_Many_to_One_hash]
+      @duplicates_One_to_Many_hash = search_results[:duplicates_One_to_Many_hash]
+      @duplicates_Many_to_One_hash = search_results[:duplicates_Many_to_One_hash]
       ######################################################
 
 
@@ -523,8 +517,16 @@ class MainController < ApplicationController
       @author_id = current_user.id # DEBUGG_TO_VIEW
       @author_connected_tree_arr = get_connected_users_tree(@connected_author_arr) # DEBUGG_TO_VIEW
       @len_author_tree = @author_connected_tree_arr.length  if !@author_connected_tree_arr.blank?  # DEBUGG_TO_VIEW
-      search_results = {}
-      @search_results = search_results
+
+
+      logger.info " "
+      logger.info "=== BEFORE connection_of_trees ==="
+     # connected_user = User.find(user_id) # For lock check
+      logger.info "current_user = #{current_user}"
+#,  connected_user = #{connected_user} "
+      @search_res = {}
+      logger.info "@search_res = #{@search_res}"
+      logger.info "search_results = #{search_results}"
 
     end
 
