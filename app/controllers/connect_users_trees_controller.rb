@@ -470,10 +470,10 @@ class ConnectUsersTreesController < ApplicationController
 
               ###################################################################
               ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-                #            connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+                    #        connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
               ####################################################################
               ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-                 #        connect_users(current_user_id.to_i, user_id.to_i)
+                    #    connect_users(current_user_id.to_i, user_id.to_i)
               ##################################################################
             else
               logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"
