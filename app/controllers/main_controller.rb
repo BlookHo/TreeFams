@@ -301,8 +301,7 @@ class MainController < ApplicationController
       # 4 ФОРМИРОВАНИЕ 2-Х СПРАВОЧНЫХ ХЭШЕЙ - ПО МОЩНОСТИ
       # СОРТИРОВКА ПАР ПРОФИЛЕЙ ПО МОЩНОСТИ ИХ ПЕРЕСЕЧЕНИЯ
       # .
-      logger.info " COMPARE HASHES"
-
+      logger.info "METHODS - TO COMPARE CIRCLES IN HASHES"
       profile_circle_1_hash = {
           'f1' => 58, 'f2' => 100, 'm1' => 59, 's1' => 63, 's2' => 64, 'b1' => 60, 'b2' => 61, 'b3' => 66, 'w1' => 62 }
 

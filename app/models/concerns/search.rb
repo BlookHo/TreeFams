@@ -8,13 +8,19 @@ module Search
     author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
     qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
+    #tree12 = get_connected_tree([12]) # DEBUGG_TO_VIEW
+    #logger.info " tree12=  #{tree12}"
+
+    #tree13 = get_connected_tree([13]) # DEBUGG_TO_VIEW
+    #logger.info " tree13=  #{tree13}"
+
     #author_tree_arr = # DEBUGG_TO_VIEW
-    # [
-    #   ]
+
+
 
     logger.info "======================= RUN start_search ========================= "
-    logger.info "Общее задание на поиск от зарег-го Юзера - весь массив заданий (author_tree_arr)"
-    logger.info "#{author_tree_arr}"
+    logger.info "Общее задание на поиск от зарег-го Юзера connected_author_arr = #{connected_author_arr} - весь массив заданий (author_tree_arr)"
+    #logger.info "#{author_tree_arr}"
     logger.info "certain_koeff = #{certain_koeff}"
 
     ############### ПОИСК ######## NEW METHOD ############
@@ -54,24 +60,31 @@ module Search
     @new_pairs_profiles_relations_arr = []     #
 
     logger.info "======================= Запуск цикла поиска по всему массиву заданий ========================= "
+    i = 0
     if !tree_arr.blank?
-      for i in 0 .. tree_arr.length-1
-        # Структура эл-та массива   32, 212, 419, 1, 213, 196, 1, false]
-        #                               1        3   4
-        from_profile_searching = tree_arr[i][1] # От какого профиля осущ-ся Поиск
-        name_id_searched       = tree_arr[i][2] # Имя Профиля
-        relation_id_searched   = tree_arr[i][3] # Искомое relation_id К_Профиля
-        profile_id_searched    = tree_arr[i][4] # Поиск по ID К_Профиля
-        is_name_id_searched    = tree_arr[i][5] # Искомое Имя К_Профиля
+      tree_arr.each do |arr_row|
+        from_profile_searching = arr_row.profile_id # От какого профиля осущ-ся Поиск
+        name_id_searched       = arr_row.name_id # Имя Профиля
+        relation_id_searched   = arr_row.relation_id # Искомое relation_id К_Профиля
+        profile_id_searched    = arr_row.is_profile_id # Поиск по ID К_Профиля
+        is_name_id_searched    = arr_row.is_name_id # Искомое Имя К_Профиля
         logger.info " "
         logger.info "***** ПОИСК: #{i+1}-я ИТЕРАЦИЯ in search_profiles_from_tree*** Ищем по этому элементу из дерева Юзера: tree_arr[i] = #{tree_arr[i]}"
         logger.info "***** из дерева (объед-х деревьев): #{connected_users_arr}; От профиля: #{from_profile_searching};  Ищем профиль: #{profile_id_searched};"
         logger.info "***** от имени (name_id): #{name_id_searched}; ищем отношение (relation_id) = #{relation_id_searched}, Ищем имя (is_name_id) = #{is_name_id_searched}  "
 
-        ###############  ЗАПУСК НОВОГО ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ РЕЗУЛЬТАТОВ
+        ###############  ЗАПУСК ПОИСКА ОДНОГО ПРОФИЛЯ
         search_match(connected_users_arr, profile_id_searched)
+        #######################################################
+
+        i += 1
 
       end
+
+
+
+
+
     end
 
     if !@new_profiles_found_arr.blank?
@@ -119,14 +132,6 @@ module Search
       logger.info " by_trees = #{by_trees} "
       @by_profiles = by_profiles #
       @by_trees = by_trees #
-
-
-      #### ДОДЕЛАТЬ? ###
-      ## Сбор дубликатов всех видов в один хэш
-      #@double_profiles_pairs_hash = double_profiles_pairs_hash #
-      #duplicated_profiles_pairs_hash.merge!(double_profiles_pairs_hash) if !double_profiles_pairs_hash.empty?
-      #logger.info "** Final DUPPS: duplicated_profiles_pairs_hash = #{duplicated_profiles_pairs_hash}"
-      #@duplicated_profiles_pairs_hash = duplicated_profiles_pairs_hash #
 
 
       #### ДОДЕЛАТЬ? #
@@ -177,9 +182,9 @@ module Search
     profile_relations_hash = Hash.new
     one_profile_relations_hash = Hash.new
 
-    all_profile_rows = ProfileKey.where(:user_id => connected_users).where(:profile_id => profile_id_searched).order('relation_id','is_name_id').select(:user_id, :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id, :id)
+    all_profile_rows = ProfileKey.where(:user_id => connected_users).where(:profile_id => profile_id_searched).order('relation_id','is_name_id').select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
     # поиск массива записей ближнего круга для каждого профиля в дереве Юзера
-    logger.info "Круг ИСКОМОГО ПРОФИЛЯ = #{profile_id_searched.inspect} в (объединенном) дереве #{connected_users} зарег-го Юзера"
+    logger.info "Круг ИСКОМОГО ПРОФИЛЯ = #{profile_id_searched.inspect} в (объединенном) дереве #{connected_users} зарег-го Юзера"      # :user_id, , :id
     show_in_logger(all_profile_rows, "all_profile_rows - запись" )  # DEBUGG_TO_LOGG
     qty_of_results = 0 # Начало подсчета результатов поиска (сумма успешных поисков в противоположном дереве)
 
