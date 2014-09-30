@@ -256,8 +256,6 @@ class ConnectUsersTreesController < ApplicationController
       logger.info " init_connection_hash = #{init_connection_hash}"
 
       final_connection_hash = init_connection_hash
-      #final_profiles_to_rewrite = init_connection_hash.keys
-      #final_profiles_to_destroy = init_connection_hash.values
 
       # начало сбора полного хэша достоверных пар профилей для объединения
       until init_connection_hash.empty?
@@ -295,13 +293,7 @@ class ConnectUsersTreesController < ApplicationController
 
           # Анализ результата сравнения двух Кругов
           if !common_circle_arr.blank? # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
-
-            new_field_arr_searched, new_field_arr_found, new_connection_hash = get_fields_arrays_from_bk(search_bk_profiles_arr, found_bk_profiles_arr )
-            new_field_arr_searched = new_field_arr_searched.flatten(1)
-            new_field_arr_found = new_field_arr_found.flatten(1)
-            logger.info "Извлечение полей из пересечения 2-х Кругов, если оно есть"
-            logger.info " new_field_arr_searched = #{new_field_arr_searched}, new_field_arr_found = #{new_field_arr_found} "
-            logger.info " "
+            new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
           else
             # @@@@@ NB !! Вставить проверку: Если Круги равны, И: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
             # то формируем новый хэш из их профилей, КОТ-Е ТОЖЕ РАВНЫ
@@ -468,10 +460,10 @@ class ConnectUsersTreesController < ApplicationController
 
               ###################################################################
               ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-                            connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+                #            connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
               ####################################################################
               ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-                            connect_users(current_user_id.to_i, user_id.to_i)
+                 #           connect_users(current_user_id.to_i, user_id.to_i)
               ##################################################################
             else
               logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"

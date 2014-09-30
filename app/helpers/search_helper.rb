@@ -212,7 +212,7 @@ module SearchHelper
     logger.info "=== КРУГ ПРОФИЛЯ = #{profile_id} "
     show_in_logger(profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
     circle_arr, circle_profiles_arr, circle_is_profiles_arr, circle_relations_arr = make_arr_hash_BK(profile_circle)
-
+    circle_is_profiles_arr = circle_is_profiles_arr.uniq
     return circle_arr, circle_profiles_arr, circle_is_profiles_arr, circle_relations_arr
   end
 
@@ -349,40 +349,31 @@ module SearchHelper
   #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>29, "is_name_id"=>125},
   #    .... ]
   # На выходе: field_arr = [28, 29, 30, 24]
-  def get_fields_arrays_from_bk(bk_arr_searched, bk_arr_found)
-    field_arr_searched = []
-    field_arr_found = []
+  def get_fields_arr_from_circles(bk_arr_searched, bk_arr_found)
+    #logger.info "search_bk_profiles_arr = #{bk_arr_searched} "
+    #logger.info "found_bk_profiles_arr = #{bk_arr_found}     "
     new_connection_hash = {}
 
-    #   logger.info "Массив значений хэшей с  key= is_profile_id : field_values_arr = #{field_values_arr}     "
-    bk_arr_searched.each_with_index do |one_searched_row, index|
-  #    logger.info "one_searched_row = #{one_searched_row} "
+    bk_arr_searched.each do |one_searched_row|
+      #logger.info "one_searched_row = #{one_searched_row} "
       name_id_s = one_searched_row.values_at('name_id')
       relation_id_s = one_searched_row.values_at('relation_id')
       is_name_id_s = one_searched_row.values_at('is_name_id')
- #     logger.info "name_id_s = #{name_id_s}, relation_id_s = #{relation_id_s}, is_name_id_s = #{is_name_id_s} "
-      bk_arr_found.each_with_index do |one_found_row, index|
- #       logger.info "one_found_row = #{one_found_row} "
+      bk_arr_found.each do |one_found_row|
+        #logger.info "one_found_row = #{one_found_row} "
         name_id_f = one_found_row.values_at('name_id')
         relation_id_f = one_found_row.values_at('relation_id')
         is_name_id_f = one_found_row.values_at('is_name_id')
- #       logger.info "name_id_f = #{name_id_f}, relation_id_f = #{relation_id_f}, is_name_id_f = #{is_name_id_f} "
 
         if name_id_s == name_id_f && relation_id_s == relation_id_f && is_name_id_s == is_name_id_f
-         # rez = true
-          field_arr_searched << one_searched_row.values_at('is_profile_id')
-          field_arr_found << one_found_row.values_at('is_profile_id')
-          new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]}) # make new el-t of hash
-
-          #logger.info "field_arr_searched = #{field_arr_searched}, field_arr_found = #{field_arr_found}, "
-
+        # make new el-t of new_connection_hash
+         new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]})
         end
 
       end
 
     end
-
-    return field_arr_searched, field_arr_found, new_connection_hash
+    return new_connection_hash
   end
 
   def get_step_arrs(pos_profiles_arr, profiles_to_connect_hash)
