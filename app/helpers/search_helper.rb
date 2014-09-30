@@ -513,7 +513,7 @@ module SearchHelper
       end
     end
 
-    logger.info " one_hash = #{one_hash} "
+    logger.info "In fill_arrays_in_hash: one_hash = #{one_hash} "
     return one_hash
 
   end
@@ -524,45 +524,9 @@ module SearchHelper
   # Получение массива дерева соединенных Юзеров из Tree
   # На входе - массив соединенных Юзеров
   def get_connected_tree(connected_users_arr)
-    #tree_arr = []
-    #check_tree_arr = [] # "опорный массив" - для удаления повторных элементов при формировании tree_arr
-    #connected_users_arr.each do |one_user|
-    #  user_tree = Tree.where(:user_id => one_user)
-    #  row_arr = []
-    #  check_row_arr = []
-    #
-    #  user_tree.each do |tree_row|
-    #    row_arr[0] = tree_row.user_id              # user_id ID От_Профиля
-    #    row_arr[1] = tree_row.profile_id           # ID От_Профиля (From_Profile)
-    #    row_arr[2] = tree_row.name_id              # name_id ID От_Профиля
-    #    row_arr[3] = tree_row.relation_id          # ID Родства От_Профиля с К_Профилю (To_Profile)
-    #    row_arr[4] = tree_row.is_profile_id        # ID К_Профиля
-    #    row_arr[5] = tree_row.is_name_id           # name_id К_Профиля
-    #    row_arr[6] = tree_row.is_sex_id            # sex К_Профиля
-    #
-    #    check_row_arr[0] = tree_row.profile_id           # ID От_Профиля (From_Profile)
-    #    check_row_arr[1] = tree_row.name_id              # name_id ID От_Профиля
-    #    check_row_arr[2] = tree_row.relation_id          # ID Родства От_Профиля с К_Профилю (To_Profile)
-    #    check_row_arr[3] = tree_row.is_profile_id        # ID К_Профиля
-    #    check_row_arr[4] = tree_row.is_name_id           # name_id К_Профиля
-    #    check_row_arr[5] = tree_row.is_sex_id            # sex К_Профиля
-    #
-    #    #logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.include?(row_arr).inspect}" # == false
-    #    #logger.info "DEBUG IN get_connection_of_trees: #{tree_arr.inspect} --- #{row_arr}"
-    #    if !check_tree_arr.include?(check_row_arr) # контроль на наличие повторов
-    #      tree_arr << row_arr
-    #      check_tree_arr << check_row_arr
-    #    end
-    #    row_arr = []
-    #    check_row_arr = []
-    #  end
-    #end
-    #logger.info "IN get_connected_tree: check_tree_arr: #{check_tree_arr.inspect} "
-
     tree_arr = Tree.where(:user_id => connected_users_arr).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
     return tree_arr
   end
-
 
 
   ## Формирование полного щирокого Хаша

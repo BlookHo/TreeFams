@@ -186,7 +186,7 @@ class MainController < ApplicationController
 
       #start_tree = 11
       #connected_user = 9
-      #uniq_profiles_pairs_hash =
+      #uniq_profiles_pairs =
       #    {72=>{9=>58, 10=>68},
       #     75=>{9=>59, 10=>65},
       #     76=>{9=>61, 10=>69},
@@ -227,7 +227,7 @@ class MainController < ApplicationController
 
       ##################################
       # ck = 4
-      uniq_profiles_pairs_hash =
+      uniq_profiles_pairs =
       {57=>{10=>71, 11=>78},
        58=>{10=>68, 11=>72},
        59=>{10=>65, 11=>75},
@@ -259,7 +259,7 @@ class MainController < ApplicationController
 
       #start_tree = 9
       #connected_user = 10
-      #uniq_profiles_pairs_hash =
+      #uniq_profiles_pairs =
       #    {57=>{10=>71, 11=>78},
       #     58=>{11=>72, 10=>68},
       #     59=>{10=>65, 11=>75},
@@ -270,7 +270,7 @@ class MainController < ApplicationController
 
       #start_tree = 10
       #connected_user = 11
-      #uniq_profiles_pairs_hash =
+      #uniq_profiles_pairs =
       #{65=>{9=>59, 11=>75},
       # 68=>{11=>72, 9=>58},
       # 69=>{9=>61, 11=>76},
@@ -280,7 +280,7 @@ class MainController < ApplicationController
       #profiles_to_destroy = [75, 72, 76, 77, 78, 73, 74, 79]
 
   ### @@@@@@@@@@@@@@@@@@@@@@
-  #    profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs_hash )
+  #    profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs )
   #    logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
   #    logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
   #    logger.info " "
@@ -487,7 +487,7 @@ class MainController < ApplicationController
       #####  Запуск НОВОГО поиска С @certainty_koeff - последняя версия
       search_results = current_user.start_search(@certain_koeff)  ##
 
-      #####  Запуск ЖЕСТКОГО поиска
+      #####  Запуск OLD ЖЕСТКОГО поиска
       #search_results = current_user.start_hard_search  ##
 
       #####  Запуск поиска 1-й версии - самый первый
@@ -504,16 +504,16 @@ class MainController < ApplicationController
       @qty_of_tree_profiles = search_results[:qty_of_tree_profiles] # To view
       ############################# NEW METHOD ############
       @profiles_relations_arr = search_results[:profiles_relations_arr]
-      @new_profiles_found_arr = search_results[:new_profiles_found_arr]
-      @uniq_profiles_pairs_hash = search_results[:uniq_profiles_pairs_hash]
+      @profiles_found_arr = search_results[:profiles_found_arr]
+      @uniq_profiles_pairs = search_results[:uniq_profiles_pairs]
       @profiles_with_match_hash = search_results[:profiles_with_match_hash]
 
       ############# РЕЗУЛЬТАТЫ ПОИСКА для отображения на Главной ##########################################
       @by_profiles = search_results[:by_profiles]
       @by_trees = search_results[:by_trees]
 
-      @duplicates_One_to_Many_hash = search_results[:duplicates_One_to_Many_hash]
-      @duplicates_Many_to_One_hash = search_results[:duplicates_Many_to_One_hash]
+      @duplicates_One_to_Many = search_results[:duplicates_One_to_Many]
+      @duplicates_Many_to_One = search_results[:duplicates_Many_to_One]
       ######################################################
 
 
@@ -523,11 +523,10 @@ class MainController < ApplicationController
       @len_author_tree = @author_connected_tree_arr.length  if !@author_connected_tree_arr.blank?  # DEBUGG_TO_VIEW
 
 
+      # Для отладки # DEBUGG_TO_VIEW
       logger.info " "
       logger.info "=== BEFORE connection_of_trees ==="
-     # connected_user = User.find(user_id) # For lock check
       logger.info "current_user = #{current_user}"
-#,  connected_user = #{connected_user} "
       @search_res = {}
       logger.info "@search_res = #{@search_res}"
       logger.info "search_results = #{search_results}"

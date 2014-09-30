@@ -18,13 +18,13 @@
 %h4
   КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ: @certain_koeff: #{@certain_koeff.inspect}
 %h4
-  СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ:
+  СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
   %h4    {профиль искомый -> профиль -> его отношение к искомому} )
   %h4    @profiles_relations_arr: #{@profiles_relations_arr.inspect}
 %h4
-  НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив):
+  ОСНОВНОЙ РЕЗ-ТАТ ПОИСКА - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив):
   %h4     {профиль искомый -> дерево -> профиль найденный -> [ массив совпавших отношений с искомым профилем ]
-  %h4     @new_profiles_found_arr: #{@new_profiles_found_arr.inspect}
+  %h4     @profiles_found_arr: #{@profiles_found_arr.inspect}
 %h4
   ПРОФИЛИ, ОТСОРТИРОВАННЫЕ ПО КОЛ-ВУ СОВПАДЕНИЙ:
   %h4     {профиль искомый -> кол-во совпадений}
@@ -32,7 +32,7 @@
 %h4
   ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ:
   %h4  {профиль искомый -> { дерево -> профиль найденный} }
-  %h4  @uniq_profiles_pairs_hash: #{@uniq_profiles_pairs_hash.inspect}
+  %h4  @uniq_profiles_pairs: #{@uniq_profiles_pairs.inspect}
 
 
 %h4
@@ -46,10 +46,10 @@
   %h4  ###### @by_trees   : #{@by_trees.inspect}
 %h4
   ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} }
-  %h4  @duplicates_One_to_Many_hash: #{@duplicates_One_to_Many_hash.inspect}
+  %h4  @duplicates_One_to_Many: #{@duplicates_One_to_Many.inspect}
 %h4
   ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : {профиль искомый -> { дерево -> профиль найденный},...  }
-  %h4  @duplicates_Many_to_One_hash: #{@duplicates_Many_to_One_hash.inspect}
+  %h4  @duplicates_Many_to_One: #{@duplicates_Many_to_One.inspect}
 
 
 %p
@@ -81,7 +81,7 @@
 
 
 
--#- @uniq_profiles_pairs_hash = {72=>{9=>58, 10=>68}, 73=>{9=>80, 10=>84}, 74=>{9=>81, 10=>85, 12=>93}, 75=>{10=>65}, 76=>{9=>61, 10=>69}, 77=>{9=>60}, 79=>{12=>101}}
+-#- @uniq_profiles_pairs = {72=>{9=>58, 10=>68}, 73=>{9=>80, 10=>84}, 74=>{9=>81, 10=>85, 12=>93}, 75=>{10=>65}, 76=>{9=>61, 10=>69}, 77=>{9=>60}, 79=>{12=>101}}
 
 
 .content
@@ -92,7 +92,7 @@
 .content
   %h2 Результаты поиска
   %table.tmp_table
-    - @uniq_profiles_pairs_hash.each do |key, value|
+    - @uniq_profiles_pairs.each do |key, value|
       %tr
         %td.grey
           Для

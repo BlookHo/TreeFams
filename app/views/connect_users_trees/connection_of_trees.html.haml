@@ -26,23 +26,23 @@
   Кто хочет соединиться: Автор: #{@current_user_id.inspect}
 %p
   @who_connect_users_arr: #{@who_connect_users_arr.inspect}
-%p
-  @first_tree: #{@first_tree.inspect}
+-#%p
+-#  @first_tree: #{@first_tree.inspect}
 %p
   Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@user_id.inspect}
 %p
   @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
-%p
-  @second_tree: #{@second_tree.inspect}
+-#%p
+-#  @second_tree: #{@second_tree.inspect}
 
 %h4
   параметр ПОИСКА: @certain_koeff_for_connect = #{@certain_koeff_for_connect.inspect}
 %h4
-  ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: @uniq_profiles_pairs_hash: #{@uniq_profiles_pairs_hash.inspect}
+  ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: @uniq_profiles_pairs: #{@uniq_profiles_pairs.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : @duplicates_One_to_Many_hash: #{@duplicates_One_to_Many_hash.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : @duplicates_One_to_Many: #{@duplicates_One_to_Many.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : @duplicates_Many_to_One_hash: #{@duplicates_Many_to_One_hash.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : @duplicates_Many_to_One: #{@duplicates_Many_to_One.inspect}
 %p
   Длительность поиска: #{@elapsed_search_time.inspect}
 

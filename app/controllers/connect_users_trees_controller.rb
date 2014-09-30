@@ -239,7 +239,7 @@ class ConnectUsersTreesController < ApplicationController
   # Input: 1. @max_power_profiles_pairs_hash
   # from 9 to 11,10
 
-  #uniq_profiles_pairs_hash =
+  #uniq_profiles_pairs =
   {57=>{10=>71, 11=>78},
    58=>{11=>72, 10=>68},
    59=>{10=>65, 11=>75},
@@ -376,15 +376,15 @@ class ConnectUsersTreesController < ApplicationController
     logger.info "current_user.tree_is_locked? = #{current_user.tree_is_locked?}, connected_user.tree_is_locked? = #{connected_user.tree_is_locked?} "
 
     ######## Check users lock status and connect if all ok
-    #if current_user.tree_is_locked? or connected_user.tree_is_locked?
-    #  logger.info "Connection locked"
-    #  redirect_to :back, :alert => "Дерево находится в процессе реорганизации, повторите попытку позже"
-    #else
-    #  logger.info "Connection UNLOCK => GO ON! "
-    #  logger.info "current_user = #{current_user},  connected_user = #{connected_user} "
-    #
-    #  current_user.lock!
-    #  connected_user.lock!
+    if current_user.tree_is_locked? or connected_user.tree_is_locked?
+      logger.info "Connection locked"
+      redirect_to :back, :alert => "Дерево находится в процессе реорганизации, повторите попытку позже"
+    else
+      logger.info "Connection UNLOCK => GO ON! "
+      logger.info "current_user = #{current_user},  connected_user = #{connected_user} "
+
+      current_user.lock!
+      connected_user.lock!
 
       who_connect_users_arr = current_user.get_connected_users
       @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
@@ -393,8 +393,6 @@ class ConnectUsersTreesController < ApplicationController
         logger.info "DEBUG IN connection_of_trees: NOT CONNECTED - #{who_connect_users_arr.include?(user_id).inspect}" # == false
         with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
         @with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
-        @first_tree = get_connected_tree(who_connect_users_arr) # # DEBUGG_TO_VIEW Массив объединенного дерева из Tree
-        @second_tree = get_connected_tree(with_whom_connect_users_arr) # # DEBUGG_TO_VIEW Массив объединенного дерева из Tree
 
         ######## запуск Жесткого метода поиска от дерева Автора (вместе с соединенными с ним)
         ######## Для точного определения массивов профилей для перезаписи
@@ -408,31 +406,31 @@ class ConnectUsersTreesController < ApplicationController
         search_results = current_user.start_search(@certain_koeff_for_connect)  ##
 
         ######## Сбор рез-тов поиска:
-        uniq_profiles_pairs_hash = search_results[:uniq_profiles_pairs_hash]
-        @duplicates_One_to_Many_hash = search_results[:duplicates_One_to_Many_hash]
-        @duplicates_Many_to_One_hash = search_results[:duplicates_Many_to_One_hash]
+        uniq_profiles_pairs = search_results[:uniq_profiles_pairs]
+        @duplicates_One_to_Many = search_results[:duplicates_One_to_Many]
+        @duplicates_Many_to_One = search_results[:duplicates_Many_to_One]
 
         stop_connection = false
         ######## Контроль на наличие дубликатов из поиска:
-        stop_connection = true if !@duplicates_One_to_Many_hash.empty? || !@duplicates_Many_to_One_hash.empty?
+        stop_connection = true if !@duplicates_One_to_Many.empty? || !@duplicates_Many_to_One.empty?
         @stop_connection = stop_connection # DEBUGG_TO_VIEW
 
-        @uniq_profiles_pairs_hash = uniq_profiles_pairs_hash # DEBUGG_TO_VIEW
+        @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
 
         logger.info ""
         logger.info ""
         logger.info ""
-        logger.info "BEFORE HARD_COMPLETE_SEARCH uniq_profiles_pairs_hash = #{uniq_profiles_pairs_hash} "
+        logger.info "BEFORE HARD_COMPLETE_SEARCH uniq_profiles_pairs = #{uniq_profiles_pairs} "
         ##### ПОЛНОЕ Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-        profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs_hash )
+        profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs )
 
         @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
         @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
         logger.info "Array(s) FOR connection:"
         logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
         logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
-        logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_One_to_Many_hash = #{@duplicates_One_to_Many_hash} "
-        logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_Many_to_One_hash = #{@duplicates_Many_to_One_hash} "
+        logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_One_to_Many = #{@duplicates_One_to_Many} "
+        logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_Many_to_One = #{@duplicates_Many_to_One} "
 
         # hard_complete_search(connected_user, uniq_profiles_hash ) ПОСЛЕДНЯЯ ВЕРСИЯ
         #    profiles_to_rewrite, profiles_to_destroy =  get_rewrite_profiles_by_bk(search_results) ##
@@ -480,8 +478,8 @@ class ConnectUsersTreesController < ApplicationController
               @test_arrrs_dubl = "ERROR - STOP connection! ЕСТЬ дублирования!"
             end
 
-            #complete_dubles_hash = @duplicates_One_to_Many_hash if !@duplicates_One_to_Many_hash.empty?
-            #complete_dubles_hash = @duplicates_Many_to_One_hash if !@duplicates_Many_to_One_hash.empty?
+            #complete_dubles_hash = @duplicates_One_to_Many if !@duplicates_One_to_Many.empty?
+            #complete_dubles_hash = @duplicates_Many_to_One if !@duplicates_Many_to_One.empty?
             #logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"
 
           else
@@ -499,11 +497,11 @@ class ConnectUsersTreesController < ApplicationController
       end
       @complete_dubles_hash = complete_dubles_hash
 
-    #  ######## Afrer all unlock unlock user tree
-    #  current_user.unlock_tree!
-    #  connected_user.unlock_tree!
-    #
-    #end
+      ######## Afrer all unlock unlock user tree
+      current_user.unlock_tree!
+      connected_user.unlock_tree!
+
+    end
 
   end
 
@@ -513,9 +511,6 @@ class ConnectUsersTreesController < ApplicationController
   # .
   def check_duplications(profiles_to_rewrite, profiles_to_destroy)
 
-    #logger.info "In check_duplicationst"
-    #logger.info " profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy}."
-
     # Извлечение из массива - повторяющиеся эл-ты в виде массива
     def repeated(array)
       counts = Hash.new(0)
@@ -524,7 +519,6 @@ class ConnectUsersTreesController < ApplicationController
     end
 
     repeated_destroy = repeated(profiles_to_destroy)
-    #logger.info " repeated_destroy = #{repeated_destroy};"
     indexs_hash_destroy = {}
     if !repeated_destroy.blank?
       for i in 0 .. repeated_destroy.length-1
@@ -537,10 +531,8 @@ class ConnectUsersTreesController < ApplicationController
         indexs_hash_destroy.merge!(repeated_destroy[i] => arr_of_dubles)
       end
     end
-    #logger.info "indexs_hash_destroy = #{indexs_hash_destroy};"
 
     repeated_rewrite = repeated(profiles_to_rewrite)
-    #logger.info " repeated_rewrite = #{repeated_rewrite};"
     indexs_hash_rewrite = {}
     if !repeated_rewrite.blank?
       for i in 0 .. repeated_rewrite.length-1
@@ -553,13 +545,11 @@ class ConnectUsersTreesController < ApplicationController
         indexs_hash_rewrite.merge!(repeated_rewrite[i] => arr_of_dubles)
       end
     end
-    #logger.info "indexs_hash_rewrite = #{indexs_hash_rewrite};"
 
     complete_dubles_hash = {}
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_destroy) if !indexs_hash_destroy.blank?
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_rewrite) if !indexs_hash_rewrite.blank?
 
-    #logger.info " complete_dubles_hash = #{complete_dubles_hash};"
     @complete_dubles_hash = complete_dubles_hash # DEBUGG_TO_VIEW
 
     return complete_dubles_hash
