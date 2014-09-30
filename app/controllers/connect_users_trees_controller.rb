@@ -468,19 +468,15 @@ class ConnectUsersTreesController < ApplicationController
 
               ###################################################################
               ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-                    #        connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+                            connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
               ####################################################################
               ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-                    #    connect_users(current_user_id.to_i, user_id.to_i)
+                            connect_users(current_user_id.to_i, user_id.to_i)
               ##################################################################
             else
               logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"
               @test_arrrs_dubl = "ERROR - STOP connection! ЕСТЬ дублирования!"
             end
-
-            #complete_dubles_hash = @duplicates_One_to_Many if !@duplicates_One_to_Many.empty?
-            #complete_dubles_hash = @duplicates_Many_to_One if !@duplicates_Many_to_One.empty?
-            #logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"
 
           else
            logger.info "ERROR - STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}."
