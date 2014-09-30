@@ -192,9 +192,9 @@ module SearchHelper
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Метод получения НЕ общей части 2-х БК профилей
   def get_circles_delta(first_bk, second_bk, common_circle_arr)
-    #one = (first_bk - common_circle_arr)
-    #two = (second_bk - common_circle_arr)
-    #logger.info " get_delta_bk: one = #{one}, two = #{two}"
+    one = (first_bk - common_circle_arr)
+    two = (second_bk - common_circle_arr)
+    logger.info " get_delta_bk: one = #{one}, two = #{two}"
     circles_delta = (first_bk - common_circle_arr) + (second_bk - common_circle_arr)
 
     return circles_delta
@@ -211,9 +211,11 @@ module SearchHelper
     profile_circle = get_one_profile_circle(profile_id, profile_user_id)
     logger.info "=== КРУГ ПРОФИЛЯ = #{profile_id} "
     show_in_logger(profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
-    circle_arr, circle_profiles_arr, circle_is_profiles_arr, circle_relations_arr = make_arr_hash_BK(profile_circle)
+    #circle_arr, circle_profiles_arr, circle_is_profiles_arr, circle_relations_arr =
+    circle_arr, circle_profiles_arr, circle_is_profiles_arr =
+        make_arrays_from_circle(profile_circle)
     circle_is_profiles_arr = circle_is_profiles_arr.uniq
-    return circle_arr, circle_profiles_arr, circle_is_profiles_arr, circle_relations_arr
+    return circle_arr, circle_profiles_arr, circle_is_profiles_arr #, circle_relations_arr
   end
 
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
@@ -223,7 +225,7 @@ module SearchHelper
   def get_one_profile_circle(profile_id, user_id)
     connected_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля
     if !connected_users_arr.blank?
-      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id).order('user_id','relation_id','is_name_id' )
+      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id).order('user_id','relation_id','is_name_id' ) #.select(:user_id, :name_id, :relation_id, :is_name_id).distinct
       if !found_profile_circle.blank?
         return found_profile_circle # Найден БК
       else
@@ -238,7 +240,7 @@ module SearchHelper
   # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
   # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
   # ИСп-ся в Жестком поиске - в hard_search_match
-  def make_arr_hash_BK(bk_rows)
+  def make_arrays_from_circle(bk_rows)
     bk_arr = []
     bk_arr_w_profiles = []
     is_profiles_arr = []
@@ -247,13 +249,13 @@ module SearchHelper
       bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
       bk_arr_w_profiles << row.attributes.except('id','user_id','profile_id','created_at','updated_at') # for further analyze
       is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
-      relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze
+      #relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze
     end
     is_profiles_arr = is_profiles_arr.flatten(1)
-    relations_arr = relations_arr.flatten(1)
+    #relations_arr = relations_arr.flatten(1)
     logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
     #logger.debug "relations_arr  = #{relations_arr}"
-    return bk_arr, bk_arr_w_profiles, is_profiles_arr, relations_arr # Сделан БК в виде массива Хэшей
+    return bk_arr, bk_arr_w_profiles, is_profiles_arr #, relations_arr # Сделан БК в виде массива Хэшей
   end
 
   # NO USE!!!!
@@ -296,7 +298,7 @@ module SearchHelper
           else
             common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
             compare_rezult = false
-            logger.info "circles Size = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
+            logger.info "circles Sizes = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
             delta = get_circles_delta(found_bk_arr, search_bk_arr, common_circle_arr)
           end
 

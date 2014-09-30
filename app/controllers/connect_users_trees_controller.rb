@@ -368,15 +368,15 @@ class ConnectUsersTreesController < ApplicationController
     logger.info "current_user.tree_is_locked? = #{current_user.tree_is_locked?}, connected_user.tree_is_locked? = #{connected_user.tree_is_locked?} "
 
     ######## Check users lock status and connect if all ok
-    if current_user.tree_is_locked? or connected_user.tree_is_locked?
-      logger.info "Connection locked"
-      redirect_to :back, :alert => "Дерево находится в процессе реорганизации, повторите попытку позже"
-    else
-      logger.info "Connection UNLOCK => GO ON! "
-      logger.info "current_user = #{current_user},  connected_user = #{connected_user} "
-
-      current_user.lock!
-      connected_user.lock!
+    #if current_user.tree_is_locked? or connected_user.tree_is_locked?
+    #  logger.info "Connection locked"
+    #  redirect_to :back, :alert => "Дерево находится в процессе реорганизации, повторите попытку позже"
+    #else
+    #  logger.info "Connection UNLOCK => GO ON! "
+    #  logger.info "current_user = #{current_user},  connected_user = #{connected_user} "
+    #
+    #  current_user.lock!
+    #  connected_user.lock!
 
       who_connect_users_arr = current_user.get_connected_users
       @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
@@ -486,10 +486,10 @@ class ConnectUsersTreesController < ApplicationController
       @complete_dubles_hash = complete_dubles_hash
 
       ######## Afrer all unlock unlock user tree
-      current_user.unlock_tree!
-      connected_user.unlock_tree!
-
-    end
+    #  current_user.unlock_tree!
+    #  connected_user.unlock_tree!
+    #
+    #end
 
   end
 
