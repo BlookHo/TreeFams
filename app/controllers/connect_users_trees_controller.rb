@@ -192,35 +192,28 @@ class ConnectUsersTreesController < ApplicationController
 
 
 
-  # NB !! ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ?
-  # Вставить проверку и действия
-  # .
   # Получение стартового Хэша для объединения профилей на основе:
-  # uniq_profiles_hash - хэша уникальных достоверных пар профилей,
+  # uniq_profiles_pairs - хэша уникальных достоверных пар профилей,
   # полученных в рез-те отработки start_search
   # connected_user - дерева(деревьев), с котороыми собираемся объединяться
   # На выходе - init_connection_hash - Хэш достоверных пар профилей,
   # с которых начинается процесс жесткого определения полного набора соответствий между всеми профилями
   # объединяемых деревьев.
-  def make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_hash)
-    logger.info "with_whom_connect_users_arr = #{with_whom_connect_users_arr}, uniq_profiles_hash = #{uniq_profiles_hash}"
-    init_searched_profiles_arr = []
-    init_found_profiles_arr = []
+  def make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_pairs)
+    logger.info "with_whom_connect_users_arr = #{with_whom_connect_users_arr}, uniq_profiles_pairs = #{uniq_profiles_pairs}"
     init_connection_hash = {} # hash to work with
-    uniq_profiles_hash.each do |searched_profile, trees_hash|
-      logger.info " searched_profile = #{searched_profile}, trees_hash = #{trees_hash}"
-      init_searched_profiles_arr << searched_profile
+    uniq_profiles_pairs.each do |searched_profile, trees_hash|
+      #logger.info " searched_profile = #{searched_profile}, trees_hash = #{trees_hash}"
       trees_hash.each do |tree_key, found_profile|
-        logger.info " tree_key = #{tree_key}, found_profile = #{found_profile}"
-        # ЗДЕСЬ !! ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ?
-        if with_whom_connect_users_arr.include?(tree_key) #connected_user.each
-          init_found_profiles_arr << found_profile
+        #logger.info " tree_key = #{tree_key}, found_profile = #{found_profile}"
+        # выбор результатов для дерева из with_whom_connect_users_arr
+        # перезапись в хэше под key = searched_profile
+        if with_whom_connect_users_arr.include?(tree_key) #
           init_connection_hash.merge!( searched_profile => found_profile )
           #logger.info " init_connection_hash = #{init_connection_hash}"
         end
       end
     end
-    #logger.info " init_searched_profiles_arr = #{init_searched_profiles_arr}, init_found_profiles_arr = #{init_found_profiles_arr}"
     return init_connection_hash
   end
 
@@ -228,32 +221,18 @@ class ConnectUsersTreesController < ApplicationController
   # NEW METHOD "HARD COMPLETE SEARCH"- TO DO
   # Input: start tree No, tree No to connect
   # сбор полного хэша достоверных пар профилей для объединения
-  # @max_power_profiles_pairs_hash
   # Output:
   # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
   # profiles_to_rewrite, profiles_to_destroy =  get_rewrite_profiles_by_bk(search_results) ##
-  #
   # start_tree = от какого дерева объедин.
   # connected_user = с каким деревом объед-ся
-  #
-  # Input: 1. @max_power_profiles_pairs_hash
-  # from 9 to 11,10
-
-  #uniq_profiles_pairs =
-  {57=>{10=>71, 11=>78},
-   58=>{11=>72, 10=>68},
-   59=>{10=>65, 11=>75},
-   60=>{10=>70, 11=>77},
-   61=>{10=>69, 11=>76}}
-
-  def hard_complete_search(with_whom_connect_users_arr, uniq_profiles_hash )
+  # Input: init_connection_hash
+  def hard_complete_search(init_connection_hash)
     logger.info "** IN hard_complete_search *** "
+    #logger.info " init_connection_hash = #{init_connection_hash}"
     final_profiles_to_rewrite = []
     final_profiles_to_destroy = []
-    if !uniq_profiles_hash.empty?
-
-      init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_hash)
-      logger.info " init_connection_hash = #{init_connection_hash}"
+    if !init_connection_hash.empty?
 
       final_connection_hash = init_connection_hash
 
@@ -386,8 +365,6 @@ class ConnectUsersTreesController < ApplicationController
         with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
         @with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
 
-        ######## запуск Жесткого метода поиска от дерева Автора (вместе с соединенными с ним)
-        ######## Для точного определения массивов профилей для перезаписи
         beg_search_time = Time.now   # Начало отсечки времени поиска
 
         ##############################################################################
@@ -404,17 +381,27 @@ class ConnectUsersTreesController < ApplicationController
 
         stop_connection = false
         ######## Контроль на наличие дубликатов из поиска:
+        # Если есть дубликаты из Поиска, то устанавливаем stop_connection = true
+        # На вьюхе проверяем: продолжать ли объединение.
         stop_connection = true if !@duplicates_One_to_Many.empty? || !@duplicates_Many_to_One.empty?
         @stop_connection = stop_connection # DEBUGG_TO_VIEW
 
+      #  uniq_profiles_pairs = {135=>{12=>94}, 129=>{12=>110, 13=>110, 14=>104}}
+      #  uniq_profiles_pairs = { 129=>{12=>110, 13=>110, 14=>104}}
         @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
 
         logger.info ""
         logger.info ""
         logger.info ""
         logger.info "BEFORE HARD_COMPLETE_SEARCH uniq_profiles_pairs = #{uniq_profiles_pairs} "
+
+        init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_pairs)
+        logger.info " init_connection_hash = #{init_connection_hash}"
+
+        ##### запуск ПОЛНОГО (жесткого) метода поиска от дерева Автора
+        ##### на основе исходного массива ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ - uniq_profiles_pairs -> init_connection_hash
         ##### ПОЛНОЕ Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-        profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs )
+        profiles_to_rewrite, profiles_to_destroy = hard_complete_search(init_connection_hash)
 
         @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
         @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
@@ -424,21 +411,6 @@ class ConnectUsersTreesController < ApplicationController
         logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_One_to_Many = #{@duplicates_One_to_Many} "
         logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_Many_to_One = #{@duplicates_Many_to_One} "
 
-        # hard_complete_search(connected_user, uniq_profiles_hash ) ПОСЛЕДНЯЯ ВЕРСИЯ
-        #    profiles_to_rewrite, profiles_to_destroy =  get_rewrite_profiles_by_bk(search_results) ##
-        ##############################################################################
-        #####  Запуск поиска 1-й версии - самый первый
- #       search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
-        # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
- #       profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles_first(search_results, who_connect_users_arr, with_whom_connect_users_arr) #, final_reduced_profiles_hash, final_reduced_relations_hash)
-
-        ##############################################################################
-        #####  Запуск МЯГКОГО поиска - 2-я версия
-       #search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
-        # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-      # profiles_to_rewrite, profiles_to_destroy = get_opposite_profiles(search_results, who_connect_users_arr, with_whom_connect_users_arr)
-
-        ##############################################################################
 
         end_search_time = Time.now   # Конец отсечки времени поиска
         @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
@@ -468,22 +440,26 @@ class ConnectUsersTreesController < ApplicationController
             else
               logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"
               @test_arrrs_dubl = "ERROR - STOP connection! ЕСТЬ дублирования!"
+              stop_connection = true #if !complete_dubles_hash.empty? || !@duplicates_Many_to_One.empty?
             end
 
           else
            logger.info "ERROR - STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}."
            @test_arrrs_size = "ERROR - STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}"
+           stop_connection = true
           end
 
         else
           logger.info "ERROR - STOP connection! Connection array(s) - blank! ."
           @test_arrrs_blank = "ERROR - STOP connection! Connection array(s) - blank! "
+          stop_connection = true
         end
 
       else
         logger.info "WARNING: DEBUG IN connection_of_trees: USERS ALREADY CONNECTED! Current_user_arr =#{who_connect_users_arr.inspect}, user_id_arr=#{with_whom_connect_users_arr.inspect}."
       end
       @complete_dubles_hash = complete_dubles_hash
+      @stop_connection = stop_connection # DEBUGG_TO_VIEW
 
       ######## Afrer all unlock unlock user tree
     #  current_user.unlock_tree!
