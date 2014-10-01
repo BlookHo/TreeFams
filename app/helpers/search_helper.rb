@@ -35,6 +35,7 @@ module SearchHelper
 
 
 
+  # NO USE !!!
   # СБОР ВСЕХ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ДЕРЕВЬЯМ
   def collect_trees_profiles(start_hash)
 
@@ -107,7 +108,6 @@ module SearchHelper
   # ПОЛУЧЕНИЕ ПАР СООТВЕТСТВИЙ ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ МНОЖЕСТВ СОВПАДЕНИЙ ОТНОШЕНИЙ
   # Вход
   # Выход
-  # .
   def get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
     logger.info " profiles_found_arr = #{profiles_found_arr} "
     max_power_profiles_pairs_hash = {}  # Профили с макс-м кол-вом совпадений для одного соответствия в дереве
@@ -174,6 +174,7 @@ module SearchHelper
     end
   end
 
+  # NO USE !!!
   # Метод суммы двух хэшей без уничтожения значений при совпадениях ключей
   # hash_one = {17=>27, 16=>28, 20=>29, 19=>30, 18=>24}
   # hash_two = {16=>28, 23=>35, 21=>34}
@@ -183,6 +184,7 @@ module SearchHelper
     return sum_hash
   end
 
+  # NO USE !!!
   # Метод сортировки массива хэшей по нескольким ключам
   def sort_hash_array(hash_arr_to_sort)
     sorted_hash_arr = hash_arr_to_sort.sort_by {|h| [ h['name_id'],h['relation_id'],h['is_name_id'] ]}
@@ -204,8 +206,6 @@ module SearchHelper
   # Взять Бл.круг одного профиля
   # получить массивы триад для дальнейшего сравнения
   # показать в Логгере
-  #
-  # /
   def have_profile_circle(profile_id)
     profile_user_id = Profile.find(profile_id).tree_id
     profile_circle = get_one_profile_circle(profile_id, profile_user_id)
@@ -278,6 +278,7 @@ module SearchHelper
 
     return diplicates_hash
   end
+
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Метод сравнения 2-х БК профилей
   # этот метод требует развития - что делать, когда два БК не равны?
@@ -378,39 +379,9 @@ module SearchHelper
     return new_connection_hash
   end
 
-  def get_step_arrs(pos_profiles_arr, profiles_to_connect_hash)
-    search_profiles_step_arr = []
-    found_profiles_step_arr = []
-    search_step_arr1 = []
-    found_step_arr1 = []
-    search_step_arr2 = []
-    found_step_arr2 = []
-    profiles_to_connect_hash.each do |key,val|
-      if pos_profiles_arr.include?(val)
-        search_step_arr1 << key
-        found_step_arr1 << val
-      else
-        search_step_arr2 << key
-        found_step_arr2 << val
-      end
-    end
-    search_profiles_step_arr << search_step_arr1
-    found_profiles_step_arr << found_step_arr1
-    search_profiles_step_arr << search_step_arr2
-    found_profiles_step_arr << found_step_arr2
-
-    return search_profiles_step_arr, found_profiles_step_arr
-  end
 
 
-  ## ВАРИАНТ № 2
-  #search_bk_profiles_arr_sorted = sort_hash_array(search_bk_profiles_arr)
-  #found_bk_profiles_arr_sorted = sort_hash_array(found_bk_profiles_arr)
-  #search_bk_is_profiles_arr = get_field_array(search_bk_profiles_arr_sorted, "is_profile_id")
-  #found_bk_is_profiles_arr = get_field_array(found_bk_profiles_arr_sorted, "is_profile_id")
-  #logger.info "=ВАРИАНТ № 2== В БЛИЖНем КРУГе НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} - Массивы профилей is_profiles : search_bk_is_profiles_arr = #{search_bk_is_profiles_arr}, found_bk_is_profiles_arr = #{found_bk_is_profiles_arr}"
-
-# ВАРИАНТ № 2
+  # NO USE !!!
   # метод получения массива значений одного поля = key в массиве хэшей
   # На входе:         bk_arr_w_profiles  = [
   #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
@@ -453,7 +424,6 @@ module SearchHelper
     end
   end
 
-  ## NEW SEARCH method
   ## получает на вход id деревьев из которых надо собрать ближний круг profile_id
   ## в виде двух хэшей: хэш профилей и хэш их отношений к self.id
   #def profile_circle_hash(user_ids, profile_id)
@@ -506,13 +476,14 @@ module SearchHelper
       end
     end
 
-    logger.info "In fill_arrays_in_hash: one_hash = #{one_hash} "
+    #logger.info "In fill_arrays_in_hash: one_hash = #{one_hash} "
     return one_hash
 
   end
 
 
 
+  # Used in Search & MainController
   # ИСПОЛЬЗУЕТСЯ В ПОИСКЕ И МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
   # Получение массива дерева соединенных Юзеров из Tree
   # На входе - массив соединенных Юзеров
@@ -521,50 +492,6 @@ module SearchHelper
     return tree_arr
   end
 
-
-  ## Формирование полного щирокого Хаша
-  # @note GET
-  # На входе:
-  # На выходе: @ Итоговый  ХЭШ
-  def make_complete_hash(input_hash)
-    complete_hash = Hash.new     #
-    if !input_hash.blank?
-      input_hash.each do |k, v|
-        if v.size == 1
-          complete_hash.merge!({k => v}) # наполнение хэша найденными profile_id
-        else
-          rez_hash = Hash.new     #
-          v.each do |one_arr|
-            if !one_arr.blank?
-              merged_hash = rez_hash.merge({one_arr[0] => one_arr[1]}){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
-              rez_hash = merged_hash
-            end
-          end
-          complete_hash.merge!(k => rez_hash) # искомый хэш
-          # с найденнымии profile_id, распределенными по связанным с ними profile_id
-        end
-      end
-    end
-    return complete_hash
-  end
-
-
-  # НАСТРОЙКА СОКРАЩЕНИЯ РЕ-В ПОИСКА: УДАЛЕНИЕ КОРОТКИХ СОВПАДЕНИЙ
-  # ЦИФРА В УСЛОВИИ if - ЭТО РАЗМЕР СОВПАДЕНИЙ В ДЕРЕВЕ ПРИ ПОИСКЕ.
-  # # Исключение тех рез-тов поиска, где найден всего один профиль
-  # @note GET
-  # На входе:
-  # На выходе: @ Итоговый  ХЭШ
-  def reduce_hash(input_hash)
-    reduced_hash = Hash.new
-    input_hash.each do |k, v|
-      if v.values.flatten.size > 1  # НАСТРОЙКА УДАЛЕНИЯ МАЛЫХ СОВПАДЕНИЙ
-        # сохраняем в рез-тах те, в кот. найдено больше 1 профиля
-        reduced_hash.merge!({k => v}) #
-      end
-    end
-    return reduced_hash
-  end
 
   # Слияние массива Хэшей без потери значений { (key = user_id) => (value = profile_id) }
   # Получение упорядоченного Хэша: {user_id  -> [ profile_id, profile_id, profile_id ...]}
@@ -583,6 +510,7 @@ module SearchHelper
     return final_merged_hash
   end
 
+  # No USE
   # Преобразование Хэша хэшей в Хэш массивов вместо хэшей
   # На входе: Из: { user_id => { profile_id => [profile_id, profile_id ,..]}, user_id => { profile_id => [profile_id, profile_id ,..]}
   # На выходе в Хэш, где значения - массивы:
@@ -612,6 +540,7 @@ module SearchHelper
     return amount_found
   end
 
+  # No USE
   # Подсчет количества найденных Юзеров среди найденных Профилей
   # @note GET
   # На входе: массив профилей all_profiles_arr: profile_id
@@ -629,24 +558,6 @@ module SearchHelper
       end
     end
   end
-
-  ##Управляемый Метод для изготовления 2-х синхронных UNIQ массивов
-  ##Вход:
-  #def make_uniq_arrays(found_profiles, found_relations)
-  #  found_profiles_uniq = []
-  #  found_relations_uniq = []
-  #
-  #  found_profiles_uniq << found_profiles[0]
-  #  found_relations_uniq << found_relations[0]
-  #  for arr_ind in 1 .. found_profiles.length-1
-  #    if !found_profiles_uniq.include?(found_profiles[arr_ind].to_i) # для исключения случая,
-  #      found_profiles_uniq << found_profiles[arr_ind]
-  #      found_relations_uniq << found_relations[arr_ind]
-  #    end
-  #  end
-  #
-  #  return found_profiles_uniq, found_relations_uniq
-  #end
 
 
 
