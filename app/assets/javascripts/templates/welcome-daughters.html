@@ -8,8 +8,8 @@
                 pause="100"
                 selected-object="family.daughters[$index]"
                 remote-url="/autocomplete/names?sex_id=0&term="
-                title-field="title"
-                initial-value="{{daughter.title}}"
+                title-field="name"
+                initial-value="{{daughter.name}}"
                 input-class="" />
 
 </div>
@@ -18,6 +18,6 @@
 </div>
 <div class="actions">
   <a ui-sref="form.sons"    class="bttn silver right">Назад</a>
-  <a ui-sref="form.wife"    class="bttn green left"    ng-show="hasWife()">Дальше</a>
+  <a ui-sref="form.wife"    class="bttn green left" ng-show="hasWife()">Дальше</a>
   <a ui-sref="form.husband" class="bttn green left" ng-show="hasHusband()">Дальше</a>
 </div>

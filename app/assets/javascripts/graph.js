@@ -47,6 +47,7 @@ restartGraph = function(){
       .nodes(nodes)
       .links(links);
 
+
   link = svg.selectAll("line.link").data(links);
 
   link.enter()
@@ -57,7 +58,8 @@ restartGraph = function(){
 
   // Link label
   linkLabel = svg.selectAll("g.linkLabel").data(links);
-  linkLabel.enter().append("g")
+  linkLabel.enter()
+           .append("g")
            .attr("class", "linkLabel")
            .append("text")
            .attr("dx", 1)
@@ -70,8 +72,7 @@ restartGraph = function(){
 
 
 
-  node = svg.selectAll("g.node")
-            .data(nodes);
+  node = svg.selectAll("g.node").data(nodes);
 
   node.enter()
       .append("g")
@@ -82,6 +83,14 @@ restartGraph = function(){
       })
       .attr('fill', '#ccc')
       .call(force.drag);
+
+  // name text
+  node
+      .append("text")
+      .attr("class", 'name middle')
+      .attr("y", 32)
+      .attr("text-anchor", "middle")
+      .text(function(d){ return d.name });
 
 
   // var defs     = svg.append("defs").attr("id", "imgdefs");
@@ -202,7 +211,7 @@ pushLink = function(sourceId, targetId){
     var sourceNode = findNode(sourceId);
     var targetNode = findNode(targetId);
     if((sourceNode !== undefined) && (targetNode !== undefined)) {
-        links.push({"source": sourceNode, "target": targetNode, "rel":sourceNode.rel, "id": sourceId});
+        links.push({"source": sourceNode, "target": targetNode, "rel":sourceNode.rel, "rel_title": sourceNode.rel_title, "id": sourceId});
     }
 };
 
@@ -265,7 +274,7 @@ pushDataFromAngular = function(data){
 pushAuthorData = function(data){
   if ( (data != undefined) && ( 'originalObject' in data ) ){
     var image = data.originalObject.sex_id == 1 ? '/assets/icon-man.png' : '/assets/icon-women.png'
-    var node = {id: 1, name: data.title, rel: "author", relation: "это вы", sex: data.originalObject.sex_id, image: image};
+    var node = {id: 1, name: data.name, rel: "author", rel_title: "это вы", sex: data.originalObject.sex_id, image: image};
     return dataset.push(node);
   }
 }
@@ -273,7 +282,7 @@ pushAuthorData = function(data){
 
 pushFatherData = function(data){
   if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 2, name: data.title, rel: "father", relation: "отец", sex: 1, target: 1, image: '/assets/icon-man.png'};
+    var node = {id: 2, name: data.name, rel: "father", rel_title: "отец", sex: 1, target: 1, image: '/assets/icon-man.png'};
     return dataset.push(node);
   }
 }
@@ -281,7 +290,7 @@ pushFatherData = function(data){
 
 pushMotherData = function(data){
   if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 3, name: data.title, rel: "mother", relation: "мать", sex: 0, target: 1, image: '/assets/icon-women.png'};
+    var node = {id: 3, name: data.name, rel: "mother", rel_title: "мать", sex: 0, target: 1, image: '/assets/icon-women.png'};
     return dataset.push(node);
   }
 }
@@ -292,7 +301,7 @@ pushBrothersData = function(data){
   for (var i=0; i < data.length; i++) {
     if ( 'originalObject' in data[i] ){
       var node_id = '4-'+i;
-      var node = {id: node_id, name: data.title, rel: "brother", relation: "брат", sex: 1, target: 1, image: '/assets/icon-man.png'};
+      var node = {id: node_id, name: data.name, rel: "brother", rel_title: "брат", sex: 1, target: 1, image: '/assets/icon-man.png'};
       dataset.push(node);
     }
   };
@@ -304,7 +313,7 @@ pushSistersData = function(data){
   for (var i=0; i < data.length; i++) {
     if ( 'originalObject' in data[i] ){
       var node_id = '5-'+i;
-      var node = {id: node_id, name: data.title, rel: "sister", relation: "сестра", sex: 0, target: 1, image: '/assets/icon-women.png'};
+      var node = {id: node_id, name: data.name, rel: "sister", rel_title: "сестра", sex: 0, target: 1, image: '/assets/icon-women.png'};
       dataset.push(node);
     }
   };
@@ -316,7 +325,7 @@ pushSonsData = function(data){
   for (var i=0; i < data.length; i++) {
     if ( 'originalObject' in data[i] ){
       var node_id = '6-'+i;
-      var node = {id: node_id, name: data.title, rel: "son", relation: "сын", sex: 1, target: 1, image: '/assets/icon-man.png'};
+      var node = {id: node_id, name: data.name, rel: "son", rel_title: "сын", sex: 1, target: 1, image: '/assets/icon-man.png'};
       dataset.push(node);
     }
   };
@@ -328,7 +337,7 @@ pushDaughtersData = function(data){
   for (var i=0; i < data.length; i++) {
     if ( 'originalObject' in data[i] ){
       var node_id = '7-'+i;
-      var node = {id: node_id, name: data.title, rel: "daughters", relation: "дочь", sex: 0, target: 1, image: '/assets/icon-women.png'};
+      var node = {id: node_id, name: data.name, rel: "daughters", rel_title: "дочь", sex: 0, target: 1, image: '/assets/icon-women.png'};
       dataset.push(node);
     }
   };
@@ -338,7 +347,7 @@ pushDaughtersData = function(data){
 
 pushWifeData = function(data){
   if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 8, name: data.title, rel: "wife", relation: "жена", sex: 0, target: 1, image: '/assets/icon-women.png'};
+    var node = {id: 8, name: data.name, rel: "wife", rel_title: "жена", sex: 0, target: 1, image: '/assets/icon-women.png'};
     return dataset.push(node);
   }
 }
@@ -346,7 +355,7 @@ pushWifeData = function(data){
 
 pushHusbandData = function(data){
   if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 9, name: data.title, rel: "husband", relation: "муж", sex: 1, target: 1, image: '/assets/icon-man.png'};
+    var node = {id: 9, name: data.name, rel: "husband", rel_title: "муж", sex: 1, target: 1, image: '/assets/icon-man.png'};
     return dataset.push(node);
   }
 }

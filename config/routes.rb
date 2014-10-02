@@ -118,12 +118,6 @@ Weafam::Application.routes.draw do
   get 'search/circle_path/:path_id/:tree_id/(:path)',  to: "circles#show_search_path", as: :search_circle_path
 
 
-  # Users and Sessions
-  resources :sessions, except: :edit
-  get "login",    to:   "sessions#new",         as: :login
-  get "logout",   to:   "sessions#destroy",     as: :logout
-
-
   # Landing & start singup
   get    'welcome/start',                  to: 'welcome#start',                as: :start
   match  'welcome/start/proceed',          to: 'welcome#proceed',              as: :proceed_start, via: [:get, :post]
@@ -136,9 +130,23 @@ Weafam::Application.routes.draw do
   get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
 
 
-  # Signup user and create new user circle
-  get 'signup',   to: 'signup#index',   as: :signup
 
+
+  # New version
+  ##################################################
+
+  # Users Sessions Signup
+  resources :sessions, except: :edit
+  get "login",    to:   "sessions#new",         as: :login
+  get "logout",   to:   "sessions#destroy",     as: :logout
+  get 'signup',   to: 'signup#index',           as: :signup
+
+  # Autocompletes
+  ##################################################
+  get '/autocomplete/names', to: 'autocomplete#names'
+
+  # Root
+  ##################################################
   root  'welcome#index'
 
 end
