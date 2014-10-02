@@ -59,20 +59,17 @@ circle{
 text {
   pointer-events: none;
   stroke-width: 0;
-  fill:white;
 }
+
 
 text.name{
   font-size: 16px;
-  &.middle{
-    font-size:12px;
-  }
 }
 
 
 text.relation{
   font-size: 10px;
-  &.middle{font-size: 9px;}
+  fill:grey;
 }
 
 
