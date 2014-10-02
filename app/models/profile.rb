@@ -28,7 +28,7 @@ class Profile < ActiveRecord::Base
   # Эксперименты по выводу кругов в объедененных деревьях
   # получает на вход id деревьев из которых надо собрать ближний круг
   def circle(user_ids)
-      results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name).uniq_by(&:is_profile_id)
+      results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name).to_a.uniq(&:is_profile_id)
       return results
   end
 
