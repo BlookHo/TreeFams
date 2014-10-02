@@ -47,32 +47,32 @@ restartGraph = function(){
       .nodes(nodes)
       .links(links);
 
-  link = svg.selectAll("line.link").data(links);
 
+
+  // Link between node
+  link = svg.selectAll("line.link").data(links);
   link.enter()
       .append("svg:line")
       .attr("class", "link");
   link.exit().remove();
 
 
-  // Link label
-  linkLabel = svg.selectAll("g.linkLabel").data(links);
-  linkLabel.enter().append("g")
-           .attr("class", "linkLabel")
+  // Relation label on link
+  relationLabel = svg.selectAll("g.relationLabel").data(links);
+  relationLabel.enter()
+           .append("g")
+           .attr("class", "relationLabel")
            .append("text")
+           .attr("class", "relation")
            .attr("dx", 1)
            .attr("dy", ".25em")
-           .attr("class", "linklabel")
            .attr("text-anchor", "middle")
-           .text(function(d) {
-             return d.rel;
-            });
+           .text(function(d) { return d.rel_title; });
+  relationLabel.exit().remove();
 
 
 
-  node = svg.selectAll("g.node")
-            .data(nodes);
-
+  node = svg.selectAll("g.node").data(nodes);
   node.enter()
       .append("g")
       .attr("class", "node")
@@ -82,36 +82,32 @@ restartGraph = function(){
       })
       .attr('fill', '#ccc')
       .call(force.drag);
-
-
-  // var defs     = svg.append("defs").attr("id", "imgdefs");
-  // var clipPath = defs.append('clipPath')
-  //                    .attr('id', 'clip-circle')
-  //                    .append("circle")
-  //                    .attr("r", 50)
-  //                    .attr("cy", 0)
-  //                    .attr("cx", 0);
-
-
-
-  node.append("image")
-      .attr("xlink:href", function(d){ return d.image; })
-      .attr("x", function(d){ return d.rel == 'author' ? -30 : -20;  })
-      .attr("y", function(d){ return d.rel == 'author' ? -30 : -20;  })
-      .attr("width", function(d){ return d.rel == 'author' ? 60 : 40;  })
-      .attr("height", function(d){ return d.rel == 'author' ? 60 : 40;  });
-      // .attr("clip-path", "url(#clip-circle)")
-
-
   node.exit().remove();
+
+
+  nameLabel = svg.selectAll("g.nameLabel").data(nodes);
+  nameLabel.enter()
+            .append("g")
+            .attr('class', 'nameLabel')
+            .append('text')
+            .attr("class", 'name')
+            .attr("text-anchor", "middle")
+            .attr("y", 50)
+            .text( function(d){ return d.name; });
+  nameLabel.exit().remove();
+
+
 
 
 
   force.on("tick", function() {
+
     if (nodes[0]){
       nodes[0].x = width / 2;
       nodes[0].y = 220;
     }
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
 
     link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
@@ -119,13 +115,18 @@ restartGraph = function(){
         .attr("y2", function(d) { return d.target.y; });
 
 
-    // Link labels
-    linkLabel.attr("transform", function(d) {
+    // relationLabel
+    relationLabel.attr("transform", function(d) {
             return "translate(" + (d.source.x + d.target.x) / 2 + ","
                                 + (d.source.y + d.target.y) / 2 + ")";
      });
 
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+     // relationLabel
+     nameLabel.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+
+
   });
 
 
@@ -202,7 +203,7 @@ pushLink = function(sourceId, targetId){
     var sourceNode = findNode(sourceId);
     var targetNode = findNode(targetId);
     if((sourceNode !== undefined) && (targetNode !== undefined)) {
-        links.push({"source": sourceNode, "target": targetNode, "rel":sourceNode.rel, "id": sourceId});
+        links.push({"source": sourceNode, "target": targetNode, "rel":sourceNode.rel, "rel_title": sourceNode.rel_title, "id": sourceId});
     }
 };
 
@@ -229,7 +230,7 @@ pushDataFromAngular = function(data){
   };
 
   if ('mother' in data){
-    pushMotherData( data.father );
+    pushMotherData( data.mother );
   };
 
   if ( ('brothers' in data) && (data.brothers.length > 0)){
@@ -265,7 +266,7 @@ pushDataFromAngular = function(data){
 pushAuthorData = function(data){
   if ( (data != undefined) && ( 'originalObject' in data ) ){
     var image = data.originalObject.sex_id == 1 ? '/assets/icon-man.png' : '/assets/icon-women.png'
-    var node = {id: 1, name: data.title, rel: "author", relation: "это вы", sex: data.originalObject.sex_id, image: image};
+    var node = {id: 1, name: data.title, rel: "author", rel_title: "это вы", sex: data.originalObject.sex_id, image: image};
     return dataset.push(node);
   }
 }
@@ -273,7 +274,7 @@ pushAuthorData = function(data){
 
 pushFatherData = function(data){
   if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 2, name: data.title, rel: "father", relation: "отец", sex: 1, target: 1, image: '/assets/icon-man.png'};
+    var node = {id: 2, name: data.title, rel: "father", rel_title: "отец", sex: 1, target: 1, image: '/assets/icon-man.png'};
     return dataset.push(node);
   }
 }
@@ -281,7 +282,7 @@ pushFatherData = function(data){
 
 pushMotherData = function(data){
   if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 3, name: data.title, rel: "mother", relation: "мать", sex: 0, target: 1, image: '/assets/icon-women.png'};
+    var node = {id: 3, name: data.title, rel: "mother", rel_title: "мать", sex: 0, target: 1, image: '/assets/icon-women.png'};
     return dataset.push(node);
   }
 }
@@ -292,7 +293,7 @@ pushBrothersData = function(data){
   for (var i=0; i < data.length; i++) {
     if ( 'originalObject' in data[i] ){
       var node_id = '4-'+i;
-      var node = {id: node_id, name: data.title, rel: "brother", relation: "брат", sex: 1, target: 1, image: '/assets/icon-man.png'};
+      var node = {id: node_id, name: data.title, rel: "brother", rel_title: "брат", sex: 1, target: 1, image: '/assets/icon-man.png'};
       dataset.push(node);
     }
   };
@@ -304,7 +305,7 @@ pushSistersData = function(data){
   for (var i=0; i < data.length; i++) {
     if ( 'originalObject' in data[i] ){
       var node_id = '5-'+i;
-      var node = {id: node_id, name: data.title, rel: "sister", relation: "сестра", sex: 0, target: 1, image: '/assets/icon-women.png'};
+      var node = {id: node_id, name: data.title, rel: "sister", rel_title: "сестра", sex: 0, target: 1, image: '/assets/icon-women.png'};
       dataset.push(node);
     }
   };
@@ -316,7 +317,7 @@ pushSonsData = function(data){
   for (var i=0; i < data.length; i++) {
     if ( 'originalObject' in data[i] ){
       var node_id = '6-'+i;
-      var node = {id: node_id, name: data.title, rel: "son", relation: "сын", sex: 1, target: 1, image: '/assets/icon-man.png'};
+      var node = {id: node_id, name: data.title, rel: "son", rel_title: "сын", sex: 1, target: 1, image: '/assets/icon-man.png'};
       dataset.push(node);
     }
   };
@@ -328,7 +329,7 @@ pushDaughtersData = function(data){
   for (var i=0; i < data.length; i++) {
     if ( 'originalObject' in data[i] ){
       var node_id = '7-'+i;
-      var node = {id: node_id, name: data.title, rel: "daughters", relation: "дочь", sex: 0, target: 1, image: '/assets/icon-women.png'};
+      var node = {id: node_id, name: data.title, rel: "daughters", rel_title: "дочь", sex: 0, target: 1, image: '/assets/icon-women.png'};
       dataset.push(node);
     }
   };
@@ -338,7 +339,7 @@ pushDaughtersData = function(data){
 
 pushWifeData = function(data){
   if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 8, name: data.title, rel: "wife", relation: "жена", sex: 0, target: 1, image: '/assets/icon-women.png'};
+    var node = {id: 8, name: data.title, rel: "wife", rel_title: "жена", sex: 0, target: 1, image: '/assets/icon-women.png'};
     return dataset.push(node);
   }
 }
@@ -346,7 +347,7 @@ pushWifeData = function(data){
 
 pushHusbandData = function(data){
   if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 9, name: data.title, rel: "husband", relation: "муж", sex: 1, target: 1, image: '/assets/icon-man.png'};
+    var node = {id: 9, name: data.title, rel: "husband", rel_title: "муж", sex: 1, target: 1, image: '/assets/icon-man.png'};
     return dataset.push(node);
   }
 }

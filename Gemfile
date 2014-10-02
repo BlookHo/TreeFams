@@ -1,43 +1,42 @@
 source 'https://rubygems.org'
 ruby '2.1.0'
 
-gem 'rails', '4.0.2'
+gem 'rails', '4.1.4'
 gem 'pg'
 gem 'redis-rails'
 
 # Use SCSS for stylesheets
-gem 'sass', '~> 3.2.18'
-gem 'sass-rails', '~> 4.0.0'
-gem 'compass-rails'
-gem 'bootstrap-sass'
-gem 'haml'
+gem 'sass-rails', '~> 4.0.3'
+gem 'uglifier', '>= 1.3.0'
+gem 'coffee-rails', '~> 4.0.0'
+# gem 'compass-rails'
+# gem 'bootstrap-sass'
+gem 'spring',             group: :development
+
+gem 'jbuilder', '~> 2.0'
+gem 'haml-rails'
+
+# Use jquery as the JavaScript library
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+
+# Angular templates in assets pipeline
+gem 'angular-rails-templates'
 
 # Icons fonts
 # old - should be removed
 gem "font-awesome-rails"
 gem 'ionicons-rails'
 
-# Angular templates in assets pipeline
-gem 'angular-rails-templates'
 
 # Russian localization
 gem 'russian', '~> 0.6.0'
 
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
-
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer'
-
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
+# gem 'therubyracer'
 
 # Обмен переменными Ruby -> JS
-gem 'gon'
+# gem 'gon'
 
 # Extend hash
 gem 'hashie'
@@ -54,9 +53,6 @@ gem "yandex_inflect", "~> 0.1.2"
 
 # Pagination
 gem 'kaminari'
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
 
 group :doc do
   # Документация
@@ -79,9 +75,8 @@ group :development, :test do
   gem 'capybara'
 end
 
-# Disable assets logging in production
+# Disable assets logging
 gem 'quiet_assets', :group => :development
-
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.1.2'
