@@ -1,0 +1,22 @@
+<h1>У вас есть братья?</h1>
+
+<!-- ng-form -->
+<div ng-repeat="brother in family.brothers" class="control">
+  <a ng-click="removeBrother($index)" class="remove-field">удалить</a>
+  <angucomplete-alt id="brothers"
+                placeholder="Начните вводить имя..."
+                pause="100"
+                selected-object="family.brothers[$index]"
+                remote-url="/autocomplete/names?sex_id=1&term="
+                title-field="title"
+                initial-value="{{brother.title}}"
+                input-class="" />
+
+</div>
+<div class="control add">
+  <a ng-click="addBrother()" class="add">Да, добавить брата</a>
+</div>
+<div class="actions">
+  <a ui-sref="form.mother" class="bttn silver right">Назад</a>
+  <a ui-sref="form.sisters" class="bttn green left">Дальше</a>
+</div>

@@ -1,0 +1,15 @@
+<h1>Как зовут вашего отца?</h1>
+<div class="control">
+  <angucomplete-alt id="father"
+                placeholder="Начните вводить имя..."
+                pause="100"
+                selected-object="family.father"
+                remote-url="/autocomplete/names?sex_id=1&term="
+                title-field="title"
+                initial-value="{{family.father.title}}"
+                input-class="" />
+</div>
+<div class="actions">
+  <a ui-sref="form.author" class="bttn silver right">Назад</a>
+  <a ui-sref="form.mother" class="bttn green left">Дальше</a>
+</div>

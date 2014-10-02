@@ -1,0 +1,15 @@
+<h1>У вас есть муж?</h1>
+<div class="control">
+  <angucomplete-alt id="husband"
+                placeholder="Начните вводить имя..."
+                pause="100"
+                selected-object="family.husband"
+                remote-url="/autocomplete/names?sex_id=1&term="
+                title-field="title"
+                initial-value="{{husband.title}}"
+                input-class="" />
+</div>
+<div class="actions">
+  <a ui-sref="form.daughters" class="bttn silver right">Назад</a>
+  <a ui-sref="form.email" class="bttn green left">Дальше</a>
+</div>

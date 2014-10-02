@@ -47,6 +47,7 @@ Weafam::Application.routes.draw do
   match 'move_graph_tree' => 'graph_tree#move_graph_tree', via: :get
 
   # start controller
+  #####################
   match 'show_tree_table' => 'start#show_tree_table', via: :get
   match 'display_saved_tree' => 'start#display_saved_tree', via: :get
   match 'save_start_tables' => 'start#save_start_tables', via: :get
@@ -133,6 +134,10 @@ Weafam::Application.routes.draw do
 
   # Debug path - Login as user
   get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
+
+
+  # Signup user and create new user circle
+  get 'signup',   to: 'signup#index',   as: :signup
 
   root  'welcome#index'
 
