@@ -158,7 +158,6 @@ module SearchHelper
   end # End of method
 
 
-
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
   #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
@@ -319,6 +318,7 @@ module SearchHelper
 
     return compare_rezult, common_circle_arr, delta
   end
+
   # TEST COMPARE 2 BK
   # bk_arr1  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
   #            {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
@@ -380,7 +380,6 @@ module SearchHelper
   end
 
 
-
   # NO USE !!!
   # метод получения массива значений одного поля = key в массиве хэшей
   # На входе:         bk_arr_w_profiles  = [
@@ -405,6 +404,7 @@ module SearchHelper
     end  # DEBUGG_TO_LOGG
   end
 
+  # NO USE !!!
   # Автоматическое наполнение хэша сущностями и
   # количеством появлений каждой сущности.
   # @note GET /
@@ -424,26 +424,6 @@ module SearchHelper
     end
   end
 
-  ## получает на вход id деревьев из которых надо собрать ближний круг profile_id
-  ## в виде двух хэшей: хэш профилей и хэш их отношений к self.id
-  #def profile_circle_hash(user_ids, profile_id)
-  #
-  #  profiles_circle_hash = Hash.new
-  #  profiles_arr = []
-  #  relations_circle_hash = Hash.new
-  #  relations_arr = []
-  #  profiles_arr << profile_id
-  #  relations_arr << 0
-  #  rows = ProfileKey.where(user_id: user_ids, profile_id: profile_id).order('relation_id')#.includes(:profile_id, :relation_id).uniq_by(&:is_profile_id)
-  #  rows.each do |row|
-  #    profiles_arr << row.is_profile_id
-  #    relations_arr << row.relation_id
-  #  end
-  #  profiles_circle_hash.merge!(profile_id => profiles_arr ) #
-  #  relations_circle_hash.merge!(profile_id => relations_arr ) #
-  #  return profiles_circle_hash, relations_circle_hash
-  #
-  #end
 
   # NEW SEARCH method
   # Автоматическое наполнение хэша сущностями и
@@ -482,7 +462,6 @@ module SearchHelper
   end
 
 
-
   # Used in Search & MainController
   # ИСПОЛЬЗУЕТСЯ В ПОИСКЕ И МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
   # Получение массива дерева соединенных Юзеров из Tree
@@ -493,6 +472,7 @@ module SearchHelper
   end
 
 
+  # NO USE !!!
   # Слияние массива Хэшей без потери значений { (key = user_id) => (value = profile_id) }
   # Получение упорядоченного Хэша: {user_id  -> [ profile_id, profile_id, profile_id ...]}
   # @note GET
@@ -529,6 +509,7 @@ module SearchHelper
   end
 
 
+  # NO USE !!!
   # Подсчет количества найденных Профилей в массиве Хэшей
   # На входе: массив Хэшей профилей input_arr_hash
   # На выходе: amount_found Кол-во
