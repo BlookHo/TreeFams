@@ -109,15 +109,15 @@
             = "(id: #{v})"
 
             %span.grey в дереве
-            - p2 = Profile.where(id: k).first
+            - p2 = User.where(id: k).first.profile
             = p2.try(:name).try(:name) || "не найден"
             = "(id: #{k})"
 
             -# Если показывать кнопку по объединению для профиля, у которого есть юзер
-            - if p1 and p1.user
-              = link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: p1.user_id), class: :handshake
+            -#- if p1 and p1.user
+            -#  = link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: p1.user_id), class: :handshake
             -#-# ИЛИ показывать кнопку по объединению для найденогодерева
-            -#= link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: key.user_id), class: :handshake
+            = link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: k), class: :handshake
             %hr
 
           .grey= value

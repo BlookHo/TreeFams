@@ -197,7 +197,7 @@ class MainController < ApplicationController
 
       #start_tree = 9
       #with_whom_connect_users_arr = 11
-      @with_whom_connect_users_arr = with_whom_connect_users_arr
+      #@with_whom_connect_users_arr = with_whom_connect_users_arr
       # ck = 2
       {58=>{10=>68, 11=>72},
        59=>{10=>65, 11=>75},

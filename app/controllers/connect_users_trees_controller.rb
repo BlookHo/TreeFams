@@ -415,6 +415,8 @@ class ConnectUsersTreesController < ApplicationController
         stop_connection = true if !@duplicates_One_to_Many.empty? || !@duplicates_Many_to_One.empty?
         @stop_connection = stop_connection # DEBUGG_TO_VIEW
 
+        #with_whom_connect_users_arr =
+        #uniq_profiles_pairs = {103=>{12=>89}}
         @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
 
         logger.info ""
