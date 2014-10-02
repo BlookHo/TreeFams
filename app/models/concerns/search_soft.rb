@@ -554,6 +554,48 @@ module SearchSoft
     Tree.where(user_id: user_ids).where("profile_id = #{profile_id} or is_profile_id = #{profile_id}").order('relation_id').includes(:name)
   end
 
+  ## Формирование полного щирокого Хаша
+  # @note GET
+  # На входе:
+  # На выходе: @ Итоговый  ХЭШ
+  def make_complete_hash(input_hash)
+    complete_hash = Hash.new     #
+    if !input_hash.blank?
+      input_hash.each do |k, v|
+        if v.size == 1
+          complete_hash.merge!({k => v}) # наполнение хэша найденными profile_id
+        else
+          rez_hash = Hash.new     #
+          v.each do |one_arr|
+            if !one_arr.blank?
+              merged_hash = rez_hash.merge({one_arr[0] => one_arr[1]}){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
+              rez_hash = merged_hash
+            end
+          end
+          complete_hash.merge!(k => rez_hash) # искомый хэш
+          # с найденнымии profile_id, распределенными по связанным с ними profile_id
+        end
+      end
+    end
+    return complete_hash
+  end
+
+  # НАСТРОЙКА СОКРАЩЕНИЯ РЕ-В ПОИСКА: УДАЛЕНИЕ КОРОТКИХ СОВПАДЕНИЙ
+  # ЦИФРА В УСЛОВИИ if - ЭТО РАЗМЕР СОВПАДЕНИЙ В ДЕРЕВЕ ПРИ ПОИСКЕ.
+  # # Исключение тех рез-тов поиска, где найден всего один профиль
+  # @note GET
+  # На входе:
+  # На выходе: @ Итоговый  ХЭШ
+  def reduce_hash(input_hash)
+    reduced_hash = Hash.new
+    input_hash.each do |k, v|
+      if v.values.flatten.size > 1  # НАСТРОЙКА УДАЛЕНИЯ МАЛЫХ СОВПАДЕНИЙ
+        # сохраняем в рез-тах те, в кот. найдено больше 1 профиля
+        reduced_hash.merge!({k => v}) #
+      end
+    end
+    return reduced_hash
+  end
 
 
   # ВАЖНО! Исключение из Хэша результатов тех элементов,

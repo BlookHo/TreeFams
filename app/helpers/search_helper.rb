@@ -35,6 +35,7 @@ module SearchHelper
 
 
 
+  # NO USE !!!
   # СБОР ВСЕХ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ДЕРЕВЬЯМ
   def collect_trees_profiles(start_hash)
 
@@ -107,7 +108,6 @@ module SearchHelper
   # ПОЛУЧЕНИЕ ПАР СООТВЕТСТВИЙ ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ МНОЖЕСТВ СОВПАДЕНИЙ ОТНОШЕНИЙ
   # Вход
   # Выход
-  # .
   def get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
     logger.info " profiles_found_arr = #{profiles_found_arr} "
     max_power_profiles_pairs_hash = {}  # Профили с макс-м кол-вом совпадений для одного соответствия в дереве
@@ -158,7 +158,6 @@ module SearchHelper
   end # End of method
 
 
-
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
   #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
@@ -174,6 +173,7 @@ module SearchHelper
     end
   end
 
+  # NO USE !!!
   # Метод суммы двух хэшей без уничтожения значений при совпадениях ключей
   # hash_one = {17=>27, 16=>28, 20=>29, 19=>30, 18=>24}
   # hash_two = {16=>28, 23=>35, 21=>34}
@@ -183,6 +183,7 @@ module SearchHelper
     return sum_hash
   end
 
+  # NO USE !!!
   # Метод сортировки массива хэшей по нескольким ключам
   def sort_hash_array(hash_arr_to_sort)
     sorted_hash_arr = hash_arr_to_sort.sort_by {|h| [ h['name_id'],h['relation_id'],h['is_name_id'] ]}
@@ -192,9 +193,9 @@ module SearchHelper
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Метод получения НЕ общей части 2-х БК профилей
   def get_circles_delta(first_bk, second_bk, common_circle_arr)
-    #one = (first_bk - common_circle_arr)
-    #two = (second_bk - common_circle_arr)
-    #logger.info " get_delta_bk: one = #{one}, two = #{two}"
+    one = (first_bk - common_circle_arr)
+    two = (second_bk - common_circle_arr)
+    logger.info " get_delta_bk: one = #{one}, two = #{two}"
     circles_delta = (first_bk - common_circle_arr) + (second_bk - common_circle_arr)
 
     return circles_delta
@@ -204,16 +205,16 @@ module SearchHelper
   # Взять Бл.круг одного профиля
   # получить массивы триад для дальнейшего сравнения
   # показать в Логгере
-  #
-  # /
   def have_profile_circle(profile_id)
     profile_user_id = Profile.find(profile_id).tree_id
     profile_circle = get_one_profile_circle(profile_id, profile_user_id)
     logger.info "=== КРУГ ПРОФИЛЯ = #{profile_id} "
     show_in_logger(profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
-    circle_arr, circle_profiles_arr, circle_is_profiles_arr, circle_relations_arr = make_arr_hash_BK(profile_circle)
-
-    return circle_arr, circle_profiles_arr, circle_is_profiles_arr, circle_relations_arr
+    #circle_arr, circle_profiles_arr, circle_is_profiles_arr, circle_relations_arr =
+    circle_arr, circle_profiles_arr, circle_is_profiles_arr =
+        make_arrays_from_circle(profile_circle)
+    circle_is_profiles_arr = circle_is_profiles_arr.uniq
+    return circle_arr, circle_profiles_arr, circle_is_profiles_arr #, circle_relations_arr
   end
 
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
@@ -223,7 +224,7 @@ module SearchHelper
   def get_one_profile_circle(profile_id, user_id)
     connected_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля
     if !connected_users_arr.blank?
-      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id).order('user_id','relation_id','is_name_id' )
+      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id).order('user_id','relation_id','is_name_id' ) #.select(:user_id, :name_id, :relation_id, :is_name_id).distinct
       if !found_profile_circle.blank?
         return found_profile_circle # Найден БК
       else
@@ -238,7 +239,7 @@ module SearchHelper
   # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
   # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
   # ИСп-ся в Жестком поиске - в hard_search_match
-  def make_arr_hash_BK(bk_rows)
+  def make_arrays_from_circle(bk_rows)
     bk_arr = []
     bk_arr_w_profiles = []
     is_profiles_arr = []
@@ -247,13 +248,13 @@ module SearchHelper
       bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
       bk_arr_w_profiles << row.attributes.except('id','user_id','profile_id','created_at','updated_at') # for further analyze
       is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
-      relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze
+      #relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze
     end
     is_profiles_arr = is_profiles_arr.flatten(1)
-    relations_arr = relations_arr.flatten(1)
+    #relations_arr = relations_arr.flatten(1)
     logger.debug "bk_arr_w_profiles  = #{bk_arr_w_profiles}"
     #logger.debug "relations_arr  = #{relations_arr}"
-    return bk_arr, bk_arr_w_profiles, is_profiles_arr, relations_arr # Сделан БК в виде массива Хэшей
+    return bk_arr, bk_arr_w_profiles, is_profiles_arr #, relations_arr # Сделан БК в виде массива Хэшей
   end
 
   # NO USE!!!!
@@ -276,6 +277,7 @@ module SearchHelper
 
     return diplicates_hash
   end
+
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Метод сравнения 2-х БК профилей
   # этот метод требует развития - что делать, когда два БК не равны?
@@ -296,7 +298,7 @@ module SearchHelper
           else
             common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
             compare_rezult = false
-            logger.info "circles Size = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
+            logger.info "circles Sizes = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
             delta = get_circles_delta(found_bk_arr, search_bk_arr, common_circle_arr)
           end
 
@@ -316,6 +318,7 @@ module SearchHelper
 
     return compare_rezult, common_circle_arr, delta
   end
+
   # TEST COMPARE 2 BK
   # bk_arr1  = [{"name_id"=>125, "relation_id"=>1, "is_name_id"=>123},
   #            {"name_id"=>125, "relation_id"=>2, "is_name_id"=>98},
@@ -349,75 +352,35 @@ module SearchHelper
   #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>29, "is_name_id"=>125},
   #    .... ]
   # На выходе: field_arr = [28, 29, 30, 24]
-  def get_fields_arrays_from_bk(bk_arr_searched, bk_arr_found)
-    field_arr_searched = []
-    field_arr_found = []
+  def get_fields_arr_from_circles(bk_arr_searched, bk_arr_found)
+    #logger.info "search_bk_profiles_arr = #{bk_arr_searched} "
+    #logger.info "found_bk_profiles_arr = #{bk_arr_found}     "
     new_connection_hash = {}
 
-    #   logger.info "Массив значений хэшей с  key= is_profile_id : field_values_arr = #{field_values_arr}     "
-    bk_arr_searched.each_with_index do |one_searched_row, index|
-  #    logger.info "one_searched_row = #{one_searched_row} "
+    bk_arr_searched.each do |one_searched_row|
+      #logger.info "one_searched_row = #{one_searched_row} "
       name_id_s = one_searched_row.values_at('name_id')
       relation_id_s = one_searched_row.values_at('relation_id')
       is_name_id_s = one_searched_row.values_at('is_name_id')
- #     logger.info "name_id_s = #{name_id_s}, relation_id_s = #{relation_id_s}, is_name_id_s = #{is_name_id_s} "
-      bk_arr_found.each_with_index do |one_found_row, index|
- #       logger.info "one_found_row = #{one_found_row} "
+      bk_arr_found.each do |one_found_row|
+        #logger.info "one_found_row = #{one_found_row} "
         name_id_f = one_found_row.values_at('name_id')
         relation_id_f = one_found_row.values_at('relation_id')
         is_name_id_f = one_found_row.values_at('is_name_id')
- #       logger.info "name_id_f = #{name_id_f}, relation_id_f = #{relation_id_f}, is_name_id_f = #{is_name_id_f} "
 
         if name_id_s == name_id_f && relation_id_s == relation_id_f && is_name_id_s == is_name_id_f
-         # rez = true
-          field_arr_searched << one_searched_row.values_at('is_profile_id')
-          field_arr_found << one_found_row.values_at('is_profile_id')
-          new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]}) # make new el-t of hash
-
-          #logger.info "field_arr_searched = #{field_arr_searched}, field_arr_found = #{field_arr_found}, "
-
+        # make new el-t of new_connection_hash
+         new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]})
         end
 
       end
 
     end
-
-    return field_arr_searched, field_arr_found, new_connection_hash
-  end
-
-  def get_step_arrs(pos_profiles_arr, profiles_to_connect_hash)
-    search_profiles_step_arr = []
-    found_profiles_step_arr = []
-    search_step_arr1 = []
-    found_step_arr1 = []
-    search_step_arr2 = []
-    found_step_arr2 = []
-    profiles_to_connect_hash.each do |key,val|
-      if pos_profiles_arr.include?(val)
-        search_step_arr1 << key
-        found_step_arr1 << val
-      else
-        search_step_arr2 << key
-        found_step_arr2 << val
-      end
-    end
-    search_profiles_step_arr << search_step_arr1
-    found_profiles_step_arr << found_step_arr1
-    search_profiles_step_arr << search_step_arr2
-    found_profiles_step_arr << found_step_arr2
-
-    return search_profiles_step_arr, found_profiles_step_arr
+    return new_connection_hash
   end
 
 
-  ## ВАРИАНТ № 2
-  #search_bk_profiles_arr_sorted = sort_hash_array(search_bk_profiles_arr)
-  #found_bk_profiles_arr_sorted = sort_hash_array(found_bk_profiles_arr)
-  #search_bk_is_profiles_arr = get_field_array(search_bk_profiles_arr_sorted, "is_profile_id")
-  #found_bk_is_profiles_arr = get_field_array(found_bk_profiles_arr_sorted, "is_profile_id")
-  #logger.info "=ВАРИАНТ № 2== В БЛИЖНем КРУГе НАЙДЕННОГО ПРОФИЛЯ = #{tree_row.profile_id} - Массивы профилей is_profiles : search_bk_is_profiles_arr = #{search_bk_is_profiles_arr}, found_bk_is_profiles_arr = #{found_bk_is_profiles_arr}"
-
-# ВАРИАНТ № 2
+  # NO USE !!!
   # метод получения массива значений одного поля = key в массиве хэшей
   # На входе:         bk_arr_w_profiles  = [
   #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
@@ -441,6 +404,7 @@ module SearchHelper
     end  # DEBUGG_TO_LOGG
   end
 
+  # NO USE !!!
   # Автоматическое наполнение хэша сущностями и
   # количеством появлений каждой сущности.
   # @note GET /
@@ -460,27 +424,6 @@ module SearchHelper
     end
   end
 
-  ## NEW SEARCH method
-  ## получает на вход id деревьев из которых надо собрать ближний круг profile_id
-  ## в виде двух хэшей: хэш профилей и хэш их отношений к self.id
-  #def profile_circle_hash(user_ids, profile_id)
-  #
-  #  profiles_circle_hash = Hash.new
-  #  profiles_arr = []
-  #  relations_circle_hash = Hash.new
-  #  relations_arr = []
-  #  profiles_arr << profile_id
-  #  relations_arr << 0
-  #  rows = ProfileKey.where(user_id: user_ids, profile_id: profile_id).order('relation_id')#.includes(:profile_id, :relation_id).uniq_by(&:is_profile_id)
-  #  rows.each do |row|
-  #    profiles_arr << row.is_profile_id
-  #    relations_arr << row.relation_id
-  #  end
-  #  profiles_circle_hash.merge!(profile_id => profiles_arr ) #
-  #  relations_circle_hash.merge!(profile_id => relations_arr ) #
-  #  return profiles_circle_hash, relations_circle_hash
-  #
-  #end
 
   # NEW SEARCH method
   # Автоматическое наполнение хэша сущностями и
@@ -513,13 +456,13 @@ module SearchHelper
       end
     end
 
-    logger.info "In fill_arrays_in_hash: one_hash = #{one_hash} "
+    #logger.info "In fill_arrays_in_hash: one_hash = #{one_hash} "
     return one_hash
 
   end
 
 
-
+  # Used in Search & MainController
   # ИСПОЛЬЗУЕТСЯ В ПОИСКЕ И МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
   # Получение массива дерева соединенных Юзеров из Tree
   # На входе - массив соединенных Юзеров
@@ -529,50 +472,7 @@ module SearchHelper
   end
 
 
-  ## Формирование полного щирокого Хаша
-  # @note GET
-  # На входе:
-  # На выходе: @ Итоговый  ХЭШ
-  def make_complete_hash(input_hash)
-    complete_hash = Hash.new     #
-    if !input_hash.blank?
-      input_hash.each do |k, v|
-        if v.size == 1
-          complete_hash.merge!({k => v}) # наполнение хэша найденными profile_id
-        else
-          rez_hash = Hash.new     #
-          v.each do |one_arr|
-            if !one_arr.blank?
-              merged_hash = rez_hash.merge({one_arr[0] => one_arr[1]}){|key,oldval,newval| [*oldval].to_a + [*newval].to_a }
-              rez_hash = merged_hash
-            end
-          end
-          complete_hash.merge!(k => rez_hash) # искомый хэш
-          # с найденнымии profile_id, распределенными по связанным с ними profile_id
-        end
-      end
-    end
-    return complete_hash
-  end
-
-
-  # НАСТРОЙКА СОКРАЩЕНИЯ РЕ-В ПОИСКА: УДАЛЕНИЕ КОРОТКИХ СОВПАДЕНИЙ
-  # ЦИФРА В УСЛОВИИ if - ЭТО РАЗМЕР СОВПАДЕНИЙ В ДЕРЕВЕ ПРИ ПОИСКЕ.
-  # # Исключение тех рез-тов поиска, где найден всего один профиль
-  # @note GET
-  # На входе:
-  # На выходе: @ Итоговый  ХЭШ
-  def reduce_hash(input_hash)
-    reduced_hash = Hash.new
-    input_hash.each do |k, v|
-      if v.values.flatten.size > 1  # НАСТРОЙКА УДАЛЕНИЯ МАЛЫХ СОВПАДЕНИЙ
-        # сохраняем в рез-тах те, в кот. найдено больше 1 профиля
-        reduced_hash.merge!({k => v}) #
-      end
-    end
-    return reduced_hash
-  end
-
+  # NO USE !!!
   # Слияние массива Хэшей без потери значений { (key = user_id) => (value = profile_id) }
   # Получение упорядоченного Хэша: {user_id  -> [ profile_id, profile_id, profile_id ...]}
   # @note GET
@@ -590,6 +490,7 @@ module SearchHelper
     return final_merged_hash
   end
 
+  # No USE
   # Преобразование Хэша хэшей в Хэш массивов вместо хэшей
   # На входе: Из: { user_id => { profile_id => [profile_id, profile_id ,..]}, user_id => { profile_id => [profile_id, profile_id ,..]}
   # На выходе в Хэш, где значения - массивы:
@@ -608,6 +509,7 @@ module SearchHelper
   end
 
 
+  # NO USE !!!
   # Подсчет количества найденных Профилей в массиве Хэшей
   # На входе: массив Хэшей профилей input_arr_hash
   # На выходе: amount_found Кол-во
@@ -619,6 +521,7 @@ module SearchHelper
     return amount_found
   end
 
+  # No USE
   # Подсчет количества найденных Юзеров среди найденных Профилей
   # @note GET
   # На входе: массив профилей all_profiles_arr: profile_id
@@ -636,24 +539,6 @@ module SearchHelper
       end
     end
   end
-
-  ##Управляемый Метод для изготовления 2-х синхронных UNIQ массивов
-  ##Вход:
-  #def make_uniq_arrays(found_profiles, found_relations)
-  #  found_profiles_uniq = []
-  #  found_relations_uniq = []
-  #
-  #  found_profiles_uniq << found_profiles[0]
-  #  found_relations_uniq << found_relations[0]
-  #  for arr_ind in 1 .. found_profiles.length-1
-  #    if !found_profiles_uniq.include?(found_profiles[arr_ind].to_i) # для исключения случая,
-  #      found_profiles_uniq << found_profiles[arr_ind]
-  #      found_relations_uniq << found_relations[arr_ind]
-  #    end
-  #  end
-  #
-  #  return found_profiles_uniq, found_relations_uniq
-  #end
 
 
 

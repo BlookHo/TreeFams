@@ -527,9 +527,9 @@ class MainController < ApplicationController
       logger.info " "
       logger.info "=== BEFORE connection_of_trees ==="
       logger.info "current_user = #{current_user}"
-      @search_res = {}
-      logger.info "@search_res = #{@search_res}"
-      logger.info "search_results = #{search_results}"
+      @search_res = {} # DEBUGG_TO_VIEW - чтобы отключить старые рез-ты-пути на вьюхе
+      #logger.info "@search_res = #{@search_res}"
+      #logger.info "search_results = #{search_results}"
 
     end
 
