@@ -1,0 +1,14 @@
+<h1>Как Вас зовут?</h1>
+<div class="control">
+  <angucomplete-alt id="author"
+                placeholder="Начните вводить имя..."
+                pause="100"
+                selected-object="family.author"
+                remote-url="/autocomplete/names?term="
+                title-field="title"
+                initial-value="{{family.author.title}}"
+                input-class="" />
+</div>
+<div class="actions">
+  <a ui-sref="form.father" class="bttn green left">Дальше</a>
+</div>

@@ -1,28 +1,30 @@
-// This is a manifest file that'll be compiled into application.js, which will include all the files
-// listed below.
-//
-// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
-// or vendor/assets/javascripts of plugins, if any, can be referenced here using a relative path.
-//
-// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
-// compiled file.
-//
-// Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
-// about supported directives.
-//
+//  Base
+//----------------------------------
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.all
-//= require welcome-form.js
-//= require dropdown.js
-//= require overlay.js
-//= require new_profile_questions.js
-//= require path-results.js
 
 
+//  D3js.org
+//----------------------------------
+//= require libs/d3
 
-$(function(){
-  $('form#welcome_form').on('submit', function() {
-    $('#next').attr('disabled', true);
-  });
-})
+//  D3js graph applications
+//----------------------------------
+//= require graph
+
+//  Angular
+//----------------------------------
+//= require libs/angular
+//= require libs/angular-ui-router
+//= require libs/angucomplete-alt
+//= require angular-rails-templates
+
+
+//  Angular templates in app/assets/templates
+//----------------------------------
+//= require_tree ./templates
+
+
+//  Angular applications
+//----------------------------------
+//= require apps/welcome_application

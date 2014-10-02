@@ -1,0 +1,39 @@
+.bttn{
+    height:34px;
+    line-height:34px;
+    padding:0 21px;
+    font-size:12px;
+    font-weight: 700;
+    text-decoration:none;
+    display:inline-block;
+    color:#fff;
+    background-color:grey;
+    border:none;
+    outline:none;
+    cursor:pointer;
+    border-radius:4px!important;
+
+    -webkit-appearance: none;
+    -moz-appearance:none;
+
+    &.silver{
+      background-color:#bdc3c7;
+      color:#fff;
+      &:hover{ background-color:#95a5a6; }
+    }
+
+    &.green{
+      background-color:#2ecc71;
+      color:#fff;
+      &:hover{ background-color:#27ae60; }
+    }
+
+    &.red{
+      background-color:#e74c3c;
+      color:#fff;
+      &:hover{ background-color:#c0392b; }
+
+    }
+
+
+}

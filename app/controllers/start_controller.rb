@@ -963,8 +963,6 @@ class StartController < ApplicationController
     #ProfileKey.reset_pk_sequence
     #
 
-
-
     profiles_array = session[:current_author].to_array
     session[:profiles_array] = session[:current_author].to_array
 

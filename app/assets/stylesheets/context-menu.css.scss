@@ -1,0 +1,70 @@
+#context-menu{
+    z-index:20;
+    float:left;
+    position:absolute;
+
+
+    ul{
+      background-color:#fff;
+      font-size:1em;
+      font-weight:normal;
+      border-radius:2px;
+      box-shadow:0 0 8px rgba(0,0,0,0.7);
+
+
+    // fix border radius
+    li.main-item:first-child a{
+      border-radius:2px 2px 0 0;
+    }
+
+    li.main-item:last-child a{
+      border-radius:0 0 2px 2px;
+    }
+
+    li.sub-item:first-child a{
+      border-radius:none;
+    }
+
+    // Arrows
+    &:before {
+       position: absolute;
+       top:6px;
+       left: -13px;
+       display: block;
+       border-top: 12px solid transparent;
+       border-bottom: 12px solid transparent;
+       border-right: 12px solid rgba(0,0,0,0.4);
+       content: '';
+    }
+
+    &:after {
+       position: absolute;
+       top:6px;
+       left: -12px;
+       display: block;
+       border-top: 12px solid transparent;
+       border-bottom: 12px solid transparent;
+       border-right: 12px solid #fff;
+       content: '';
+    }
+
+
+    // Items
+    li.main-item a,
+    li.sub-item a{
+      text-decoration:none;
+      display:inline-block;
+      padding:10px;
+      color:blue;
+      width:200px;
+      border-bottom:1px solid #ccc;
+      font-weight:normal;
+      &.grey{color:grey;}
+      &.red{color:red;}
+      &:hover{
+        background-color:blue;
+        color:#fff;
+      }
+    }
+  }
+}
