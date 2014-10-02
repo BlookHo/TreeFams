@@ -33,7 +33,7 @@ gem 'ionicons-rails'
 gem 'russian', '~> 0.6.0'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer'
+gem 'therubyracer'
 
 # Обмен переменными Ruby -> JS
 # gem 'gon'
