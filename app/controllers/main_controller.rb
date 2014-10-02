@@ -195,8 +195,8 @@ class MainController < ApplicationController
       #profiles_to_rewrite = [72, 75, 76, 77, 78, 73, 74, 79]
       #profiles_to_destroy = [58, 59, 61, 60, 57, 80, 81, 62]
 
-      start_tree = 9
-      with_whom_connect_users_arr = 11
+      #start_tree = 9
+      #with_whom_connect_users_arr = 11
       @with_whom_connect_users_arr = with_whom_connect_users_arr
       # ck = 2
       {58=>{10=>68, 11=>72},
@@ -227,7 +227,7 @@ class MainController < ApplicationController
 
       ##################################
       # ck = 4
-      uniq_profiles_pairs =
+      #uniq_profiles_pairs =
       {57=>{10=>71, 11=>78},
        58=>{10=>68, 11=>72},
        59=>{10=>65, 11=>75},
@@ -302,11 +302,11 @@ class MainController < ApplicationController
       # СОРТИРОВКА ПАР ПРОФИЛЕЙ ПО МОЩНОСТИ ИХ ПЕРЕСЕЧЕНИЯ
       # .
       logger.info "METHODS - TO COMPARE CIRCLES IN HASHES"
-      profile_circle_1_hash = {
-          'f1' => 58, 'f2' => 100, 'm1' => 59, 's1' => 63, 's2' => 64, 'b1' => 60, 'b2' => 61, 'b3' => 66, 'w1' => 62 }
-
-      profile_circle_2_hash = {
-          'f1' => 58, 'f2' => 100, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
+      #profile_circle_1_hash = {
+      #    'f1' => 58, 'f2' => 100, 'm1' => 59, 's1' => 63, 's2' => 64, 'b1' => 60, 'b2' => 61, 'b3' => 66, 'w1' => 62 }
+      #
+      #profile_circle_2_hash = {
+      #    'f1' => 58, 'f2' => 100, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
 
       # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
       def get_row_data(one_row_hash)
