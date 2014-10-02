@@ -49,7 +49,6 @@ restartGraph = function(){
 
 
   link = svg.selectAll("line.link").data(links);
-
   link.enter()
       .append("svg:line")
       .attr("class", "link");
@@ -70,6 +69,8 @@ restartGraph = function(){
              return d.rel;
             });
 
+  linkLabel.exit().remove();
+
 
 
   node = svg.selectAll("g.node").data(nodes);
@@ -84,13 +85,13 @@ restartGraph = function(){
       .attr('fill', '#ccc')
       .call(force.drag);
 
+
   // name text
-  node
-      .append("text")
-      .attr("class", 'name middle')
-      .attr("y", 32)
-      .attr("text-anchor", "middle")
-      .text(function(d){ return d.name });
+  // node.append("text")
+  //     .attr("class", 'name middle')
+  //     .attr("y", 32)
+  //     .attr("text-anchor", "middle")
+  //     .text(function(d){ return d.name });
 
 
   // var defs     = svg.append("defs").attr("id", "imgdefs");
