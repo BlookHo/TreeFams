@@ -12,7 +12,7 @@
       (совпадений:
       = result[:count]
       )
-    = link_to "Обединиться с #{YandexInflect.inflections(tree_owner_user.name)[4]["__content__"].mb_chars.capitalize}", connection_of_trees_path( user_id_to_connect: result[:found_tree_id], certain_koeff: @certain_koeff), class: :green
+    = link_to "Объединиться с #{YandexInflect.inflections(tree_owner_user.name)[4]["__content__"].mb_chars.capitalize}", connection_of_trees_path( user_id_to_connect: result[:found_tree_id], certain_koeff: @certain_koeff), class: :green
 
   = render 'single_circle_table', circle: tree_owner_user.profile.circle(tree_owner_user.get_connected_users), author: tree_owner_user.profile
 - else
