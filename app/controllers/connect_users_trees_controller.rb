@@ -372,7 +372,7 @@ class ConnectUsersTreesController < ApplicationController
         ##### Запуск НОВОГО ДОСТОВЕРНОГО поиска С @certainty_koeff- ПОСЛЕДНЯЯ ВЕРСИЯ
         ##### !!!!!! @@@@@@
         ##### @certain_koeff_for_connect БРАТЬ ИЗ main_page view ??? или оставить постоянной величиной здесь ???
-       # @certain_koeff_for_connect = 7
+        @certain_koeff_for_connect = 4
         logger.info ""
         logger.info "BEFORE start_search  "
         logger.info " @certain_koeff_for_connect = #{@certain_koeff_for_connect}"
