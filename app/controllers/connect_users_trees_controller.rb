@@ -338,7 +338,8 @@ class ConnectUsersTreesController < ApplicationController
     user_id = params[:user_id_to_connect] # From view
     @current_user_id = current_user_id # DEBUGG_TO_VIEW
     @user_id = user_id # DEBUGG_TO_VIEW
-
+    @certain_koeff_for_connect = params[:certain_koeff] # From view
+    @certain_koeff_for_connect = @certain_koeff_for_connect.to_i
     connected_user = User.find(user_id) # For lock check
 
     logger.info " "
@@ -371,7 +372,12 @@ class ConnectUsersTreesController < ApplicationController
         ##### Запуск НОВОГО ДОСТОВЕРНОГО поиска С @certainty_koeff- ПОСЛЕДНЯЯ ВЕРСИЯ
         ##### !!!!!! @@@@@@
         ##### @certain_koeff_for_connect БРАТЬ ИЗ main_page view ??? или оставить постоянной величиной здесь ???
-        @certain_koeff_for_connect = 4
+       # @certain_koeff_for_connect = 7
+        logger.info ""
+        logger.info "BEFORE start_search  "
+        logger.info " @certain_koeff_for_connect = #{@certain_koeff_for_connect}"
+
+
         search_results = current_user.start_search(@certain_koeff_for_connect)  ##
 
         ######## Сбор рез-тов поиска:

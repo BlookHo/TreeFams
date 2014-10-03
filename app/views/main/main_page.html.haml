@@ -117,7 +117,7 @@
             -#- if p1 and p1.user
             -#  = link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: p1.user_id), class: :handshake
             -#-# ИЛИ показывать кнопку по объединению для найденогодерева
-            = link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: k), class: :handshake
+            = link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: k, certain_koeff: @certain_koeff), class: :handshake
             %hr
 
           .grey= value
