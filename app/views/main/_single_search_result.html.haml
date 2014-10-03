@@ -1,4 +1,4 @@
-- result = @by_profiles.first
+- result = @by_profiles.try(:first)
 
 - if result
   - tree_owner_user = User.where(id: result[:found_tree_id]).first
