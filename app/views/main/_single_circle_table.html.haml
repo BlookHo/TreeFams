@@ -1,0 +1,15 @@
+%table.tmp_table.circle-table#circle-table
+  %tr
+    %td Автор дерева
+    %td
+      %h2= author.full_name
+
+    %td
+  - circle.each_with_index do |item, index|
+    - path_link = circle_path(circle_path_helper(@path_params, item.is_profile_id, item.relation_id))
+    %tr
+      %td= relation_to_human(item.relation_id)
+      %td= item.name.to_name
+      %td.center
+        -# - if item.profile.tree_circle(current_user.get_connected_users, item.is_profile_id).size > 0 and item.relation_id != 0
+        -#   = link_to "Смотреть", path_link, style: "margin-left:11px;color:green;", remote: true

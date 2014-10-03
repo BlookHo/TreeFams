@@ -1,129 +1,14 @@
-
-
-
-%p
-  Search:
-%p
-  @author_id: #{@author_id.inspect}
-%p
-  Состав дерева автора: @connected_author_arr: #{@connected_author_arr.inspect}
-%p
-  Массив дерева автора: @author_connected_tree_arr: #{@author_connected_tree_arr.inspect}
-%p
-  @len_author_connected_tree: #{@len_author_tree.inspect}
-%p
-  В дереве родственников: @qty_of_tree_profiles: #{@qty_of_tree_profiles.inspect}
-
-
-%h4
-  КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ: @certain_koeff: #{@certain_koeff.inspect}
-%h4
-  СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
-  %h4    {профиль искомый -> профиль -> его отношение к искомому} )
-  %h4    @profiles_relations_arr: #{@profiles_relations_arr.inspect}
-%h4
-  ОСНОВНОЙ РЕЗ-ТАТ ПОИСКА - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив):
-  %h4     {профиль искомый -> дерево -> профиль найденный -> [ массив совпавших отношений с искомым профилем ]
-  %h4     @profiles_found_arr: #{@profiles_found_arr.inspect}
-%h4
-  ПРОФИЛИ, ОТСОРТИРОВАННЫЕ ПО КОЛ-ВУ СОВПАДЕНИЙ:
-  %h4     {профиль искомый -> кол-во совпадений}
-  %h4     @profiles_with_match_hash: #{@profiles_with_match_hash.inspect}
-%h4
-  ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ:
-  %h4  {профиль искомый -> { дерево -> профиль найденный} }
-  %h4  @uniq_profiles_pairs: #{@uniq_profiles_pairs.inspect}
-
-
-%h4
-  ТЕСТ НАЙДЕННЫХ ПРОФИЛЕЙ - РАСПРЕДЕЛЕНИЕ ПО МОЩНОСТИ СОВПАДЕНИЙ:
-  %h4   @high_power_results_hash: #{@high_power_results_hash.inspect}
-  %h4   @low_power_results_hash: #{@low_power_results_hash.inspect}
-
-%h4
-  ИТОГОВЫЕ РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ
-  %h4  ###### @by_profiles: #{@by_profiles.inspect}
-  %h4  ###### @by_trees   : #{@by_trees.inspect}
-%h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} }
-  %h4  @duplicates_One_to_Many: #{@duplicates_One_to_Many.inspect}
-%h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : {профиль искомый -> { дерево -> профиль найденный},...  }
-  %h4  @duplicates_Many_to_One: #{@duplicates_Many_to_One.inspect}
-
-
-%p
-  Длительность поиска: @elapsed_search_time: #{@elapsed_search_time.inspect}
-
-
-%h4
-  Массивы перезаписи, найденные в Connect_Users
-%p
-  @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
-%p
-  @profiles_to_rewrite: #{@profiles_to_rewrite.inspect}
-%p
-  @profiles_to_destroy: #{@profiles_to_destroy.inspect}
-
-
--#%p
--#  make_questions in NON-STANDARD CASE ###########
--#%p
--#  Добавляем к кому: @relation_add_to: #{@relation_add_to.inspect}
--#%p
--#  Добавляем кого: @relation_added: #{@relation_added.inspect}
--#%p
--#  С именем: @name_id: #{@name_id.inspect}
--#
--#%p
--#  @non_standard_questions_hash: #{@non_standard_questions_hash.inspect}
-
-
-
-
--#- @uniq_profiles_pairs = {72=>{9=>58, 10=>68}, 73=>{9=>80, 10=>84}, 74=>{9=>81, 10=>85, 12=>93}, 75=>{10=>65}, 76=>{9=>61, 10=>69}, 77=>{9=>60}, 79=>{12=>101}}
-
+-# вывод отладочной информации только в dev режиме
+- if Rails.env = 'development'
+  = render 'debugger'
 
 .content
   = form_tag('/main_page') do
     = select_tag :certain_koeff, options_for_select([1,2,3,4,5,6,7,8,9,10], selected: @certain_koeff)
     = submit_tag 'Запустить поиск'
 
-.content
-  %h2 Результаты поиска
-  %table.tmp_table
-    - @uniq_profiles_pairs.each do |key, value|
-      %tr
-        %td.grey
-          Для
-        %td
-          - p0 = Profile.where(id: key).first
-          = p0.try(:name).try(:name) || "не найден"
-          = "(id: #{key})"
-        %td.grey
-          в вашем дереве мы нашли
-        %td
-          - value.each do |k,v|
-            - p1 = Profile.where(id: v).first
-            = p1.try(:name).try(:name) || "не найден"
-            = "(id: #{v})"
 
-            %span.grey в дереве
-            - p2 = User.where(id: k).first.profile
-            = p2.try(:name).try(:name) || "не найден"
-            = "(id: #{k})"
-
-            -# Если показывать кнопку по объединению для профиля, у которого есть юзер
-            -#- if p1 and p1.user
-            -#  = link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: p1.user_id), class: :handshake
-            -#-# ИЛИ показывать кнопку по объединению для найденогодерева
-            = link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: k, certain_koeff: @certain_koeff), class: :handshake
-            %hr
-
-          .grey= value
-
-
-
+-# Дерево текущего польщзователя
 .content
   .circle-view
     .circle-path#current-circle-path= render 'circle_path'
@@ -137,124 +22,64 @@
     .current-circle#current-circle= render 'circle_table', circle: @circle
 
 
-  %div{style: "margin-top:50px;"}
-    - if @search_res.empty?
-      %h1.yellow-title Совпадений не найдено
-    - else
-      %h1.yellow-title Возможно, мы нашли ваших родственников:
+-# Результаты поиска - версия для Алексей
+-#= render 'alex_search_results'
 
-      #search-results
-        %ul
-          - @search_results_data.each do |data|
-            - user = User.find(data.user_id)
-            %li
-              %h1
-                = data.user_name
-                - if data.connected
-                  %strong (объединенное дерево)
+-# Результаты поиска - один результат за раз
+.content= render 'single_search_result'
 
-                %span
-                  Содержит
-                  - counter = data.results.map{|p| p.results_count}.inject(:+)
-                  = counter
-                  = Russian.p(counter, "общего", "общих", "общих")
-                  с вами
-                  = Russian.p(counter, "родственника", "родственников", "родственников")
-                  в своем древе
+-##path-results
+-#  - @path_search_results.each do |result|
+-#    - user = result[:user]
+-#    - paths = result[:paths]
+-#    .path-result{id: "path-results-#{user.id}"}
+-#      = link_to fa_icon("plus-square-o"), '#', onclick: "showSearchResluts(#{user.id}); return false;", class: "open-search-results-link"
+-#      .user-info
+-#        = image_tag 'profile-default.png', class: :avatar
+-#        %h1= user.profile.full_name
+-#        %h3
+-#          Содержит
+-#          = paths.size
+-#          общих
+-#          = Russian.p(paths.size, "родственника", "родственников", "родственников")
+-#      = link_to 'Объединиться', connection_of_trees_path(current_user_id: current_user.id, user_id_to_connect: user.id, matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash), class: :handshake
+-#      .results{style: 'display:none;', id: "results-#{user.id}"}
+-#        - paths.each do |path|
+-#          - path_id = Digest::MD5.hexdigest(path.to_s)
+-#          .path
+-#            %ul.path-list.path-search-list
+-#              - path.each_with_index do |step, index|
+-#                %li
+-#                  - if step[:relation] != 0
+-#                    = sex_id_to_human(step[:prev_sex_id])
+-#                    = relation_to_human(step[:relation])
+-#                  = link_to step[:profile].to_name, "/search/circle_path/#{path_id}/#{user.id}/#{step[:profile].id},#{step[:relation]}", remote: true
+-#                  - if (index + 1) == path.size
+-#                    .span.whois
+-#                      Вероятно, это
+-#                      = relation_to_profile(@search_results_relations.find {|r| r[step[:profile].id] }.try(:[], step[:profile].id) )
+-#                  - else
+-#                    %span
+-#                      = fa_icon('arrow-right')
+-#
+-#            .search-path-table{id: "search-path-table-#{path_id}", style: 'display:none;'}
+-#              = render 'search_circle_path_table', circle: user.profile.circle(user.id), author: user, path_id: path_id
 
-
-                = link_to 'Объединиться', connection_of_trees_path( user_id_to_connect: user.id), class: :handshake
-              %ul
-                - data.results.each do |profile|
-                  %li
-                    %h3
-                      Для
-                      = YandexInflect.inflections(profile.profile_name)[1]["__content__"].mb_chars.capitalize
-                      из вашего дерева найдены:
-                    -# %h5
-                    -#   Содержит
-                    -#   = profile.results_count
-                    -#   = Russian.p(profile.results_count, "общего", "общих", "общих")
-                    -#   = Russian.p(profile.results_count, "родственника", "родственников", "родственников")
-
-                    %ul
-                      - profile.results.each do |path|
-                        - path_id = Digest::MD5.hexdigest(path.to_s)
-                        %ul
-                          - path.each_with_index do |step, index|
-                            %li
-                              - if step[:relation] != 0
-                                = sex_id_to_human(step[:prev_sex_id])
-                                = relation_to_human(step[:relation])
-                              = link_to step[:profile].to_name, "/search/circle_path/#{path_id}/#{data.user_id}/#{step[:profile].id},#{step[:relation]}", remote: true
-                              - if (index + 1) == path.size
-                                .span.whois
-                                  Вероятно, это
-                                  = relation_to_profile(@search_results_relations.find {|r| r[step[:profile].id] }.try(:[], step[:profile].id) )
-                              - else
-                                %span
-                                  = fa_icon('arrow-right')
-                          .search-path-table{id: "search-path-table-#{path_id}", style: 'display:none;'}
-                            = render 'search_circle_path_table', circle: user.profile.circle(user.id), author: user, path_id: path_id
+-# - @search_results.each do |result|
+-#   .circle-view
+-#     - if result.author.class == User
+-#       .circle-path{id: "current-circle-path-#{result.author.id}"}
+-#         = render 'search_circle_path', author: result.author
+-#       .current-circle{id: "current-circle-#{result.author.id}"}
+-#         = render 'search_circle_table', circle: result.circle, author: result.author
+-#     - else
+-#       .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
+-#         = render 'search_circle_path', author: result.author
+-#       .current-circle{id: "current-circle-#{params[:tree_id]}"}
+-#         = render 'search_circle_table', circle: result.circle, author: result.author
 
 
 
 
-
-
-
-
-    -##path-results
-    -#  - @path_search_results.each do |result|
-    -#    - user = result[:user]
-    -#    - paths = result[:paths]
-    -#    .path-result{id: "path-results-#{user.id}"}
-    -#      = link_to fa_icon("plus-square-o"), '#', onclick: "showSearchResluts(#{user.id}); return false;", class: "open-search-results-link"
-    -#      .user-info
-    -#        = image_tag 'profile-default.png', class: :avatar
-    -#        %h1= user.profile.full_name
-    -#        %h3
-    -#          Содержит
-    -#          = paths.size
-    -#          общих
-    -#          = Russian.p(paths.size, "родственника", "родственников", "родственников")
-    -#      = link_to 'Объединиться', connection_of_trees_path(current_user_id: current_user.id, user_id_to_connect: user.id, matched_profiles: @final_reduced_profiles_hash, matched_relations: @final_reduced_relations_hash), class: :handshake
-    -#      .results{style: 'display:none;', id: "results-#{user.id}"}
-    -#        - paths.each do |path|
-    -#          - path_id = Digest::MD5.hexdigest(path.to_s)
-    -#          .path
-    -#            %ul.path-list.path-search-list
-    -#              - path.each_with_index do |step, index|
-    -#                %li
-    -#                  - if step[:relation] != 0
-    -#                    = sex_id_to_human(step[:prev_sex_id])
-    -#                    = relation_to_human(step[:relation])
-    -#                  = link_to step[:profile].to_name, "/search/circle_path/#{path_id}/#{user.id}/#{step[:profile].id},#{step[:relation]}", remote: true
-    -#                  - if (index + 1) == path.size
-    -#                    .span.whois
-    -#                      Вероятно, это
-    -#                      = relation_to_profile(@search_results_relations.find {|r| r[step[:profile].id] }.try(:[], step[:profile].id) )
-    -#                  - else
-    -#                    %span
-    -#                      = fa_icon('arrow-right')
-    -#
-    -#            .search-path-table{id: "search-path-table-#{path_id}", style: 'display:none;'}
-    -#              = render 'search_circle_path_table', circle: user.profile.circle(user.id), author: user, path_id: path_id
-
-  -# - @search_results.each do |result|
-  -#   .circle-view
-  -#     - if result.author.class == User
-  -#       .circle-path{id: "current-circle-path-#{result.author.id}"}
-  -#         = render 'search_circle_path', author: result.author
-  -#       .current-circle{id: "current-circle-#{result.author.id}"}
-  -#         = render 'search_circle_table', circle: result.circle, author: result.author
-  -#     - else
-  -#       .circle-path{id: "current-circle-path-#{params[:tree_id]}"}
-  -#         = render 'search_circle_path', author: result.author
-  -#       .current-circle{id: "current-circle-#{params[:tree_id]}"}
-  -#         = render 'search_circle_table', circle: result.circle, author: result.author
-
-
-
-
-    = render 'users/login_list'
+.content
+  = render 'users/login_list'
