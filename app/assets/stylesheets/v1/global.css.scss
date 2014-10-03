@@ -18,3 +18,13 @@ body{
 .right_75{
   margin-right:75px;
 }
+
+
+.single_search_result{
+  display:block;
+  padding:12px;
+  border:1px dashed #ccc;
+  background-color:#fffbd8;
+
+  a{float:right;}
+}
