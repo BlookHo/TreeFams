@@ -377,7 +377,6 @@ class ConnectUsersTreesController < ApplicationController
         logger.info "BEFORE start_search  "
         logger.info " @certain_koeff_for_connect = #{@certain_koeff_for_connect}"
 
-
         search_results = current_user.start_search(@certain_koeff_for_connect)  ##
 
         ######## Сбор рез-тов поиска:
@@ -391,74 +390,86 @@ class ConnectUsersTreesController < ApplicationController
         # На вьюхе проверяем: продолжать ли объединение.
         stop_connection = true if !@duplicates_One_to_Many.empty? || !@duplicates_Many_to_One.empty?
         @stop_connection = stop_connection # DEBUGG_TO_VIEW
+        logger.info " @duplicates_One_to_Many = #{@duplicates_One_to_Many}"
+        logger.info " @duplicates_Many_to_One = #{@duplicates_Many_to_One}"
+        logger.info " !@duplicates_One_to_Many.empty?  = #{!@duplicates_One_to_Many.empty? }"
+        logger.info " !@duplicates_Many_to_One.empty? = #{!@duplicates_Many_to_One.empty?}"
+        logger.info " !@duplicates_One_to_Many.empty? || !@duplicates_Many_to_One.empty? = #{!@duplicates_One_to_Many.empty? || !@duplicates_Many_to_One.empty?}"
 
-      #  uniq_profiles_pairs = {135=>{12=>94}, 129=>{12=>110, 13=>110, 14=>104}}
-      #  uniq_profiles_pairs = { 129=>{12=>110, 13=>110, 14=>104}}
-        @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
+        if stop_connection == false # если не было дубликатов
+           #  uniq_profiles_pairs = {135=>{12=>94}, 129=>{12=>110, 13=>110, 14=>104}}
+          #  uniq_profiles_pairs = { 129=>{12=>110, 13=>110, 14=>104}}
+          @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
 
-        logger.info ""
-        logger.info ""
-        logger.info ""
-        logger.info "BEFORE HARD_COMPLETE_SEARCH uniq_profiles_pairs = #{uniq_profiles_pairs} "
+          logger.info ""
+          logger.info ""
+          logger.info ""
+          logger.info " stop_connection = #{stop_connection}"
+          logger.info "BEFORE HARD_COMPLETE_SEARCH uniq_profiles_pairs = #{uniq_profiles_pairs} "
 
-        init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_pairs)
-        logger.info " init_connection_hash = #{init_connection_hash}"
+          init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_pairs)
+          logger.info " init_connection_hash = #{init_connection_hash}"
 
-        ##### запуск ПОЛНОГО (жесткого) метода поиска от дерева Автора
-        ##### на основе исходного массива ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ - uniq_profiles_pairs -> init_connection_hash
-        ##### ПОЛНОЕ Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-        profiles_to_rewrite, profiles_to_destroy = hard_complete_search(init_connection_hash)
+          ##### запуск ПОЛНОГО (жесткого) метода поиска от дерева Автора
+          ##### на основе исходного массива ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ - uniq_profiles_pairs -> init_connection_hash
+          ##### ПОЛНОЕ Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
+          profiles_to_rewrite, profiles_to_destroy = []
+          profiles_to_rewrite, profiles_to_destroy = hard_complete_search(init_connection_hash)
 
-        @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
-        @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
-        logger.info "Array(s) FOR connection:"
-        logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
-        logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
-        logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_One_to_Many = #{@duplicates_One_to_Many} "
-        logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_Many_to_One = #{@duplicates_Many_to_One} "
+          @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
+          @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
+          logger.info "Array(s) FOR connection:"
+          logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
+          logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
+          logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_One_to_Many = #{@duplicates_One_to_Many} "
+          logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_Many_to_One = #{@duplicates_Many_to_One} "
 
 
-        end_search_time = Time.now   # Конец отсечки времени поиска
-        @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
+          end_search_time = Time.now   # Конец отсечки времени поиска
+          @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
 
-        ######## Контроль корректности массивов перед объединением
-        if !@profiles_to_rewrite.blank? && !@profiles_to_destroy.blank?
+          ######## Контроль корректности массивов перед объединением
+          if !@profiles_to_rewrite.blank? && !@profiles_to_destroy.blank?
 
-          logger.info "Connection proceed. Array(s) - Dont blank."
-          if @profiles_to_rewrite.size == @profiles_to_destroy.size
-            logger.info "Ok to connect. Connection array(s) - Equal. Size = #{@profiles_to_rewrite.size}."
+            logger.info "Connection proceed. Array(s) - Dont blank."
+            if @profiles_to_rewrite.size == @profiles_to_destroy.size
+              logger.info "Ok to connect. Connection array(s) - Equal. Size = #{@profiles_to_rewrite.size}."
 
-            # Проверка найденных массивов перезаписи перед объединением - на повторы
-            complete_dubles_hash = check_duplications(@profiles_to_rewrite, @profiles_to_destroy)
+              # Проверка найденных массивов перезаписи перед объединением - на повторы
+              complete_dubles_hash = check_duplications(@profiles_to_rewrite, @profiles_to_destroy)
 
-            if complete_dubles_hash.empty? # Если НЕТ дублирования в массивах
+              if complete_dubles_hash.empty? # Если НЕТ дублирования в массивах
 
-              @test_arrrs_doubles = "Ok to connect. Connection array(s): - НЕТ Дублирований  "
-              logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).  complete_dubles_hash = #{complete_dubles_hash};"
+                @test_arrrs_doubles = "Ok to connect. Connection array(s): - НЕТ Дублирований  "
+                logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).  complete_dubles_hash = #{complete_dubles_hash};"
 
-              ###################################################################
-              ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-                  #          connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
-              ####################################################################
-              ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-                  #          connect_users(current_user_id.to_i, user_id.to_i)
-              ##################################################################
+                ###################################################################
+                ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
+                    #          connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_users_arr, with_whom_connect_users_arr)
+                ####################################################################
+                ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
+                    #          connect_users(current_user_id.to_i, user_id.to_i)
+                ##################################################################
+              else
+                logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"
+                @test_arrrs_dubl = "ERROR - STOP connection! ЕСТЬ дублирования!"
+                stop_connection = true #if !complete_dubles_hash.empty? || !@duplicates_Many_to_One.empty?
+              end
+
             else
-              logger.info "STOP connection: ЕСТЬ дублирования в поиске: complete_dubles_hash = #{complete_dubles_hash};"
-              @test_arrrs_dubl = "ERROR - STOP connection! ЕСТЬ дублирования!"
-              stop_connection = true #if !complete_dubles_hash.empty? || !@duplicates_Many_to_One.empty?
+             logger.info "ERROR - STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}."
+             @test_arrrs_size = "ERROR - STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}"
+             stop_connection = true
             end
 
           else
-           logger.info "ERROR - STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}."
-           @test_arrrs_size = "ERROR - STOP connection! Array(s) - NOT Equal! To_rewrite arr.size = #{@profiles_to_rewrite.size}; To_destroy arr.size = #{@profiles_to_destroy.size}"
-           stop_connection = true
+            logger.info "ERROR - STOP connection! Connection array(s) - blank! ."
+            @test_arrrs_blank = "ERROR - STOP connection! Connection array(s) - blank! "
+            stop_connection = true
           end
 
         else
-          logger.info "ERROR - STOP connection! Connection array(s) - blank! ."
-          @test_arrrs_blank = "ERROR - STOP connection! Connection array(s) - blank! "
-          stop_connection = true
+          logger.info "ERROR - STOP connection! ЕСТЬ дублирования в поиске. @duplicates_One_to_Many = #{@duplicates_One_to_Many}; @duplicates_Many_to_One = #{@duplicates_Many_to_One}."
         end
 
       else
