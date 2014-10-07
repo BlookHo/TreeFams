@@ -65,7 +65,7 @@ module Search
         logger.info " "
         logger.info "***** Цикл ПОИСКa: #{i+1}-я ИТЕРАЦИЯ - Ищем профиль: #{profile_id_searched.inspect};"
         ###### ЗАПУСК ПОИСКА ОДНОГО ПРОФИЛЯ
-        search_match(connected_users_arr, profile_id_searched)
+        search_match(connected_users_arr, profile_id_searched, certain_koeff)
         ###################################
         i += 1  # DEBUGG_TO_LOGG
       end
@@ -192,7 +192,7 @@ module Search
   # Берем параметр: profile_id из массива  = profiles_tree_arr[i][6].
   # @note GET /
   # @see News
-  def search_match(connected_users, profile_id_searched)
+  def search_match(connected_users, profile_id_searched, certain_koeff)
 
     logger.info " "
     logger.info "=== IN search_match "
@@ -209,18 +209,21 @@ module Search
     all_profile_rows_No = 1 # DEBUGG_TO_LOGG
     if !all_profile_rows.blank?
       logger.info "all_profile_rows.size = #{all_profile_rows.size} " # DEBUGG_TO_LOGG
+      # допускаем до поиска те круги искомых профилей, кот-е больше или равно коэфф-та достоверности
+      if all_profile_rows.size >= certain_koeff
+        all_profile_rows.each do |relation_row|
+          one_profile_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
+          # Получение РЕЗ-ТАТа ПОИСКА для одной записи Kруга искомого профиля - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
+          found_profiles_hash = get_found_profiles(profiles_hash, relation_row, connected_users, profile_id_searched)
 
-      all_profile_rows.each do |relation_row|
-        one_profile_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
-        # Получение РЕЗ-ТАТа ПОИСКА для одной записи Kруга искомого профиля - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
-        found_profiles_hash = get_found_profiles(profiles_hash, relation_row, connected_users, profile_id_searched)
+          logger.info " "
+          logger.info "=== После ПОИСКА по записи № #{all_profile_rows_No}" # DEBUGG_TO_LOGG
+          logger.info "one_profile_relations_hash = #{one_profile_relations_hash} " # DEBUGG_TO_LOGG
+          logger.info "profiles_hash = #{profiles_hash} " # DEBUGG_TO_LOGG
 
-        logger.info " "
-        logger.info "=== После ПОИСКА по записи № #{all_profile_rows_No}" # DEBUGG_TO_LOGG
-        logger.info "one_profile_relations_hash = #{one_profile_relations_hash} " # DEBUGG_TO_LOGG
-        logger.info "profiles_hash = #{profiles_hash} " # DEBUGG_TO_LOGG
+          all_profile_rows_No += 1 # Подсчет номера по порядку очередной записи об искомом профиле  # DEBUGG_TO_LOGG
+        end
 
-        all_profile_rows_No += 1 # Подсчет номера по порядку очередной записи об искомом профиле  # DEBUGG_TO_LOGG
       end
 
     else
