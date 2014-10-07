@@ -20,9 +20,10 @@ class MainController < ApplicationController
       @author = current_user.profile  # Нужно To view
 
       connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
-      author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
-  #    qty_of_tree_profiles = author_tree_arr.map {|p| p[4] }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
+      author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree # DEBUGG_TO_VIEW
       @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
+      @tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq # DEBUGG_TO_VIEW
+
 
       ##### КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ ##########
       @certain_koeff = params[:certain_koeff] || 4 # (for 0-8 relations)
@@ -31,23 +32,6 @@ class MainController < ApplicationController
       #logger.info "@certain_koeff = #{@certain_koeff}"
 
       # PLACE for DEBUGG_TO_VIEW
-      [{107=>{12=>{92=>[1, 2, 5, 5], 95=>[1, 5], 110=>[8]}, 13=>{95=>[1], 92=>[1, 2, 5, 5, 8], 110=>[8]}, 16=>{131=>[2, 5, 5], 129=>[8]}}},
-       {113=>{12=>{93=>[7]}, 13=>{93=>[7]}, 16=>{128=>[7]}}},
-       {103=>{12=>{89=>[1, 2, 3, 3, 3, 5, 8], 88=>[2, 3, 3, 5]}, 13=>{89=>[1, 2, 3, 3, 3, 8], 88=>[2, 3, 5]}, 16=>{132=>[1, 2, 5], 134=>[2, 3], 136=>[3, 8]}}},
-       {104=>{12=>{110=>[3, 3, 8]}, 13=>{110=>[3, 8], 92=>[8]}, 16=>{129=>[3, 3, 8]}}},
-       {109=>{12=>{88=>[1, 2, 5, 5, 8], 94=>[1, 5], 89=>[2, 5]}, 13=>{88=>[1, 2, 5, 5, 8], 89=>[2]}, 16=>{135=>[1], 134=>[1, 2, 8], 132=>[2, 5, 5]}}},
-       {106=>{13=>{90=>[2, 3, 3, 3, 7], 111=>[3]}, 12=>{90=>[3, 3, 3, 7], 111=>[3, 3]}, 16=>{130=>[3, 3, 3], 137=>[3, 7]}}},
-       {108=>{12=>{91=>[1, 2, 5, 5], 140=>[2, 5]}, 13=>{91=>[1, 2, 5, 5]}, 16=>{133=>[2, 5, 5]}}},
-       {103=>{12=>{89=>[1, 2, 3, 3, 3, 5, 8], 88=>[2, 3, 3, 5]}, 13=>{89=>[1, 2, 3, 3, 3, 8], 88=>[2, 3, 5]}, 16=>{132=>[1, 2, 5], 134=>[2, 3], 136=>[3, 8]}}},
-       {109=>{12=>{88=>[1, 2, 5, 5, 8], 94=>[1, 5], 89=>[2, 5]}, 13=>{88=>[1, 2, 5, 5, 8], 89=>[2]}, 16=>{135=>[1], 134=>[1, 2, 8], 132=>[2, 5, 5]}}},
-       {124=>{12=>{111=>[7]}, 13=>{116=>[7], 111=>[7]}, 16=>{130=>[7]}}},
-       {141=>{12=>{140=>[1, 2, 5], 91=>[2, 5]}, 16=>{133=>[1, 2, 5]}, 13=>{91=>[2, 5]}}},
-       {105=>{12=>{90=>[3, 3], 111=>[3, 3, 7]}, 13=>{90=>[3, 3], 111=>[3, 7], 116=>[7]}, 16=>{130=>[3, 3, 7], 137=>[3]}}},
-       {106=>{13=>{90=>[2, 3, 3, 3, 7], 111=>[3]}, 12=>{90=>[3, 3, 3, 7], 111=>[3, 3]}, 16=>{130=>[3, 3, 3], 137=>[3, 7]}}},
-       {138=>{13=>{98=>[4]}}},
-       {107=>{12=>{92=>[1, 2, 5, 5], 95=>[1, 5], 110=>[8]}, 13=>{95=>[1], 92=>[1, 2, 5, 5, 8], 110=>[8]}, 16=>{131=>[2, 5, 5], 129=>[8]}}},
-       {108=>{12=>{91=>[1, 2, 5, 5], 140=>[2, 5]}, 13=>{91=>[1, 2, 5, 5]}, 16=>{133=>[2, 5, 5]}}}
-      ]
 
       #
 
@@ -201,100 +185,6 @@ class MainController < ApplicationController
       end
 
 
-      #start_tree = 11
-      #connected_user = 9
-      #uniq_profiles_pairs =
-      #    {72=>{9=>58, 10=>68},
-      #     75=>{9=>59, 10=>65},
-      #     76=>{9=>61, 10=>69},
-      #     77=>{9=>60, 10=>70},
-      #     78=>{9=>57, 10=>71}}
-      #profiles_to_rewrite = [72, 75, 76, 77, 78, 73, 74, 79]
-      #profiles_to_destroy = [58, 59, 61, 60, 57, 80, 81, 62]
-
-      #start_tree = 9
-      #with_whom_connect_users_arr = 11
-      #@with_whom_connect_users_arr = with_whom_connect_users_arr
-      # ck = 2
-      {58=>{10=>68, 11=>72},
-       59=>{10=>65, 11=>75},
-       60=>{10=>70},
-       61=>{10=>69, 11=>76},
-       62=>{10=>86},
-       80=>{10=>84, 11=>73},
-       81=>{10=>85, 11=>74}}
-      #One_to_Many_hash:
-      {64=>{10=>{70=>2, 87=>2}}}
-      #Many_to_One_hash:
-      {63=>{10=>71, 11=>78},
-       64=>{11=>77},
-       57=>{10=>71, 11=>78},
-       60=>{11=>77}}
-      # ALL profiles_to_rewrite = [58, 59, 61, 80, 81, 57, 60, 62]
-      # ALL profiles_to_destroy = [72, 75, 76, 73, 74, 78, 77, 79]
-
-      # ck = 3
-      {57=>{10=>71, 11=>78},
-       58=>{10=>68, 11=>72},
-       59=>{10=>65, 11=>75},
-       60=>{10=>70, 11=>77},
-       61=>{10=>69, 11=>76}}
-      #ALL profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
-      #ALL profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
-
-      ##################################
-      # ck = 4
-      #uniq_profiles_pairs =
-      {57=>{10=>71, 11=>78},
-       58=>{10=>68, 11=>72},
-       59=>{10=>65, 11=>75},
-       60=>{10=>70, 11=>77},
-       61=>{10=>69, 11=>76}}
-
-      [57, 58, 59, 60, 61, 62, 80, 81]
-      [78, 72, 75, 77, 76, 79, 73, 74]
-
-      #ALL profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
-      #ALL profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
-      #####################################
-
-      # ck = 5
-      {57=>{10=>71, 11=>78},
-       58=>{10=>68, 11=>72},
-       59=>{10=>65}}
-      #ALL profiles_to_rewrite = [57, 58, 59, 60, 61, 62, 80, 81]
-      #ALL profiles_to_destroy = [78, 72, 75, 77, 76, 79, 73, 74]
-
-      # ck = 6
-      {57=>{10=>71},
-       58=>{10=>68, 11=>72}}
-      #ALL profiles_to_rewrite = [58, 80, 81, 57, 60, 61, 59, 62]
-      #ALL profiles_to_destroy = [72, 73, 74, 78, 77, 76, 75, 79]
-
-      # ck = 7
-      {}
-
-      #start_tree = 9
-      #connected_user = 10
-      #uniq_profiles_pairs =
-      #    {57=>{10=>71, 11=>78},
-      #     58=>{11=>72, 10=>68},
-      #     59=>{10=>65, 11=>75},
-      #     60=>{10=>70, 11=>77},
-      #     61=>{10=>69, 11=>76}}
-      #profiles_to_rewrite = [57, 58, 59, 60, 61, 64, 62, 80, 81, 82]
-      #profiles_to_destroy = [71, 68, 65, 70, 69, 87, 86, 84, 85, 66]
-
-      #start_tree = 10
-      #connected_user = 11
-      #uniq_profiles_pairs =
-      #{65=>{9=>59, 11=>75},
-      # 68=>{11=>72, 9=>58},
-      # 69=>{9=>61, 11=>76},
-      # 70=>{9=>60, 11=>77},
-      # 71=>{9=>57, 11=>78}}
-      #profiles_to_rewrite = [65, 68, 69, 70, 71, 84, 85, 86]
-      #profiles_to_destroy = [75, 72, 76, 77, 78, 73, 74, 79]
 
   ### @@@@@@@@@@@@@@@@@@@@@@
   #    profiles_to_rewrite, profiles_to_destroy = hard_complete_search(with_whom_connect_users_arr, uniq_profiles_pairs )
@@ -470,32 +360,6 @@ class MainController < ApplicationController
       # НОВЫХ МЕТОДОВ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
 
 
-# from 11 to 9,10
-#          {72=>{9=>58, 10=>68},
-#           75=>{9=>59, 10=>65},
-#           76=>{9=>61, 10=>69},
-#           77=>{9=>60, 10=>70},
-#           78=>{9=>57, 10=>71}}
-
-
-# from 10 to 11,9
-
-      # from 10 to 11,9
-      #{65=>{9=>59, 11=>75},
-      # 68=>{11=>72, 9=>58},
-      # 69=>{9=>61, 11=>76},
-      # 70=>{9=>60, 11=>77},
-      # 71=>{9=>57, 11=>78}}
-
-# from 9 to 11,10
-
-      {57=>{10=>71, 11=>78},
-       58=>{11=>72, 10=>68},
-       59=>{10=>65, 11=>75},
-       60=>{10=>70, 11=>77},
-       61=>{10=>69, 11=>76}}
-
-
       ################################
       ##### Основной поиск от дерева Автора (вместе с соединенными)
       ##### среди других деревьев в ProfileKeys.
@@ -503,15 +367,6 @@ class MainController < ApplicationController
 
       #####  Запуск НОВОГО поиска С @certainty_koeff - последняя версия
       search_results = current_user.start_search(@certain_koeff)  ##
-
-      #####  Запуск OLD ЖЕСТКОГО поиска
-      #search_results = current_user.start_hard_search  ##
-
-      #####  Запуск поиска 1-й версии - самый первый
-      #search_results = current_user.start_search_first  #####  Запуск поиска 1-й версии
-
-      #####  Запуск МЯГКОГО поиска - 2-я версия
-      #search_results = current_user.start_search_soft  ## Запуск поиска с right_profile
 
       end_search_time = Time.now   # Конец отсечки времени поиска
       @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
@@ -536,8 +391,8 @@ class MainController < ApplicationController
 
       # Для отладки # DEBUGG_TO_VIEW
       @author_id = current_user.id # DEBUGG_TO_VIEW
-      @author_connected_tree_arr = get_connected_users_tree(@connected_author_arr) # DEBUGG_TO_VIEW
-      @len_author_tree = @author_connected_tree_arr.length  if !@author_connected_tree_arr.blank?  # DEBUGG_TO_VIEW
+      #@author_connected_tree_arr = get_connected_users_tree(@connected_author_arr) # DEBUGG_TO_VIEW
+      #@len_author_tree = @author_connected_tree_arr.length  if !@author_connected_tree_arr.blank?  # DEBUGG_TO_VIEW
 
 
       # Для отладки # DEBUGG_TO_VIEW

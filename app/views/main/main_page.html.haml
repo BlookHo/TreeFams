@@ -22,8 +22,6 @@
     .current-circle#current-circle= render 'circle_table', circle: @circle
 
 
--# Результаты поиска - версия для Алексей
--#= render 'alex_search_results'
 
 -# Результаты поиска - один результат за раз
 .content= render 'single_search_result'
@@ -78,6 +76,8 @@
 -#       .current-circle{id: "current-circle-#{params[:tree_id]}"}
 -#         = render 'search_circle_table', circle: result.circle, author: result.author
 
+-#Результаты поиска - версия для Алексей
+= render 'alex_search_results'
 
 
 

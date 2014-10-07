@@ -6,16 +6,26 @@ module Search
                                      # Значение certain_koeff - из вьюхи/
 
     connected_author_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
-    author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree
-    qty_of_tree_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq.size # Кол-во профилей в объед-ном дереве - для отображения на Главной
+    author_tree_arr = get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
+    ###################################
+    #from_profile_searching = author_tree_arr.profile_id     # От какого профиля осущ-ся Поиск DEBUGG_TO_LOGG
+    #name_id_searched       = author_tree_arr.name_id        # Имя Профиля DEBUGG_TO_LOGG
+    #relation_id_searched   = author_tree_arr.relation_id    # Искомое relation_id К_Профиля DEBUGG_TO_LOGG
+    #is_name_id_searched    = author_tree_arr.is_name_id     # Искомое Имя К_Профиля DEBUGG_TO_LOGG
+    #
+    #profile_id_searched    = author_tree_arr.is_profile_id  # Поиск по ID К_Профиля
+    ###################################
+
+    tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
+    qty_of_tree_profiles = tree_is_profiles.size if !tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
     logger.info "======================= RUN start_search ========================= "
     logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
-    logger.info "Задание на поиск от Дерева Юзера: connected_author_arr = #{connected_author_arr} "
+    logger.info "Задание на поиск от Дерева Юзера: tree_is_profiles = #{tree_is_profiles} "
     logger.info "Коэффициент достоверности: certain_koeff = #{certain_koeff}"
 
     ############### ПОИСК ######## NEW LAST METHOD ############
-    search_profiles_from_tree(certain_koeff, connected_author_arr, author_tree_arr) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
+    search_profiles_from_tree(certain_koeff, connected_author_arr, tree_is_profiles) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
 
     results = {
         connected_author_arr: connected_author_arr, # where use? - in View
@@ -41,7 +51,7 @@ module Search
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
-  def search_profiles_from_tree(certain_koeff, connected_users_arr, tree_arr)
+  def search_profiles_from_tree(certain_koeff, connected_users_arr, tree_is_profiles)
 
     @profiles_found_arr = []     #
     @new_profiles_to_profiles_arr = []     #
@@ -50,33 +60,18 @@ module Search
     logger.info " "
     logger.info "=== IN search_profiles_from_tree === Запуск Циклов поиска по tree_arr === "
     i = 0 # DEBUGG_TO_LOGG
-    if !tree_arr.blank?
-      tree_arr.each do |arr_row|
-
-        from_profile_searching = arr_row.profile_id     # От какого профиля осущ-ся Поиск DEBUGG_TO_LOGG
-        name_id_searched       = arr_row.name_id        # Имя Профиля DEBUGG_TO_LOGG
-        relation_id_searched   = arr_row.relation_id    # Искомое relation_id К_Профиля DEBUGG_TO_LOGG
-        is_name_id_searched    = arr_row.is_name_id     # Искомое Имя К_Профиля DEBUGG_TO_LOGG
-
-        ###################################
-        profile_id_searched    = arr_row.is_profile_id  # Поиск по ID К_Профиля
-        ###################################
+    if !tree_is_profiles.blank?
+      tree_is_profiles.each do |profile_id_searched|
         logger.info " "
-        logger.info "***** Цикл ПОИСКa: #{i+1}-я ИТЕРАЦИЯ "
-        logger.info "***** От профиля: #{from_profile_searching};  Ищем профиль: #{profile_id_searched};"
-        logger.info "***** Oт имени (name_id): #{name_id_searched}; ищем отношение (relation_id) = #{relation_id_searched}, Ищем имя (is_name_id) = #{is_name_id_searched}  "
-
+        logger.info "***** Цикл ПОИСКa: #{i+1}-я ИТЕРАЦИЯ - Ищем профиль: #{profile_id_searched.inspect};"
         ###### ЗАПУСК ПОИСКА ОДНОГО ПРОФИЛЯ
         search_match(connected_users_arr, profile_id_searched)
         ###################################
-
         i += 1  # DEBUGG_TO_LOGG
       end
-
     end
 
     if !@profiles_found_arr.blank?
-
       ######## Запуск метода выбора пар профилей с максимальной мощностью множеств совпадений отношений
       logger.info ""
       max_power_profiles_pairs_hash, duplicates_One_to_Many, profiles_with_match_hash =
@@ -143,8 +138,6 @@ module Search
   #    logger.info "** After check_uniqness: new_uniq_profiles_hash = #{new_uniq_profiles_hash}, check_results_hash = #{check_results_hash}"
       # After method Get all found profiles for trees
       #### ДОДЕЛАТЬ? ########### TEST ########################################
-
-
 
     else
       logger.info "** NO SEARCH RESULTS **"
