@@ -109,6 +109,8 @@ module SearchHelper
   # Вход
   # Выход
   def get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
+    logger.info ""
+    logger.info "=== IN get_certain_profiles_pairs "
     logger.info " profiles_found_arr = #{profiles_found_arr} "
     max_power_profiles_pairs_hash = {}  # Профили с макс-м кол-вом совпадений для одного соответствия в дереве
     profiles_with_match_hash = {} # Порофили, отсортир-е по кол-ву совпадений
