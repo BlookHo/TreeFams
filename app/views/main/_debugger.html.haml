@@ -7,21 +7,17 @@
   @author_id: #{@author_id.inspect}
 %p
   Состав дерева автора: @connected_author_arr: #{@connected_author_arr.inspect}
--#%p
--#  Массив дерева автора: @author_connected_tree_arr: #{@author_connected_tree_arr.inspect}
--#%p
--#  @len_author_connected_tree: #{@len_author_tree.inspect}
 %p
   Искомые профили: @tree_is_profiles: #{@tree_is_profiles.inspect}
 %p
   В Искомом дереве: @qty_of_tree_profiles: #{@qty_of_tree_profiles.inspect}
-
 
 %h4
   КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ: @certain_koeff: #{@certain_koeff.inspect}
 %h4
   СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
   %h4    {профиль искомый -> профиль -> его отношение к искомому} )
+  %h4    ( только те отношения, кот-е больше или равны @certain_koeff )
   %h4    @profiles_relations_arr: #{@profiles_relations_arr.inspect}
 %h4
   ОСНОВНОЙ РЕЗ-ТАТ ПОИСКА - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив):

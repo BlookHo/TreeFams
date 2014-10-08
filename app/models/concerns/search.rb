@@ -209,7 +209,7 @@ module Search
     all_profile_rows_No = 1 # DEBUGG_TO_LOGG
     if !all_profile_rows.blank?
       logger.info "all_profile_rows.size = #{all_profile_rows.size} " # DEBUGG_TO_LOGG
-      # допускаем до поиска те круги искомых профилей, кот-е больше или равно коэфф-та достоверности
+      # допускаем до поиска те круги искомых профилей, размер кот-х (кругов) больше или равно коэфф-та достоверности
       if all_profile_rows.size >= certain_koeff
         all_profile_rows.each do |relation_row|
           one_profile_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
