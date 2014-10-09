@@ -1,8 +1,10 @@
+// http://www.angularcode.com/how-to-create-a-facebook-style-autocomplete-using-angularjs/
+// http://angular-ui.github.io/bootstrap/#/typeahead
 var app = angular
 
 // create our angular app and inject dependencies
 // =============================================================================
-.module('welcomeApplication', ['angucomplete-alt', 'ui.router', 'templates'])
+.module('welcomeApplication', ['ui.bootstrap', 'ui.router', 'templates'])
 
 // configuring our routes
 // =============================================================================
@@ -71,37 +73,65 @@ var app = angular
       templateUrl: 'welcome-email.html'
     })
 
-
     // catch all route
     // send users to the root form page
     $urlRouterProvider.otherwise('/form/author');
 })
 
 
-
 // our controller for the form
 // =============================================================================
-.controller('welcomeApplicationController', function($scope) {
+.controller('welcomeApplicationController', function($scope, $http) {
 
-  // we will store all of our form data in this object
-  $scope.family = {
-    // author:{},
-    // mother:{},
-    // father:{},
-    // wife:{},
-    // husband:{},
-    // email:{},
-    brothers:[],
-    sisters:[],
-    sons:[],
-    daughters:[]
+  $scope.getNames = function(val){
+    return $http.get('/autocomplete/names', {
+      params: {
+        term: val
+      }
+    }).then(function(response){
+      // return response.data.results.map(function(item){
+      //   return item.formatted_address;
+      // });
+      return response.data;
+    });
   };
 
 
+  // $scope.changeName = function(model){
+  //   console.log('changeName'+model);
+  // };
+
+
+  $scope.onNameSelect = function(item, model, label){
+    $scope.author = model;
+  }
+
+
+  $scope.isAuthorValid = function(){
+    return true;
+  }
+
+
+
+  // we will store all of our form data in this object
+  // $scope.family = {
+  //   author:{},
+  //   mother:{},
+  //   father:{},
+  //   wife:{},
+  //   husband:{},
+  //   email:{},
+  //   brothers:[],
+  //   sisters:[],
+  //   sons:[],
+  //   daughters:[]
+  // };
+
+
   // Оbserver - trigger graph
-  $scope.$watch('family', function(data){
-    pushDataFromAngular(data);
-  }, true);
+  // $scope.$watch('family', function(data){
+  //   pushDataFromAngular(data);
+  // }, true);
 
 
   // $scope.$watch('family.brothers', function(data){
@@ -154,10 +184,5 @@ var app = angular
     return $scope.family.author.originalObject.sex_id == 0;
   }
 
-
-  // function to process the form
-  // $scope.processForm = function() {
-  //   alert('awesome!');
-  // };
 
 });

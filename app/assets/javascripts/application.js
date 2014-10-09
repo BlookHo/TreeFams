@@ -16,7 +16,8 @@
 //----------------------------------
 //= require libs/angular
 //= require libs/angular-ui-router
-//= require libs/angucomplete-alt
+//= require libs/ui-bootstrap-tpls-0.9.0
+
 //= require angular-rails-templates
 
 
