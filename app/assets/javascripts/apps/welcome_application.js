@@ -81,7 +81,25 @@ var app = angular
 
 // our controller for the form
 // =============================================================================
-.controller('welcomeApplicationController', function($scope, $http) {
+.controller('welcomeApplicationController', function($scope, $http, $state) {
+
+
+  $scope.$on('$viewContentLoaded', function () {
+      // father -> author
+      if ($state.current.name == 'form.father'){
+        if (!$scope.isAuthorValid()){
+          $state.go('form.author');
+        }
+      }
+
+      // mother -> father
+      if ($state.current.name == 'form.mother'){
+        if (!$scope.isFatherValid()){
+          $state.go('form.father');
+        }
+      }
+
+  });
 
   $scope.getNames = function(val){
     return $http.get('/autocomplete/names', {
@@ -89,26 +107,48 @@ var app = angular
         term: val
       }
     }).then(function(response){
-      // return response.data.results.map(function(item){
-      //   return item.formatted_address;
-      // });
       return response.data;
     });
   };
 
 
-  // $scope.changeName = function(model){
-  //   console.log('changeName'+model);
-  // };
+  $scope.changeName = function(modelName){
+    //$scope.author = '';
+    eval('$scope.'+modelName+'="";');
+  };
 
 
-  $scope.onNameSelect = function(item, model, label){
-    $scope.author = model;
+  $scope.onSelectName = function(model, modelName){
+    //$scope.author = model;
+    eval('$scope.'+modelName+'=model;');
   }
 
 
   $scope.isAuthorValid = function(){
-    return true;
+    if ($scope.hasOwnProperty('author')){
+      return $scope.author.hasOwnProperty('name');
+    }else{
+      return false;
+    }
+  }
+
+
+
+  $scope.isFatherValid = function(){
+    if ($scope.hasOwnProperty('father')){
+      return $scope.father.hasOwnProperty('name');
+    }else{
+      return false;
+    }
+  }
+
+
+  $scope.isMotherValid = function(){
+    if ($scope.hasOwnProperty('mother')){
+      return $scope.mother.hasOwnProperty('name');
+    }else{
+      return false;
+    }
   }
 
 
@@ -185,4 +225,16 @@ var app = angular
   }
 
 
+});
+
+
+app.directive('autoFocus', function($timeout) {
+    return {
+        restrict: 'AC',
+        link: function(_scope, _element) {
+            $timeout(function(){
+                _element[0].focus();
+            }, 0);
+        }
+    };
 });

@@ -16,6 +16,8 @@
     -webkit-appearance: none;
     -moz-appearance:none;
 
+    &:hover{text-decoration:none;}
+
     &.silver{
       background-color:#bdc3c7;
       color:#fff;
@@ -32,7 +34,11 @@
       background-color:#e74c3c;
       color:#fff;
       &:hover{ background-color:#c0392b; }
+    }
 
+    &:disabled{
+      background-color:#bdc3c7;
+      &:hover{ background-color:#bdc3c7; }
     }
 
 

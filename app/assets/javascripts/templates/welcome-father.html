@@ -1,15 +1,19 @@
 <h1>Как зовут вашего отца?</h1>
+
 <div class="control">
-  <angucomplete-alt id="father"
-                placeholder="Начните вводить имя..."
-                pause="100"
-                selected-object="family.father"
-                remote-url="/autocomplete/names?sex_id=1&term="
-                title-field="name"
-                initial-value="{{family.father.title}}"
-                input-class="" />
+  <input type="text"
+         ng-model="father"
+         ng-change="changeName('father')"
+         ng-value="name"
+         typeahead-on-select="onSelectName($model, 'father')"
+         placeholder="Начните вводить имя..."
+         typeahead="item as item.name for item in getNames($viewValue)"
+         typeahead-editable="false"
+         typeahead-loading="loading"
+         autoFocus>
 </div>
+
 <div class="actions">
   <a ui-sref="form.author" class="bttn silver right">Назад</a>
-  <a ui-sref="form.mother" class="bttn green left">Дальше</a>
+  <button ui-sref="form.mother" ng-disabled="!isFatherValid()" class="bttn green left">Дальше</button>
 </div>

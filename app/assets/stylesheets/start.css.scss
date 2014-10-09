@@ -2,10 +2,9 @@
   text-align:center;
   position:relative;
   z-index:100;
+  padding:0;
+  margin:0;
 
-  h1{
-    margin-bottom:21px;
-  }
 
 
   form{
@@ -92,9 +91,9 @@
     a{
       margin:0 4px;
       display:inline-block;
-      width:12px;
-      height:12px;
-      border-radius:6px;
+      width:0.5em;
+      height:0.5em;
+      border-radius:50%;
       color:grey;
       background-color:#ccc;
       text-indent:-10000px;
