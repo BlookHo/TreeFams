@@ -6,22 +6,28 @@
 
 
 
-- if !@stop_connection
+- if !@stop_by_dublicates && !@stop_by_arrs
   %h1 Дубликатов нет. Деревья объединяются...
 - else
   %h1 Деревья объединить нельзя! ...
-  %h1 Информация при объединении деревьев: Есть дубликаты
+  %h1 Информация при объединении деревьев:
   = @complete_dubles_hash
   %br/
-  = @test_arrrs_dubl
-  %br/
-  = @test_arrrs_size
-  %br/
-  = @test_arrrs_blank
+  connection_message: #{@connection_message}
+  -#%br/
+  -#= @test_arrrs_dubl
+  -#%br/
+  -#= @test_arrrs_size
+  -#%br/
+  -#= @test_arrrs_blank
 
 
 %p
-  @stop_connection: #{@stop_connection.inspect}
+  @stop_by_dublicates: #{@stop_by_dublicates.inspect}
+%p
+  @stop_by_arrs: #{@stop_by_arrs.inspect}
+
+
 %p
   Кто хочет соединиться: Автор: #{@current_user_id.inspect}
 %p
@@ -36,9 +42,9 @@
 %h4
   ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: @uniq_profiles_pairs: #{@uniq_profiles_pairs.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : @duplicates_One_to_Many: #{@duplicates_One_to_Many.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ one_to_many : @duplicates_one_to_many: #{@duplicates_one_to_many.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : @duplicates_Many_to_One: #{@duplicates_Many_to_One.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ many_to_one : @duplicates_many_to_one: #{@duplicates_many_to_one.inspect}
 %p
   Длительность поиска: #{@elapsed_search_time.inspect}
 
