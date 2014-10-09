@@ -3,7 +3,7 @@ ruby '2.1.0'
 
 gem 'rails', '4.1.4'
 gem 'pg'
-gem 'redis-rails'
+# gem 'redis-rails'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
