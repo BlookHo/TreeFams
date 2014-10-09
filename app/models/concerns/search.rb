@@ -39,8 +39,8 @@ module Search
         by_profiles: @by_profiles,
         by_trees: @by_trees,
         ############### ДУБЛИКАТЫ ПОИСКА ######## NEW METHOD ############
-        duplicates_One_to_Many: @duplicates_One_to_Many,
-        duplicates_Many_to_One: @duplicates_Many_to_One
+        duplicates_one_to_many: @duplicates_one_to_many,
+        duplicates_many_to_one: @duplicates_many_to_one
     }
 
     logger.info "== END OF start_search ========================= "
@@ -74,36 +74,33 @@ module Search
     if !@profiles_found_arr.blank?
       ######## Запуск метода выбора пар профилей с максимальной мощностью множеств совпадений отношений
       logger.info ""
-      max_power_profiles_pairs_hash, duplicates_One_to_Many, profiles_with_match_hash =
+      max_power_profiles_pairs_hash, duplicates_one_to_many, profiles_with_match_hash =
           get_certain_profiles_pairs(@profiles_found_arr, certain_koeff)
       ###################################
 
       logger.info ""
       logger.info "== После get_certain_profiles_pairs - результат поиска: max_power_profiles_pairs_hash = #{max_power_profiles_pairs_hash}"
       logger.info ""
-      logger.info "== После get_certain_profiles_pairs - duplicates_One_to_Many = #{duplicates_One_to_Many}"
+      logger.info "== После get_certain_profiles_pairs - duplicates_one_to_many = #{duplicates_one_to_many}"
       logger.info ""
       logger.info "== После get_certain_profiles_pairs - profiles_with_match_hash = #{profiles_with_match_hash}"
       logger.info ""
 
-      ######## Удаление дубликатов типа duplicates_Many_to_One
-      # duplicates_out - метод в hasher.rb
-      uniq_profiles_pairs, duplicates_Many_to_One =
+      ##### Удаление дубликатов типа duplicates_many_to_one # duplicates_out - метод в hasher.rb
+      uniq_profiles_pairs, duplicates_many_to_one =
           duplicates_out(max_power_profiles_pairs_hash)  # Ok
-      # Exclude empty hashes
-      ######## Удаление пустых хэшей из результатов
+      ##### Удаление пустых хэшей из результатов # Exclude empty hashes
       uniq_profiles_pairs.delete_if { |k,v|  v == {} }
-      logger.info "** ПРОМЕЖУТОЧНЫЕ RESULTS: (После duplicates_out)"
-      logger.info "==  - результат поиска: uniq_profiles_pairs = #{uniq_profiles_pairs}"
-      logger.info "duplicates_Many_to_One = #{duplicates_Many_to_One}"
+      logger.info "== Pезультат поиска (После duplicates_out): uniq_profiles_pairs = #{uniq_profiles_pairs}"
+      logger.info "duplicates_many_to_one = #{duplicates_many_to_one}"
 
-      ##### ПРОМЕЖУТОЧНЫЕ РЕЗУЛЬТАТЫ ПОИСКА - DEBUGG_TO_VIEW ############
+      ##### ПРОМЕЖУТОЧНЫЕ РЕЗУЛЬТАТЫ ПОИСКА - DEBUGG_TO_VIEW #####
       @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
       @profiles_with_match_hash = profiles_with_match_hash # DEBUGG_TO_VIEW
-      @duplicates_One_to_Many = duplicates_One_to_Many # DEBUGG_TO_VIEW
-      @duplicates_Many_to_One = duplicates_Many_to_One # DEBUGG_TO_VIEW
+      @duplicates_one_to_many = duplicates_one_to_many # DEBUGG_TO_VIEW
+      @duplicates_many_to_one = duplicates_many_to_one # DEBUGG_TO_VIEW
 
-      ##### РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ #########
+      ##### РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ #####
       by_profiles, by_trees = make_search_results(uniq_profiles_pairs, profiles_with_match_hash)
 
       logger.info " by_profiles = #{by_profiles} "
@@ -112,40 +109,13 @@ module Search
       @by_trees = by_trees # DEBUGG_TO_VIEW
 
 
-      #### ДОДЕЛАТЬ! #
-      ########### TEST ########################################
-      # NB !! Вставить проверку и действия ПРИСУТСТВИЯ КАЖДОГО FOUND ПРОФИЛЯ В ЕГО РОДНОМ ДЕРЕВЕ
-      # СБОР ВСЕХ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ДЕРЕВЬЯМ
-      ################ TEST #######################################
-      # ПРОВЕРКА ПРИСУТСТВИЯ КАЖДОГО ПРОФИЛЯ В ЕГО РОДНОМ ДЕРЕВЕ
-      def check_profiles_tree_uniqness(trees_profiles_hash)
-        logger.info "**  in check_profiles_tree_uniqness: trees_profiles_hash = #{trees_profiles_hash} "
-        check_results_hash = {}
-        new_uniq_profiles_hash = {}
-        trees_profiles_hash.each_with_index do |(k, v), index|
-          all_tree_profiles = Tree.where(user_id: k).pluck(:is_profile_id)
-          logger.info "** all_tree_profiles = #{all_tree_profiles} "
-
-        end
-        return check_results_hash, new_uniq_profiles_hash
-      end
-
-  #    uniq_profiles_pairs = {89=>{14=>103}, 90=>{14=>106}, 91=>{14=>108}, 92=>{14=>107}, 88=>{14=>109}}
-  #    trees_profiles_hash = collect_trees_profiles(uniq_profiles_pairs)
-  #    logger.info "** collect_trees_profiles begin: trees_profiles_hash = #{trees_profiles_hash} "
-
-  #    check_results_hash, new_uniq_profiles_hash = check_profiles_tree_uniqness(trees_profiles_hash)
-  #    logger.info "** After check_uniqness: new_uniq_profiles_hash = #{new_uniq_profiles_hash}, check_results_hash = #{check_results_hash}"
-      # After method Get all found profiles for trees
-      #### ДОДЕЛАТЬ? ########### TEST ########################################
-
     else
       logger.info "** NO SEARCH RESULTS **"
       @uniq_profiles_pairs = {}
 
       logger.info "** NO DUBLICATES **"
-      @duplicates_One_to_Many = {}
-      @duplicates_Many_to_One = {}
+      @duplicates_one_to_many = {}
+      @duplicates_many_to_one = {}
     end
 
   end

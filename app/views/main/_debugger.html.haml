@@ -33,21 +33,21 @@
   %h4  @uniq_profiles_pairs: #{@uniq_profiles_pairs.inspect}
 
 
-%h4
-  ТЕСТ НАЙДЕННЫХ ПРОФИЛЕЙ - РАСПРЕДЕЛЕНИЕ ПО МОЩНОСТИ СОВПАДЕНИЙ:
-  %h4   @high_power_results_hash: #{@high_power_results_hash.inspect}
-  %h4   @low_power_results_hash: #{@low_power_results_hash.inspect}
+-#%h4
+-#  ТЕСТ НАЙДЕННЫХ ПРОФИЛЕЙ - РАСПРЕДЕЛЕНИЕ ПО МОЩНОСТИ СОВПАДЕНИЙ:
+-#  %h4   @high_power_results_hash: #{@high_power_results_hash.inspect}
+-#  %h4   @low_power_results_hash: #{@low_power_results_hash.inspect}
 
 %h4
   ИТОГОВЫЕ РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ
   %h4  ###### @by_profiles: #{@by_profiles.inspect}
   %h4  ###### @by_trees   : #{@by_trees.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} }
-  %h4  @duplicates_One_to_Many: #{@duplicates_One_to_Many.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ one_to_many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} }
+  %h4  @duplicates_one_to_many: #{@duplicates_one_to_many.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : {профиль искомый -> { дерево -> профиль найденный},...  }
-  %h4  @duplicates_Many_to_One: #{@duplicates_Many_to_One.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ many_to_one : {профиль искомый -> { дерево -> профиль найденный},...  }
+  %h4  @duplicates_many_to_one: #{@duplicates_many_to_one.inspect}
 
 
 %p

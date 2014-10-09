@@ -37,6 +37,53 @@ class MainController < ApplicationController
       #logger.info "@certain_koeff = #{@certain_koeff}"
 
       # PLACE for DEBUGG_TO_VIEW
+      ########### TEST ########################################
+      # NB !! Вставить проверку и действия ПРИСУТСТВИЯ КАЖДОГО FOUND ПРОФИЛЯ В ЕГО РОДНОМ ДЕРЕВЕ
+
+      # СБОР ВСЕХ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ДЕРЕВЬЯМ
+      ################ TEST #######################################
+      # ПРОВЕРКА ПРИСУТСТВИЯ КАЖДОГО ПРОФИЛЯ В ЕГО РОДНОМ ДЕРЕВЕ
+      def check_profiles_tree_uniqness(trees_profiles_hash)
+        logger.info "**  in check_profiles_tree_uniqness: trees_profiles_hash = #{trees_profiles_hash} "
+        check_results_hash = {}
+        new_uniq_profiles_hash = {}
+        trees_profiles_hash.each_with_index do |(tree_id, profiles_arr), index|
+          all_tree_profiles = Tree.where(user_id: tree_id).pluck(:is_profile_id)
+          check_arr = profiles_arr & all_tree_profiles
+          logger.info "** profiles_arr = #{profiles_arr}, all_tree_profiles = #{all_tree_profiles}, check_arr = #{check_arr} "
+          # проверка на совпадение массивов
+          # если массивы совпали, значит все профили - из дерева
+          # тогда рез.хэш - пустой= {}
+          # если не равны , то надо найти разность массивов, т.е. .
+          # те профили, кот-е отсутствуют в соотв-м дереве
+          # эту разность заносим в рез-й хэш
+          logger.info "** check_arr != profiles_arr = #{check_arr != profiles_arr} "
+          if check_arr != profiles_arr #
+            if check_arr.size > profiles_arr.size
+              rez = check_arr - profiles_arr
+            else
+              rez = profiles_arr - check_arr
+            end
+            logger.info "** rez = #{rez} "
+            check_results_hash.merge!( tree_id => rez )
+          end
+
+        end
+        return check_results_hash, new_uniq_profiles_hash
+      end
+
+      uniq_profiles_pairs =
+      {89=>{14=>103, 15=>103},
+       91=>{14=>108, 15=>2108},
+       92=>{14=>107, 15=>107},
+       90=>{14=>1106, 15=>106},
+       88=>{14=>109, 15=>109, 16=>3134}}
+      #trees_profiles_hash = collect_trees_profiles(uniq_profiles_pairs)
+      #logger.info "** after collect_trees_profiles begin: trees_profiles_hash = #{trees_profiles_hash} "
+      #
+      #check_results_hash, new_uniq_profiles_hash = check_profiles_tree_uniqness(trees_profiles_hash)
+      #logger.info "** After check_uniqness: new_uniq_profiles_hash = #{new_uniq_profiles_hash}, check_results_hash = #{check_results_hash}"
+      ############### TEST ########################################
 
       #
 
@@ -65,8 +112,8 @@ class MainController < ApplicationController
       @by_profiles = search_results[:by_profiles]
       @by_trees = search_results[:by_trees]
 
-      @duplicates_One_to_Many = search_results[:duplicates_One_to_Many]
-      @duplicates_Many_to_One = search_results[:duplicates_Many_to_One]
+      @duplicates_one_to_many = search_results[:duplicates_one_to_many]
+      @duplicates_many_to_one = search_results[:duplicates_many_to_one]
       ######################################################
 
 
