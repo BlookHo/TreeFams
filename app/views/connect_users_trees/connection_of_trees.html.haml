@@ -2,40 +2,34 @@
 
 %h3
   *** ПРОЦЕСС ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ ***
+%br/
+%br/
 
-
-
-
-- if !@stop_by_dublicates && !@stop_by_arrs
-  %h1 Дубликатов нет. Деревья объединяются...
+- if !@stop_by_search_dublicates && !@stop_by_arrs
+  %h1 #{@connection_message} (Дубликатов нет, массивы - в норме)
+  %br/
+  %br/
 - else
   %h1 Деревья объединить нельзя! ...
   %h1 Информация при объединении деревьев:
+  #{@connection_message}
+  %br/
   = @complete_dubles_hash
   %br/
-  connection_message: #{@connection_message}
-  -#%br/
-  -#= @test_arrrs_dubl
-  -#%br/
-  -#= @test_arrrs_size
-  -#%br/
-  -#= @test_arrrs_blank
-
+  %br/
 
 %p
-  @stop_by_dublicates: #{@stop_by_dublicates.inspect}
+  @stop_by_search_dublicates: #{@stop_by_search_dublicates.inspect}
 %p
   @stop_by_arrs: #{@stop_by_arrs.inspect}
 
 
 %p
-  Кто хочет соединиться: Автор: #{@current_user_id.inspect}
+  Кто хочет соединиться: Автор: #{@current_user_id.inspect}, @who_connect_users_arr: #{@who_connect_users_arr.inspect}
+
 %p
-  @who_connect_users_arr: #{@who_connect_users_arr.inspect}
-%p
-  Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@user_id.inspect}
-%p
-  @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
+  Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@user_id.inspect}, @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
+
 
 %h4
   параметр ПОИСКА: @certain_koeff_for_connect = #{@certain_koeff_for_connect.inspect}
