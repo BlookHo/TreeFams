@@ -137,9 +137,10 @@ Weafam::Application.routes.draw do
 
   # Users Sessions Signup
   resources :sessions, except: :edit
-  get "login",    to:   "sessions#new",         as: :login
-  get "logout",   to:   "sessions#destroy",     as: :logout
-  get 'signup',   to: 'signup#index',           as: :signup
+  get  'login',      to:   "sessions#new",      as: :login
+  get  'logout',     to:   "sessions#destroy",  as: :logout
+  get  'signup',     to:   'signup#index',      as: :signup
+  post 'register',   to:   'signup#create',     as: :register
 
   # Autocompletes
   ##################################################

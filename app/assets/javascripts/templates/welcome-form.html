@@ -1,20 +1,17 @@
-<form>
+{{family | json }}
+<form name="welcomeForm">
   <div id="form-views" ui-view></div>
 </form>
 
-
 <div class='navigation'>
   <a ui-sref-active="active" ui-sref=".author">1</a>
-  <a ui-sref-active="active" ui-sref=".father"><span>2</span></a>
-  <a ui-sref-active="active" ui-sref=".mother"><span>3</span></a>
-  <a ui-sref-active="active" ui-sref=".brothers"><span>4</span></a>
-  <a ui-sref-active="active" ui-sref=".sisters"><span>5</span></a>
-  <a ui-sref-active="active" ui-sref=".sons"><span>6</span></a>
-  <a ui-sref-active="active" ui-sref=".daughters"><span>7</span></a>
-  <a ui-sref-active="active" ui-sref=".wife"><span>8</span></a>
-  <a ui-sref-active="active" ui-sref=".email"><span>9</span></a>
+  <a ui-sref-active="active" ui-sref=".father">2</a>
+  <a ui-sref-active="active" ui-sref=".mother">3</a>
+  <a ui-sref-active="active" ui-sref=".brothers">4</a>
+  <a ui-sref-active="active" ui-sref=".sisters">5</a>
+  <a ui-sref-active="active" ui-sref=".sons">6</a>
+  <a ui-sref-active="active" ui-sref=".daughters">7</a>
+  <a ui-sref-active="active" ui-sref=".wife" ng-show="hasWife()">8</a>
+  <a ui-sref-active="active" ui-sref=".husband" ng-show="hasHusband()">8</a>
+  <a ui-sref-active="active" ui-sref=".email">9</a>
 </div>
-
-<!-- <small>
-{{family}}
-</small> -->

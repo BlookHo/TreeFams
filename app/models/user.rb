@@ -49,6 +49,9 @@ class User < ActiveRecord::Base
     return connected_users_arr
   end
 
+
+
+
   private
 
   def self.create_with_email(email)

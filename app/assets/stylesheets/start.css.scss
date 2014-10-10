@@ -1,15 +1,21 @@
 #start{
-  text-align:center;
-  position:relative;
-  z-index:100;
-  padding:0;
-  margin:0;
+  // text-align:center;
+  // position:relative;
+  // z-index:100;
+  // padding:0;
+  // margin:0;
 
+
+  #form-views{
+    line-height:20px;
+    padding:0;
+    margin:0;
+  }
 
 
   form{
     width:400px;
-    margin-top:30%;
+    margin-top:10%;
     margin-left: auto;
     margin-right: auto;
     box-shadow:0 -1px 8px rgba(0,0,0,0.35);
@@ -48,11 +54,12 @@
   .control, .actions{
     width:100%;
     display:inline-block;
-    margin-bottom:1em;
+    margin-bottom:1.4em;
     position:relative;
+    height:36px;
 
     &.add{
-      padding:10px 0 15px 0;
+      line-height:40px;
     }
   }
 
@@ -87,6 +94,10 @@
 
   // NAvigtaion breadcrumb
   .navigation{
+    text-align:center;
+    width:400px;
+    margin-left: auto;
+    margin-right: auto;
     margin-top:12px;
     a{
       margin:0 4px;

@@ -1,8 +1,13 @@
-<h1>Введите ваш email:</h1>
+<h1>Ваш email:</h1>
 <div class="control">
-  <input ng-model="family.email" type="email" required>
+  <input ng-model="family.email"
+         type="email"
+         name="email"
+         ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/"
+         required>
 </div>
 <div class="actions">
-  <a ui-sref="form.author" class="bttn silver right">Назад</a>
-  <a ui-sref="form.mother" class="bttn green left">Дальше</a>
+  <a ui-sref="form.wife" class="bttn silver right"     ng-show="hasWife()">Назад</a>
+  <a ui-sref="form.husband" class="bttn silver right"  ng-show="hasHusband()">Назад</a>
+  <button ng-disabled="welcomeForm.email.$invalid" ng-click="submitData()" class="bttn green left">Дальше</a>
 </div>

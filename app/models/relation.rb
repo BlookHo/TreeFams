@@ -6,6 +6,21 @@ class Relation < ActiveRecord::Base
   end
 
 
+  def self.name_to_id(name)
+    case name
+      when 'author'      then 0
+      when 'father'      then 1
+      when 'mother'      then 2
+      when 'sons'        then 3
+      when 'daughters'   then 4
+      when 'brothers'    then 5
+      when 'sisters'     then 6
+      when 'husband'     then 7
+      when 'wife'        then 8
+    end
+  end
+
+
   def self.to_hash
     {
       fathers:   {title: "Отец",   id: 1},

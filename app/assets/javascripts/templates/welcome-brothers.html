@@ -2,21 +2,21 @@
 
 <!-- ng-form -->
 <div ng-repeat="brother in family.brothers" class="control">
-  <a ng-click="removeBrother($index)" class="remove-field">удалить</a>
-  <angucomplete-alt id="brothers"
-                placeholder="Начните вводить имя..."
-                pause="100"
-                selected-object="family.brothers[$index]"
-                remote-url="/autocomplete/names?sex_id=1&term="
-                title-field="name"
-                initial-value="{{brother.title}}"
-                input-class="" />
-
+  <a ng-click="removeMember($index, 'brothers')" class="remove-field">удалить</a>
+    <input type="text"
+           ng-model="brother"
+           ng-change="changeMultipleName('brothers', $index)"
+           typeahead-on-select="onMultipleSelectName($model, 'brothers', $index)"
+           placeholder="Начните вводить имя..."
+           typeahead="item as item.name for item in getNames($viewValue, 1)"
+           typeahead-editable="false"
+           typeahead-loading="loading..."
+           autoFocus>
 </div>
 <div class="control add">
-  <a ng-click="addBrother()" class="add">Да, добавить брата</a>
+  <a ng-click="addMember('brothers')">Да, добавить брата</a>
 </div>
 <div class="actions">
   <a ui-sref="form.mother" class="bttn silver right">Назад</a>
-  <a ui-sref="form.sisters" class="bttn green left">Дальше</a>
+  <button ui-sref="form.sisters" class="bttn green left">Дальше</button>
 </div>

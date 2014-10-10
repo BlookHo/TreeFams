@@ -1,12 +1,12 @@
 <h1>Как зовут вашу маму?</h1>
 <div class="control">
   <input type="text"
-         ng-model="mother"
+         ng-model="family.mother"
          ng-change="changeName('mother')"
          ng-value="name"
          typeahead-on-select="onSelectName($model, 'mother')"
          placeholder="Начните вводить имя..."
-         typeahead="item as item.name for item in getNames($viewValue)"
+         typeahead="item as item.name for item in getNames($viewValue, 0)"
          typeahead-editable="false"
          typeahead-loading="loading"
          autoFocus>
