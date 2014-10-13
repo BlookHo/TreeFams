@@ -48,7 +48,7 @@ module ProfileKeysGeneration
         new_profile_key_row.relation_id = new_relation_id          # relation_id
         new_profile_key_row.is_profile_id = new_profile_id         # is_profile_id
         new_profile_key_row.is_name_id = new_profile_name_id       # is_name_id
-      #########################
+ #########################
       new_profile_key_row.save
  #########################
 
@@ -122,6 +122,9 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 9, new_profile_id, new_profile_name_id)  ###
       fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 9, new_profile_id, new_profile_name_id)  ###
 
+      fill_relation_rows(base_profile_tree_id, @wives_hash, 0, 13, new_profile_id, new_profile_name_id)  ###
+      fill_relation_rows(base_profile_tree_id, @husbands_hash, 1, 15, new_profile_id, new_profile_name_id)  ###
+
 
     end
 
@@ -139,6 +142,9 @@ module ProfileKeysGeneration
       # new relations
       fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 10, new_profile_id, new_profile_name_id)  ###
       fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 10, new_profile_id, new_profile_name_id)  ###
+
+      fill_relation_rows(base_profile_tree_id, @wives_hash, 0, 14, new_profile_id, new_profile_name_id)  ###
+      fill_relation_rows(base_profile_tree_id, @husbands_hash, 1, 16, new_profile_id, new_profile_name_id)  ###
 
 
     end
