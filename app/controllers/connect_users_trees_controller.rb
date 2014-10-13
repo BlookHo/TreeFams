@@ -223,7 +223,6 @@ class ConnectUsersTreesController < ApplicationController
   # сбор полного хэша достоверных пар профилей для объединения
   # Output:
   # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-  # profiles_to_rewrite, profiles_to_destroy =  get_rewrite_profiles_by_bk(search_results) ##
   # start_tree = от какого дерева объедин.
   # connected_user = с каким деревом объед-ся
   # Input: init_connection_hash

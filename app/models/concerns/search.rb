@@ -113,6 +113,9 @@ module Search
       logger.info "** NO SEARCH RESULTS **"
       @uniq_profiles_pairs = {}
 
+      @by_profiles = {}
+      @by_trees = {}
+
       logger.info "** NO DUBLICATES **"
       @duplicates_one_to_many = {}
       @duplicates_many_to_one = {}

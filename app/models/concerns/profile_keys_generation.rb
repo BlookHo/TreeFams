@@ -24,8 +24,9 @@ module ProfileKeysGeneration
           new_tree.is_profile_id  = new_profile_id      # is_profile_id нового К_Профиля
           new_tree.is_name_id     = new_profile_name_id # is_name_id нового К_Профиля
           new_tree.is_sex_id      = new_profile_sex     # is_sex_id нового К_Профиля
-
-        new_tree.save
+  #########################
+   #     new_tree.save
+  #########################
         #id   user_id, profile_id, new_relation_id  conn-ted  dates   name_id  is new_profile_id  is new_profile_name_id  is new_profile_sex
         #1053;127     ;1052        ;8              ;FALSE;   "2014-"; 370     ;1053               ;354                    ;0
 
@@ -47,7 +48,9 @@ module ProfileKeysGeneration
         new_profile_key_row.relation_id = new_relation_id          # relation_id
         new_profile_key_row.is_profile_id = new_profile_id         # is_profile_id
         new_profile_key_row.is_name_id = new_profile_name_id       # is_name_id
-      new_profile_key_row.save
+      #########################
+  #    new_profile_key_row.save
+ #########################
 
       one_profile_key_arr = []
       one_profile_key_arr[0] = base_profile_tree_id # @@current_user_id
@@ -104,9 +107,9 @@ module ProfileKeysGeneration
       end
     end
 
-    # Добавить ряды в ProfileKeys при вводе Матери
+    # Добавить ряды в ProfileKeys при вводе Отца
     # в первом элементе мессива - данные об Авторе
-    # в последнем элементе мессива - данные о Матери
+    # в последнем элементе мессива - данные о Отца
     # @note GET /
     # @see News
     def add_father_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
@@ -114,6 +117,12 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 7, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 1, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 1, new_profile_id, new_profile_name_id)  ### NonStandard
+
+      # new relations
+      fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 9, new_profile_id, new_profile_name_id)  ###
+      fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 9, new_profile_id, new_profile_name_id)  ###
+
+
     end
 
     # Добавить ряды в ProfileKeys при вводе Матери
@@ -126,6 +135,12 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 8, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 2, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 2, new_profile_id, new_profile_name_id)  ### NonStandard
+
+      # new relations
+      fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 10, new_profile_id, new_profile_name_id)  ###
+      fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 10, new_profile_id, new_profile_name_id)  ###
+
+
     end
 
     # Добавить ряды в ProfileKeys при вводе Сына   ## OK
