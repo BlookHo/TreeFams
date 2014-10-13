@@ -87,6 +87,9 @@ var app = angular
 .controller('welcomeApplicationController', function($scope, $http, $state) {
 
 
+  // Error container
+  $scope.errors = {}
+
   // Data container
   $scope.family = {
     author: '',
@@ -116,6 +119,7 @@ var app = angular
   // Update model
   $scope.changeName = function(modelName){
     // $scope.author = '';
+    $scope.error = '';
     eval('$scope.family'+modelName+'="";');
   };
 
@@ -288,8 +292,16 @@ var app = angular
       method : 'POST',
       url : '/register',
       data : {family: $scope.family}
+    }).success(function(data){
+      if (data.errors) {
+        $scope.error = "Email "+data.errors['email'];
+      }else{
+        window.location.href = '/main_page';
+      }
+    }).error(function(data){
+      alert('Неизвестная ошибка ;(');
     });
-  }
+  };
 
 });
 

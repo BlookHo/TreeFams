@@ -5,6 +5,7 @@
          name="email"
          ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/"
          required>
+  <span class='error'>{{error}}</span>
 </div>
 <div class="actions">
   <a ui-sref="form.wife" class="bttn silver right"     ng-show="hasWife()">Назад</a>
