@@ -118,25 +118,36 @@ var app = angular
 
   // Update model
   $scope.changeName = function(modelName){
-    // $scope.author = '';
+    //clear error on server validation
     $scope.error = '';
     eval('$scope.family'+modelName+'="";');
+    removeDataFormGraph(modelName);
+    if (modelName == 'author'){
+      removeDataFormGraph('father');
+      removeDataFormGraph('mother');
+      removeDataFormGraph(modelName);
+    }else{
+      removeDataFormGraph(modelName);
+    }
   };
 
 
   $scope.onSelectName = function(model, modelName){
     // $scope.author = model;
     eval('$scope.family'+modelName+'= model;');
+    pushDataToGraph(modelName, model);
   }
 
 
   $scope.changeMultipleName = function(modelName, index){
+    removeMultipleDataFormGraph(modelName, index);
     eval('$scope.family.'+modelName+'[index] = "";');
   };
 
 
   $scope.onMultipleSelectName = function(model, modelName, index){
     eval('$scope.family.'+modelName+'[index] = model;');
+    pushMultipleDataToGraph(modelName, model, index);
   }
 
 
@@ -149,7 +160,9 @@ var app = angular
 
   $scope.removeMember = function(index, modelName) {
     // $scope.family.brothers.splice(index, 1);
-    eval('$scope.family.'+modelName+'.splice('+index+', 1);')
+    removeMultipleDataFormGraph(modelName, index);
+    eval('$scope.family.'+modelName+'.splice('+index+', 1);');
+
 
   };
 
@@ -275,17 +288,17 @@ var app = angular
   }
 
 
-
-    // Оbserver - trigger graph
-    $scope.$watch('family', function(data){
-      // console.log( data )
-      pushDataToGraph(data);
-    }, true);
+  // Оbserver - trigger graph
+  // $scope.$watch('family.author', function(newVal, oldVal){
+  //   console.log( 'family.author is changed!' )
+  //   console.log(newVal.name === oldVal.name);
+  // }, true);
 
 
     // $scope.$watch('family.brothers', function(data){
     //   // pushDataFromAngular(data);
     // }, true)
+
 
 
   $scope.submitData = function(){

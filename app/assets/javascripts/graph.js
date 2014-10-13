@@ -1,35 +1,38 @@
-var dataset =  [];
 
-var svg,
-    force,
-    node, link;
-
-var width  = 980,
+var width = 960,
     height = 200;
 
+var color = d3.scale.category10();
+
 var nodes = [],
-    links = [],
-    color = d3.scale.category10();
+    links = [];
 
 
-createGraph = function(){
-  svg = d3.select("#graph-wrapper")
-          .append("svg")
-          .attr("width",  width)
-          .attr("height", height)
-          .attr('id', 'graph');
-};
+var node, link, nameLabel, relationLabel;
+var force, svg;
 
 
-initGraph = function(){
+createForce = function(){
   force = d3.layout.force()
-            .charge(-15000)
-            .theta(0.1)
-            .linkDistance(30)
-            .linkStrength(1)
-            .friction(0.7)
-            .size([width, height]);
-};
+               .nodes(nodes)
+               .links(links)
+               .charge(-15000)
+               .theta(0.1)
+               .linkDistance(20)
+               .linkStrength(1)
+               .friction(0.7)
+               .size([width, height]);
+               // .on("tick", tick);
+}
+
+
+createSvg = function(){
+  svg = d3.select("#graph-wrapper")
+           .append("svg")
+           .attr("width",  width)
+           .attr("height", height)
+           .attr('id', 'graph');
+}
 
 
 
@@ -42,10 +45,28 @@ function resizeGraph() {
 };
 
 
-restartGraph = function(){
-  force
-      .nodes(nodes)
-      .links(links);
+
+tick = function() {
+  if (nodes[0]){
+      nodes[0].x = width / 2;
+      nodes[0].y = 220;
+  }
+  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+
+  nameLabel.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+}
+
+
+
+
+start = function(){
 
 
   // Link between node
@@ -84,6 +105,7 @@ restartGraph = function(){
   node.exit().remove();
 
 
+
   nameLabel = svg.selectAll("g.nameLabel").data(nodes);
   nameLabel.enter()
             .append("g")
@@ -91,10 +113,9 @@ restartGraph = function(){
             .append('text')
             .attr("class", 'name')
             .attr("text-anchor", "middle")
-            .attr("y", 50)
+            .attr("y", 40)
             .text( function(d){ return d.name; });
   nameLabel.exit().remove();
-
 
 
 
@@ -131,10 +152,81 @@ restartGraph = function(){
 
   force.start();
 
+
+  // Link between node
+  // link = svg.selectAll("line.link").data(force.links());
+  // link.enter()
+  //     .insert("svg:line")
+  //     .attr("class", "link");
+  // link.exit().remove();
+  //
+  //
+  //
+  // node = svg.selectAll("g.node").data(nodes);
+  // node.enter()
+  //     .append("g")
+  //     .attr("class", "node")
+  //     .append("circle")
+  //     .attr('r', function(d){
+  //       return d.rel == 'author' ? 30 : 20;
+  //     })
+  //     .attr('fill', '#ccc')
+  //     .call(force.drag);
+  // node.exit().remove();
+  //
+  //
+  // nameLabel = svg.selectAll("g.nameLabel").data(nodes);
+  // nameLabel.enter()
+  //           .append("g")
+  //           .attr('class', 'nameLabel')
+  //           .append('text')
+  //           .attr("class", 'name')
+  //           .attr("text-anchor", "middle")
+  //           .attr("y", 50)
+  //           .text( function(d){ return d.name; });
+  // nameLabel.exit().remove();
+
+
+
+
+  // link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
+  // link.enter().insert("line", ".node").attr("class", "link");
+  // link.exit().remove();
+
+  // node = node.data(force.nodes(), function(d) { return d.id;});
+  // node.enter()
+  //     .append("circle")
+  //     .attr("class", function(d) { return "node " + d.id; })
+  //     .attr("r", 8);
+  // node.exit().remove();
+
+
+
+
+
+  // name = svg.selectAll("g.nameLable").data(nodes);
+  // name.enter()
+  //           .append("g")
+  //           .attr('class', 'nameLable')
+  //           .append('text')
+  //           .attr("class", 'name')
+  //           .attr("text-anchor", "middle")
+  //           .attr("y", 20)
+  //           .text( function(d){ return d.name; });
+  // name.exit().remove();
+
+
+  // force.start();
+}
+
+
+
+pushNode = function(data){
+    nodes.push(data);
+    if (data.target){
+      pushLink(data.id, data.target);
+    }
 };
-
-
-
 
 
 
@@ -156,20 +248,12 @@ findNodeIndex = function (id) {
 
 deleteNode = function(id){
     var index = findNodeIndex(id);
+    console.log("delet node index:"+index);
     if (index != undefined){
-      nodes.splice(index, 1);
-      deleteLink(id);
+        nodes.splice(index, 1);
+        deleteLink(id);
     }
 }
-
-
-pushNode = function(data){
-    nodes.push(data);
-    if (data.target){
-      pushLink(data.id, data.target);
-    }
-};
-
 
 
 findLink = function(id) {
@@ -188,7 +272,6 @@ findLinkIndex = function (id) {
 };
 
 
-
 deleteLink = function(id){
     var index = findLinkIndex(id);
     if (index != undefined){
@@ -197,231 +280,192 @@ deleteLink = function(id){
 };
 
 
-
 pushLink = function(sourceId, targetId){
     var sourceNode = findNode(sourceId);
     var targetNode = findNode(targetId);
     if((sourceNode !== undefined) && (targetNode !== undefined)) {
-        links.push({"source": sourceNode, "target": targetNode, "rel":sourceNode.rel, "rel_title": sourceNode.rel_title, "id": sourceId});
+        links.push({source: sourceNode, target: targetNode, id: sourceId, rel_title:sourceNode.rel_title});
     }
 };
 
 
-reloadDataset = function(){
-  dataset.forEach(function(d) {
-    pushNode(d);
-  });
+
+function add_author(data){
+  var node = {id: 1, name: data.name};
+  pushNode(node);
+  start();
+}
+
+
+function add_father(data){
+  var node = {id: 2, name: data.name, target: 1, rel_title: "отец"};
+  pushNode(node)
+  start();
+}
+
+
+function add_mother(data){
+  var node = {id: 3, name: data.name, target: 1, rel_title: "мать"};
+  pushNode(node)
+  start();
+}
+
+
+function add_brothers(data, index){
+  var node_id = 41+index;
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "брат"};
+  pushNode(node)
+  start();
+}
+
+
+function remove_brothers(index){
+  var node_id = 41+index;
+  deleteNode(node_id)
+  start();
+}
+
+
+function add_sisters(data, index){
+  var node_id = '5-'+index+'';
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "сестра"};
+  pushNode(node)
+  start();
+}
+
+
+function add_sons(data, index){
+  var node_id = '6-'+index+'';
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "сын"};
+  pushNode(node)
+  start();
+}
+
+
+function add_daughters(data, index){
+  var node_id = '7-'+index+'';
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "дочь"};
+  pushNode(node)
+  start();
+}
+
+
+function add_wife(data){
+  var node = {id: 8, name: data.name, target: 1, rel_title: "жена"};
+  pushNode(node)
+  start();
+}
+
+
+function add_husband(data){
+  var node = {id: 9, name: data.name, target: 1, rel_title: "муж"};
+  pushNode(node)
+  start();
 }
 
 
 
-pushDataToGraph = function(data){
-
-  dataset = [];
-  nodes = [];
-  links = [];
-
-
-  try{
-    if ( data.author.hasOwnProperty('name') ){
-      pushAuthorData( data.author );
-    }
-  }catch(e){}
+function remove_author(){
+  deleteNode(1)
+  start();
+}
 
 
-  try{
-    if ( data.father.hasOwnProperty('name') ){
-      pushFatherData( data.father );
-    }
-  }catch(e){}
-
-  try{
-    if ( data.mother.hasOwnProperty('name') ){
-      pushMotherData( data.mother );
-    }
-  }catch(e){}
-
-  try{
-    if ( data.brothers.length > 0 ){
-      pushBrothersData( data.brothers );
-    }
-  }catch(e){}
-
-  try{
-    if ( data.sisters.length > 0 ){
-      pushSistersData( data.sisters );
-    }
-  }catch(e){}
-
-  try{
-    if ( data.sons.length > 0 ){
-      pushSonsData( data.sons );
-    }
-  }catch(e){}
-
-  try{
-    if ( data.daughters.length > 0 ){
-      pushSonsData( data.daughters );
-    }
-  }catch(e){}
-
-  try{
-    if ( data.wife.hasOwnProperty('name') ){
-      pushWifeData( data.wife );
-    }
-  }catch(e){}
-
-  try{
-    if ( data.husband.hasOwnProperty('name') ){
-      pushHusbandData( data.husband );
-    }
-  }catch(e){}
+function remove_father(){
+  deleteNode(2)
+  start();
+}
 
 
-
-  // try{
-  //   if ( data.author.hasOwnProperty('name') ){
-  //     pushAuthorData( data.author );
-  //   }
-  //
-  //
-  //   if ( data.father.hasOwnProperty('name') ){
-  //     pushFatherData( data.father );
-  //   }
-  //
-  //   if ( data.mother.hasOwnProperty('name') ){
-  //     pushMotherData( data.mother );
-  //   }
-  //
-  //   if ( data.brothers.length > 0 ){
-  //     pushBrothersData( data.brothers );
-  //   }
-  //
-  //   if ( data.sisters.length > 0 ){
-  //     pushSistersData( data.sisters );
-  //   }
-  //
-  //   if ( data.sons.length > 0 ){
-  //     pushSonsData( data.sons );
-  //   }
-  //
-  //   if ( data.daughters.length > 0 ){
-  //     pushSonsData( data.daughters );
-  //   }
-  //
-  //   if ( data.wife.hasOwnProperty('name') ){
-  //     pushWifeData( data.wife );
-  //   }
-  //
-  //   if ( data.husband.hasOwnProperty('name') ){
-  //     pushHusbandData( data.husband );
-  //   }
-  //
-  // }catch(e){
-  //   console.log('Incomplete object');
-  // };
-
-
-  reloadDataset();
-  restartGraph();
-};
-
-
-
-// pushAuthorData = function(data){
-//   if ( (data != undefined) && ( 'name' in data ) ){
-//     var image = data.sex_id == 1 ? '/assets/icon-man.png' : '/assets/icon-women.png'
-//     var node = {id: 1, name: data.name, rel: "author", rel_title: "это вы", sex: data.sex_id, image: image};
-//     return dataset.push(node);
-//   }
-// }
-
-
-pushAuthorData = function(data){
-  var image = data.sex_id == 1 ? '/assets/icon-man.png' : '/assets/icon-women.png'
-  var node = {id: 1, name: data.name, rel: "author", rel_title: "это вы", sex: data.sex_id, image: image};
-  return dataset.push(node);
+function remove_mother(){
+  deleteNode(3)
+  start();
 }
 
 
 
-pushFatherData = function(data){
-  var node = {id: 2, name: data.name, rel: "father", rel_title: "отец", sex: 1, target: 1, image: '/assets/icon-man.png'};
-  return dataset.push(node);
+
+function remove_sisters(index){
+  var node_id = '5-'+index;
+  deleteNode(node_id)
+  start();
 }
 
 
-pushMotherData = function(data){
-  var node = {id: 3, name: data.name, rel: "mother", rel_title: "мать", sex: 0, target: 1, image: '/assets/icon-women.png'};
-  return dataset.push(node);
+function remove_sons(index){
+  var node_id = '6-'+index;
+  deleteNode(node_id)
+  start();
 }
 
 
-
-pushBrothersData = function(data){
-  for (var i=0; i < data.length; i++) {
-    if ( 'name' in data[i] ){
-      var node_id = '4-'+i;
-      var node = {id: node_id, name: data[i].name, rel: "brother", rel_title: "брат", sex: 1, target: 1, image: '/assets/icon-man.png'};
-      dataset.push(node);
-    }
-  };
-  return dataset;
+function remove_daughters(index){
+  var node_id = '7-'+index;
+  deleteNode(node_id)
+  start();
 }
 
 
-pushSistersData = function(data){
-  for (var i=0; i < data.length; i++) {
-    if ( 'name' in data[i] ){
-      var node_id = '5-'+i;
-      var node = {id: node_id, name: data[i].name, rel: "sister", rel_title: "сестра", sex: 0, target: 1, image: '/assets/icon-women.png'};
-      dataset.push(node);
-    }
-  };
-  return dataset;
+pushDataToGraph = function(modelName, model){
+  eval('add_'+modelName+'(model)');
 }
 
 
-
-pushSonsData = function(data){
-  for (var i=0; i < data.length; i++) {
-    if ( 'name' in data[i] ){
-      var node_id = '6-'+i;
-      var node = {id: node_id, name: data[i].name, rel: "son", rel_title: "сын", sex: 1, target: 1, image: '/assets/icon-man.png'};
-      dataset.push(node);
-    }
-  };
-  return dataset;
+pushMultipleDataToGraph = function(modelName, model, index){
+  eval('add_'+modelName+'(model, index)');
 }
 
 
-pushDaughtersData = function(data){
-  for (var i=0; i < data.length; i++) {
-    if ( 'name' in data[i] ){
-      var node_id = '7-'+i;
-      var node = {id: node_id, name: data[i].name, rel: "daughters", rel_title: "дочь", sex: 0, target: 1, image: '/assets/icon-women.png'};
-      dataset.push(node);
-    }
-  };
-  return dataset;
+removeDataFormGraph = function(modelName){
+  eval('remove_'+modelName+'()');
 }
 
 
-pushWifeData = function(data){
-  var node = {id: 8, name: data.name, rel: "wife", rel_title: "жена", sex: 0, target: 1, image: '/assets/icon-women.png'};
-  return dataset.push(node);
+removeMultipleDataFormGraph = function(modelName, index){
+  eval('remove_'+modelName+'('+index+')');
 }
 
-
-pushHusbandData = function(data){
-  var node = {id: 9, name: data.name, rel: "husband", rel_title: "муж", sex: 1, target: 1, image: '/assets/icon-man.png'};
-  return dataset.push(node);
-}
 
 
 
 $(function(){
-  createGraph();
-  initGraph();
+
+  createForce();
+  createSvg();
   resizeGraph();
+
+  node = svg.selectAll(".node"),
+  link = svg.selectAll(".link");
+
+
+
+
+  // 1. Add three nodes and three links.
+  // setTimeout(function() {
+  //   var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
+  //   nodes.push(a, b, c);
+  //   links.push({source: a, target: b}, {source: a, target: c}, {source: b, target: c});
+  //   start();
+  // }, 0);
+  //
+  //
+  // // 2. Remove node B and associated links.
+  // setTimeout(function() {
+  //   nodes.splice(1, 1); // remove b
+  //   links.shift(); // remove a-b
+  //   links.pop(); // remove b-c
+  //   start();
+  // }, 3000);
+  //
+  //
+  // // Add node B back.
+  // setTimeout(function() {
+  //   var a = nodes[0], b = {id: "b"}, c = nodes[1];
+  //   nodes.push(b);
+  //   links.push({source: a, target: b}, {source: b, target: c});
+  //   start();
+  // }, 6000);
+
+
+
 });
