@@ -277,9 +277,10 @@ var app = angular
 
 
     // Оbserver - trigger graph
-    // $scope.$watch('family', function(data){
-    //   pushDataFromAngular(data);
-    // }, true);
+    $scope.$watch('family', function(data){
+      // console.log( data )
+      pushDataToGraph(data);
+    }, true);
 
 
     // $scope.$watch('family.brothers', function(data){

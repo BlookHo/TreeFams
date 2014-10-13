@@ -48,7 +48,6 @@ restartGraph = function(){
       .links(links);
 
 
-
   // Link between node
   link = svg.selectAll("line.link").data(links);
   link.enter()
@@ -215,47 +214,113 @@ reloadDataset = function(){
 }
 
 
-pushDataFromAngular = function(data){
+
+pushDataToGraph = function(data){
 
   dataset = [];
   nodes = [];
   links = [];
 
-  if ('author' in data){
-    pushAuthorData( data.author );
-  };
 
-  if ('father' in data){
-    pushFatherData( data.father );
-  };
+  try{
+    if ( data.author.hasOwnProperty('name') ){
+      pushAuthorData( data.author );
+    }
+  }catch(e){}
 
-  if ('mother' in data){
-    pushMotherData( data.mother );
-  };
 
-  if ( ('brothers' in data) && (data.brothers.length > 0)){
-    pushBrothersData( data.brothers);
-  };
+  try{
+    if ( data.father.hasOwnProperty('name') ){
+      pushFatherData( data.father );
+    }
+  }catch(e){}
 
-  if ( ('sisters' in data) && (data.sisters.length > 0)){
-    pushSistersData( data.sisters);
-  };
+  try{
+    if ( data.mother.hasOwnProperty('name') ){
+      pushMotherData( data.mother );
+    }
+  }catch(e){}
 
-  if ( ('sons' in data) && (data.sons.length > 0)){
-    pushSonsData( data.sons);
-  };
+  try{
+    if ( data.brothers.length > 0 ){
+      pushBrothersData( data.brothers );
+    }
+  }catch(e){}
 
-  if ( ('daughters' in data) && (data.daughters.length > 0)){
-    pushDaughtersData( data.daughters);
-  };
+  try{
+    if ( data.sisters.length > 0 ){
+      pushSistersData( data.sisters );
+    }
+  }catch(e){}
 
-  if ('wife' in data){
-    pushWifeData( data.wife );
-  };
+  try{
+    if ( data.sons.length > 0 ){
+      pushSonsData( data.sons );
+    }
+  }catch(e){}
 
-  if ('husband' in data){
-    pushHusbandData( data.husband );
-  };
+  try{
+    if ( data.daughters.length > 0 ){
+      pushSonsData( data.daughters );
+    }
+  }catch(e){}
+
+  try{
+    if ( data.wife.hasOwnProperty('name') ){
+      pushWifeData( data.wife );
+    }
+  }catch(e){}
+
+  try{
+    if ( data.husband.hasOwnProperty('name') ){
+      pushHusbandData( data.husband );
+    }
+  }catch(e){}
+
+
+
+  // try{
+  //   if ( data.author.hasOwnProperty('name') ){
+  //     pushAuthorData( data.author );
+  //   }
+  //
+  //
+  //   if ( data.father.hasOwnProperty('name') ){
+  //     pushFatherData( data.father );
+  //   }
+  //
+  //   if ( data.mother.hasOwnProperty('name') ){
+  //     pushMotherData( data.mother );
+  //   }
+  //
+  //   if ( data.brothers.length > 0 ){
+  //     pushBrothersData( data.brothers );
+  //   }
+  //
+  //   if ( data.sisters.length > 0 ){
+  //     pushSistersData( data.sisters );
+  //   }
+  //
+  //   if ( data.sons.length > 0 ){
+  //     pushSonsData( data.sons );
+  //   }
+  //
+  //   if ( data.daughters.length > 0 ){
+  //     pushSonsData( data.daughters );
+  //   }
+  //
+  //   if ( data.wife.hasOwnProperty('name') ){
+  //     pushWifeData( data.wife );
+  //   }
+  //
+  //   if ( data.husband.hasOwnProperty('name') ){
+  //     pushHusbandData( data.husband );
+  //   }
+  //
+  // }catch(e){
+  //   console.log('Incomplete object');
+  // };
+
 
   reloadDataset();
   restartGraph();
@@ -263,37 +328,41 @@ pushDataFromAngular = function(data){
 
 
 
+// pushAuthorData = function(data){
+//   if ( (data != undefined) && ( 'name' in data ) ){
+//     var image = data.sex_id == 1 ? '/assets/icon-man.png' : '/assets/icon-women.png'
+//     var node = {id: 1, name: data.name, rel: "author", rel_title: "это вы", sex: data.sex_id, image: image};
+//     return dataset.push(node);
+//   }
+// }
+
+
 pushAuthorData = function(data){
-  if ( (data != undefined) && ( 'originalObject' in data ) ){
-    var image = data.originalObject.sex_id == 1 ? '/assets/icon-man.png' : '/assets/icon-women.png'
-    var node = {id: 1, name: data.title, rel: "author", rel_title: "это вы", sex: data.originalObject.sex_id, image: image};
-    return dataset.push(node);
-  }
+  var image = data.sex_id == 1 ? '/assets/icon-man.png' : '/assets/icon-women.png'
+  var node = {id: 1, name: data.name, rel: "author", rel_title: "это вы", sex: data.sex_id, image: image};
+  return dataset.push(node);
 }
 
 
+
 pushFatherData = function(data){
-  if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 2, name: data.title, rel: "father", rel_title: "отец", sex: 1, target: 1, image: '/assets/icon-man.png'};
-    return dataset.push(node);
-  }
+  var node = {id: 2, name: data.name, rel: "father", rel_title: "отец", sex: 1, target: 1, image: '/assets/icon-man.png'};
+  return dataset.push(node);
 }
 
 
 pushMotherData = function(data){
-  if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 3, name: data.title, rel: "mother", rel_title: "мать", sex: 0, target: 1, image: '/assets/icon-women.png'};
-    return dataset.push(node);
-  }
+  var node = {id: 3, name: data.name, rel: "mother", rel_title: "мать", sex: 0, target: 1, image: '/assets/icon-women.png'};
+  return dataset.push(node);
 }
 
 
 
 pushBrothersData = function(data){
   for (var i=0; i < data.length; i++) {
-    if ( 'originalObject' in data[i] ){
+    if ( 'name' in data[i] ){
       var node_id = '4-'+i;
-      var node = {id: node_id, name: data.title, rel: "brother", rel_title: "брат", sex: 1, target: 1, image: '/assets/icon-man.png'};
+      var node = {id: node_id, name: data[i].name, rel: "brother", rel_title: "брат", sex: 1, target: 1, image: '/assets/icon-man.png'};
       dataset.push(node);
     }
   };
@@ -303,9 +372,9 @@ pushBrothersData = function(data){
 
 pushSistersData = function(data){
   for (var i=0; i < data.length; i++) {
-    if ( 'originalObject' in data[i] ){
+    if ( 'name' in data[i] ){
       var node_id = '5-'+i;
-      var node = {id: node_id, name: data.title, rel: "sister", rel_title: "сестра", sex: 0, target: 1, image: '/assets/icon-women.png'};
+      var node = {id: node_id, name: data[i].name, rel: "sister", rel_title: "сестра", sex: 0, target: 1, image: '/assets/icon-women.png'};
       dataset.push(node);
     }
   };
@@ -313,11 +382,12 @@ pushSistersData = function(data){
 }
 
 
+
 pushSonsData = function(data){
   for (var i=0; i < data.length; i++) {
-    if ( 'originalObject' in data[i] ){
+    if ( 'name' in data[i] ){
       var node_id = '6-'+i;
-      var node = {id: node_id, name: data.title, rel: "son", rel_title: "сын", sex: 1, target: 1, image: '/assets/icon-man.png'};
+      var node = {id: node_id, name: data[i].name, rel: "son", rel_title: "сын", sex: 1, target: 1, image: '/assets/icon-man.png'};
       dataset.push(node);
     }
   };
@@ -327,9 +397,9 @@ pushSonsData = function(data){
 
 pushDaughtersData = function(data){
   for (var i=0; i < data.length; i++) {
-    if ( 'originalObject' in data[i] ){
+    if ( 'name' in data[i] ){
       var node_id = '7-'+i;
-      var node = {id: node_id, name: data.title, rel: "daughters", rel_title: "дочь", sex: 0, target: 1, image: '/assets/icon-women.png'};
+      var node = {id: node_id, name: data[i].name, rel: "daughters", rel_title: "дочь", sex: 0, target: 1, image: '/assets/icon-women.png'};
       dataset.push(node);
     }
   };
@@ -338,18 +408,14 @@ pushDaughtersData = function(data){
 
 
 pushWifeData = function(data){
-  if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 8, name: data.title, rel: "wife", rel_title: "жена", sex: 0, target: 1, image: '/assets/icon-women.png'};
-    return dataset.push(node);
-  }
+  var node = {id: 8, name: data.name, rel: "wife", rel_title: "жена", sex: 0, target: 1, image: '/assets/icon-women.png'};
+  return dataset.push(node);
 }
 
 
 pushHusbandData = function(data){
-  if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 9, name: data.title, rel: "husband", rel_title: "муж", sex: 1, target: 1, image: '/assets/icon-man.png'};
-    return dataset.push(node);
-  }
+  var node = {id: 9, name: data.name, rel: "husband", rel_title: "муж", sex: 1, target: 1, image: '/assets/icon-man.png'};
+  return dataset.push(node);
 }
 
 

@@ -4,6 +4,10 @@
 //= require jquery_ujs
 
 
+// Helpers
+//= require libs/clone
+
+
 //  D3js.org
 //----------------------------------
 //= require libs/d3
@@ -17,6 +21,9 @@
 //= require libs/angular
 //= require libs/angular-ui-router
 //= require libs/ui-bootstrap-tpls-0.9.0
+
+
+
 
 //= require angular-rails-templates
 
