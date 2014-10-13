@@ -32,6 +32,14 @@ module ApplicationHelper
       prefix ? "Ваш муж" : "Муж"
     when 8
       prefix ? "Ваша жена" : "Жена"
+    when 9
+        prefix ? "Ваш дед" : "Дед"
+    when 10
+        prefix ? "Ваша бабка" : "Бабка"
+    when 11
+        prefix ? "Ваш внук" : "Внук"
+    when 12
+        prefix ? "Ваша внучка" : "Внучка"
     else
       "Неизвестно"
     end
