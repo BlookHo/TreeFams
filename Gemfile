@@ -90,6 +90,8 @@ gem 'rvm-capistrano', '1.5.1', group: :development
 # Админка
 gem 'rails_admin'
 
+gem 'newrelic_rpm'
+
 group :console do
   # does not work !!!
   gem 'pry' #
