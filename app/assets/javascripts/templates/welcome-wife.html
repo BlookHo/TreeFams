@@ -1,13 +1,15 @@
 <h1>У вас есть супруга?</h1>
 <div class="control">
-  <angucomplete-alt id="wife"
-                placeholder="Начните вводить имя..."
-                pause="100"
-                selected-object="family.wife"
-                remote-url="/autocomplete/names?sex_id=0&term="
-                title-field="name"
-                initial-value="{{wife.title}}"
-                input-class="" />
+  <input type="text"
+         ng-model="family.wife"
+         ng-change="changeName('wife')"
+         ng-value="name"
+         typeahead-on-select="onSelectName($model, 'wife')"
+         placeholder="Начните вводить имя..."
+         typeahead="item as item.name for item in getNames($viewValue, 0)"
+         typeahead-editable="false"
+         typeahead-loading="loading..."
+         autoFocus>
 </div>
 <div class="actions">
   <a ui-sref="form.daughters" class="bttn silver right">Назад</a>

@@ -21,7 +21,8 @@ class Profile < ActiveRecord::Base
   end
 
   def full_name
-    [self.to_name, self.surname].join(' ')
+    # [self.to_name, self.surname].join(' ')
+    self.to_name
   end
 
 

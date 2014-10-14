@@ -20,4 +20,12 @@ namespace :names do
     file.write("])")
     file.close
   end
+
+
+  desc "Capitalize names"
+  task :capitalize => :environment do
+    Name.all.each do |name|
+      name.update_attribute(:name, name.name.mb_chars.capitalize)
+    end
+  end
 end

@@ -2,22 +2,22 @@
 
 <!-- ng-form -->
 <div ng-repeat="daughter in family.daughters" class="control">
-  <a ng-click="removeDaughter($index)" class="remove-field">удалить</a>
-  <angucomplete-alt id="sons"
-                placeholder="Начните вводить имя..."
-                pause="100"
-                selected-object="family.daughters[$index]"
-                remote-url="/autocomplete/names?sex_id=0&term="
-                title-field="name"
-                initial-value="{{daughter.title}}"
-                input-class="" />
-
+  <a ng-click="removeMember($index, 'daughters')" class="remove-field">удалить</a>
+  <input type="text"
+         ng-model="daughter"
+         ng-change="changeMultipleName('daughters', $index)"
+         typeahead-on-select="onMultipleSelectName($model, 'daughters', $index)"
+         placeholder="Начните вводить имя..."
+         typeahead="item as item.name for item in getNames($viewValue, 0)"
+         typeahead-editable="false"
+         typeahead-loading="loading..."
+         autoFocus>
 </div>
 <div class="control add">
-  <a ng-click="addDaughter()" class="add">Да, добавить дочь</a>
+  <a ng-click="addMember('daughters')" class="add">Да, добавить дочь</a>
 </div>
 <div class="actions">
   <a ui-sref="form.sons"    class="bttn silver right">Назад</a>
-  <a ui-sref="form.wife"    class="bttn green left" ng-show="hasWife()">Дальше</a>
-  <a ui-sref="form.husband" class="bttn green left" ng-show="hasHusband()">Дальше</a>
+  <button ui-sref="form.wife"    class="bttn green left" ng-show="hasWife()">Дальше</button>
+  <button ui-sref="form.husband" class="bttn green left" ng-show="hasHusband()">Дальше</button>
 </div>

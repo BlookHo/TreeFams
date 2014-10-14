@@ -301,7 +301,8 @@ module ProfileKeysGeneration
                         tree_ids: tree_ids) # [trees connected] типа [126, 127]
 
       logger.info "============ In add_new_profile ==================DDDDDDDD"
-      logger.info "base_profile.id = #{base_profile.id}, new_profile.id = #{new_profile.id}, new_relation_id = #{new_relation_id},"
+      logger.info "base_profile.id = #{base_profile.id}"
+      #logger.info "base_profile.id = #{base_profile.id}, new_profile.id = #{new_profile.id}, new_relation_id = #{new_relation_id},"
       logger.info "exclusions_hash = #{exclusions_hash}, tree_ids = #{tree_ids},"
       logger.info "base_profile.tree_id #{base_profile.tree_id}"
         # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый

@@ -5,12 +5,15 @@ class User < ActiveRecord::Base
   include Search
   include UserLock
 
-  has_secure_password
+
 
   validates :email,
             :uniqueness => true,
-            :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
+            :format => {
+              :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+            }
 
+  has_secure_password
 
   # User profile
   has_one  :profile,  dependent: :destroy
@@ -48,6 +51,9 @@ class User < ActiveRecord::Base
     end
     return connected_users_arr
   end
+
+
+
 
   private
 

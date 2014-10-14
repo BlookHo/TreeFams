@@ -1,39 +1,40 @@
-var dataset =  [];
-
-var svg,
-    force,
-    node, link;
-
-var width  = 980,
+var width = 960,
     height = 200;
 
+var color = d3.scale.category10();
+
 var nodes = [],
-    links = [],
-    color = d3.scale.category10();
+    links = [];
+
+var node, link, nameLabel, relationLabel;
+var force, svg;
 
 
-createGraph = function(){
-  svg = d3.select("#graph-wrapper")
-          .append("svg")
-          .attr("width",  width)
-          .attr("height", height)
-          .attr('id', 'graph');
-};
-
-
-initGraph = function(){
+createForce = function(){
   force = d3.layout.force()
-            .charge(-15000)
-            .theta(0.1)
-            .linkDistance(30)
-            .linkStrength(1)
-            .friction(0.7)
-            .size([width, height]);
-};
+               .nodes(nodes)
+               .links(links)
+               .charge(-15000)
+               .theta(0.1)
+               .linkDistance(20)
+               .linkStrength(1)
+               .friction(0.7)
+               .size([width, height])
+               .on("tick", tick);
+}
+
+
+createSvg = function(){
+  svg = d3.select("#graph-wrapper")
+           .append("svg")
+           .attr("width",  width)
+           .attr("height", height)
+           .attr('id', 'graph');
+}
 
 
 
-function resizeGraph() {
+resizeGraph = function(){
   width = parseInt(d3.select("#graph-wrapper").style("width"));
   height = parseInt(d3.select("#graph-wrapper").style("height"));
 
@@ -42,100 +43,228 @@ function resizeGraph() {
 };
 
 
-restartGraph = function(){
-  force
-      .nodes(nodes)
-      .links(links);
+
+tick = function(){
+
+  if (nodes[0]){
+    nodes[0].x = width / 2;
+    nodes[0].y = 220;
+  }
+
+  node = svg.selectAll(".node");
+  node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+
+  relation = svg.selectAll(".relation");
+  relation.attr("transform", function(d) {
+          return "translate(" + (d.source.x + d.target.x) / 2 + ","
+                              + (d.source.y + d.target.y) / 2 + ")";
+   });
+
+
+  link = svg.selectAll(".link");
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+}
 
 
 
-  // Link between node
-  link = svg.selectAll("line.link").data(links);
-  link.enter()
-      .append("svg:line")
-      .attr("class", "link");
+
+start = function(){
+
+  // Links
+  link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
+  link.enter().insert("line", ".node").attr("class", "link");
   link.exit().remove();
 
 
-  // Relation label on link
-  relationLabel = svg.selectAll("g.relationLabel").data(links);
-  relationLabel.enter()
-           .append("g")
-           .attr("class", "relationLabel")
-           .append("text")
-           .attr("class", "relation")
-           .attr("dx", 1)
-           .attr("dy", ".25em")
-           .attr("text-anchor", "middle")
-           .text(function(d) { return d.rel_title; });
-  relationLabel.exit().remove();
+  // Relations
+  relation = svg.selectAll('.relation').data(links);
+             relation.enter()
+                     .append("g")
+                     .attr("class", "relation")
+                     .append("text")
+                     .attr("class", "label")
+                     .attr("dx", 1)
+                     .attr("dy", ".25em")
+                     .attr("text-anchor", "middle")
+                     .text(function(d) { return d.rel_title; });
 
-
-
-  node = svg.selectAll("g.node").data(nodes);
-  node.enter()
-      .append("g")
-      .attr("class", "node")
-      .append("circle")
-      .attr('r', function(d){
-        return d.rel == 'author' ? 30 : 20;
-      })
-      .attr('fill', '#ccc')
-      .call(force.drag);
-  node.exit().remove();
-
-
-  nameLabel = svg.selectAll("g.nameLabel").data(nodes);
-  nameLabel.enter()
-            .append("g")
-            .attr('class', 'nameLabel')
-            .append('text')
-            .attr("class", 'name')
-            .attr("text-anchor", "middle")
-            .attr("y", 50)
-            .text( function(d){ return d.name; });
-  nameLabel.exit().remove();
+              relation.exit().remove();
 
 
 
 
+  // Nodes
+  node = svg.selectAll(".node").data(nodes, function(d) { return d.id });
 
-  force.on("tick", function() {
+  var gNode = node.enter()
+                  .append("g")
+                  .attr("class", function(d) { return "node " + d.id; });
 
-    if (nodes[0]){
-      nodes[0].x = width / 2;
-      nodes[0].y = 220;
-    }
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+              gNode.append("circle").attr("r", 14);
 
+              gNode.append('text')
+                    .attr("class", 'name')
+                    .attr("text-anchor", "middle")
+                    .attr("y", 40)
+                    .text( function(d){ return d.name; });
 
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+              node.exit().remove();
 
-
-    // relationLabel
-    relationLabel.attr("transform", function(d) {
-            return "translate(" + (d.source.x + d.target.x) / 2 + ","
-                                + (d.source.y + d.target.y) / 2 + ")";
-     });
-
-
-     // relationLabel
-     nameLabel.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-
-
-  });
 
 
   force.start();
+}
 
+
+
+// Author
+function add_author(data){
+  var node = {id: 1, name: data.name, circle: 0};
+  pushNode(node);
+  start();
+}
+
+
+
+function remove_author(){
+  deleteNode(1)
+  start();
+}
+
+
+// Father
+function add_father(data){
+  var node = {id: 2, name: data.name, target: 1, rel_title: "отец", circle: 1};
+  pushNode(node)
+  start();
+}
+
+
+function remove_father(){
+  deleteNode(2)
+  start();
+}
+
+
+// Mother
+function add_mother(data){
+  var node = {id: 3, name: data.name, target: 1, rel_title: "мать", circle: 1};
+  pushNode(node)
+  start();
+}
+
+
+function remove_mother(){
+  deleteNode(3)
+  start();
+}
+
+// Brothers
+var brothers_container = [];
+
+function add_brothers(data, index){
+  var node_id = 40+index;
+  brothers_container.push(node_id);
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "брат", circle: 1};
+  pushNode(node)
+  start();
+}
+
+
+function remove_brothers(index){
+  deleteNode(brothers_container[index])
+  brothers_container.splice(index, 1)
+  start();
+}
+
+
+
+// Sisters
+var sisters_container = [];
+
+function add_sisters(data, index){
+  var node_id = 50+index;
+  sisters_container.push(node_id);
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "сестра"};
+  pushNode(node)
+  start();
+}
+
+
+function remove_sisters(index){
+  deleteNode(sisters_container[index]);
+  sisters_container.splice(index, 1)
+  start();
+}
+
+
+
+// Sons
+var sons_container = [];
+
+function add_sons(data, index){
+  var node_id = 60+index;
+  sons_container.push(node_id);
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "сын"};
+  pushNode(node)
+  start();
+}
+
+function remove_sons(index){
+  deleteNode(sons_container[index]);
+  sons_container.splice(index, 1)
+  start();
+}
+
+
+// Daughters
+var daughters_container = [];
+
+function add_daughters(data, index){
+  var node_id = 70+index;
+  daughters_container.push(node_id);
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "дочь"};
+  pushNode(node)
+  start();
+}
+
+
+function remove_daughters(index){
+  deleteNode(daughters_container[index]);
+  daughters_container.splice(index, 1)
+  start();
+}
+
+
+
+// Wife
+function add_wife(data){
+  var node = {id: 8, name: data.name, target: 1, rel_title: "жена"};
+  pushNode(node)
+  start();
+}
+
+
+function add_husband(data){
+  var node = {id: 9, name: data.name, target: 1, rel_title: "муж"};
+  pushNode(node)
+  start();
+}
+
+
+
+
+// Data wirks
+pushNode = function(data){
+    nodes.push(data);
+    if (data.target){
+      pushLink(data.id, data.target);
+    }
 };
-
-
-
 
 
 
@@ -158,19 +287,10 @@ findNodeIndex = function (id) {
 deleteNode = function(id){
     var index = findNodeIndex(id);
     if (index != undefined){
-      nodes.splice(index, 1);
-      deleteLink(id);
+        nodes.splice(index, 1);
+        deleteLink(id);
     }
 }
-
-
-pushNode = function(data){
-    nodes.push(data);
-    if (data.target){
-      pushLink(data.id, data.target);
-    }
-};
-
 
 
 findLink = function(id) {
@@ -189,7 +309,6 @@ findLinkIndex = function (id) {
 };
 
 
-
 deleteLink = function(id){
     var index = findLinkIndex(id);
     if (index != undefined){
@@ -198,164 +317,35 @@ deleteLink = function(id){
 };
 
 
-
 pushLink = function(sourceId, targetId){
     var sourceNode = findNode(sourceId);
     var targetNode = findNode(targetId);
     if((sourceNode !== undefined) && (targetNode !== undefined)) {
-        links.push({"source": sourceNode, "target": targetNode, "rel":sourceNode.rel, "rel_title": sourceNode.rel_title, "id": sourceId});
+        links.push({source: sourceNode, target: targetNode, id: sourceId, rel_title:sourceNode.rel_title});
     }
 };
 
 
-reloadDataset = function(){
-  dataset.forEach(function(d) {
-    pushNode(d);
-  });
+pushDataToGraph = function(modelName, model){
+  eval('add_'+modelName+'(model)');
 }
 
-
-pushDataFromAngular = function(data){
-
-  dataset = [];
-  nodes = [];
-  links = [];
-
-  if ('author' in data){
-    pushAuthorData( data.author );
-  };
-
-  if ('father' in data){
-    pushFatherData( data.father );
-  };
-
-  if ('mother' in data){
-    pushMotherData( data.mother );
-  };
-
-  if ( ('brothers' in data) && (data.brothers.length > 0)){
-    pushBrothersData( data.brothers);
-  };
-
-  if ( ('sisters' in data) && (data.sisters.length > 0)){
-    pushSistersData( data.sisters);
-  };
-
-  if ( ('sons' in data) && (data.sons.length > 0)){
-    pushSonsData( data.sons);
-  };
-
-  if ( ('daughters' in data) && (data.daughters.length > 0)){
-    pushDaughtersData( data.daughters);
-  };
-
-  if ('wife' in data){
-    pushWifeData( data.wife );
-  };
-
-  if ('husband' in data){
-    pushHusbandData( data.husband );
-  };
-
-  reloadDataset();
-  restartGraph();
-};
-
-
-
-pushAuthorData = function(data){
-  if ( (data != undefined) && ( 'originalObject' in data ) ){
-    var image = data.originalObject.sex_id == 1 ? '/assets/icon-man.png' : '/assets/icon-women.png'
-    var node = {id: 1, name: data.title, rel: "author", rel_title: "это вы", sex: data.originalObject.sex_id, image: image};
-    return dataset.push(node);
-  }
+removeDataFormGraph = function(modelName){
+  eval('remove_'+modelName+'()');
 }
 
-
-pushFatherData = function(data){
-  if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 2, name: data.title, rel: "father", rel_title: "отец", sex: 1, target: 1, image: '/assets/icon-man.png'};
-    return dataset.push(node);
-  }
+pushMultipleDataToGraph = function(modelName, model, index){
+  eval('add_'+modelName+'(model, index)');
 }
 
-
-pushMotherData = function(data){
-  if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 3, name: data.title, rel: "mother", rel_title: "мать", sex: 0, target: 1, image: '/assets/icon-women.png'};
-    return dataset.push(node);
-  }
-}
-
-
-
-pushBrothersData = function(data){
-  for (var i=0; i < data.length; i++) {
-    if ( 'originalObject' in data[i] ){
-      var node_id = '4-'+i;
-      var node = {id: node_id, name: data.title, rel: "brother", rel_title: "брат", sex: 1, target: 1, image: '/assets/icon-man.png'};
-      dataset.push(node);
-    }
-  };
-  return dataset;
-}
-
-
-pushSistersData = function(data){
-  for (var i=0; i < data.length; i++) {
-    if ( 'originalObject' in data[i] ){
-      var node_id = '5-'+i;
-      var node = {id: node_id, name: data.title, rel: "sister", rel_title: "сестра", sex: 0, target: 1, image: '/assets/icon-women.png'};
-      dataset.push(node);
-    }
-  };
-  return dataset;
-}
-
-
-pushSonsData = function(data){
-  for (var i=0; i < data.length; i++) {
-    if ( 'originalObject' in data[i] ){
-      var node_id = '6-'+i;
-      var node = {id: node_id, name: data.title, rel: "son", rel_title: "сын", sex: 1, target: 1, image: '/assets/icon-man.png'};
-      dataset.push(node);
-    }
-  };
-  return dataset;
-}
-
-
-pushDaughtersData = function(data){
-  for (var i=0; i < data.length; i++) {
-    if ( 'originalObject' in data[i] ){
-      var node_id = '7-'+i;
-      var node = {id: node_id, name: data.title, rel: "daughters", rel_title: "дочь", sex: 0, target: 1, image: '/assets/icon-women.png'};
-      dataset.push(node);
-    }
-  };
-  return dataset;
-}
-
-
-pushWifeData = function(data){
-  if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 8, name: data.title, rel: "wife", rel_title: "жена", sex: 0, target: 1, image: '/assets/icon-women.png'};
-    return dataset.push(node);
-  }
-}
-
-
-pushHusbandData = function(data){
-  if ( (data != undefined)  && ( 'originalObject' in data ) ){
-    var node = {id: 9, name: data.title, rel: "husband", rel_title: "муж", sex: 1, target: 1, image: '/assets/icon-man.png'};
-    return dataset.push(node);
-  }
+removeMultipleDataFormGraph = function(modelName, index){
+  eval('remove_'+modelName+'('+index+')');
 }
 
 
 
 $(function(){
-  createGraph();
-  initGraph();
+  createForce();
+  createSvg();
   resizeGraph();
 });

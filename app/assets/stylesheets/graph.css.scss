@@ -14,88 +14,31 @@
   position:absolute;
   top:0;
   left:0;
-  z-index:-1;
-  border:1px solid grey;
-  stroke:red;
-  stroke-width: 1px;
-}
 
-
-.node{
-  cursor:pointer;
-  z-index:10;
-}
-
-
-.link {
-  stroke: #ccc;
-  stroke-width: 1px;
-}
-
-
-.crown{
-  fill:green;
-}
-
-
-.rect{
-  stroke-width: 0;
-}
-
-
-circle{
-  stroke-width: 0;
-
-  &.button{
-    fill:red;
+  text {
+    pointer-events: none;
+    stroke-width: 0;
   }
 
-  &.button:hover{
-    fill:black;
-  }
-}
 
-
-text {
-  pointer-events: none;
-  stroke-width: 0;
-}
-
-
-text.name{
-  font-size: 16px;
-}
-
-
-text.relation{
-  font-size: 10px;
-  fill:grey;
-}
-
-
-.linklabel{
-  font-size: 11px;
-  fill:grey;
-}
-
-
-
-
-.node {
-  fill: #000;
-  stroke: #fff;
-  stroke-width: 1.5px;
-
-  &.male{
-    fill:#007AFF;
-    fill:#ccc;
-  }
-  &.female{
-    fill:#FF4981;
-    fill:#ccc;
-  }
-  &.more{
-    fill:grey;
+  .node{
+    circle{
+      stroke-width: 0; fill:grey;
+    }
+    .name{}
   }
 
+
+  .link {
+    stroke: #ccc;
+    stroke-width: 1px;
+  }
+
+
+  .relation{
+    .label{
+      font-size:12px;
+      fill:grey;
+    }
+  }
 }
