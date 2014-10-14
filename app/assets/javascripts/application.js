@@ -4,17 +4,11 @@
 //= require jquery_ujs
 
 
-// Helpers
-//= require libs/clone
-
-
 //  D3js.org
 //----------------------------------
 //= require libs/d3
 
-//  D3js graph applications
-//----------------------------------
-//= require graph
+
 
 //  Angular
 //----------------------------------
@@ -24,15 +18,18 @@
 
 
 
-
-//= require angular-rails-templates
-
-
-//  Angular templates in app/assets/templates
+//  Angular templates  (app/assets/templates)
 //----------------------------------
+//= require angular-rails-templates
 //= require_tree ./templates
+
 
 
 //  Angular applications
 //----------------------------------
 //= require apps/welcome_application
+
+
+//  D3js graph applications
+//----------------------------------
+//= require graph
