@@ -19,7 +19,7 @@ class Member
 
   def name_extended
     # имя приводим к нижнему регистру
-    current_name = Name.where(name: self.name.mb_chars.downcase).first
+    current_name = Name.where(name: self.name.mb_chars.capitalize).first
     # Если имя есть в базе - то просто берем его sex_id
     if current_name
       self.name = current_name.name
@@ -27,7 +27,7 @@ class Member
     # если имени еще нет в базе, но при этом есть его sex_id
     # значит пользователь подтвердил ввод новго имени
     elsif !current_name && !self.sex_id.blank? && ( [0,1].include? self.sex_id.to_i )
-      new_name = Name.create(name: self.name.mb_chars.downcase, sex_id: self.sex_id.to_i, is_approved: false)
+      new_name = Name.create(name: self.name.mb_chars.capitalize, sex_id: self.sex_id.to_i, is_approved: false)
       self.name = new_name.name
       self.sex_id = new_name.sex_id
     # если новое имя - предупреждение и запрос пола

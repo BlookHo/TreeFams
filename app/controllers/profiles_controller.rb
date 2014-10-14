@@ -50,7 +50,7 @@ class ProfilesController < ApplicationController
 
     logger.info " @author_profile_id = #{@author_profile_id}, @profile.tree_id = #{@profile.tree_id} "
 
-    @name = Name.where(name: params[:profile_name].mb_chars.downcase).first
+    @name = Name.where(name: params[:profile_name].mb_chars.capitalize).first
     #  :profile_name = имя нового профиля
 
     # if new name - create

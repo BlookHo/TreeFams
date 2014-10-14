@@ -12,7 +12,6 @@ var app = angular
   // Set csrf-token
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
 
-
   $stateProvider
     // route to show our basic form (/form)
     .state('form', {

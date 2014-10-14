@@ -6,8 +6,6 @@
   @stop_connection: #{@stop_connection.inspect}
 
 
-
-
 - if !@stop_connection
   %h1 Дубликатов нет. Деревья объединяются...
 - else
@@ -22,69 +20,5 @@
   = @test_arrrs_blank
 
 
-
-%p
-  Кто хочет соединиться: Автор: #{@current_user_id.inspect}
-%p
-  @who_connect_users_arr: #{@who_connect_users_arr.inspect}
--#%p
--#  @first_tree: #{@first_tree.inspect}
-%p
-  Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@user_id.inspect}
-%p
-  @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
--#%p
--#  @second_tree: #{@second_tree.inspect}
-
-%h4
-  параметр ПОИСКА: @certain_koeff_for_connect = #{@certain_koeff_for_connect.inspect}
-%h4
-  ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: @uniq_profiles_pairs: #{@uniq_profiles_pairs.inspect}
-%h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : @duplicates_One_to_Many: #{@duplicates_One_to_Many.inspect}
-%h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : @duplicates_Many_to_One: #{@duplicates_Many_to_One.inspect}
-%p
-  Длительность поиска: #{@elapsed_search_time.inspect}
-
-%h4
-  Определение массивов ПЕРЕЗАПИСИ ПРОФИЛЕЙ:
-
-
--#%p
--#  ВИД ПОИСКА: @type_search_message: #{@type_search_message.inspect}
-
-%h4
-  Массивы перезаписи, найденные в Connect_Users
-%p
-  @profiles_to_rewrite: #{@profiles_to_rewrite.inspect}
-%p
-  @profiles_to_destroy: #{@profiles_to_destroy.inspect}
-%p
-  @complete_dubles_hash: #{@complete_dubles_hash.inspect}
--#%p
--#  @new_connection_hash: #{@new_connection_hash.inspect}
--#%p
--#  @diff_hash: #{@diff_hash.inspect}
-
-
-
-
-
-%p
-  @save_in_tree: #{@save_in_tree.inspect}
-%p
-  @save_in_tree_LEN: #{@save_in_tree_LEN.inspect}
-%p
-  @save_in_profilekey: #{@save_in_profilekey.inspect}
-%p
-  @save_in_profilekey_LEN: #{@save_in_profilekey_LEN.inspect}
-
-
-
-
-
-
-
-
-
+- if Rails.env == 'development'
+  = render 'debugger'

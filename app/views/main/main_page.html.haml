@@ -1,10 +1,10 @@
 -# вывод отладочной информации только в dev режиме
-- if Rails.env = 'development'
+- if Rails.env != 'development'
   = render 'debugger'
 
 .content
   = form_tag('/main_page') do
-    = select_tag :certain_koeff, options_for_select([1,2,3,4,5,6,7,8,9,10], selected: @certain_koeff)
+    -#= select_tag :certain_koeff, options_for_select([1,2,3,4,5,6,7,8,9,10], selected: @certain_koeff)
     = submit_tag 'Запустить поиск'
 
 
@@ -77,9 +77,3 @@
 -#         = render 'search_circle_path', author: result.author
 -#       .current-circle{id: "current-circle-#{params[:tree_id]}"}
 -#         = render 'search_circle_table', circle: result.circle, author: result.author
-
-
-
-
-.content
-  = render 'users/login_list'
