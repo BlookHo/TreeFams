@@ -11,8 +11,9 @@ class SignupController < ApplicationController
 
   def create
     @data = params['family'].compact
-    test_user = User.new( email: @data["email"] )
-    if test_user.errors.messages[:email].nil?
+    user = User.new( email: @data["email"] )
+    user.valid?
+    if user.errors.messages[:email].nil?
       user = create_user
       session[:user_id] = user.id
       render json: { status: 'ok' }
@@ -41,9 +42,11 @@ class SignupController < ApplicationController
 
 
   def create_profile(data)
-    Profile.create(
-      { name_id:  data['id'], sex_id:   data['sex_id'], tree_id:  data['tree_id'] }
-    )
+    Profile.create({
+      name_id:  data['id'],
+      sex_id:   data['sex_id'],
+      tree_id:  data['tree_id']
+    })
   end
 
 
