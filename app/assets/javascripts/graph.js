@@ -249,9 +249,22 @@ function add_wife(data){
 }
 
 
+function remove_wife(){
+  deleteNode(8)
+  start();
+}
+
+
 function add_husband(data){
   var node = {id: 9, name: data.name, target: 1, rel_title: "муж"};
   pushNode(node)
+  start();
+}
+
+
+
+function remove_husband(){
+  deleteNode(9)
   start();
 }
 
@@ -340,6 +353,36 @@ pushMultipleDataToGraph = function(modelName, model, index){
 
 removeMultipleDataFormGraph = function(modelName, index){
   eval('remove_'+modelName+'('+index+')');
+}
+
+
+removeAllDataFormGraph = function(){
+  console.log('Brothers container')
+
+
+
+  remove_mother();
+  remove_father();
+  remove_wife();
+  remove_husband();
+
+  for (index = 0; index < brothers_container.length; ++index) {
+    remove_brothers(index)
+  }
+
+
+  for (index = 0; index < sisters_container.length; ++index) {
+    remove_sisters(index)
+  }
+
+  for (index = 0; index < sons_container.length; ++index) {
+    remove_sons(index)
+  }
+
+  for (index = 0; index < daughters_container.length; ++index) {
+    remove_daughters(index)
+  }
+
 }
 
 

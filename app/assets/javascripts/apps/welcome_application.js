@@ -89,6 +89,16 @@ var app = angular
   // Error container
   $scope.errors = {}
 
+  $scope.empty_family = {
+    author: '',
+    father: '',
+    mother: '',
+    brothers: [],
+    sisters: [],
+    sons: [],
+    daughters: []
+  }
+
   // Data container
   $scope.family = {
     author: '',
@@ -122,9 +132,13 @@ var app = angular
     eval('$scope.family'+modelName+'="";');
     removeDataFormGraph(modelName);
     if (modelName == 'author'){
-      removeDataFormGraph('father');
-      removeDataFormGraph('mother');
-      removeDataFormGraph(modelName);
+      $scope.family.father = '';
+      $scope.family.mother = '';
+      $scope.family.sisters = [];
+      $scope.family.brothers = [];
+      $scope.family.sons = [];
+      $scope.family.daughters = [];
+      removeAllDataFormGraph();
     }else{
       removeDataFormGraph(modelName);
     }
@@ -283,18 +297,6 @@ var app = angular
       return false;
     }
   }
-
-
-  // Оbserver - trigger graph
-  // $scope.$watch('family.author', function(newVal, oldVal){
-  //   console.log( 'family.author is changed!' )
-  //   console.log(newVal.name === oldVal.name);
-  // }, true);
-
-
-    // $scope.$watch('family.brothers', function(data){
-    //   // pushDataFromAngular(data);
-    // }, true)
 
 
 
