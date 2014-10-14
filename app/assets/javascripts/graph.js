@@ -1,4 +1,3 @@
-
 var width = 960,
     height = 200;
 
@@ -6,7 +5,6 @@ var color = d3.scale.category10();
 
 var nodes = [],
     links = [];
-
 
 var node, link, nameLabel, relationLabel;
 var force, svg;
@@ -21,8 +19,8 @@ createForce = function(){
                .linkDistance(20)
                .linkStrength(1)
                .friction(0.7)
-               .size([width, height]);
-               // .on("tick", tick);
+               .size([width, height])
+               .on("tick", tick);
 }
 
 
@@ -36,7 +34,7 @@ createSvg = function(){
 
 
 
-function resizeGraph() {
+resizeGraph = function(){
   width = parseInt(d3.select("#graph-wrapper").style("width"));
   height = parseInt(d3.select("#graph-wrapper").style("height"));
 
@@ -46,21 +44,29 @@ function resizeGraph() {
 
 
 
-tick = function() {
+tick = function(){
+
   if (nodes[0]){
-      nodes[0].x = width / 2;
-      nodes[0].y = 220;
+    nodes[0].x = width / 2;
+    nodes[0].y = 220;
   }
+
+  node = svg.selectAll(".node");
   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
 
+  relation = svg.selectAll(".relation");
+  relation.attr("transform", function(d) {
+          return "translate(" + (d.source.x + d.target.x) / 2 + ","
+                              + (d.source.y + d.target.y) / 2 + ")";
+   });
+
+
+  link = svg.selectAll(".link");
   link.attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
-
-
-  nameLabel.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 }
 
 
@@ -68,159 +74,191 @@ tick = function() {
 
 start = function(){
 
-
-  // Link between node
-  link = svg.selectAll("line.link").data(links);
-  link.enter()
-      .append("svg:line")
-      .attr("class", "link");
+  // Links
+  link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
+  link.enter().insert("line", ".node").attr("class", "link");
   link.exit().remove();
 
 
-  // Relation label on link
-  relationLabel = svg.selectAll("g.relationLabel").data(links);
-  relationLabel.enter()
-           .append("g")
-           .attr("class", "relationLabel")
-           .append("text")
-           .attr("class", "relation")
-           .attr("dx", 1)
-           .attr("dy", ".25em")
-           .attr("text-anchor", "middle")
-           .text(function(d) { return d.rel_title; });
-  relationLabel.exit().remove();
+  // Relations
+  relation = svg.selectAll('.relation').data(links);
+             relation.enter()
+                     .append("g")
+                     .attr("class", "relation")
+                     .append("text")
+                     .attr("class", "label")
+                     .attr("dx", 1)
+                     .attr("dy", ".25em")
+                     .attr("text-anchor", "middle")
+                     .text(function(d) { return d.rel_title; });
 
-
-
-  node = svg.selectAll("g.node").data(nodes);
-  node.enter()
-      .append("g")
-      .attr("class", "node")
-      .append("circle")
-      .attr('r', function(d){
-        return d.rel == 'author' ? 30 : 20;
-      })
-      .attr('fill', '#ccc')
-      .call(force.drag);
-  node.exit().remove();
-
-
-
-  nameLabel = svg.selectAll("g.nameLabel").data(nodes);
-  nameLabel.enter()
-            .append("g")
-            .attr('class', 'nameLabel')
-            .append('text')
-            .attr("class", 'name')
-            .attr("text-anchor", "middle")
-            .attr("y", 40)
-            .text( function(d){ return d.name; });
-  nameLabel.exit().remove();
+              relation.exit().remove();
 
 
 
 
-  force.on("tick", function() {
+  // Nodes
+  node = svg.selectAll(".node").data(nodes, function(d) { return d.id });
 
-    if (nodes[0]){
-      nodes[0].x = width / 2;
-      nodes[0].y = 220;
-    }
-    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  var gNode = node.enter()
+                  .append("g")
+                  .attr("class", function(d) { return "node " + d.id; });
 
+              gNode.append("circle").attr("r", 14);
 
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+              gNode.append('text')
+                    .attr("class", 'name')
+                    .attr("text-anchor", "middle")
+                    .attr("y", 40)
+                    .text( function(d){ return d.name; });
 
+              node.exit().remove();
 
-    // relationLabel
-    relationLabel.attr("transform", function(d) {
-            return "translate(" + (d.source.x + d.target.x) / 2 + ","
-                                + (d.source.y + d.target.y) / 2 + ")";
-     });
-
-
-     // relationLabel
-     nameLabel.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-
-
-
-  });
 
 
   force.start();
-
-
-  // Link between node
-  // link = svg.selectAll("line.link").data(force.links());
-  // link.enter()
-  //     .insert("svg:line")
-  //     .attr("class", "link");
-  // link.exit().remove();
-  //
-  //
-  //
-  // node = svg.selectAll("g.node").data(nodes);
-  // node.enter()
-  //     .append("g")
-  //     .attr("class", "node")
-  //     .append("circle")
-  //     .attr('r', function(d){
-  //       return d.rel == 'author' ? 30 : 20;
-  //     })
-  //     .attr('fill', '#ccc')
-  //     .call(force.drag);
-  // node.exit().remove();
-  //
-  //
-  // nameLabel = svg.selectAll("g.nameLabel").data(nodes);
-  // nameLabel.enter()
-  //           .append("g")
-  //           .attr('class', 'nameLabel')
-  //           .append('text')
-  //           .attr("class", 'name')
-  //           .attr("text-anchor", "middle")
-  //           .attr("y", 50)
-  //           .text( function(d){ return d.name; });
-  // nameLabel.exit().remove();
-
-
-
-
-  // link = link.data(force.links(), function(d) { return d.source.id + "-" + d.target.id; });
-  // link.enter().insert("line", ".node").attr("class", "link");
-  // link.exit().remove();
-
-  // node = node.data(force.nodes(), function(d) { return d.id;});
-  // node.enter()
-  //     .append("circle")
-  //     .attr("class", function(d) { return "node " + d.id; })
-  //     .attr("r", 8);
-  // node.exit().remove();
-
-
-
-
-
-  // name = svg.selectAll("g.nameLable").data(nodes);
-  // name.enter()
-  //           .append("g")
-  //           .attr('class', 'nameLable')
-  //           .append('text')
-  //           .attr("class", 'name')
-  //           .attr("text-anchor", "middle")
-  //           .attr("y", 20)
-  //           .text( function(d){ return d.name; });
-  // name.exit().remove();
-
-
-  // force.start();
 }
 
 
 
+// Author
+function add_author(data){
+  var node = {id: 1, name: data.name, circle: 0};
+  pushNode(node);
+  start();
+}
+
+
+
+function remove_author(){
+  deleteNode(1)
+  start();
+}
+
+
+// Father
+function add_father(data){
+  var node = {id: 2, name: data.name, target: 1, rel_title: "отец", circle: 1};
+  pushNode(node)
+  start();
+}
+
+
+function remove_father(){
+  deleteNode(2)
+  start();
+}
+
+
+// Mother
+function add_mother(data){
+  var node = {id: 3, name: data.name, target: 1, rel_title: "мать", circle: 1};
+  pushNode(node)
+  start();
+}
+
+
+function remove_mother(){
+  deleteNode(3)
+  start();
+}
+
+// Brothers
+var brothers_container = [];
+
+function add_brothers(data, index){
+  var node_id = 40+index;
+  brothers_container.push(node_id);
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "брат", circle: 1};
+  pushNode(node)
+  start();
+}
+
+
+function remove_brothers(index){
+  deleteNode(brothers_container[index])
+  brothers_container.splice(index, 1)
+  start();
+}
+
+
+
+// Sisters
+var sisters_container = [];
+
+function add_sisters(data, index){
+  var node_id = 50+index;
+  sisters_container.push(node_id);
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "сестра"};
+  pushNode(node)
+  start();
+}
+
+
+function remove_sisters(index){
+  deleteNode(sisters_container[index]);
+  sisters_container.splice(index, 1)
+  start();
+}
+
+
+
+// Sons
+var sons_container = [];
+
+function add_sons(data, index){
+  var node_id = 60+index;
+  sons_container.push(node_id);
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "сын"};
+  pushNode(node)
+  start();
+}
+
+function remove_sons(index){
+  deleteNode(sons_container[index]);
+  sons_container.splice(index, 1)
+  start();
+}
+
+
+// Daughters
+var daughters_container = [];
+
+function add_daughters(data, index){
+  var node_id = 70+index;
+  daughters_container.push(node_id);
+  var node = {id: node_id, name: data.name, target: 1, rel_title: "дочь"};
+  pushNode(node)
+  start();
+}
+
+
+function remove_daughters(index){
+  deleteNode(daughters_container[index]);
+  daughters_container.splice(index, 1)
+  start();
+}
+
+
+
+// Wife
+function add_wife(data){
+  var node = {id: 8, name: data.name, target: 1, rel_title: "жена"};
+  pushNode(node)
+  start();
+}
+
+
+function add_husband(data){
+  var node = {id: 9, name: data.name, target: 1, rel_title: "муж"};
+  pushNode(node)
+  start();
+}
+
+
+
+
+// Data wirks
 pushNode = function(data){
     nodes.push(data);
     if (data.target){
@@ -248,7 +286,6 @@ findNodeIndex = function (id) {
 
 deleteNode = function(id){
     var index = findNodeIndex(id);
-    console.log("delet node index:"+index);
     if (index != undefined){
         nodes.splice(index, 1);
         deleteLink(id);
@@ -289,137 +326,17 @@ pushLink = function(sourceId, targetId){
 };
 
 
-
-function add_author(data){
-  var node = {id: 1, name: data.name};
-  pushNode(node);
-  start();
-}
-
-
-function add_father(data){
-  var node = {id: 2, name: data.name, target: 1, rel_title: "отец"};
-  pushNode(node)
-  start();
-}
-
-
-function add_mother(data){
-  var node = {id: 3, name: data.name, target: 1, rel_title: "мать"};
-  pushNode(node)
-  start();
-}
-
-
-function add_brothers(data, index){
-  var node_id = 41+index;
-  var node = {id: node_id, name: data.name, target: 1, rel_title: "брат"};
-  pushNode(node)
-  start();
-}
-
-
-function remove_brothers(index){
-  var node_id = 41+index;
-  deleteNode(node_id)
-  start();
-}
-
-
-function add_sisters(data, index){
-  var node_id = '5-'+index+'';
-  var node = {id: node_id, name: data.name, target: 1, rel_title: "сестра"};
-  pushNode(node)
-  start();
-}
-
-
-function add_sons(data, index){
-  var node_id = '6-'+index+'';
-  var node = {id: node_id, name: data.name, target: 1, rel_title: "сын"};
-  pushNode(node)
-  start();
-}
-
-
-function add_daughters(data, index){
-  var node_id = '7-'+index+'';
-  var node = {id: node_id, name: data.name, target: 1, rel_title: "дочь"};
-  pushNode(node)
-  start();
-}
-
-
-function add_wife(data){
-  var node = {id: 8, name: data.name, target: 1, rel_title: "жена"};
-  pushNode(node)
-  start();
-}
-
-
-function add_husband(data){
-  var node = {id: 9, name: data.name, target: 1, rel_title: "муж"};
-  pushNode(node)
-  start();
-}
-
-
-
-function remove_author(){
-  deleteNode(1)
-  start();
-}
-
-
-function remove_father(){
-  deleteNode(2)
-  start();
-}
-
-
-function remove_mother(){
-  deleteNode(3)
-  start();
-}
-
-
-
-
-function remove_sisters(index){
-  var node_id = '5-'+index;
-  deleteNode(node_id)
-  start();
-}
-
-
-function remove_sons(index){
-  var node_id = '6-'+index;
-  deleteNode(node_id)
-  start();
-}
-
-
-function remove_daughters(index){
-  var node_id = '7-'+index;
-  deleteNode(node_id)
-  start();
-}
-
-
 pushDataToGraph = function(modelName, model){
   eval('add_'+modelName+'(model)');
 }
-
-
-pushMultipleDataToGraph = function(modelName, model, index){
-  eval('add_'+modelName+'(model, index)');
-}
-
 
 removeDataFormGraph = function(modelName){
   eval('remove_'+modelName+'()');
 }
 
+pushMultipleDataToGraph = function(modelName, model, index){
+  eval('add_'+modelName+'(model, index)');
+}
 
 removeMultipleDataFormGraph = function(modelName, index){
   eval('remove_'+modelName+'('+index+')');
@@ -427,45 +344,8 @@ removeMultipleDataFormGraph = function(modelName, index){
 
 
 
-
 $(function(){
-
   createForce();
   createSvg();
   resizeGraph();
-
-  node = svg.selectAll(".node"),
-  link = svg.selectAll(".link");
-
-
-
-
-  // 1. Add three nodes and three links.
-  // setTimeout(function() {
-  //   var a = {id: "a"}, b = {id: "b"}, c = {id: "c"};
-  //   nodes.push(a, b, c);
-  //   links.push({source: a, target: b}, {source: a, target: c}, {source: b, target: c});
-  //   start();
-  // }, 0);
-  //
-  //
-  // // 2. Remove node B and associated links.
-  // setTimeout(function() {
-  //   nodes.splice(1, 1); // remove b
-  //   links.shift(); // remove a-b
-  //   links.pop(); // remove b-c
-  //   start();
-  // }, 3000);
-  //
-  //
-  // // Add node B back.
-  // setTimeout(function() {
-  //   var a = nodes[0], b = {id: "b"}, c = nodes[1];
-  //   nodes.push(b);
-  //   links.push({source: a, target: b}, {source: b, target: c});
-  //   start();
-  // }, 6000);
-
-
-
 });

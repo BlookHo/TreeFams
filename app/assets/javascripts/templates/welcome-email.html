@@ -10,5 +10,6 @@
 <div class="actions">
   <a ui-sref="form.wife" class="bttn silver right"     ng-show="hasWife()">Назад</a>
   <a ui-sref="form.husband" class="bttn silver right"  ng-show="hasHusband()">Назад</a>
-  <button ng-disabled="welcomeForm.email.$invalid" ng-click="submitData()" class="bttn green left">Дальше</a>
+  <span class="spinner left ion-ios7-reloading" ng-show="loading"></span>
+  <button ng-disabled="welcomeForm.email.$invalid" ng-click="submitData()" class="bttn green left" ng-show="!(loading)">Дальше</a>
 </div>

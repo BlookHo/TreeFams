@@ -36,7 +36,6 @@
          content: '';
       }
 
-
     a{ cursor: pointer; }
 
   }
@@ -72,6 +71,15 @@
   .actions{
     margin-bottom:0;
     .left{float:right;}
+  }
+
+
+  .spinner{
+    display:block;
+    width:34px;
+    height:34px;
+    font-size:34px;
+    color:blue;
   }
 
 

@@ -162,8 +162,6 @@ var app = angular
     // $scope.family.brothers.splice(index, 1);
     removeMultipleDataFormGraph(modelName, index);
     eval('$scope.family.'+modelName+'.splice('+index+', 1);');
-
-
   };
 
 
@@ -302,17 +300,20 @@ var app = angular
 
 
   $scope.submitData = function(){
+    $scope.loading = true;
     $http({
       method : 'POST',
       url : '/register',
       data : {family: $scope.family}
     }).success(function(data){
+      $scope.loading = false;
       if (data.errors) {
         $scope.error = "Email "+data.errors['email'];
       }else{
         window.location.href = '/main_page';
       }
     }).error(function(data){
+      $scope.loading = false;
       alert('Неизвестная ошибка ;(');
     });
   };
