@@ -42,8 +42,7 @@ Relation.create([
 {relation_id: 18, relation: 'Зять', relation_rod_padej: 'Зятя', origin_profile_sex_id: 0,  reverse_relation_id: 16, reverse_relation: 'Теща'}
 
 
-
 # муж/жена: добавить для однополых браков?
 
 
-])
+                ])

@@ -1034,10 +1034,10 @@ class StartController < ApplicationController
         new_profile = Profile.new
           if arr_i == 0 # only for email для user
             new_profile.user_id = current_user.id  # user_id - берем после регистрации
-            new_profile.email = current_user.email # user regged email
+            #new_profile.email = current_user.email # user regged email
           else
             new_profile.user_id = 0  # profile - not user_id
-            new_profile.email = ""   # profile - not user_id
+            #new_profile.email = ""   # profile - not user_id
           end
           new_profile.tree_id = current_user.id # родительское дерово профиля
           new_profile.name_id = Name.find_by_name(profiles_array[arr_i][1]).id  # name_id
@@ -1105,7 +1105,8 @@ class StartController < ApplicationController
   # @param admin_page [Integer] опциональный номер страницы
   # @see
   def update_user
-    user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
+    #user_profile = Profile.where(:user_id => current_user.id, :email => current_user.email)
+    user_profile = Profile.where(:user_id => current_user.id)
     if !user_profile.blank?
       current_user.profile_id = user_profile[0]['id']
       current_user.save
