@@ -16,8 +16,6 @@
 //= require libs/angular-ui-router
 
 
-
-
 //  Angular templates  (app/assets/templates)
 //----------------------------------
 //= require angular-rails-templates

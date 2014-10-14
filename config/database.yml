@@ -8,7 +8,7 @@
 # weafam_admin
 # password for it
 # rake db:setup
-production:  # my version
+development:  # my version
   adapter: postgresql
   database: weafam_development
   username: weafam_admin
@@ -27,7 +27,7 @@ test:
   password: gR0v1Ng3i
   timeout: 5000
 
-development:
+production:
   adapter: postgresql
   encoding: UTF8
   database: weafam_production
