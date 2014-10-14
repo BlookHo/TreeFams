@@ -12,7 +12,7 @@ Weafam::Application.routes.draw do
   get "graph_tree/move"
   get "admin_methods/service_method_1"
   get "admin_methods/service_method_2"
-  mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
+  # mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
 
 
   # admin_methods controller

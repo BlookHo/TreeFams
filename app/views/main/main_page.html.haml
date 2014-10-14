@@ -1,5 +1,5 @@
 -# вывод отладочной информации только в dev режиме
-- if Rails.env != 'development'
+- if Rails.env == 'development'
   = render 'debugger'
 
 .content

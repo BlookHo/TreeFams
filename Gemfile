@@ -23,6 +23,8 @@ gem 'jquery-ui-rails'
 # Angular templates in assets pipeline
 gem 'angular-rails-templates'
 
+gem 'ngannotate-rails'
+
 # Icons fonts
 # old - should be removed
 gem "font-awesome-rails"
@@ -88,7 +90,7 @@ gem 'rvm-capistrano', '1.5.1', group: :development
 # gem 'debugger', group: [:development, :test]
 
 # Админка
-gem 'rails_admin'
+# gem 'rails_admin'
 
 gem 'newrelic_rpm'
 
