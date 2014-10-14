@@ -8,8 +8,7 @@
 # weafam_admin
 # password for it
 # rake db:setup
-production:
-# development:  # my version
+production:  # my version
   adapter: postgresql
   database: weafam_development
   username: weafam_admin
@@ -18,22 +17,21 @@ production:
   encoding: UTF8
   pool: 5
   timeout: 5000
-#
-#
-# test:
-#   adapter: postgresql
-#   encoding: UTF8
-#   database: weafam_test
-#   pool: 5
-#   username: weafam_admin
-#   password: gR0v1Ng3i
-#   timeout: 5000
-#
-# production:
-#   adapter: postgresql
-#   encoding: UTF8
-#   database: weafam_production
-#   pool: 5
-#   username: weafam_admin
-#   password: gR0v1Ng3i
-#   timeout: 5000
+
+test:
+  adapter: postgresql
+  encoding: UTF8
+  database: weafam_test
+  pool: 5
+  username: weafam_admin
+  password: gR0v1Ng3i
+  timeout: 5000
+
+development:
+  adapter: postgresql
+  encoding: UTF8
+  database: weafam_production
+  pool: 5
+  username: weafam_admin
+  password: gR0v1Ng3i
+  timeout: 5000
