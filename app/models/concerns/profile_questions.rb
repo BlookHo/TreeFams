@@ -18,6 +18,7 @@ module ProfileQuestions
   # user_ids - Id всех объединенных юзеров
   def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added, author_profile_id, user_ids)
 
+    @non_standard_questions_hash = Hash.new
     # Собираем хеш ближнего круга
     circle_hashes = get_circle_as_hash(user_ids, author_profile_id)
 
@@ -64,6 +65,7 @@ module ProfileQuestions
 
     case relation_add_to
       when 0
+        logger.info "== in case: relation_add_to = #{relation_add_to} "
         check_author_relations(relation_added, name_id_added)
       when 1
 
@@ -82,7 +84,10 @@ module ProfileQuestions
         # @standard_msg = "make_questions: Добавляемое отношение - неизвестно"
         nil
     end
+    logger.info "== after case: relation_add_to = #{relation_add_to} "
+    logger.info "== after  - make_questions: @non_standard_questions_hash = #{@non_standard_questions_hash} "
 
+    return @non_standard_questions_hash
   end
 
 
@@ -96,6 +101,8 @@ module ProfileQuestions
   # Выбор группы вопросов для Автора в нестандартных ситуациях
   # в завис-ти от добавляемого relation
   def check_author_relations(relation_added, added_name_id)
+    logger.info "== in check_author_relations: relation_added = #{relation_added} "
+
     case relation_added
       when 1 # add new father
         ask_author_questions(1, added_name_id)
@@ -104,11 +111,14 @@ module ProfileQuestions
       when 7 # add new husband
         ask_author_questions(7, added_name_id)
       when 8 # add new wife
+        logger.info "== in case 8  - check_author_relations: relation_added = #{relation_added} "
         ask_author_questions(8, added_name_id)
       else # все остальные relation_added - создают стандартные ситуации
         # @standard_msg = "check_author_relations: Добавляемое к Автору отношение явл. СТАНДАРТНЫМ"
         nil
     end
+    logger.info "== after  - check_author_relations: @non_standard_questions_hash = #{@non_standard_questions_hash} "
+
   end
 
   # Выбор группы вопросов для Отца в нестандартных ситуациях
@@ -263,6 +273,7 @@ module ProfileQuestions
   # При этом в впоросе выясняется истинность отношения text_relation добавленного added_relation к рассматриваемому профилю
   # с отношением profile_relation
   def add_relation_questions(names_hash, added_name_id, added_relation, text_relation, profile_relation)
+    logger.info "== in  - add_relation_questions: names_hash = #{names_hash}, added_name_id = #{added_name_id}, added_relation = #{added_relation}, text_relation = #{text_relation}, profile_relation = #{profile_relation}"
     return {} if names_hash.blank?
     if !names_hash.blank?
       names_arr = names_hash.values   # name_id array
@@ -289,6 +300,7 @@ module ProfileQuestions
   # В зависимости от того, какое relation добавляем,
   # заполняются те массивы вопросов, которые следует задавать
   def ask_author_questions(added_relation, added_name_id) # 0
+    logger.info "== in - ask_author_questions: added_name_id = #{added_name_id} "
     non_standard_questions_hash = Hash.new
     case added_relation
       when 1  # Добавляем Отца к Автору - то же, что 5,6 - 1
@@ -304,12 +316,14 @@ module ProfileQuestions
         non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Муж", "Отец", "Сын"))
         non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Муж", "Отец", "Дочь"))
       when 8  # Добавляем Жену к Автору (мужчине)
+        logger.info "== in case 8  - ask_author_questions: added_relation = #{added_relation} "
         non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Жена", "Мать", "Сын"))
         non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Жена", "Мать", "Дочь"))
       else
         "Неизвестно"
     end
     @non_standard_questions_hash = non_standard_questions_hash   #
+    logger.info "== after  - ask_author_questions: non_standard_questions_hash = #{non_standard_questions_hash} "
   end
 
   # Генерация вопросов для Отца в создавшихся нестандартных ситуациях.

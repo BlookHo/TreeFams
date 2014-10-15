@@ -8,14 +8,14 @@
 
 - if !@stop_connection
   %h1 Дубликатов нет. Деревья объединяются...
+
 - else
   %h1 Деревья объединить нельзя! ...
-  %h1 Информация при объединении деревьев: Есть дубликаты
+  %h1 Информация при объединении деревьев:
+  #{@connection_message}
+  %br/
   = @complete_dubles_hash
   %br/
-  = @test_arrrs_dubl
-  %br/
-  = @test_arrrs_size
   %br/
   = @test_arrrs_blank
 

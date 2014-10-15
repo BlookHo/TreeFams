@@ -35,7 +35,7 @@ module SearchHelper
 
 
 
-  # NO USE !!!
+  # Используется в тесте рез-тов поиска
   # СБОР ВСЕХ НАЙДЕННЫХ ПРОФИЛЕЙ ПО ДЕРЕВЬЯМ
   def collect_trees_profiles(start_hash)
 
@@ -109,18 +109,19 @@ module SearchHelper
   # Вход
   # Выход
   def get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
+    logger.info ""
+    logger.info "=== IN get_certain_profiles_pairs "
     logger.info " profiles_found_arr = #{profiles_found_arr} "
     max_power_profiles_pairs_hash = {}  # Профили с макс-м кол-вом совпадений для одного соответствия в дереве
     profiles_with_match_hash = {} # Порофили, отсортир-е по кол-ву совпадений
     new_profiles_with_match_hash = {}
-    duplicates_pairs_One_to_Many_hash = {}  # Дубликаты ТИПА 1 К 2 - One_to_Many пар профилей
+    duplicates_pairs_one_to_many = {}  # Дубликаты ТИПА 1 К 2 - One_to_Many пар профилей
     profiles_found_arr.each do |hash_in_arr|
       #logger.info " hash_in_arr = #{hash_in_arr} "
       hash_in_arr.each do |searched_profile, profile_trees_relations|
         #logger.info " searched_profile = #{searched_profile} "
         max_power_pairs_hash = {}
-        # new_profiles_with_match_hash = {}
-        duplicates_One_to_Many_hash = {}
+        duplicates_one_to_many_hash = {}
         profile_trees_relations.each do |key_tree, profile_relations_hash|
           logger.info " profile_relations_hash = #{profile_relations_hash} "
           reduced_profile_relations_hash = reduce_profile_relations(profile_relations_hash, certainty_koeff)
@@ -134,10 +135,10 @@ module SearchHelper
               max_power_pairs_hash.merge!(key_tree => profile_selected )
               new_profiles_with_match_hash = get_profiles_match_hash(profiles_with_match_hash, max_profiles_powers_hash)
             else # больше одного профиля с максимальной мощностью
-              # НАРАЩИВАНИЕ ХЭША ПРОФИЛЕЙ-ДУПЛИКАТОВ duplicates_One_to_Many_hash
+              # НАРАЩИВАНИЕ ХЭША ПРОФИЛЕЙ-ДУПЛИКАТОВ duplicates_one_to_many_hash
               # ЕСЛИ НАЙДЕНО БОЛЬШЕ 1 ПАРЫ ПРОФИЛЕЙ С ОДИНАК. МАКС. МОЩНОСТЬЮ
               # Т.Е. ДУПЛИКАТ ТИПА 1 К 2 - One_to_Many, => ЗАНОСИМ В ХЭШ ДУПЛИКАТОВ.
-              duplicates_One_to_Many_hash.merge!(key_tree => max_profiles_powers_hash )
+              duplicates_one_to_many_hash.merge!(key_tree => max_profiles_powers_hash )
             end
 
           end
@@ -148,12 +149,12 @@ module SearchHelper
 
         max_power_profiles_pairs_hash.merge!(searched_profile => max_power_pairs_hash ) if !max_power_pairs_hash.empty?
 
-        duplicates_pairs_One_to_Many_hash.merge!(searched_profile => duplicates_One_to_Many_hash ) if !duplicates_One_to_Many_hash.empty?
+        duplicates_pairs_one_to_many.merge!(searched_profile => duplicates_one_to_many_hash ) if !duplicates_one_to_many_hash.empty?
 
       end
 
     end
-    return max_power_profiles_pairs_hash, duplicates_pairs_One_to_Many_hash, new_profiles_with_match_hash
+    return max_power_profiles_pairs_hash, duplicates_pairs_one_to_many, new_profiles_with_match_hash
 
   end # End of method
 

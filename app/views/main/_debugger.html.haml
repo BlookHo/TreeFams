@@ -8,18 +8,16 @@
 %p
   Состав дерева автора: @connected_author_arr: #{@connected_author_arr.inspect}
 %p
-  Массив дерева автора: @author_connected_tree_arr: #{@author_connected_tree_arr.inspect}
+  Искомые профили: @tree_is_profiles: #{@tree_is_profiles.inspect}
 %p
-  @len_author_connected_tree: #{@len_author_tree.inspect}
-%p
-  В дереве родственников: @qty_of_tree_profiles: #{@qty_of_tree_profiles.inspect}
-
+  В Искомом дереве: @qty_of_tree_profiles: #{@qty_of_tree_profiles.inspect}
 
 %h4
   КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ: @certain_koeff: #{@certain_koeff.inspect}
 %h4
   СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
   %h4    {профиль искомый -> профиль -> его отношение к искомому} )
+  %h4    ( только те отношения, кот-е больше или равны @certain_koeff )
   %h4    @profiles_relations_arr: #{@profiles_relations_arr.inspect}
 %h4
   ОСНОВНОЙ РЕЗ-ТАТ ПОИСКА - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив):
@@ -35,21 +33,21 @@
   %h4  @uniq_profiles_pairs: #{@uniq_profiles_pairs.inspect}
 
 
-%h4
-  ТЕСТ НАЙДЕННЫХ ПРОФИЛЕЙ - РАСПРЕДЕЛЕНИЕ ПО МОЩНОСТИ СОВПАДЕНИЙ:
-  %h4   @high_power_results_hash: #{@high_power_results_hash.inspect}
-  %h4   @low_power_results_hash: #{@low_power_results_hash.inspect}
+-#%h4
+-#  ТЕСТ НАЙДЕННЫХ ПРОФИЛЕЙ - РАСПРЕДЕЛЕНИЕ ПО МОЩНОСТИ СОВПАДЕНИЙ:
+-#  %h4   @high_power_results_hash: #{@high_power_results_hash.inspect}
+-#  %h4   @low_power_results_hash: #{@low_power_results_hash.inspect}
 
 %h4
   ИТОГОВЫЕ РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ
   %h4  ###### @by_profiles: #{@by_profiles.inspect}
   %h4  ###### @by_trees   : #{@by_trees.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ One_to_Many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} }
-  %h4  @duplicates_One_to_Many: #{@duplicates_One_to_Many.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ one_to_many : {профиль искомый -> { дерево -> { профиль найденный, ... профиль найденный }} }
+  %h4  @duplicates_one_to_many: #{@duplicates_one_to_many.inspect}
 %h4
-  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ Many_to_One : {профиль искомый -> { дерево -> профиль найденный},...  }
-  %h4  @duplicates_Many_to_One: #{@duplicates_Many_to_One.inspect}
+  ИТОГОВЫЕ ДУБЛИКАТЫ ПРОФИЛЕЙ many_to_one : {профиль искомый -> { дерево -> профиль найденный},...  }
+  %h4  @duplicates_many_to_one: #{@duplicates_many_to_one.inspect}
 
 
 %p

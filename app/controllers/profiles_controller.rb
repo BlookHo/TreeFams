@@ -53,26 +53,36 @@ class ProfilesController < ApplicationController
     @name = Name.where(name: params[:profile_name].mb_chars.capitalize).first
     #  :profile_name = имя нового профиля
 
-    # if new name - create
     if !@name and !params[:profile_name].blank? and params[:new_name_confirmation]
       @name = Name.create(name: params[:profile_name])
     end
 
+    logger.info " in create: @name.id = #{@name.id}"
     # Name exist and valid:
     # 1. collect questions
     # 2. Validate answers
     if @name
       @profile.name_id = @name.id
+      logger.info " in create: @base_profile.id = #{@base_profile.id}, @base_relation_id.to_i = #{@base_relation_id.to_i}, @profile.relation_id.to_i = #{@profile.relation_id.to_i}, "
+      logger.info " in create: current_user.id = #{current_user.id}, @profile.name_id.to_i = #{@profile.name_id.to_i} "
+      logger.info " in create: @author_profile_id = #{@author_profile_id}, current_user.get_connected_users = #{current_user.get_connected_users} "
+      logger.info " in create: current_user.profile.id = #{current_user.profile.id} "
+      #logger.info " in create: make_questions = #{profile.make_questions(current_user.id,
+      #                                                               @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i,
+      #                                                               @profile.name_id.to_i, @author_profile_id, current_user.get_connected_users )}"
 
       questions_hash = current_user.profile.make_questions(current_user.id,
       @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i,
       @profile.name_id.to_i, @author_profile_id, current_user.get_connected_users )
+      logger.info " in create: questions_hash = #{questions_hash}"
+      #logger.info "in create: after  - make_questions: @non_standard_questions_hash = #{@non_standard_questions_hash} "
 
       @questions = create_questions_from_hash(questions_hash)
       @profile.answers_hash = params[:answers]
 
       logger.info "==== Вопросы по новому профилю ====== "
-      logger.info " @questions = #{@questions}, @profile.answers_hash = #{@profile.answers_hash} "
+      logger.info " @questions = #{@questions.inspect}"
+      logger.info " @profile.answers_hash = #{@profile.answers_hash} " if !@profile.answers_hash.nil?
 
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
@@ -175,17 +185,17 @@ class ProfilesController < ApplicationController
 
   def questions_valid?(questions_hash)
     # return true if questions_hash.blank?
-    return true if questions_hash.nil?
+    return true if questions_hash.empty?
     questions_hash.try(:size) == params[:answers].try(:size)
   end
 
 
   def create_questions_from_hash(questions_hash)
-    logger.info "=== debugging create_questions_from_hash========="
-    logger.info questions_hash
+    logger.info "=== debugging in  create_questions_from_hash========="
+    logger.info " questions_hash = #{questions_hash.inspect}"
     logger.info questions_hash.blank?
 
-    if questions_hash.nil?
+    if questions_hash.nil? or questions_hash.empty?
       return nil
     else
       result = []
