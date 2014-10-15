@@ -18,6 +18,7 @@ module ProfileQuestions
   # user_ids - Id всех объединенных юзеров
   def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added, author_profile_id, user_ids)
 
+    logger.info " in make_questions: profile_id = #{profile_id}"
     @non_standard_questions_hash = Hash.new
     # Собираем хеш ближнего круга
     circle_hashes = get_circle_as_hash(user_ids, author_profile_id)
