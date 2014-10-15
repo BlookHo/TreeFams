@@ -4,9 +4,10 @@ var width = 960,
 var color = d3.scale.category10();
 
 var nodes = [],
-    links = [];
+    links = [],
+    relations = [];
 
-var node, link, nameLabel, relationLabel;
+var node, link, relation;
 var force, svg;
 
 
@@ -76,12 +77,12 @@ start = function(){
 
   // Links
   link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
-  link.enter().insert("line", ".node").attr("class", "link");
+  link.enter().insert("line").attr("class", "link");
   link.exit().remove();
 
 
   // Relations
-  relation = svg.selectAll('.relation').data(links);
+  relation = svg.selectAll('.relation').data(relations, function(d) { return d.source.id + "-" + d.target.id; });
              relation.enter()
                      .append("g")
                      .attr("class", "relation")
@@ -90,10 +91,9 @@ start = function(){
                      .attr("dx", 1)
                      .attr("dy", ".25em")
                      .attr("text-anchor", "middle")
-                     .text(function(d) { return d.rel_title; });
+                     .text(function(d) { return d.relation; });
 
-              relation.exit().remove();
-
+  relation.exit().remove();
 
 
 
@@ -115,6 +115,9 @@ start = function(){
               node.exit().remove();
 
 
+  // link.order();
+  // relation.order();
+  node.order();
 
   force.start();
 }
@@ -138,7 +141,7 @@ function remove_author(){
 
 // Father
 function add_father(data){
-  var node = {id: 2, name: data.name, target: 1, rel_title: "отец", circle: 1};
+  var node = {id: 2, name: data.name, target: 1, relation: "отец", circle: 1};
   pushNode(node)
   start();
 }
@@ -152,7 +155,7 @@ function remove_father(){
 
 // Mother
 function add_mother(data){
-  var node = {id: 3, name: data.name, target: 1, rel_title: "мать", circle: 1};
+  var node = {id: 3, name: data.name, target: 1, relation: "мать", circle: 1};
   pushNode(node)
   start();
 }
@@ -169,7 +172,7 @@ var brothers_container = [];
 function add_brothers(data, index){
   var node_id = 40+index;
   brothers_container.push(node_id);
-  var node = {id: node_id, name: data.name, target: 1, rel_title: "брат", circle: 1};
+  var node = {id: node_id, name: data.name, target: 1, relation: "брат", circle: 1};
   pushNode(node)
   start();
 }
@@ -189,7 +192,7 @@ var sisters_container = [];
 function add_sisters(data, index){
   var node_id = 50+index;
   sisters_container.push(node_id);
-  var node = {id: node_id, name: data.name, target: 1, rel_title: "сестра"};
+  var node = {id: node_id, name: data.name, target: 1, relation: "сестра"};
   pushNode(node)
   start();
 }
@@ -209,7 +212,7 @@ var sons_container = [];
 function add_sons(data, index){
   var node_id = 60+index;
   sons_container.push(node_id);
-  var node = {id: node_id, name: data.name, target: 1, rel_title: "сын"};
+  var node = {id: node_id, name: data.name, target: 1, relation: "сын"};
   pushNode(node)
   start();
 }
@@ -227,7 +230,7 @@ var daughters_container = [];
 function add_daughters(data, index){
   var node_id = 70+index;
   daughters_container.push(node_id);
-  var node = {id: node_id, name: data.name, target: 1, rel_title: "дочь"};
+  var node = {id: node_id, name: data.name, target: 1, relation: "дочь"};
   pushNode(node)
   start();
 }
@@ -243,7 +246,7 @@ function remove_daughters(index){
 
 // Wife
 function add_wife(data){
-  var node = {id: 8, name: data.name, target: 1, rel_title: "жена"};
+  var node = {id: 8, name: data.name, target: 1, relation: "жена"};
   pushNode(node)
   start();
 }
@@ -256,7 +259,7 @@ function remove_wife(){
 
 
 function add_husband(data){
-  var node = {id: 9, name: data.name, target: 1, rel_title: "муж"};
+  var node = {id: 9, name: data.name, target: 1, relation: "муж"};
   pushNode(node)
   start();
 }
@@ -326,6 +329,7 @@ deleteLink = function(id){
     var index = findLinkIndex(id);
     if (index != undefined){
       links.splice(index, 1);
+      relations.splice(index, 1);
     }
 };
 
@@ -334,7 +338,8 @@ pushLink = function(sourceId, targetId){
     var sourceNode = findNode(sourceId);
     var targetNode = findNode(targetId);
     if((sourceNode !== undefined) && (targetNode !== undefined)) {
-        links.push({source: sourceNode, target: targetNode, id: sourceId, rel_title:sourceNode.rel_title});
+        links.push({id: sourceId, source: sourceNode, target: targetNode, });
+        relations.push({id: sourceId, source: sourceNode, target: targetNode, relation: sourceNode.relation});
     }
 };
 
