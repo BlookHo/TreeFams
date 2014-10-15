@@ -357,10 +357,6 @@ removeMultipleDataFormGraph = function(modelName, index){
 
 
 removeAllDataFormGraph = function(){
-  console.log('Brothers container')
-
-
-
   remove_mother();
   remove_father();
   remove_wife();
@@ -369,7 +365,6 @@ removeAllDataFormGraph = function(){
   for (index = 0; index < brothers_container.length; ++index) {
     remove_brothers(index)
   }
-
 
   for (index = 0; index < sisters_container.length; ++index) {
     remove_sisters(index)
