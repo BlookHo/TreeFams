@@ -131,6 +131,14 @@ Weafam::Application.routes.draw do
 
 
 
+  # New version
+  ##################################################
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      resources :profiles
+    end
+  end
+
 
   # New version
   ##################################################
@@ -141,6 +149,12 @@ Weafam::Application.routes.draw do
   get  'logout',     to:   "sessions#destroy",  as: :logout
   get  'signup',     to:   'signup#index',      as: :signup
   post 'register',   to:   'signup#create',     as: :register
+
+
+  # Home
+  ##################################################
+  get '/home', to: 'home#index', as: :home
+
 
   # Autocompletes
   ##################################################

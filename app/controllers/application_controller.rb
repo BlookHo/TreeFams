@@ -5,15 +5,13 @@ class ApplicationController < ActionController::Base
     http_basic_authenticate_with name: "interweb", password: "interweb"
   end
 
-  # include MainSearchHelper
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_user,
-                :logged_id?,
-                :is_admin?
+
+  helper_method :current_user, :logged_id?
 
 
   before_filter do
@@ -21,15 +19,14 @@ class ApplicationController < ActionController::Base
   end
 
 
+
   def current_user
-    @current_user ||= User.find(session[:user_id])  if session[:user_id]
+    begin
+      @current_user ||= User.find(session[:user_id])
+    rescue
+      session[:user_id] = nil
+    end
   end
-
-
-  def is_admin?
-    current_user && current_user.is_admin?
-  end
-
 
 
   def logged_in?
@@ -44,12 +41,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
-  @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
+  # Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
+  # @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
 
   # Получение массива дерева соединенных Юзеров из Tree
   #  На входе - массив соединенных Юзеров
-  def get_connected_users_tree(connected_users_arr)
+  def sget_connected_users_tree(connected_users_arr)
     # tree_arr
     # В search_soft.rb исп-ся get_connected_tree(connected_users_arr)
 

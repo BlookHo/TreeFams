@@ -6,6 +6,12 @@
   // margin:0;
 
 
+  h1{
+    font-size:2em;
+    margin-bottom:.8em;
+  }
+
+
   #form-views{
     line-height:20px;
     padding:0;
@@ -106,7 +112,7 @@
 
   }
 
-  // NAvigtaion breadcrumb
+  // Navigtaion breadcrumb
   .navigation{
     text-align:center;
     width:400px;
@@ -122,9 +128,7 @@
       color:grey;
       background-color:#ccc;
       text-indent:-10000px;
-
       &.active{ background-color: #2ecc71; }
-
     }
   }
 
