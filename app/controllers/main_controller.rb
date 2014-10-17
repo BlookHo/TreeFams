@@ -5,9 +5,9 @@ class MainController < ApplicationController
 
   include SearchHelper
 
- def check_user
-   redirect_to :root if !current_user
- end
+   def check_user
+     redirect_to :root if !current_user
+   end
 
 
 # ГЛАВНЫЙ СТАРТОВЫЙ МЕТОД ПОИСКА совпадений по дереву Юзера

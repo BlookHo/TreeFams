@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   include Search
   include UserLock
 
-
+  before_create :generate_access_token
 
   validates :email,
             :uniqueness => true,
@@ -54,6 +54,12 @@ class User < ActiveRecord::Base
 
 
 
+  def generate_access_token
+    begin
+      self.access_token = SecureRandom.hex
+    end while self.class.exists?(access_token: access_token)
+  end
+
 
   private
 
@@ -64,6 +70,7 @@ class User < ActiveRecord::Base
   def self.generate_password
     '1111'
   end
+
 
 
 end
