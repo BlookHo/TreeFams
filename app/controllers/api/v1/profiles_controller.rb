@@ -19,8 +19,6 @@ module Api
         head :unauthorized unless api_key
       end
 
-
-
     end
   end
 end
