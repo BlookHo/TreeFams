@@ -116,13 +116,24 @@ GraphHomeModule = function(){
     var gNode = node.enter()
                     .append("g")
                     .attr("class", function(d) { return "node " + d.id; })
+                    .classed('current', function(d){ return d.current_user; })
                     .on('click', function(d){
                       if (d3.event.defaultPrevented) return; // click suppressed
                       getCircles(d.id);
                     })
                     .call(force.drag);
 
-                gNode.append("circle").attr("r", 14);
+                gNode.append("circle")
+                      .attr("r", function(d){
+                        if (d.circle == 0){
+                          return 30;
+                        }else if(d.circle == 1){
+                          return 20;
+                        }else{
+                          return 7;
+                        }
+
+                      });
 
                 gNode.append('text')
                       .attr("class", 'name')

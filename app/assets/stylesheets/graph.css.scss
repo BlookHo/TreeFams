@@ -24,8 +24,9 @@
   .node{
     circle{
       cursor:pointer;
-      stroke-width: 0; fill:grey;
+      stroke-width: 0; fill:#ccc;
     }
+    &.current circle{fill:green;}
     .name{}
   }
 

@@ -6,7 +6,7 @@ module Api
 
       def show
         profile = Profile.find(params[:id])
-        respond_with profile.circles
+        respond_with profile.circles(current_user_id: session[:user_id])
       end
 
     end
