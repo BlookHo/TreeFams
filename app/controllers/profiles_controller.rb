@@ -57,7 +57,7 @@ class ProfilesController < ApplicationController
       @name = Name.create(name: params[:profile_name])
     end
 
-    logger.info " in create: @name.id = #{@name.id}"
+    logger.info " in create: @name.name = #{@name.name}"
     # Name exist and valid:
     # 1. collect questions
     # 2. Validate answers
@@ -67,15 +67,11 @@ class ProfilesController < ApplicationController
       logger.info " in create: current_user.id = #{current_user.id}, @profile.name_id.to_i = #{@profile.name_id.to_i} "
       logger.info " in create: @author_profile_id = #{@author_profile_id}, current_user.get_connected_users = #{current_user.get_connected_users} "
       logger.info " in create: current_user.profile.id = #{current_user.profile.id} "
-      #logger.info " in create: make_questions = #{profile.make_questions(current_user.id,
-      #                                                               @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i,
-      #                                                               @profile.name_id.to_i, @author_profile_id, current_user.get_connected_users )}"
 
       questions_hash = current_user.profile.make_questions(current_user.id,
       @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i,
       @profile.name_id.to_i, @author_profile_id, current_user.get_connected_users )
       logger.info " in create: questions_hash = #{questions_hash}"
-      #logger.info "in create: after  - make_questions: @non_standard_questions_hash = #{@non_standard_questions_hash} "
 
       @questions = create_questions_from_hash(questions_hash)
       @profile.answers_hash = params[:answers]
