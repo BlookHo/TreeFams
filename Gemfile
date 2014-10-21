@@ -2,6 +2,9 @@ source 'https://rubygems.org'
 ruby '2.1.0'
 
 gem 'rails', '4.1.4'
+
+# on mac os x fail:
+# gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/9.3/bin/pg_config
 gem 'pg'
 # gem 'redis-rails'
 

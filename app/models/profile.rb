@@ -4,21 +4,29 @@ class Profile < ActiveRecord::Base
 
   include ProfileQuestions
   include ProfileMerge
+  include ProfileApiCircles
 
   has_one    :user
+  has_one    :owner_user,
+              primary_key: :tree_id,
+              foreign_key: :id,
+              class: User
   belongs_to :name
   has_many   :trees
 
   has_many   :profile_datas, dependent: :destroy
   accepts_nested_attributes_for :profile_datas
 
+
   before_save do
     self.sex_id = name.try(:sex_id)
   end
 
+
   def to_name
     name.try(:name).try(:mb_chars).try(:capitalize)
   end
+
 
   def full_name
     # [self.to_name, self.surname].join(' ')

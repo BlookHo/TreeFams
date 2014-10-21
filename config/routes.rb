@@ -135,7 +135,7 @@ Weafam::Application.routes.draw do
   ##################################################
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
-      resources :profiles
+      get 'circles', to: 'circles#show'
     end
   end
 

@@ -1,4 +1,5 @@
 # encoding: utf-8
+puts "Create names"
 Name.delete_all
 Name.reset_pk_sequence
 Name.create([

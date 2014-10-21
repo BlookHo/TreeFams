@@ -1,1 +1,6 @@
 = render 'path'
+
+#graph-wrapper
+
+%script
+  $(function(){ GraphHomeModule.init(); getCircles( #{current_user.profile_id} ); });

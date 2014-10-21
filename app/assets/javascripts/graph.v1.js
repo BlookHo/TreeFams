@@ -140,7 +140,6 @@ $(function(){
        .attr("text-anchor", "middle")
        .text(function(d) { return d.rel });
 
-
       link.exit().remove();
 
       // Nodes
@@ -417,10 +416,7 @@ $(function(){
   };
 
 
-  dataset.nodes.forEach(function(d, i) {
-    pushNode(d);
-  });
-
+  datasets
 
   resize()
   reStart();

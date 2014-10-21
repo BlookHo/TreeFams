@@ -36,7 +36,7 @@ class WelcomeController < ApplicationController
     #ProfileKey.reset_pk_sequence
 
 
-    redirect_to :main_page
+    redirect_to :home
   end
 
 
