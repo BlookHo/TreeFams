@@ -109,7 +109,7 @@ class ProfilesController < ApplicationController
       @profile.answers_hash = nil
 
       if params[:profile][:name].blank?
-        flash.now[:alert] = "Вы не указли имя."
+        flash.now[:alert] = "Вы не указали имя."
         render :new
       else
         flash.now[:name_warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
