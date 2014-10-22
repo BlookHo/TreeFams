@@ -142,6 +142,7 @@ class Profile < ActiveRecord::Base
   def brothers_hash(user_id)
     hash = {}
     brothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
+    logger.info "== in brothers_hash: hash = #{hash} "
     return hash
   end
 
