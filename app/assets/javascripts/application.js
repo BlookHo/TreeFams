@@ -31,5 +31,5 @@
 
 //  D3js graph applications
 //----------------------------------
-//= require graph
-//= require graph_home_module
+//= require graphSignupModule
+//= require graphHomeModule

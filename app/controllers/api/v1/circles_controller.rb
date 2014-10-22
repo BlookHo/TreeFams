@@ -5,8 +5,8 @@ module Api
       respond_to :json
 
       def show
-        profile = Profile.find(params[:id])
-        respond_with profile.circles(current_user_id: session[:user_id])
+        profile = Profile.find(params[:profile_id])
+        respond_with profile.circles(api_current_user)
       end
 
     end

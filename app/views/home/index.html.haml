@@ -3,4 +3,5 @@
 #graph-wrapper
 
 %script
-  $(function(){ GraphHomeModule.init(); getCircles( #{current_user.profile_id} ); });
+  var access_token = '#{current_user.access_token}';
+  $(function(){ GraphHomeModule.init(); getCircles( {profile_id: #{current_user.profile_id}, token: access_token } )});

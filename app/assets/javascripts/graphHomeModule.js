@@ -1,4 +1,6 @@
-startDialogGraphModule = function(){
+GraphHomeModule = function(){
+
+  console.log('GraphHomeModule');
 
   var width = 960,
       height = 200;
@@ -42,7 +44,7 @@ startDialogGraphModule = function(){
     height = parseInt(d3.select("#graph-wrapper").style("height"));
 
     svg.attr("width", width).attr("height", height);
-    force.size([width, height]).resume();
+    // force.size([width, height]).resume();
   };
 
 
@@ -51,7 +53,7 @@ startDialogGraphModule = function(){
 
     if (nodes[0]){
       nodes[0].x = width / 2;
-      nodes[0].y = 220;
+      nodes[0].y = height / 2;
     }
 
     node = svg.selectAll(".node");
@@ -76,6 +78,17 @@ startDialogGraphModule = function(){
 
 
   start = function(){
+
+    force = d3.layout.force()
+                 .nodes(nodes)
+                 .links(links)
+                 .charge(-15000)
+                 .theta(0.1)
+                 .linkDistance(0)
+                 .linkStrength(1)
+                 .friction(0.7)
+                 .size([width, height])
+                 .on("tick", tick);
 
     // Links
     link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
@@ -104,9 +117,40 @@ startDialogGraphModule = function(){
 
     var gNode = node.enter()
                     .append("g")
-                    .attr("class", function(d) { return "node " + d.id; });
+                    .attr("class", function(d) { return "node " + d.id; })
+                    .classed('current', function(d){ return d.current_user_profile; })
+                    .on('click', function(d){
+                      if (d3.event.defaultPrevented) return; // click suppressed
+                      getCircles({profile_id: d.id});
+                    })
+                    .call(force.drag);
 
-                gNode.append("circle").attr("r", 14);
+
+                // Node circle
+                // gNode.append("circle")
+                //       .attr("r", function(d){
+                //         if (d.circle == 0){
+                //           return 30;
+                //         }else if(d.circle == 1){
+                //           return 20;
+                //         }else{
+                //           return 7;
+                //         }
+                //       });
+
+
+                gNode.append("svg:image")
+                     .attr("xlink:href", function(d){ return d.icon; })
+                     .attr("width", 40)
+                     .attr("height", 40)
+                     .attr("x", -20)
+                     .attr("y", -20)
+                     .attr("transform", function(d){
+                       if (d.circle == 0) { return "scale(1.6)"}
+                       else if (d.circle == 1) { return "scale(1.3)"}
+                       else if (d.circle == 2) { return "scale(1)"}
+                     })
+                     .attr("class", "icon");
 
                 gNode.append('text')
                       .attr("class", 'name')
@@ -116,9 +160,6 @@ startDialogGraphModule = function(){
 
                 node.exit().remove();
 
-
-    // link.order();
-    // relation.order();
     node.order();
 
     force.start();
@@ -126,157 +167,8 @@ startDialogGraphModule = function(){
 
 
 
-  // Author
-  function add_author(data){
-    var node = {id: 1, name: data.name, circle: 0};
-    pushNode(node);
-    start();
-  }
 
-
-
-  function remove_author(){
-    deleteNode(1)
-    start();
-  }
-
-
-  // Father
-  function add_father(data){
-    var node = {id: 2, name: data.name, target: 1, relation: "отец", circle: 1};
-    pushNode(node)
-    start();
-  }
-
-
-  function remove_father(){
-    deleteNode(2)
-    start();
-  }
-
-
-  // Mother
-  function add_mother(data){
-    var node = {id: 3, name: data.name, target: 1, relation: "мать", circle: 1};
-    pushNode(node)
-    start();
-  }
-
-
-  function remove_mother(){
-    deleteNode(3)
-    start();
-  }
-
-  // Brothers
-  var brothers_container = [];
-
-  function add_brothers(data, index){
-    var node_id = 40+index;
-    brothers_container.push(node_id);
-    var node = {id: node_id, name: data.name, target: 1, relation: "брат", circle: 1};
-    pushNode(node)
-    start();
-  }
-
-
-  function remove_brothers(index){
-    deleteNode(brothers_container[index])
-    brothers_container.splice(index, 1)
-    start();
-  }
-
-
-
-  // Sisters
-  var sisters_container = [];
-
-  function add_sisters(data, index){
-    var node_id = 50+index;
-    sisters_container.push(node_id);
-    var node = {id: node_id, name: data.name, target: 1, relation: "сестра"};
-    pushNode(node)
-    start();
-  }
-
-
-  function remove_sisters(index){
-    deleteNode(sisters_container[index]);
-    sisters_container.splice(index, 1)
-    start();
-  }
-
-
-
-  // Sons
-  var sons_container = [];
-
-  function add_sons(data, index){
-    var node_id = 60+index;
-    sons_container.push(node_id);
-    var node = {id: node_id, name: data.name, target: 1, relation: "сын"};
-    pushNode(node)
-    start();
-  }
-
-  function remove_sons(index){
-    deleteNode(sons_container[index]);
-    sons_container.splice(index, 1)
-    start();
-  }
-
-
-  // Daughters
-  var daughters_container = [];
-
-  function add_daughters(data, index){
-    var node_id = 70+index;
-    daughters_container.push(node_id);
-    var node = {id: node_id, name: data.name, target: 1, relation: "дочь"};
-    pushNode(node)
-    start();
-  }
-
-
-  function remove_daughters(index){
-    deleteNode(daughters_container[index]);
-    daughters_container.splice(index, 1)
-    start();
-  }
-
-
-
-  // Wife
-  function add_wife(data){
-    var node = {id: 8, name: data.name, target: 1, relation: "жена"};
-    pushNode(node)
-    start();
-  }
-
-
-  function remove_wife(){
-    deleteNode(8)
-    start();
-  }
-
-
-  function add_husband(data){
-    var node = {id: 9, name: data.name, target: 1, relation: "муж"};
-    pushNode(node)
-    start();
-  }
-
-
-
-  function remove_husband(){
-    deleteNode(9)
-    start();
-  }
-
-
-
-
-  // Data wirks
+  // Data works
   pushNode = function(data){
       nodes.push(data);
       if (data.target){
@@ -346,53 +238,40 @@ startDialogGraphModule = function(){
   };
 
 
-  pushDataToGraph = function(modelName, model){
-    eval('add_'+modelName+'(model)');
-  }
 
-  removeDataFormGraph = function(modelName){
-    eval('remove_'+modelName+'()');
-  }
-
-  pushMultipleDataToGraph = function(modelName, model, index){
-    eval('add_'+modelName+'(model, index)');
-  }
-
-  removeMultipleDataFormGraph = function(modelName, index){
-    eval('remove_'+modelName+'('+index+')');
+  clearNodes = function(){
+    if (node != undefined){
+      d3.selectAll("svg > *").remove();
+       nodes = [];
+       links = [];
+       relations = [];
+       force.start();
+       d3.timer(force.resume);
+    }
   }
 
 
-  removeAllDataFormGraph = function(){
-    remove_mother();
-    remove_father();
-    remove_wife();
-    remove_husband();
 
-    for (index = 0; index < brothers_container.length; ++index) {
-      remove_brothers(index)
-    }
 
-    for (index = 0; index < sisters_container.length; ++index) {
-      remove_sisters(index)
-    }
-
-    for (index = 0; index < sons_container.length; ++index) {
-      remove_sons(index)
-    }
-
-    for (index = 0; index < daughters_container.length; ++index) {
-      remove_daughters(index)
-    }
+  getCircles = function(params){
+    clearNodes();
+    $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token } )
+      .done(function( data ) {
+          data.forEach(function(d, i) {
+            pushNode(d);
+          });
+          start();
+      });
   }
 
 
 
   var init = function(){
-    createForce();
+    // createForce();
     createSvg();
     resizeGraph();
   }
+
 
   return{init:init};
 

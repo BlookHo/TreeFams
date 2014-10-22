@@ -34,6 +34,12 @@ class Profile < ActiveRecord::Base
   end
 
 
+  def icon_path
+    logger.info "Current profile sex id: #{self.name.sex_id}"
+    self.name.sex_id == 1 ? 'assets/man.svg' : 'assets/woman.svg'
+  end
+
+
   # Эксперименты по выводу кругов в объедененных деревьях
   # получает на вход id деревьев из которых надо собрать ближний круг
   def circle(user_ids)

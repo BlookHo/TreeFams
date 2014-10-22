@@ -1,4 +1,6 @@
-GraphHomeModule = function(){
+GraphSignupModule = function(){
+
+  console.log('GraphSignupModule');
 
   var width = 960,
       height = 200;
@@ -42,7 +44,7 @@ GraphHomeModule = function(){
     height = parseInt(d3.select("#graph-wrapper").style("height"));
 
     svg.attr("width", width).attr("height", height);
-    // force.size([width, height]).resume();
+    force.size([width, height]).resume();
   };
 
 
@@ -51,7 +53,7 @@ GraphHomeModule = function(){
 
     if (nodes[0]){
       nodes[0].x = width / 2;
-      nodes[0].y = height / 2;
+      nodes[0].y = 220;
     }
 
     node = svg.selectAll(".node");
@@ -76,18 +78,6 @@ GraphHomeModule = function(){
 
 
   start = function(){
-
-    force = d3.layout.force()
-                 .nodes(nodes)
-                 .links(links)
-                 .charge(-15000)
-                 .theta(0.1)
-                 .linkDistance(0)
-                 .linkStrength(1)
-                 .friction(0.7)
-                 .size([width, height])
-                 .on("tick", tick);
-
     // Links
     link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
     link.enter().insert("line").attr("class", "link");
@@ -115,25 +105,9 @@ GraphHomeModule = function(){
 
     var gNode = node.enter()
                     .append("g")
-                    .attr("class", function(d) { return "node " + d.id; })
-                    .classed('current', function(d){ return d.current_user; })
-                    .on('click', function(d){
-                      if (d3.event.defaultPrevented) return; // click suppressed
-                      getCircles(d.id);
-                    })
-                    .call(force.drag);
+                    .attr("class", function(d) { return "node " + d.id; });
 
-                gNode.append("circle")
-                      .attr("r", function(d){
-                        if (d.circle == 0){
-                          return 30;
-                        }else if(d.circle == 1){
-                          return 20;
-                        }else{
-                          return 7;
-                        }
-
-                      });
+                gNode.append("circle").attr("r", 14);
 
                 gNode.append('text')
                       .attr("class", 'name')
@@ -143,6 +117,9 @@ GraphHomeModule = function(){
 
                 node.exit().remove();
 
+
+    // link.order();
+    // relation.order();
     node.order();
 
     force.start();
@@ -150,8 +127,157 @@ GraphHomeModule = function(){
 
 
 
+  // Author
+  function add_author(data){
+    var node = {id: 1, name: data.name, circle: 0};
+    pushNode(node);
+    start();
+  }
 
-  // Data works
+
+
+  function remove_author(){
+    deleteNode(1)
+    start();
+  }
+
+
+  // Father
+  function add_father(data){
+    var node = {id: 2, name: data.name, target: 1, relation: "отец", circle: 1};
+    pushNode(node)
+    start();
+  }
+
+
+  function remove_father(){
+    deleteNode(2)
+    start();
+  }
+
+
+  // Mother
+  function add_mother(data){
+    var node = {id: 3, name: data.name, target: 1, relation: "мать", circle: 1};
+    pushNode(node)
+    start();
+  }
+
+
+  function remove_mother(){
+    deleteNode(3)
+    start();
+  }
+
+  // Brothers
+  var brothers_container = [];
+
+  function add_brothers(data, index){
+    var node_id = 40+index;
+    brothers_container.push(node_id);
+    var node = {id: node_id, name: data.name, target: 1, relation: "брат", circle: 1};
+    pushNode(node)
+    start();
+  }
+
+
+  function remove_brothers(index){
+    deleteNode(brothers_container[index])
+    brothers_container.splice(index, 1)
+    start();
+  }
+
+
+
+  // Sisters
+  var sisters_container = [];
+
+  function add_sisters(data, index){
+    var node_id = 50+index;
+    sisters_container.push(node_id);
+    var node = {id: node_id, name: data.name, target: 1, relation: "сестра"};
+    pushNode(node)
+    start();
+  }
+
+
+  function remove_sisters(index){
+    deleteNode(sisters_container[index]);
+    sisters_container.splice(index, 1)
+    start();
+  }
+
+
+
+  // Sons
+  var sons_container = [];
+
+  function add_sons(data, index){
+    var node_id = 60+index;
+    sons_container.push(node_id);
+    var node = {id: node_id, name: data.name, target: 1, relation: "сын"};
+    pushNode(node)
+    start();
+  }
+
+  function remove_sons(index){
+    deleteNode(sons_container[index]);
+    sons_container.splice(index, 1)
+    start();
+  }
+
+
+  // Daughters
+  var daughters_container = [];
+
+  function add_daughters(data, index){
+    var node_id = 70+index;
+    daughters_container.push(node_id);
+    var node = {id: node_id, name: data.name, target: 1, relation: "дочь"};
+    pushNode(node)
+    start();
+  }
+
+
+  function remove_daughters(index){
+    deleteNode(daughters_container[index]);
+    daughters_container.splice(index, 1)
+    start();
+  }
+
+
+
+  // Wife
+  function add_wife(data){
+    var node = {id: 8, name: data.name, target: 1, relation: "жена"};
+    pushNode(node)
+    start();
+  }
+
+
+  function remove_wife(){
+    deleteNode(8)
+    start();
+  }
+
+
+  function add_husband(data){
+    var node = {id: 9, name: data.name, target: 1, relation: "муж"};
+    pushNode(node)
+    start();
+  }
+
+
+
+  function remove_husband(){
+    deleteNode(9)
+    start();
+  }
+
+
+
+
+  // Data wirks
   pushNode = function(data){
       nodes.push(data);
       if (data.target){
@@ -221,40 +347,53 @@ GraphHomeModule = function(){
   };
 
 
+  pushDataToGraph = function(modelName, model){
+    eval('add_'+modelName+'(model)');
+  }
 
-  clearNodes = function(){
-    if (node != undefined){
-      d3.selectAll("svg > *").remove();
-       nodes = [];
-       links = [];
-       relations = [];
-       force.start();
-       d3.timer(force.resume);
+  removeDataFormGraph = function(modelName){
+    eval('remove_'+modelName+'()');
+  }
+
+  pushMultipleDataToGraph = function(modelName, model, index){
+    eval('add_'+modelName+'(model, index)');
+  }
+
+  removeMultipleDataFormGraph = function(modelName, index){
+    eval('remove_'+modelName+'('+index+')');
+  }
+
+
+  removeAllDataFormGraph = function(){
+    remove_mother();
+    remove_father();
+    remove_wife();
+    remove_husband();
+
+    for (index = 0; index < brothers_container.length; ++index) {
+      remove_brothers(index)
+    }
+
+    for (index = 0; index < sisters_container.length; ++index) {
+      remove_sisters(index)
+    }
+
+    for (index = 0; index < sons_container.length; ++index) {
+      remove_sons(index)
+    }
+
+    for (index = 0; index < daughters_container.length; ++index) {
+      remove_daughters(index)
     }
   }
 
 
 
-
-  getCircles = function(profile_id){
-    clearNodes();
-    $.get( "/api/v1/circles", { id: profile_id } )
-      .done(function( data ) {
-          data.forEach(function(d, i) {
-            pushNode(d);
-          });
-          start();
-      });
-  }
-
-
-
   var init = function(){
-    // createForce();
+    createForce();
     createSvg();
     resizeGraph();
   }
-
 
   return{init:init};
 

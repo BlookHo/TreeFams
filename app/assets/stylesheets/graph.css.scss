@@ -1,7 +1,7 @@
 #graph-wrapper{
   width:100%;
   height:100%;
-  border:1px solid grey;
+  // border:1px solid grey;
   position:absolute;
   top:0;
   left:0;
@@ -21,13 +21,15 @@
   }
 
 
+
   .node{
-    circle{
-      cursor:pointer;
-      stroke-width: 0; fill:#ccc;
-    }
-    &.current circle{fill:green;}
-    .name{}
+    // circle{
+    //   cursor:pointer;
+    //   stroke-width: 0; fill:#ccc;
+    // }
+
+    &.current .name{fill:red;}
+    image.icon {cursor:pointer; }
   }
 
 
