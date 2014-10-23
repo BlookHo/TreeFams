@@ -136,7 +136,7 @@ Weafam::Application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       get 'circles', to: 'circles#show'
-      get 'search',  to: 'search#show'
+      get 'search',  to: 'search#index'
     end
   end
 
