@@ -57,7 +57,7 @@ class ProfilesController < ApplicationController
       @name = Name.create(name: params[:profile_name])
     end
 
-    logger.info " in create: @name.id = #{@name.id}"
+    logger.info " in create: @name.name = #{@name.name}"
     # Name exist and valid:
     # 1. collect questions
     # 2. Validate answers
@@ -67,21 +67,26 @@ class ProfilesController < ApplicationController
       logger.info " in create: current_user.id = #{current_user.id}, @profile.name_id.to_i = #{@profile.name_id.to_i} "
       logger.info " in create: @author_profile_id = #{@author_profile_id}, current_user.get_connected_users = #{current_user.get_connected_users} "
       logger.info " in create: current_user.profile.id = #{current_user.profile.id} "
-      #logger.info " in create: make_questions = #{profile.make_questions(current_user.id,
-      #                                                               @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i,
-      #                                                               @profile.name_id.to_i, @author_profile_id, current_user.get_connected_users )}"
 
-      questions_hash = current_user.profile.make_questions(current_user.id,
-      @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i,
-      @profile.name_id.to_i, @author_profile_id, current_user.get_connected_users )
+      make_questions_data = {
+          current_user_id:     current_user.id, #
+          base_profile_id:     @base_profile.id, #
+          base_relation_id:    @base_relation_id.to_i, #
+          profile_relation_id: @profile.relation_id.to_i, #
+          profile_name_id:     @profile.name_id.to_i, #
+          author_profile_id:   @author_profile_id, #
+          connected_users:     current_user.get_connected_users #
+      }
+
+      ################ MAIN MAKE NON-STANDARD QUESTIONS #####################
+      questions_hash = current_user.profile.make_questions(make_questions_data)
       logger.info " in create: questions_hash = #{questions_hash}"
-      #logger.info "in create: after  - make_questions: @non_standard_questions_hash = #{@non_standard_questions_hash} "
 
       @questions = create_questions_from_hash(questions_hash)
-      @profile.answers_hash = params[:answers]
 
-      logger.info "==== Вопросы по новому профилю ====== "
-      logger.info " @questions = #{@questions.inspect}"
+      ################ COILLECT ANSWERS FOR NON-STANDARD QUESTIONS #####################
+      @profile.answers_hash = params[:answers]
+      logger.info "==== Вопросы по новому профилю  @questions = #{@questions.inspect}"
       logger.info " @profile.answers_hash = #{@profile.answers_hash} " if !@profile.answers_hash.nil?
 
       # Validate for relation questions
@@ -113,7 +118,7 @@ class ProfilesController < ApplicationController
       @profile.answers_hash = nil
 
       if params[:profile][:name].blank?
-        flash.now[:alert] = "Вы не указли имя."
+        flash.now[:alert] = "Вы не указали имя."
         render :new
       else
         flash.now[:name_warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"

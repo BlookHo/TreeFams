@@ -6,7 +6,7 @@ module ProfileQuestions
   ############# МЕТОДЫ ФОРМИРОВАНИЯ ВОПРОСОВ В НЕСТ. СИТ-Х
 
   # Основной метод формирования вопросов в нестандартных ситуациях добавления профилей
-  # На выходе: сгенерированные массивы вопросов к каждому нестандартному relation
+  # На выходе: @non_standard_questions_hash - сгенерированные массивы вопросов к каждому нестандартному relation
   # для добавляемого relation.
 
   # user_id           Дерево в которое добавляем или массив деревеье
@@ -16,16 +16,21 @@ module ProfileQuestions
   # name_id_added     ID имени нового отношения
   # author_profile_id  ID профиля автора (центра) круга, для кого нужно собирать хеши и относительно кого строются вопросы
   # user_ids - Id всех объединенных юзеров
-  def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added, author_profile_id, user_ids)
+  def make_questions(make_questions_data)
+
+    user_id           = make_questions_data[:current_user_id]
+    profile_id        = make_questions_data[:base_profile_id]
+    relation_add_to   = make_questions_data[:base_relation_id]
+    relation_added    = make_questions_data[:profile_relation_id]
+    name_id_added     = make_questions_data[:profile_name_id]
+    author_profile_id = make_questions_data[:author_profile_id]
+    user_ids          = make_questions_data[:connected_users]
 
     @non_standard_questions_hash = Hash.new
     # Собираем хеш ближнего круга
     circle_hashes = get_circle_as_hash(user_ids, author_profile_id)
 
-    @incoming_author_profile_id = author_profile_id # автор текущего круга
-
     @tmp_author_profile_id = User.find(user_id).profile_id  # Главный автор - Юзер
-
 
     @fathers_hash = circle_hashes[:fathers]
     @mothers_hash = circle_hashes[:mothers]
@@ -39,13 +44,19 @@ module ProfileQuestions
     @author_hash = circle_hashes[:author] # Инфа о текущем авторе
     tmp_author_hash = {@author_hash["profile_id"] => @author_hash["name_id"]}
 
+    # ТОлько в случае, когда добавляем НЕ автору
     # Включение в списки братьев или сестер автора в завис-ти от его пола
-    if @author_hash["sex_id"] == 1
-      @brothers_hash.merge!(tmp_author_hash)
-    else
-      @sisters_hash.merge!(tmp_author_hash)
+    if relation_add_to != 0
+      if @author_hash["sex_id"] == 1
+        @brothers_hash.merge!(tmp_author_hash)
+        @husbands_hash.merge!(tmp_author_hash)
+      else
+        @sisters_hash.merge!(tmp_author_hash)
+        @wives_hash.merge!(tmp_author_hash)
+      end
     end
 
+    logger.info " @author_hash = #{@author_hash}  "
     logger.info "=====@fathers_hash========"
     logger.info @fathers_hash
     logger.info "=====@mothers_hash========"
@@ -63,25 +74,24 @@ module ProfileQuestions
     logger.info "=====@daughters_hash========"
     logger.info @daughters_hash
 
+    @relation_add_to = relation_add_to
+    @profile_id = profile_id
+
     case relation_add_to
       when 0
-        logger.info "== in case: relation_add_to = #{relation_add_to} "
         check_author_relations(relation_added, name_id_added)
       when 1
-
         check_father_relations(relation_added, name_id_added)
       when 2
         check_mother_relations(relation_added, name_id_added)
-      when 3
-        check_son_daughter_relations(relation_added, name_id_added)
-      when 4
+      when 3, 4
         check_son_daughter_relations(relation_added, name_id_added)
       when 5, 6
         check_brother_sister_relations(relation_added, name_id_added)
       when 7, 8
         check_husband_wife_relations(relation_added, name_id_added)
       else
-        # @standard_msg = "make_questions: Добавляемое отношение - неизвестно"
+        logger.info "ERROR in make_questions! отношение - неизвестно: relation_add_to = #{relation_add_to} "
         nil
     end
     logger.info "== after case: relation_add_to = #{relation_add_to} "
@@ -91,18 +101,14 @@ module ProfileQuestions
   end
 
 
-
   def get_circle_as_hash(user_id, profile_id)
     profile = Profile.find profile_id
     profile.circle_as_hash(user_id)
   end
 
-
   # Выбор группы вопросов для Автора в нестандартных ситуациях
   # в завис-ти от добавляемого relation
   def check_author_relations(relation_added, added_name_id)
-    logger.info "== in check_author_relations: relation_added = #{relation_added} "
-
     case relation_added
       when 1 # add new father
         ask_author_questions(1, added_name_id)
@@ -111,14 +117,10 @@ module ProfileQuestions
       when 7 # add new husband
         ask_author_questions(7, added_name_id)
       when 8 # add new wife
-        logger.info "== in case 8  - check_author_relations: relation_added = #{relation_added} "
         ask_author_questions(8, added_name_id)
       else # все остальные relation_added - создают стандартные ситуации
-        # @standard_msg = "check_author_relations: Добавляемое к Автору отношение явл. СТАНДАРТНЫМ"
         nil
     end
-    logger.info "== after  - check_author_relations: @non_standard_questions_hash = #{@non_standard_questions_hash} "
-
   end
 
   # Выбор группы вопросов для Отца в нестандартных ситуациях
@@ -132,7 +134,6 @@ module ProfileQuestions
       when 8 # add new wife
         ask_father_questions(8, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        # @standard_msg = "check_father_relations: Добавляемое к Отцу отношение явл. СТАНДАРТНЫМ"
         nil
     end
   end
@@ -148,7 +149,6 @@ module ProfileQuestions
       when 7 # add new husband
         ask_mother_questions(7, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        # @standard_msg = "check_mother_relations: Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
         nil
     end
   end
@@ -166,7 +166,6 @@ module ProfileQuestions
       when 6 # add new sister
         ask_brother_sister_questions(6, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        # @standard_msg = "check_brother_sister_relations: Добавляемое к Матери отношение явл. СТАНДАРТНЫМ"
         nil
     end
   end
@@ -184,7 +183,6 @@ module ProfileQuestions
       when 6 # add new sister
         ask_son_daughter_questions(6, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        # @standard_msg = "check_son_daughter_relations: Добавляемое к Сыну/Дочери отношение явл. СТАНДАРТНЫМ"
         nil
     end
   end
@@ -202,7 +200,6 @@ module ProfileQuestions
       when 8 # add new wife
         ask_husband_wife_questions(8, added_name_id)
       else  # все остальные relation_added - создают стандартные ситуации
-        # @standard_msg = "check_father_relations: Добавляемое к Мужа/Жены отношение явл. СТАНДАРТНЫМ"
         nil
     end
   end
@@ -216,7 +213,7 @@ module ProfileQuestions
       when "Мать", "Сестра", "Дочь", "Жена"
         word_which_1 = "вашей"
       else
-        @standard_msg = "К кому добавляем - неизвестно"
+        logger.info "ERROR in words_case_sex_relation! К кому добавляем - неизвестно: profile_relation = #{profile_relation} "
     end
 
     case text_relation
@@ -225,44 +222,40 @@ module ProfileQuestions
       when "Мать", "Сестра", "Дочь", "Жена"
         word_which_2 = "вашей"
       else
-        @standard_msg = "К кому добавляем - неизвестно"
+        logger.info "ERROR in words_case_sex_relation! К кому добавляем - неизвестно: text_relation = #{text_relation} "
     end
+
     return word_which_1, word_which_2
   end
 
   # Формирование текста одного вопроса
   # При этом в зависимости от того, является ли автор членом хэша родни
   # видоизменяется вид вопроса для автора.
-  #
-  def make_one_question(one_question_name, author_profile_id, one_question_profile, added_relation, added_name, text_relation, profile_relation, which_string_1, which_string_2)
+  def make_one_question(one_question_data, author_profile_id)
+
+    text_relation_add_to = one_question_data[:text_relation_to]
+    one_question_name    = one_question_data[:one_name]
+    one_question_profile = one_question_data[:one_profile]
+    added_relation       = one_question_data[:added_relation]
+    added_name           = one_question_data[:added_name]
+    text_relation        = one_question_data[:text_relation]
+    profile_relation     = one_question_data[:profile_relation]
+    which_string_1       = one_question_data[:string_1]
+    which_string_2       = one_question_data[:string_2]
 
     name_exist = YandexInflect.inflections(Name.find(one_question_name).name)[1]["__content__"].mb_chars.capitalize
-    logger.info "BIG DEBUG =============one_question_profile==========="
-    logger.info one_question_profile
-    logger.info "BIG DEBUG ============author_profile_id============"
-    logger.info author_profile_id
-    logger.info "EDN BIG DEBUG ========================"
+    logger.info "make_one_question DEBUG ================="
+    logger.info " author_profile_id = #{author_profile_id}"
+    logger.info " one_question_profile = #{one_question_profile} "
+    logger.info " profile_relation = #{profile_relation} "
 
-
-    #if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
-    #   # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
-    #   one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
-    #else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
-    #   logger.info "2 BIG DEBUG ========================"
-    #   one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{which_string_2} #{text_relation}?"
-    #end
-
-    if @incoming_author_profile_id.to_i != author_profile_id
-      ## one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
-      #  one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} <strike>1 #{which_string_1} #{profile_relation} </strike> #{name_exist}?"
-        one_question = "Считаете ли вы #{added_relation} #{added_name} -  #{text_relation} #{name_exist}?"
-    else
-      if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
-        # one_question = "Считаете ли вы КОГО <added_name КОГО> - КЕМ вашего(й) КОГО <name_exist КОГО>?"
+    if @relation_add_to == 0 # если добавляем к автору? == 0
         one_question = "Считаете ли вы #{added_relation} #{added_name} - #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
-      else  # Если один из профилей в хэше circle - автор. Тогда - видоизменен текст вопроса
-        logger.info "2 BIG DEBUG ========================"
-        one_question = "Считаете ли вы #{added_relation} #{added_name} - #{which_string_2} #{text_relation}?"
+    else  # если добавляем НЕ к автору?
+      if one_question_profile != author_profile_id # Если один из профилей в хэше circle - не автор
+        one_question = "Считаете ли вы #{added_name} - #{added_relation} #{text_relation_add_to}, - #{text_relation} #{which_string_1} #{profile_relation} #{name_exist}?"
+      else  # Если оба профиля в хэше circle - автор. Тогда - видоизменен текст вопроса
+        one_question = "Считаете ли вы #{added_name} - #{added_relation} #{text_relation_add_to}, - #{which_string_2} #{text_relation}?"
       end
     end
 
@@ -272,22 +265,34 @@ module ProfileQuestions
   # с новым отношением added_relation.
   # При этом в впоросе выясняется истинность отношения text_relation добавленного added_relation к рассматриваемому профилю
   # с отношением profile_relation
-  def add_relation_questions(names_hash, added_name_id, added_relation, text_relation, profile_relation)
-    logger.info "== in  - add_relation_questions: names_hash = #{names_hash}, added_name_id = #{added_name_id}, added_relation = #{added_relation}, text_relation = #{text_relation}, profile_relation = #{profile_relation}"
+  def add_relation_questions(names_hash, text_relation_add_to, added_name_id, added_relation, text_relation, profile_relation)
     return {} if names_hash.blank?
     if !names_hash.blank?
       names_arr = names_hash.values   # name_id array
       profiles_arr = names_hash.keys  # profile_id array
-      inflect_added_relation    = YandexInflect.inflections(added_relation)[3]["__content__"]
-      inflect_text_relation     = YandexInflect.inflections(text_relation)[4]["__content__"]
-      inflect_profile_relation  = YandexInflect.inflections(profile_relation)[1]["__content__"]
-      inflect_added_name        = YandexInflect.inflections(Name.find(added_name_id).name)[3]["__content__"].mb_chars.capitalize
+      inflect_added_relation         = YandexInflect.inflections(added_relation)[3]["__content__"]
+      inflect_text_relation          = YandexInflect.inflections(text_relation)[4]["__content__"]
+      inflect_profile_relation       = YandexInflect.inflections(profile_relation)[1]["__content__"]
+      inflect_text_relation_add_to   = YandexInflect.inflections(text_relation_add_to)[1]["__content__"]
+      inflect_added_name             = YandexInflect.inflections(Name.find(added_name_id).name)[3]["__content__"].mb_chars.capitalize
       which_string_1, which_string_2 = words_case_sex_relation(profile_relation, text_relation)
       if !names_arr.blank?
         questions_hash = Hash.new
         for arr_ind in 0 .. names_arr.length - 1
-          # one_question = make_one_question(names_arr[arr_ind], @profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
-          one_question = make_one_question(names_arr[arr_ind], @tmp_author_profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
+
+          one_question_data = {
+              text_relation_to: inflect_text_relation_add_to, #
+              one_name:         names_arr[arr_ind], #
+              one_profile:      profiles_arr[arr_ind], #
+              added_relation:   inflect_added_relation, #
+              added_name:       inflect_added_name, #
+              text_relation:    inflect_text_relation, #
+              profile_relation: inflect_profile_relation, #
+              string_1:         which_string_1, #
+              string_2:         which_string_2 #
+          }
+
+          one_question = make_one_question(one_question_data, @tmp_author_profile_id)
           # Добавляем один вопрос в хэш вопросов касательно нового отношения
           questions_hash.merge!({profiles_arr[arr_ind] => one_question})
         end
@@ -300,55 +305,49 @@ module ProfileQuestions
   # В зависимости от того, какое relation добавляем,
   # заполняются те массивы вопросов, которые следует задавать
   def ask_author_questions(added_relation, added_name_id) # 0
-    logger.info "== in - ask_author_questions: added_name_id = #{added_name_id} "
     non_standard_questions_hash = Hash.new
     case added_relation
-      when 1  # Добавляем Отца к Автору - то же, что 5,6 - 1
-
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Отец", "Отец", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Отец", "Отец", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать"))
-      when 2  # Добавляем Мать к Автору - то же, что 5,6 - 2
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Мать", "Мать", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Мать", "Мать", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, added_name_id, "Мать", "Жена", "Отец"))
+      when 1  # Добавляем Отца к Автору
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, "", added_name_id, "Отец", "Отец", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, "", added_name_id, "Отец", "Отец", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, "", added_name_id, "Отец", "Муж", "Мать"))
+      when 2  # Добавляем Мать к Автору
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, "", added_name_id, "Мать", "Мать", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, "", added_name_id, "Мать", "Мать", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, "", added_name_id, "Мать", "Жена", "Отец"))
       when 7  # Добавляем Мужа к Автору (женщине)
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Муж", "Отец", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Муж", "Отец", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, "", added_name_id, "Муж", "Отец", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, "", added_name_id, "Муж", "Отец", "Дочь"))
       when 8  # Добавляем Жену к Автору (мужчине)
-        logger.info "== in case 8  - ask_author_questions: added_relation = #{added_relation} "
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Жена", "Мать", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Жена", "Мать", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, "", added_name_id, "Жена", "Мать", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, "", added_name_id, "Жена", "Мать", "Дочь"))
       else
-        "Неизвестно"
+        logger.info "ERROR in ask_author_questions! Кого добавляем - неизвестно: added_relation = #{added_relation} "
     end
     @non_standard_questions_hash = non_standard_questions_hash   #
-    logger.info "== after  - ask_author_questions: non_standard_questions_hash = #{non_standard_questions_hash} "
   end
 
   # Генерация вопросов для Отца в создавшихся нестандартных ситуациях.
   # В зависимости от того, какое relation добавляем,
   # заполняются те массивы вопросов, которые следует задавать
-  #
   def ask_father_questions(added_relation, added_name_id) # 1
     non_standard_questions_hash = Hash.new
+    relation_name = update_before_questions(@relation_add_to)
+
     case added_relation
       when 3  # Добавляем Сына к Отцу
-
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Сын", "Брат", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Сын", "Брат", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Сын", "Сын", "Мать"))
-        @standard_msg = "Добавляем Сына к Отцу"
-        logger.info "============================== in 3 ask #{@brothers_hash}"
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Сын", "Брат", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name, added_name_id, "Сын", "Брат", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, relation_name, added_name_id, "Сын", "Сын", "Мать"))
       when 4  # Добавляем Дочь к Отцу
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Дочь", "Сестра", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Дочь", "Сестра", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Дочь", "Дочь", "Мать"))
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Дочь", "Сестра", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name, added_name_id, "Дочь", "Сестра", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, relation_name, added_name_id, "Дочь", "Дочь", "Мать"))
       when 8  # Добавляем Жену к Отцу
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Жена", "Мать", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Жена", "Мать", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Жена", "Мать", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name, added_name_id, "Жена", "Мать", "Сестра"))
       else
-        "Неизвестно"
+        logger.info "ERROR in ask_father_questions! Кого добавляем - неизвестно: added_relation = #{added_relation} "
     end
     @non_standard_questions_hash = non_standard_questions_hash   #
   end
@@ -358,53 +357,55 @@ module ProfileQuestions
   # заполняются те массивы вопросов, которые следует задавать
   def ask_mother_questions(added_relation, added_name_id) # 2
     non_standard_questions_hash = Hash.new
+    relation_name = update_before_questions(@relation_add_to)
+
     case added_relation
       when 3  # Добавляем Сына к Матери
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Сын", "Брат", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Сын", "Брат", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, added_name_id, "Сын", "Сын", "Отец"))
-        @standard_msg = "Добавляем Сына к Матери (Автора)"
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Сын", "Брат", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name, added_name_id, "Сын", "Брат", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, relation_name, added_name_id, "Сын", "Сын", "Отец"))
       when 4  # Добавляем Дочь к Матери
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Дочь", "Сестра", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Дочь", "Сестра", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, added_name_id, "Дочь", "Дочь", "Отец"))
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Дочь", "Сестра", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name, added_name_id, "Дочь", "Сестра", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, relation_name, added_name_id, "Дочь", "Дочь", "Отец"))
       when 7  # Добавляем Мужа к Матери
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Муж", "Отец", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Муж", "Отец", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Муж", "Отец", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name,  added_name_id, "Муж", "Отец", "Сестра"))
       else
-        "Неизвестно"
+        logger.info "ERROR in ask_mother_questions! Кого добавляем - неизвестно: added_relation = #{added_relation} "
     end
     @non_standard_questions_hash = non_standard_questions_hash   #
   end
-
 
   # Генерация вопросов для Брата/Сестры в создавшихся нестандартных ситуациях.
   # В зависимости от того, какое relation добавляем,
   # заполняются те массивы вопросов, которые следует задавать
   def ask_brother_sister_questions(added_relation, added_name_id) # 5, 6
     non_standard_questions_hash = Hash.new
+
+    relation_name = update_before_questions(@relation_add_to)
+
     case added_relation
       when 1  # Добавляем Отца к Брату/Сестре - то же, что 0 - 1
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Отец", "Отец", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Отец", "Отец", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Отец", "Муж", "Мать"))
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Отец", "Отец", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name, added_name_id, "Отец", "Отец", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, relation_name, added_name_id, "Отец", "Муж", "Мать"))
       when 2  # Добавляем Мать к Брату/Сестре - то же, что 0 - 2
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Мать", "Мать", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Мать", "Мать", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, added_name_id, "Мать", "Жена", "Отец"))
-        @standard_msg = "Добавляем Мать к Брату/Сестре"
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Мать", "Мать", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name, added_name_id, "Мать", "Мать", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, relation_name, added_name_id, "Мать", "Жена", "Отец"))
       when 5  # Добавляем к Брата к Брату/Сестре
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Брат", "Брат", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Брат", "Брат", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, added_name_id, "Брат", "Сын", "Отец"))
-        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Брат", "Сын", "Мать"))
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Брат", "Брат", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name, added_name_id, "Брат", "Брат", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, relation_name, added_name_id, "Брат", "Сын", "Отец"))
+        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, relation_name, added_name_id, "Брат", "Сын", "Мать"))
       when 6  # Добавляем к Сестру к Брату/Сестре
-        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, added_name_id, "Сестра", "Сестра", "Брат"))
-        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, added_name_id, "Сестра", "Сестра", "Сестра"))
-        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, added_name_id, "Сестра", "Дочь", "Отец"))
-        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, added_name_id, "Сестра", "Дочь", "Мать"))
+        non_standard_questions_hash.merge!(add_relation_questions(@brothers_hash, relation_name, added_name_id, "Сестра", "Сестра", "Брат"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sisters_hash, relation_name, added_name_id, "Сестра", "Сестра", "Сестра"))
+        non_standard_questions_hash.merge!(add_relation_questions(@fathers_hash, relation_name, added_name_id, "Сестра", "Дочь", "Отец"))
+        non_standard_questions_hash.merge!(add_relation_questions(@mothers_hash, relation_name, added_name_id, "Сестра", "Дочь", "Мать"))
       else
-        "Неизвестно"
+        logger.info "ERROR in ask_brother_sister_questions! Кого добавляем - неизвестно: added_relation = #{added_relation} "
     end
     @non_standard_questions_hash = non_standard_questions_hash   #
   end
@@ -414,29 +415,30 @@ module ProfileQuestions
   # заполняются те массивы вопросов, которые следует задавать
   def ask_son_daughter_questions(added_relation, added_name_id) # 3, 4
     non_standard_questions_hash = Hash.new
+
+    relation_name = update_before_questions(@relation_add_to)
+
     case added_relation
       when 1  # Добавляем Отца к Сыну/Дочери - то же, что
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Отец", "Отец", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Отец", "Отец", "Дочь"))
-        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, added_name_id, "Отец", "Муж", "Жена"))
-        @standard_msg = "Добавляем Отца к Сыну/Дочери"
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, relation_name, added_name_id, "Отец", "Отец", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, relation_name, added_name_id, "Отец", "Отец", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, relation_name, added_name_id, "Отец", "Муж", "Жена"))
       when 2  # Добавляем Мать к Сыну/Дочери - то же, что
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Мать", "Мать", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Мать", "Мать", "Дочь"))
-        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, added_name_id, "Мать", "Жена", "Муж"))
-        @standard_msg = "Добавляем Мать к Сыну/Дочери"
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, relation_name, added_name_id, "Мать", "Мать", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, relation_name, added_name_id, "Мать", "Мать", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, relation_name, added_name_id, "Мать", "Жена", "Муж"))
       when 5  # Добавляем Брата к Сыну/Дочери
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Брат", "Брат", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Брат", "Брат", "Дочь"))
-        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, added_name_id, "Брат", "Сын", "Муж"))
-        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, added_name_id, "Брат", "Сын", "Жена"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, relation_name, added_name_id, "Брат", "Брат", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, relation_name, added_name_id, "Брат", "Брат", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, relation_name, added_name_id, "Брат", "Сын", "Муж"))
+        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, relation_name, added_name_id, "Брат", "Сын", "Жена"))
       when 6  # Добавляем Сестру к Сыну/Дочери
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Сестра", "Сестра", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Сестра", "Сестра", "Дочь"))
-        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, added_name_id, "Сестра", "Дочь", "Муж"))
-        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, added_name_id, "Сестра", "Дочь", "Жена"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, relation_name, added_name_id, "Сестра", "Сестра", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, relation_name, added_name_id, "Сестра", "Сестра", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, relation_name, added_name_id, "Сестра", "Дочь", "Муж"))
+        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, relation_name, added_name_id, "Сестра", "Дочь", "Жена"))
       else
-        "Неизвестно"
+        logger.info "ERROR in ask_son_daughter_questions! Кого добавляем - неизвестно: added_relation = #{added_relation} "
     end
     @non_standard_questions_hash = non_standard_questions_hash   #
   end
@@ -446,111 +448,71 @@ module ProfileQuestions
   # заполняются те массивы вопросов, которые следует задавать
   def ask_husband_wife_questions(added_relation, added_name_id) # 7,8
     non_standard_questions_hash = Hash.new
+
+    relation_name = update_before_questions(@relation_add_to)
+
     case added_relation
       when 3  # Добавляем Сына к Мужу/Жене
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Сын", "Брат", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Сын", "Брат", "Дочь"))
-        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, added_name_id, "Сын", "Сын", "Жена"))
-        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, added_name_id, "Сын", "Сын", "Муж"))
-        @standard_msg = "Добавляем Сына к Мужу/Жене"
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, relation_name, added_name_id, "Сын", "Брат", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, relation_name, added_name_id, "Сын", "Брат", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, relation_name, added_name_id, "Сын", "Сын", "Жена"))
+        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, relation_name, added_name_id, "Сын", "Сын", "Муж"))
       when 4  # Добавляем Дочь к Мужу/Жене
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Дочь", "Сестра", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Дочь", "Сестра", "Дочь"))
-        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, added_name_id, "Дочь", "Дочь", "Жена"))
-        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, added_name_id, "Дочь", "Дочь", "Муж"))
-        @standard_msg = "Добавляем Дочь к Мужу/Жене"
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, relation_name, added_name_id, "Дочь", "Сестра", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, relation_name, added_name_id, "Дочь", "Сестра", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@wives_hash, relation_name, added_name_id, "Дочь", "Дочь", "Жена"))
+        non_standard_questions_hash.merge!(add_relation_questions(@husbands_hash, relation_name, added_name_id, "Дочь", "Дочь", "Муж"))
       when 7  # Добавляем Мужа к Жене
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Муж", "Отец", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Муж", "Отец", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, relation_name, added_name_id, "Муж", "Отец", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, relation_name, added_name_id, "Муж", "Отец", "Дочь"))
       when 8  # Добавляем Жену к Мужу
-        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, added_name_id, "Жена", "Мать", "Сын"))
-        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, added_name_id, "Жена", "Мать", "Дочь"))
+        non_standard_questions_hash.merge!(add_relation_questions(@sons_hash, relation_name, added_name_id, "Жена", "Мать", "Сын"))
+        non_standard_questions_hash.merge!(add_relation_questions(@daughters_hash, relation_name, added_name_id, "Жена", "Мать", "Дочь"))
       else
-        "Неизвестно"
+        logger.info "ERROR in ask_husband_wife_questions! Кого добавляем - неизвестно: added_relation = #{added_relation} "
     end
     @non_standard_questions_hash = non_standard_questions_hash   #
   end
 
-  # Формирование массива хэшей ближнего круга
-  #  для дальнейшего анализа
-  # ПОРЯДОК - ВАЖЕН, Т.К. ОПРЕДЕЛЕН ЗАРАНЕЕ!!
-  def make_one_array_of_hashes
-
-    # Тестовый исходный circle_as_hash(user_id, profile_id)
-    @fathers_hash = {173 => 45 }
-    @mothers_hash = {172 => 235 , 174 => 354 }
-    @brothers_hash = {190 => 73, 191 => 66 }
-    @sisters_hash = {1000 => 233, 1001 => 16}
-    @wives_hash = {155 => 292 }
-    @husbands_hash = {194 => 111 }
-    @sons_hash = {156 => 151 }
-    @daughters_hash = {153 => 212, 157 => 214 }
-
-    one_array_of_circle_hashes = []
-    one_array_of_circle_hashes << @fathers_hash
-    one_array_of_circle_hashes << @mothers_hash
-    one_array_of_circle_hashes << @brothers_hash
-    one_array_of_circle_hashes << @sisters_hash
-    one_array_of_circle_hashes << @wives_hash
-    one_array_of_circle_hashes << @husbands_hash
-    one_array_of_circle_hashes << @sons_hash
-    one_array_of_circle_hashes << @daughters_hash
-
-    return one_array_of_circle_hashes
-  end
-
-
-  # Редакция хэшей ближнего кругав зависимости от ответов на вопросы
-  # в нестандартных ситуациях.
-  def circle_hash_reduction(non_standard_answers_hash, one_array_of_hashes)
-    non_standard_answers_hash.each do |key, val|
-      one_array_of_hashes.each do |one_elem_hash|
-        #@one_elem_hash = one_elem_hash # DEBUGG_TO_VIEW
-        one_elem_hash.each do |k,v|
-          one_elem_hash.delete_if {|k, v| k == key && val == false}
-        end
-      end
+  # Формирование данных для генерации вопросов
+  # 1.сокращение соответствующего хэша - удаление из хэша того, к кому добавляем
+  # 2.формирование текстового наименования того, кото добавляем
+  #
+  def update_before_questions(relation_add_to)
+    case relation_add_to
+      when 1
+        relation_name = "Отец"
+        @fathers_hash.delete_if {|k, v| k.to_i == @profile_id } #
+      when 2
+        relation_name = "Мать"
+        @mothers_hash.delete_if {|k, v| k.to_i == @profile_id } #
+      when 3
+        relation_name = "Сын"
+        @sons_hash.delete_if {|k, v| k.to_i == @profile_id } #
+      when 4
+        relation_name = "Дочь"
+        @daughters_hash.delete_if {|k, v| k.to_i == @profile_id } #
+      when 5
+        relation_name = "Брат"
+        @brothers_hash.delete_if {|k, v| k.to_i == @profile_id } #
+      when 6
+        relation_name = "Сестра"
+        @sisters_hash.delete_if {|k, v| k.to_i == @profile_id } #
+      when 7
+        relation_name = "Муж"
+        @husbands_hash.delete_if {|k, v| k.to_i == @profile_id } #
+      when 8
+        relation_name = "Жена"
+        @wives_hash.delete_if {|k, v| k.to_i == @profile_id } #
+      else
+        relation_name = ""
     end
-    return one_array_of_hashes
-  end
+    logger.info "== in ask_brother_sister_questions: @fathers_hash = #{@fathers_hash} "
+    logger.info "== in ask_brother_sister_questions: @brothers_hash = #{@brothers_hash} "
+    logger.info "== in ask_brother_sister_questions: @sisters_hash = #{@sisters_hash} "
+    logger.info "== in ask_brother_sister_questions: relation_name = #{relation_name} "
 
-  # Получение обратно хэшей ближнего круга из массива сокращенных хэшей
-  # в нестандартных ситуациях.
-  # ПОРЯДОК - ВАЖЕН, Т.К. ОПРЕДЕЛЕН ЗАРАНЕЕ!!
-  def make_circle_hashes_reduced(one_array_of_reduced_hashes)
-
-    one_array_of_reduced_hashes.each_with_index do |elem, index|
-      case index
-        when 0
-          @fathers_hash = elem
-        when 1
-          @mothers_hash = elem
-        when 2
-          @brothers_hash = elem
-        when 3
-          @sisters_hash = elem
-        when 4
-          @wives_hash = elem
-        when 5
-          @husbands_hash = elem
-        when 6
-          @sons_hash = elem
-        when 7
-          @daughters_hash = elem
-        else
-          "Nothing"
-      end
-    end
-
-    @reduced_fathers_hash = @fathers_hash       # DEBUGG_TO_VIEW
-    @reduced_mothers_hash = @mothers_hash       # DEBUGG_TO_VIEW
-    @reduced_brothers_hash = @brothers_hash     # DEBUGG_TO_VIEW
-    @reduced_sisters_hash = @sisters_hash       # DEBUGG_TO_VIEW
-    @reduced_wives_hash = @wives_hash           # DEBUGG_TO_VIEW
-    @reduced_husbands_hash = @husbands_hash     # DEBUGG_TO_VIEW
-    @reduced_sons_hash = @sons_hash             # DEBUGG_TO_VIEW
-    @reduced_daughters_hash = @daughters_hash   # DEBUGG_TO_VIEW
-
+    return relation_name
   end
 
 
