@@ -78,15 +78,15 @@ class ProfilesController < ApplicationController
           connected_users:     current_user.get_connected_users #
       }
 
+      ################ MAIN MAKE NON-STANDARD QUESTIONS #####################
       questions_hash = current_user.profile.make_questions(make_questions_data)
-
       logger.info " in create: questions_hash = #{questions_hash}"
 
       @questions = create_questions_from_hash(questions_hash)
-      @profile.answers_hash = params[:answers]
 
-      logger.info "==== Вопросы по новому профилю ====== "
-      logger.info " @questions = #{@questions.inspect}"
+      ################ COILLECT ANSWERS FOR NON-STANDARD QUESTIONS #####################
+      @profile.answers_hash = params[:answers]
+      logger.info "==== Вопросы по новому профилю  @questions = #{@questions.inspect}"
       logger.info " @profile.answers_hash = #{@profile.answers_hash} " if !@profile.answers_hash.nil?
 
       # Validate for relation questions
