@@ -1,16 +1,10 @@
 = render 'path'
+= render 'search_results_button'
 
 #graph-wrapper
+
 
 = javascript_include_tag params[:controller]
 %script
   var access_token = '#{current_user.access_token}';
   getCircles({ profile_id: #{current_user.profile_id}, token: access_token });
-
-
-
-
-
-// GraphHomeModule.init();
-// getCircles({ profile_id: #{current_user.profile_id}, token: access_token });
-// $(function(){ GraphHomeModule.init(); getCircles( {profile_id: #{current_user.profile_id}, token: access_token } )});

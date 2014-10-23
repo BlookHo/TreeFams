@@ -49,7 +49,7 @@ tick = function(){
 
   if (nodes[0]){
     nodes[0].x = width / 2;
-    nodes[0].y = height / 2;
+    nodes[0].y = (height / 2)-100;
   }
 
   node = svg.selectAll(".node");
@@ -260,6 +260,11 @@ getCircles = function(params){
     });
 }
 
+
+$(window).on('resize', function (e) {
+  resizeGraph();
+  start();
+});
 
 
 createSvg();
