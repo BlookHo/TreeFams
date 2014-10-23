@@ -68,9 +68,18 @@ class ProfilesController < ApplicationController
       logger.info " in create: @author_profile_id = #{@author_profile_id}, current_user.get_connected_users = #{current_user.get_connected_users} "
       logger.info " in create: current_user.profile.id = #{current_user.profile.id} "
 
-      questions_hash = current_user.profile.make_questions(current_user.id,
-      @base_profile.id, @base_relation_id.to_i, @profile.relation_id.to_i,
-      @profile.name_id.to_i, @author_profile_id, current_user.get_connected_users )
+      make_questions_data = {
+          current_user_id:     current_user.id, #
+          base_profile_id:     @base_profile.id, #
+          base_relation_id:    @base_relation_id.to_i, #
+          profile_relation_id: @profile.relation_id.to_i, #
+          profile_name_id:     @profile.name_id.to_i, #
+          author_profile_id:   @author_profile_id, #
+          connected_users:     current_user.get_connected_users #
+      }
+
+      questions_hash = current_user.profile.make_questions(make_questions_data)
+
       logger.info " in create: questions_hash = #{questions_hash}"
 
       @questions = create_questions_from_hash(questions_hash)

@@ -16,7 +16,15 @@ module ProfileQuestions
   # name_id_added     ID имени нового отношения
   # author_profile_id  ID профиля автора (центра) круга, для кого нужно собирать хеши и относительно кого строются вопросы
   # user_ids - Id всех объединенных юзеров
-  def make_questions(user_id, profile_id, relation_add_to, relation_added, name_id_added, author_profile_id, user_ids)
+  def make_questions(make_questions_data)
+
+    user_id           = make_questions_data[:current_user_id]
+    profile_id        = make_questions_data[:base_profile_id]
+    relation_add_to   = make_questions_data[:base_relation_id]
+    relation_added    = make_questions_data[:profile_relation_id]
+    name_id_added     = make_questions_data[:profile_name_id]
+    author_profile_id = make_questions_data[:author_profile_id]
+    user_ids          = make_questions_data[:connected_users]
 
     @non_standard_questions_hash = Hash.new
     # Собираем хеш ближнего круга
@@ -223,17 +231,17 @@ module ProfileQuestions
   # Формирование текста одного вопроса
   # При этом в зависимости от того, является ли автор членом хэша родни
   # видоизменяется вид вопроса для автора.
-  def make_one_question(question_data, author_profile_id)
+  def make_one_question(one_question_data, author_profile_id)
 
-    text_relation_add_to = question_data[:text_relation_to]
-    one_question_name    = question_data[:one_name]
-    one_question_profile = question_data[:one_profile]
-    added_relation       = question_data[:added_relation]
-    added_name           = question_data[:added_name]
-    text_relation        = question_data[:text_relation]
-    profile_relation     = question_data[:profile_relation]
-    which_string_1       = question_data[:string_1]
-    which_string_2       = question_data[:string_2]
+    text_relation_add_to = one_question_data[:text_relation_to]
+    one_question_name    = one_question_data[:one_name]
+    one_question_profile = one_question_data[:one_profile]
+    added_relation       = one_question_data[:added_relation]
+    added_name           = one_question_data[:added_name]
+    text_relation        = one_question_data[:text_relation]
+    profile_relation     = one_question_data[:profile_relation]
+    which_string_1       = one_question_data[:string_1]
+    which_string_2       = one_question_data[:string_2]
 
     name_exist = YandexInflect.inflections(Name.find(one_question_name).name)[1]["__content__"].mb_chars.capitalize
     logger.info "make_one_question DEBUG ================="
@@ -272,7 +280,7 @@ module ProfileQuestions
         questions_hash = Hash.new
         for arr_ind in 0 .. names_arr.length - 1
 
-          question_data = {
+          one_question_data = {
               text_relation_to: inflect_text_relation_add_to, #
               one_name:         names_arr[arr_ind], #
               one_profile:      profiles_arr[arr_ind], #
@@ -284,7 +292,7 @@ module ProfileQuestions
               string_2:         which_string_2 #
           }
 
-          one_question = make_one_question(question_data, @tmp_author_profile_id)
+          one_question = make_one_question(one_question_data, @tmp_author_profile_id)
           # Добавляем один вопрос в хэш вопросов касательно нового отношения
           questions_hash.merge!({profiles_arr[arr_ind] => one_question})
         end
