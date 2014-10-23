@@ -261,10 +261,12 @@ getCircles = function(params){
 }
 
 
+
 $(window).on('resize', function (e) {
   resizeGraph();
   start();
 });
+
 
 
 createSvg();

@@ -4,8 +4,19 @@ module Api
 
       respond_to :json
 
-      def index
-        respond_with api_current_user
+      def show
+        certain_koeff = 3
+        search_data = api_current_user.start_search(certain_koeff)
+        respond_with collect_results(search_data)
+      end
+
+      private
+
+      def collect_results(search_data)
+        results = {
+          total: search_data[:by_profiles].size,
+          by_profiles: search_data[:by_profiles]
+        }
       end
 
     end
