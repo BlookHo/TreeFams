@@ -1,18 +1,16 @@
 GraphSignupModule = function(){
 
-  console.log('GraphSignupModule');
+    var width = 960,
+        height = 200;
 
-  var width = 960,
-      height = 200;
+    var color = d3.scale.category10();
 
-  var color = d3.scale.category10();
+    var nodes = [],
+        links = [],
+        relations = [];
 
-  var nodes = [],
-      links = [],
-      relations = [];
-
-  var node, link, relation;
-  var force, svg;
+    var node, link, relation;
+    var force, svg;
 
 
   createForce = function(){
@@ -50,7 +48,6 @@ GraphSignupModule = function(){
 
 
   tick = function(){
-
     if (nodes[0]){
       nodes[0].x = width / 2;
       nodes[0].y = 220;
@@ -395,8 +392,9 @@ GraphSignupModule = function(){
     resizeGraph();
   }
 
-  return{init:init};
+  console.log("Sigup graph width:"+width);
 
+  return{init:init};
 
 
 }(); // end module
