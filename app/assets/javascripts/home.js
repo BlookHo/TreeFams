@@ -11,18 +11,18 @@ var node, link, relation;
 var force, svg;
 
 
-createForce = function(){
-  force = d3.layout.force()
-               .nodes(nodes)
-               .links(links)
-               .charge(-15000)
-               .theta(0.1)
-               .linkDistance(20)
-               .linkStrength(1)
-               .friction(0.7)
-               .size([width, height])
-               .on("tick", tick);
-}
+// createForce = function(){
+//   force = d3.layout.force()
+//                .nodes(nodes)
+//                .links(links)
+//                .charge(-15000)
+//                .theta(0.1)
+//                .linkDistance(-200)
+//                .linkStrength(1)
+//                .friction(0.7)
+//                .size([width, height])
+//                .on("tick", tick);
+// }
 
 
 createSvg = function(){
@@ -78,7 +78,7 @@ start = function(){
   force = d3.layout.force()
                .nodes(nodes)
                .links(links)
-               .charge(-15000)
+               .charge(-7500)
                .theta(0.1)
                .linkDistance(0)
                .linkStrength(1)
