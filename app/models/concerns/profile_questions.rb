@@ -223,7 +223,17 @@ module ProfileQuestions
   # Формирование текста одного вопроса
   # При этом в зависимости от того, является ли автор членом хэша родни
   # видоизменяется вид вопроса для автора.
-  def make_one_question(one_question_name, text_relation_add_to, author_profile_id, one_question_profile, added_relation, added_name, text_relation, profile_relation, which_string_1, which_string_2)
+  def make_one_question(question_data, author_profile_id)
+
+    text_relation_add_to = question_data[:text_relation_to]
+    one_question_name    = question_data[:one_name]
+    one_question_profile = question_data[:one_profile]
+    added_relation       = question_data[:added_relation]
+    added_name           = question_data[:added_name]
+    text_relation        = question_data[:text_relation]
+    profile_relation     = question_data[:profile_relation]
+    which_string_1       = question_data[:string_1]
+    which_string_2       = question_data[:string_2]
 
     name_exist = YandexInflect.inflections(Name.find(one_question_name).name)[1]["__content__"].mb_chars.capitalize
     logger.info "make_one_question DEBUG ================="
@@ -261,7 +271,20 @@ module ProfileQuestions
       if !names_arr.blank?
         questions_hash = Hash.new
         for arr_ind in 0 .. names_arr.length - 1
-          one_question = make_one_question(names_arr[arr_ind], inflect_text_relation_add_to, @tmp_author_profile_id, profiles_arr[arr_ind], inflect_added_relation, inflect_added_name, inflect_text_relation, inflect_profile_relation, which_string_1, which_string_2)
+
+          question_data = {
+              text_relation_to: inflect_text_relation_add_to, #
+              one_name:         names_arr[arr_ind], #
+              one_profile:      profiles_arr[arr_ind], #
+              added_relation:   inflect_added_relation, #
+              added_name:       inflect_added_name, #
+              text_relation:    inflect_text_relation, #
+              profile_relation: inflect_profile_relation, #
+              string_1:         which_string_1, #
+              string_2:         which_string_2 #
+          }
+
+          one_question = make_one_question(question_data, @tmp_author_profile_id)
           # Добавляем один вопрос в хэш вопросов касательно нового отношения
           questions_hash.merge!({profiles_arr[arr_ind] => one_question})
         end
