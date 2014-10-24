@@ -1,4 +1,14 @@
 Weafam::Application.routes.draw do
+
+  resources :messages
+
+  # messages controller
+  match 'make_messages' => 'messages#make_messages', via: :get
+  match 'make_messages' => 'messages#make_messages', via: :post
+
+
+
+
   get "connect_users_trees/connect_users"
   get "connect_users_trees/connect_profiles"
   get "connect_users_trees/connect_trees"

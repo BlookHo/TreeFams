@@ -1,0 +1,64 @@
+%section.admin
+
+%br
+  %h3 INDEX: Отладка работы с сообщениями
+%br
+  %div
+    -#%p
+    -#  @session_id: #{@session_id.inspect}
+    -#%p
+    -#  @navigation_var: #{@navigation_var.inspect}
+  %p
+    @current_user.id = #{current_user.id.inspect}
+    -#%p
+    -#  @menu_choice: #{@menu_choice.inspect}
+%br
+
+  = form_tag do
+    = label_tag 'Введи ID User = Receiver message: :'
+    = number_field_tag 'receiver_id', '', :maxlength => 4, :size => 5
+    = label_tag 'Введи текст сообщения'
+    = text_field_tag 'text', '', :maxlength => 50, :size => 50
+    = submit_tag 'Отправить сообщение (Ввод)'
+
+%br
+  %p
+    @receiver_id = #{@receiver_id.inspect}
+  %p
+    @text = #{@text.inspect}
+%br
+%br
+
+%h1 Listing messages
+%br
+%br
+
+%table
+  %tr
+    %th Text
+    %th Sender
+    %th Receiver
+    %th Read
+    %th Sender deleted
+    %th Receiver deleted
+    %th
+    %th
+    %th
+
+  - @messages.each do |message|
+    %tr
+      %td= message.text
+      %td= message.sender_id
+      %td= message.receiver_id
+      %td= message.read
+      %td= message.sender_deleted
+      %td= message.receiver_deleted
+      %td= link_to 'Show', message
+      %td= link_to 'Edit', edit_message_path(message)
+      %td= link_to 'Destroy', message, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+%br
+%br
+
+= link_to 'New Message', new_message_path
