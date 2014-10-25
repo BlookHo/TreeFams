@@ -1,33 +1,29 @@
 %section.admin
 %br
-  %h3 MAKE_MESSAGES: Работа с сообщениями
-%br
-  %div
-    -#%p
-    -#  @session_id: #{@session_id.inspect}
-    -#%p
-    -#  @navigation_var: #{@navigation_var.inspect}
-  %p
-    @current_user.id = #{current_user.id.inspect}
-    -#%p
-    -#  @menu_choice: #{@menu_choice.inspect}
+  %h3 MAKE_MESSAGES: СООБЩЕНИЯ
 %br
 
   = form_tag do
-    = label_tag 'Введи ID User = Receiver message: :'
+    = label_tag 'Введи ID User = Получателя сообщения (receiver_id): '
     = number_field_tag 'receiver_id', '', :maxlength => 4, :size => 5
-    = label_tag 'Введи текст сообщения'
+    %li
+    = label_tag 'Введи текст сообщения (text):'
     = text_field_tag 'text', '', :maxlength => 50, :size => 50
+    %li
     = submit_tag 'Отправить сообщение (Ввод)'
 
 %br
-  %p
-    @receiver_id = #{@receiver_id.inspect}
-  %p
-    @text = #{@text.inspect}
-%br
-%br
+  %div
+    %h3 Параметры введенного сообщения:
+    %p
+      @current_user.id = #{current_user.id.inspect}
+    %p
+      @receiver_id = #{@receiver_id.inspect}
+    %p
+      @text = #{@text.inspect}
 
+%br
+  %h3 Методы работы с сообщениями
 %ul
   - if current_user
     %li= link_to 'Отправить     - send_message', send_message_path( receiver_id: @receiver_id, text: @text), class: :messages
@@ -40,15 +36,17 @@
     %li= link_to 'Войти in Messages', "make_messages",   class: :login
 
 
-
-%h1 Listing messages
 %br
+%h1 Listing messages
+%p
+  @messages.size = #{@messages.size.inspect}
 %br
 
 - if !@messages.blank?
   %div
     %table
       %tr
+        %th Id
         %th Text
         %th Sender
         %th Receiver
@@ -61,6 +59,7 @@
 
       - @messages.each do |message|
         %tr
+          %td= message.id
           %td= message.text
           %td= message.sender_id
           %td= message.receiver_id
@@ -76,6 +75,77 @@
 %br
 %br
 %br
+  %p
+    @agents.size = #{@agents.size.inspect}
+  -#%p
+  -#  @agents[1] = #{@agents[1].inspect}
+  -#%p
+  -#  @agents = #{@agents.inspect}
+  %p
+    @agents_senders = #{@agents_senders.inspect}
+  %p
+    @agents_receivers = #{@agents_receivers.inspect}
+  %p
+    @agents_talks = #{@agents_talks.inspect}
+
+%br
+%h1 Listing Agents
+%br
+
+- if !@agents.blank?
+  %div
+    %table
+      %tr
+        %th Id
+        %th Text
+        %th Sender
+        %th Receiver
+        %th Read
+        %th Sender deleted
+        %th Receiver deleted
+      - @agents.each do |message|
+        %tr
+          %td= message.id
+          %td= message.text
+          %td= message.sender_id
+          %td= message.receiver_id
+          %td= message.read
+          %td= message.sender_deleted
+          %td= message.receiver_deleted
+- else
+  %h4 No Listing agents - No @tree_arr!
+  %p
+    @agents[0] = #{@agents[0].inspect}
+
+
+%p
+  @all_talks = #{@all_talks.inspect}
+%p
+  @all_talks.size = #{@all_talks.size.inspect}
+%br
+%h1 Listing Agents
+%br
+
+- if !@all_talks.blank?
+  %div
+    %table
+      %tr
+        %th Id
+        %th Text
+        %th Sender
+        %th Receiver
+      - @all_talks.each do |message|
+        %tr
+          %td= message[0]
+          %td= message[1]
+          %td= message[2]
+          %td= message[3]
+- else
+  %h4 No Listing @all_talks!
+  -#%p
+  -#  @agents[0] = #{@agents[0].inspect}
+
+
 
 = link_to 'New Message', make_messages_path
 

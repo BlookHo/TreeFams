@@ -6,6 +6,37 @@ class MessagesController < ApplicationController
 
   before_action :set_message, only: [:show, :edit, :update, :destroy]
 
+  # GET /messages
+  # GET /messages.json
+  def make_messages
+
+    @messages = Message.all.order('created_at desc')
+
+    @receiver_id = params[:receiver_id].to_i #         # FOR ALL USERS MANUAL
+    @text = params[:text] #         # FOR ALL USERS MANUAL
+
+    find_agents # find all contragent of current_user by messages
+
+    @all_talks = []
+    one_talk_arr = []
+    @agents_talks.each do |user_id|
+
+      one_user_talk =  Message.where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").where(:receiver_deleted => false, :sender_deleted => false).select(:id, :text, :sender_id, :receiver_id ).order('created_at').reverse_order
+      one_talk_arr[0] = one_user_talk[0].id
+      one_talk_arr[1] = one_user_talk[0].text
+      one_talk_arr[2] = one_user_talk[0].sender_id
+      one_talk_arr[3] = one_user_talk[0].receiver_id
+
+      @all_talks << one_user_talk
+      one_user_talk = []
+
+    end
+
+
+
+  end
+
+
   def mail #страница сообщений юзера
     unless user_signed_in?
       redirect_to index_path
@@ -29,6 +60,44 @@ class MessagesController < ApplicationController
         :title => 'Brainlook | Личные сообщения',
         :description => "Твои личные сообщения на Brainlook."
     }
+  end
+
+  # Найти всех контрагентов current_user по сообщениям
+  def find_agents
+    @agents = Message.where("receiver_id = #{current_user.id}  or  sender_id = #{current_user.id}").where(:receiver_deleted => false, :sender_deleted => false).group(:id,:sender_id,:receiver_id ).order('created_at').reverse_order#.pluck(:id)#.limit(limit)
+    logger.info "@agents = #{@agents}"
+
+    @agents_senders = Message.where(:receiver_id => current_user.id).pluck(:sender_id).uniq
+    logger.info "@agents_senders = #{@agents_senders}"
+
+    @agents_receivers = Message.where(:sender_id => current_user.id).pluck(:receiver_id).uniq
+    logger.info "@agents_receivers = #{@agents_receivers}"
+
+    @agents_talks = (@agents_senders + @agents_receivers).uniq
+
+
+
+  end
+
+  def show_messages_box #
+    if user_signed_in?
+      count_messages
+      page_number = params[:page]
+      limit = page_number.blank? ? 26 : page_number.to_i*25 + 1
+
+      input_messages = Message.where(:receiver_id => current_user.id, :receiver_deleted => false).order('created_at').reverse_order.limit(limit)
+
+      messages = input_messages(input_messages)
+      @messages = Kaminari.paginate_array(messages).page(params[:page]).per(25)
+
+      respond_to do |format|
+        format.html { redirect_to index_opinions_path }
+        format.js { render "messages/mail/renderMessages" }
+      end
+    else
+      redirect_to index_path
+      flash[:info] = "Для этого нужно авторизоваться"
+    end
   end
 
   def render_inbox #рендерит входящие
@@ -134,7 +203,6 @@ class MessagesController < ApplicationController
         #end
 
       end
-
  #     redirect_to make_messages_path
     else
       redirect_to make_messages_path
@@ -228,19 +296,6 @@ class MessagesController < ApplicationController
   end
 
 
-
-
-  # GET /messages
-  # GET /messages.json
-  def make_messages
-
-    @messages = Message.all.order('created_at desc')
-
-    @receiver_id = params[:receiver_id].to_i #         # FOR ALL USERS MANUAL
-    @text = params[:text] #         # FOR ALL USERS MANUAL
-
-
-  end
 
 
 
