@@ -1,6 +1,6 @@
 %section.admin
 %br
-  %h3 MAKE_MESSAGES: Отладка работы с сообщениями
+  %h3 MAKE_MESSAGES: Работа с сообщениями
 %br
   %div
     -#%p
@@ -28,36 +28,55 @@
 %br
 %br
 
--#%h1 Listing messages
--#%br
--#%br
--#
--#%table
--#  %tr
--#    %th Text
--#    %th Sender
--#    %th Receiver
--#    %th Read
--#    %th Sender deleted
--#    %th Receiver deleted
--#    %th
--#    %th
--#    %th
--#
--#  - @messages.each do |message|
--#    %tr
--#      %td= message.text
--#      %td= message.sender_id
--#      %td= message.receiver_id
--#      %td= message.read
--#      %td= message.sender_deleted
--#      %td= message.receiver_deleted
--#      %td= link_to 'Show', message
--#      %td= link_to 'Edit', edit_message_path(message)
--#      %td= link_to 'Destroy', message, :method => :delete, :data => { :confirm => 'Are you sure?' }
--#
--#%br
--#%br
--#%br
--#
--#= link_to 'New Message', new_message_path
+%ul
+  - if current_user
+    %li= link_to 'Отправить     - send_message', send_message_path( receiver_id: @receiver_id, text: @text), class: :messages
+    %li= link_to 'Прочитать     - read_message', "read_message", class: :messages
+    %li= link_to 'Входящие      - render_inbox', "render_inbox",  class: :messages
+    %li= link_to 'Отправленные  - render_sent', "render_sent",  class: :messages
+    %li= link_to 'Удалить       - delete_message', "delete_message", class: :messages
+    %li= link_to 'Пометить спам - spam_message', "spam_message",  class: :messages
+  - else
+    %li= link_to 'Войти in Messages', "make_messages",   class: :login
+
+
+
+%h1 Listing messages
+%br
+%br
+
+- if !@messages.blank?
+  %div
+    %table
+      %tr
+        %th Text
+        %th Sender
+        %th Receiver
+        %th Read
+        %th Sender deleted
+        %th Receiver deleted
+        %th
+        %th
+        %th
+
+      - @messages.each do |message|
+        %tr
+          %td= message.text
+          %td= message.sender_id
+          %td= message.receiver_id
+          %td= message.read
+          %td= message.sender_deleted
+          %td= message.receiver_deleted
+          %td= link_to 'Show', message
+          %td= link_to 'Edit', edit_message_path(message)
+          %td= link_to 'Destroy', message, :method => :delete, :data => { :confirm => 'Are you sure?' }
+- else
+  %h4 No Listing tree - No @tree_arr!
+
+%br
+%br
+%br
+
+= link_to 'New Message', make_messages_path
+
+

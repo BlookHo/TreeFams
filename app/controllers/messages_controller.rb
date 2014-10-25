@@ -97,32 +97,47 @@ class MessagesController < ApplicationController
   end
 
   def send_message # отправление нового сообщения
-    if user_signed_in? && !banned?
-      if params[:receiver_nick]
-        user = User.find_by_nick(params[:receiver_nick])
-        unless user.blank?
-          receiver_id = user.id
-        end
-      else
-        receiver_id = params[:receiver_id]
+    #if user_signed_in? && !banned?
+    if !current_user.id.blank? # && !banned?
+
+      # Выбор Юзера по имени(?)
+      #if params[:receiver_name]
+      #  user = User.find_by_nick(params[:receiver_name])
+      #  unless user.blank?
+      #    receiver_id = user.id
+      #  end
+      #else
+      #  receiver_id = params[:receiver_id]
+      #end
+
+      receiver_id = params[:receiver_id] # From view
+      text = params[:text] # From view
+
+      if !(receiver_id.blank? || text.blank?)
+        @receiver_id = receiver_id #params[:receiver_id].to_i #
+        @text = params[:text] #
+
+        message = Message.new(text: params[:text], receiver_id: receiver_id, sender_id: current_user.id)
+        message.save
+
+        # Установка уведомления
+ #       if message.persisted?
+          #user_setting = UserSetting.find_by_user_id(receiver_id)
+          #receiver = User.find(receiver_id)
+          #unless user_setting.blank?
+          #  unless receiver.email.blank? || user_setting.notify_messages == false
+          #    UserMailer.message_notify(receiver.email, message.id).deliver
+          #  end
+          #end
+        #else
+        #  flash[:error] = "Ошибки при вводе письма"
+        #end
+
       end
 
-      message = Message.new(text: params[:text], receiver_id: receiver_id, sender_id: current_user.id)
-      message.save
-      if message.persisted?
-        user_setting = UserSetting.find_by_user_id(receiver_id)
-        receiver = User.find(receiver_id)
-        unless user_setting.blank?
-          unless receiver.email.blank? || user_setting.notify_messages == false
-            UserMailer.message_notify(receiver.email, message.id).deliver
-          end
-        end
-      else
-        flash[:error] = "Ошибки при вводе письма"
-      end
-      redirect_to mail_path
+ #     redirect_to make_messages_path
     else
-      redirect_to index_path
+      redirect_to make_messages_path
       flash[:info] = "Для этого нужно авторизоваться"
     end
   end
@@ -219,14 +234,10 @@ class MessagesController < ApplicationController
   # GET /messages.json
   def make_messages
 
-    #@messages = []
-      @messages = Message.all
+    @messages = Message.all.order('created_at desc')
 
     @receiver_id = params[:receiver_id].to_i #         # FOR ALL USERS MANUAL
-
     @text = params[:text] #         # FOR ALL USERS MANUAL
-
-
 
 
   end
@@ -237,16 +248,10 @@ class MessagesController < ApplicationController
   # GET /messages
   # GET /messages.json
   def index
+    @messages = Message.all.order('created_at desc')
 
-    #@messages = []
-    @messages = Message.all
-
-    @receiver_id = params[:receiver_id].to_i #         # FOR ALL USERS MANUAL
-
-    @text = params[:text] #         # FOR ALL USERS MANUAL
-
-
-
+    @receiver_id = params[:receiver_id].to_i #
+    @text = params[:text] #
 
   end
 
