@@ -6,33 +6,55 @@ class MessagesController < ApplicationController
 
   before_action :set_message, only: [:show, :edit, :update, :destroy]
 
+  def show_messages
+    find_agents # find all contragent of current_user by messages
+
+    @talks_and_messages = []
+
+    @agents_talks.each do |user_id|
+      user_talks = {}
+      @user_messages = []
+
+      #one_user_talk =  Message.where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").where(:receiver_deleted => false, :sender_deleted => false).select(:id, :text, :sender_id, :receiver_id ).order('created_at').reverse_order
+      one_user_talk =  Message.where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").where(:receiver_deleted => false, :sender_deleted => false).order('created_at').reverse_order
+
+      one_user_talk.each do |one_message|
+
+        one_message_hash = {}
+
+        one_message_hash.merge!(:message_id => one_message.id)
+        one_message_hash.merge!(:text => one_message.text)
+        one_message_hash.merge!(:sender_id => one_message.sender_id)
+        one_message_hash.merge!(:receiver_id => one_message.receiver_id)
+        one_message_hash.merge!(:read => one_message.read)
+        one_message_hash.merge!(:sender_deleted => one_message.sender_deleted)
+        one_message_hash.merge!(:receiver_deleted => one_message.receiver_deleted)
+
+        @user_messages << one_message_hash
+
+      end
+
+      user_talks.merge!(user_id => @user_messages)
+      @talks_and_messages << user_talks
+
+    end
+
+
+
+
+  end
+
   # GET /messages
   # GET /messages.json
   def make_messages
 
     @messages = Message.all.order('created_at desc')
 
-    @receiver_id = params[:receiver_id].to_i #         # FOR ALL USERS MANUAL
-    @text = params[:text] #         # FOR ALL USERS MANUAL
-
-    find_agents # find all contragent of current_user by messages
-
-    @all_talks = []
-    one_talk_arr = []
-    @agents_talks.each do |user_id|
-
-      one_user_talk =  Message.where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").where(:receiver_deleted => false, :sender_deleted => false).select(:id, :text, :sender_id, :receiver_id ).order('created_at').reverse_order
-      one_talk_arr[0] = one_user_talk[0].id
-      one_talk_arr[1] = one_user_talk[0].text
-      one_talk_arr[2] = one_user_talk[0].sender_id
-      one_talk_arr[3] = one_user_talk[0].receiver_id
-
-      @all_talks << one_user_talk
-      one_user_talk = []
-
-    end
+    @receiver_id = params[:receiver_id].to_i #
+    @text = params[:text] #
 
 
+    show_messages
 
   end
 

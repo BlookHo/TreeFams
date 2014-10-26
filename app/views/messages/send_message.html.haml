@@ -1,5 +1,27 @@
 %section.admin
 %br
+  %h3 MAKE_MESSAGES: СООБЩЕНИЯ
+%br
+
+  = form_tag do
+    = label_tag 'Введи ID User = Получателя сообщения (receiver_id): '
+    = number_field_tag 'receiver_id', '', :maxlength => 4, :size => 5
+    %li
+    = label_tag 'Введи текст сообщения (text):'
+    = text_field_tag 'text', '', :maxlength => 50, :size => 50
+    %li
+    = submit_tag 'Отправить сообщение (Ввод)'
+
+%br
+  %div
+    %h3 Параметры введенного сообщения:
+    %p
+      @current_user.id = #{current_user.id.inspect}
+    %p
+      @receiver_id = #{@receiver_id.inspect}
+    %p
+      @text = #{@text.inspect}
+%br
   %h3 SEND_MESSAGES: Ввод нового сообщения
 
 %br

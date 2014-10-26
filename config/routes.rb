@@ -6,6 +6,9 @@ Weafam::Application.routes.draw do
   match 'make_messages' => 'messages#make_messages', via: :get
   match 'make_messages' => 'messages#make_messages', via: :post
 
+  match 'show_messages' => 'messages#show_messages', via: :get
+  match 'show_messages' => 'messages#show_messages', via: :post
+
   match 'send_message' => 'messages#send_message', via: :get
   #match 'send_message' => 'messages#send_message', via: :post
 

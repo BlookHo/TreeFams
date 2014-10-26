@@ -37,7 +37,7 @@
 
 
 %br
-%h1 Listing messages
+%h1 Все сообщения (Listing messages)
 %p
   @messages.size = #{@messages.size.inspect}
 %br
@@ -73,14 +73,6 @@
   %h4 No Listing tree - No @tree_arr!
 
 %br
-%br
-%br
-  %p
-    @agents.size = #{@agents.size.inspect}
-  -#%p
-  -#  @agents[1] = #{@agents[1].inspect}
-  -#%p
-  -#  @agents = #{@agents.inspect}
   %p
     @agents_senders = #{@agents_senders.inspect}
   %p
@@ -89,7 +81,7 @@
     @agents_talks = #{@agents_talks.inspect}
 
 %br
-%h1 Listing Agents
+%h1 Сообщения одного Юзера (Listing Agents)
 %br
 
 - if !@agents.blank?
@@ -117,34 +109,72 @@
   %p
     @agents[0] = #{@agents[0].inspect}
 
-
-%p
-  @all_talks = #{@all_talks.inspect}
-%p
-  @all_talks.size = #{@all_talks.size.inspect}
 %br
-%h1 Listing Agents
-%br
+-#%p
+-#  @user_messages = #{@user_messages.inspect}
+-#%p
+-#  @talks_and_messages.size = #{@talks_and_messages.size.inspect}
+-#%p
+-#  @talks_and_messages = #{@talks_and_messages.inspect}
 
-- if !@all_talks.blank?
-  %div
-    %table
-      %tr
-        %th Id
-        %th Text
-        %th Sender
-        %th Receiver
-      - @all_talks.each do |message|
-        %tr
-          %td= message[0]
-          %td= message[1]
-          %td= message[2]
-          %td= message[3]
+
+%br
+%br
+%h1 Сообщения одного Юзера (Listing Agents) -
+%br
+- if !@talks_and_messages.blank?
+
+  - @talks_and_messages.each do |one_talk_arr|
+    - if !one_talk_arr.blank?
+      %div
+        %table
+          %tr
+            %th User_Id
+            %th
+
+          - one_talk_arr.each do |user_id, user_talk_arr|
+            %tr
+              %td= user_id
+              %td= link_to 'Отправить     - send_message', send_message_path
+
+              - if !user_talk_arr.blank?
+                %div
+                  %table
+                    %tr
+                      %th Id Msg
+                      %th Text
+                      %th Sender
+                      %th Receiver
+                      %th Read
+                      %th Sender_deleted
+                      %th Receiver_deleted
+                      %th
+                      %th
+                      %th
+                      - user_talk_arr.each do |one_talk_messages|
+                        %tr
+                        %td= one_talk_messages.values_at(:message_id).flatten[0]
+                        %td= one_talk_messages.values_at(:text).flatten[0]
+                        %td= one_talk_messages.values_at(:sender_id).flatten[0]
+                        %td= one_talk_messages.values_at(:receiver_id).flatten[0]
+                        %td= one_talk_messages.values_at(:read).flatten[0]
+                        %td= one_talk_messages.values_at(:sender_deleted).flatten[0]
+                        %td= one_talk_messages.values_at(:receiver_deleted).flatten[0]
+                        %td= link_to 'Прочитать', "read_message", class: :messages
+                        %td= link_to 'Удалить', "delete_message", class: :messages
+                        %td= link_to 'Cпам', "spam_message",  class: :messages
+              - else
+                %h4 No Listing one_talk_messages!
+    - else
+      %h4 No Listing @talks_and_messages!
+
 - else
-  %h4 No Listing @all_talks!
-  -#%p
-  -#  @agents[0] = #{@agents[0].inspect}
+  %h4 No Listing @talks_and_messages!
 
+
+%br
+%br
+%br
 
 
 = link_to 'New Message', make_messages_path
