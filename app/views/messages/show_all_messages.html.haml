@@ -1,0 +1,66 @@
+
+%p
+  @current_user.id = #{current_user.id.inspect}
+%br
+= link_to 'Поиск собеседника', search_dialoge_agent_path
+%br
+%br
+%h1 Диалоги всех Юзеров (Listing All Dialoges)
+= link_to 'Смотреть все диалоги:', show_all_dialoges_path
+%br
+%h1 Диалоги и Сообщения всех Юзеров (Listing All Dialoges & Messages)
+%br
+- if !@talks_and_messages.blank?
+
+  - @talks_and_messages.each do |one_talk_arr|
+    %br
+    - if !one_talk_arr.blank?
+      %div
+        %table
+          %tr
+            %th User_Id
+            %th
+
+          - one_talk_arr.each do |user_id, user_talk_arr|
+            %tr
+            %tr
+              %td= user_id
+              %td= link_to 'Написать сообщение .', send_message_path(user_id: user_id)
+              %td= link_to 'Показать весь диалог с этим Юзером .', show_one_dialoge_path(user_id: user_id), class: :messages
+              %td= link_to 'Удалить диалог .', "", class: :messages
+              -#%td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
+            %li
+
+            - if !user_talk_arr.blank?
+              %table
+                %tr
+                %tr
+                  %th Id Msg
+                  %th Text
+                  %th Sender
+                  %th Receiver
+                  %th Read
+                  %th Sender_deleted
+                  %th Receiver_deleted
+                  %th
+                  %th
+                - user_talk_arr.each do |one_talk_messages|
+                  %tr
+                  %td= one_talk_messages.values_at(:message_id).flatten[0]
+                  %td= one_talk_messages.values_at(:text).flatten[0][0..9]
+                  %td= one_talk_messages.values_at(:sender_id).flatten[0]
+                  %td= one_talk_messages.values_at(:receiver_id).flatten[0]
+                  %td= one_talk_messages.values_at(:read).flatten[0]
+                  %td= one_talk_messages.values_at(:sender_deleted).flatten[0]
+                  %td= one_talk_messages.values_at(:receiver_deleted).flatten[0]
+                  %td= link_to 'Прочитать', read_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]), class: :messages
+                  %td= link_to 'Удалить сообщение .', delete_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]), class: :messages
+            - else
+              %h4 No Listing user_talk_arr!
+    - else
+      %h4 No Listing one_talk_arr!
+
+- else
+  %h4 No Listing @talks_and_messages!
+
+%br

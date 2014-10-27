@@ -1,6 +1,8 @@
 %section.admin
+%p
+  @current_user.id = #{current_user.id.inspect}
 %br
-  %h3 MAKE_MESSAGES: СООБЩЕНИЯ
+  %h3 SEND_MESSAGE: ОТПРАВИТЬ СООБЩЕНИЕ
 %br
 
   = form_tag do
@@ -30,5 +32,8 @@
   %p
     @text = #{@text.inspect}
 
+
+
+= link_to 'Возврат к списку диалогов и сообщений', show_all_messages_path
 
 

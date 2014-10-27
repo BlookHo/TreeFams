@@ -6,58 +6,235 @@ class MessagesController < ApplicationController
 
   before_action :set_message, only: [:show, :edit, :update, :destroy]
 
-  def show_messages
-    find_agents # find all contragent of current_user by messages
+  # Получаем диалоги и сообщения всех контрагентов текущего юзера
+  # Альтернативное отображение.
+  def show_all_messages
 
-    @talks_and_messages = []
+    if current_user
+      find_agents # find all contragent of current_user by messages
+      @talks_and_messages = []
+      @agents_talks.each do |user_id|
+        user_dialoge = get_user_messages(user_id)
+        @talks_and_messages << user_dialoge
+      end
+    else
+      redirect_to login_path
+      flash[:info] = "Для этого нужно авторизоваться"
+    end
 
-    @agents_talks.each do |user_id|
-      user_talks = {}
-      @user_messages = []
+  end
 
-      #one_user_talk =  Message.where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").where(:receiver_deleted => false, :sender_deleted => false).select(:id, :text, :sender_id, :receiver_id ).order('created_at').reverse_order
-      one_user_talk =  Message.where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").where(:receiver_deleted => false, :sender_deleted => false).order('created_at').reverse_order
+  # Получаем диалоги всех контрагентов текущего юзера
+  def show_all_dialoges
 
-      one_user_talk.each do |one_message|
+    if current_user
+      find_agents # find all contragent of current_user by messages
 
-        one_message_hash = {}
+      @talks_and_messages = []
+      @agents_talks.each do |user_id|
+        user_dialoge = get_user_messages(user_id)
+        @talks_and_messages << user_dialoge
+      end
+    else
+      redirect_to login_path
+      flash[:info] = "Для этого нужно авторизоваться"
+    end
+    @new_mail_count = count_messages
+    logger.info "===== @new_mail_count = #{@new_mail_count}"
 
-        one_message_hash.merge!(:message_id => one_message.id)
-        one_message_hash.merge!(:text => one_message.text)
-        one_message_hash.merge!(:sender_id => one_message.sender_id)
-        one_message_hash.merge!(:receiver_id => one_message.receiver_id)
-        one_message_hash.merge!(:read => one_message.read)
-        one_message_hash.merge!(:sender_deleted => one_message.sender_deleted)
-        one_message_hash.merge!(:receiver_deleted => one_message.receiver_deleted)
+  end
 
-        @user_messages << one_message_hash
+  # Получаем массив сообщений для одного юзера
+  def get_user_messages(user_id)
+    user_dialoge = {}
+    user_messages = []
+    one_user_talk =  Message.where(:receiver_deleted => false).where(:sender_deleted => false).where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").order('created_at').reverse_order
+    one_user_talk.each do |one_message|
+      one_message_hash = {}
+      one_message_hash.merge!(:message_id => one_message.id)
+      one_message_hash.merge!(:text => one_message.text)
+      one_message_hash.merge!(:sender_id => one_message.sender_id)
+      one_message_hash.merge!(:receiver_id => one_message.receiver_id)
+      one_message_hash.merge!(:read => one_message.read)
+      one_message_hash.merge!(:sender_deleted => one_message.sender_deleted)
+      one_message_hash.merge!(:receiver_deleted => one_message.receiver_deleted)
+      user_messages << one_message_hash
+    end
+    user_dialoge.merge!(user_id => user_messages)
+    return user_dialoge
+  end
+
+
+  # Получаем диалог одного юзера
+  def show_one_dialoge
+
+    if current_user
+      find_agents # find all contragent of current_user by messages
+      user_id = params[:user_id] # From view
+
+      @talks_and_messages = []
+      user_dialoge = get_user_messages(user_id)
+      @talks_and_messages << user_dialoge
+    else
+      redirect_to login_path
+      flash[:info] = "Для этого нужно авторизоваться"
+    end
+
+  end
+
+  #
+  def search_dialoge_agent
+
+
+  end
+
+  def send_message # отправление нового сообщения
+
+    if !current_user.id.blank? # && !banned?
+
+      # Выбор Юзера по имени(?)
+      #if params[:receiver_name]
+      #  user = User.find_by_nick(params[:receiver_name])
+      #  unless user.blank?
+      #    receiver_id = user.id
+      #  end
+      #else
+      #  receiver_id = params[:receiver_id]
+      #end
+
+      receiver_id = params[:receiver_id] # From view
+      text = params[:text] # From view
+
+      if !(receiver_id.blank? || text.blank?)
+        @receiver_id = receiver_id #
+        @text = params[:text] #
+
+        message = Message.new(text: params[:text], receiver_id: receiver_id, sender_id: current_user.id)
+        message.save
+
+        # Установка уведомления
+        #       if message.persisted?
+        #user_setting = UserSetting.find_by_user_id(receiver_id)
+        #receiver = User.find(receiver_id)
+        #unless user_setting.blank?
+        #  unless receiver.email.blank? || user_setting.notify_messages == false
+        #    UserMailer.message_notify(receiver.email, message.id).deliver
+        #  end
+        #end
+        #else
+        #  flash[:error] = "Ошибки при вводе письма"
+        #end
 
       end
 
-      user_talks.merge!(user_id => @user_messages)
-      @talks_and_messages << user_talks
-
+    else
+      redirect_to login_path
+      flash[:info] = "Для этого нужно авторизоваться"
     end
 
+  end
 
+  # Удаление выбранного one_message
+  # GET /messages
+  def delete_message
+
+    #user_id = params[:user_id] # From view # всего диалога
+
+    if current_user
+
+      #one_user_dialoge =  Message.where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})")#.where(:receiver_deleted => false)#, :sender_deleted => false)#.order('created_at').reverse_order
+      #one_user_dialoge.each do |one_message|
+      #
+      #  one_message.receiver_deleted = true if one_message.receiver_id == current_user.id
+      #  one_message.sender_deleted = true   if one_message.sender_id == current_user.id
+      #  one_message.save
+      #
+      #
+      #end
+
+      message = Message.find(params[:message_id])
+      if message.receiver_id == current_user.id
+        message.receiver_deleted = true
+        message.save
+        user_id = message.sender_id
+        if message.persisted?
+          flash[:success] = "Письмо удалено"
+        else
+          flash[:error] = "Ошибки при удалении письма"
+        end
+      else
+        flash[:error] = "Ты не можешь удалить это сообщение"
+      end
+      if message.sender_id == current_user.id
+        message.sender_deleted = true
+        message.save
+        user_id = message.receiver_id
+
+        if message.persisted?
+          flash[:success] = "Письмо удалено"
+        else
+          flash[:error] = "Ошибки при удалении письма"
+        end
+      else
+        flash[:error] = "Ты не можешь удалить это сообщение"
+      end
+      redirect_to show_all_dialoges_path(user_id: user_id)
+    else
+      redirect_to login_path
+      flash[:info] = "Для этого нужно авторизоваться"
+    end
 
 
   end
 
   # GET /messages
-  # GET /messages.json
-  def make_messages
+  def spam_dialoge
+    user_id = params[:user_id] # From view
 
-    @messages = Message.all.order('created_at desc')
-
-    @receiver_id = params[:receiver_id].to_i #
-    @text = params[:text] #
-
-
-    show_messages
 
   end
 
+  def read_message # чтение сообщения
+
+    if current_user
+      message = Message.find(params[:message_id])
+      if message.receiver_id == current_user.id || message.sender_id == current_user.id
+        if message.read == false #
+          message.read = true
+          message.save
+        end
+        user_id = message.sender_id  if message.receiver_id == current_user.id
+        user_id = message.receiver_id  if message.sender_id == current_user.id
+
+        # Изменение счетчика непрочитанных сообщений - для уведомлений
+
+      end
+
+      new_messages_count = count_messages
+      logger.info "===== new_messages_count = #{new_messages_count}"
+
+      respond_to do |format|
+        format.html { redirect_to show_one_dialoge_path(user_id: user_id) }
+        format.js { render "messages/mail/renderMessage" }
+      end
+    else
+      redirect_to login_path
+      flash[:info] = "Для этого нужно авторизоваться"
+    end
+
+  end
+
+  ## GET /messages
+  ## GET /messages.json
+  #def make_messages
+  #
+  #  @messages = Message.all.order('created_at desc')
+  #
+  #  @receiver_id = params[:receiver_id].to_i #
+  #  @text = params[:text] #
+  #
+  #end
+  #
 
   def mail #страница сообщений юзера
     unless user_signed_in?
@@ -86,18 +263,18 @@ class MessagesController < ApplicationController
 
   # Найти всех контрагентов current_user по сообщениям
   def find_agents
-    @agents = Message.where("receiver_id = #{current_user.id}  or  sender_id = #{current_user.id}").where(:receiver_deleted => false, :sender_deleted => false).group(:id,:sender_id,:receiver_id ).order('created_at').reverse_order#.pluck(:id)#.limit(limit)
-    logger.info "@agents = #{@agents}"
 
-    @agents_senders = Message.where(:receiver_id => current_user.id).pluck(:sender_id).uniq
-    logger.info "@agents_senders = #{@agents_senders}"
+    #@agents = Message.where("receiver_id = #{current_user.id}  or  sender_id = #{current_user.id}").where(:receiver_deleted => false, :sender_deleted => false).group(:id,:sender_id,:receiver_id ).order('created_at').reverse_order#.pluck(:id)#.limit(limit)
+    @agents = Message.where("receiver_id = #{current_user.id}  or  sender_id = #{current_user.id}").where(:receiver_deleted => false, :sender_deleted => false).order('created_at').reverse_order.pluck(:id)#.limit(limit)
+    logger.info " ++++++++++++++++++ @agents = #{@agents}"
 
-    @agents_receivers = Message.where(:sender_id => current_user.id).pluck(:receiver_id).uniq
-    logger.info "@agents_receivers = #{@agents_receivers}"
+    agents_senders = Message.where(:receiver_id => current_user.id).pluck(:sender_id).uniq
+    logger.info "@agents_senders = #{agents_senders}"
 
-    @agents_talks = (@agents_senders + @agents_receivers).uniq
+    agents_receivers = Message.where(:sender_id => current_user.id).pluck(:receiver_id).uniq
+    logger.info "@agents_receivers = #{agents_receivers}"
 
-
+    @agents_talks = (agents_senders + agents_receivers).uniq
 
   end
 
@@ -187,111 +364,7 @@ class MessagesController < ApplicationController
     end
   end
 
-  def send_message # отправление нового сообщения
-    #if user_signed_in? && !banned?
-    if !current_user.id.blank? # && !banned?
 
-      # Выбор Юзера по имени(?)
-      #if params[:receiver_name]
-      #  user = User.find_by_nick(params[:receiver_name])
-      #  unless user.blank?
-      #    receiver_id = user.id
-      #  end
-      #else
-      #  receiver_id = params[:receiver_id]
-      #end
-
-      receiver_id = params[:receiver_id] # From view
-      text = params[:text] # From view
-
-      if !(receiver_id.blank? || text.blank?)
-        @receiver_id = receiver_id #params[:receiver_id].to_i #
-        @text = params[:text] #
-
-        message = Message.new(text: params[:text], receiver_id: receiver_id, sender_id: current_user.id)
-        message.save
-
-        # Установка уведомления
- #       if message.persisted?
-          #user_setting = UserSetting.find_by_user_id(receiver_id)
-          #receiver = User.find(receiver_id)
-          #unless user_setting.blank?
-          #  unless receiver.email.blank? || user_setting.notify_messages == false
-          #    UserMailer.message_notify(receiver.email, message.id).deliver
-          #  end
-          #end
-        #else
-        #  flash[:error] = "Ошибки при вводе письма"
-        #end
-
-      end
- #     redirect_to make_messages_path
-    else
-      redirect_to make_messages_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
-  end
-
-
-  def delete_message #удаление сообщения
-    if user_signed_in?
-      message = Message.find(params[:message_id])
-      if params[:type] == "inbox"
-        if message.receiver_id == current_user.id
-          message.receiver_deleted = true
-          message.save
-
-          if message.persisted?
-            flash[:success] = "Письмо удалено"
-          else
-            flash[:error] = "Ошибки при удалении письма"
-          end
-        else
-          flash[:error] = "Ты не можешь удалить это сообщение"
-        end
-      else
-        if message.sender_id == current_user.id
-          message.sender_deleted = true
-          message.save
-
-          if message.persisted?
-            flash[:success] = "Письмо удалено"
-          else
-            flash[:error] = "Ошибки при удалении письма"
-          end
-        else
-          flash[:error] = "Ты не можешь удалить это сообщение"
-        end
-      end
-      redirect_to mail_path
-    else
-      redirect_to index_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
-  end
-
-  def read_message #чтение сообщения
-    if user_signed_in?
-      message = Message.find(params[:message_id])
-      if message.receiver_id == current_user.id || message.sender_id == current_user.id
-        if message.read == false && params[:type] == "inbox"
-          message.read = true
-          message.save
-        end
-        user = params[:type] == "inbox" ? User.find(message.sender_id) : User.find(message.receiver_id)
-        follower = Follower.where(reader_id: current_user.id, writer_id: user.id, active: true).any? ? true : false
-        @message = {text: message.text, user_id: user.id, nick: user.nick, avatar: user.avatar.url(:original), created_at: message.created_at, follower: follower}
-      end
-      count_messages
-      respond_to do |format|
-        format.html { redirect_to mail_path }
-        format.js { render "messages/mail/renderMessage" }
-      end
-    else
-      redirect_to index_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
-  end
 
   def spam_message #отметка автора сообщения как спаммера
     if user_signed_in? && !banned?

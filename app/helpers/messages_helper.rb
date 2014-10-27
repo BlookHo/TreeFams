@@ -1,17 +1,20 @@
 # encoding: utf-8
 module MessagesHelper
 
-  def count_messages(check = false, *user_id) #подсчитывает количество новых писем у юзера
-    if user_signed_in?
-      user_id = current_user.id if user_id.blank?
-      @new_mail_count = Message.where(receiver_id: user_id, read:false, receiver_deleted: false).count
-      unless check == true
-        session[:new_messages] = {:value => @new_mail_count, :updated_at => Time.current}
-      end
-      if session[:new_messages].blank?
-        session[:new_messages] = {:value => @new_mail_count, :updated_at => Time.current}
-      end
+  def count_messages  #(check = false, *user_id) #подсчитывает количество новых писем у юзера
+    if current_user
+      user_id = current_user.id # if user_id.blank?
+      new_messages_count = Message.where(receiver_id: current_user.id, read:false, receiver_deleted: false).count
+
+      #unless check == true
+      #  session[:new_messages] = {:value => @new_mail_count, :updated_at => Time.current}
+      #end
+      #if session[:new_messages].blank?
+      #  session[:new_messages] = {:value => @new_mail_count, :updated_at => Time.current}
+      #end
+
     end
+    return new_messages_count
   end
 
   def input_messages(input_messages) #хэш для отображения входящих сообщений юзера

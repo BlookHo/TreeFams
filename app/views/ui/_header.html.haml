@@ -5,7 +5,7 @@
     %ul
       - if current_user
         %li= link_to 'Уведомления', '#', class: :notifications
-        %li= link_to 'Сообщения', "show_messages", class: :messages
+        %li= link_to 'Сообщения', "show_all_messages", class: :messages
         %li= link_to 'Выйти', :logout,  class: :logout
       - else
         %li= link_to 'Войти', :login,   class: :login
