@@ -2,33 +2,24 @@
 %p
   @current_user.id = #{current_user.id.inspect}
 %br
-%br
-%h1 Диалог выбранного Юзера (show_one_dialoge: Listing Dialoge w/One User )
-%br
-%br
-= link_to 'Написать сообщение .', make_messages_path
-%br
-%h1 Сообщения выбранного Юзерa (Listing One User Messages)
-%br
-%br
+%h1 ДИАЛОГ ВЫБРАННОГО ЮЗЕРА (show_one_dialoge: Listing Dialoge w/One User )
 %br
 - if !@talks_and_messages.blank?
 
   - @talks_and_messages.each do |one_talk_arr|
-    %br
     - if !one_talk_arr.blank?
       %div
         %table
           %tr
             %th User_Id
             %th
+            %th
 
           - one_talk_arr.each do |user_id, user_talk_arr|
-            %tr
-            %tr
-              %td= user_id
-              %td= link_to 'Написать сообщение .', send_message_path(user_id: user_id)
-              %td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
+            %td= user_id
+            %td= link_to 'Написать сообщение .', send_message_path(receiver_id: user_id),  class: :messages
+            %br
+            %td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
             %li
             - if !user_talk_arr.blank?
               %table

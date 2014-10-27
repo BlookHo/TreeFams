@@ -2,7 +2,7 @@
 %p
   @current_user.id = #{current_user.id.inspect}
 %br
-= link_to 'Поиск собеседника', search_dialoge_agent_path
+-#= link_to 'Поиск собеседника', search_dialoge_agent_path
 %br
 %br
 %h1 Диалоги всех Юзеров (Listing All Dialoges)
@@ -25,7 +25,7 @@
             %tr
             %tr
               %td= user_id
-              %td= link_to 'Написать сообщение .', send_message_path(user_id: user_id)
+              %td= link_to 'Написать сообщение .', send_message_path(receiver_id: user_id)
               %td= link_to 'Показать весь диалог с этим Юзером .', show_one_dialoge_path(user_id: user_id), class: :messages
               %td= link_to 'Удалить диалог .', "", class: :messages
               -#%td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages

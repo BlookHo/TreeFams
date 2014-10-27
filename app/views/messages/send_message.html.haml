@@ -7,7 +7,7 @@
 
   = form_tag do
     = label_tag 'Введи ID User = Получателя сообщения (receiver_id): '
-    = number_field_tag 'receiver_id', '', :maxlength => 4, :size => 5
+    = number_field_tag 'receiver_id', '', :placeholder => params[:receiver_id], :maxlength => 4, :size => 5
     %li
     = label_tag 'Введи текст сообщения (text):'
     = text_field_tag 'text', '', :maxlength => 50, :size => 50
@@ -23,17 +23,12 @@
       @receiver_id = #{@receiver_id.inspect}
     %p
       @text = #{@text.inspect}
-%br
-  %h3 SEND_MESSAGES: Ввод нового сообщения
 
 %br
-  %p
-    @receiver_id = #{@receiver_id.inspect}
-  %p
-    @text = #{@text.inspect}
-
-
-
+= link_to 'Смотреть диалог с Юзером - получателем: ', show_one_dialoge_path(user_id: params[:receiver_id]), class: :messages
+%br
+= link_to 'Смотреть все диалоги: ', show_all_dialoges_path
+%br
 = link_to 'Возврат к списку диалогов и сообщений', show_all_messages_path
 
 

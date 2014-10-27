@@ -3,7 +3,7 @@
   @current_user.id = #{current_user.id.inspect}
 %br
 %h1 Диалоги всех Юзеров (Listing All Dialoges)
-= link_to 'Написать сообщение .', send_message_path
+-#= link_to 'Написать сообщение .', send_message_path
 %br
 %br
 - if !@talks_and_messages.blank?
@@ -21,8 +21,8 @@
             %tr
             %tr
               %td= user_id
-              %td= link_to 'Написать сообщение .', send_message_path(user_id: user_id)
-              %td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
+              %td= link_to 'Написать сообщение .', send_message_path(receiver_id: user_id)
+              -#%td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
             %li
 
             - if !user_talk_arr.blank?
@@ -61,10 +61,6 @@
 %br
 %br
 %br
-
-
-= link_to 'Написать сообщение .', send_message_path
-
 = link_to 'Смотреть все Диалоги и Сообщения:', show_all_messages_path
 
 -#
