@@ -31,7 +31,7 @@ class MainController < ApplicationController
       @tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq # DEBUGG_TO_VIEW
 
       ##### КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ ##########
-      @certain_koeff = params[:certain_koeff] || 3 # (for 0-8 relations)
+      @certain_koeff = params[:certain_koeff] || 4 # (for 0-8 relations)
       @certain_koeff = @certain_koeff.to_i
       ###############
       #logger.info "@certain_koeff = #{@certain_koeff}"
@@ -72,12 +72,13 @@ class MainController < ApplicationController
         return check_results_hash, new_uniq_profiles_hash
       end
 
-      uniq_profiles_pairs =
-      {89=>{14=>103, 15=>103},
-       91=>{14=>108, 15=>2108},
-       92=>{14=>107, 15=>107},
-       90=>{14=>1106, 15=>106},
-       88=>{14=>109, 15=>109, 16=>3134}}
+      #uniq_profiles_pairs =
+      #{89=>{14=>103, 15=>103},
+      # 91=>{14=>108, 15=>2108},
+      # 92=>{14=>107, 15=>107},
+      # 90=>{14=>1106, 15=>106},
+      # 88=>{14=>109, 15=>109, 16=>3134}}
+
       #trees_profiles_hash = collect_trees_profiles(uniq_profiles_pairs)
       #logger.info "** after collect_trees_profiles begin: trees_profiles_hash = #{trees_profiles_hash} "
       #

@@ -1,5 +1,93 @@
 class ExtraCode
 
+
+  #FROM module ProfileQuestions
+
+ # Формирование массива хэшей ближнего круга
+ #  для дальнейшего анализа
+ # ПОРЯДОК - ВАЖЕН, Т.К. ОПРЕДЕЛЕН ЗАРАНЕЕ!!
+ def make_one_array_of_hashes
+
+   # Тестовый исходный circle_as_hash(user_id, profile_id)
+   @fathers_hash = {173 => 45 }
+   @mothers_hash = {172 => 235 , 174 => 354 }
+   @brothers_hash = {190 => 73, 191 => 66 }
+   @sisters_hash = {1000 => 233, 1001 => 16}
+   @wives_hash = {155 => 292 }
+   @husbands_hash = {194 => 111 }
+   @sons_hash = {156 => 151 }
+   @daughters_hash = {153 => 212, 157 => 214 }
+
+   one_array_of_circle_hashes = []
+   one_array_of_circle_hashes << @fathers_hash
+   one_array_of_circle_hashes << @mothers_hash
+   one_array_of_circle_hashes << @brothers_hash
+   one_array_of_circle_hashes << @sisters_hash
+   one_array_of_circle_hashes << @wives_hash
+   one_array_of_circle_hashes << @husbands_hash
+   one_array_of_circle_hashes << @sons_hash
+   one_array_of_circle_hashes << @daughters_hash
+
+   return one_array_of_circle_hashes
+ end
+
+
+ # Редакция хэшей ближнего кругав зависимости от ответов на вопросы
+ # в нестандартных ситуациях.
+ def circle_hash_reduction(non_standard_answers_hash, one_array_of_hashes)
+   non_standard_answers_hash.each do |key, val|
+     one_array_of_hashes.each do |one_elem_hash|
+       #@one_elem_hash = one_elem_hash # DEBUGG_TO_VIEW
+       one_elem_hash.each do |k,v|
+         one_elem_hash.delete_if {|k, v| k == key && val == false}
+       end
+     end
+   end
+   return one_array_of_hashes
+ end
+
+ # Получение обратно хэшей ближнего круга из массива сокращенных хэшей
+ # в нестандартных ситуациях.
+ # ПОРЯДОК - ВАЖЕН, Т.К. ОПРЕДЕЛЕН ЗАРАНЕЕ!!
+ def make_circle_hashes_reduced(one_array_of_reduced_hashes)
+
+   one_array_of_reduced_hashes.each_with_index do |elem, index|
+     case index
+       when 0
+         @fathers_hash = elem
+       when 1
+         @mothers_hash = elem
+       when 2
+         @brothers_hash = elem
+       when 3
+         @sisters_hash = elem
+       when 4
+         @wives_hash = elem
+       when 5
+         @husbands_hash = elem
+       when 6
+         @sons_hash = elem
+       when 7
+         @daughters_hash = elem
+       else
+         "Nothing"
+     end
+   end
+
+   @reduced_fathers_hash = @fathers_hash       # DEBUGG_TO_VIEW
+   @reduced_mothers_hash = @mothers_hash       # DEBUGG_TO_VIEW
+   @reduced_brothers_hash = @brothers_hash     # DEBUGG_TO_VIEW
+   @reduced_sisters_hash = @sisters_hash       # DEBUGG_TO_VIEW
+   @reduced_wives_hash = @wives_hash           # DEBUGG_TO_VIEW
+   @reduced_husbands_hash = @husbands_hash     # DEBUGG_TO_VIEW
+   @reduced_sons_hash = @sons_hash             # DEBUGG_TO_VIEW
+   @reduced_daughters_hash = @daughters_hash   # DEBUGG_TO_VIEW
+
+ end
+
+
+
+
   # Ввод одного профиля древа. Проверка Имя-Пол.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
