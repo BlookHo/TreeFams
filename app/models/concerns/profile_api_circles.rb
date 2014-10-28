@@ -11,7 +11,6 @@ module ProfileApiCircles
     # Первый (ближний круг)
     second_circle = get_circle(user_ids: user_ids, profile_id: self.id)
 
-
     # Форматирование
     # Ближний круг центрального профиля
     circles = profile_keys_to_hash(second_circle, circle: 1, current_user: current_user)
@@ -31,6 +30,22 @@ module ProfileApiCircles
     end
 
     return circles.flatten!
+  end
+
+
+  def new_circles(user: current_user)
+    tree_ids = user.get_connected_users
+    first_circle = get_circle(tree_ids: tree_ids, profile_id: self.id)
+
+  end
+
+
+  def gget_circle(tree_ids: user_ids, profile_id: profile_id, except_ids: [])
+    ProfileKey.where(user_id: user_ids, profile_id: profile_id)
+              .where("relation_id < ?", 9)
+              .where.not(is_profile_id: except_ids)
+              .order('relation_id')
+              .includes(:name).to_a.uniq(&:is_profile_id)
   end
 
 
@@ -58,7 +73,6 @@ module ProfileApiCircles
               .order('relation_id')
               .includes(:name).to_a.uniq(&:is_profile_id)
   end
-
 
 
 
