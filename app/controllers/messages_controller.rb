@@ -11,6 +11,9 @@ class MessagesController < ApplicationController
   def show_all_messages
 
     if current_user
+      @new_messages_count = count_new_messages
+      logger.info "== show_all_messages == @new_messages_count = #{@new_messages_count}"
+
       find_agents # find all contragent of current_user by messages
       @talks_and_messages = []
       @agents_talks.each do |user_id|
@@ -28,6 +31,8 @@ class MessagesController < ApplicationController
   def show_all_dialoges
 
     if current_user
+      @new_messages_count = count_new_messages
+      logger.info "== show_all_dialoges == @new_messages_count = #{@new_messages_count}"
       find_agents # find all contragent of current_user by messages
 
       @talks_and_messages = []
@@ -40,7 +45,7 @@ class MessagesController < ApplicationController
       flash[:info] = "Для этого нужно авторизоваться"
     end
  #   redirect_to show_one_dialoge_path
-    @new_mail_count = count_messages
+    @new_mail_count = count_new_messages
     logger.info "===== @new_mail_count = #{@new_mail_count}"
 
   end
@@ -70,6 +75,9 @@ class MessagesController < ApplicationController
   def show_one_dialoge
 
     if current_user
+      @new_messages_count = count_new_messages
+      logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
+
       find_agents # find all contragent of current_user by messages
       user_id = params[:user_id] # From view
 
@@ -185,24 +193,22 @@ class MessagesController < ApplicationController
 
   end
 
-  def read_message # чтение сообщения
+  # чтение непрочитанных сообщений
+  # Необходимо Изменение счетчика непрочитанных сообщений - для header
+  def read_message
 
     if current_user
       message = Message.find(params[:message_id])
-      if message.receiver_id == current_user.id || message.sender_id == current_user.id
-        if message.read == false #
+      if message.receiver_id == current_user.id && message.read == false #|| message.sender_id == current_user.id
           message.read = true
           message.save
-        end
-        user_id = message.sender_id  if message.receiver_id == current_user.id
-        user_id = message.receiver_id  if message.sender_id == current_user.id
 
-        # Изменение счетчика непрочитанных сообщений - для уведомлений
+          # Изменение счетчика непрочитанных сообщений - для header
+          @new_messages_count = count_new_messages
+          logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
 
       end
-
-      new_messages_count = count_messages
-      logger.info "===== new_messages_count = #{new_messages_count}"
+      user_id = message.sender_id # для рендера
 
       respond_to do |format|
         format.html { redirect_to show_one_dialoge_path(user_id: user_id) }
@@ -229,116 +235,6 @@ class MessagesController < ApplicationController
 
   end
 
-
-  #def mail #страница сообщений юзера
-  #  unless user_signed_in?
-  #    redirect_to index_path
-  #    flash[:info] = "Для этого нужно авторизоваться"
-  #  end
-  #
-  #  set_meta_tags :title => 'Личные сообщения',
-  #                :description => "Твои личные сообщения на Brainlook.",
-  #                :keywords => "Brainlook, мнение, мнения, общество, анализ, статистика, социальный анализ, маркетологические исследования, исследования, Мозгозыр, социум, социология, веб-анализатор, опросы, голосования, опросники, брейнлук, бреинлук, браинлук, брайнлук, брэйнлук, брэинлук"
-  #
-  #  set_meta_tags :og => {
-  #      :site_name => "Brainlook",
-  #      :image => "http://brainlook.org/assets/logo/square/with_title.svg",
-  #      :title => 'Brainlook | Личные сообщения',
-  #      :description => "Твои личные сообщения на Brainlook.",
-  #      :keywords => "Brainlook, мнения, общество, анализ, статистика, социальный анализ, маркетологические исследования, исследования, Мозгозыр, мнение, социум, социология, веб-анализатор, опросы, голосования, опросники, брейнлук, бреинлук, браинлук, брайнлук, брэйнлук, брэинлук"
-  #  }
-  #
-  #  set_meta_tags :twitter => {
-  #      :image => "http://brainlook.org/assets/logo/square/with_title.svg",
-  #      :title => 'Brainlook | Личные сообщения',
-  #      :description => "Твои личные сообщения на Brainlook."
-  #  }
-  #end
-  #def show_messages_box #
-  #  if user_signed_in?
-  #    count_messages
-  #    page_number = params[:page]
-  #    limit = page_number.blank? ? 26 : page_number.to_i*25 + 1
-  #
-  #    input_messages = Message.where(:receiver_id => current_user.id, :receiver_deleted => false).order('created_at').reverse_order.limit(limit)
-  #
-  #    messages = input_messages(input_messages)
-  #    @messages = Kaminari.paginate_array(messages).page(params[:page]).per(25)
-  #
-  #    respond_to do |format|
-  #      format.html { redirect_to index_opinions_path }
-  #      format.js { render "messages/mail/renderMessages" }
-  #    end
-  #  else
-  #    redirect_to index_path
-  #    flash[:info] = "Для этого нужно авторизоваться"
-  #  end
-  #end
-  #
-  #def render_inbox #рендерит входящие
-  #  if user_signed_in?
-  #    count_messages
-  #    page_number = params[:page]
-  #    limit = page_number.blank? ? 26 : page_number.to_i*25 + 1
-  #    input_messages = Message.where(:receiver_id => current_user.id, :receiver_deleted => false).order('created_at').reverse_order.limit(limit)
-  #
-  #    messages = input_messages(input_messages)
-  #    @messages = Kaminari.paginate_array(messages).page(params[:page]).per(25)
-  #
-  #    respond_to do |format|
-  #      format.html { redirect_to index_opinions_path }
-  #      format.js { render "messages/mail/renderMessages" }
-  #    end
-  #  else
-  #    redirect_to index_path
-  #    flash[:info] = "Для этого нужно авторизоваться"
-  #  end
-  #end
-  #
-  #
-  #def render_sent #рендерит отправленные
-  #  if user_signed_in?
-  #    count_messages
-  #    page_number = params[:page]
-  #    limit = page_number.blank? ? 26 : page_number.to_i*25 + 1
-  #    sent_messages = Message.where(:sender_id => current_user.id, :sender_deleted => false).order('created_at').reverse_order.limit(limit)
-  #
-  #    messages = sent_messages(sent_messages)
-  #    @messages = Kaminari.paginate_array(messages).page(params[:page]).per(25)
-  #
-  #    respond_to do |format|
-  #      format.html { redirect_to index_opinions_path }
-  #      format.js { render "messages/mail/renderMessages" }
-  #    end
-  #  else
-  #    redirect_to index_path
-  #    flash[:info] = "Для этого нужно авторизоваться"
-  #  end
-  #end
-  #
-  #def render_send_message #рендерит форму отправления письма
-  #  if user_signed_in?
-  #    count_messages
-  #
-  #    nicks = User.find_by_sql " SELECT DISTINCT nick FROM users"
-  #    @arr_nicks = []
-  #    nicks.each do |row|
-  #      nick = row.nick
-  #      unless nick.blank?
-  #        @arr_nicks << nick
-  #      end
-  #    end
-  #    @arr_nicks.sort_by! { |elem| elem }
-  #
-  #    respond_to do |format|
-  #      format.html { redirect_to index_opinions_path }
-  #      format.js { render "messages/mail/renderSend" }
-  #    end
-  #  else
-  #    redirect_to index_path
-  #    flash[:info] = "Для этого нужно авторизоваться"
-  #  end
-  #end
 
 
 
