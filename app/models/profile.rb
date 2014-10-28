@@ -36,7 +36,7 @@ class Profile < ActiveRecord::Base
 
   def icon_path
     logger.info "Current profile sex id: #{self.name.sex_id}"
-    self.name.sex_id == 1 ? 'assets/man.svg' : 'assets/woman.svg'
+    self.name.sex_id == 1 ? '/assets/man.svg' : '/assets/woman.svg'
   end
 
 

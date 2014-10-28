@@ -103,4 +103,36 @@ class Relation < ActiveRecord::Base
     end
   end
 
+
+
+  def self.relations_for_sex(sex_id)
+    case sex_id
+      when 1
+        [
+          {title: "Отец",   id: 1},
+          {title: "Мать",   id: 2},
+          {title: "Сын",    id: 3},
+          {title: "Дочь",   id: 4},
+          {title: "Брат",   id: 5},
+          {title: "Сестра", id: 6},
+          # {title: "Муж",    id: 7},
+          {title: "Жена",   id: 8}
+        ]
+      when 0
+        [
+          {title: "Отец",   id: 1},
+          {title: "Мать",   id: 2},
+          {title: "Сын",    id: 3},
+          {title: "Дочь",   id: 4},
+          {title: "Брат",   id: 5},
+          {title: "Сестра", id: 6},
+          {title: "Муж",    id: 7},
+          # {title: "Жена",   id: 8}
+        ]
+      else
+        []
+      end
+  end
+
+
 end

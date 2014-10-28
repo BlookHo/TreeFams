@@ -111,53 +111,192 @@ start = function(){
   // Nodes
   node = svg.selectAll(".node").data(nodes, function(d) { return d.id });
 
+
   var gNode = node.enter()
                   .append("g")
                   .attr("class", function(d) { return "node " + d.id; })
                   .classed('current', function(d){ return d.current_user_profile; })
-                  .on('click', function(d){
-                    if (d3.event.defaultPrevented) return; // click suppressed
-                    getCircles({profile_id: d.id});
-                  })
                   .call(force.drag);
 
 
-              // Node circle
-              // gNode.append("circle")
-              //       .attr("r", function(d){
-              //         if (d.circle == 0){
-              //           return 30;
-              //         }else if(d.circle == 1){
-              //           return 20;
-              //         }else{
-              //           return 7;
-              //         }
-              //       });
+
+  // Center node
+  //////////////////////////////////////
+  gNode.select(function(d){
+    if (d.circle == 0){
 
 
-              gNode.append("svg:image")
-                   .attr("xlink:href", function(d){ return d.icon; })
-                   .attr("width", 40)
-                   .attr("height", 40)
-                   .attr("x", -20)
-                   .attr("y", -20)
-                   .attr("transform", function(d){
-                     if (d.circle == 0) { return "scale(1.6)"}
-                     else if (d.circle == 1) { return "scale(1.3)"}
-                     else if (d.circle == 2) { return "scale(1)"}
-                   })
-                   .attr("class", "icon");
 
-              gNode.append('text')
-                    .attr("class", 'name')
-                    .attr("text-anchor", "middle")
-                    .attr("y", 40)
-                    .text( function(d){ return d.name; });
+        // Name label
+        d3.select(this)
+              .append('text')
+              .attr("class", 'name')
+              .attr("text-anchor", "middle")
+              .attr("y", 55)
+              .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
 
-              node.exit().remove();
 
+
+
+        // Profile Icon
+          d3.select(this)
+            .append("svg:image")
+            .attr("xlink:href", function(d){ return d.icon; })
+            .attr("width", 80)
+            .attr("height", 80)
+            .attr("x", -40)
+            .attr("y", -40)
+            .attr("class", "icon");
+
+
+
+
+        // Plus icon (dropdown menu)
+        if (d.has_rights){
+           d3.select(this)
+             .append("svg:image")
+             .attr("xlink:href", "/assets/plus.svg")
+             .attr("width", 24)
+             .attr("height", 24)
+             .attr("x", 8)
+             .attr("y", -40)
+             .attr("class", "add-icon");
+         }
+
+
+
+         // Search green mark
+         if ( ~search_marked_profile_ids.indexOf(d.id) ) {
+           d3.select(this)
+             .append("svg:image")
+             .attr("xlink:href", "/assets/mark.svg")
+             .attr("width", 24)
+             .attr("height", 24)
+             .attr("x", 8)
+             .attr("y", -40)
+             .attr("class", "add-icon");
+         }
+
+
+        // Click event
+        d3.select(this)
+          .on('click', function(d){
+            if (d3.event.defaultPrevented) return; // click suppressed
+            // getCircles({profile_id: d.id});
+            showProfileMenu({profile_id: d.id});
+          });
+
+      }
+  });
+
+
+
+    // First circle nodes
+    //////////////////////////////////////
+    gNode.select(function(d){
+      if (d.circle == 1){
+
+        // Name label
+        d3.select(this)
+              .append('text')
+              .attr("class", 'name')
+              .attr("text-anchor", "middle")
+              .attr("y", 35)
+              // .text( function(d){ return d.name; });
+              .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
+
+
+        // Icon
+        d3.select(this)
+          .append("svg:image")
+          .attr("xlink:href", function(d){ return d.icon; })
+          .attr("width", 50)
+          .attr("height", 50)
+          .attr("x", -25)
+          .attr("y", -25)
+          .attr("class", "icon");
+
+
+        // Search green mark
+        if ( ~search_marked_profile_ids.indexOf(d.id) ) {
+          d3.select(this)
+            .append("svg:image")
+            .attr("xlink:href", "/assets/mark.svg")
+            .attr("width", 24)
+            .attr("height", 24)
+            .attr("x", 8)
+            .attr("y", -40)
+            .attr("class", "add-icon");
+        }
+
+
+        // Click event
+        d3.select(this)
+          .on('click', function(d){
+            if (d3.event.defaultPrevented) return; // click suppressed
+            getCircles({profile_id: d.id});
+          });
+
+
+      }
+    });
+
+
+
+    // Second circle nodes
+    //////////////////////////////////////
+    gNode.select(function(d){
+      if (d.circle == 2){
+
+        // Name label
+        d3.select(this)
+              .append('text')
+              .attr("class", 'name')
+              .attr("text-anchor", "middle")
+              .attr("y", 35)
+              // .text( function(d){ return d.name; });
+              .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
+
+
+        // Icon
+        d3.select(this)
+          .append("svg:image")
+          .attr("xlink:href", function(d){ return d.icon; })
+          .attr("width", 30)
+          .attr("height", 30)
+          .attr("x", -15)
+          .attr("y", -15)
+          .attr("class", "icon");
+
+
+        // Search green mark
+        if ( ~search_marked_profile_ids.indexOf(d.id) ) {
+          d3.select(this)
+            .append("svg:image")
+            .attr("xlink:href", "/assets/mark.svg")
+            .attr("width", 18)
+            .attr("height", 18)
+            .attr("x", 4)
+            .attr("y", -20)
+            .attr("class", "add-icon");
+        }
+
+
+
+        // Click event
+        d3.select(this)
+          .on('click', function(d){
+            if (d3.event.defaultPrevented) return; // click suppressed
+            getCircles({profile_id: d.id});
+          });
+
+      }
+    });
+
+
+
+  node.exit().remove();
   node.order();
-
   force.start();
 }
 
@@ -262,10 +401,26 @@ getCircles = function(params){
 
 
 
+showProfileMenu = function(params){
+  $('#center-profile-menu').toggle();
+}
+
+
+
 $(window).on('resize', function (e) {
   resizeGraph();
   start();
 });
+
+
+function contains(a, obj) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
 
 
 

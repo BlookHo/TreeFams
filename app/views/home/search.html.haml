@@ -1,5 +1,4 @@
--# home / index page
-
+-# home / search page
 #graph-wrapper
 
 = render 'path'
@@ -15,5 +14,4 @@
 
 %script
   var access_token = '#{current_user.access_token}';
-  getCircles({ profile_id: #{current_user.profile_id}, token: access_token });
-  getSearchResults();
+  showSearchResult();

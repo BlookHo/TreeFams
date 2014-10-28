@@ -34,15 +34,14 @@ class ProfilesController < ApplicationController
   end
 
 
-
   def create
 
     logger.info "==== Profiles_controller.Create ===== Start add new profile!!!"
 
     @base_profile = Profile.find(params[:base_profile_id]) # Старый профиль, к которому добавляем
-    @base_profile_id = params[:base_profile_id] #  профиль того, к кому добавляем
+    @base_profile_id   = params[:base_profile_id] #  профиль того, к кому добавляем
     @author_profile_id = params[:author_profile_id] # текущий автор отображаемого круга
-    @base_relation_id = params[:base_relation_id] # relation того, к кому добавляем, к автору отображаемого круга
+    @base_relation_id  = params[:base_relation_id] # relation того, к кому добавляем, к автору отображаемого круга
 
     @profile = Profile.new(profile_params)  # Новый добавляемый профиль
     @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
@@ -174,6 +173,8 @@ class ProfilesController < ApplicationController
     end
     redirect_to :back
   end
+
+
 
 
   def show_dropdown_menu

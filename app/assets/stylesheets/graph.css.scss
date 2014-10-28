@@ -25,13 +25,11 @@
 
 
   .node{
-    // circle{
-    //   cursor:pointer;
-    //   stroke-width: 0; fill:#ccc;
-    // }
-
     &.current .name{fill:red;}
-    image.icon {cursor:pointer; }
+    image.icon,
+    image.add-icon {cursor:pointer; }
+
+
   }
 
 

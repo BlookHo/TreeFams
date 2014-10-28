@@ -3,7 +3,6 @@
 //= require jquery
 //= require jquery_ujs
 
-
 //  D3js.org
 //----------------------------------
 //= require libs/d3
