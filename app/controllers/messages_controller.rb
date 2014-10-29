@@ -44,13 +44,13 @@ class MessagesController < ApplicationController
       redirect_to login_path
       flash[:info] = "Для этого нужно авторизоваться"
     end
- #   redirect_to show_one_dialoge_path
     @new_mail_count = count_new_messages
     logger.info "===== @new_mail_count = #{@new_mail_count}"
 
   end
 
   # Получаем массив сообщений для одного юзера
+  # чтение всех сообщений получателем при открывании диалога
   def get_user_messages(user_id)
     user_dialoge = {}
     user_messages = []
@@ -64,10 +64,25 @@ class MessagesController < ApplicationController
       one_message_hash.merge!(:read => one_message.read)
       one_message_hash.merge!(:sender_deleted => one_message.sender_deleted)
       one_message_hash.merge!(:receiver_deleted => one_message.receiver_deleted)
+      one_message_hash.merge!(:important => one_message.important)
       user_messages << one_message_hash
+
+      # чтение одного сообщения получателем при открывании диалога
+      if user_id == params[:user_id]
+        read_one_message(one_message)
+        one_message.save
+      end
+
     end
     user_dialoge.merge!(user_id => user_messages)
     return user_dialoge
+  end
+
+  # чтение всех сообщений получателем при открывании диалога
+  def read_one_message(message)
+
+    message.read = true  if !message.read && message.receiver_id == current_user.id
+
   end
 
 
@@ -186,6 +201,29 @@ class MessagesController < ApplicationController
 
   end
 
+  # GET /messages
+  def important_message
+    message = Message.find(params[:message_id]) # From view
+    if message.receiver_id == current_user.id || message.sender_id == current_user.id
+      if !message.important
+        message.important = true
+        message.save
+        if message.receiver_id == current_user.id
+          user_id = message.sender_id
+        elsif message.sender_id == current_user.id
+          user_id = message.receiver_id
+        end
+      end
+      redirect_to show_one_dialoge_path(user_id: user_id)
+
+    else
+      flash[:error] = "Ты не можешь удалить это сообщение"
+    end
+
+
+  end
+
+  # later
   # GET /messages
   def spam_dialoge
     user_id = params[:user_id] # From view

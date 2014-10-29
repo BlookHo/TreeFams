@@ -24,6 +24,9 @@ Weafam::Application.routes.draw do
   match 'read_message' => 'messages#read_message', via: :get
   #match 'read_message' => 'messages#read_message', via: :post
 
+  match 'important_message' => 'messages#important_message', via: :get
+  #match 'important_message' => 'messages#important_message', via: :post
+
   match 'delete_message' => 'messages#delete_message', via: :get
   #match 'delete_message' => 'messages#delete_message', via: :post
 

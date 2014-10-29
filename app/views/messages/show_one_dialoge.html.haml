@@ -5,6 +5,7 @@
   @new_messages_count = #{@new_messages_count.inspect}
 %br
 %h1 ДИАЛОГ ВЫБРАННОГО ЮЗЕРА (show_one_dialoge: Listing Dialoge w/One User )
+%h1 При открывании диалога все нечитанные сообщения - читаются
 %br
 - if !@talks_and_messages.blank?
 
@@ -21,7 +22,7 @@
             %td= user_id
             %td= link_to 'Написать сообщение .', send_message_path(receiver_id: user_id),  class: :messages
             %br
-            %td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
+            -#%td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
             %li
             - if !user_talk_arr.blank?
               %table
@@ -34,6 +35,7 @@
                   %th Read
                   %th Sender_deleted
                   %th Receiver_deleted
+                  %th Important
                   %th
                   %th
                 - user_talk_arr.each do |one_talk_messages|
@@ -45,7 +47,9 @@
                   %td= one_talk_messages.values_at(:read).flatten[0]
                   %td= one_talk_messages.values_at(:sender_deleted).flatten[0]
                   %td= one_talk_messages.values_at(:receiver_deleted).flatten[0]
-                  %td= link_to 'Прочитать', read_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]), class: :messages
+                  %td= one_talk_messages.values_at(:important).flatten[0]
+                  %td= link_to 'Пометить сообщение как важное', important_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]),  class: :messages
+                  -#%td= link_to 'Прочитать', read_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]), class: :messages
                   %td= link_to 'Удалить сообщение .', delete_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]), class: :messages
             - else
               %h4 No Listing user_talk_arr!

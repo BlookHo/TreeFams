@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141024134255) do
+ActiveRecord::Schema.define(version: 20141029144116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20141024134255) do
     t.boolean  "receiver_deleted", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "important",        default: false
   end
 
   create_table "names", force: true do |t|

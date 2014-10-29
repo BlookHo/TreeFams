@@ -4,14 +4,15 @@
 
     %ul
       - if current_user
-        %li= link_to 'Мои новости', '#', class: :notifications
+        %li= link_to 'Рукопожатия', '#', class: :notifications
+        %li= link_to 'Мои новости (Лента)', '#', class: :notifications
 
         - if @new_messages_count.blank? || @new_messages_count == 0
-          %li= link_to raw(" Сообщения <i class='icon-envelope-alt'></i> "), show_all_messages_path, :class => "ttip", title: "Мои сообщения"
+          %li= link_to raw(" Сообщения <i class='fa envelope-alt'></i> "), show_all_messages_path, :class => "ttip", title: "Мои сообщения"
         - elsif  @new_messages_count > 9
-          %li= link_to raw("Сообщения <i class='icon-envelope-alt'></i> <strong>(*)</strong>"), show_all_messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
+          %li= link_to raw("Сообщения <i class='fa envelope-alt'></i> <strong>(*)</strong>"), show_all_messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
         - else
-          %li= link_to raw("Сообщения <i class='icon-envelope-alt'></i> <strong>(#{@new_messages_count})</strong>"), show_all_messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
+          %li= link_to raw("Сообщения <i class='fa envelope-alt'></i> <strong>(#{@new_messages_count})</strong>"), show_all_messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
 
         %li= link_to 'Выйти', :logout,  class: :logout
       - else
