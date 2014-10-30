@@ -442,7 +442,7 @@ getCircles = function(params){
           pushNode(d);
         });
         start();
-        $('#path_data').text(JSON.stringify(data.path));
+        buildPath(data.path);
     });
 }
 

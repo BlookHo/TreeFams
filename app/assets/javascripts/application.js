@@ -16,7 +16,3 @@
 //= require libs/ui-bootstrap-tpls-0.9.0
 //= require_tree ./templates
 //= require apps/welcome_application
-
-
-//  D3js graph applications
-//----------------------------------

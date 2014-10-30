@@ -29,6 +29,7 @@ class WelcomeController < ApplicationController
     # session[:user_id] = nil
     # session[:current_step] = nil
     # session[:current_author] = nil
+    redirect_to :home if current_user
   end
 
   # Singup form
