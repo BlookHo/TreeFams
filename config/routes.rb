@@ -1,4 +1,38 @@
 Weafam::Application.routes.draw do
+
+  resources :messages
+
+  # messages controller
+  match 'make_messages' => 'messages#make_messages', via: :get
+  match 'make_messages' => 'messages#make_messages', via: :post
+
+  match 'search_dialoge_agent' => 'messages#search_dialoge_agent', via: :get
+  match 'search_dialoge_agent' => 'messages#search_dialoge_agent', via: :post
+
+  match 'show_all_messages' => 'messages#show_all_messages', via: :get
+  match 'show_all_messages' => 'messages#show_all_messages', via: :post
+
+  match 'show_all_dialoges' => 'messages#show_all_dialoges', via: :get
+  #match 'show_all_dialoges' => 'messages#show_all_dialoges', via: :post
+
+  match 'send_message' => 'messages#send_message', via: :get
+  match 'send_message' => 'messages#send_message', via: :post
+
+  match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :get
+  #match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :post
+
+  match 'read_message' => 'messages#read_message', via: :get
+  #match 'read_message' => 'messages#read_message', via: :post
+
+  match 'important_message' => 'messages#important_message', via: :get
+  #match 'important_message' => 'messages#important_message', via: :post
+
+  match 'delete_message' => 'messages#delete_message', via: :get
+  #match 'delete_message' => 'messages#delete_message', via: :post
+
+  match 'spam_dialoge' => 'messages#spam_dialoge', via: :get
+  #match 'spam_dialoge' => 'messages#spam_dialoge', via: :post
+
   get "connect_users_trees/connect_users"
   get "connect_users_trees/connect_profiles"
   get "connect_users_trees/connect_trees"
