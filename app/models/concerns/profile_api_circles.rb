@@ -1,102 +1,45 @@
 module ProfileApiCircles
   extend ActiveSupport::Concern
 
-  def circles(current_user = nil)
-
-    # current_user = nil
+  def circles(current_user = nil, max_distance = 4)
+    @results = []
+    @max_distance = max_distance
+    @current_distance = 1
 
     tree_id = self.tree_id
     user_ids = User.find(tree_id).get_connected_users
 
-    # Центральный профиль
-    zero_circle = zero_circle(current_user)
+    center_node = center_node(current_user, user_ids)
 
-    # Первый (ближний круг)
-    second_circle = get_circle(user_ids: user_ids, profile_id: self.id)
+    # Первый круг
+    circle = get_circle(user_ids: user_ids, profile_id: self.id)
+    except_ids = circle.map {|r| r.is_profile_id }.push(self.id)
+    @results << circle_to_hash(circle: circle, distance: 1, target: self.id, current_user: current_user)
 
-    # Форматирование
-    # Ближний круг центрального профиля
-    circles = profile_keys_to_hash(second_circle, circle: 1, current_user: current_user)
-
-    # Добавляем центральный профиль на ПЕРВУЮ ПОЗИЦИЮ
-    # Центральный профиль (первая нода - центральная)
-    circles.unshift(zero_circle)
-
-    # Из второго круга исключаются профили, которые в первом круге
-    except_ids =  second_circle.map {|r| r.is_profile_id }.push(self.id)
+    collect_circles(user_ids: user_ids,
+                      circle: circle,
+                  except_ids: except_ids,
+                current_user: current_user)
+    logger.info @results.unshift(center_node).flatten
+    return  @results.unshift(center_node).flatten
+  end
 
 
-    # Для кождого профиля первого круга собирается его ближний круг, исключаю профили в предыдущем круге
-    second_circle.each do |key|
-      ad_results = get_circle(user_ids: user_ids, profile_id: key.is_profile_id, except_ids: except_ids)
-      circles << profile_keys_to_hash(ad_results, circle: 2, target: key.is_profile_id, current_user: current_user)
+
+
+  def collect_circles(user_ids: user_ids, circle: circle, except_ids: except_ids, current_user: current_user)
+    return if @current_distance >= @max_distance
+    @current_distance += 1
+    circle.each do |key|
+      current_circle = get_circle(user_ids: user_ids, profile_id: key.is_profile_id, except_ids: except_ids)
+      current_except_ids = current_circle.map {|r| r.is_profile_id }.push(key.is_profile_id)
+      @results << circle_to_hash(circle: current_circle, distance: @current_distance, target: key.is_profile_id, current_user: current_user)
+
+      if current_circle.size > 0
+        collect_circles(user_ids: user_ids, circle: current_circle, except_ids: current_except_ids, current_user: current_user)
+      end
     end
-
-    return circles.flatten!
-  end
-
-  # Ближний круг профиля для построения графиков
-  # С привязкой к пользоватлея
-  def user_circles(current_user)
-    user_ids = current_user.get_connected_users
-
-    # Центральный профиль
-    zero_circle = zero_circle(current_user)
-
-    # Первый (ближний круг)
-    second_circle = get_circle(user_ids: user_ids, profile_id: self.id)
-
-    # Форматирование
-    # Ближний круг центрального профиля
-    circles = profile_keys_to_hash(second_circle, circle: 1, current_user: current_user)
-
-    # Добавляем центральный профиль на ПЕРВУЮ ПОЗИЦИЮ
-    # Центральный профиль (первая нода - центральная)
-    circles.unshift(zero_circle)
-
-    # Из второго круга исключаются профили, которые в первом круге
-    except_ids =  second_circle.map {|r| r.is_profile_id }.push(self.id)
-
-
-    # Для кождого профиля первого круга собирается его ближний круг, исключаю профили в предыдущем круге
-    second_circle.each do |key|
-      ad_results = get_circle(user_ids: user_ids, profile_id: key.is_profile_id, except_ids: except_ids)
-      circles << profile_keys_to_hash(ad_results, circle: 2, target: key.is_profile_id, current_user: current_user)
-    end
-
-    return circles.flatten!
-  end
-
-
-  def new_circles(user: current_user)
-    tree_ids = user.get_connected_users
-    first_circle = get_circle(tree_ids: tree_ids, profile_id: self.id)
-
-  end
-
-
-  def gget_circle(tree_ids: user_ids, profile_id: profile_id, except_ids: [])
-    ProfileKey.where(user_id: user_ids, profile_id: profile_id)
-              .where("relation_id < ?", 9)
-              .where.not(is_profile_id: except_ids)
-              .order('relation_id')
-              .includes(:name).to_a.uniq(&:is_profile_id)
-  end
-
-
-
-  # Center profile
-  def zero_circle(current_user)
-    {
-      id: self.id,
-      name: self.name.name,
-      relation: "Центр",
-      relation_id: 0,
-      circle: 0,
-      current_user_profile: current_user.try(:profile_id) == self.id,
-      icon: self.icon_path,
-      has_rights: (current_user.try(:get_connected_users).include? self.tree_id)
-    }
+    @current_distance += 1
   end
 
 
@@ -112,11 +55,25 @@ module ProfileApiCircles
 
 
 
-  # Форматирование рузультатов
-  def profile_keys_to_hash(profile_keys, circle: circle, target: nil, current_user: current_user)
+
+  def center_node(current_user, user_ids)
+    {
+      id: self.id,
+      name: self.name.name,
+      relation: "Центр круга",
+      relation_id: 0,
+      distance: 0,
+      current_user_profile: current_user.try(:profile_id) == self.id,
+      icon: self.icon_path,
+      has_rights: (user_ids.include? self.tree_id)
+    }
+  end
+
+
+
+  def circle_to_hash(circle: circle, distance: distance, target: nil, current_user: current_user)
     results = []
-    profile_keys.each do |key|
-      logger.info "COnvert obj class: #{key.class}"
+    circle.each do |key|
       results << {
         id: key.is_profile_id,
         name: key.name.name,
@@ -124,14 +81,13 @@ module ProfileApiCircles
         relation: key.relation.relation,
         relation_id: key.relation_id,
         target: target.nil? ? self.id : target,
-        circle: circle,
+        distance: distance,
         current_user_profile: current_user.try(:profile_id) == key.is_profile_id,
         icon: key.is_profile.icon_path
       }
     end
     return results
   end
-
 
 
 end

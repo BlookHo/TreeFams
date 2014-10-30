@@ -123,7 +123,8 @@ start = function(){
   // Center node
   //////////////////////////////////////
   gNode.select(function(d){
-    if (d.circle == 0){
+    console.log("Show node circle: "+ d.distance);
+    if (d.distance == 0){
 
 
 
@@ -194,7 +195,7 @@ start = function(){
     // First circle nodes
     //////////////////////////////////////
     gNode.select(function(d){
-      if (d.circle == 1){
+      if (d.distance == 1){
 
         // Name label
         d3.select(this)
@@ -202,7 +203,6 @@ start = function(){
               .attr("class", 'name')
               .attr("text-anchor", "middle")
               .attr("y", 35)
-              // .text( function(d){ return d.name; });
               .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
 
 
@@ -246,7 +246,7 @@ start = function(){
     // Second circle nodes
     //////////////////////////////////////
     gNode.select(function(d){
-      if (d.circle == 2){
+      if (d.distance == 2){
 
         // Name label
         d3.select(this)
@@ -254,7 +254,6 @@ start = function(){
               .attr("class", 'name')
               .attr("text-anchor", "middle")
               .attr("y", 35)
-              // .text( function(d){ return d.name; });
               .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
 
 
@@ -281,7 +280,51 @@ start = function(){
             .attr("class", "add-icon");
         }
 
+        // Click event
+        d3.select(this)
+          .on('click', function(d){
+            if (d3.event.defaultPrevented) return; // click suppressed
+            getCircles({profile_id: d.id});
+          });
 
+      }
+    });
+
+
+
+
+    // Small dots circle nodes
+    //////////////////////////////////////
+    gNode.select(function(d){
+      if (d.distance > 2){
+
+        // Name label
+        d3.select(this)
+              .append('text')
+              .attr("class", 'name')
+              .attr("text-anchor", "middle")
+              .attr("y", 35)
+              .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
+
+
+        // Grey circle
+        d3.select(this)
+          .append("circle")
+          .attr('r', 7)
+          .attr('fill', '#ccc')
+
+
+        // Search green mark
+        if ( ~search_marked_profile_ids.indexOf(d.id) ) {
+          d3.select(this)
+            .append("svg:image")
+            .attr("xlink:href", "/assets/mark.svg")
+            .attr("width", 18)
+            .attr("height", 18)
+            .attr("x", 4)
+            .attr("y", -20)
+            .attr("class", "add-icon");
+        }
 
         // Click event
         d3.select(this)
@@ -292,6 +335,9 @@ start = function(){
 
       }
     });
+
+
+
 
 
 
