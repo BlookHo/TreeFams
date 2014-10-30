@@ -234,7 +234,7 @@ start = function(){
         d3.select(this)
           .on('click', function(d){
             if (d3.event.defaultPrevented) return; // click suppressed
-            getCircles({profile_id: d.id});
+            getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
           });
 
 
@@ -284,7 +284,7 @@ start = function(){
         d3.select(this)
           .on('click', function(d){
             if (d3.event.defaultPrevented) return; // click suppressed
-            getCircles({profile_id: d.id});
+            getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
           });
 
       }
@@ -330,7 +330,7 @@ start = function(){
         d3.select(this)
           .on('click', function(d){
             if (d3.event.defaultPrevented) return; // click suppressed
-            getCircles({profile_id: d.id});
+            getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
           });
 
       }
@@ -436,12 +436,13 @@ clearNodes = function(){
 
 getCircles = function(params){
   clearNodes();
-  $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token } )
+  $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id } )
     .done(function( data ) {
-        data.forEach(function(d, i) {
+        data.circles.forEach(function(d, i) {
           pushNode(d);
         });
         start();
+        $('#path_data').text(JSON.stringify(data.path));
     });
 }
 

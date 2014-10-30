@@ -1,14 +1,14 @@
  [
-  {:id=>5, :name=>"Алексей", :distance=>0},
-  {:id=>6, :name=>"Сергей", :target=>5, :distance=>1},
-  {:id=>7, :name=>"Алла", :target=>5, :distance=>1},
-  {:id=>10, :name=>"Лука", :relation_id=>3, :distance=>1},
-  {:id=>9, :name=>"Макар", :target=>5, :distance=>1},
-  {:id=>8, :name=>"Никита",:target=>5, :distance=>1},
-  {:id=>11, :name=>"Вероника", :target=>5, :distance=>1},
-  {:id=>12, :name=>"Федор", :target=>6, :distance=>2},
-  {:id=>24, :name=>"Валентина", :target=>6, :distance=>2},
-  {:id=>25, :name=>"Александр", :target=>6, :distance=>2},
-  {:id=>31, :name=>"Егор", :target=>25},
-  {:id=>30, :name=>"Ксения", :target=>25}
+  {:id=>5,  :name=>"Алексей",   :distance=>0},
+  {:id=>6,  :name=>"Сергей",    :target=>5  },
+  {:id=>7,  :name=>"Алла",      :target=>5  },
+  {:id=>10, :name=>"Лука",      :target=>5  },
+  {:id=>9,  :name=>"Макар",     :target=>5  },
+  {:id=>8,  :name=>"Никита",    :target=>5  },
+  {:id=>11, :name=>"Вероника",  :target=>5  },
+  {:id=>12, :name=>"Федор",     :target=>6  },
+  {:id=>24, :name=>"Валентина", :target=>6  },
+  {:id=>25, :name=>"Александр", :target=>6  },
+  {:id=>31, :name=>"Егор",      :target=>25 },
+  {:id=>30, :name=>"Ксения",    :target=>25 }
   ]

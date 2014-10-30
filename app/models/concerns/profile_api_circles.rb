@@ -20,7 +20,7 @@ module ProfileApiCircles
                       circle: circle,
                   except_ids: except_ids,
                 current_user: current_user)
-    logger.info @results.unshift(center_node).flatten
+
     return  @results.unshift(center_node).flatten
   end
 
