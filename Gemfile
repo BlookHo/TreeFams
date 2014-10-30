@@ -30,7 +30,9 @@ gem 'ngannotate-rails'
 
 # Icons fonts
 # old - should be removed
-gem "font-awesome-rails"
+#gem "font-awesome-rails"
+gem 'font-awesome-rails', '~> 4.2.0.0'
+gem 'font-awesome-sass', '~> 4.2.0'
 gem 'ionicons-rails'
 
 
