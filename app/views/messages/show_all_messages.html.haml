@@ -44,6 +44,7 @@
                   %th Read
                   %th Sender_deleted
                   %th Receiver_deleted
+                  %th Important
                   %th
                   %th
                 - user_talk_arr.each do |one_talk_messages|
@@ -55,6 +56,7 @@
                   %td= one_talk_messages.values_at(:read).flatten[0]
                   %td= one_talk_messages.values_at(:sender_deleted).flatten[0]
                   %td= one_talk_messages.values_at(:receiver_deleted).flatten[0]
+                  %td= one_talk_messages.values_at(:important).flatten[0]
                   %td= link_to 'Прочитать', read_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]), class: :messages
                   %td= link_to 'Удалить сообщение .', delete_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]), class: :messages
             - else

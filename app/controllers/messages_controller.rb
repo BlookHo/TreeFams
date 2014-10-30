@@ -201,6 +201,7 @@ class MessagesController < ApplicationController
 
   end
 
+  # Пометка сообщения как Важного (important_message)
   # GET /messages
   def important_message
     message = Message.find(params[:message_id]) # From view
@@ -215,12 +216,9 @@ class MessagesController < ApplicationController
         end
       end
       redirect_to show_one_dialoge_path(user_id: user_id)
-
     else
       flash[:error] = "Ты не можешь удалить это сообщение"
     end
-
-
   end
 
   # later
@@ -231,7 +229,8 @@ class MessagesController < ApplicationController
 
   end
 
-  # чтение непрочитанных сообщений
+  # Не используется
+  # чтение непрочитанных сообщений - по-одному
   # Необходимо Изменение счетчика непрочитанных сообщений - для header
   def read_message
 
