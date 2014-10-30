@@ -8,7 +8,7 @@
 
 
 #jsdebug
-  
+
 = javascript_include_tag 'path'
 = javascript_include_tag 'home'
 = javascript_include_tag 'home-search'
@@ -19,4 +19,4 @@
   var access_token = '#{current_user.access_token}';
   var current_user_profile_id = #{current_user.profile_id};
   getCircles({ profile_id: #{current_user.profile_id}, token: access_token, path_from_profile_id: current_user_profile_id });
-  // getSearchResults();
+  getSearchResults();

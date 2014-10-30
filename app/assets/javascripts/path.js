@@ -1,5 +1,8 @@
 var buildPath = function(data){
 
+  // tmp fix
+  return;
+
   var ul = document.getElementById('path_list');
   ul.innerHTML = "";
 

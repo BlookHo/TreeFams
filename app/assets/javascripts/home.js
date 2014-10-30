@@ -11,19 +11,6 @@ var node, link, relation;
 var force, svg;
 
 
-// createForce = function(){
-//   force = d3.layout.force()
-//                .nodes(nodes)
-//                .links(links)
-//                .charge(-15000)
-//                .theta(0.1)
-//                .linkDistance(-200)
-//                .linkStrength(1)
-//                .friction(0.7)
-//                .size([width, height])
-//                .on("tick", tick);
-// }
-
 
 createSvg = function(){
   svg = d3.select("#graph-wrapper")
@@ -123,7 +110,6 @@ start = function(){
   // Center node
   //////////////////////////////////////
   gNode.select(function(d){
-    console.log("Show node circle: "+ d.distance);
     if (d.distance == 0){
 
 
@@ -438,11 +424,12 @@ getCircles = function(params){
   clearNodes();
   $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id } )
     .done(function( data ) {
+        buildPath(data.path);
         data.circles.forEach(function(d, i) {
           pushNode(d);
         });
         start();
-        buildPath(data.path);
+
     });
 }
 

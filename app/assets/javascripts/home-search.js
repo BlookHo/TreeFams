@@ -22,7 +22,7 @@ showSearchResult = function(){
       current_search_result = data.trees[0];
       search_marked_profile_ids = current_search_result.profile_ids
       current_search_result_profile = current_search_result.profile_ids[0]
-      getCircles({profile_id: current_search_result_profile, token: access_token})
+      getCircles({profile_id: current_search_result_profile, token: access_token, path_from_profile_id: current_user_profile_id})
       $('#jsdebug').text(JSON.stringify(search_marked_profile_ids))
     });
 }

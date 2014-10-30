@@ -1,7 +1,7 @@
 module ProfileApiCircles
   extend ActiveSupport::Concern
 
-  def circles(current_user = nil, max_distance = 4)
+  def circles(current_user = nil, max_distance = 5)
     @results = []
     @max_distance = max_distance
     @current_distance = 1
@@ -27,19 +27,19 @@ module ProfileApiCircles
 
 
 
-  def collect_circles(user_ids: user_ids, circle: circle, except_ids: except_ids, current_user: current_user)
-    return if @current_distance >= @max_distance
-    @current_distance += 1
+  def collect_circles(user_ids: user_ids, circle: circle, except_ids: except_ids, current_user: current_user )
+    # return if @current_distance >= @max_distance
+    # @current_distance += 1
     circle.each do |key|
       current_circle = get_circle(user_ids: user_ids, profile_id: key.is_profile_id, except_ids: except_ids)
       current_except_ids = current_circle.map {|r| r.is_profile_id }.push(key.is_profile_id)
-      @results << circle_to_hash(circle: current_circle, distance: @current_distance, target: key.is_profile_id, current_user: current_user)
+      @results << circle_to_hash(circle: current_circle, distance: 2, target: key.is_profile_id, current_user: current_user)
 
       if current_circle.size > 0
         collect_circles(user_ids: user_ids, circle: current_circle, except_ids: current_except_ids, current_user: current_user)
       end
     end
-    @current_distance += 1
+    # @current_distance += 1
   end
 
 

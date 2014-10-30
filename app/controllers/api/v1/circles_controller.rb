@@ -7,8 +7,8 @@ module Api
       def show
         profile = Profile.find(params[:profile_id])
         circles = profile.circles(api_current_user)
-        path = find_path(from_profile_id: params[:path_from_profile_id].to_i, data: circles)
-        respond_with circles: circles, path: path
+        # path = find_path(from_profile_id: params[:path_from_profile_id].to_i, data: circles)
+        respond_with circles: circles#, path: path
       end
 
 
