@@ -91,7 +91,7 @@ class MessagesController < ApplicationController
 
     if current_user
       @new_messages_count = count_new_messages
-      logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
+      #logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
 
       find_agents # find all contragent of current_user by messages
       user_id = params[:user_id] # From view

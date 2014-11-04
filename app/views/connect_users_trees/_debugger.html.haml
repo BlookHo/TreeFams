@@ -55,3 +55,7 @@
   @save_in_profilekey: #{@save_in_profilekey.inspect}
 %p
   @save_in_profilekey_LEN: #{@save_in_profilekey_LEN.inspect}
+
+
+
+= link_to 'Просмотр одного запроса', show_one_request_path(with_user_id: @user_id),  class: :request

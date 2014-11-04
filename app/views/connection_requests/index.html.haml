@@ -1,0 +1,35 @@
+%h1 Listing connection_requests
+
+%table
+  %tr
+    %th User
+    %th With user
+    %th Confirm
+    %th Done
+    %th Created_at
+    %th
+    %th
+    %th
+
+  - @connection_requests.each do |connection_request|
+    %tr
+      %td= connection_request.user_id
+      %td= connection_request.with_user_id
+      %td= connection_request.confirm
+      %td= connection_request.done
+      %td= connection_request.created_at.inspect
+      %td= link_to 'Show', connection_request
+      %td= link_to 'Edit', edit_connection_request_path(connection_request)
+      %td= link_to 'Destroy', connection_request, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %br
+      %td= link_to 'Просмотр одного запроса', show_one_request_path(with_user_id: connection_request.with_user_id),  class: :request
+
+%br
+
+-#%p
+-#  @yes_user_id = #{@yes_user_id.inspect}
+-#  @no_user_id = #{@no_user_id.inspect}
+
+
+
+= link_to 'New Connection request', new_connection_request_path

@@ -1,7 +1,21 @@
 Weafam::Application.routes.draw do
 
-  resources :messages
+  resources :connection_requests
+  # connection_requests_controller
+  match 'show_one_request' => 'connection_requests#show_one_request', via: :get
+  match 'show_one_request' => 'connection_requests#show_one_request', via: :post
 
+  match 'yes_connect' => 'connection_requests#yes_connect', via: :get
+  match 'yes_connect' => 'connection_requests#yes_connect', via: :post
+
+  match 'no_connect' => 'connection_requests#no_connect', via: :get
+  match 'no_connect' => 'connection_requests#no_connect', via: :post
+
+  match 'make_connection_request' => 'connection_requests#make_connection_request', via: :get
+  match 'make_connection_request' => 'connection_requests#make_connection_request', via: :post
+
+
+  resources :messages
   # messages controller
   match 'make_messages' => 'messages#make_messages', via: :get
   match 'make_messages' => 'messages#make_messages', via: :post
@@ -33,10 +47,6 @@ Weafam::Application.routes.draw do
   match 'spam_dialoge' => 'messages#spam_dialoge', via: :get
   #match 'spam_dialoge' => 'messages#spam_dialoge', via: :post
 
-  get "connect_users_trees/connect_users"
-  get "connect_users_trees/connect_profiles"
-  get "connect_users_trees/connect_trees"
-  get "connect_users_trees/connect_profiles_keys"
   get "new_profile/get_profile_params"
   get "new_profile/make_new_profile"
   get "new_profile/make_tree_row"
@@ -132,6 +142,10 @@ Weafam::Application.routes.draw do
   match 'connect_trees' => 'connect_users_trees#connect_trees', via: :get
   match 'connect_profiles_keys' => 'connect_users_trees#connect_profiles_keys', via: :get
 
+  get "connect_users_trees/connect_users"
+  get "connect_users_trees/connect_profiles"
+  get "connect_users_trees/connect_trees"
+  get "connect_users_trees/connect_profiles_keys"
 
 
 
