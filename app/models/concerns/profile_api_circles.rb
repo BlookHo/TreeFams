@@ -71,7 +71,8 @@ module ProfileApiCircles
       distance: 0,
       current_user_profile: current_user.try(:profile_id) == self.id,
       icon: self.icon_path,
-      has_rights: (user_ids.include? self.tree_id)
+      has_rights: (user_ids.include? self.tree_id),
+      user_id: (self.user_id ? self.user_id : false)
     }
   end
 
@@ -89,7 +90,8 @@ module ProfileApiCircles
         target: target.nil? ? self.id : target,
         distance: distance,
         current_user_profile: current_user.try(:profile_id) == key.is_profile_id,
-        icon: key.is_profile.icon_path
+        icon: key.is_profile.icon_path,
+        user_id: (key.is_profile.user_id ? key.is_profile.user_id : false)
       }
     end
     return results

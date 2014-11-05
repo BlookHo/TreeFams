@@ -36,6 +36,15 @@
   .link {
     stroke: #ccc;
     stroke-width: 1px;
+
+    &.green{
+      stroke: green;
+    }
+
+    &.blue{
+      stroke:blue;
+    }
+
   }
 
 

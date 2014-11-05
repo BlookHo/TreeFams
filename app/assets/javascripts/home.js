@@ -75,8 +75,14 @@ start = function(){
 
   // Links
   link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
-  link.enter().insert("line").attr("class", "link");
-  link.exit().remove();
+         link.enter()
+             .insert("line")
+             .classed("link", true)
+             .classed("blue", function(d){
+               return ~path_profile_ids.indexOf(d.id);
+             });
+
+         link.exit().remove();
 
 
   // Relations
@@ -151,16 +157,29 @@ start = function(){
          }
 
 
+         // Registrated user's icon
+         if (d.user_id){
+            d3.select(this)
+              .append("svg:image")
+              .attr("xlink:href", "/assets/registrated.svg")
+              .attr("width", 16)
+              .attr("height", 16)
+              .attr("x", -30)
+              .attr("y", 20)
+              .attr("class", "registrated-icon");
+         }
+
+
 
          // Search green mark
          if ( ~search_marked_profile_ids.indexOf(d.id) ) {
            d3.select(this)
              .append("svg:image")
              .attr("xlink:href", "/assets/mark.svg")
-             .attr("width", 24)
-             .attr("height", 24)
-             .attr("x", 8)
-             .attr("y", -40)
+             .attr("width", 16)
+             .attr("height", 16)
+             .attr("x", -32)
+             .attr("y", 20)
              .attr("class", "add-icon");
          }
 
@@ -192,7 +211,7 @@ start = function(){
               .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
 
 
-        // Icon
+        // Profile icon
         d3.select(this)
           .append("svg:image")
           .attr("xlink:href", function(d){ return d.icon; })
@@ -214,6 +233,21 @@ start = function(){
             .attr("y", -40)
             .attr("class", "add-icon");
         }
+
+
+
+        // Registrated user's icon
+        if (d.user_id){
+           d3.select(this)
+             .append("svg:image")
+             .attr("xlink:href", "/assets/registrated.svg")
+             .attr("width", 16)
+             .attr("height", 16)
+             .attr("x", -24)
+             .attr("y", 7)
+             .attr("class", "registrated-icon");
+        }
+
 
 
         // Click event
@@ -406,6 +440,7 @@ pushLink = function(sourceId, targetId){
 
 
 
+
 clearNodes = function(){
   if (node != undefined){
     d3.selectAll("svg > *").remove();
@@ -424,6 +459,7 @@ getCircles = function(params){
   clearNodes();
   $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id } )
     .done(function( data ) {
+        console.log(data.path);
         buildPath(data.path);
         data.circles.forEach(function(d, i) {
           pushNode(d);

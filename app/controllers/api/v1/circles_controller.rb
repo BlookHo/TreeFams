@@ -4,11 +4,21 @@ module Api
 
       respond_to :json
 
+
+      # /api/v1/circles
+      # принмает параметры:
+      # profile_id - id центрального профиля, для которого будут собраны круги родственников
+      # path_from_profile_id - id профиля от котрого вернуть путь к центральному профилю
+      # access_token - токен текущено пользователя
+      #
+      # ответ в формате json
+      # {circles:[], path:[]}
+
       def show
         profile = Profile.find(params[:profile_id])
         circles = profile.circles(api_current_user)
-        # path = find_path(from_profile_id: params[:path_from_profile_id].to_i, data: circles)
-        respond_with circles: circles#, path: path
+        path = find_path(from_profile_id: params[:path_from_profile_id].to_i, data: circles)
+        respond_with circles: circles, path: path
       end
 
 
@@ -28,7 +38,7 @@ module Api
     #    {:id=>30, :name=>"Ксения",    :target=>25 }
     #  ]
 
-
+      private
 
       def find_path(from_profile_id: from_profile_id, data: data)
         path = []
