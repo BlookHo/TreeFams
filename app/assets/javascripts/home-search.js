@@ -17,6 +17,8 @@ getSearchResults = function(params){
 showSearchResult = function(){
   $.get( "/api/v1/search", { token: access_token } )
     .done(function( data ) {
+      console.log('Search results');
+      console.log(data);
       search_results = data.circles;
       current_search_result = data.trees[0];
       search_marked_profile_ids = current_search_result.profile_ids

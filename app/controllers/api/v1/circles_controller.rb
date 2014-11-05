@@ -17,8 +17,9 @@ module Api
       def show
         profile = Profile.find(params[:profile_id])
         circles = profile.circles(api_current_user)
+        tree_owner_ids = profile.owner_user.get_connected_users
         path = find_path(from_profile_id: params[:path_from_profile_id].to_i, data: circles)
-        respond_with circles: circles, path: path
+        respond_with circles: circles, path: path, tree_owner_ids: tree_owner_ids
       end
 
 
@@ -47,6 +48,12 @@ module Api
           path << data.select {|d| d[:id] == path.last[:target]}.first
         end
         return path
+      end
+
+
+
+      def tree_owners(profile)
+
       end
 
 

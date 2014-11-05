@@ -119,6 +119,11 @@ start = function(){
     if (d.distance == 0){
 
 
+        // Add center class to center node group
+        d3.select(this)
+          .classed('center', true);
+
+
 
         // Name label
         d3.select(this)
@@ -179,7 +184,7 @@ start = function(){
              .attr("width", 16)
              .attr("height", 16)
              .attr("x", -32)
-             .attr("y", 20)
+             .attr("y", -32)
              .attr("class", "add-icon");
          }
 
@@ -188,7 +193,6 @@ start = function(){
         d3.select(this)
           .on('click', function(d){
             if (d3.event.defaultPrevented) return; // click suppressed
-            // getCircles({profile_id: d.id});
             showProfileMenu({profile_id: d.id});
           });
 
@@ -277,7 +281,7 @@ start = function(){
               .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
 
 
-        // Icon
+        // Profile's icon
         d3.select(this)
           .append("svg:image")
           .attr("xlink:href", function(d){ return d.icon; })
@@ -298,6 +302,19 @@ start = function(){
             .attr("x", 4)
             .attr("y", -20)
             .attr("class", "add-icon");
+        }
+
+
+        // Registrated user's icon
+        if (d.user_id){
+           d3.select(this)
+             .append("svg:image")
+             .attr("xlink:href", "/assets/registrated.svg")
+             .attr("width", 16)
+             .attr("height", 16)
+             .attr("x", -18)
+             .attr("y", 0)
+             .attr("class", "registrated-icon");
         }
 
         // Click event
@@ -459,7 +476,6 @@ getCircles = function(params){
   clearNodes();
   $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id } )
     .done(function( data ) {
-        console.log(data.path);
         buildPath(data.path);
         data.circles.forEach(function(d, i) {
           pushNode(d);

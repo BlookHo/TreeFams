@@ -10,13 +10,14 @@ $(function(){
         };
       };
   });
-
 });
+
 
 
 function hideContextMenu(){
   $('#context-menu').hide();
 }
+
 
 
 function showContextMenu(x,y){

@@ -11,8 +11,11 @@ class Profile < ActiveRecord::Base
               primary_key: :tree_id,
               foreign_key: :id,
               class: User
+
+
   belongs_to :name
   has_many   :trees
+
 
   has_many   :profile_datas, dependent: :destroy
   accepts_nested_attributes_for :profile_datas
