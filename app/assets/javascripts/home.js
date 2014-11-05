@@ -34,10 +34,10 @@ resizeGraph = function(){
 
 tick = function(){
 
-  if (nodes[0]){
-    nodes[0].x = width / 2;
-    nodes[0].y = (height / 2)-100;
-  }
+//  if (nodes[0]){
+//    nodes[0].x = width / 2;
+//    nodes[0].y = (height / 2)-100;
+//  }
 
   node = svg.selectAll(".node");
   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
@@ -67,9 +67,9 @@ start = function(){
                .links(links)
                .charge(-7500)
                .theta(0.1)
-               .linkDistance(0)
+               .linkDistance(-200)
                .linkStrength(1)
-               .friction(0.7)
+               .friction(0.5)
                .size([width, height])
                .on("tick", tick);
 
@@ -341,7 +341,7 @@ start = function(){
               .append('text')
               .attr("class", 'name')
               .attr("text-anchor", "middle")
-              .attr("y", 35)
+              .attr("y", 15)
               .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
 
 
