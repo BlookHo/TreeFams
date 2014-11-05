@@ -65,11 +65,12 @@ start = function(){
   force = d3.layout.force()
                .nodes(nodes)
                .links(links)
-               .charge(-7500)
+               .charge(-3000)
                .theta(0.1)
-               .linkDistance(-200)
+               .linkDistance(50)
                .linkStrength(1)
                .friction(0.5)
+               .gravity(1)
                .size([width, height])
                .on("tick", tick);
 
