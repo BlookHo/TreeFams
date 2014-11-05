@@ -2,6 +2,8 @@
 
 %table
   %tr
+    %th id
+    %th Connection_id
     %th User
     %th With user
     %th Confirm
@@ -13,6 +15,8 @@
 
   - @connection_requests.each do |connection_request|
     %tr
+      %td= connection_request.id
+      %td= connection_request.connection_id
       %td= connection_request.user_id
       %td= connection_request.with_user_id
       %td= connection_request.confirm
@@ -22,7 +26,7 @@
       %td= link_to 'Edit', edit_connection_request_path(connection_request)
       %td= link_to 'Destroy', connection_request, :method => :delete, :data => { :confirm => 'Are you sure?' }
       %br
-      %td= link_to 'Просмотр одного запроса', show_one_request_path(with_user_id: connection_request.with_user_id),  class: :request
+      %td= link_to 'Просмотр одного запроса', show_one_request_path(id: connection_request.id ,connection_id: connection_request.connection_id , with_user_id: connection_request.with_user_id),  class: :request
 
 %br
 

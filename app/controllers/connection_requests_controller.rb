@@ -70,6 +70,13 @@ class ConnectionRequestsController < ApplicationController
 
       find_users_connectors(with_user_id) if current_user # определение Юзеров - участников объединения деревьев
 
+      connection_id = params[:connection_id] # From view
+      @connection_id = connection_id # DEBUGG_TO_VIEW
+
+      id = params[:id] # From view
+      @id = id # DEBUGG_TO_VIEW
+
+
     else
       redirect_to login_path
       flash[:info] = "Для этого нужно авторизоваться"
