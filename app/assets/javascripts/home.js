@@ -115,6 +115,7 @@ start = function(){
 
   // Center node
   //////////////////////////////////////
+    /*
   gNode.select(function(d){
     if (d.distance == 0){
 
@@ -328,12 +329,12 @@ start = function(){
     });
 
 
-
+     */
 
     // Small dots circle nodes
     //////////////////////////////////////
     gNode.select(function(d){
-      if (d.distance > 2){
+      // if (d.distance > 2){
 
         // Name label
         d3.select(this)
@@ -370,7 +371,7 @@ start = function(){
             getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
           });
 
-      }
+      // }
     });
 
 
