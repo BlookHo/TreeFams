@@ -65,16 +65,16 @@ start = function(){
   force = d3.layout.force()
                .nodes(nodes)
                .links(links)
-               .charge(-3000)
-               .theta(0.1)
-               .linkDistance(50)
+               .charge(-1200)
+               //.theta(0.1)
+               .linkDistance(20)
                .linkStrength(1)
-               .friction(0.5)
-               .gravity(1)
+               .friction(.3)
+               .gravity(.1)
                .size([width, height])
                .on("tick", tick);
 
-  // Links
+  // Linksdista
   link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
          link.enter()
              .insert("line")
