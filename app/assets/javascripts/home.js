@@ -65,16 +65,15 @@ start = function(){
   force = d3.layout.force()
                .nodes(nodes)
                .links(links)
-               .charge(-7500)
-               .theta(0.1)
+               .charge(-600)
+               // .theta(0.1)
                // .linkDistance(0)
                .linkDistance(function(e){
-                 // console.log(e);
-                 // return 150 / e.distance;
-                 return 0;
+                 var distance =  Math.round(100 / e.distance);
+                 return distance;
                })
-               .linkStrength(1)
-               .friction(0.7)
+               // .linkStrength(1)
+               // .friction(0.7)
                .size([width, height])
                .on("tick", tick);
 
@@ -455,8 +454,8 @@ pushLink = function(sourceId, targetId){
     var sourceNode = findNode(sourceId);
     var targetNode = findNode(targetId);
     if((sourceNode !== undefined) && (targetNode !== undefined)) {
-        links.push({id: sourceId, source: sourceNode, target: targetNode, });
-        relations.push({id: sourceId, source: sourceNode, target: targetNode, relation: sourceNode.relation});
+        links.push({id: sourceId, source: sourceNode, target: targetNode, distance: sourceNode.distance });
+        relations.push({id: sourceId, source: sourceNode, target: targetNode, relation: sourceNode.relation, distance: sourceNode.distance});
     }
 };
 
