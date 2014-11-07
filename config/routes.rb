@@ -188,9 +188,11 @@ Weafam::Application.routes.draw do
 
 
   # Home
+
   ##################################################
-  get '/home',             to: 'home#index',  as: :home
-  get '/home/show/search', to: 'home#search', as: :home_search
+  get '/home',        to: 'home#index',  as: :home_index
+  get '/home/show',   to: 'home#show',   as: :home_show
+  get '/home/search', to: 'home#search', as: :home_search
 
 
   # Autocompletes

@@ -4,7 +4,13 @@ class HomeController < ApplicationController
   layout 'application.new'
 
 
+  # All profiles in user's tree
   def index
+  end
+
+
+  
+  def show
   end
 
 

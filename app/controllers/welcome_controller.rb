@@ -18,7 +18,7 @@ class WelcomeController < ApplicationController
     else
       flash[:alert] = "Пользователь не найден"
     end
-    redirect_to :home
+    redirect_to :home_show
     # redirect_to :main_page
   end
 
@@ -29,7 +29,7 @@ class WelcomeController < ApplicationController
     # session[:user_id] = nil
     # session[:current_step] = nil
     # session[:current_author] = nil
-    redirect_to :home if current_user
+    redirect_to :home_show if current_user
   end
 
   # Singup form

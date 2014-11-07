@@ -8,7 +8,7 @@ getSearchResults = function(params){
     .done(function( data ) {
       search_results = data.trees;
       $(search_btn).text('Найдено ваших родственников: '+data.total);
-      $('#jsdebug').text(JSON.stringify(search_results))
+      // $('#jsdebug').text(JSON.stringify(search_results))
     });
 };
 

@@ -6,4 +6,6 @@ class ProfileKey < ActiveRecord::Base
   belongs_to :user
   belongs_to :name, foreign_key: :is_name_id
   belongs_to :relation, primary_key: :relation_id
+
+
 end
