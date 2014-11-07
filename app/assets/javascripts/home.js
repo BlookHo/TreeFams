@@ -58,9 +58,11 @@ tick = function(){
 }
 
 
-
+var drag;
 
 start = function(){
+
+
 
   force = d3.layout.force()
                .nodes(nodes)
@@ -76,6 +78,11 @@ start = function(){
                // .friction(0.7)
                .size([width, height])
                .on("tick", tick);
+
+
+  drag = force.drag()
+              .on("dragstart", dragstart);
+              
 
   // Links
   link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
@@ -113,7 +120,7 @@ start = function(){
                   .append("g")
                   .attr("class", function(d) { return "node " + d.id; })
                   .classed('current', function(d){ return d.current_user_profile; })
-                  .call(force.drag);
+                  .call(drag);
 
 
 
@@ -392,6 +399,10 @@ start = function(){
 }
 
 
+
+function dragstart(d) {
+  d3.select(this).classed("fixed", d.fixed = true);
+}
 
 
 // Data works
