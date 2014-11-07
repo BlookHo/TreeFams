@@ -71,7 +71,7 @@ start = function(){
                // .linkStrength(1)
                // .friction(.3)
                // .gravity(.1)
-               .charge(-750)
+               .charge(-450)
                .linkDistance(function(e){
                  var distance =  Math.round(60 / e.distance);
                  return distance;
