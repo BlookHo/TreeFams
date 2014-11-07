@@ -34,10 +34,10 @@ resizeGraph = function(){
 
 tick = function(){
 
-  if (nodes[0]){
-    nodes[0].x = width / 2;
-    nodes[0].y = (height / 2)-100;
-  }
+//  if (nodes[0]){
+//    nodes[0].x = width / 2;
+//    nodes[0].y = (height / 2)-100;
+//  }
 
   node = svg.selectAll(".node");
   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
@@ -65,15 +65,16 @@ start = function(){
   force = d3.layout.force()
                .nodes(nodes)
                .links(links)
-               .charge(-7500)
-               .theta(0.1)
-               .linkDistance(0)
+               .charge(-1200)
+               //.theta(0.1)
+               .linkDistance(20)
                .linkStrength(1)
-               .friction(0.7)
+               .friction(.3)
+               .gravity(.1)
                .size([width, height])
                .on("tick", tick);
 
-  // Links
+  // Linksdista
   link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
          link.enter()
              .insert("line")
@@ -115,6 +116,7 @@ start = function(){
 
   // Center node
   //////////////////////////////////////
+    /*
   gNode.select(function(d){
     if (d.distance == 0){
 
@@ -328,19 +330,19 @@ start = function(){
     });
 
 
-
+     */
 
     // Small dots circle nodes
     //////////////////////////////////////
     gNode.select(function(d){
-      if (d.distance > 2){
+      // if (d.distance > 2){
 
         // Name label
         d3.select(this)
               .append('text')
               .attr("class", 'name')
               .attr("text-anchor", "middle")
-              .attr("y", 35)
+              .attr("y", 15)
               .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
 
 
@@ -370,7 +372,7 @@ start = function(){
             getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
           });
 
-      }
+      // }
     });
 
 
