@@ -98,7 +98,8 @@ start = function(){
                      .attr("dx", 1)
                      .attr("dy", ".25em")
                      .attr("text-anchor", "middle")
-                     .text(function(d) { return d.relation + ' ' + d.distance; });
+                     // .text(function(d) { return d.relation + ' ' + d.distance; });
+                     .text(function(d) { return d.relation; });
 
   relation.exit().remove();
 
@@ -126,7 +127,8 @@ start = function(){
               .attr("class", 'name')
               .attr("text-anchor", "middle")
               .attr("y", 15)
-              .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
+              //.text( function(d){ return d.name + ' (id:'+ d.id+')'; });
+              .text( function(d){ return d.name; });
 
 
         // Grey circle
