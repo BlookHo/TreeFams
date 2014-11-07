@@ -67,7 +67,12 @@ start = function(){
                .links(links)
                .charge(-7500)
                .theta(0.1)
-               .linkDistance(0)
+               // .linkDistance(0)
+               .linkDistance(function(e){
+                 // console.log(e);
+                 // return 150 / e.distance;
+                 return 0;
+               })
                .linkStrength(1)
                .friction(0.7)
                .size([width, height])

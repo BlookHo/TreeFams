@@ -73,8 +73,9 @@ start = function(){
                // .gravity(.1)
                .charge(-750)
                .linkDistance(function(e){
-                 console.log(e);
-                 return 150 / e.distance;
+                 var distance =  Math.round(100 / e.distance);
+                 console.log('link distance: '+distance);
+                 return distance;
                })
                .size([width, height])
                .on("tick", tick);
@@ -98,7 +99,7 @@ start = function(){
                      .attr("dx", 1)
                      .attr("dy", ".25em")
                      .attr("text-anchor", "middle")
-                     .text(function(d) { return d.relation; });
+                     .text(function(d) { return d.relation + ' ' + d.distance; });
 
   relation.exit().remove();
 
@@ -222,7 +223,7 @@ pushLink = function(sourceId, targetId){
     var targetNode = findNode(targetId);
     if((sourceNode !== undefined) && (targetNode !== undefined)) {
         links.push({id: sourceId, source: sourceNode, target: targetNode, distance: sourceNode.distance });
-        relations.push({id: sourceId, source: sourceNode, target: targetNode, relation: sourceNode.relation});
+        relations.push({id: sourceId, source: sourceNode, target: targetNode, relation: sourceNode.relation, distance: sourceNode.distance});
     }
 };
 
