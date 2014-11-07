@@ -1,7 +1,7 @@
 module ProfileApiCircles
   extend ActiveSupport::Concern
 
-  def circles(current_user = nil, max_distance = 5)
+  def circles(current_user = nil, max_distance = 10)
     @results = []
     @max_distance = max_distance
     @current_distance = 1
