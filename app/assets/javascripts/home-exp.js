@@ -73,7 +73,7 @@ start = function(){
                // .gravity(.1)
                .charge(-750)
                .linkDistance(function(e){
-                 var distance =  Math.round(80 / e.distance);
+                 var distance =  Math.round(60 / e.distance);
                  return distance;
                })
                .size([width, height])
