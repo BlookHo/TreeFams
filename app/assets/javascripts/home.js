@@ -347,7 +347,7 @@ start = function(){
               .append('text')
               .attr("class", 'name')
               .attr("text-anchor", "middle")
-              .attr("y", 35)
+              .attr("y", 15)
               // .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
               .text( function(d){ return d.name; });
 
