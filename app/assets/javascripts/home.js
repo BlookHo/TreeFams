@@ -82,7 +82,7 @@ start = function(){
 
   drag = force.drag()
               .on("dragstart", dragstart);
-              
+
 
   // Links
   link = svg.selectAll(".link").data(links, function(d) { return d.source.id + "-" + d.target.id; });
@@ -120,6 +120,7 @@ start = function(){
                   .append("g")
                   .attr("class", function(d) { return "node " + d.id; })
                   .classed('current', function(d){ return d.current_user_profile; })
+                  .on("dblclick", dblclick)
                   .call(drag);
 
 
@@ -398,6 +399,9 @@ start = function(){
   force.start();
 }
 
+function dblclick(d) {
+  d3.select(this).classed("fixed", d.fixed = false);
+}
 
 
 function dragstart(d) {
