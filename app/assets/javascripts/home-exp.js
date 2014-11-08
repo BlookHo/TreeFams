@@ -34,10 +34,10 @@ resizeGraph = function(){
 
 tick = function(){
 
-//  if (nodes[0]){
-//    nodes[0].x = width / 2;
-//    nodes[0].y = (height / 2)-100;
-//  }
+ if (nodes[0]){
+   nodes[0].x = width / 2;
+   nodes[0].y = (height / 2)-100;
+ }
 
   node = svg.selectAll(".node");
   node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
