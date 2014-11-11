@@ -119,7 +119,7 @@ start = function(){
   var gNode = node.enter()
                   .append("g")
                   .attr("class", function(d) { return "node " + d.id; })
-                  .classed('current', function(d){ return d.current_user_profile; })
+                  // .classed('current', function(d){ return d.current_user_profile; })
                   .on("dblclick", dblclick)
                   .call(drag);
 
@@ -272,7 +272,8 @@ start = function(){
         d3.select(this)
           .on('click', function(d){
             if (d3.event.defaultPrevented) return; // click suppressed
-            getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
+              // getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
+              getCircles({ profile_id: d.id });
           });
 
 
@@ -336,7 +337,8 @@ start = function(){
         d3.select(this)
           .on('click', function(d){
             if (d3.event.defaultPrevented) return; // click suppressed
-            getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
+            // getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
+            getCircles({ profile_id: d.id });
           });
 
       }
@@ -383,7 +385,8 @@ start = function(){
         d3.select(this)
           .on('click', function(d){
             if (d3.event.defaultPrevented) return; // click suppressed
-            getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
+            // getCircles({profile_id: d.id, path_from_profile_id: current_user_profile_id});
+            getCircles({ profile_id: d.id });
           });
 
       }

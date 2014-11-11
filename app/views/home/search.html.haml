@@ -1,12 +1,12 @@
--# home / search page
+-# home / SEARCH
 #graph-wrapper
 
 = render 'path'
-= render 'search_results_button'
+= render 'search_results_paginator'
 = render 'profile_menu'
 
-
 #jsdebug
+
 = javascript_include_tag 'path'
 = javascript_include_tag 'home'
 = javascript_include_tag 'home-search'
@@ -14,5 +14,5 @@
 
 %script
   var access_token = '#{current_user.access_token}';
-  var current_user_profile_id = #{current_user.profile_id};
-  showSearchResult();
+  // var current_user_profile_id = #{current_user.profile_id};
+  getSearchResults( updateSearchResultPaginator );

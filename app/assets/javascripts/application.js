@@ -16,3 +16,10 @@
 //= require libs/ui-bootstrap-tpls-0.9.0
 //= require_tree ./templates
 //= require apps/welcome_application
+
+
+
+
+function jsdebug(objekt){
+  $('#jsdebug').text( JSON.stringify(objekt) );
+}

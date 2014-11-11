@@ -17,7 +17,7 @@ var buildPath = function(data){
     // next_index = index + 1;
 
     if (index == 0){
-       path_item.is_relation = "Это вы";
+       path_item.is_relation = "Владелец дерева: ";
     }else{
       path_item.is_relation = data[index - 1].is_relation;
     }
@@ -49,7 +49,7 @@ var buildPathLink = function(profile){
   var linkText = document.createTextNode(profile.is_relation+' '+profile.name);
   a.appendChild(linkText);
   a.onclick = function(){
-    getCircles({profile_id: profile.id, path_from_profile_id: current_user_profile_id});
+    getCircles({profile_id: profile.id});
   };
   a.href = "#";
   li.appendChild(a)

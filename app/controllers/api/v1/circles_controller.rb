@@ -8,18 +8,44 @@ module Api
       # /api/v1/circles
       # принмает параметры:
       # profile_id - id центрального профиля, для которого будут собраны круги родственников
-      # path_from_profile_id - id профиля от котрого вернуть путь к центральному профилю
+      # fixed: путь возвращается к первому валдельцу дерева
       # access_token - токен текущено пользователя
       #
       # ответ в формате json
       # {circles:[], path:[]}
 
       def show
+
+        logger.info "==================== api_current_user"
+        logger.info api_current_user
+        logger.info "==================== api_current_user"
+
+        profile = Profile.find(params[:profile_id])
+        circles = profile.circles(api_current_user)
+        tree_owner_ids = profile.owner_user.get_connected_users
+        tree_owner_profile_id = get_tree_owner_user(tree_owner_ids).profile_id
+        path = find_path(from_profile_id: tree_owner_profile_id, data: circles)
+        respond_with circles: circles, path: path, tree_owner_ids: tree_owner_ids
+      end
+
+
+      def old_show
         profile = Profile.find(params[:profile_id])
         circles = profile.circles(api_current_user)
         tree_owner_ids = profile.owner_user.get_connected_users
         path = find_path(from_profile_id: params[:path_from_profile_id].to_i, data: circles)
         respond_with circles: circles, path: path, tree_owner_ids: tree_owner_ids
+      end
+
+
+
+      def get_tree_owner_user(tree_owner_ids)
+        if tree_owner_ids.include? api_current_user.id
+          user =  api_current_user
+        else
+          user = User.find(tree_owner_ids.first)
+        end
+        return user
       end
 
 
