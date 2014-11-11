@@ -10,6 +10,4 @@ class ConnectionRequest < ActiveRecord::Base
 
   validates_inclusion_of :done, :in => [true, false]
 
-  #validates_length_of :text, :minimum => 2, :maximum => 420, :message => "Поле текста сообщения должно быть длиной от 2 до 420 символов в Messages"
-
 end

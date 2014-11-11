@@ -20,6 +20,7 @@
 
   %table
     %tr
+      %th Connection_id
       %th User
       %th With user
       %th Confirm
@@ -31,6 +32,7 @@
 
     - @all_connection_requests.each do |connection_request|
       %tr
+        %td= connection_request.connection_id
         %td= connection_request.user_id
         %td= connection_request.with_user_id
         %td= connection_request.confirm.inspect

@@ -28,12 +28,16 @@ class ConnectionRequestsController < ApplicationController
 
       find_users_connectors(with_user_id) if current_user # определение Юзеров - участников объединения деревьев
 
+      max_connection_id = ConnectionRequest.connection_id.maximum
+      logger.info " max_connection_id = #{max_connection_id}"
+
       @with_whom_connect_users_arr.each do |user_to_connect|
 
         new_connection_request = ConnectionRequest.new
+    #    new_connection_request.connection_id = current_user.id
         new_connection_request.user_id = current_user.id
         new_connection_request.with_user_id = user_to_connect
-  #      new_connection_request.save
+        new_connection_request.save
 
       end
 
