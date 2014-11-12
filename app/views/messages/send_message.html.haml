@@ -25,7 +25,7 @@
       @text = #{@text.inspect}
 
 %br
-= link_to 'Смотреть диалог с Юзером - получателем: ', show_one_dialoge_path(user_id: params[:receiver_id]), class: :messages
+= link_to 'Смотреть диалог с Юзером - получателем: ', show_one_dialoge_path(user_id: params[:receiver_id]), class: :messages  if !params[:receiver_id].blank?
 %br
 = link_to 'Смотреть все диалоги: ', show_all_dialoges_path
 %br
