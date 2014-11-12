@@ -163,6 +163,10 @@ module ProfileKeysGeneration
       # new relations
       fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 11, new_profile_id, new_profile_name_id)  ###
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 11, new_profile_id, new_profile_name_id)  ###
+
+      fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 21, new_profile_id, new_profile_name_id)  ### NonStandard
+      fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 21, new_profile_id, new_profile_name_id)  ### NonStandard
+
     end
 
     # Добавить ряды в ProfileKeys при вводе Дочи
@@ -179,6 +183,10 @@ module ProfileKeysGeneration
       # new relations
       fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 12, new_profile_id, new_profile_name_id)  ###
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 12, new_profile_id, new_profile_name_id)  ###
+
+      fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 22, new_profile_id, new_profile_name_id)  ### NonStandard
+      fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 22, new_profile_id, new_profile_name_id)  ### NonStandard
+
     end
 
     # Добавить ряды в ProfileKeys при вводе Брата
@@ -191,6 +199,11 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 3, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 5, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 5, new_profile_id, new_profile_name_id)  ### NonStandard
+
+      # new relations
+      fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 19, new_profile_id, new_profile_name_id)
+      fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 19, new_profile_id, new_profile_name_id)
+
     end
 
     # Добавить ряды в ProfileKeys при вводе Сестры
@@ -203,6 +216,11 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 4, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 6, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 6, new_profile_id, new_profile_name_id)  ### NonStandard
+
+      # new relations
+      fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 20, new_profile_id, new_profile_name_id)
+      fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 20, new_profile_id, new_profile_name_id)
+
     end
 
     # Добавить ряды в ProfileKeys при вводе Мужа
