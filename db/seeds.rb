@@ -39,7 +39,17 @@ Relation.create([
 {relation_id: 17, relation: 'Невестка', relation_rod_padej: 'Невестки', origin_profile_sex_id: 1,  reverse_relation_id: 13, reverse_relation: 'Свекр'},
 {relation_id: 17, relation: 'Невестка', relation_rod_padej: 'Невестки', origin_profile_sex_id: 0,  reverse_relation_id: 14, reverse_relation: 'Свекровь'},
 {relation_id: 18, relation: 'Зять', relation_rod_padej: 'Зятя', origin_profile_sex_id: 1,  reverse_relation_id: 15, reverse_relation: 'Тесть'},
-{relation_id: 18, relation: 'Зять', relation_rod_padej: 'Зятя', origin_profile_sex_id: 0,  reverse_relation_id: 16, reverse_relation: 'Теща'}
+{relation_id: 18, relation: 'Зять', relation_rod_padej: 'Зятя', origin_profile_sex_id: 0,  reverse_relation_id: 16, reverse_relation: 'Теща'},
+
+{relation_id: 19, relation: 'Дядя', relation_rod_padej: 'Дяди', origin_profile_sex_id: 1,  reverse_relation_id: 21, reverse_relation: 'Племянник'},
+{relation_id: 19, relation: 'Дядя', relation_rod_padej: 'Дяди', origin_profile_sex_id: 0,  reverse_relation_id: 22, reverse_relation: 'Племянница'},
+{relation_id: 20, relation: 'Тетя', relation_rod_padej: 'Тети', origin_profile_sex_id: 1,  reverse_relation_id: 21, reverse_relation: 'Племянник'},
+{relation_id: 20, relation: 'Тетя', relation_rod_padej: 'Тети', origin_profile_sex_id: 0,  reverse_relation_id: 22, reverse_relation: 'Племянница'},
+
+{relation_id: 21, relation: 'Племянник', relation_rod_padej: 'Племянника', origin_profile_sex_id: 1,  reverse_relation_id: 19, reverse_relation: 'Дядя'},
+{relation_id: 21, relation: 'Племянник', relation_rod_padej: 'Племянника', origin_profile_sex_id: 0,  reverse_relation_id: 20, reverse_relation: 'Тетя'},
+{relation_id: 22, relation: 'Племянница', relation_rod_padej: 'Племянницы', origin_profile_sex_id: 1,  reverse_relation_id: 19, reverse_relation: 'Дядя'},
+{relation_id: 22, relation: 'Племянница', relation_rod_padej: 'Племянницы', origin_profile_sex_id: 0,  reverse_relation_id: 20, reverse_relation: 'Тетя'}
 
 
 
