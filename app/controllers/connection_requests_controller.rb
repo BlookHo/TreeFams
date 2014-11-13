@@ -1,7 +1,7 @@
 class ConnectionRequestsController < ApplicationController
   include ConnectionRequestsHelper
 
-#  before_filter :logged_id?
+  before_filter :logged_in?
   before_action :set_connection_request, only: [:show, :edit, :update, :destroy] #, :show_one_request]
 
   # GET /connection_requests
@@ -19,8 +19,6 @@ class ConnectionRequestsController < ApplicationController
   # GET /connection_requests/new
   def make_connection_request
 
-    if current_user
-
       current_user_id = current_user.id #
       with_user_id = params[:user_id_to_connect] # From view
       @current_user_id = current_user_id # DEBUGG_TO_VIEW
@@ -29,22 +27,23 @@ class ConnectionRequestsController < ApplicationController
       find_users_connectors(with_user_id) if current_user # определение Юзеров - участников объединения деревьев
 
       max_connection_id = ConnectionRequest.maximum(:connection_id)
-      logger.info " max_connection_id = #{max_connection_id}"
+      max_connection_id = 1 if max_connection_id == nil
+
+      logger.info " max_connection_id = #{max_connection_id.inspect}"
+
+
 
       @with_whom_connect_users_arr.each do |user_to_connect|
 
         new_connection_request = ConnectionRequest.new
-    #    new_connection_request.connection_id = current_user.id
+        new_connection_request.connection_id = max_connection_id
         new_connection_request.user_id = current_user.id
         new_connection_request.with_user_id = user_to_connect
-    #    new_connection_request.save
+   #     new_connection_request.save
 
       end
 
       @all_connection_requests = ConnectionRequest.all.order('created_at').reverse_order
-
-    end
-
 
   end
 
@@ -65,7 +64,6 @@ class ConnectionRequestsController < ApplicationController
   # GET /connection_requests/1.json
   def show_one_request
 
-    if current_user
       @new_requests_count = count_new_requests
       #logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
 
@@ -79,12 +77,6 @@ class ConnectionRequestsController < ApplicationController
 
       id = params[:id] # From view
       @id = id # DEBUGG_TO_VIEW
-
-
-    else
-      redirect_to login_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
 
   end
 
@@ -133,7 +125,7 @@ class ConnectionRequestsController < ApplicationController
     # update request data - to no connect
     request_to_update = ConnectionRequest.where(:user_id => current_user.id, :with_user_id => no_user_id, :done => false)[0]
     request_to_update.confirm = 0
-    request_to_update.done = true # больше не объединяем в дальнейшем (?)
+    request_to_update.done = true # больше не объединяем в дальнейшем
     request_to_update.save
     logger.info "== request_to_update.confirm = #{request_to_update.confirm}"
     logger.info "== request_to_update.done = #{request_to_update.done}"

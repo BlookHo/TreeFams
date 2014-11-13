@@ -20,6 +20,9 @@ class User < ActiveRecord::Base
   has_many :trees,    dependent: :destroy
   has_many :profile_keys, dependent: :destroy
 
+  has_many :connection_requests, dependent: :destroy
+
+
 
   def name
     profile.name.name.capitalize
