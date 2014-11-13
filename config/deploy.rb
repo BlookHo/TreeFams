@@ -2,15 +2,15 @@ require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
 
 
-set :application, "we"
-set :user, "meduza"
+set :application, "weafam"
+set :user, "weafam"
 set :rails_env, "production"
-set :domain, "meduza@rubycola.ru" # Это необходимо для деплоя через ssh.
-set :deploy_to, "/home/meduza/www/#{application}"
+set :domain, "weafam@128.199.38.4" # Это необходимо для деплоя через ssh.
+set :deploy_to, "/home/weafam/www/#{application}"
 set :use_sudo, false
 
 
-set :rvm_ruby_string, 'ruby-2.1.0@we' # Ruby интерпретатор + gemset.
+set :rvm_ruby_string, 'ruby-2.1.4@weafam' # Ruby интерпретатор + gemset.
 set :rvm_bin_path, "/home/#{user}/.rvm/bin/" # rvm bin path - rvm-shell
 set :rvm_type, :user # rvm, установленный у пользователя, от которого происходит деплой, а не системный rvm.
 
@@ -35,7 +35,7 @@ namespace :db do
     base: &base
       adapter: postgresql
       username: postgres
-      password: postpass2
+      password: interweb
       encoding: utf8
       reconnect: false
       pool: 5
