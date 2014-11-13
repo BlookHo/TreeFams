@@ -1,7 +1,7 @@
 class ConnectionRequestsController < ApplicationController
   include ConnectionRequestsHelper
 
-
+#  before_filter :logged_id?
   before_action :set_connection_request, only: [:show, :edit, :update, :destroy] #, :show_one_request]
 
   # GET /connection_requests
@@ -37,7 +37,7 @@ class ConnectionRequestsController < ApplicationController
     #    new_connection_request.connection_id = current_user.id
         new_connection_request.user_id = current_user.id
         new_connection_request.with_user_id = user_to_connect
-        new_connection_request.save
+    #    new_connection_request.save
 
       end
 
