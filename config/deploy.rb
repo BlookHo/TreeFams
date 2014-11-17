@@ -27,6 +27,7 @@ role :db,  domain, :primary => true
 
 
 
+
 # Настройка БД
 namespace :db do
   desc "Create database yaml in shared path"
