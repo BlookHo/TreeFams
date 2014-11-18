@@ -311,7 +311,7 @@ var app = angular
       if (data.errors) {
         $scope.error = "Email "+data.errors['email'];
       }else{
-        window.location.href = '/home/show';
+        window.location.href = '/home';
       }
     }).error(function(data){
       $scope.loading = false;

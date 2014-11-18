@@ -42,14 +42,13 @@ class ProfilesController < ApplicationController
 
   def create
 
+
     @base_profile = Profile.find(params[:base_profile_id]) # Старый профиль, к которому добавляем
     @base_profile_id   = @base_profile.id #  профиль того, к кому добавляем
-    # текущий автор отображаемого круга
-    # теперь это и есть base_profile
-    @author_profile_id = @base_profile_id
-
+    @author_profile_id = params[:author_profile_id] # текущий автор отображаемого круга
     # @base_relation_id  = params[:base_relation_id] # relation того, к кому добавляем, к автору отображаемого круга
-    @base_relation_id = 0
+    @base_relation_id = 3
+
 
     @profile = Profile.new(profile_params)  # Новый добавляемый профиль
     @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
@@ -91,22 +90,23 @@ class ProfilesController < ApplicationController
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
         logger.info "==== Start ProfileKey.add_new_profile ====== "
-        ProfileKey.add_new_profile(@base_profile,
-            @profile, @profile.relation_id,
-            exclusions_hash: @profile.answers_hash,
-            tree_ids: current_user.get_connected_users) #
+
+        # ProfileKey.add_new_profile(@base_profile,
+        #     @profile, @profile.relation_id,
+        #     exclusions_hash: @profile.answers_hash,
+        #     tree_ids: current_user.get_connected_users)
 
         # redirect_to to profile circle path if exist, via js
-        if params[:path_link].blank?
-          @circle = current_user.profile.circle(current_user.id)
-          @author = current_user.profile
-        else
-          @path_link = params[:path_link]
-        end
+        # if params[:path_link].blank?
+        #   @circle = current_user.profile.circle(current_user.id)
+        #   @author = current_user.profile
+        # else
+        #   @path_link = params[:path_link]
+        # end
 
       # Ask relations questions
       else
-        # flash.now[:alert] = "Уточняющие вопросы"
+        flash.now[:alert] = "Уточняющие вопросы"
         render :new
       end
 

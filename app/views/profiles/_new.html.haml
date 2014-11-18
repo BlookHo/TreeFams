@@ -10,6 +10,8 @@
   = form_for @profile, remote: true do |f|
 
     = hidden_field_tag :base_profile_id, @base_profile.id
+    = text_field_tag :author_profile_id
+
     = f.hidden_field :relation_id
 
     - if @questions
@@ -19,6 +21,8 @@
       = text_field_tag :profile_name, @profile.profile_name, placeholder: "Имя...", id: :new_profile_name
       = text_field_tag :profile_name_id, @profile.name_id, id: :new_profile_name_id
       %script
+        var author_id = path_profile_ids[0];
+        $('#author_profile_id').val(author_id);
         initNameAutocomplete('#new_profile_name', #{Relation.sex_id_for_relation_id(@profile.relation_id)});
     .actions
       -#= link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class:  [:bttn, :grey]
