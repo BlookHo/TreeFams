@@ -9,10 +9,12 @@ class ProfilesController < ApplicationController
   end
 
 
+
   def edit
     @profile = Profile.find(params[:profile_id])
     @profile_data = find_or_create_profile_data
   end
+
 
 
   def update
@@ -130,30 +132,6 @@ class ProfilesController < ApplicationController
 
 
 
-
-  def old_destroy
-
-    @profile = Profile.where(id: params[:id]).first
-
-    if @profile.tree_circle(current_user.id, @profile.id).size > 0
-      flash[:alert] = "Вы можете удалить только последнего родственника в цепочке"
-    else
-      if @profile and @profile.user_id != current_user.id
-        ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
-        Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
-        @profile.destroy
-        flash[:notice] = "Профиль удален"
-      else
-        flash[:alert] = "Ошибка удаления профиля"
-      end
-    end
-
-
-    redirect_to :back
-  end
-
-
-
   def destroy
     @profile = Profile.where(id: params[:id]).first
 
@@ -177,6 +155,7 @@ class ProfilesController < ApplicationController
 
 
 
+
   def show_dropdown_menu
     @author_profile_id = params[:author_profile_id]
     @profile = Profile.find(params[:profile_id])
@@ -186,7 +165,13 @@ class ProfilesController < ApplicationController
 
 
 
+  def show_context_menu
+    @profile = Profile.find(params[:profile_id])
+  end
+
+
   private
+
 
 
   def questions_valid?(questions_hash)
@@ -213,6 +198,7 @@ class ProfilesController < ApplicationController
   end
 
 
+
   def find_or_create_profile_data
     profile_data = @profile.profile_datas.where(creator_id: current_user.id).first
     if profile_data.nil?
@@ -220,6 +206,7 @@ class ProfilesController < ApplicationController
     end
     return profile_data
   end
+
 
 
   def profile_data_params

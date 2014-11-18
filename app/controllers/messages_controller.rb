@@ -27,6 +27,8 @@ class MessagesController < ApplicationController
 
   end
 
+
+
   # Получаем диалоги всех контрагентов текущего юзера
   def show_all_dialoges
 

@@ -10,7 +10,7 @@ var current_search_result = 0;
 function getSearchResults(callback) {
   $.get( "/api/v1/search", { token: access_token } )
    .done(function( data ) {
-      jsdebug(data);
+      // jsdebug(data);
       search_results = data;
       if (callback){ callback(search_results); }
     });

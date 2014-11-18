@@ -1,0 +1,50 @@
+#profile-context-menu{
+  position:absolute;
+  display:inline-block;
+
+  left:50%;
+  top:40%;
+
+  margin-left:50px;
+  margin-top:-12px;
+
+  background-color:#fff;
+  border-radius:5px;
+  box-shadow:0 0 8px rgba(0,0,0,0.7);
+
+  // Arrows
+  &:before {
+     position: absolute;
+     top:10px;
+     left: -13px;
+     display: block;
+     border-top: 12px solid transparent;
+     border-bottom: 12px solid transparent;
+     border-right: 12px solid rgba(0,0,0,0.4);
+     content: '';
+  }
+
+  &:after {
+     position: absolute;
+     top:10px;
+     left: -12px;
+     display: block;
+     border-top: 12px solid transparent;
+     border-bottom: 12px solid transparent;
+     border-right: 12px solid #fff;
+     content: '';
+  }
+}
+
+
+#profile-context-menu a{
+  text-decoration:none;
+}
+
+
+#profile-context-menu ul{
+  li{
+    display:block;
+    padding:10px 20px;
+  }
+}

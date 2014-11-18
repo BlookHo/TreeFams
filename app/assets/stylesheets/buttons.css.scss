@@ -44,3 +44,68 @@
 
 
 }
+
+
+
+// OLD BUTTONS
+.btn,
+input[type=submit].btn{
+  display:inline-block;
+  text-decoration:none;
+  font-weight:bold;
+
+  border:none;
+  outline:none;
+  cursor:pointer;
+
+  // default
+  height:34px;
+  line-height:34px;
+  border-radius:21px;
+  font-size:14px;
+  padding:0 21px;
+  color:#fff !important;
+  background-color:grey;
+
+  &:hover{
+    background-color:#000;
+  }
+
+
+  // disabled button
+  &:disabled{
+    pointer-events: none;
+    opacity:0.5;
+  }
+
+  &.large{
+    height:60px;
+    padding:0 32px;
+    border-radius:30px;
+    line-height:60px;
+    font-size:18px;
+  }
+
+
+  &.blue{
+    background-color:#0088ff;
+    &:hover{
+      background-color:#0069c0;
+    }
+  }
+
+
+  &.green{
+    background-color:green;
+    &:hover{
+      background-color:green;
+    }
+  }
+
+  &.red{
+    background-color:red;
+    &:hover{
+      background-color:#b10000;
+    }
+  }
+}
