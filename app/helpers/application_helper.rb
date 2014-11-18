@@ -52,6 +52,14 @@ module ApplicationHelper
         prefix ? "Ваш невестка" : "Невестка"
       when 18
         prefix ? "Ваш зять" : "Зять"
+      when 19
+        prefix ? "Ваш дядя" : "дядя"
+      when 20
+        prefix ? "Ваша тетя" : "Тетя"
+      when 21
+        prefix ? "Ваш племянник" : "Племянник"
+      when 22
+        prefix ? "Ваша племянница" : "Племянница"
     else
       "Неизвестно"
     end

@@ -1,10 +1,35 @@
 
 %p
   @current_user.id = #{current_user.id.inspect}
+%p
+  ID всех Юзеров - адресатов: #{@users_ids.inspect}
+%br
+  %h3 SEND_MESSAGE: ОТПРАВИТЬ СООБЩЕНИЕ
+%br
+
+  = form_tag do
+    = label_tag 'Введи ID User = Получателя сообщения (receiver_id): '
+    = number_field_tag 'receiver_id', '', :placeholder => params[:receiver_id], :maxlength => 4, :size => 5
+    %li
+    -#= label_tag 'Введи текст сообщения (text):'
+    -#= text_field_tag 'text', '', :maxlength => 50, :size => 50
+    -#%li
+    = submit_tag 'Отправить сообщение (Ввод)'
+
+%br
+  %div
+    %h3 Параметры введенного сообщения:
+    %p
+      @current_user.id = #{current_user.id.inspect}
+    %p
+      @receiver_id = #{@receiver_id.inspect}
+    %p
+      @text = #{@text.inspect}
+
 %br
 %p
   @new_messages_count = #{@new_messages_count.inspect}
--#= link_to 'Поиск собеседника', search_dialoge_agent_path
+%td= link_to 'Написать сообщение .', send_message_path(receiver_id: @receiver_id) if !params[:receiver_id].blank?
 %br
 %br
 %h1 Диалоги всех Юзеров (Listing All Dialoges)
@@ -68,3 +93,9 @@
   %h4 No Listing @talks_and_messages!
 
 %br
+%br
+= link_to 'Смотреть диалог с Юзером - получателем: ', show_one_dialoge_path(user_id: params[:receiver_id]), class: :messages if !params[:receiver_id].blank?
+%br
+= link_to 'Смотреть все диалоги: ', show_all_dialoges_path
+%br
+= link_to 'Возврат к списку диалогов и сообщений', show_all_messages_path

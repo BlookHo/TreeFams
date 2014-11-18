@@ -232,6 +232,11 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @wives_hash, 0, 7, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 1, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 1, new_profile_id, new_profile_name_id)  ### NonStandard
+
+      # new relations
+      fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 18, new_profile_id, new_profile_name_id)  ###
+      fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 18, new_profile_id, new_profile_name_id)  ###
+
     end
 
     # Добавить ряды в ProfileKeys при вводе Жены
@@ -243,6 +248,11 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @husbands_hash, 1, 8, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 2, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 2, new_profile_id, new_profile_name_id)
+
+      # new relations
+      fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 17, new_profile_id, new_profile_name_id)  ###
+      fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 17, new_profile_id, new_profile_name_id)  ###
+
     end
 
 
@@ -374,34 +384,6 @@ module ProfileKeysGeneration
       # add_row_to_tree - это рабочий массив с данными для формирования рядов в таблице ProfileKey.
       @add_row_to_tree = add_row_to_tree # DEBUGG_TO_VIEW
       logger.info " @add_row_to_tree = #{add_row_to_tree} "
-
-      # промеж-я version - ProfileKey rows -> только в те из объед-ных деревея, где есть base_profile.id, - профиль к кот-му добавляем
-      #modified_tree_ids_Tr = []
-      #tree_ids.each do |tree_id|
-      #  rows_in_Tree = Tree.where(user_id: tree_id, is_profile_id: base_profile.id)
-      #  if !rows_in_Tree.blank?
-      #    modified_tree_ids_Tr << tree_id
-      #  end
-      #end
-      #
-      #logger.info "Before cycle: base_profile.id = #{base_profile.id}, modified_tree_ids_Tr = #{modified_tree_ids_Tr}  "
-      #modified_tree_ids_Tr.each do |tree_id|
-      #  @@current_user_id = tree_id
-      #  #make_profilekeys_rows(@relation_id, @add_row_to_tree)
-      #  logger.info "In cycle: make_profilekeys_rows: tree_ids = #{tree_ids} "
-      #  logger.info "@@current_user_id = #{@@current_user_id} "
-      #  make_profilekeys_rows(add_row_to_tree)
-      #end
-
-      # old version - ProfileKey rows -> в каждое из  объед-ных дерев
-      #tree_ids.each do |tree_id|
-      #  @@current_user_id = tree_id
-      #  #make_profilekeys_rows(@relation_id, @add_row_to_tree)
-      #  logger.info "In cycle: make_profilekeys_rows: tree_ids = #{tree_ids} "
-      #  logger.info "@@current_user_id = #{@@current_user_id} "
-      #  make_profilekeys_rows(add_row_to_tree)
-      #end
-
       logger.info "Before: make_profilekeys_rows:: base_profile.tree_id = #{base_profile.tree_id}, tree_ids = #{tree_ids} "
       make_profilekeys_rows(base_profile.tree_id, add_row_to_tree)
 
