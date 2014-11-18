@@ -1,6 +1,6 @@
 #header
   .container
-    = link_to "Мы все &mdash; родня <i class='fa fa-copyright fa-fw'></i>".html_safe, "/home", id: :logo
+    = link_to "Мы все &mdash; родня".html_safe, "/home", id: :logo
 
     %ul
       - if current_user
@@ -20,4 +20,4 @@
         %li= link_to 'Выйти', :logout,  class: :logout
       - else
         %li= link_to 'Войти', :login,   class: :login
-        %li= link_to 'Зарегистрироваться', :start,   class: :login
+        %li= link_to 'Зарегистрироваться', :signup,   class: :login

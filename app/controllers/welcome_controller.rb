@@ -1,5 +1,8 @@
 class WelcomeController < ApplicationController
 
+  layout 'application.new'
+
+
   helper_method :current_step,
                 :current_author,
                 :normolized_members_name,
@@ -18,8 +21,7 @@ class WelcomeController < ApplicationController
     else
       flash[:alert] = "Пользователь не найден"
     end
-    redirect_to :home_show
-    # redirect_to :main_page
+    redirect_to :home
   end
 
 
@@ -29,12 +31,14 @@ class WelcomeController < ApplicationController
     # session[:user_id] = nil
     # session[:current_step] = nil
     # session[:current_author] = nil
-    redirect_to :home_show if current_user
+    redirect_to :home if current_user
   end
+
 
   # Singup form
   def start
   end
+
 
   # Form action
   def proceed

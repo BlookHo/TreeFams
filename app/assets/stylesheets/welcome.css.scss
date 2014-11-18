@@ -4,3 +4,27 @@
   font-size:1.6em;
   color:grey;
 }
+
+
+#promo{
+  width:100%;
+  padding:50px 0;
+  text-align:center;
+
+  h1{
+    font-size:41px;
+    color:#252525;
+    font-weight:300;
+  }
+
+
+  h2{
+    font-size:21px;
+    line-height:29px;
+    margin-top:21px;
+    margin-bottom:32px;
+    color:grey;
+    font-style:italic;
+    font-family:Georgia, serif;
+  }
+}
