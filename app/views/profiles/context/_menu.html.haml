@@ -1,0 +1,39 @@
+%ul
+  -# Могут ли быть добавлены к профилю новые отношения от current_user
+  - if @profile.allow_add_relation
+    %li
+      = link_to "+ Добавить родственника", '#', onclick: "$('#context-relations-list').slideToggle('fast')"
+      %ul#context-relations-list{style:'display:none;'}
+        - Relation.relations_for_sex(@profile.sex_id).each do |relation|
+          %li
+            = link_to relation[:title], new_profile_path(relation_id: relation[:id],
+                                                         base_profile_id: @profile.id), remote: true
+
+  -# пригласить
+  - if @profile.allow_invite
+    %li= link_to "Пригласить", '#', class: :grey
+
+  -# Написать личное сообщение
+  - if @profile.allow_conversation
+    %li= link_to "Отправить сообщение", '#', class: :grey
+
+  -# Добавить в избранное
+  %li= link_to "Добавить в избранные", '#', class: :grey
+
+  -# Страница профиля
+  %li= link_to "О нём", profile_edit_data_path(@profile.id)
+
+  -# Может ли быть удален профиль от current_user
+  - if @profile.allow_destroy
+    %li= link_to "Удалить профиль", profile_path(@profile), class: :red, method: :delete
+
+
+
+
+
+-# = link_to relation[:title],
+-#   new_profile_path(base_relation_id: @base_relation_id,
+-#                    base_profile_id: @profile.id,
+-#                    relation_id: relation[:id],
+-#                    path_link: @path_link,
+-#                    author_profile_id: @author_profile_id), remote: true

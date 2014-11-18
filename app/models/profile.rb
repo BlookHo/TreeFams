@@ -1,6 +1,16 @@
 class Profile < ActiveRecord::Base
 
-  attr_accessor :profile_name, :relation_id, :answers_hash
+  # Аттрибуты при добавлении нового профиля
+  attr_accessor :profile_name,
+                :relation_id,
+                :answers_hash
+
+
+  # аттрибуты для контекстного меню
+  attr_accessor :allow_add_relation,
+                :allow_destroy,
+                :allow_invite,
+                :allow_conversation
 
   include ProfileQuestions
   include ProfileMerge

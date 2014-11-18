@@ -9,8 +9,12 @@
   margin-top:-12px;
 
   background-color:#fff;
-  border-radius:5px;
+  border-radius:4px;
+  overflow:hidden;
+
   box-shadow:0 0 8px rgba(0,0,0,0.7);
+
+  width:280px;
 
   // Arrows
   &:before {
@@ -37,14 +41,65 @@
 }
 
 
+
 #profile-context-menu a{
+
   text-decoration:none;
+  display:inline-block;
+  padding:10px;
+  color:blue;
+  width:100%;
+  border-bottom:1px solid #ccc;
+
+  &:hover{
+    background-color:blue;
+    color:#fff;
+  }
 }
+
+
 
 
 #profile-context-menu ul{
   li{
     display:block;
-    padding:10px 20px;
+  }
+}
+
+
+// nested list
+#profile-context-menu ul li > ul{
+  font-size:12px;
+  background-color:#ddd;
+  a{padding-left:24px;}
+}
+
+
+
+
+//  Form in context menu
+#profile-context-menu .context-menu-form{
+  h2{
+    font-size:16px;
+    font-weight:bold;
+    padding:10px;
+    width:100%;
+    border-bottom:1px solid #ccc;
+  }
+
+  form{
+    padding:10px;
+
+  }
+
+  form .row{
+    width:100%;
+    margin-bottom:10px;
+  }
+
+  form input[type='text']{
+    font-size:14px;
+    padding:6px;
+    width:100%;
   }
 }

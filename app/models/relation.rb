@@ -135,4 +135,14 @@ class Relation < ActiveRecord::Base
   end
 
 
+  # Возвращает sex_id добавляемого отношения
+  def self.sex_id_for_relation_id(relation_id)
+      if [1,3,5,7].include? relation_id.to_i
+        return 1
+      else
+        return 0
+      end
+  end
+
+
 end

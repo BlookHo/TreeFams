@@ -4,22 +4,16 @@
 = render 'path'
 = render 'search_results_button'
 
-#profile-context-menu
-  %ul
-    %li= link_to 'Пригласить', '#'
-    %li= link_to 'Написать', '#'
-    %li= link_to 'Добавить родственника', '#'
+#profile-context-menu{style:'display:none;'}
 
 #jsdebug
 
 = javascript_include_tag 'path'
 = javascript_include_tag 'home'
 = javascript_include_tag 'home-search'
--#= javascript_include_tag 'profile-dropdown'
 
 
 %script
   var access_token = '#{current_user.access_token}';
-  // var current_user_profile_id = #{current_user.profile_id};
   getCircles({ profile_id: #{current_user.profile_id}, token: access_token });
   getSearchResults( showSearchResultsButton );

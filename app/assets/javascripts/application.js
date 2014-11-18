@@ -2,6 +2,9 @@
 //----------------------------------
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.autocomplete
+//= require profile-context-menu.js
+//= require autocompletes.js
 
 //  D3js.org
 //----------------------------------
@@ -16,7 +19,6 @@
 //= require libs/ui-bootstrap-tpls-0.9.0
 //= require_tree ./templates
 //= require apps/welcome_application
-
 
 
 

@@ -515,7 +515,7 @@ getCircles = function(params){
 
 
 showProfileContextMenu = function(params){
-  $.get( "/profiles/show-context-menu", params);
+  $.get( "/profile/context-menu", params);
 }
 
 

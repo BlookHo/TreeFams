@@ -135,14 +135,22 @@ Weafam::Application.routes.draw do
 
 
 
-  resources :members, except: :index
+  # resources :members, except: :index
   resources :trees
 
+
+  # resources :profiles, except: [:index, :edit]
+  # resources :profiles, except: [:index, :edit] do
+      # get 'show-dropdowm-menu', to: 'profiles#show_dropdown_menu', as: :show_dropdown
+      # get 'show-context-menu', to: 'profiles#show_context_menu', as: :show_context_menu
+      # get '/edit/data', to: 'profiles#edit', as: :edit_data
+  # end
+
+  get 'profile/context-menu', to: 'profiles#context_menu', as: :profile_context_menu
   resources :profiles, except: [:index, :edit] do
-    # get 'show-dropdowm-menu', to: 'profiles#show_dropdown_menu', as: :show_dropdown
-    # get 'show-context-menu', to: 'profiles#show_context_menu', as: :show_context_menu
-    # get '/edit/data', to: 'profiles#edit', as: :edit_data
+    get '/edit/data', to: 'profiles#edit', as: :edit_data
   end
+
 
   resources :users
   resources :names
