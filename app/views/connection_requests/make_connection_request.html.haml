@@ -1,22 +1,69 @@
 %section.admin
 
-%h3
-  ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ
+%p
+  Дата и Время:
+  -#@time: #{@time.inspect}
+  =  l Time.now, format: :myformat
+%br
 
+%h3
+  ВАШ ЗАПРОС НА ОБЪЕДИНЕНИЕ С ВЫБРАННЫМ ВАМИ ДЕРЕВОМ Юзера = #{@with_user_id.inspect}
+  СФОРМИРОВАН
+%h3
+  И ОТПРАВЛЕН ДЛЯ ПОДТВЕРЖДЕНИЯ ВСЕМ УЧАСТНИКАМ ЭТОГО ДЕРЕВА: #{@with_whom_connect_users_arr.inspect}
+%br
+%p Справочно:
 %p
   Кто хочет соединиться: Автор: #{@current_user_id.inspect}
 %p
-  @who_connect_users_arr: #{@who_connect_users_arr.inspect}
--#%p
--#  @first_tree: #{@first_tree.inspect}
+  Состав вашего дерева: @who_connect_users_arr: #{@who_connect_users_arr.inspect}
 %p
   Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@with_user_id.inspect}
 %p
-  @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
+  Состав объединяемого дерева: @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
 
+%br
+%p
+  @current_user_connection_ids: #{@current_user_connection_ids.inspect}
+
+%p
+  @user_requests_data: #{@user_requests_data.inspect}
+
+
+
+%p Содержание всех ваших запросов:
+- if !@user_requests_data.blank?
+
+  %h1 Listing @user_requests_data
+
+  %table
+    %tr
+      %th Connection_id
+      %th User
+      %th With user
+      %th Confirm
+      %th Done
+      %th Created_at
+      %th
+      %th
+      %th
+      %th
+
+    - @user_requests_data.each do |connection_request, data_hash|
+      %tr
+        %td= connection_request
+        %td= data_hash.values_at(:request_from_user_id).flatten[0]
+        %td= data_hash.values_at(:request_to_user_id).flatten[0]
+        %td= data_hash.values_at(:confirm).flatten[0].inspect
+        %td= data_hash.values_at(:done).flatten[0]
+        %td= data_hash.values_at(:created_at).flatten[0]
+        %td= link_to 'Просмотр одного из сущ-х запросов', show_one_request_path(with_user_id: data_hash.values_at(:request_to_user_id).flatten[0]),  class: :request
+
+
+%p Содержание всех запросов:
 - if !@all_connection_requests.blank?
 
-  %h1 Listing connection_requests
+  %h1 Listing @all_connection_requests
 
   %table
     %tr

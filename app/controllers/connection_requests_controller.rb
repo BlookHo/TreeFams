@@ -5,6 +5,8 @@ class ConnectionRequestsController < ApplicationController
   #before_action :set_connection_request, only: [:show, :edit, :update, :destroy] #, :show_one_request]
 
   Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
+ # I18n.l Time.now, format: :myformat
+
   @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
 
 
@@ -49,11 +51,39 @@ class ConnectionRequestsController < ApplicationController
         new_connection_request.connection_id = max_connection_id
         new_connection_request.user_id = current_user.id
         new_connection_request.with_user_id = user_to_connect
-        new_connection_request.save
+  #      new_connection_request.save
 
       end
 
       @all_connection_requests = ConnectionRequest.all.order('created_at').reverse_order
+
+      current_user_connection_ids = ConnectionRequest.where(:user_id => current_user.id, :done => false ).order('created_at').reverse_order.pluck('connection_id').uniq
+      @current_user_connection_ids = current_user_connection_ids
+
+      user_requests_data = {}
+      current_user_connection_ids.each do |one_connection_id|
+        request = ConnectionRequest.where(:connection_id => one_connection_id, :done => false ).order('created_at').reverse_order.first
+        one_request = {}
+
+        one_request.merge!(:request_id  => request.id)
+        one_request.merge!(:request_from_user_id  => request.user_id)
+        one_request.merge!(:request_to_user_id => request.with_user_id)
+        #one_request.merge!(:yes_user_ids => collected_yes_users)
+        #one_request.merge!(:no_user_ids => collected_no_users)
+        one_request.merge!(:confirm => request.confirm)
+        one_request.merge!(:done => request.done)
+        one_request.merge!(:created_at => (request.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S'))
+        #one_request.merge!(:created_at => request.created_at)
+        #logger.info "== show_requests_for_user == request = #{request}"
+        #logger.info "== show_requests_for_user == request.created_at = #{request.created_at}"
+
+        user_requests_data.merge!(request.connection_id => one_request)
+
+      end
+
+      @user_requests_data = user_requests_data
+
+
 
   end
 
