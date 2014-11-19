@@ -213,6 +213,23 @@ class ConnectionRequestsController < ApplicationController
   def edit
   end
 
+  # update request data - to yes or no connect
+  def  update_requests(value, connection_id)
+    requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
+    if !requests_to_update.blank?
+      requests_to_update.each do |request_row|
+        request_row.done = true
+        request_row.confirm = value if request_row.with_user_id == current_user.id
+        request_row.save
+        logger.info "== requests_to_update.confirm = #{request_row.confirm}"
+        logger.info "== requests_to_update.done = #{request_row.done}"
+      end
+    else
+      redirect_to show_user_requests_path
+      # flash - no connection requests data in table
+    end
+  end
+
   # Ответ ДА на запрос на объединение
   # Действия: сохраняем инфу - кто дал добро какому объединению
   # После этого - запуск собственно процесса объединения
@@ -221,24 +238,20 @@ class ConnectionRequestsController < ApplicationController
   def yes_connect
     yes_user_id = params[:yes_user_id].to_i # From view
     logger.info "== yes_user_id = #{yes_user_id}"
+    connection_id = params[:connection_id].to_i # From view Link
 
     # update request data - to yes connect
-    request_to_update = ConnectionRequest.where(:with_user_id => current_user.id, :user_id => yes_user_id, :done => false)[0]
-    request_to_update.confirm = 1
-    request_to_update.done = true
-    request_to_update.save
-    logger.info "== request_to_update.confirm = #{request_to_update.confirm}"
-    logger.info "== request_to_update.done = #{request_to_update.done}"
+    update_requests(1, connection_id)
 
-    # debugg method
-    conn_requests_update
+    # debugg here this method - update all requests with users connected
+    conn_requests_update(yes_user_id)
 
     # Взять значение из Settings
     @certain_koeff = 4
 
   #  redirect_to connection_of_trees_path( user_id_to_connect: yes_user_id, certain_koeff: @certain_koeff), class: :green
-    redirect_to connection_of_trees_path
-    #redirect_to connection_requests_path
+  #  redirect_to connection_of_trees_path
+    redirect_to show_user_requests_path
 
   end
 
@@ -249,16 +262,12 @@ class ConnectionRequestsController < ApplicationController
   def no_connect
     no_user_id = params[:no_user_id].to_i # From view
     logger.info "== no_user_id = #{no_user_id}"
+    connection_id = params[:connection_id].to_i # From view Link
 
     # update request data - to no connect
-    request_to_update = ConnectionRequest.where(:with_user_id => current_user.id, :user_id => no_user_id, :done => false)[0]
-    request_to_update.confirm = 0
-    request_to_update.done = true # больше не объединяем в дальнейшем
-    request_to_update.save
-    logger.info "== request_to_update.confirm = #{request_to_update.confirm}"
-    logger.info "== request_to_update.done = #{request_to_update.done}"
+    update_requests(0, connection_id)
 
-    redirect_to connection_requests_path
+    redirect_to show_user_requests_path
 
   end
 
@@ -269,7 +278,7 @@ class ConnectionRequestsController < ApplicationController
   #  done = true  - to all requests
   #  save requests
   ##################################################################
-  def conn_requests_update
+  def conn_requests_update(yes_user_id)
 
     @update_msg = "conn_requests_update - DONE"
 

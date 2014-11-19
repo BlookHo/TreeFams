@@ -37,11 +37,9 @@
         %td= user.done
         %td= user.read_attribute_before_type_cast(:created_at).to_s
         %td= link_to 'Просмотр одного запроса', show_one_request_path(connection_id: user.connection_id, with_user_id: user.user_id),  class: :request
-        -#%td= link_to 'Запросу - ДА', yes_connect_path(yes_user_id: user)
-        -#%td= link_to 'Запросу - НЕТ', no_connect_path(no_user_id: user)
         %br
 
-  %p @requests_to_user_data = #{@requests_to_user_data.inspect}
+  -#%p @requests_to_user_data = #{@requests_to_user_data.inspect}
   %br
 %br
 
