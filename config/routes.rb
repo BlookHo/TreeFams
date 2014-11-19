@@ -2,6 +2,9 @@ Weafam::Application.routes.draw do
 
   resources :connection_requests
   # connection_requests_controller
+  match 'show_requests_for_user' => 'connection_requests#show_requests_for_user', via: :get
+  match 'show_requests_for_user' => 'connection_requests#show_requests_for_user', via: :post
+
   match 'show_one_request' => 'connection_requests#show_one_request', via: :get
   match 'show_one_request' => 'connection_requests#show_one_request', via: :post
 

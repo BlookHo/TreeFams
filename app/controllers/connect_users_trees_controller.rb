@@ -448,6 +448,13 @@ class ConnectUsersTreesController < ApplicationController
             ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
     #        connection_in_tables(connection_data, current_user_id, user_id)
             ##################################################################
+            ##### Update connection requests
+            # get_connected - new tree users
+            # find all requests with where(user   in   [ users in tree])
+            # all requests. each
+            #  done = true  - to all requests
+            #  save requests
+            ##################################################################
 
           else
             logger.info "ERROR - STOP connection! Connection array(s) - INCORRECT! stop_by_arrs = #{stop_by_arrs}, "
@@ -468,6 +475,9 @@ class ConnectUsersTreesController < ApplicationController
     #  connected_user.unlock_tree!
     #
     #end
+
+    #redirect_to home_path # ?
+
 
   end
 

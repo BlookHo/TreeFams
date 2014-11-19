@@ -2,7 +2,12 @@ class ConnectionRequestsController < ApplicationController
   include ConnectionRequestsHelper
 
   before_filter :logged_in?
-  before_action :set_connection_request, only: [:show, :edit, :update, :destroy] #, :show_one_request]
+  #before_action :set_connection_request, only: [:show, :edit, :update, :destroy] #, :show_one_request]
+
+  Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
+  @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
+
+
 
   # GET /connection_requests
   # GET /connection_requests.json
@@ -27,7 +32,12 @@ class ConnectionRequestsController < ApplicationController
       find_users_connectors(with_user_id) if current_user # определение Юзеров - участников объединения деревьев
 
       max_connection_id = ConnectionRequest.maximum(:connection_id)
-      max_connection_id = 1 if max_connection_id == nil
+      logger.info " max_connection_id = #{max_connection_id.inspect}"
+      if max_connection_id == nil
+        max_connection_id = 1
+      else
+        max_connection_id += 1
+      end
 
       logger.info " max_connection_id = #{max_connection_id.inspect}"
 
@@ -57,6 +67,61 @@ class ConnectionRequestsController < ApplicationController
     with_whom_connect_users_arr = User.find(with_user_id).get_connected_users  #
     @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
     @with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
+
+  end
+
+  # GET /connection_requests/1
+  # GET /connection_requests/1.json
+  def show_requests_for_user
+
+    @new_requests_count = count_new_requests
+    #logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
+
+    with_user_id = params[:with_user_id] # From view
+    @with_user_id = with_user_id # DEBUGG_TO_VIEW
+
+    find_users_connectors(current_user) if current_user # определение Юзеров - участников объединения деревьев
+
+    connection_id = params[:connection_id] # From view
+    @connection_id = connection_id # DEBUGG_TO_VIEW
+
+    id = params[:id] # From view
+    @id = id # DEBUGG_TO_VIEW
+
+    user_requests_data = {}
+    @user_requests = ConnectionRequest.where(:with_user_id => current_user.id, :done => false ).order('created_at').reverse_order
+    # select(:created_at).
+    @user_requests.each do |request|
+      one_request = {}
+
+      #find_request_connectors
+      #collected_yes_users = collect_yes_users
+      #collected_no_users = collect_no_users
+      collected_yes_users = []
+      collected_no_users = [4]
+
+      one_request.merge!(:request_to_user_id => current_user.id)
+      one_request.merge!(:request_from_user_id => request.user_id)
+      one_request.merge!(:yes_user_ids => collected_yes_users)
+      one_request.merge!(:no_user_ids => collected_no_users)
+      one_request.merge!(:confirm => request.confirm)
+      one_request.merge!(:done => request.done)
+      one_request.merge!(:created_at => request.read_attribute_before_type_cast(:created_at))
+      #one_request.merge!(:created_at => request.created_at)
+      logger.info "== show_requests_for_user == request = #{request}"
+      logger.info "== show_requests_for_user == request.created_at = #{request.created_at}"
+
+      user_requests_data.merge!(request.connection_id => one_request)
+
+
+    end
+    @user_requests_data = user_requests_data # DEBUGG_TO_VIEW
+
+    @prof = Profile.find(23)#.select(:created_at)#.created_at
+    #@prof_date = @prof.created_at.to_s
+    @prof_name = @prof.name_id
+    @prof_date = @prof.attributes_before_type_cast["created_at"]
+    @prof_date2 = @prof.read_attribute_before_type_cast("created_at")
 
   end
 
@@ -99,18 +164,23 @@ class ConnectionRequestsController < ApplicationController
     logger.info "== yes_user_id = #{yes_user_id}"
 
     # update request data - to yes connect
-    request_to_update = ConnectionRequest.where(:user_id => current_user.id, :with_user_id => yes_user_id, :done => false)[0]
+    request_to_update = ConnectionRequest.where(:with_user_id => current_user.id, :user_id => yes_user_id, :done => false)[0]
     request_to_update.confirm = 1
     request_to_update.done = true
     request_to_update.save
     logger.info "== request_to_update.confirm = #{request_to_update.confirm}"
     logger.info "== request_to_update.done = #{request_to_update.done}"
 
+    # debugg method
+    conn_requests_update
+
+
     # Взять значение из Settings
     @certain_koeff = 4
 
   #  redirect_to connection_of_trees_path( user_id_to_connect: yes_user_id, certain_koeff: @certain_koeff), class: :green
-    redirect_to connection_requests_path
+    redirect_to connection_of_trees_path
+    #redirect_to connection_requests_path
 
   end
 
@@ -123,7 +193,7 @@ class ConnectionRequestsController < ApplicationController
     logger.info "== no_user_id = #{no_user_id}"
 
     # update request data - to no connect
-    request_to_update = ConnectionRequest.where(:user_id => current_user.id, :with_user_id => no_user_id, :done => false)[0]
+    request_to_update = ConnectionRequest.where(:with_user_id => current_user.id, :user_id => no_user_id, :done => false)[0]
     request_to_update.confirm = 0
     request_to_update.done = true # больше не объединяем в дальнейшем
     request_to_update.save
@@ -134,13 +204,26 @@ class ConnectionRequestsController < ApplicationController
 
   end
 
+  ##### Update connection requests
+  # get_connected - new tree users
+  # find all requests with where(user   in   [ users in tree])
+  # all requests. each
+  #  done = true  - to all requests
+  #  save requests
+  ##################################################################
+  def conn_requests_update
+
+    @update_msg = "conn_requests_update - DONE"
+
+
+  end
+
+
   # POST /connection_requests
   # POST /connection_requests.json
   def create
 
-
-
-    @connection_request = ConnectionRequest.new(connection_request_params)
+    @connection_request = ConnectionRequest.new#(connection_request_params)
 
     respond_to do |format|
       if @connection_request.save
@@ -157,7 +240,7 @@ class ConnectionRequestsController < ApplicationController
   # PATCH/PUT /connection_requests/1.json
   def update
     respond_to do |format|
-      if @connection_request.update(connection_request_params)
+      if @connection_request.update(params[:id])
         format.html { redirect_to @connection_request, notice: 'Connection request was successfully updated.' }
         format.json { render :show, status: :ok, location: @connection_request }
       else
@@ -188,14 +271,16 @@ def update_settings
 end
 
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_connection_request
-      @connection_request = ConnectionRequest.find(params[:id])
-    end
+  #private
+  #  # Use callbacks to share common setup or constraints between actions.
+  #  def set_connection_request
+  #    @connection_request = ConnectionRequest.find(params[:id])
+  #  end
+  #
+  #  # Never trust parameters from the scary internet, only allow the white list through.
+  #  def connection_request_params
+  #    params.require(:connection_request).permit(:user_id, :with_user_id, :confirm, :done, :created_at)
+  #  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def connection_request_params
-      params.require(:connection_request).permit(:user_id, :with_user_id, :confirm, :done, :created_at)
-    end
 end
+
