@@ -10,7 +10,7 @@ var nodes = [],
 var node, link, relation;
 var force, svg;
 
-
+var current_circle_author;
 
 createSvg = function(){
   svg = d3.select("#graph-wrapper")
@@ -504,6 +504,8 @@ getCircles = function(params){
   $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id } )
     .done(function( data ) {
         buildPath(data.path);
+        current_circle_author = data.cirlce_author;
+        // jsdebug(data);
         data.circles.forEach(function(d, i) {
           pushNode(d);
         });

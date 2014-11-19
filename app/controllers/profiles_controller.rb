@@ -41,13 +41,67 @@ class ProfilesController < ApplicationController
 
 
   def create
+    # Профиль, к которому добавляем (на котором вызвали меню +)
+    @base_profile = Profile.find(params[:base_profile_id])
+
+    # Relation того, к кому добавляем к автору отображаемого круга
+    # Его отношение к текущему автору круга. автор круга - шаг назад по пути
+    @base_relation_id  = params[:base_relation_id]
+
+    # текущий автор отображаемого круга - путь минус один шаг назад или профиль текущего юзера
+    @author_profile_id = params[:author_profile_id]
+
+    @profile = Profile.new(profile_params)  # Новый добавляемый профиль
+    @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
+    @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
+
+    # Имя
+    @name = Name.where(id: params[:profile_name_id]).first
+
+    if @name
+      @profile.name_id = @name.id
+      @profile.profile_name = @name.name
+
+      make_questions_data = {
+          current_user_id:     current_user.id,
+          base_profile_id:     @base_profile.id,
+          base_relation_id:    @base_relation_id.to_i,
+          profile_relation_id: @profile.relation_id.to_i,
+          profile_name_id:     @profile.name_id.to_i,
+          author_profile_id:   @author_profile_id,
+          connected_users:     current_user.get_connected_users
+      }
+
+      questions_hash = current_user.profile.make_questions(make_questions_data)
+      @questions = create_questions_from_hash(questions_hash)
+
+      if @questions
+        flash.now[:alert] = "Уточняющие вопросы"
+        render :new
+      else
+        flash.now[:alert] = "Нет вопросов"
+        render :new
+      end
+    else
+      flash.now[:alert] = "Ошибка при добавлении профиля"
+      render :new
+    end
+  end
 
 
-    @base_profile = Profile.find(params[:base_profile_id]) # Старый профиль, к которому добавляем
-    @base_profile_id   = @base_profile.id #  профиль того, к кому добавляем
-    @author_profile_id = params[:author_profile_id] # текущий автор отображаемого круга
-    # @base_relation_id  = params[:base_relation_id] # relation того, к кому добавляем, к автору отображаемого круга
-    @base_relation_id = 3
+
+  def pre_create
+
+    # Профиль, к которому добавляем (на котором вызвали меню +)
+    @base_profile = Profile.find(params[:base_profile_id])
+    @base_profile_id   = @base_profile.id
+
+    # текущий автор отображаемого круга - путь минус один шаг назад или профиль текущего юзера
+    @author_profile_id = params[:author_profile_id]
+
+    # relation того, к кому добавляем, к автору отображаемого круга
+    # Его отношение к текущему центру круга
+    @base_relation_id  = params[:base_relation_id]
 
 
     @profile = Profile.new(profile_params)  # Новый добавляемый профиль
@@ -66,6 +120,7 @@ class ProfilesController < ApplicationController
     # 2. Validate answers
     if @name
       @profile.name_id = @name.id
+      @profile.profile_name = @name.name
 
       make_questions_data = {
           current_user_id:     current_user.id, #

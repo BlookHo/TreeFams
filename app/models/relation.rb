@@ -64,6 +64,7 @@ class Relation < ActiveRecord::Base
   end
 
 
+
   # Невозможные отношения к добавляемуму профилю
   def self.invalid_relation_ids_to(base_relation_id: base_relation_id, base_sex_id: base_sex_id)
     base_relation_id = base_relation_id.to_i
@@ -132,6 +133,56 @@ class Relation < ActiveRecord::Base
       else
         []
       end
+  end
+
+
+
+  def self.name_by_id(relation_id)
+    case relation_id
+      when 1 then 'отец'
+      when 2 then 'мать'
+      when 3 then 'сын'
+      when 4 then 'дочь'
+      when 5 then 'брат'
+      when 6 then 'сестра'
+      when 7 then 'муж'
+      when 8 then 'жена'
+    end
+  end
+
+
+  # Возвращает обратное отношение по прямому отношению + имя, из котрого берется пол
+  # Примерно: он отец для Алексей => вернет сын
+  # Примерно: он отец для Аллы => вернет дочь
+  def self.reverse_by_name_id(name_id: name_id, relation_id: relation_id)
+    name = Name.find(name_id)
+    # к мужским именам
+    # он отец для Серегея
+    if name.sex_id == 1
+      case relation_id
+        when 1 then 3
+        when 2 then 3
+        when 3 then 1
+        when 4 then 1
+        when 5 then 5
+        when 6 then 5
+        when 7 then 7
+        when 8 then 7
+      end
+    # к женским именам
+    # он отец для Натальи
+    else
+      case relation_id
+        when 1 then 4
+        when 2 then 4
+        when 3 then 2
+        when 4 then 2
+        when 5 then 6
+        when 6 then 6
+        when 7 then 8
+        when 8 then 8
+      end
+    end
   end
 
 

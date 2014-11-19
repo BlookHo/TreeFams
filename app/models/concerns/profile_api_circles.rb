@@ -68,7 +68,8 @@ module ProfileApiCircles
       name: self.name.name,
       relation: "Центр круга",
       relation_id: 0,
-      is_relation: "Is relation",
+      is_relation: nil,
+      is_relation_id: nil,
       distance: 0,
       current_user_profile: current_user.try(:profile_id) == self.id,
       icon: self.icon_path,
@@ -82,13 +83,15 @@ module ProfileApiCircles
   def circle_to_hash(circle: circle, distance: distance, target: nil, current_user: current_user)
     results = []
     circle.each do |key|
+      is_rel = Relation.reverse_by_name_id(name_id: key.name_id, relation_id: key.relation_id)
       results << {
         id: key.is_profile_id,
         name: key.name.name,
         sex_id: key.name.sex_id,
         relation: key.relation.relation,
         relation_id: key.relation_id,
-        is_relation: key.relation.reverse_relation,
+        is_relation: Relation.name_by_id(is_rel),
+        is_relation_id: is_rel,
         target: target.nil? ? self.id : target,
         distance: distance,
         current_user_profile: current_user.try(:profile_id) == key.is_profile_id,
