@@ -2,7 +2,6 @@
 
 %p
   Дата и Время:
-  -#@time: #{@time.inspect}
   =  l Time.now, format: :myformat
 %br
 
@@ -12,6 +11,9 @@
 %h3
   И ОТПРАВЛЕН ДЛЯ ПОДТВЕРЖДЕНИЯ ВСЕМ УЧАСТНИКАМ ЭТОГО ДЕРЕВА: #{@with_whom_connect_users_arr.inspect}
 %br
+%h3
+  ОЖИДАЙТЕ ПОЛУЧЕНИЯ ПОДТВЕРЖДЕНИЯ ОБЪЕДИНЕНИЯ
+%br
 %p Справочно:
 %p
   Кто хочет соединиться: Автор: #{@current_user_id.inspect}
@@ -20,7 +22,7 @@
 %p
   Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@with_user_id.inspect}
 %p
-  Состав объединяемого дерева: @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
+  Состав объединяемого с вами дерева: @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
 
 %br
 %p
@@ -43,7 +45,7 @@
       %th With user
       %th Confirm
       %th Done
-      %th Created_at
+      %th Дата создания запроса
       %th
       %th
       %th
@@ -95,4 +97,4 @@
 
 
 
-= link_to 'Просмотр создаваемого запроса', show_one_request_path(with_user_id: @with_user_id),  class: :request
+= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request

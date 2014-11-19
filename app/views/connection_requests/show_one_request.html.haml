@@ -1,51 +1,64 @@
 
 %p
-  @current_user.id = #{current_user.id.inspect}
-%p
-  @with_user_id = #{@with_user_id.inspect}
-%p
-  @new_requests_count = #{@new_requests_count.inspect}
-%p
-  @connection_id = #{@connection_id.inspect}
-%p
-  @id = #{@id.inspect}
+  Дата и Время:
+  =  l Time.now, format: :myformat
+%br
+
+%h1 СТРАНИЦА ПРИНЯТИЯ РЕШЕНИЯ ПО ОДНОМУ ЗАПРОСУ на ОБЪЕДИНЕНИЕ
+%br
 
 %br
-%h1 СТРАНИЦА ПРОЦЕССА ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ (show_one_request)
-%br
--
+%p Справочно:
+%p @current_user.id = #{current_user.id.inspect}
+%p
+  @with_user_id = #{@with_user_id.inspect}
+%p кол-во новых запросов: @new_requests_count = #{@new_requests_count.inspect}
 %h1 КТО ОБЪЕДИНЯЕТСЯ: @who_connect_users_arr = #{@who_connect_users_arr.inspect}
 
 %h1 С КЕМ ОБЪЕДИНЯЕТСЯ: @with_whom_connect_users_arr = #{@with_whom_connect_users_arr.inspect}
+%p
+  @connection_id = #{@connection_id.inspect}
+%p
+  @user_request_data = #{@user_request_data.inspect}
 
-%h1 Listing connection_requests
 
-%table
-  %tr
-    %th id
-    %th Connection_id
-    %th User
-    %th
-    %th
-
-  - @with_whom_connect_users_arr.each do |user|
+%h1 НОВЫЙ запрос на объединение - в ожидании Вашего решения
+- if !@user_request_data.empty?
+  %table
     %tr
-      %td= @id
-      %td= @connection_id
-      %td= user
-      %td= link_to 'ДА', yes_connect_path(yes_user_id: user)
-      %td= link_to 'НЕТ', no_connect_path(no_user_id: user)
-      %br
+      %th Connection_id
+
+    - @user_request_data.each do |connection_request, requests_arr|
+      %tr
+        %td= connection_request
+      %li
+      - if !requests_arr.blank?
+        %table
+          %tr
+            %th Объединиться с:
+            %th Запрос Юзеру:
+            %th Confirm
+            %th Статус
+            %th Дата создания запроса
+            %th
+            %th
+          - requests_arr.each do |one_requests_arr|
+            %tr
+              %td= one_requests_arr.values_at(:request_from_user_id).flatten[0]
+              - if one_requests_arr.values_at(:request_to_user_id).flatten[0] == current_user.id
+                - request_to = current_user.id
+              - else
+                - request_to = "Don't show"
+              %td= request_to
+              %td= one_requests_arr.values_at(:confirm).flatten[0].inspect
+              %td= one_requests_arr.values_at(:done).flatten[0]
+              %td= one_requests_arr.values_at(:created_at).flatten[0]
+              %td= link_to 'ДА', yes_connect_path(yes_user_id: current_user.id)
+              %td= link_to 'НЕТ', no_connect_path(no_user_id: current_user.id)
+              %br
 
 %br
 
--#%p
--#  @yes_user_id = #{@yes_user_id.inspect}
--#  @no_user_id = #{@no_user_id.inspect}
-
-= link_to 'Просмотр одного запроса', show_one_request_path(with_user_id: @with_user_id),  class: :request
-
-= link_to 'Connection request', connection_requests_path
-
+= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request
 
 

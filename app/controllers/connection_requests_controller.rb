@@ -4,10 +4,9 @@ class ConnectionRequestsController < ApplicationController
   before_filter :logged_in?
   #before_action :set_connection_request, only: [:show, :edit, :update, :destroy] #, :show_one_request]
 
-  Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
- # I18n.l Time.now, format: :myformat
-
-  @time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
+  #Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
+  #I18n.l Time.now, format: :myformat
+  #@time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
 
 
 
@@ -32,6 +31,8 @@ class ConnectionRequestsController < ApplicationController
       @with_user_id = with_user_id # DEBUGG_TO_VIEW
 
       find_users_connectors(with_user_id) if current_user # определение Юзеров - участников объединения деревьев
+      #@who_connect_users_arrЮ = who_connect_users_arr # DEBUGG_TO_VIEW
+      #@with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
 
       max_connection_id = ConnectionRequest.maximum(:connection_id)
       logger.info " max_connection_id = #{max_connection_id.inspect}"
@@ -42,8 +43,6 @@ class ConnectionRequestsController < ApplicationController
       end
 
       logger.info " max_connection_id = #{max_connection_id.inspect}"
-
-
 
       @with_whom_connect_users_arr.each do |user_to_connect|
 
@@ -74,8 +73,8 @@ class ConnectionRequestsController < ApplicationController
         one_request.merge!(:done => request.done)
         one_request.merge!(:created_at => (request.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S'))
         #one_request.merge!(:created_at => request.created_at)
-        #logger.info "== show_requests_for_user == request = #{request}"
-        #logger.info "== show_requests_for_user == request.created_at = #{request.created_at}"
+        #logger.info "== show_user_requests == request = #{request}"
+        #logger.info "== show_user_requests == request.created_at = #{request.created_at}"
 
         user_requests_data.merge!(request.connection_id => one_request)
 
@@ -92,86 +91,116 @@ class ConnectionRequestsController < ApplicationController
   # who_connect_users_arr:   кто объединяется = инициатор
   # with_whom_connect_users_arr:  с кем объединяется = ответчик
   def find_users_connectors(with_user_id)
-
     who_connect_users_arr = current_user.get_connected_users
     with_whom_connect_users_arr = User.find(with_user_id).get_connected_users  #
     @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
     @with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
-
   end
 
+  # Показываем все запросы на объединение текущего Юзера
+  # Переход сюда из Хэдера.
   # GET /connection_requests/1
   # GET /connection_requests/1.json
-  def show_requests_for_user
+  def show_user_requests
 
-    @new_requests_count = count_new_requests
+    @new_requests_count = count_new_requests # DEBUGG_TO_VIEW
     #logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
 
-    with_user_id = params[:with_user_id] # From view
-    @with_user_id = with_user_id # DEBUGG_TO_VIEW
+    # Полученные Вами НОВЫЕ запросы на объединение - в ожидании Вашего решения
 
-    find_users_connectors(current_user) if current_user # определение Юзеров - участников объединения деревьев
+    requests_to_user_data = {}
+    @requests_to_user = ConnectionRequest.where(:with_user_id => current_user.id, :done => false ).order('created_at').reverse_order
 
-    connection_id = params[:connection_id] # From view
-    @connection_id = connection_id # DEBUGG_TO_VIEW
-
-    id = params[:id] # From view
-    @id = id # DEBUGG_TO_VIEW
-
-    user_requests_data = {}
-    @user_requests = ConnectionRequest.where(:with_user_id => current_user.id, :done => false ).order('created_at').reverse_order
-    # select(:created_at).
-    @user_requests.each do |request|
+    @requests_to_user.each do |request|
       one_request = {}
 
-      #find_request_connectors
-      #collected_yes_users = collect_yes_users
-      #collected_no_users = collect_no_users
-      collected_yes_users = []
-      collected_no_users = [4]
+      collected_yes_users = []  # ?
+      collected_no_users = [4]  # ?
 
       one_request.merge!(:request_to_user_id => current_user.id)
       one_request.merge!(:request_from_user_id => request.user_id)
-      one_request.merge!(:yes_user_ids => collected_yes_users)
-      one_request.merge!(:no_user_ids => collected_no_users)
+      #one_request.merge!(:yes_user_ids => collected_yes_users)  # ?
+      #one_request.merge!(:no_user_ids => collected_no_users)  # ?
       one_request.merge!(:confirm => request.confirm)
       one_request.merge!(:done => request.done)
       one_request.merge!(:created_at => request.read_attribute_before_type_cast(:created_at))
-      #one_request.merge!(:created_at => request.created_at)
-      logger.info "== show_requests_for_user == request = #{request}"
-      logger.info "== show_requests_for_user == request.created_at = #{request.created_at}"
+
+      requests_to_user_data.merge!(request.connection_id => one_request)
+
+    end
+    @requests_to_user_data = requests_to_user_data # DEBUGG_TO_VIEW
+
+
+    # Все ваши запросы - в ожидании на объединение
+
+    current_user_connection_ids = ConnectionRequest.where(:user_id => current_user.id, :done => false ).order('created_at').reverse_order.pluck('connection_id').uniq
+    @current_user_connection_ids = current_user_connection_ids
+
+    user_requests_data = {}
+    current_user_connection_ids.each do |one_connection_id|
+      request = ConnectionRequest.where(:connection_id => one_connection_id, :done => false ).order('created_at').reverse_order.first
+      one_request = {}
+
+      one_request.merge!(:request_id  => request.id)
+      one_request.merge!(:request_from_user_id  => request.user_id)
+      one_request.merge!(:request_to_user_id => request.with_user_id)
+      #one_request.merge!(:yes_user_ids => collected_yes_users)
+      #one_request.merge!(:no_user_ids => collected_no_users)
+      one_request.merge!(:confirm => request.confirm)
+      one_request.merge!(:done => request.done)
+      one_request.merge!(:created_at => (request.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S'))
 
       user_requests_data.merge!(request.connection_id => one_request)
 
-
     end
-    @user_requests_data = user_requests_data # DEBUGG_TO_VIEW
 
-    @prof = Profile.find(23)#.select(:created_at)#.created_at
-    #@prof_date = @prof.created_at.to_s
-    @prof_name = @prof.name_id
-    @prof_date = @prof.attributes_before_type_cast["created_at"]
-    @prof_date2 = @prof.read_attribute_before_type_cast("created_at")
+    @user_requests_data = user_requests_data
+
+ #   get_one_request_data(connection_id)
+
 
   end
 
+  # Формирование структуры данных для отображения запросов
+  #
+  def get_one_request_data(connection_id)
+
+    one_user_request_data = {}
+    requests_arr = []
+
+    request = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
+    request.each do |request_row|
+      one_request = {}
+
+      one_request.merge!(:request_id  => request_row.id)
+      one_request.merge!(:request_from_user_id  => request_row.user_id)
+      one_request.merge!(:request_to_user_id => request_row.with_user_id)
+      #one_request.merge!(:yes_user_ids => collected_yes_users)
+      #one_request.merge!(:no_user_ids => collected_no_users)
+      one_request.merge!(:confirm => request_row.confirm)
+      one_request.merge!(:done => request_row.done)
+      one_request.merge!(:created_at => (request_row.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S'))
+
+      requests_arr << one_request
+    end
+    one_user_request_data.merge!(connection_id => requests_arr)
+    @user_request_data = one_user_request_data
+
+  end
   # GET /connection_requests/1
   # GET /connection_requests/1.json
   def show_one_request
 
-      @new_requests_count = count_new_requests
-      #logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
+      with_user_id = params[:with_user_id].to_i # From view Link
+      connection_id = params[:connection_id].to_i # From view Link
 
-      with_user_id = params[:with_user_id] # From view
+      @connection_id = connection_id # DEBUGG_TO_VIEW
       @with_user_id = with_user_id # DEBUGG_TO_VIEW
+      @new_requests_count = count_new_requests # DEBUGG_TO_VIEW
 
       find_users_connectors(with_user_id) if current_user # определение Юзеров - участников объединения деревьев
 
-      connection_id = params[:connection_id] # From view
-      @connection_id = connection_id # DEBUGG_TO_VIEW
-
-      id = params[:id] # From view
-      @id = id # DEBUGG_TO_VIEW
+      get_one_request_data(connection_id)
 
   end
 
@@ -203,7 +232,6 @@ class ConnectionRequestsController < ApplicationController
 
     # debugg method
     conn_requests_update
-
 
     # Взять значение из Settings
     @certain_koeff = 4
