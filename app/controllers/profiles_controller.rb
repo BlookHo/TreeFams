@@ -52,7 +52,7 @@ class ProfilesController < ApplicationController
     @author_profile_id = params[:author_profile_id]
 
     @profile = Profile.new(profile_params)  # Новый добавляемый профиль
-    @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
+    # @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
     @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
 
     # Имя
