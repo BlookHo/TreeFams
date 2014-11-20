@@ -2,12 +2,6 @@ class ConnectionRequestsController < ApplicationController
   include ConnectionRequestsHelper
 
   before_filter :logged_in?
-  #before_action :set_connection_request, only: [:show, :edit, :update, :destroy] #, :show_one_request]
-
-  #Time::DATE_FORMATS[:ru_datetime] = "%Y.%m.%d в %k:%M:%S"
-  #I18n.l Time.now, format: :myformat
-  #@time = Time.current #  Ок  - Greenwich   instead of Time.now - Moscow
-
 
 
   # GET /connection_requests
@@ -31,8 +25,6 @@ class ConnectionRequestsController < ApplicationController
       @with_user_id = with_user_id # DEBUGG_TO_VIEW
 
       find_users_connectors(with_user_id) if current_user # определение Юзеров - участников объединения деревьев
-      #@who_connect_users_arrЮ = who_connect_users_arr # DEBUGG_TO_VIEW
-      #@with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
 
       max_connection_id = ConnectionRequest.maximum(:connection_id)
       logger.info " max_connection_id = #{max_connection_id.inspect}"
@@ -50,8 +42,9 @@ class ConnectionRequestsController < ApplicationController
         new_connection_request.connection_id = max_connection_id
         new_connection_request.user_id = current_user.id
         new_connection_request.with_user_id = user_to_connect
+  ##########################################
   #      new_connection_request.save
-
+  ##########################################
       end
 
       @all_connection_requests = ConnectionRequest.all.order('created_at').reverse_order
@@ -67,22 +60,15 @@ class ConnectionRequestsController < ApplicationController
         one_request.merge!(:request_id  => request.id)
         one_request.merge!(:request_from_user_id  => request.user_id)
         one_request.merge!(:request_to_user_id => request.with_user_id)
-        #one_request.merge!(:yes_user_ids => collected_yes_users)
-        #one_request.merge!(:no_user_ids => collected_no_users)
         one_request.merge!(:confirm => request.confirm)
         one_request.merge!(:done => request.done)
         one_request.merge!(:created_at => (request.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S'))
-        #one_request.merge!(:created_at => request.created_at)
-        #logger.info "== show_user_requests == request = #{request}"
-        #logger.info "== show_user_requests == request.created_at = #{request.created_at}"
 
         user_requests_data.merge!(request.connection_id => one_request)
 
       end
 
       @user_requests_data = user_requests_data
-
-
 
   end
 
@@ -104,7 +90,6 @@ class ConnectionRequestsController < ApplicationController
   def show_user_requests
 
     @new_requests_count = count_new_requests # DEBUGG_TO_VIEW
-    #logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
 
     # Полученные Вами НОВЫЕ запросы на объединение - в ожидании Вашего решения
 
@@ -114,13 +99,8 @@ class ConnectionRequestsController < ApplicationController
     @requests_to_user.each do |request|
       one_request = {}
 
-      collected_yes_users = []  # ?
-      collected_no_users = [4]  # ?
-
       one_request.merge!(:request_to_user_id => current_user.id)
       one_request.merge!(:request_from_user_id => request.user_id)
-      #one_request.merge!(:yes_user_ids => collected_yes_users)  # ?
-      #one_request.merge!(:no_user_ids => collected_no_users)  # ?
       one_request.merge!(:confirm => request.confirm)
       one_request.merge!(:done => request.done)
       one_request.merge!(:created_at => request.read_attribute_before_type_cast(:created_at))
@@ -144,8 +124,6 @@ class ConnectionRequestsController < ApplicationController
       one_request.merge!(:request_id  => request.id)
       one_request.merge!(:request_from_user_id  => request.user_id)
       one_request.merge!(:request_to_user_id => request.with_user_id)
-      #one_request.merge!(:yes_user_ids => collected_yes_users)
-      #one_request.merge!(:no_user_ids => collected_no_users)
       one_request.merge!(:confirm => request.confirm)
       one_request.merge!(:done => request.done)
       one_request.merge!(:created_at => (request.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S'))
@@ -155,9 +133,6 @@ class ConnectionRequestsController < ApplicationController
     end
 
     @user_requests_data = user_requests_data
-
- #   get_one_request_data(connection_id)
-
 
   end
 
@@ -175,8 +150,6 @@ class ConnectionRequestsController < ApplicationController
       one_request.merge!(:request_id  => request_row.id)
       one_request.merge!(:request_from_user_id  => request_row.user_id)
       one_request.merge!(:request_to_user_id => request_row.with_user_id)
-      #one_request.merge!(:yes_user_ids => collected_yes_users)
-      #one_request.merge!(:no_user_ids => collected_no_users)
       one_request.merge!(:confirm => request_row.confirm)
       one_request.merge!(:done => request_row.done)
       one_request.merge!(:created_at => (request_row.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S'))
@@ -221,8 +194,6 @@ class ConnectionRequestsController < ApplicationController
         request_row.done = true
         request_row.confirm = value if request_row.with_user_id == current_user.id
         request_row.save
-        logger.info "== requests_to_update.confirm = #{request_row.confirm}"
-        logger.info "== requests_to_update.done = #{request_row.done}"
       end
     else
       redirect_to show_user_requests_path

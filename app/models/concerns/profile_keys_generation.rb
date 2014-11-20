@@ -25,7 +25,7 @@ module ProfileKeysGeneration
           new_tree.is_name_id     = new_profile_name_id # is_name_id нового К_Профиля
           new_tree.is_sex_id      = new_profile_sex     # is_sex_id нового К_Профиля
   #########################
-        new_tree.save
+  #      new_tree.save
   #########################
         #id   user_id, profile_id, new_relation_id  conn-ted  dates   name_id  is new_profile_id  is new_profile_name_id  is new_profile_sex
         #1053;127     ;1052        ;8              ;FALSE;   "2014-"; 370     ;1053               ;354                    ;0
@@ -49,7 +49,7 @@ module ProfileKeysGeneration
         new_profile_key_row.is_profile_id = new_profile_id         # is_profile_id
         new_profile_key_row.is_name_id = new_profile_name_id       # is_name_id
  #########################
-      new_profile_key_row.save
+ #     new_profile_key_row.save
  #########################
 
       one_profile_key_arr = []
@@ -100,6 +100,7 @@ module ProfileKeysGeneration
             @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
             # Добавить ряд Новый_профиль - Жена - Мать_Профиля
             current_reverse_relation_id = Relation.where(:relation_id => relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
+            logger.info "== In fill_relation_rows:: current_reverse_relation_id = #{current_reverse_relation_id}, relation_id = #{relation_id} , sex_id = #{sex_id}  ============"
             add_new_ProfileKey_row(base_profile_tree_id, new_profile_id, new_profile_name_id, current_reverse_relation_id, profiles_arr[arr_ind], names_arr[arr_ind])
             @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
           end
