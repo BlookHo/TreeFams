@@ -3,30 +3,103 @@
     Добавить
     = YandexInflect.inflections( relation_to_human(@profile.relation_id) )[3]["__content__"]
 
-  - if flash[:alert]
-    .flash.alert
-      = flash[:alert]
 
   = form_for @profile, remote: true do |f|
 
+    - if flash[:alert]
+      .flash.alert= flash[:alert]
+    - if flash[:warning]
+      .flash.warning= flash[:warning]
+
     - if @questions
-      = @questions.inspect
+      -#= @questions.inspect
+      = hidden_field_tag :profile_name, (@profile.to_name || params.try(:[], :profile).try(:[], :name))
+      #questions-fields
+        - if @profile.answers_hash.nil?
+          - current_question = @questions.first
+        - else
+          -#- q = @questions.delete_if {|q| @profile.answers_hash.try(:keys).include? q.id.to_s}.first
+          - current_question = @questions.select {|q| !( @profile.answers_hash.try(:keys).include? q.id.to_s) }.first
+
+        - # keep answers
+        - @profile.answers_hash.try(:each) do |answer_id, answer_value|
+          = hidden_field_tag "answers[#{answer_id}]", answer_value
+
+        - @questions.each do |q|
+          .question{id: "question-#{q.id}", "data-id" => q.id}
+            -#= current_question
+            .text
+              = q.text.html_safe
+            .answer
+              %label.bttn.small.green
+                = radio_button_tag "answers[#{q.id}]", 1, @profile.answers_hash.try(:[], "#{q.id}") == 1.to_s, onclick: "$('#new_profile').submit()"
+                Да
+              %label.bttn.small.red
+                = radio_button_tag "answers[#{q.id}]", 0, @profile.answers_hash.try(:[], "#{q.id}") == 0.to_s, onclick: "$('#new_profile').submit()"
+                Нет
+
+        :javascript
+          $(function(){
+            var current_question = #{current_question.id};
+            var questions = $('.question');
+            var question_ids = [];
+            $.each(questions, function(index, value){
+              question_ids.push( $(value).data('id') );
+            })
+            var current_question_index = $.inArray(current_question, question_ids);
+
+            $(questions).hide();
+            var current_element = $(questions)[current_question_index];
+            $(current_element).fadeIn();
+
+            $('#showPreviousQuestion').on('click', function(){
+              if (current_question_index != 0){
+                $(questions).hide();
+                var current_element = $(questions)[current_question_index - 1];
+                $(current_element).fadeIn();
+                current_question_index = current_question_index -1;
+
+                if (current_question_index == 0){
+                  $('#showPreviousQuestion').hide();
+                }else{
+                  $('#showPreviousQuestion').show();
+                }
+              }
+              return false;
+            });
+
+            if (current_question_index == 0){
+              $('#showPreviousQuestion').hide();
+            }
+          })
+
+
+      = link_to 'Показать предыдущий вопрос', '#', id: "showPreviousQuestion"
 
     %br
 
-    base_profile_id
-    = text_field_tag :base_profile_id, @base_profile.id
-    author_profile_id
-    = text_field_tag :author_profile_id
-    base_relation_id
-    = text_field_tag :base_relation_id
-    relation_id
-    = f.text_field :relation_id
+    -# base_profile_id - Профиль, к которому добавляем (на котором вызвали меню +)
+    = hidden_field_tag :base_profile_id, @base_profile.id
 
-    .row
-      = text_field_tag :profile_name, @profile.profile_name, placeholder: "Имя...", id: :new_profile_name
+    -# author_profile_id - текущий автор отображаемого круга - путь минус один шаг назад или профиль текущего юзера
+    = hidden_field_tag :author_profile_id
+
+    -# base_relation_id
+    -# Relation того, к кому добавляем к автору отображаемого круга
+    -# Его отношение к текущему автору круга. автор круга - шаг назад по пути
+    = hidden_field_tag :base_relation_id
+
+    -# relation_id - добавлянмое отношение
+    = f.hidden_field :relation_id
+
+
+    - if @questions
+      = hidden_field_tag :profile_name, @profile.profile_name, placeholder: "Имя...", id: :new_profile_name
       = hidden_field_tag :profile_name_id, @profile.name_id, id: :new_profile_name_id
-      = f.hidden_field :relation_id
+    - else
+      .row
+        = text_field_tag :profile_name, @profile.profile_name, placeholder: "Имя...", id: :new_profile_name
+        = hidden_field_tag :profile_name_id, @profile.name_id, id: :new_profile_name_id
 
     .actions
       -#= link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class:  [:bttn, :grey]
@@ -34,8 +107,10 @@
 
 
 
-%script
+
+:javascript
   var author_id = path_profile_ids[0];
   $('#author_profile_id').val(current_circle_author.author_profile_id);
   $('#base_relation_id').val(current_circle_author.base_relation_id);
   initNameAutocomplete('#new_profile_name', #{Relation.sex_id_for_relation_id(@profile.relation_id)});
+  $('#new_profile_name').focus();

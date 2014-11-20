@@ -75,18 +75,51 @@ class ProfilesController < ApplicationController
       questions_hash = current_user.profile.make_questions(make_questions_data)
       @questions = create_questions_from_hash(questions_hash)
 
-      if @questions
+      @profile.answers_hash = params[:answers]
+
+      # Validate for relation questions
+      if questions_valid?(questions_hash) and @profile.save
+
+        logger.info "==== Profile generation debugger ==========="
+        logger.info @base_profile.inspect
+        logger.info '---'
+        logger.info @profile.inspect
+        logger.info '---'
+        logger.info @profile.relation_id
+        logger.info '---'
+        logger.info @profile.answers_hash
+        logger.info '---'
+        logger.info current_user.get_connected_users
+        logger.info "==== Profile generation debugger ==========="
+
+        ProfileKey.add_new_profile(@base_profile,
+            @profile, @profile.relation_id,
+            exclusions_hash: @profile.answers_hash,
+            tree_ids: current_user.get_connected_users)
+
+
+
+        # TODO create new profile data for d3 graph
+        flash.now[:alert] = "Вопросы валидны - профиль coздан"
+        render :new
+
+
+      # Ask relations questions
+      else
         flash.now[:alert] = "Уточняющие вопросы"
         render :new
-      else
-        flash.now[:alert] = "Нет вопросов"
-        render :new
       end
+    # No name
     else
-      flash.now[:alert] = "Ошибка при добавлении профиля"
+      @questions = nil
+      @profile.answers_hash = nil
+      flash.now[:alert] = "Вы не указали имя"
       render :new
     end
   end
+
+
+
 
 
 
