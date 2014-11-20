@@ -41,13 +41,15 @@ module ProfileKeysGeneration
     # @see News
     def add_new_ProfileKey_row(base_profile_tree_id, profile_id, name_id, new_relation_id, new_profile_id, new_profile_name_id)
 
-      new_profile_key_row = ProfileKey.new
-        new_profile_key_row.user_id = base_profile_tree_id # @@current_user_id            # - from cycle:
+        new_profile_key_row = ProfileKey.new
+        new_profile_key_row.user_id = base_profile_tree_id         # @@current_user_id            # - from cycle:
         new_profile_key_row.profile_id = profile_id                # profile_id
         new_profile_key_row.name_id = name_id                      # name_id
         new_profile_key_row.relation_id = new_relation_id          # relation_id
         new_profile_key_row.is_profile_id = new_profile_id         # is_profile_id
         new_profile_key_row.is_name_id = new_profile_name_id       # is_name_id
+
+
  #########################
       new_profile_key_row.save
  #########################

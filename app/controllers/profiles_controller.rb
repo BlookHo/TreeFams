@@ -98,10 +98,13 @@ class ProfilesController < ApplicationController
             tree_ids: current_user.get_connected_users)
 
 
+        @questions = nil
+        @profile.answers_hash = nil
 
         # TODO create new profile data for d3 graph
-        flash.now[:alert] = "Вопросы валидны - профиль coздан"
-        render :new
+        # flash.now[:alert] = "Вопросы валидны - профиль coздан"
+        # render :new
+        # render create.js.erb
 
 
       # Ask relations questions
