@@ -242,12 +242,7 @@ class ConnectionRequestsController < ApplicationController
     # debugg here this method - update all requests with users connected
     conn_requests_update(yes_user_id)
 
-    # Взять значение из Settings
-    @certain_koeff = 4
 
-  #  redirect_to connection_of_trees_path( user_id_to_connect: yes_user_id, certain_koeff: @certain_koeff), class: :green
-  #  redirect_to connection_of_trees_path
-  #  redirect_to show_user_requests_path
 
   end
 

@@ -7,11 +7,8 @@
 
 
 - if !@stop_connection
-  %h1 Дубликатов нет. Деревья можно объединять.
-
-  -#= link_to "Объединиться с ", connection_of_trees_path( user_id_to_connect: result[:found_tree_id], certain_koeff: @certain_koeff), class: :green
-
-
+  %h1 Дубликатов нет. Деревья можно объединть.
+  #{@connection_message}
 
 
 - else
@@ -28,4 +25,6 @@
 - if Rails.env == 'development'
   = render 'debugger'
 
--#= link_to 'Просмотр одного запроса', show_one_request_path(with_user_id: @with_user_id),  class: :request
+= link_to 'Просмотр Ваших оставшихся запросов', show_user_requests_path
+%br
+= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request

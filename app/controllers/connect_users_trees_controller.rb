@@ -339,11 +339,11 @@ class ConnectUsersTreesController < ApplicationController
     @user_id = user_id # DEBUGG_TO_VIEW
     @certain_koeff_for_connect = params[:certain_koeff] # From view
     @certain_koeff_for_connect = @certain_koeff_for_connect.to_i
+    # Взять значение из Settings
     @certain_koeff_for_connect = 4
     connected_user = User.find(user_id) # For lock check
 
-    @connection_id = params[:connection_id].to_i # From view Link
-
+    @connection_id = params[:connection_id].to_i # From view Link - where pressed button Yes
 
     logger.info " "
     logger.info "=== IN connection_of_trees ==="
@@ -373,9 +373,7 @@ class ConnectUsersTreesController < ApplicationController
         beg_search_time = Time.now   # Начало отсечки времени поиска
 
         ##############################################################################
-        ##### Запуск ДОСТОВЕРНОГО поиска С @certainty_koeff
-        ##### @certain_koeff_for_connect БРАТЬ ИЗ main_page view (?) или оставить постоянной величиной здесь ???
-      #  @certain_koeff_for_connect = 4 # Если закомментить эту строку, то значение certainty_koeff будет приходить из main_page
+        ##### Запуск ДОСТОВЕРНОГО поиска С @@certain_koeff_for_connect
         logger.info ""
         logger.info "BEFORE start_search  "
         logger.info " @certain_koeff_for_connect = #{@certain_koeff_for_connect}"
@@ -397,17 +395,15 @@ class ConnectUsersTreesController < ApplicationController
         stop_by_search_dublicates = false
         stop_by_search_dublicates = true if !duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?
         @stop_by_search_dublicates = stop_by_search_dublicates # DEBUGG_TO_VIEW
-
-        logger.info "ERROR - STOP connection! ЕСТЬ дублирования в поиске. stop_by_search_dublicates = #{stop_by_search_dublicates}"
+        logger.info "ERROR - STOP connection! ЕСТЬ дублирования в поиске. stop_by_search_dublicates = #{stop_by_search_dublicates}" if !duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?
         if stop_by_search_dublicates == false # если не было дубликатов
            #  uniq_profiles_pairs = {135=>{12=>94}, 129=>{12=>110, 13=>110, 14=>104}}
           #  uniq_profiles_pairs = { 129=>{12=>110, 13=>110, 14=>104}}
+          @stop_connection = false  # for view
           @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
 
-          logger.info ""
-          logger.info ""
-          logger.info ""
-          logger.info " stop_by_search_dublicates = #{stop_by_search_dublicates}"
+          logger.info " After start_search in SEARCH.rb"
+          logger.info " stop_by_search_dublicates = #{stop_by_search_dublicates}, @stop_connection = #{@stop_connection}"
           logger.info "BEFORE HARD_COMPLETE_SEARCH uniq_profiles_pairs = #{uniq_profiles_pairs} "
 
           init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_pairs)
@@ -446,27 +442,20 @@ class ConnectUsersTreesController < ApplicationController
           stop_by_arrs = false
           stop_by_arrs, connection_message = check_connection_arrs(connection_data)
           if stop_by_arrs == false
-            logger.info "Connection - GO ON! Connection array(s) - CORRECT! stop_by_arrs = #{stop_by_arrs}"
+            @stop_connection = false  # for view
+            logger.info "Connection - GO ON! Connection array(s) - CORRECT! stop_by_arrs = #{stop_by_arrs}, @stop_connection = #{@stop_connection}"
             connection_message = "Деревья объединяются..."
 
             ##################################################################
             ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
     #        connection_in_tables(connection_data, current_user_id, user_id)
             ##################################################################
-            ##### Update connection requests
-            # get_connected - new tree users
-            # find all requests with where(user   in   [ users in tree])
-            # all requests. each
-            #  done = true  - to all requests
-            #  save requests
+            ##### Update connection requests - to yes connect
+            yes_to_request(@connection_id)
             ##################################################################
-            # update request data - to yes connect
-            update_requests(1, @connection_id)
-
-            # debugg here this method - update all requests with users connected
-        #    conn_requests_update(yes_user_id)
-
-
+            # Make DONE all connected requests
+            # - update all requests - with users, connected with current_user
+            after_conn_update_requests
             ##############################################
 
 
@@ -497,50 +486,60 @@ class ConnectUsersTreesController < ApplicationController
 
   end
 
-  # update request data - to yes or no connect
-  def  update_requests(value, connection_id)
+  # update request data - to yes to connect
+  # Ответ ДА на запрос на объединение
+  # Действия: сохраняем инфу - кто дал добро (= 1) какому объединению
+  # Перед этим - запуск собственно процесса объединения
+  def yes_to_request(connection_id)
     requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
     if !requests_to_update.blank?
       requests_to_update.each do |request_row|
         request_row.done = true
-        request_row.confirm = value if request_row.with_user_id == current_user.id
-        request_row.save
+        request_row.confirm = 1 if request_row.with_user_id == current_user.id
+  #      request_row.save
       end
-      logger.info "&&&& In update_requests: Done"
-
+      logger.info "In update_requests: Done"
     else
-      redirect_to show_user_requests_path
-      # To: Просмотр Ваших оставшихся запросов'
+      logger.info "WARNING: NO update_requests WAS DONE!"
+      redirect_to show_user_requests_path # To: Просмотр Ваших оставшихся запросов'
       # flash - no connection requests data in table
     end
   end
 
-  # Ответ ДА на запрос на объединение
-  # Действия: сохраняем инфу - кто дал добро какому объединению
-  # После этого - запуск собственно процесса объединения
-  #
-  # GET /connection_requests/yes_connect
-  def update_requests_by_yes
+  # Найти все запросы, в которых участвуют члены нового объединенного дерева
+  # 1.Get connected users - arr
+  # where(user-id - in Arr and with_user in Arr)
+  # set to DONE all.
 
-    yes_user_id = params[:yes_user_id].to_i # From view
-    logger.info "== yes_user_id = #{yes_user_id}"
-    connection_id = params[:connection_id].to_i # From view Link
+  def after_conn_update_requests
+    @new_tree_users = current_user.get_connected_users
+    arr = [11,2,5,14,7]
+  #  @str_arr = arr.map(&:inspect).join('; ')
+  #  @str_arr = arr.join('; ')
 
-    # update request data - to yes connect
-    update_requests(1, connection_id)
+    # Find Array of all requests - connected
+    @requests_from_arr = ConnectionRequest.where("user_id in (?)", arr).pluck(:connection_id).uniq
+    @requests_with_arr = ConnectionRequest.where("with_user_id in (?)", arr).pluck(:connection_id).uniq
+    @all_requests_to_update = (@requests_from_arr + @requests_with_arr).uniq
 
-    # debugg here this method - update all requests with users connected
-    conn_requests_update(yes_user_id)
+    # Update all requests - connected
 
-    # Взять значение из Settings
-    @certain_koeff = 4
-
-    #  redirect_to connection_of_trees_path( user_id_to_connect: yes_user_id, certain_koeff: @certain_koeff), class: :green
-    #  redirect_to connection_of_trees_path
-    #  redirect_to show_user_requests_path
+    @all_requests_to_update.each do |connection_id|
+      requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false )#.order('created_at').reverse_order
+      if !requests_to_update.blank?
+        requests_to_update.each do |request_row|
+          request_row.done = true
+          #request_row.confirm = value if request_row.with_user_id == current_user.id
+          request_row.save
+        end
+      else
+        logger.info "WARNING: NO update_requests WAS DONE!"
+        #redirect_to show_user_requests_path
+        # flash - no connection requests data in table
+      end
+    end
 
   end
-
 
   # Центральный метод соединения деревьев = перезапись профилей в таблицах
   # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
