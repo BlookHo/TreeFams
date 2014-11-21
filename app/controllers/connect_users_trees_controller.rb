@@ -496,7 +496,7 @@ class ConnectUsersTreesController < ApplicationController
       requests_to_update.each do |request_row|
         request_row.done = true
         request_row.confirm = 1 if request_row.with_user_id == current_user.id
-  #      request_row.save
+        request_row.save
       end
       logger.info "In update_requests: Done"
     else
@@ -512,28 +512,29 @@ class ConnectUsersTreesController < ApplicationController
   # set to DONE all.
 
   def after_conn_update_requests
-    @new_tree_users = current_user.get_connected_users
-    arr = [11,2,5,14,7]
+    new_tree_users = current_user.get_connected_users
+    @new_tree_users = new_tree_users  # DEBUGG_TO_VIEW
+   # arr = [11,2,14,7]
   #  @str_arr = arr.map(&:inspect).join('; ')
   #  @str_arr = arr.join('; ')
 
-    # Find Array of all requests - connected
-    @requests_from_arr = ConnectionRequest.where("user_id in (?)", arr).pluck(:connection_id).uniq
-    @requests_with_arr = ConnectionRequest.where("with_user_id in (?)", arr).pluck(:connection_id).uniq
+    # Find Array of all requests - included in just connected
+    @requests_from_arr = ConnectionRequest.where("user_id in (?)", new_tree_users).pluck(:connection_id).uniq
+    @requests_with_arr = ConnectionRequest.where("with_user_id in (?)", new_tree_users).pluck(:connection_id).uniq
     @all_requests_to_update = (@requests_from_arr + @requests_with_arr).uniq
 
-    # Update all requests - connected
-
+    # Update all included requests - just connected
     @all_requests_to_update.each do |connection_id|
-      requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false )#.order('created_at').reverse_order
+      requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false )
       if !requests_to_update.blank?
         requests_to_update.each do |request_row|
           request_row.done = true
-          #request_row.confirm = value if request_row.with_user_id == current_user.id
+          request_row.confirm = 2 # for all requests - system done
           request_row.save
         end
+        logger.info "All just connected update_requests DONE!"
       else
-        logger.info "WARNING: NO update_requests WAS DONE!"
+        logger.info "WARNING: NO update_requests!"
         #redirect_to show_user_requests_path
         # flash - no connection requests data in table
       end
