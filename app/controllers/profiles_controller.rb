@@ -342,8 +342,8 @@ class ProfilesController < ApplicationController
   def context_menu
     @profile = Profile.find(params[:profile_id])
     @profile.allow_add_relation = @profile.owner_user.get_connected_users.include? current_user.id
-    @profile.allow_destroy = !@profile.user.present? # && @profile last in chains
-    @profile.allow_invite = !@profile.user.present? && @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
+    @profile.allow_destroy = !@profile.user.present?  && !(@profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0) && (@profile.owner_user.get_connected_users.include? current_user.id)
+    @profile.allow_invite = !@profile.user.present?
     @profile.allow_conversation = @profile.user.present? && @profile.user.id != current_user.id
   end
 
