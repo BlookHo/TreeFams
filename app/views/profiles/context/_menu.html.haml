@@ -25,4 +25,4 @@
 
   -# Может ли быть удален профиль от current_user
   - if @profile.allow_destroy
-    %li= link_to "Удалить профиль", profile_path(@profile), class: :red, method: :delete
+    %li= link_to "Удалить профиль", profile_path(@profile), class: :red, method: :delete, remote: true

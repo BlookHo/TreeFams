@@ -80,18 +80,6 @@ class ProfilesController < ApplicationController
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
 
-        logger.info "==== Profile generation debugger ==========="
-        logger.info @base_profile.inspect
-        logger.info '---'
-        logger.info @profile.inspect
-        logger.info '---'
-        logger.info @profile.relation_id
-        logger.info '---'
-        logger.info @profile.answers_hash
-        logger.info '---'
-        logger.info current_user.get_connected_users
-        logger.info "==== Profile generation debugger ==========="
-
         ProfileKey.add_new_profile(@base_profile,
             @profile, @profile.relation_id,
             exclusions_hash: @profile.answers_hash,
@@ -320,22 +308,22 @@ class ProfilesController < ApplicationController
 
   def destroy
     @profile = Profile.where(id: params[:id]).first
-
     if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
-     flash[:alert] = "Вы можете удалить только последнего родственника в цепочке"
+     @error = "Вы можете удалить только последнего родственника в цепочке"
     elsif @profile.user.present?
-     flash[:alert] = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
+     @error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
     elsif @profile.user_id == current_user.id
-     flash[:alert] = "Вы не можете удалить свой профиль"
+     @error = "Вы не можете удалить свой профиль"
     else
        ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
        Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
        ProfileData.where(profile_id: @profile.id).map(&:destroy)
        @profile.destroy
-       flash[:notice] = "Профиль удален"
-       # flash[:alert] = "Ошибка удаления профиля"
     end
-    redirect_to :back
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
 
 

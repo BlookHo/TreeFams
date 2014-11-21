@@ -46,7 +46,8 @@ var buildPath = function(data){
 var buildPathLink = function(profile){
   var li = document.createElement('li');
   var a = document.createElement('a');
-  var linkText = document.createTextNode(profile.is_relation+' '+profile.name+profile.id);
+  // var linkText = document.createTextNode(profile.is_relation+' '+profile.name+profile.id);
+  var linkText = document.createTextNode(profile.is_relation+' '+profile.name);
   a.appendChild(linkText);
   a.onclick = function(){
     getCircles({profile_id: profile.id});

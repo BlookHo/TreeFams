@@ -1,1 +1,3 @@
-alert('Profile added!');
+$('#profile-context-menu').hide();
+getCircles({ profile_id: <%= @base_profile.id %>, token: '<%= current_user.access_token %>' });
+getSearchResults( showSearchResultsButton );

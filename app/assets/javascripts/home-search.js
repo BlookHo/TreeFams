@@ -8,6 +8,8 @@ var current_search_result = 0;
 
 // Получение результатов поиска и отображение на кнопке на домашней странице
 function getSearchResults(callback) {
+  $(search_btn).text('Идет поиск...');
+  $(search_btn).removeClass('animated tada');
   $.get( "/api/v1/search", { token: access_token } )
    .done(function( data ) {
       // jsdebug(data);
@@ -21,6 +23,7 @@ function getSearchResults(callback) {
 // Показать результаты поиска на большой синей кнопке
 showSearchResultsButton = function(search_results){
   $(search_btn).text('Найдено '+search_results.total_profiles+' родственников в '+search_results.total_trees+' деревьях');
+  $(search_btn).addClass('animated tada');
 }
 
 

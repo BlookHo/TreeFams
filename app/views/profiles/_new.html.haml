@@ -31,10 +31,10 @@
             .text
               = q.text.html_safe
             .answer
-              %label.bttn.small.green
+              %label.bttn.green
                 = radio_button_tag "answers[#{q.id}]", 1, @profile.answers_hash.try(:[], "#{q.id}") == 1.to_s, onclick: "$('#new_profile').submit()"
                 Да
-              %label.bttn.small.red
+              %label.bttn.red
                 = radio_button_tag "answers[#{q.id}]", 0, @profile.answers_hash.try(:[], "#{q.id}") == 0.to_s, onclick: "$('#new_profile').submit()"
                 Нет
 
@@ -101,9 +101,10 @@
         = text_field_tag :profile_name, @profile.profile_name, placeholder: "Имя...", id: :new_profile_name
         = hidden_field_tag :profile_name_id, @profile.name_id, id: :new_profile_name_id
 
-    .actions
-      -#= link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class:  [:bttn, :grey]
-      = f.submit "Добавить", class: [:bttn, :green], data: { disable_with: "Подождите..." }
+    - if !@questions
+      .actions
+        -#= link_to 'Отмена', '#cancel', onclick: "closeAllDropDown();", class:  [:bttn, :grey]
+        = f.submit "Добавить", class: [:bttn, :green], data: { disable_with: "Подождите..." }
 
 
 

@@ -1,0 +1,6 @@
+<%- if @error %>
+  alert('<%= @error %>');
+<%- else %>
+  $('#profile-context-menu').hide();
+  getCircles({ profile_id: <%= current_user.profile_id %>, token: '<%= current_user.access_token %>' });
+<%- end %>
