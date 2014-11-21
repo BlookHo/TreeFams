@@ -226,27 +226,7 @@ class ConnectionRequestsController < ApplicationController
     end
   end
 
-  # Ответ ДА на запрос на объединение
-  # Действия: сохраняем инфу - кто дал добро какому объединению
-  # После этого - запуск собственно процесса объединения
-  #
-  # GET /connection_requests/yes_connect
-  def yes_connect
-    yes_user_id = params[:yes_user_id].to_i # From view
-    logger.info "== yes_user_id = #{yes_user_id}"
-    connection_id = params[:connection_id].to_i # From view Link
-
-    # update request data - to yes connect
-    update_requests(1, connection_id)
-
-    # debugg here this method - update all requests with users connected
-    conn_requests_update(yes_user_id)
-
-
-
-  end
-
-  # Ответ НЕТ на запрос на объединение
+   # Ответ НЕТ на запрос на объединение
   # Действия: сохраняем инфу - кто отказал какому объединению
   # После этого - пометить, что-то?
   # GET /connection_requests/no_connect
@@ -255,27 +235,12 @@ class ConnectionRequestsController < ApplicationController
     logger.info "== no_user_id = #{no_user_id}"
     connection_id = params[:connection_id].to_i # From view Link
 
-    # update request data - to no connect
+    # update request data - No to connect
     update_requests(0, connection_id)
 
     redirect_to show_user_requests_path
 
   end
-
-  ##### Update connection requests
-  # get_connected - new tree users
-  # find all requests with where(user   in   [ users in tree])
-  # all requests. each
-  #  done = true  - to all requests
-  #  save requests
-  ##################################################################
-  def conn_requests_update(yes_user_id)
-
-    @update_msg = "conn_requests_update - DONE"
-
-
-  end
-
 
   # POST /connection_requests
   # POST /connection_requests.json
