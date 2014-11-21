@@ -339,12 +339,17 @@ class ConnectUsersTreesController < ApplicationController
     @user_id = user_id # DEBUGG_TO_VIEW
     @certain_koeff_for_connect = params[:certain_koeff] # From view
     @certain_koeff_for_connect = @certain_koeff_for_connect.to_i
+    @certain_koeff_for_connect = 4
     connected_user = User.find(user_id) # For lock check
+
+    @connection_id = params[:connection_id].to_i # From view Link
+
 
     logger.info " "
     logger.info "=== IN connection_of_trees ==="
     logger.info "current_user_id = #{current_user_id}, user_id = #{user_id}, connected_user = #{connected_user} "
     logger.info "current_user.tree_is_locked? = #{current_user.tree_is_locked?}, connected_user.tree_is_locked? = #{connected_user.tree_is_locked?} "
+    logger.info "@connection_id = #{@connection_id}"
 
     ######## Check users lock status and connect if all ok
     #if current_user.tree_is_locked? or connected_user.tree_is_locked?
@@ -455,6 +460,15 @@ class ConnectUsersTreesController < ApplicationController
             #  done = true  - to all requests
             #  save requests
             ##################################################################
+            # update request data - to yes connect
+            update_requests(1, @connection_id)
+
+            # debugg here this method - update all requests with users connected
+        #    conn_requests_update(yes_user_id)
+
+
+            ##############################################
+
 
           else
             logger.info "ERROR - STOP connection! Connection array(s) - INCORRECT! stop_by_arrs = #{stop_by_arrs}, "
@@ -470,7 +484,9 @@ class ConnectUsersTreesController < ApplicationController
       @stop_by_arrs = stop_by_arrs # DEBUGG_TO_VIEW
       @connection_message = connection_message # DEBUGG_TO_VIEW
 
-      ######## Afrer all unlock unlock user tree
+ #   redirect_to yes_connect_path(yes_user_id: current_user.id, connection_id: connection_id) and return
+
+    ######## Afrer all unlock unlock user tree
     #  current_user.unlock_tree!
     #  connected_user.unlock_tree!
     #
@@ -480,6 +496,51 @@ class ConnectUsersTreesController < ApplicationController
 
 
   end
+
+  # update request data - to yes or no connect
+  def  update_requests(value, connection_id)
+    requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
+    if !requests_to_update.blank?
+      requests_to_update.each do |request_row|
+        request_row.done = true
+        request_row.confirm = value if request_row.with_user_id == current_user.id
+        request_row.save
+      end
+      logger.info "&&&& In update_requests: Done"
+
+    else
+      redirect_to show_user_requests_path
+      # To: Просмотр Ваших оставшихся запросов'
+      # flash - no connection requests data in table
+    end
+  end
+
+  # Ответ ДА на запрос на объединение
+  # Действия: сохраняем инфу - кто дал добро какому объединению
+  # После этого - запуск собственно процесса объединения
+  #
+  # GET /connection_requests/yes_connect
+  def update_requests_by_yes
+
+    yes_user_id = params[:yes_user_id].to_i # From view
+    logger.info "== yes_user_id = #{yes_user_id}"
+    connection_id = params[:connection_id].to_i # From view Link
+
+    # update request data - to yes connect
+    update_requests(1, connection_id)
+
+    # debugg here this method - update all requests with users connected
+    conn_requests_update(yes_user_id)
+
+    # Взять значение из Settings
+    @certain_koeff = 4
+
+    #  redirect_to connection_of_trees_path( user_id_to_connect: yes_user_id, certain_koeff: @certain_koeff), class: :green
+    #  redirect_to connection_of_trees_path
+    #  redirect_to show_user_requests_path
+
+  end
+
 
   # Центральный метод соединения деревьев = перезапись профилей в таблицах
   # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились

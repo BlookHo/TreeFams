@@ -20,55 +20,80 @@ class ConnectionRequestsController < ApplicationController
   def make_connection_request
 
       current_user_id = current_user.id #
-      with_user_id = params[:user_id_to_connect] # From view
+      with_user_id = params[:user_id_to_connect].to_i # From view
       @current_user_id = current_user_id # DEBUGG_TO_VIEW
       @with_user_id = with_user_id # DEBUGG_TO_VIEW
 
       find_users_connectors(with_user_id) if current_user # определение Юзеров - участников объединения деревьев
 
-      max_connection_id = ConnectionRequest.maximum(:connection_id)
-      logger.info " max_connection_id = #{max_connection_id.inspect}"
-      if max_connection_id == nil
-        max_connection_id = 1
+      if !@who_connect_users_arr.include?(with_user_id.to_i) # check_connection: IF NOT CONNECTED
+
+        if !counter_request_exists(with_user_id)
+          max_connection_id = ConnectionRequest.maximum(:connection_id)
+          logger.info " max_connection_id = #{max_connection_id.inspect}"
+          if max_connection_id == nil
+            max_connection_id = 1
+          else
+            max_connection_id += 1
+          end
+
+          logger.info " max_connection_id = #{max_connection_id.inspect}"
+
+          @with_whom_connect_users_arr.each do |user_to_connect|
+
+            new_connection_request = ConnectionRequest.new
+            new_connection_request.connection_id = max_connection_id
+            new_connection_request.user_id = current_user.id
+            new_connection_request.with_user_id = user_to_connect
+      ##########################################
+            new_connection_request.save
+      ##########################################
+          end
+
+          @all_connection_requests = ConnectionRequest.all.order('created_at').reverse_order
+
+          current_user_connection_ids = ConnectionRequest.where(:user_id => current_user.id, :done => false ).order('created_at').reverse_order.pluck('connection_id').uniq
+          @current_user_connection_ids = current_user_connection_ids
+
+          user_requests_data = {}
+          current_user_connection_ids.each do |one_connection_id|
+            request = ConnectionRequest.where(:connection_id => one_connection_id, :done => false ).order('created_at').reverse_order.first
+            if !request.blank?
+              one_request = {}
+
+              one_request.merge!(:request_id  => request.id)
+              one_request.merge!(:request_from_user_id  => request.user_id)
+              one_request.merge!(:request_to_user_id => request.with_user_id)
+              one_request.merge!(:confirm => request.confirm)
+              one_request.merge!(:done => request.done)
+              one_request.merge!(:created_at => (request.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S'))
+
+              user_requests_data.merge!(request.connection_id => one_request)
+            end
+
+          end
+
+          @user_requests_data = user_requests_data
+
+          @request_msg = "ВАШ ЗАПРОС НА ОБЪЕДИНЕНИЕ С ВЫБРАННЫМ ВАМИ ДЕРЕВОМ Юзера = #{@with_user_id.inspect} - СФОРМИРОВАН
+          И ОТПРАВЛЕН ДЛЯ ПОДТВЕРЖДЕНИЯ ВСЕМ УЧАСТНИКАМ ЭТОГО ДЕРЕВА: #{@with_whom_connect_users_arr.inspect}.
+          ОЖИДАЙТЕ ПОЛУЧЕНИЯ ПОДТВЕРЖДЕНИЯ ОБЪЕДИНЕНИЯ "
+        else
+          @request_msg = "УЖЕ ЕСТЬ ЗАПРОС, ВСТРЕЧНЫЙ ВАШЕМУ "
+          logger.info "Warning:: Встречный запрос на объединение! "
+        end
+
       else
-        max_connection_id += 1
+        logger.info "Warning:: Current_user &  with_user_id - Already connected! "
       end
 
-      logger.info " max_connection_id = #{max_connection_id.inspect}"
 
-      @with_whom_connect_users_arr.each do |user_to_connect|
+  end
 
-        new_connection_request = ConnectionRequest.new
-        new_connection_request.connection_id = max_connection_id
-        new_connection_request.user_id = current_user.id
-        new_connection_request.with_user_id = user_to_connect
-  ##########################################
-  #      new_connection_request.save
-  ##########################################
-      end
-
-      @all_connection_requests = ConnectionRequest.all.order('created_at').reverse_order
-
-      current_user_connection_ids = ConnectionRequest.where(:user_id => current_user.id, :done => false ).order('created_at').reverse_order.pluck('connection_id').uniq
-      @current_user_connection_ids = current_user_connection_ids
-
-      user_requests_data = {}
-      current_user_connection_ids.each do |one_connection_id|
-        request = ConnectionRequest.where(:connection_id => one_connection_id, :done => false ).order('created_at').reverse_order.first
-        one_request = {}
-
-        one_request.merge!(:request_id  => request.id)
-        one_request.merge!(:request_from_user_id  => request.user_id)
-        one_request.merge!(:request_to_user_id => request.with_user_id)
-        one_request.merge!(:confirm => request.confirm)
-        one_request.merge!(:done => request.done)
-        one_request.merge!(:created_at => (request.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S'))
-
-        user_requests_data.merge!(request.connection_id => one_request)
-
-      end
-
-      @user_requests_data = user_requests_data
+  def counter_request_exists(with_user_id)
+    #with_user_id_request = ConnectionRequest.where(:user_id => with_user_id, :with_user_id => current_user.id, :done => false )
+    ConnectionRequest.exists?(:user_id => with_user_id, :with_user_id => current_user.id, :done => false )
+    logger.info "In check_counter_request: Встречный запрос = #{ConnectionRequest.exists?(:user_id => with_user_id, :with_user_id => current_user.id, :done => false )} "
 
   end
 
@@ -222,7 +247,7 @@ class ConnectionRequestsController < ApplicationController
 
   #  redirect_to connection_of_trees_path( user_id_to_connect: yes_user_id, certain_koeff: @certain_koeff), class: :green
   #  redirect_to connection_of_trees_path
-    redirect_to show_user_requests_path
+  #  redirect_to show_user_requests_path
 
   end
 

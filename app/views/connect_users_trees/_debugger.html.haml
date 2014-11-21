@@ -56,6 +56,10 @@
 %p
   @save_in_profilekey_LEN: #{@save_in_profilekey_LEN.inspect}
 
+%br
 
-
-= link_to 'Просмотр одного запроса', show_one_request_path(with_user_id: @user_id),  class: :request
+-#= link_to 'Просмотр одного запроса', show_one_request_path(with_user_id: @user_id, connection_id: @user_id),  class: :request
+= link_to 'Просмотр Ваших оставшихся запросов', show_user_requests_path
+%br
+-#(with_user_id: @user_id, connection_id: @user_id),  class: :request
+= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request

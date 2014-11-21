@@ -1,8 +1,8 @@
 
-%p
-  Дата и Время:
-  =  l Time.now, format: :myformat
-%br
+-#%p
+-#  Дата и Время:
+-#  =  l Time.now, format: :myformat
+-#%br
 
 %h1 СТРАНИЦА ПРИНЯТИЯ РЕШЕНИЯ ПО ОДНОМУ ЗАПРОСУ на ОБЪЕДИНЕНИЕ
 %br
@@ -51,7 +51,8 @@
               %td= one_requests_arr.values_at(:done).flatten[0]
               %td= one_requests_arr.values_at(:created_at).flatten[0]
               - if request_to != "Don't show"
-                %td= link_to 'ДА', yes_connect_path(yes_user_id: current_user.id, connection_id: connection_request)
+                %td= link_to 'ДА', connection_of_trees_path( connection_id: connection_request, user_id_to_connect: one_requests_arr.values_at(:request_from_user_id).flatten[0])
+                -#%td= link_to 'ДА', yes_connect_path(yes_user_id: current_user.id, connection_id: connection_request)
                 %td= link_to 'НЕТ', no_connect_path(no_user_id: current_user.id, connection_id: connection_request)
               %br
 
