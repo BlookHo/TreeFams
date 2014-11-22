@@ -10,24 +10,17 @@
 %br
 %p Справочно:
 %p @current_user.id = #{current_user.id.inspect}
-%p
-  @with_user_id = #{@with_user_id.inspect}
+%p @with_user_id = #{@with_user_id.inspect}
 %p кол-во новых запросов: @new_requests_count = #{@new_requests_count.inspect}
 %h1 КТО ОБЪЕДИНЯЕТСЯ: @who_connect_users_arr = #{@who_connect_users_arr.inspect}
-
 %h1 С КЕМ ОБЪЕДИНЯЕТСЯ: @with_whom_connect_users_arr = #{@with_whom_connect_users_arr.inspect}
-%p
-  @connection_id = #{@connection_id.inspect}
-%p
-  @user_request_data = #{@user_request_data.inspect}
+%p @connection_id = #{@connection_id.inspect}
 
-
-%h1 НОВЫЙ запрос на объединение - в ожидании Вашего решения
 - if !@user_request_data.empty?
+  %h1 ** запрос на объединение - в ожидании Вашего решения **
   %table
     %tr
       %th Connection_id
-
     - @user_request_data.each do |connection_request, requests_arr|
       %tr
         %td= connection_request
@@ -35,8 +28,8 @@
       - if !requests_arr.blank?
         %table
           %tr
-            %th Объединиться с:
-            %th Запрос Юзеру:
+            %th Кто создал запрос
+            %th С кем объединяется
             %th Confirm
             %th Статус
             %th Дата создания запроса
@@ -51,10 +44,10 @@
               %td= one_requests_arr.values_at(:done).flatten[0]
               %td= one_requests_arr.values_at(:created_at).flatten[0]
               - if request_to != "Don't show"
-                %td= link_to 'ДА', connection_of_trees_path( connection_id: connection_request, user_id_to_connect: one_requests_arr.values_at(:request_from_user_id).flatten[0])
+                %td= link_to 'Решение - ДА', connection_of_trees_path( connection_id: connection_request, user_id_to_connect: one_requests_arr.values_at(:request_from_user_id).flatten[0])
                 -#%td= link_to 'ДА', yes_connect_path(yes_user_id: current_user.id, connection_id: connection_request)
-                %td= link_to 'НЕТ', no_connect_path(no_user_id: current_user.id, connection_id: connection_request)
-              %br
+                %td= link_to 'Решение - НЕТ', no_connect_path( connection_id: connection_request)
+      %br
 
 %br
 

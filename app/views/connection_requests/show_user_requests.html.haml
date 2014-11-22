@@ -1,11 +1,10 @@
 
--#%p
--#  Дата и Время:
--#  =  l Time.now, format: :myformat
--#%br
+%p
+  Дата и Время:
+  =  l Time.now, format: :myformat
+%br
 
 %h1 СТРАНИЦА демонстрации всех запросов на ОБЪЕДИНЕНИЕ
-%br
 
 %br
 %p Справочно:
@@ -13,12 +12,11 @@
 %p кол-во новых запросов: @new_requests_count = #{@new_requests_count.inspect}
 
 %br
-%h1 Полученные Вами НОВЫЕ запросы на объединение - в ожидании Вашего решения
 %br
-- if !@requests_to_user.blank?
+- if !@requests_to_user_data.empty?
+  %h1 ** Полученные Вами НОВЫЕ запросы на объединение - в ожидании Вашего решения **
   %table
     %tr
-      -#%th id
       %th Connection_id
       %th От кого запрос
       -#%th With_user
@@ -26,26 +24,25 @@
       %th Статус
       %th Дата создания запроса
       %th
-
-    - @requests_to_user.each do |user|
+    - @requests_to_user_data.each do |connection_request, data_hash|
       %tr
-        -#%td= user.id
-        %td= user.connection_id
-        %td= user.user_id
-        -#%td= user.with_user_id
-        %td= user.confirm.inspect
-        %td= user.done
-        %td= user.read_attribute_before_type_cast(:created_at).to_s
-        %td= link_to 'Просмотр одного запроса', show_one_request_path(connection_id: user.connection_id, with_user_id: user.user_id),  class: :request
-        %br
+        %td= connection_request
+        %td= data_hash.values_at(:request_from_user_id).flatten[0]
+        -#%td= data_hash.values_at(:request_to_user_id).flatten[0]
+        %td= data_hash.values_at(:confirm).flatten[0].inspect
+        %td= data_hash.values_at(:done).flatten[0]
+        %td= data_hash.values_at(:created_at).flatten[0]
+        %td= link_to 'Просмотр одного запроса', show_one_request_path(connection_id: connection_request, user_id: data_hash.values_at(:request_from_user_id).flatten[0]),  class: :request
 
-  -#%p @requests_to_user_data = #{@requests_to_user_data.inspect}
-  %br
+    %br
+- else
+  %h1 ** Для Вас отсутствуют НОВЫЕ запросы на объединение **
+
 %br
-
-%h1 Все созданные Вами запросы - в ожидании на объединение
+%br
 %br
 - if !@user_requests_data.empty?
+  %h1 ** Все созданные Вами запросы - в ожидании на объединение **
   %table
     %tr
       %th Connection_id
@@ -55,7 +52,6 @@
       %th Статус
       %th Дата создания запроса
       %th
-
     - @user_requests_data.each do |connection_request, data_hash|
       %tr
         %td= connection_request
@@ -65,8 +61,12 @@
         %td= data_hash.values_at(:done).flatten[0]
         %td= data_hash.values_at(:created_at).flatten[0]
         %td= link_to 'Просмотр одного запроса', show_one_request_path(connection_id: connection_request, with_user_id: data_hash.values_at(:request_to_user_id).flatten[0]),  class: :request
+    %br
+- else
+  %h1 ** Вы не создали НОВЫЕ запросы на объединение **
 
-
-
--#= link_to 'Connection request', connection_requests_path
+%br
+%br
+%br
+= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request
 
