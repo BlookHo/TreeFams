@@ -4,7 +4,16 @@
 
     %ul
       - if current_user
-        %li= link_to raw("Рукопожатия <i class='fa fa-globe'></i>"), '#', :class => "ttip", title: "Объединение родственных деревьев"
+        - if @new_requests_count.blank? || @new_requests_count == 0
+          %li= link_to raw("Рукопожатия <i class='fa fa-globe '></i> "), show_user_requests_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
+        - elsif  @new_requests_count > 9
+          %li= link_to raw("Рукопожатия <i class='fa fa-globe '></i> <strong>(*)</strong>"), show_user_requests_path, :class => "ttip", title: "К тебе есть новые запросы на рукопожатия"
+        - else
+          %li= link_to raw("Рукопожатия <i class='fa fa-globe'></i> <strong>(#{@new_requests_count})</strong>"), show_user_requests_path, :class => "ttip", title: "К тебе есть новые запросы на рукопожатия"
+
+        -#%li= link_to raw("Рукопожатия <i class='fa fa-globe'></i>"), '#', :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
+
+
         %li= link_to 'Мои новости (Лента)', '#', :class => "ttip", title: "Мои новости"
 
 

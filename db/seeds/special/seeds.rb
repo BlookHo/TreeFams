@@ -19,6 +19,6 @@ ConnectedUser.reset_pk_sequence
 Message.delete_all       #
 Message.reset_pk_sequence
 
-#ConnectionRequest.delete_all       #
-#ConnectionRequest.reset_pk_sequence
+ConnectionRequest.delete_all       #
+ConnectionRequest.reset_pk_sequence
 

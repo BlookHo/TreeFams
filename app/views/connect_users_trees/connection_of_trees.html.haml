@@ -7,7 +7,9 @@
 
 
 - if !@stop_connection
-  %h1 Дубликатов нет. Деревья объединяются...
+  %h1 Дубликатов нет. Деревья можно объединть.
+  #{@connection_message}
+
 
 - else
   %h1 Деревья объединить нельзя! ...
@@ -22,3 +24,7 @@
 
 - if Rails.env == 'development'
   = render 'debugger'
+
+= link_to 'Просмотр Ваших оставшихся запросов', show_user_requests_path
+%br
+= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request

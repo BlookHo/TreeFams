@@ -1,3 +1,6 @@
+# encoding: utf-8
+Encoding.default_external = "UTF-8"
+
 Weafam::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
