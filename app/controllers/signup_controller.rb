@@ -9,8 +9,17 @@ class SignupController < ApplicationController
   end
 
 
+  # {"author"=>{"name"=>"Александр", "sex_id"=>1, "id"=>27}, "father"=>{"name"=>"Давид", "sex_id"=>1, "id"=>147}, "mother"=>{"name"=>"Лариса", "sex_id"=>0, "id"=>262}, "sisters"=>[{"name"=>"Виктория", "sex_id"=>0, "id"=>107}], "email"=>"david@mail.ru"}
+
   def create
     @data = params['family'].compact
+
+    logger.info "======================================= FAKER "
+    logger.info "======================================= faker "
+    logger.info @data.inspect
+    logger.info "======================================= end "
+
+
     user = User.new( email: @data["email"] )
     user.valid?
     if user.errors.messages[:email].nil?
