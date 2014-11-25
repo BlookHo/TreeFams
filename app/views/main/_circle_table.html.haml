@@ -16,7 +16,7 @@
 
     %td
   - circle.each_with_index do |item, index|
-    - path_link = circle_path(circle_path_helper(@path_params, item.is_profile_id, item.relation_id))
+    -#- path_link = circle_path(circle_path_helper(@path_params, item.is_profile_id, item.relation_id))
     %tr
       %td= relation_to_human(item.relation_id)
       %td
@@ -25,7 +25,7 @@
           base_profile_id: item.is_profile_id,
           base_relation_id: item.relation_id,
           link_text: item.name.to_name,
-          path_link: path_link
+          path_link: 'path_link'
 
       %td.center
         - if item.profile.tree_circle(current_user.get_connected_users, item.is_profile_id).size > 0 and item.relation_id != 0
