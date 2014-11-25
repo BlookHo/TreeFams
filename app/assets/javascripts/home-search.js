@@ -3,8 +3,24 @@ var search_paginator = $('#search_results_paginator');
 var search_results;
 var search_marked_profile_ids = [];
 var current_search_result = 0;
+var current_search_resuls_tree_owner_id;
 
 
+
+
+
+
+function getCurrentTreeUserId(){
+  return search_results.trees[current_search_result].tree_id;
+}
+
+
+function connectTrees(){
+  // http://localhost:3000/make_connection_request?user_id_to_connect=tree_owner_id
+  var tree_owner_id = getCurrentTreeUserId();
+  window.location.href = '/make_connection_request?user_id_to_connect='+tree_owner_id;
+
+}
 
 // Получение результатов поиска и отображение на кнопке на домашней странице
 function getSearchResults(callback) {
@@ -12,11 +28,19 @@ function getSearchResults(callback) {
   $(search_btn).removeClass('animated tada');
   $.get( "/api/v1/search", { token: access_token } )
    .done(function( data ) {
-      // jsdebug(data);
+      jsdebug(data);
       search_results = data;
       if (callback){ callback(search_results); }
     });
 };
+
+
+
+
+
+function goToConnetTrees(){
+
+}
 
 
 
