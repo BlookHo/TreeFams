@@ -168,6 +168,9 @@ Weafam::Application.routes.draw do
     get '/edit/data', to: 'profiles#edit', as: :edit_data
   end
 
+  match 'enter_email' => 'profiles#enter_email', via: :get
+  match 'enter_email' => 'profiles#enter_email', via: :post
+
 
   resources :users
   resources :names

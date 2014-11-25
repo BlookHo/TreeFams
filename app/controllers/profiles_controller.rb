@@ -348,6 +348,23 @@ class ProfilesController < ApplicationController
   end
 
 
+  def enter_email
+
+    @profile_id = params[:profile_id] #104
+    @profile = Profile.find(params[:profile_id]) if !params[:profile_id].blank?
+
+    @profile_email = "sdfsdfs" #@profile.email
+    @email_name = params[:profile_email] || @profile_email if !@profile_email.blank?
+    @email_text = params[:email_text]
+
+
+
+
+
+
+
+  end
+
   private
 
 
