@@ -25,7 +25,7 @@ module ProfileKeysGeneration
           new_tree.is_name_id     = new_profile_name_id # is_name_id нового К_Профиля
           new_tree.is_sex_id      = new_profile_sex     # is_sex_id нового К_Профиля
   #########################
-  #      new_tree.save
+        new_tree.save
   #########################
         #id   user_id, profile_id, new_relation_id  conn-ted  dates   name_id  is new_profile_id  is new_profile_name_id  is new_profile_sex
         #1053;127     ;1052        ;8              ;FALSE;   "2014-"; 370     ;1053               ;354                    ;0
@@ -51,7 +51,7 @@ module ProfileKeysGeneration
 
 
  #########################
- #     new_profile_key_row.save
+      new_profile_key_row.save
  #########################
 
       one_profile_key_arr = []
