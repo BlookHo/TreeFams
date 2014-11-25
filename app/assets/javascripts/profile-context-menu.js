@@ -2,11 +2,12 @@
 $(function(){
 
   $(document).on('click', function(e){
-    if ( $('#center-profile-menu').has(e.target).length == 0 ) {
+    if ( $('#profile-context-menu').has(e.target).length == 0 ) {
       if ( $('g.center').has(e.target).length === 0 ){
-        $('#center-profile-menu').hide();
+        $('#profile-context-menu').hide();
       }
     }
   });
+
 
 });

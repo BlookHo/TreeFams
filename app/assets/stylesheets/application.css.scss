@@ -3,6 +3,7 @@
  *= require layout
  *= require global
  *= require ionicons
+ *= require animate
  *= require typo
  *= require buttons
  *= require graph
@@ -14,7 +15,8 @@
  *= require user_path
  *= require home
  *= require home-search
- *= require profile_menu
+ *= require profile-context-menu
  *= require font-awesome
+ *= require jquery-autocomplete-dropdown
 
 */

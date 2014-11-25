@@ -146,14 +146,12 @@ module Search
     relation_match_arr = ProfileKey.where.not(user_id: connected_users).where(:name_id => relation_row.name_id, :relation_id => relation_row.relation_id, :is_name_id => relation_row.is_name_id).order('user_id','relation_id','is_name_id').select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
     if !relation_match_arr.blank?
       show_in_logger(relation_match_arr, "=== результат" )  # DEBUGG_TO_LOGG
-      #relation_row_No = 1  # DEBUGG_TO_LOGG
       relation_match_arr.each do |tree_row|
-        #logger.info "=== === в результате № #{relation_row_No} - НАЙДЕНO: name_id = #{tree_row.name_id}, relation_id = #{tree_row.relation_id}, is_name_id = #{tree_row.is_name_id}, profile_id = #{tree_row.profile_id}, is_profile_id = #{tree_row.is_profile_id}) "
         profiles_hash = fill_arrays_in_hash(profiles_hash, tree_row.user_id, tree_row.profile_id, relation_row.relation_id)
         found_profiles_hash.merge!( profile_id_searched  => profiles_hash ) # наполнение хэша соответствиями найденных профилей и найденных отношений
-        #relation_row_No += 1  # DEBUGG_TO_LOGG
       end
     else
+      found_profiles_hash.merge!( profile_id_searched  => profiles_hash ) # наполнение хэша соответствиями найденных профилей и найденных отношений
       logger.info " "
       logger.info "=== НЕТ результата! В деревьях сайта ничего не найдено! === "
     end
@@ -193,6 +191,7 @@ module Search
           logger.info "=== После ПОИСКА по записи № #{all_profile_rows_No}" # DEBUGG_TO_LOGG
           logger.info "one_profile_relations_hash = #{one_profile_relations_hash} " # DEBUGG_TO_LOGG
           logger.info "profiles_hash = #{profiles_hash} " # DEBUGG_TO_LOGG
+          logger.info "found_profiles_hash = #{found_profiles_hash} " # DEBUGG_TO_LOGG
 
           all_profile_rows_No += 1 # Подсчет номера по порядку очередной записи об искомом профиле  # DEBUGG_TO_LOGG
         end

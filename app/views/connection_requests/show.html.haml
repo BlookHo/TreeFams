@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @connection_request.user_id
+%p
+  %b With user:
+  = @connection_request.with_user_id
+%p
+  %b Confirm:
+  = @connection_request.confirm
+%p
+  %b Done:
+  = @connection_request.done
+
+= link_to 'Edit', edit_connection_request_path(@connection_request)
+\|
+= link_to 'Back', connection_requests_path

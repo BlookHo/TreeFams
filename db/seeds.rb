@@ -52,8 +52,8 @@ Relation.create([
 {relation_id: 22, relation: 'Племянница', relation_rod_padej: 'Племянницы', origin_profile_sex_id: 0,  reverse_relation_id: 20, reverse_relation: 'Тетя'}
 
 
-
 # муж/жена: добавить для однополых браков?
 
 
 ])
+

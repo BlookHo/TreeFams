@@ -1,0 +1,5 @@
+<%- if @path_link %>
+  $.ajax({url: "<%= @path_link %>", type: "GET"});
+<%- else %>
+  $('#current-circle').html('<%= j render "main/circle_table", circle: @circle %>');
+<%- end %>

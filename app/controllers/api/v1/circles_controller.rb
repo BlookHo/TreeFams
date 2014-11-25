@@ -4,7 +4,6 @@ module Api
 
       respond_to :json
 
-
       # /api/v1/circles
       # принмает параметры:
       # profile_id - id центрального профиля, для которого будут собраны круги родственников
@@ -15,26 +14,13 @@ module Api
       # {circles:[], path:[]}
 
       def show
-
-        logger.info "==================== api_current_user"
-        logger.info api_current_user
-        logger.info "==================== api_current_user"
-
         profile = Profile.find(params[:profile_id])
         circles = profile.circles(api_current_user)
         tree_owner_ids = profile.owner_user.get_connected_users
         tree_owner_profile_id = get_tree_owner_user(tree_owner_ids).profile_id
         path = find_path(from_profile_id: tree_owner_profile_id, data: circles)
-        respond_with circles: circles, path: path, tree_owner_ids: tree_owner_ids
-      end
-
-
-      def old_show
-        profile = Profile.find(params[:profile_id])
-        circles = profile.circles(api_current_user)
-        tree_owner_ids = profile.owner_user.get_connected_users
-        path = find_path(from_profile_id: params[:path_from_profile_id].to_i, data: circles)
-        respond_with circles: circles, path: path, tree_owner_ids: tree_owner_ids
+        circle_author = find_current_circle_author(path)
+        respond_with circles: circles, path: path, tree_owner_ids: tree_owner_ids, cirlce_author: circle_author
       end
 
 
@@ -67,6 +53,26 @@ module Api
 
       private
 
+      # Возвращяет профиль и отношение
+      # к текущему центральному профилю
+      # Можно рассматривать как текщий путь минус один шаг назад
+      # возвращяет id профиля и его отношение к текущему профилю в центре
+      # используется для генерации вопросов при добавлении нестандартных отношений
+      def find_current_circle_author(path)
+        if path.size <= 1
+          {
+            author_profile_id: path.first[:id],
+            base_relation_id: 0,
+          }
+        else
+          {
+            author_profile_id: path[path.size - 2][:id],
+            base_relation_id: path[path.size - 2][:is_relation_id],
+          }
+        end
+      end
+
+
       def find_path(from_profile_id: from_profile_id, data: data)
         path = []
         path << data.select { |d| d[:id] == from_profile_id }.first
@@ -74,12 +80,6 @@ module Api
           path << data.select {|d| d[:id] == path.last[:target]}.first
         end
         return path
-      end
-
-
-
-      def tree_owners(profile)
-
       end
 
 

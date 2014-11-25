@@ -1,6 +1,13 @@
 class ExtraCode
 
 
+  #ОТОБРАЖЕНИЕ ДАТЫ ИЗ ТАБЛИЦЫ
+  @prof = Profile.find(23)#.select(:created_at)#.created_at
+  #@prof_date = @prof.created_at.to_s
+  @prof_name = @prof.name_id
+  @prof_date = @prof.attributes_before_type_cast["created_at"]
+  @prof_date2 = @prof.read_attribute_before_type_cast("created_at")
+
   #FROM module ProfileQuestions
 
  # Формирование массива хэшей ближнего круга

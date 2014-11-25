@@ -1,5 +1,3 @@
-<%- if @path_link %>
-  $.ajax({url: "<%= @path_link %>", type: "GET"});
-<%- else %>
-  $('#current-circle').html('<%= j render "main/circle_table", circle: @circle %>');
-<%- end %>
+$('#profile-context-menu').hide();
+getCircles({ profile_id: <%= @base_profile.id %>, token: '<%= current_user.access_token %>' });
+getSearchResults( showSearchResultsButton );

@@ -3,14 +3,19 @@
 class MessagesController < ApplicationController
   include MessagesHelper
 
+  before_filter :logged_in?
 
   before_action :set_message, only: [:show, :edit, :update, :destroy]
+
+  # if current_user # && !banned?
+
 
   # Получаем диалоги и сообщения всех контрагентов текущего юзера
   # Альтернативное отображение.
   def show_all_messages
 
-    if current_user
+    @users_ids = User.all.pluck(:id)
+
       @new_messages_count = count_new_messages
       logger.info "== show_all_messages == @new_messages_count = #{@new_messages_count}"
 
@@ -19,18 +24,16 @@ class MessagesController < ApplicationController
       @agents_talks.each do |user_id|
         user_dialoge = get_user_messages(user_id)
         @talks_and_messages << user_dialoge
+
       end
-    else
-      redirect_to login_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
 
   end
+
+
 
   # Получаем диалоги всех контрагентов текущего юзера
   def show_all_dialoges
 
-    if current_user
       @new_messages_count = count_new_messages
       logger.info "== show_all_dialoges == @new_messages_count = #{@new_messages_count}"
       find_agents # find all contragent of current_user by messages
@@ -40,10 +43,6 @@ class MessagesController < ApplicationController
         user_dialoge = get_user_messages(user_id)
         @talks_and_messages << user_dialoge
       end
-    else
-      redirect_to login_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
     @new_mail_count = count_new_messages
     logger.info "===== @new_mail_count = #{@new_mail_count}"
 
@@ -89,9 +88,8 @@ class MessagesController < ApplicationController
   # Получаем диалог одного юзера
   def show_one_dialoge
 
-    if current_user
       @new_messages_count = count_new_messages
-      logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
+      #logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
 
       find_agents # find all contragent of current_user by messages
       user_id = params[:user_id] # From view
@@ -99,10 +97,6 @@ class MessagesController < ApplicationController
       @talks_and_messages = []
       user_dialoge = get_user_messages(user_id)
       @talks_and_messages << user_dialoge
-    else
-      redirect_to login_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
 
   end
 
@@ -123,7 +117,7 @@ class MessagesController < ApplicationController
 
   def send_message # отправление нового сообщения
 
-    if current_user # && !banned?
+
 
       receiver_id = params[:receiver_id] # From view
       text = params[:text] # From view
@@ -140,11 +134,6 @@ class MessagesController < ApplicationController
 
       end
 
-    else
-      redirect_to login_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
-
   end
 
   # Удаление выбранного one_message
@@ -152,8 +141,6 @@ class MessagesController < ApplicationController
   def delete_message
 
     #user_id = params[:user_id] # From view # всего диалога
-
-    if current_user
 
       #one_user_dialoge =  Message.where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})")#.where(:receiver_deleted => false)#, :sender_deleted => false)#.order('created_at').reverse_order
       #one_user_dialoge.each do |one_message|
@@ -193,11 +180,6 @@ class MessagesController < ApplicationController
       end
       redirect_to show_one_dialoge_path(user_id: user_id)
 
-    else
-      redirect_to login_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
-
 
   end
 
@@ -234,7 +216,6 @@ class MessagesController < ApplicationController
   # Необходимо Изменение счетчика непрочитанных сообщений - для header
   def read_message
 
-    if current_user
       message = Message.find(params[:message_id])
       if message.receiver_id == current_user.id && message.read == false #|| message.sender_id == current_user.id
           message.read = true
@@ -251,10 +232,6 @@ class MessagesController < ApplicationController
         format.html { redirect_to show_one_dialoge_path(user_id: user_id) }
         format.js { render "messages/mail/renderMessage" }
       end
-    else
-      redirect_to login_path
-      flash[:info] = "Для этого нужно авторизоваться"
-    end
 
   end
 
@@ -275,30 +252,6 @@ class MessagesController < ApplicationController
 
 
 
-  #def spam_message #отметка автора сообщения как спаммера
-  #  if user_signed_in? && !banned?
-  #    message = Message.find(params[:message_id])
-  #    user_spam_row = UserSpamer.where(reporter_id: current_user.id, reported_id: message.sender_id, active: true)
-  #    spammed_user = User.find(message.sender_id)
-  #    if user_spam_row.blank?
-  #      UserSpamer.create(reporter_id: current_user.id, reported_id: message.sender_id, active: true)
-  #
-  #      flash[:success] = "Автор письма помечен как спамер"
-  #    else
-  #      flash[:error] = "Ты уже отмечал автора этого письма как спамера. Мы разберемся с ним"
-  #    end
-  #
-  #    if message.receiver_id == current_user.id
-  #      message.receiver_deleted = true
-  #      message.save
-  #    end
-  #    redirect_to mail_path
-  #  else
-  #    redirect_to index_path
-  #    flash[:info] = "Для этого нужно авторизоваться"
-  #  end
-  #end
-  #
 
   # GET /messages
   # GET /messages.json

@@ -15,26 +15,202 @@ class ProfilesController < ApplicationController
   end
 
 
-  def update
-    @profile = Profile.find(params[:id])
-    @profile_data = find_or_create_profile_data
-    if @profile_data.update_attributes(profile_data_params)
-      redirect_to profile_path(@profile), :notice => "Профиль сохранен!"
-    else
-      render :edit, :alert => "Ошибки при сохранении профиля!"
-    end
-  end
+  # def update
+  #   @profile = Profile.find(params[:id])
+  #   @profile_data = find_or_create_profile_data
+  #   if @profile_data.update_attributes(profile_data_params)
+  #     redirect_to profile_path(@profile), :notice => "Профиль сохранен!"
+  #   else
+  #     render :edit, :alert => "Ошибки при сохранении профиля!"
+  #   end
+  # end
+
 
 
   def new
+    # Новый профиль
     @profile = Profile.new
+    # Отношение нового профиля (кого добавляем: мать, отец...)
     @profile.relation_id = params[:relation_id]
+    # Профиль К КОТОРОМУ добавляем
     @base_profile = Profile.find(params[:base_profile_id])
+    # Дерево в котором происходит добавление
     @profile.tree_id = @base_profile.tree_id
   end
 
 
+
   def create
+    # Профиль, к которому добавляем (на котором вызвали меню +)
+    @base_profile = Profile.find(params[:base_profile_id])
+
+    # Relation того, к кому добавляем к автору отображаемого круга
+    # Его отношение к текущему автору круга. автор круга - шаг назад по пути
+    @base_relation_id  = params[:base_relation_id]
+
+    # текущий автор отображаемого круга - путь минус один шаг назад или профиль текущего юзера
+    @author_profile_id = params[:author_profile_id]
+
+    @profile = Profile.new(profile_params)  # Новый добавляемый профиль
+    # @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
+    @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
+
+    # Имя
+    @name = Name.where(id: params[:profile_name_id]).first
+
+    if @name
+      @profile.name_id = @name.id
+      @profile.profile_name = @name.name
+
+      make_questions_data = {
+          current_user_id:     current_user.id,
+          base_profile_id:     @base_profile.id,
+          base_relation_id:    @base_relation_id.to_i,
+          profile_relation_id: @profile.relation_id.to_i,
+          profile_name_id:     @profile.name_id.to_i,
+          author_profile_id:   @author_profile_id,
+          connected_users:     current_user.get_connected_users
+      }
+
+      questions_hash = current_user.profile.make_questions(make_questions_data)
+      @questions = create_questions_from_hash(questions_hash)
+
+      @profile.answers_hash = params[:answers]
+
+      # Validate for relation questions
+      if questions_valid?(questions_hash) and @profile.save
+
+        ProfileKey.add_new_profile(@base_profile,
+            @profile, @profile.relation_id,
+            exclusions_hash: @profile.answers_hash,
+            tree_ids: current_user.get_connected_users)
+
+
+        @questions = nil
+        @profile.answers_hash = nil
+
+        # TODO create new profile data for d3 graph
+        # flash.now[:alert] = "Вопросы валидны - профиль coздан"
+        # render :new
+        # render create.js.erb
+
+
+      # Ask relations questions
+      else
+        flash.now[:alert] = "Уточняющие вопросы"
+        render :new
+      end
+    # No name
+    else
+      @questions = nil
+      @profile.answers_hash = nil
+      flash.now[:alert] = "Вы не указали имя"
+      render :new
+    end
+  end
+
+
+
+
+
+
+  def pre_create
+
+    # Профиль, к которому добавляем (на котором вызвали меню +)
+    @base_profile = Profile.find(params[:base_profile_id])
+    @base_profile_id   = @base_profile.id
+
+    # текущий автор отображаемого круга - путь минус один шаг назад или профиль текущего юзера
+    @author_profile_id = params[:author_profile_id]
+
+    # relation того, к кому добавляем, к автору отображаемого круга
+    # Его отношение к текущему центру круга
+    @base_relation_id  = params[:base_relation_id]
+
+
+    @profile = Profile.new(profile_params)  # Новый добавляемый профиль
+    @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
+    @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
+
+
+    @name = Name.where(name: params[:profile_name].mb_chars.capitalize).first
+
+    # if !@name and !params[:profile_name].blank? and params[:new_name_confirmation]
+    #   @name = Name.create(name: params[:profile_name])
+    # end
+
+    # Name exist and valid:
+    # 1. collect questions
+    # 2. Validate answers
+    if @name
+      @profile.name_id = @name.id
+      @profile.profile_name = @name.name
+
+      make_questions_data = {
+          current_user_id:     current_user.id, #
+          base_profile_id:     @base_profile.id, #
+          base_relation_id:    @base_relation_id.to_i, #
+          profile_relation_id: @profile.relation_id.to_i, #
+          profile_name_id:     @profile.name_id.to_i, #
+          author_profile_id:   @author_profile_id, #
+          connected_users:     current_user.get_connected_users #
+      }
+
+      ################ MAIN MAKE NON-STANDARD QUESTIONS #####################
+      questions_hash = current_user.profile.make_questions(make_questions_data)
+
+      @questions = create_questions_from_hash(questions_hash)
+
+      ################ COILLECT ANSWERS FOR NON-STANDARD QUESTIONS #####################
+      @profile.answers_hash = params[:answers]
+      logger.info "==== Вопросы по новому профилю  @questions = #{@questions.inspect}"
+      logger.info " @profile.answers_hash = #{@profile.answers_hash} " if !@profile.answers_hash.nil?
+
+      # Validate for relation questions
+      if questions_valid?(questions_hash) and @profile.save
+        logger.info "==== Start ProfileKey.add_new_profile ====== "
+
+        # ProfileKey.add_new_profile(@base_profile,
+        #     @profile, @profile.relation_id,
+        #     exclusions_hash: @profile.answers_hash,
+        #     tree_ids: current_user.get_connected_users)
+
+        # redirect_to to profile circle path if exist, via js
+        # if params[:path_link].blank?
+        #   @circle = current_user.profile.circle(current_user.id)
+        #   @author = current_user.profile
+        # else
+        #   @path_link = params[:path_link]
+        # end
+
+      # Ask relations questions
+      else
+        flash.now[:alert] = "Уточняющие вопросы"
+        render :new
+      end
+
+    # Name validation
+    # reset question
+    else
+      @questions = nil
+      @profile.answers_hash = nil
+
+      if params[:profile][:name].blank?
+        flash.now[:alert] = "Вы не указали имя."
+        render :new
+      else
+        flash.now[:name_warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
+        render :new
+      end
+    end
+  end
+
+
+
+
+
+
+  def OLD_create
 
     logger.info "==== Profiles_controller.Create ===== Start add new profile!!!"
 
@@ -94,15 +270,15 @@ class ProfilesController < ApplicationController
         ProfileKey.add_new_profile(@base_profile,
             @profile, @profile.relation_id,
             exclusions_hash: @profile.answers_hash,
-            tree_ids: current_user.get_connected_users) #
-
+            tree_ids: current_user.get_connected_users)
+        #
         # redirect_to to profile circle path if exist, via js
-        if params[:path_link].blank?
-          @circle = current_user.profile.circle(current_user.id)
-          @author = current_user.profile
-        else
-          @path_link = params[:path_link]
-        end
+        # if params[:path_link].blank?
+        #   @circle = current_user.profile.circle(current_user.id)
+        #   @author = current_user.profile
+        # else
+        #   @path_link = params[:path_link]
+        # end
 
       # Ask relations questions
       else
@@ -130,49 +306,26 @@ class ProfilesController < ApplicationController
 
 
 
-
-  def old_destroy
-
-    @profile = Profile.where(id: params[:id]).first
-
-    if @profile.tree_circle(current_user.id, @profile.id).size > 0
-      flash[:alert] = "Вы можете удалить только последнего родственника в цепочке"
-    else
-      if @profile and @profile.user_id != current_user.id
-        ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
-        Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
-        @profile.destroy
-        flash[:notice] = "Профиль удален"
-      else
-        flash[:alert] = "Ошибка удаления профиля"
-      end
-    end
-
-
-    redirect_to :back
-  end
-
-
-
   def destroy
     @profile = Profile.where(id: params[:id]).first
-
     if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
-     flash[:alert] = "Вы можете удалить только последнего родственника в цепочке"
+     @error = "Вы можете удалить только последнего родственника в цепочке"
     elsif @profile.user.present?
-     flash[:alert] = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
+     @error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
     elsif @profile.user_id == current_user.id
-     flash[:alert] = "Вы не можете удалить свой профиль"
+     @error = "Вы не можете удалить свой профиль"
     else
        ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
        Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
        ProfileData.where(profile_id: @profile.id).map(&:destroy)
        @profile.destroy
-       flash[:notice] = "Профиль удален"
-       # flash[:alert] = "Ошибка удаления профиля"
     end
-    redirect_to :back
+    respond_to do |format|
+      format.js
+      format.html
+    end
   end
+
 
 
 
@@ -184,6 +337,15 @@ class ProfilesController < ApplicationController
     @path_link = params[:path_link]
   end
 
+
+
+  def context_menu
+    @profile = Profile.find(params[:profile_id])
+    @profile.allow_add_relation = @profile.owner_user.get_connected_users.include? current_user.id
+    @profile.allow_destroy = !@profile.user.present?  && !(@profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0) && (@profile.owner_user.get_connected_users.include? current_user.id)
+    @profile.allow_invite = !@profile.user.present?
+    @profile.allow_conversation = @profile.user.present? && @profile.user.id != current_user.id
+  end
 
 
   private
@@ -213,6 +375,7 @@ class ProfilesController < ApplicationController
   end
 
 
+
   def find_or_create_profile_data
     profile_data = @profile.profile_datas.where(creator_id: current_user.id).first
     if profile_data.nil?
@@ -220,6 +383,7 @@ class ProfilesController < ApplicationController
     end
     return profile_data
   end
+
 
 
   def profile_data_params

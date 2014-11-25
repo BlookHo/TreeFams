@@ -4,3 +4,10 @@ body{
 }
 
 html > body{height:100%}
+
+
+.flash{
+  margin-bottom:10px;
+  &.alert{color:red;}
+  &.warning{color:#f5a439;}
+}

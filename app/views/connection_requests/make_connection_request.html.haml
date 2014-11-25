@@ -1,0 +1,90 @@
+%section.admin
+
+%p
+  Дата и Время:
+  =  l Time.now, format: :myformat
+%br
+%h1 СТРАНИЦА ФОРМИРОВАНИЯ НОВОГО ЗАПРОСА НА ОБЪЕДИНЕНИЕ от @current_user
+
+%h3 @request_msg: #{@request_msg.inspect}
+%br
+%br
+%p Справочно:
+%p
+  Кто хочет соединиться: Автор: #{@current_user_id.inspect}
+%p
+  Состав вашего дерева: @who_connect_users_arr: #{@who_connect_users_arr.inspect}
+%p
+  Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@with_user_id.inspect}
+%p
+  Состав объединяемого с вами дерева: @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
+%p
+  @current_user_connection_ids: #{@current_user_connection_ids.inspect}
+
+%br
+%br
+- if !@user_requests_data.blank?
+  %h1 ** Содержание всех ваших запросов (вместе с новым) **
+  %table
+    %tr
+      %th Connection_id
+      %th Кто создал запрос
+      %th С кем объединяется
+      %th Confirm
+      %th Done
+      %th Дата создания запроса
+      %th
+    - @user_requests_data.each do |connection_request, data_hash|
+      %tr
+        %td= connection_request
+        %td= data_hash.values_at(:request_from_user_id).flatten[0]
+        %td= data_hash.values_at(:request_to_user_id).flatten[0]
+        %td= data_hash.values_at(:confirm).flatten[0].inspect
+        %td= data_hash.values_at(:done).flatten[0]
+        %td= data_hash.values_at(:created_at).flatten[0]
+        %td= link_to 'Просмотр одного из сущ-х запросов', show_one_request_path(connection_id: connection_request, with_user_id: data_hash.values_at(:request_to_user_id).flatten[0]),  class: :request
+    %br
+- else
+  %h1 ** У Вас отсутствуют НОВЫЕ запросы на объединение (новый запрос не создан) **
+
+%br
+%br
+%br
+
+
+= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request
+%br
+
+-#%p СПРАВОЧНО: Содержание всех запросов:
+-#- if !@all_connection_requests.blank?
+-#
+-#  %h1 Listing @all_connection_requests
+-#
+-#  %table
+-#    %tr
+-#      %th Connection_id
+-#      %th User
+-#      %th With user
+-#      %th Confirm
+-#      %th Done
+-#      %th Created_at
+-#      %th
+-#      %th
+-#      %th
+-#      %th
+-#
+-#    - @all_connection_requests.each do |connection_request|
+-#      %tr
+-#        %td= connection_request.connection_id
+-#        %td= connection_request.user_id
+-#        %td= connection_request.with_user_id
+-#        %td= connection_request.confirm.inspect
+-#        %td= connection_request.done
+-#        %td= connection_request.created_at.inspect
+-#        %td= link_to 'Show', connection_request
+-#        %td= link_to 'Edit', edit_connection_request_path(connection_request)
+-#        %td= link_to 'Destroy', connection_request, :method => :delete, :data => { :confirm => 'Are you sure?' }
+-#        %td= link_to 'Просмотр одного из сущ-х запросов', show_one_request_path(with_user_id: connection_request.with_user_id),  class: :request
+-#
+
+
