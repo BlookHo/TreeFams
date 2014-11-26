@@ -14,12 +14,6 @@ class SignupController < ApplicationController
   def create
     @data = params['family'].compact
 
-    logger.info "======================================= FAKER "
-    logger.info "======================================= faker "
-    logger.info @data.inspect
-    logger.info "======================================= end "
-
-
     user = User.new( email: @data["email"] )
     user.valid?
     if user.errors.messages[:email].nil?
