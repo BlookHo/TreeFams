@@ -52,11 +52,12 @@
     // counter label
     a span{
       text-align:center;
-      top:-6px;
+      top:-9px;
       right:-12px;
       border-radius:9px;
 
       height:18px;
+      min-width:18px;
       line-height:18px;
       padding:0 6px;
       color:#fff;

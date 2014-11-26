@@ -1,2 +1,22 @@
 .container#requests
   %h1 Просмотр запроса на объединение
+
+  %table.request_confirmation
+    - @user_request_data.each do |connection_request, requests_arr|
+      - requests_arr.each do |one_requests_arr|
+        %tr
+          %td.from
+            - from_user = User.find( one_requests_arr.values_at(:request_from_user_id).flatten[0] )
+            = image_tag from_user.profile.icon_path
+            %h2= from_user.name
+          %td.arrow.grey.italic предлагает объединиться с
+          %td.to
+            - to_user = User.find( one_requests_arr.values_at(:request_to_user_id).flatten[0] )
+            = image_tag to_user.profile.icon_path
+            %h2= to_user.name
+            - request_to = "Don't show" if one_requests_arr.values_at(:request_to_user_id).flatten[0] != current_user.id
+            - if request_to != "Don't show"
+              %h4 Ваше решение:
+              = link_to 'Да', connection_of_trees_path( connection_id: connection_request, user_id_to_connect: one_requests_arr.values_at(:request_from_user_id).flatten[0]), class: [:bttn, :green]
+              &nbsp;
+              = link_to 'Нет', no_connect_path( connection_id: connection_request), class: [:bttn, :red]
