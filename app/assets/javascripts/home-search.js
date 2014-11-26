@@ -28,7 +28,7 @@ function getSearchResults(callback) {
   $(search_btn).removeClass('animated tada');
   $.get( "/api/v1/search", { token: access_token } )
    .done(function( data ) {
-      jsdebug(data);
+      // jsdebug(data);
       search_results = data;
       if (callback){ callback(search_results); }
     });

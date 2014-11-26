@@ -32,6 +32,8 @@ class ConnectionRequestsController < ApplicationController
       @current_user_id = current_user_id # DEBUGG_TO_VIEW
       @with_user_id = with_user_id # DEBUGG_TO_VIEW
 
+      # TODO проверить, существует ли уже такой запрос  если да, то вернуть его данные
+
       find_users_connectors(with_user_id) if current_user # определение Юзеров - участников объединения деревьев
 
       # Если деревья еще не объединялись?

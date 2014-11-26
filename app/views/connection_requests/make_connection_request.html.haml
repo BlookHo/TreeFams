@@ -1,1 +1,17 @@
-hello request!
+.container#requests
+  %h1.notice Ваш запрос на объединение деревьев отправлен
+
+  %h2 Ваши деревья будут объединены в случае положительного решения одного из участников.
+
+  -# = @user_requests_data.inspect
+  -#
+  -# %table.request_confirmation
+  -# - @user_requests_data.each do |connection_request, data_hash|
+  -#   %tr
+  -#     %td= connection_request
+  -#     %td= data_hash.values_at(:request_from_user_id).flatten[0]
+  -#     %td= data_hash.values_at(:request_to_user_id).flatten[0]
+  -#     %td= data_hash.values_at(:confirm).flatten[0].inspect
+  -#     %td= data_hash.values_at(:done).flatten[0]
+  -#     %td= data_hash.values_at(:created_at).flatten[0]
+  -#     %td= link_to 'Просмотр одного из сущ-х запросов', show_one_request_path(connection_id: connection_request, with_user_id: data_hash.values_at(:request_to_user_id).flatten[0]),  class: :request
