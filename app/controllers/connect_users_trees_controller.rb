@@ -466,14 +466,17 @@ class ConnectUsersTreesController < ApplicationController
             ##############################################
 
           else
+            @stop_connection = true  # for view
             logger.info "ERROR - STOP connection! Connection array(s) - INCORRECT! stop_by_arrs = #{stop_by_arrs}, "
           end
 
         else
+          @stop_connection = true  # for view
           logger.info "ERROR - STOP connection! ЕСТЬ дублирования в поиске. @duplicates_one_to_many = #{@duplicates_one_to_many}; @duplicates_many_to_one = #{@duplicates_many_to_one}."
         end
 
       else
+        @stop_connection = true  # for view
         logger.info "WARNING: DEBUG IN connection_of_trees: USERS ALREADY CONNECTED! Current_user_arr =#{who_connect_users_arr.inspect}, user_id_arr=#{with_whom_connect_users_arr.inspect}."
       end
       @stop_by_arrs = stop_by_arrs # DEBUGG_TO_VIEW
@@ -558,26 +561,26 @@ class ConnectUsersTreesController < ApplicationController
             connection_message = "Ok to connect. НЕТ Дублирований in Connection array(s) "
             logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).  complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
           else
-            connection_message = "ERROR: STOP connection! ЕСТЬ дублирования в массивах:"
+            connection_message = "ERROR: Объединение остановлено! ЕСТЬ дублирования в массивах:"
             logger.info "ERROR: STOP connection! ЕСТЬ дублирования в массивах: complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
             stop_by_arrs = true #
           end
 
         else
-          connection_message = "ERROR: STOP connection! Array(s) - NOT Equal!"
+          connection_message = "ERROR: Объединение остановлено! Array(s) - NOT Equal!"
           logger.info "ERROR: STOP connection! Array(s) - NOT Equal!  To_rewrite arr.size = #{profiles_to_rewrite.size}; To_destroy arr.size = #{profiles_to_destroy.size}.  connection_message = #{connection_message};"
           stop_by_arrs = true
         end
 
       else
-        connection_message = "ERROR - STOP connection! В массивах объединения - есть общие профили!"
+        connection_message = "Объединение остановлено. В массивах объединения - есть общие профили!"
         logger.info "ERROR: В массивах объединения - есть общие профили! connection_message = #{connection_message};."
         stop_by_arrs = true
 
       end
 
     else
-      connection_message = "ERROR - STOP connection! Connection array(s) - blank!"
+      connection_message = "Объединение остановлено, т.к. недостаточно отношений между профилями. (Массивы объединения - пустые)"
       logger.info "ERROR: Connection array(s) - blank! connection_message = #{connection_message};."
       stop_by_arrs = true
     end
