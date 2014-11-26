@@ -1,0 +1,12 @@
+.flash{
+  padding:10px 0;
+  color:#fff;
+
+  &.notice{
+    background-color:#14af42;
+  }
+
+  &.alert{
+    background-color:#e54467;
+  }
+}
