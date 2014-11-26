@@ -1,72 +1,62 @@
+.container#requests
+  %h1 Ваши запросы на объединение
 
-%p
-  Дата и Время:
-  =  l Time.now, format: :myformat
-%br
+  %h2
+    %span.green &darr;
+    Входящие
+    %span.grey (ожидают вашего решения)
 
-%h1 СТРАНИЦА демонстрации всех запросов на ОБЪЕДИНЕНИЕ
-
-%br
-%p Справочно:
-%p @current_user.id = #{current_user.id.inspect}
-%p кол-во новых запросов: @new_requests_count = #{@new_requests_count.inspect}
-
-%br
-%br
-- if !@requests_to_user_data.empty?
-  %h1 ** Полученные Вами НОВЫЕ запросы на объединение - в ожидании Вашего решения **
-  %table
-    %tr
-      %th Connection_id
-      %th От кого запрос
-      -#%th With_user
-      %th Confirm
-      %th Статус
-      %th Дата создания запроса
-      %th
-    - @requests_to_user_data.each do |connection_request, data_hash|
+  - if @requests_to_user_data.empty?
+    %table
       %tr
-        %td= connection_request
-        %td= data_hash.values_at(:request_from_user_id).flatten[0]
-        -#%td= data_hash.values_at(:request_to_user_id).flatten[0]
-        %td= data_hash.values_at(:confirm).flatten[0].inspect
-        %td= data_hash.values_at(:done).flatten[0]
-        %td= data_hash.values_at(:created_at).flatten[0]
-        %td= link_to 'Просмотр одного запроса', show_one_request_path(connection_id: connection_request, user_id: data_hash.values_at(:request_from_user_id).flatten[0]),  class: :request
-
-    %br
-- else
-  %h1 ** Для Вас отсутствуют НОВЫЕ запросы на объединение **
-
-%br
-%br
-%br
-- if !@user_requests_data.empty?
-  %h1 ** Все созданные Вами запросы - в ожидании на объединение **
-  %table
-    %tr
-      %th Connection_id
-      -#%th User
-      %th Объединиться с:
-      %th Confirm
-      %th Статус
-      %th Дата создания запроса
-      %th
-    - @user_requests_data.each do |connection_request, data_hash|
+        %td.left.grey.italic
+          К вам пока не поступало запросов на объединение от других деревьев...
+  - else
+    %table
       %tr
-        %td= connection_request
-        -#%td= data_hash.values_at(:request_from_user_id).flatten[0]
-        %td= data_hash.values_at(:request_to_user_id).flatten[0]
-        %td= data_hash.values_at(:confirm).flatten[0].inspect
-        %td= data_hash.values_at(:done).flatten[0]
-        %td= data_hash.values_at(:created_at).flatten[0]
-        %td= link_to 'Просмотр одного запроса', show_one_request_path(connection_id: connection_request, with_user_id: data_hash.values_at(:request_to_user_id).flatten[0]),  class: :request
-    %br
-- else
-  %h1 ** Вы не создали НОВЫЕ запросы на объединение **
+        %th #
+        %th От кого
+        %th Confirm
+        %th Статус
+        %th Дата создания запроса
+        %th Действия
+      - @requests_to_user_data.each do |connection_request, data_hash|
+        %tr
+          %td= connection_request
+          %td= User.find( data_hash.values_at(:request_from_user_id).flatten[0] ).name
+          %td= data_hash.values_at(:confirm).flatten[0].inspect
+          %td= data_hash.values_at(:done).flatten[0] ? 'выполнен' : 'ожидает...'
+          %td= data_hash.values_at(:created_at).flatten[0]
+          %td= link_to 'Посмотреть запрос', show_one_request_path(connection_id: connection_request, user_id: data_hash.values_at(:request_from_user_id).flatten[0]),  class: :request
 
-%br
-%br
-%br
-= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request
 
+
+
+  %h2
+    %span.red &uarr;
+    Исходящие
+    %span.grey (отправленные Вами запросы к другим деревьям)
+
+  - if @user_requests_data.empty?
+    %table
+      %tr
+        %td.left.grey.italic
+          Вы еще не отправляли запросы на объединение с другими деревьями...
+  - else
+    %table
+      %tr
+        %th #
+        %th Объединиться с:
+        %th Confirm
+        %th Статус
+        %th Дата создания запроса
+        %th Действия
+      - @user_requests_data.each do |connection_request, data_hash|
+        %tr
+          %td= connection_request
+          %td= User.find( data_hash.values_at(:request_to_user_id).flatten[0]).name
+          %td= data_hash.values_at(:confirm).flatten[0].inspect
+          %td= data_hash.values_at(:done).flatten[0] ? 'выполнен' : 'ожидает...'
+          %td= data_hash.values_at(:created_at).flatten[0]
+          %td= link_to 'Посмотреть запрос', show_one_request_path(connection_id: connection_request, with_user_id: data_hash.values_at(:request_to_user_id).flatten[0]),  class: :request
+          %br

@@ -1,6 +1,8 @@
 class ConnectionRequestsController < ApplicationController
   include ConnectionRequestsHelper
 
+  layout 'application.new'
+
   before_filter :logged_in?
 
   # формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
@@ -16,6 +18,8 @@ class ConnectionRequestsController < ApplicationController
       ##########################################
     end
   end
+
+
 
   # Формирование нового запроса на объединение деревьев
   # От кого - от текущего Юзера
@@ -67,8 +71,9 @@ class ConnectionRequestsController < ApplicationController
       end
 
       @all_connection_requests = ConnectionRequest.all.order('created_at').reverse_order
-
   end
+
+
 
   # Проверка на существование встречного запроса на объединение
   def counter_request_exists(with_user_id)
@@ -240,4 +245,3 @@ class ConnectionRequestsController < ApplicationController
   #  end
 
 end
-

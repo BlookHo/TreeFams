@@ -44,9 +44,27 @@
     a{
       color:#fff;
       text-decoration:none;
+      position:relative;
     }
 
     a:hover{color:#fff5bd;}
+
+    // counter label
+    a span{
+      text-align:center;
+      top:-6px;
+      right:-12px;
+      border-radius:9px;
+
+      height:18px;
+      line-height:18px;
+      padding:0 6px;
+      color:#fff;
+      display:block;
+      position:absolute;
+      font-size:12px;
+      background-color:red;
+    }
 
 
   }

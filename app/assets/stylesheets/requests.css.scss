@@ -1,0 +1,31 @@
+#requests{
+  margin-top:40px;
+
+
+  h1{
+    font-size:24px;
+    color:#616161;
+    border-bottom:1px solid #ccc;
+    padding-bottom:5px;
+    display:block;
+    margin-bottom:40px;
+  }
+
+  h2{
+    font-size:18px;
+  }
+
+
+  table{
+    margin:20px 0 60px 0;
+    width:100%;
+    td{padding:10px;text-align:center;}
+    tr{border-bottom:1px solid #ccc;}
+
+    th{
+      font-weight:bold;
+      padding:10px;
+      color:grey;
+    }
+  }
+}

@@ -10,7 +10,7 @@
 
   background-color:#fff;
   border-radius:4px;
-  overflow:hidden;
+  // overflow:hidden;
 
   box-shadow:0 0 8px rgba(0,0,0,0.7);
 
@@ -42,6 +42,10 @@
 
 
 
+#profile-context-menu ul > li:first-child a{border-radius:4px 4px 0 0;}
+#profile-context-menu ul > li:last-child a{border-radius:0 0 4px 4px;}
+
+
 #profile-context-menu a{
 
   text-decoration:none;
@@ -71,7 +75,9 @@
 #profile-context-menu ul li > ul{
   font-size:12px;
   background-color:#ddd;
-  a{padding-left:24px;}
+  a{
+    padding-left:24px;
+    border-radius:0 0 0 0 !important;}
 }
 
 
