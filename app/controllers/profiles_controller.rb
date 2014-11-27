@@ -1,3 +1,4 @@
+# encoding: utf-8
 class ProfilesController < ApplicationController
 
   before_filter :logged_in?
@@ -353,15 +354,16 @@ class ProfilesController < ApplicationController
     @profile_id = params[:profile_id] #104
     @profile = Profile.find(params[:profile_id]) if !params[:profile_id].blank?
 
-    @profile_email = "sdfsdfs" #@profile.email
+    @profile_email = "zoneiva@gmail.com" #@profile.email
     @email_name = params[:profile_email] || @profile_email if !@profile_email.blank?
     @email_text = params[:email_text]
 
+    if !@email_name.blank? && !@email_text.blank?
+      WeafamMailer.invitation_email(@email_name).deliver
+        #redirect_to invitation_email_path
+      logger.info "In Метод: enter_email:  delivered!  @email_name = #{@email_name.inspect}, @email_text = #{@email_text.inspect}"
 
-
-
-
-
+    end
 
   end
 

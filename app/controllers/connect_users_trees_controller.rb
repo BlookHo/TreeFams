@@ -344,8 +344,8 @@ class ConnectUsersTreesController < ApplicationController
     user_id = params[:user_id_to_connect] # From view
     @current_user_id = current_user_id # DEBUGG_TO_VIEW
     @user_id = user_id # DEBUGG_TO_VIEW
-    @certain_koeff_for_connect = params[:certain_koeff] # From view
-    @certain_koeff_for_connect = @certain_koeff_for_connect.to_i
+    @certain_koeff_for_connect = params[:certain_koeff].to_i # From view
+    #@certain_koeff_for_connect = @certain_koeff_for_connect.to_i
     # Взять значение из Settings
     @certain_koeff_for_connect = 4
     connected_user = User.find(user_id) # For lock check
@@ -458,11 +458,11 @@ class ConnectUsersTreesController < ApplicationController
     #        connection_in_tables(connection_data, current_user_id, user_id)
             ##################################################################
             ##### Update connection requests - to yes connect
-             yes_to_request(@connection_id)
+    #         yes_to_request(@connection_id)
             ##################################################################
             # Make DONE all connected requests
             # - update all requests - with users, connected with current_user
-             after_conn_update_requests  # From Helper
+    #         after_conn_update_requests  # From Helper
             ##############################################
 
           else

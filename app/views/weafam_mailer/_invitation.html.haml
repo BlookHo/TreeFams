@@ -1,0 +1,40 @@
+!!!
+%html
+  %head
+    %title Weafam
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    = stylesheet_link_tag "v1/application"
+    = javascript_include_tag 'v1/application'
+    = csrf_meta_tags
+  %body
+    -##overlay{style:'display:none;'}
+    -#= render 'shared/ui/header'
+    -#= render 'shared/ui/flash'
+    %img src="~/assets/images/logo-tree.jpg", alt="Мы все &mdash; родня", style="width:680px"
+
+    %section.admin
+    %h3
+      СТРАНИЦА ПРИГЛАШЕНИЯ НОВОГО ПОЛЬЗОВАТЕЛЯ
+    %p
+      @email_name: #{@email_name.inspect}
+    %h1 Добро пожаловать на www.Weallfamily.ru!
+    %h1 Чувствуй себя как дома, <%= @user %>!
+
+    -#%p С чего начать?
+    -#%li= link_to raw("Перейди на страницу входа - диалога"), login_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
+    -#или
+    -#%li= link_to raw("Посмотри ознакомительное видео или просто зайди на сайт как гость"), login_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
+
+    -#<%= render :partial => 'email_signature' %>
+
+
+    %h3
+      Дорогой "имя нового ПОЛЬЗОВАТЕЛЯ" !
+    %h3
+      Мы направили Вам приглашение от нашего ПОЛЬЗОВАТЕЛЯ "имя старого ПОЛЬЗОВАТЕЛЯ"
+    %h3
+      "Приходи на сайт "имя сайта". Здесь я нашел тебя - ты найдешь меня и многих других твоих родственников
+    %h3
+      Пройди по этой ссылке и ты сможешь зарегистрироваться на этом сайте: "ссылка на старт. диалог"
+

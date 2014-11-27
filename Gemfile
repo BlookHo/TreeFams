@@ -102,11 +102,17 @@ gem 'newrelic_rpm'
 group :console do
   # does not work !!!
   gem 'pry' #
-
   gem 'hirb' # даёт прекрасное расположение хэша модели, в стиле mysql.
-
   gem 'wirble' #   — даёт подсветку.
-
   gem 'awesome_print', :require => 'ap'
-
 end
+
+
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'fb_graph'
+gem 'omniauth-twitter'
+gem 'twitter', :git => 'https://github.com/sferik/twitter.git'
+gem "omniauth-google-oauth2"
+gem "omniauth-vkontakte"
+gem 'vkontakte_api'

@@ -5,6 +5,8 @@
   Profile: @profile_id = #{@profile_id.inspect}
 %p
   Profile Email: @email_name = #{@email_name.inspect}
+%p
+  @email_text: = #{@email_text.inspect}
 
 
 
@@ -19,8 +21,11 @@
     %li
     = submit_tag 'Отправить сообщение (Ввод)'
 
+  - if !@email_text.blank?
+    = render 'weafam_mailer/invitation'
 
 
+    -#%li= link_to raw("Перейди на страницу просмотра содержания почты"), invitation_email_path, :class => "ttip", title: "просмотр содержания текста почты"
 
 
 

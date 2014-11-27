@@ -76,7 +76,7 @@ Weafam::Application.configure do
   config.action_mailer.smtp_settings = {
       :address => "smtp.gmail.com",       ########### CHANGE!! ??
       :port => 587,
-      :domain => 'weallfamily.ru',
+      #:domain => 'weallfamily.ru',
       :user_name => 'blookho@gmail.com',  ########### CHANGE!!
       :password => '    ',                ########### CHANGE new passw!!
       :authentication => 'plain',
