@@ -41,4 +41,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # получаем из таблю настроек проекта значение коэфф-та достоверности
+  # для управления рез-тами поиска и объединения
+  # Чем больше значение, тем меньше рез-тов поиска
+  # и тем больше НЕУЗНАННЫХ профилей при объединении.
+  def get_certain_koeff
+    WeafamSetting.first.certain_koeff
+  end
+
+
+
+
+
 end

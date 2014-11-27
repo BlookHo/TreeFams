@@ -31,10 +31,12 @@ class MainController < ApplicationController
       @tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq # DEBUGG_TO_VIEW
 
       ##### КОЭФФИЦИЕНТ ДОСТОВЕРНОСТИ ##########
-      @certain_koeff = params[:certain_koeff] || 4 # (for 0-8 relations)
-      @certain_koeff = @certain_koeff.to_i
+      #@certain_koeff = params[:certain_koeff] || 4 # (for 0-8 relations)
+      #@certain_koeff = @certain_koeff.to_i
       ###############
-      #logger.info "@certain_koeff = #{@certain_koeff}"
+      # Взять значение из Settings
+      @certain_koeff = get_certain_koeff #3 from appl.cntrler
+      logger.info "== in connection_of_trees:  @certain_koeff = #{@certain_koeff}"
 
       # PLACE for DEBUGG_TO_VIEW
       ########### TEST ########################################

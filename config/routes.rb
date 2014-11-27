@@ -1,5 +1,7 @@
 Weafam::Application.routes.draw do
 
+  resources :weafam_settings
+
   resources :connection_requests
   # connection_requests_controller
   match 'show_user_requests' => 'connection_requests#show_user_requests', via: :get

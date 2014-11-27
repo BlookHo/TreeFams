@@ -320,12 +320,6 @@ class ConnectUsersTreesController < ApplicationController
   end
 
 
-  ## Need to create table
-  #def get_settings(field_name)
-  #  settings = WeafamSetting.first   # Берем из Таблицы настроек значение требуемого кол-ва совпадений отношений
-  #  # для признания двух профилей эквивалентными.
-  #  @parameter_value = settings.field_name   # To take from Bl_settings == 650 !
-  #end
 
   ######## Главный стартовый метод дла перезаписи профилей в таблицах
   # Вход:
@@ -346,8 +340,12 @@ class ConnectUsersTreesController < ApplicationController
     @user_id = user_id # DEBUGG_TO_VIEW
     @certain_koeff_for_connect = params[:certain_koeff] # From view
     @certain_koeff_for_connect = @certain_koeff_for_connect.to_i
+
     # Взять значение из Settings
-    @certain_koeff_for_connect = 4
+    @certain_koeff_for_connect = get_certain_koeff #3 4  from appl.cntrler
+    logger.info "== in connection_of_trees:  @certain_koeff_for_connect = #{@certain_koeff_for_connect}"
+
+
     connected_user = User.find(user_id) # For lock check
 
     @connection_id = params[:connection_id].to_i # From view Link - where pressed button Yes

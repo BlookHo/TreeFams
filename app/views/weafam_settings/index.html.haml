@@ -1,0 +1,19 @@
+%h1 Listing weafam_settings
+
+%table
+  %tr
+    %th Certain koeff
+    %th
+    %th
+    %th
+
+  - @weafam_settings.each do |weafam_setting|
+    %tr
+      %td= weafam_setting.certain_koeff
+      %td= link_to 'Show', weafam_setting
+      %td= link_to 'Edit', edit_weafam_setting_path(weafam_setting)
+      %td= link_to 'Destroy', weafam_setting, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Weafam setting', new_weafam_setting_path

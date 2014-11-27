@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Certain koeff:
+  = @weafam_setting.certain_koeff
+
+= link_to 'Edit', edit_weafam_setting_path(@weafam_setting)
+\|
+= link_to 'Back', weafam_settings_path
