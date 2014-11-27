@@ -1,0 +1,28 @@
+%section.admin
+
+%h3
+  ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ
+%p
+  @stop_connection: #{@stop_connection.inspect}
+
+
+- if !@stop_connection
+  %h1 Дубликатов нет. Деревья можно объединть.
+  #{@connection_message}
+
+
+- else
+  %h1 Деревья объединить нельзя! ...
+  %h1 Информация при объединении деревьев:
+  #{@connection_message}
+  %br/
+  = @complete_dubles_hash
+  %br/
+  %br/
+  = @test_arrrs_blank
+
+
+
+= link_to 'Просмотр Ваших оставшихся запросов', show_user_requests_path
+%br
+= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request

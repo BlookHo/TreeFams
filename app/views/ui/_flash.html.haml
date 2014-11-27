@@ -1,3 +1,5 @@
 - flash.each do |type, message|
   .flash{class: type}
-    .container= message
+    .container
+      = message
+      %a.close{href:'#', onclick: "$('.flash').slideUp();"}= fa_icon "close"

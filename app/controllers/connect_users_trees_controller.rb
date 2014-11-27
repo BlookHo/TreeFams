@@ -3,6 +3,8 @@ class ConnectUsersTreesController < ApplicationController
   include ConnectionRequestsHelper
 
 
+  layout 'application.new'
+
   def connect_users(current_user_id, user_id)
 
     if current_user_id != user_id
@@ -348,6 +350,11 @@ class ConnectUsersTreesController < ApplicationController
 
     connected_user = User.find(user_id) # For lock check
 
+
+    @connection_request =  ConnectionRequest.where(connection_id: params[:connection_id]).first
+    @from_user = User.find(@connection_request.user_id)
+    @to_user = User.find(@connection_request.with_user_id)
+
     @connection_id = params[:connection_id].to_i # From view Link - where pressed button Yes
 
     logger.info " "
@@ -405,6 +412,7 @@ class ConnectUsersTreesController < ApplicationController
            #  uniq_profiles_pairs = {135=>{12=>94}, 129=>{12=>110, 13=>110, 14=>104}}
           #  uniq_profiles_pairs = { 129=>{12=>110, 13=>110, 14=>104}}
           @stop_connection = false  # for view
+          flash[:notice] = "Ваши деревья успешно объединены!"
           @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
 
           logger.info " After start_search in SEARCH.rb"
@@ -448,6 +456,7 @@ class ConnectUsersTreesController < ApplicationController
           stop_by_arrs, connection_message = check_connection_arrs(connection_data)
           if stop_by_arrs == false
             @stop_connection = false  # for view
+            flash[:notice] = "Ваши деревья успешно объединены!"
             logger.info "Connection - GO ON! Connection array(s) - CORRECT! stop_by_arrs = #{stop_by_arrs}, @stop_connection = #{@stop_connection}"
             connection_message = "Деревья объединяются..."
 
@@ -465,16 +474,19 @@ class ConnectUsersTreesController < ApplicationController
 
           else
             @stop_connection = true  # for view
+            flash[:alert] = "В данный момент нельзя объединить ваши деревья!"
             logger.info "ERROR - STOP connection! Connection array(s) - INCORRECT! stop_by_arrs = #{stop_by_arrs}, "
           end
 
         else
           @stop_connection = true  # for view
+          flash[:alert] = "В данный момент нельзя объединить ваши деревья!"
           logger.info "ERROR - STOP connection! ЕСТЬ дублирования в поиске. @duplicates_one_to_many = #{@duplicates_one_to_many}; @duplicates_many_to_one = #{@duplicates_many_to_one}."
         end
 
       else
         @stop_connection = true  # for view
+        flash[:alert] = "В данный момент нельзя объединить ваши деревья!"
         logger.info "WARNING: DEBUG IN connection_of_trees: USERS ALREADY CONNECTED! Current_user_arr =#{who_connect_users_arr.inspect}, user_id_arr=#{with_whom_connect_users_arr.inspect}."
       end
       @stop_by_arrs = stop_by_arrs # DEBUGG_TO_VIEW

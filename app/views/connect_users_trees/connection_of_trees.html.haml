@@ -1,30 +1,23 @@
-%section.admin
+.container#requests
+  %h1 Объединение деревьев
 
-%h3
-  ПРОЦЕСС ОБЪЕДИНЕНИЯ ДВУХ ДЕРЕВЬЕВ
-%p
-  @stop_connection: #{@stop_connection.inspect}
+  %table.request_confirmation
+    %tr
+      %td.from
+        = image_tag @from_user.profile.icon_path
+        %h2= @from_user.name
 
+      %td.connection_results
+        - if @stop_connection
+          .red= fa_icon "close"
+        - else
+          .green= fa_icon "check"
 
-- if !@stop_connection
-  %h1 Дубликатов нет. Деревья можно объединть.
-  #{@connection_message}
+      %td.to
+        = image_tag @to_user.profile.icon_path
+        %h2= @to_user.name
 
-
-- else
-  %h1 Деревья объединить нельзя! ...
-  %h1 Информация при объединении деревьев:
-  #{@connection_message}
-  %br/
-  = @complete_dubles_hash
-  %br/
-  %br/
-  = @test_arrrs_blank
 
 
 - if Rails.env == 'development'
   = render 'debugger'
-
-= link_to 'Просмотр Ваших оставшихся запросов', show_user_requests_path
-%br
-= link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request

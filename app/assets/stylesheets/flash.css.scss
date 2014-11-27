@@ -1,6 +1,7 @@
 .flash{
   padding:10px 0;
   color:#fff;
+  margin-bottom:0;
 
   &.notice{
     background-color:#14af42;
@@ -8,5 +9,10 @@
 
   &.alert{
     background-color:#e54467;
+  }
+
+  .close{
+    float:right;
+    color:#fff;
   }
 }

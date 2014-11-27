@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
   # Чем больше значение, тем меньше рез-тов поиска
   # и тем больше НЕУЗНАННЫХ профилей при объединении.
   def get_certain_koeff
-    WeafamSetting.first.certain_koeff
+    @get_certain_koeff ||= WeafamSetting.first.certain_koeff
   end
 
 
