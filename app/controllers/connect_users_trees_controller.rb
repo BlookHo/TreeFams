@@ -462,7 +462,7 @@ class ConnectUsersTreesController < ApplicationController
 
             ##################################################################
             ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
-     #       connection_in_tables(connection_data, current_user_id, user_id)
+            connection_in_tables(connection_data, current_user_id, user_id)
             ##################################################################
             ##### Update connection requests - to yes connect
              yes_to_request(@connection_id)
