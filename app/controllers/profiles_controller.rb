@@ -44,6 +44,9 @@ class ProfilesController < ApplicationController
     # Профиль, к которому добавляем (на котором вызвали меню +)
     @base_profile = Profile.find(params[:base_profile_id])
 
+    # Sex того профиля, к кому добавляем (на котором вызвали меню +) к автору отображаемого круга
+    @base_sex_id = @base_profile.sex_id
+
     # Relation того, к кому добавляем к автору отображаемого круга
     # Его отношение к текущему автору круга. автор круга - шаг назад по пути
     @base_relation_id  = params[:base_relation_id]
@@ -80,7 +83,7 @@ class ProfilesController < ApplicationController
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
 
-        ProfileKey.add_new_profile(@base_profile,
+        ProfileKey.add_new_profile(@base_sex_id, @base_profile,
             @profile, @profile.relation_id,
             exclusions_hash: @profile.answers_hash,
             tree_ids: current_user.get_connected_users)

@@ -55,7 +55,10 @@ class SignupController < ApplicationController
 
 
   def create_keys(relation_name, data, user)
-    ProfileKey.add_new_profile(
+    logger.info "============ In create_keys ==================DDDDDDDD"
+    logger.info "user.profile.sex_id = #{user.profile.sex_id}"
+
+    ProfileKey.add_new_profile(user.profile.sex_id,
       user.profile,
       create_profile(data.merge(tree_id: user.id)),
       Relation.name_to_id(relation_name),

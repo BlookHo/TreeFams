@@ -115,15 +115,25 @@ module ProfileKeysGeneration
     # в последнем элементе мессива - данные о Отца
     # @note GET /
     # @see News
-    def add_father_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+    def add_father_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
       # Хэш_родста, Пол_родства_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 7, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 1, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 1, new_profile_id, new_profile_name_id)  ### NonStandard
 
+      logger.info "== In add_father_to_ProfileKeys:: base_sex_id = #{base_sex_id.inspect}"
+
       # new relations
-      fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 9, new_profile_id, new_profile_name_id)  ###
-      fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 9, new_profile_id, new_profile_name_id)  ###
+      if base_sex_id == 1 # добавляем к мужику, т.е. к Отцу или Автору-М
+        # Дед по Отцу 91
+        fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 91, new_profile_id, new_profile_name_id)  ###
+        fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 91, new_profile_id, new_profile_name_id)  ###
+      end
+      if base_sex_id == 0 # добавляем к женщине, т.е. к Матери или Автору-Ж
+        # Дед по Матери 92
+        fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 92, new_profile_id, new_profile_name_id)  ###
+        fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 92, new_profile_id, new_profile_name_id)  ###
+      end
 
       fill_relation_rows(base_profile_tree_id, @wives_hash, 0, 13, new_profile_id, new_profile_name_id)  ###
       fill_relation_rows(base_profile_tree_id, @husbands_hash, 1, 15, new_profile_id, new_profile_name_id)  ###
@@ -136,15 +146,26 @@ module ProfileKeysGeneration
     # в последнем элементе мессива - данные о Матери
     # @note GET /
     # @see News
-    def add_mother_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+    def add_mother_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
       # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_с_Добавляемым, профиль_Кого_добавляем, имя_Кого_добавляем,
       fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 8, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 2, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 2, new_profile_id, new_profile_name_id)  ### NonStandard
 
       # new relations
-      fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 10, new_profile_id, new_profile_name_id)  ###
-      fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 10, new_profile_id, new_profile_name_id)  ###
+      #fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 10, new_profile_id, new_profile_name_id)  ###
+      #fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 10, new_profile_id, new_profile_name_id)  ###
+      logger.info "== In add_mother_to_ProfileKeys:: base_sex_id = #{base_sex_id.inspect}"
+      if base_sex_id == 1
+        # Бабка по Отцу 101
+        fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 101, new_profile_id, new_profile_name_id)  ###
+        fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 101, new_profile_id, new_profile_name_id)  ###
+      end
+      if base_sex_id == 0
+        # Бабка по Матери 102
+        fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 102, new_profile_id, new_profile_name_id)  ###
+        fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 102, new_profile_id, new_profile_name_id)  ###
+      end
 
       fill_relation_rows(base_profile_tree_id, @wives_hash, 0, 14, new_profile_id, new_profile_name_id)  ###
       fill_relation_rows(base_profile_tree_id, @husbands_hash, 1, 16, new_profile_id, new_profile_name_id)  ###
@@ -156,7 +177,7 @@ module ProfileKeysGeneration
     # в первом элементе мессива - данные об Авторе
     # @note GET /
     # @see News
-    def add_son_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+    def add_son_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
       # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
       fill_relation_rows(base_profile_tree_id, @wives_hash, 0, 3, new_profile_id, new_profile_name_id)      ### NonStandard
       fill_relation_rows(base_profile_tree_id, @husbands_hash, 1, 3, new_profile_id, new_profile_name_id)   ### NonStandard
@@ -164,11 +185,28 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 5, new_profile_id, new_profile_name_id)
 
       # new relations
-      fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 11, new_profile_id, new_profile_name_id)  ###
-      fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 11, new_profile_id, new_profile_name_id)  ###
+      #fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 11, new_profile_id, new_profile_name_id)  ###
+      #fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 11, new_profile_id, new_profile_name_id)  ###
 
-      fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 21, new_profile_id, new_profile_name_id)  ### NonStandard
-      fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 21, new_profile_id, new_profile_name_id)  ### NonStandard
+      if base_sex_id == 1
+        # Внук по Отцу 111
+        fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 111, new_profile_id, new_profile_name_id)  ###
+        fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 111, new_profile_id, new_profile_name_id)  ###
+        # Племянник по Отцу 211
+        fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 211, new_profile_id, new_profile_name_id)  ### NonStandard
+        fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 211, new_profile_id, new_profile_name_id)  ### NonStandard
+      end
+      if base_sex_id == 0
+        # Внук по Матери  112
+        fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 112, new_profile_id, new_profile_name_id)  ###
+        fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 112, new_profile_id, new_profile_name_id)  ###
+        # Племянник по Матери 212
+        fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 212, new_profile_id, new_profile_name_id)  ### NonStandard
+        fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 212, new_profile_id, new_profile_name_id)  ### NonStandard
+      end
+
+      #fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 21, new_profile_id, new_profile_name_id)  ### NonStandard
+      #fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 21, new_profile_id, new_profile_name_id)  ### NonStandard
 
     end
 
@@ -176,7 +214,7 @@ module ProfileKeysGeneration
     # в первом элементе мессива - данные об Авторе    ## OK
     # @note GET /
     # @see News
-    def add_daugther_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+    def add_daugther_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
       # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
       fill_relation_rows(base_profile_tree_id, @wives_hash, 0, 4, new_profile_id, new_profile_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @husbands_hash, 1, 4, new_profile_id, new_profile_name_id)  ### NonStandard
@@ -184,11 +222,29 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 6, new_profile_id, new_profile_name_id)
 
       # new relations
-      fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 12, new_profile_id, new_profile_name_id)  ###
-      fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 12, new_profile_id, new_profile_name_id)  ###
+      #fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 12, new_profile_id, new_profile_name_id)  ###
+      #fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 12, new_profile_id, new_profile_name_id)  ###
+      logger.info "== In add_mother_to_ProfileKeys:: base_sex_id = #{base_sex_id.inspect}"
 
-      fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 22, new_profile_id, new_profile_name_id)  ### NonStandard
-      fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 22, new_profile_id, new_profile_name_id)  ### NonStandard
+      if base_sex_id == 1
+        # Внучка по Отцу  121
+        fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 121, new_profile_id, new_profile_name_id)  ###
+        fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 121, new_profile_id, new_profile_name_id)  ###
+        # Племянница по Отцу  221
+        fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 221, new_profile_id, new_profile_name_id)  ### NonStandard
+        fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 221, new_profile_id, new_profile_name_id)  ### NonStandard
+      end
+      if base_sex_id == 0
+        # Внучка по Матери  122
+        fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 122, new_profile_id, new_profile_name_id)  ###
+        fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 122, new_profile_id, new_profile_name_id)  ###
+        # Племянница по Матери  222
+        fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 222, new_profile_id, new_profile_name_id)  ### NonStandard
+        fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 222, new_profile_id, new_profile_name_id)  ### NonStandard
+      end
+
+      #fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 22, new_profile_id, new_profile_name_id)  ### NonStandard
+      #fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 22, new_profile_id, new_profile_name_id)  ### NonStandard
 
     end
 
@@ -196,7 +252,7 @@ module ProfileKeysGeneration
     # в первом элементе мессива - данные об Авторе
     # @note GET /
     # @see News
-    def add_brother_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+    def add_brother_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
       # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
       fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 3, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 3, new_profile_id, new_profile_name_id)
@@ -204,8 +260,19 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 5, new_profile_id, new_profile_name_id)  ### NonStandard
 
       # new relations
-      fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 19, new_profile_id, new_profile_name_id)
-      fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 19, new_profile_id, new_profile_name_id)
+      #fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 19, new_profile_id, new_profile_name_id)
+      #fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 19, new_profile_id, new_profile_name_id)
+
+      if base_sex_id == 1
+        # Дядя по Отцу  191
+        fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 191, new_profile_id, new_profile_name_id)
+        fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 191, new_profile_id, new_profile_name_id)
+      end
+      if base_sex_id == 0
+        # Дядя по Матери  192
+        fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 192, new_profile_id, new_profile_name_id)
+        fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 192, new_profile_id, new_profile_name_id)
+      end
 
     end
 
@@ -213,7 +280,7 @@ module ProfileKeysGeneration
     # в первом элементе мессива - данные об Авторе
     # @note GET /
     # @see News
-    def add_sister_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+    def add_sister_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
       # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
       fill_relation_rows(base_profile_tree_id, @fathers_hash, 1, 4, new_profile_id, new_profile_name_id)
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 4, new_profile_id, new_profile_name_id)
@@ -221,8 +288,18 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 6, new_profile_id, new_profile_name_id)  ### NonStandard
 
       # new relations
-      fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 20, new_profile_id, new_profile_name_id)
-      fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 20, new_profile_id, new_profile_name_id)
+      #fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 20, new_profile_id, new_profile_name_id)
+      #fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 20, new_profile_id, new_profile_name_id)
+      if base_sex_id == 1
+        # Тетя по Отцу  201
+        fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 201, new_profile_id, new_profile_name_id)
+        fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 201, new_profile_id, new_profile_name_id)
+      end
+      if base_sex_id == 0
+        # Тетя по Матери  202
+        fill_relation_rows(base_profile_tree_id, @sons_hash, 1, 202, new_profile_id, new_profile_name_id)
+        fill_relation_rows(base_profile_tree_id, @daughters_hash, 0, 202, new_profile_id, new_profile_name_id)
+      end
 
     end
 
@@ -262,7 +339,7 @@ module ProfileKeysGeneration
     # Добавление новых рядов по профилю в таблицу ProfileKey
     # @note GET /
     # @see News
-    def  make_profilekeys_rows(base_profile_tree_id, add_row_to_tree)
+    def  make_profilekeys_rows(base_sex_id, base_profile_tree_id, add_row_to_tree)
 
       profile_id = add_row_to_tree[0]
       sex_id = add_row_to_tree[1]  # исп-ся для определения обратного relation в завис-ти от пола базового профиля, к кому добавляем
@@ -276,17 +353,17 @@ module ProfileKeysGeneration
 
       case new_relation_id
         when 1
-          add_father_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+          add_father_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
         when 2
-          add_mother_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+          add_mother_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
          when 3
-          add_son_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+          add_son_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
         when 4
-          add_daugther_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+          add_daugther_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
         when 5
-          add_brother_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+          add_brother_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
         when 6
-          add_sister_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
+          add_sister_to_ProfileKeys(base_sex_id, base_profile_tree_id, new_profile_id, new_profile_name_id)
         when 7
           add_husband_to_ProfileKeys(base_profile_tree_id, new_profile_id, new_profile_name_id)
         when 8
@@ -355,13 +432,16 @@ module ProfileKeysGeneration
     # exclusions_hash - по умоланию nil
     # или же, в него передается hash, уточняющий нестандартные свзяи {profile_id => boolean} / {"143" => '0'}
     # профили в exclusions_hash с значение 0/false исключаются из генерации связей
-    def add_new_profile(base_profile,
+    def add_new_profile(base_sex_id, base_profile,
                         new_profile, new_relation_id,
                         exclusions_hash: nil,
                         tree_ids: tree_ids) # [trees connected] типа [126, 127]
 
       logger.info "============ In add_new_profile ==================DDDDDDDD"
+      logger.info "base_sex_id = #{base_sex_id}"
+      logger.info "new_profile = #{new_profile}"
       logger.info "base_profile.id = #{base_profile.id}"
+      logger.info "new_relation_id = #{new_relation_id}"
       #logger.info "base_profile.id = #{base_profile.id}, new_profile.id = #{new_profile.id}, new_relation_id = #{new_relation_id},"
       logger.info "exclusions_hash = #{exclusions_hash}, tree_ids = #{tree_ids},"
       logger.info "base_profile.tree_id #{base_profile.tree_id}"
@@ -388,7 +468,7 @@ module ProfileKeysGeneration
       @add_row_to_tree = add_row_to_tree # DEBUGG_TO_VIEW
       logger.info " @add_row_to_tree = #{add_row_to_tree} "
       logger.info "Before: make_profilekeys_rows:: base_profile.tree_id = #{base_profile.tree_id}, tree_ids = #{tree_ids} "
-      make_profilekeys_rows(base_profile.tree_id, add_row_to_tree)
+      make_profilekeys_rows(base_sex_id, base_profile.tree_id, add_row_to_tree)
 
       logger.info "======= add_new_profile = END ================"
     end
