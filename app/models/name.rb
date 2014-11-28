@@ -1,5 +1,7 @@
 class Name < ActiveRecord::Base
 
+  has_many :subnames
+
   # Имя не может быть пустым
   # и должно быть уникальным
   validates :name,
@@ -24,6 +26,9 @@ class Name < ActiveRecord::Base
 
   # Женский, включает имя "не известно"
   scope :female_extended, -> { where(sex_id: 0) }
+
+
+
 
 
   def to_name
