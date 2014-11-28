@@ -14,6 +14,7 @@
 ActiveRecord::Schema.define(version: 20141128125610) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "adminpack"
   enable_extension "plpgsql"
 
   create_table "connected_users", force: true do |t|
