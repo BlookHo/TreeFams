@@ -73,6 +73,15 @@ group :development do
 
   # Находит косяки в запросах к базе
   gem "bullet"
+
+  gem 'brakeman', :require => false
+  gem 'flog'
+  gem 'flay'
+
+  #gem 'mailcatcher' # mail
+
+  #gem 'reek'
+
 end
 
 gem 'activerecord-reset-pk-sequence'

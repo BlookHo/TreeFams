@@ -173,8 +173,8 @@ Weafam::Application.routes.draw do
   match 'enter_email' => 'profiles#enter_email', via: :get
   match 'enter_email' => 'profiles#enter_email', via: :post
 
-  #match 'invitation_email' => 'weafam_mailer#invitation_email', via: :get
-  #match 'invitation_email' => 'weafam_mailer#invitation_email', via: :post
+  match 'invitation_email' => 'weafam_mailer#invitation_email', via: :get
+  match 'invitation_email' => 'weafam_mailer#invitation_email', via: :post
 
 
   resources :users

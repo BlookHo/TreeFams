@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title Weafam
+    %title Weafam INVITATION EMAIL
     -#%meta{:charset => "utf-8"}/
     -#%meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
     -#= stylesheet_link_tag "v1/application"
@@ -10,32 +10,41 @@
   %body
     -##overlay{style:'display:none;'}
     -#= render 'shared/ui/header'
-    -#= render 'shared/ui/flash'
-    -#%img src="http://brainlook.org/assets/userback.jpg", alt="Brainlook", style="width:680px"
+    -#= render 'shared/ui/flash' alt="Brainlook",
 
     %section.admin
+    %h2
+      #{@mail_number.inspect} СТРАНИЦА ПРИГЛАШЕНИЯ НОВОГО ПОЛЬЗОВАТЕЛЯ (INVITATION EMAIL)
+
+    -#%img(src="http://brainlook.org/assets/userback.jpg")
+    -#alt="Brainlook" style="width:680px"/>
+    -#%img(src= "http://www.weallfamily.ru/assets/logo-tree.png" style="width:100px height:100")
+    = image_tag("http://www.weallfamily.ru/assets/logo-tree.png", {:width => "150", :height =>"160"})
     %h3
-      9 СТРАНИЦА ПРИГЛАШЕНИЯ НОВОГО ПОЛЬЗОВАТЕЛЯ
+      Получатель: #{@email_name}.
+
+    %h2
+      Дорогой #{@profile_name}!
     %h3
-      Дорогой "имя нового ПОЛЬЗОВАТЕЛЯ" !
+      Твой родственник #{@current_user_name} добавил тебя в общее семейное дерево и приглашает посетить вебсайт < Мы все - родня >.
+    %h3
+      Многие твои родственники все еще отсутствуют в твоем семейном дереве.
+      Приходи на вебсайт < Мы все - родня >. Здесь #{@current_user_name} нашел тебя - ты найдешь других своих родственников.
+    %h3
+      -#%img(src="http://weallfamily.ru/assets/logo-tree.png")
+      = link_to image_tag( 'http://www.weallfamily.ru/assets/logo-tree.png', {:width => "45", :height =>"45"}), 'http://www.weallfamily.ru'
+      = link_to 'Пройди по этой ссылке и ты сможешь зарегистрироваться на нашем сайте', 'http://www.weallfamily.ru',  class: :request
+
+    %h3 Добро пожаловать на www.weallfamily.ru - на вебсайт, который помогает создавать и наращивать дерево родственников, обмениваться информацией и поддерживать семейные связи.
+    %h3 Чувствуй себя как дома, #{@profile_name}!
+
     %p
-      @email_name: #{@email_name.inspect}
-    %h1 Добро пожаловать на www.Weallfamily.ru!
-    %h1 Чувствуй себя как дома, <%= @user %>!
-
-    -#%p С чего начать?
-    -#%li= link_to raw("Перейди на страницу входа - диалога"), login_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
-    -#или
-    -#%li= link_to raw("Посмотри ознакомительное видео или просто зайди на сайт как гость"), login_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
-
-    -#<%= render :partial => 'email_signature' %>
-
-    %h3
-      Мы направили Вам приглашение от нашего ПОЛЬЗОВАТЕЛЯ "имя старого ПОЛЬЗОВАТЕЛЯ"
-    %h3
-      "Приходи на сайт "имя сайта". Здесь я нашел тебя - ты найдешь меня и многих других твоих родственников
-    %h3
-      Пройди по этой ссылке и ты сможешь зарегистрироваться на этом сайте: "ссылка на старт. диалог"
-
+      Мы направили тебе это приглашение с целью помочь тебе в исследовании семейной истории на www.weallfamily.ru.
+    -#%p
+    -#  Если ты не хочешь получать подобные сообщения в будущем, нажми здесь.
+    %p
+      Если этот почтовый адрес #{@email_name.inspect} - не твой, просто проигнорируй это письмо.
+%br
+  %p С  ООО МыВсеРодня, 190000, С.-Петербург, Дворцовая пл., д.1
 
 

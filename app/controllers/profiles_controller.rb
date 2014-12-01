@@ -351,18 +351,25 @@ class ProfilesController < ApplicationController
 
   def enter_email
 
-    @profile_id = params[:profile_id] #104
-    @profile = Profile.find(params[:profile_id]) if !params[:profile_id].blank?
-
-    @profile_email = "zoneiva@gmail.com" #@profile.email
-    @email_name = params[:profile_email] || @profile_email if !@profile_email.blank?
-    @email_text = params[:email_text]
-
-    if !@email_name.blank? && !@email_text.blank?
-      WeafamMailer.invitation_email(@email_name).deliver
-        #redirect_to invitation_email_path
-      logger.info "In Метод: enter_email:  delivered!  @email_name = #{@email_name.inspect}, @email_text = #{@email_text.inspect}"
-
+    @profile_id = params[:profile_id].to_i #
+    @current_user_id = params[:curr_user_id].to_i
+    logger.info "In enter_email 11: params[:curr_user_id].to_i:  #{params[:curr_user_id].to_i.inspect} , @current_user_id:  #{@current_user_id.inspect}"
+    session[:profile_id] = {:value => @profile_id} if @profile_id != 0
+    #logger.info "In enter_email 13: session[:profile_id]:  #{session[:profile_id].inspect}"
+    #logger.info "In enter_email 131: @current_user_id:  #{@current_user_id.inspect}"
+    session[:current_user_id] = {:value => @current_user_id} if @current_user_id != 0
+    logger.info "In enter_email 14: session[:current_user_id]:  #{session[:current_user_id].inspect}"
+    @email_name = params[:profile_email] # email = "zoneiva@gmail.com" #@profile.email
+    #@current_user_id = current_user.id
+    #logger.info "In enter_email 15: @current_user_id:  #{@current_user_id.inspect}"
+    if !@email_name.blank?
+      @profile_id = session[:profile_id][:value]
+      @current_user_id = session[:current_user_id][:value]
+      logger.info "In enter_email 22: @profile_id:  #{@profile_id.inspect}, @current_user_id:  #{@current_user_id.inspect}"
+      logger.info "In enter_email 23: params[:profile_id].to_i:  #{params[:profile_id].to_i.inspect}"
+      logger.info "In enter_email 24: enter_email:  delivered!  @email_name = #{@email_name.inspect}" if WeafamMailer.invitation_email(@email_name, @profile_id, @current_user_id).deliver
+    else
+      logger.info "In enter_email 3: enter_email  !@email_name.blank?: #{!@email_name.blank?}"
     end
 
   end
