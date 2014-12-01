@@ -2,36 +2,31 @@
 %html
   %head
     %title Weafam INVITATION EMAIL
-    -#%meta{:charset => "utf-8"}/
-    -#%meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
-    -#= stylesheet_link_tag "v1/application"
-    -#= javascript_include_tag 'v1/application'
-    -#= csrf_meta_tags
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    = stylesheet_link_tag "v1/application"
+    = javascript_include_tag 'v1/application'
   %body
-    -##overlay{style:'display:none;'}
-    -#= render 'shared/ui/header'
-    -#= render 'shared/ui/flash' alt="Brainlook",
 
     %section.admin
     %h2
-      #{@mail_number.inspect} СТРАНИЦА ПРИГЛАШЕНИЯ НОВОГО ПОЛЬЗОВАТЕЛЯ (INVITATION EMAIL)
+      #{@mail_number.inspect} ПРИГЛАШЕНИЕ НОВОГО ПОЛЬЗОВАТЕЛЯ
 
-    -#%img(src="http://brainlook.org/assets/userback.jpg")
-    -#alt="Brainlook" style="width:680px"/>
+    -#%img(src="http://.org/assets/userback.jpg")
+    -#alt="" style="width:680px"/>
     -#%img(src= "http://www.weallfamily.ru/assets/logo-tree.png" style="width:100px height:100")
     = image_tag("http://www.weallfamily.ru/assets/logo-tree.png", {:width => "150", :height =>"160"})
     %h3
       Получатель: #{@email_name}.
 
     %h2
-      Дорогой #{@profile_name}!
+      Дорогой(ая) #{@profile_name}!
     %h3
-      Твой родственник #{@current_user_name} добавил тебя в общее семейное дерево и приглашает посетить вебсайт < Мы все - родня >.
+      Твой родственник #{@current_user_name} добавил(а) тебя в общее семейное дерево и приглашает посетить вебсайт < Мы все - родня >.
     %h3
       Многие твои родственники все еще отсутствуют в твоем семейном дереве.
       Приходи на вебсайт < Мы все - родня >. Здесь #{@current_user_name} нашел тебя - ты найдешь других своих родственников.
     %h3
-      -#%img(src="http://weallfamily.ru/assets/logo-tree.png")
       = link_to image_tag( 'http://www.weallfamily.ru/assets/logo-tree.png', {:width => "45", :height =>"45"}), 'http://www.weallfamily.ru'
       = link_to 'Пройди по этой ссылке и ты сможешь зарегистрироваться на нашем сайте', 'http://www.weallfamily.ru',  class: :request
 
@@ -40,11 +35,9 @@
 
     %p
       Мы направили тебе это приглашение с целью помочь тебе в исследовании семейной истории на www.weallfamily.ru.
-    -#%p
-    -#  Если ты не хочешь получать подобные сообщения в будущем, нажми здесь.
     %p
       Если этот почтовый адрес #{@email_name.inspect} - не твой, просто проигнорируй это письмо.
 %br
-  %p С  ООО МыВсеРодня, 190000, С.-Петербург, Дворцовая пл., д.1
+  %p (С)  "МыВсеРодня".OOO, 190000, С.-Петербург, Дворцовая пл., д.1
 
 

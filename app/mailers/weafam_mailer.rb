@@ -14,7 +14,7 @@ class WeafamMailer < ActionMailer::Base
       @current_user_name = Name.find(Profile.find(current_user_id).name_id).name
       logger.info "In invitation_email:  @profile_name = #{@profile_name}, @current_user_name = #{@current_user_name} " #
 
-      @mail_number = 17
+      @mail_number = 19
       mail(to: email_name, subject: "#{@mail_number}-e Приглашение на сайт < Мы все - родня >", reply_to: 'blookho@gmail.com')
     end
 
