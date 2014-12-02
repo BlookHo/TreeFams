@@ -11,7 +11,8 @@
 
   -# пригласить
   - if @profile.allow_invite
-    %li= link_to "Пригласить", enter_email_path(profile_id: @profile.id, curr_user_id: current_user.id), class: :grey
+    -#%li= link_to "Пригласить", enter_email_path(profile_id: @profile.id, curr_user_id: current_user.id), class: :grey
+    %li= link_to "Пригласить", '#', class: :grey
     -#= render 'enter_email'
 
   -# Написать личное сообщение
