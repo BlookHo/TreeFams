@@ -16,9 +16,35 @@ Weafam::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
+  config.action_mailer.default :charset => "utf-8"
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = {host: 'localhost:3000'}
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+
+  config.action_mailer.default_url_options = { :host => 'localhost', port: '3000' }  #Bl
+  #config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+
+  config.action_mailer.delivery_method = :smtp #Bl
+
+  config.action_mailer.smtp_settings =
+      {#:address => "localhost", #Bl
+       :port => 25, # 1025     -  Bl
+       #    :port => 587, # 465, 25
+      :enable_starttls_auto => true,  # ??
+      :address => "smtp.gmail.com",       ########### CHANGE!! ??
+      :domain => 'localhost:3000',
+      :user_name => 'blookho@gmail.com',  ########### CHANGE!!
+      :password => 'dmkv1219',                ########### CHANGE new passw!!
+      :authentication => 'plain',
+      :openssl_verify_mode  => 'none' # ??
+     }
+
+  # For Mailcatcher
+  #config.action_mailer.smtp_settings = { :address => "localhost", :domain => 'localhost:3000', :port => 1025 }
+  #config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+
+
+
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -32,6 +58,14 @@ Weafam::Application.configure do
   # SpeedUp js / css compiling in development
   config.assets.debug = true
   config.assets.js_compressor = false
+  # Expands the lines which load the assets
+  config.assets.debug = true
 
+  # Do not compress assets
+  #config.assets.compress = false
+
+  #config.assets.css_compressor = :yui
+  #config.assets.js_compressor = :uglify
+  #config.assets.compile = false
 
 end
