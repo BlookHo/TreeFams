@@ -117,7 +117,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'fb_graph'
 gem 'omniauth-twitter'
-gem 'twitter', :git => 'https://github.com/sferik/twitter.git'
+gem 'twitter'#, :git => 'https://github.com/sferik/twitter.git'
 gem "omniauth-google-oauth2"
 gem "omniauth-vkontakte"
 gem 'vkontakte_api'

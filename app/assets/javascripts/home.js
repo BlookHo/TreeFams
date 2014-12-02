@@ -382,6 +382,18 @@ start = function(){
             .attr("class", "add-icon");
         }
 
+          // Registrated user's icon
+          if (d.user_id){
+              d3.select(this)
+                  .append("svg:image")
+                  .attr("xlink:href", "/assets/registrated.svg")
+                  .attr("width", 12)
+                  .attr("height", 12)
+                  .attr("x", -12)
+                  .attr("y", 2)
+                  .attr("class", "registrated-icon");
+          }
+
         // Click event
         d3.select(this)
           .on('click', function(d){
