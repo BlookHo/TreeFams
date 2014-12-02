@@ -59,8 +59,8 @@ Weafam::Application.routes.draw do
   get "graph_tree/show_graph_tree"
   get "graph_tree/edit"
   get "graph_tree/move"
-  get "admin_methods/service_method_1"
-  get "admin_methods/service_method_2"
+  # get "admin_methods/service_method_1"
+  # get "admin_methods/service_method_2"
   # mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
 
 
@@ -73,7 +73,7 @@ Weafam::Application.routes.draw do
 
   # pages controller
   match 'landing' => 'pages#landing', via: :get
-  match 'admin' => 'pages#admin', via: :get
+  # match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
   match 'mypage' => 'pages#mypage', via: :get
@@ -206,6 +206,28 @@ Weafam::Application.routes.draw do
 
 
 
+  # Admin
+  ##################################################
+  namespace :admin do
+
+    resources :sessions
+    get '/login'  => 'sessions#new',      :as => :login
+    get '/logout' => 'sessions#destroy',  :as => :logout
+
+
+    resources :admins
+    resources :users
+    resources :subnames
+
+    resources :names do
+      get 'males',   to: "names#males",   on: :collection, as: :males
+      get 'females', to: "names#females", on: :collection, as: :females
+    end
+
+    root "names#index"
+  end
+
+
   # New version
   ##################################################
   namespace :api, defaults: {format: 'json'} do
@@ -234,6 +256,10 @@ Weafam::Application.routes.draw do
   # Autocompletes
   ##################################################
   get '/autocomplete/names', to: 'autocomplete#names'
+
+
+
+
 
   # Root
   ##################################################

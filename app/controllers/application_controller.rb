@@ -34,6 +34,7 @@ class ApplicationController < ActionController::Base
   end
 
 
+
   def access_denied
     respond_to do |format|
       format.html { redirect_to :root, :alert => 'Для просмотра этой страницы вам нужно войти на сайт!'}

@@ -123,8 +123,6 @@ GEM
       sexp_processor (~> 4.4)
     font-awesome-rails (4.2.0.0)
       railties (>= 3.2, < 5.0)
-    font-awesome-sass (4.2.2)
-      sass (~> 3.2)
     haml (4.0.5)
       tilt
     haml-rails (0.5.3)
@@ -346,7 +344,6 @@ DEPENDENCIES
   flay
   flog
   font-awesome-rails (~> 4.2.0.0)
-  font-awesome-sass (~> 4.2.0)
   haml-rails
   hashie
   hirb
