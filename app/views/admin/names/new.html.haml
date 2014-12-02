@@ -1,0 +1,9 @@
+.page-header
+  %h2
+    Добавить имя
+    = link_to "Отмена", :back, class: 'btn btn-default pull-right'
+
+
+= form_for @name, url: admin_names_path, html:{role: :form, class: "form-horizontal"} do |f|
+  = render 'admin/shared/errors', :objekt => @name
+  = render 'form', f: f

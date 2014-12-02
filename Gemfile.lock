@@ -73,8 +73,6 @@ GEM
     execjs (2.2.1)
     font-awesome-rails (4.2.0.0)
       railties (>= 3.2, < 5.0)
-    font-awesome-sass (4.2.2)
-      sass (~> 3.2)
     haml (4.0.5)
       tilt
     haml-rails (0.5.3)
@@ -228,7 +226,6 @@ DEPENDENCIES
   capybara
   coffee-rails (~> 4.0.0)
   font-awesome-rails (~> 4.2.0.0)
-  font-awesome-sass (~> 4.2.0)
   haml-rails
   hashie
   hirb

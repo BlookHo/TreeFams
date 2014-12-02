@@ -12,9 +12,7 @@ gem 'pg'
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
-# gem 'compass-rails'
-# gem 'bootstrap-sass'
-gem 'spring',             group: :development
+gem 'spring', group: :development
 
 gem 'jbuilder', '~> 2.0'
 gem 'haml-rails'
@@ -25,14 +23,12 @@ gem 'jquery-ui-rails'
 
 # Angular templates in assets pipeline
 gem 'angular-rails-templates'
-
 gem 'ngannotate-rails'
 
+
 # Icons fonts
-# old - should be removed
-#gem "font-awesome-rails"
 gem 'font-awesome-rails', '~> 4.2.0.0'
-gem 'font-awesome-sass', '~> 4.2.0'
+# gem 'font-awesome-sass', '~> 4.2.0'
 gem 'ionicons-rails'
 
 
