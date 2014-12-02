@@ -1,5 +1,9 @@
 %section.admin
 %h2 Страница вода наименования электронной почты:
+%p
+  zoneiva@gmail.com   konstantin.starovoytov@gmail.com
+%p
+  denis@lobkov.net    medvedev.alexey@gmail.com
 
 %p
   Profile: @profile_id = #{@profile_id.inspect}
@@ -22,7 +26,11 @@
 
 
 - if !@email_name.blank?
-  = render 'weafam_mailer/invitation'
+  -#= render 'weafam_mailer/invitation'
+  %h3
+    Дорогой новый ПОЛЬЗОВАТЕЛЬ" !
+  %h3
+    Мы направили Вам приглашение на вебсайт "Weallfamily.ru"
 
 
 
