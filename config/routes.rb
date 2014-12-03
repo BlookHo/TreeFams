@@ -90,11 +90,6 @@ Weafam::Application.routes.draw do
   match 'match_approval' => 'main#match_approval', via: :get
   match 'add_new_profile' => 'new_profile#add_new_profile', via: [:get, :post]
 
-  # graph_tree controller
-  # match 'show_graph_tree' => 'graph_tree#show_graph_tree', via: :get
-  # match 'edit_graph_tree' => 'graph_tree#edit_graph_tree', via: :get
-  # match 'move_graph_tree' => 'graph_tree#move_graph_tree', via: :get
-
   # start controller
   #####################
   # match 'show_tree_table' => 'start#show_tree_table', via: :get

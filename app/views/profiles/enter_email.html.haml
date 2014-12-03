@@ -7,8 +7,6 @@
 
 %p
   Profile: @profile_id = #{@profile_id.inspect}
--#%p
--#  @email_text: = #{@email_text.inspect}
 
 %br
 
@@ -16,9 +14,6 @@
     = label_tag 'Введи Электронную почту приглашаемого Профиля: '
     = text_field_tag 'profile_email', '', :placeholder => @email_name, :maxlength => 25, :size => 25
     %li
-    -#= label_tag 'Введи текст сообщения (text):'
-    -#= text_field_tag 'email_text', '', :maxlength => 250, :size => 250
-    -#%li
     = submit_tag 'Отправить сообщение (Ввод)'
 
 %p

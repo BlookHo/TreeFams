@@ -27,14 +27,18 @@ Weafam::Application.configure do
   config.action_mailer.delivery_method = :smtp #Bl
 
   config.action_mailer.smtp_settings =
-      {#:address => "localhost", #Bl
+      {
        :port => 25, # 1025     -  Bl
        #    :port => 587, # 465, 25
-      :enable_starttls_auto => true,  # ??
-      :address => "smtp.gmail.com",       ########### CHANGE!! ??
+      :enable_starttls_auto => true,  #
+      #:address => "smtp.gmail.com",       ########### CHANGE!!
+      :address => "smtp.yandex.ru",       ########### CHANGE!!
+      #:address => "smtp",       ########### CHANGE!! ??
       :domain => 'localhost:3000',
-      :user_name => 'blookho@gmail.com',  ########### CHANGE!!
-      :password => 'dmkv1219',                ########### CHANGE new passw!!
+      #:user_name => 'blookho@gmail.com',  ########### CHANGE!!
+      #:password => '',                ########### CHANGE new passw!!
+      :user_name => 'weallfamily@yandex.ru',  ########### CHANGE!!
+      :password => 'interweb',                ########### CHANGE new passw!!
       :authentication => 'plain',
       :openssl_verify_mode  => 'none' # ??
      }
@@ -42,8 +46,6 @@ Weafam::Application.configure do
   # For Mailcatcher
   #config.action_mailer.smtp_settings = { :address => "localhost", :domain => 'localhost:3000', :port => 1025 }
   #config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
-
-
 
 
   # Print deprecation notices to the Rails logger.

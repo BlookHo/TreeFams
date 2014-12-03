@@ -1,6 +1,7 @@
 # encoding: utf-8
 class WeafamMailer < ActionMailer::Base
-  default from: "blookho@gmail.com"
+  default from: "weallfamily@yandex.ru"  ####
+  #default from: "blookho@gmail.com"
 
   def invitation_email(email_name, profile_id, current_user_id)
 
@@ -14,9 +15,13 @@ class WeafamMailer < ActionMailer::Base
       @current_user_name = Name.find(Profile.find_by_user_id(current_user_id).name_id).name
       logger.info "In invitation_email:  @profile_name = #{@profile_name}, @current_user_name = #{@current_user_name} " #
 
-      #@mail_number = 32
-      #mail(to: email_name, subject: "#{@mail_number}-e Приглашение на сайт < Мы все - родня >", reply_to: 'blookho@gmail.com')
-      mail(to: email_name, subject: "Приглашение на сайт < Мы все - родня >", reply_to: 'blookho@gmail.com')
+      @mail_number = 37
+      mail(to: email_name, subject: "#{@mail_number}-e Приглашение на сайт < Мы все - родня >", reply_to: 'weallfamily@yandex.ru')
+      #mail(to: email_name, subject: "#{@mail_number}-e Приглашение на сайт < Мы все - родня >", reply_to: 'blookho@gmail.com')  ####
+      logger.info "In invitation_email: after mail"
+    else
+      logger.info "In invitation_email: enter_email   if !profile_id.to_i.blank? && !current_user_id.to_i.blank?: #{!profile_id.to_i.blank? && !current_user_id.to_i.blank?}"
+      flash[:alert] = "Не определены адресат и/или отправитель электронной почты. Почтовое сообщение не отправлено. "
     end
 
   end

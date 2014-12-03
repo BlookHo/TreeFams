@@ -370,6 +370,7 @@ class ProfilesController < ApplicationController
       #logger.info "In enter_email: delivered - current_user.id = #{current_user.id.inspect}"
     else
       logger.info "In enter_email: enter_email  !@email_name.blank?: #{!@email_name.blank?}"
+      flash[:alert] = "Введите адрес электронной почты. Почтовое сообщение не отправлено. "
     end
 
   end
