@@ -255,11 +255,29 @@ class MessagesController < ApplicationController
 
   # GET /messages
   # GET /messages.json
+  # Показываем все диалоги текущего юзера
+  # с возможностью перехода к просмотру одного выбранного диалога
+  # с одним юзером.
+
   def index
     @messages = Message.all.order('created_at desc')
 
     @receiver_id = params[:receiver_id].to_i #
     @text = params[:text] #
+
+    @new_messages_count = count_new_messages
+    logger.info "== show_all_dialoges == @new_messages_count = #{@new_messages_count}"
+    find_agents # find all contragent of current_user by messages
+
+    @talks_and_messages = []
+    @agents_talks.each do |user_id|
+      user_dialoge = get_user_messages(user_id)
+      @talks_and_messages << user_dialoge
+      logger.info "== In @agents_talks.each"
+    end
+
+    #@new_mail_count = count_new_messages
+    #logger.info "===== @new_mail_count = #{@new_mail_count}"
 
   end
 

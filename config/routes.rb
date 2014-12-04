@@ -20,8 +20,12 @@ Weafam::Application.routes.draw do
   match 'make_connection_request' => 'connection_requests#make_connection_request', via: :post
 
 
-  resources :messages
   # messages controller
+  resources :messages, except: [:update, :edit] do
+    #get '/edit/data', to: 'messages#edit', as: :edit_data
+
+  end
+
   match 'make_messages' => 'messages#make_messages', via: :get
   match 'make_messages' => 'messages#make_messages', via: :post
 
