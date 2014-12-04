@@ -28,19 +28,16 @@ Weafam::Application.configure do
 
   config.action_mailer.smtp_settings =
       {
-       :port => 25, # 1025     -  Bl
-       #    :port => 587, # 465, 25
+       :port => 25, # 1025     -  mailcatcher
+       # 587, 465, 25
       :enable_starttls_auto => true,  #
-      #:address => "smtp.gmail.com",       ########### CHANGE!!
-      :address => "smtp.yandex.ru",       ########### CHANGE!!
-      #:address => "smtp",       ########### CHANGE!! ??
+      #:address => "smtp.gmail.com",       ## CHANGE for Gmail
+      :address => "smtp.yandex.ru",       ## for Yandex
       :domain => 'localhost:3000',
-      #:user_name => 'blookho@gmail.com',  ########### CHANGE!!
-      #:password => '',                ########### CHANGE new passw!!
       :user_name => 'weallfamily@yandex.ru',  ########### CHANGE!!
       :password => 'interweb',                ########### CHANGE new passw!!
       :authentication => 'plain',
-      :openssl_verify_mode  => 'none' # ??
+      :openssl_verify_mode  => 'none' # ?
      }
 
   # For Mailcatcher
