@@ -1,4 +1,4 @@
-<!-- {{family | json }} -->
+{{family | json }}
 <form name="welcomeForm">
   <div id="form-views" ui-view></div>
 </form>
@@ -15,3 +15,10 @@
   <a ui-sref-active="active" ui-sref=".husband" ng-show="hasHusband()">8</a>
   <a ui-sref-active="active" ui-sref=".email">9</a>
 </div>
+
+<script type="text/ng-template" id="customDropDownTemplate.html">
+<a>
+  <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+  <span ng-if="match.model.parent_name" bind-html-unsafe="match.model.parent_name" class="parent_name"></span>
+</a>
+</script>

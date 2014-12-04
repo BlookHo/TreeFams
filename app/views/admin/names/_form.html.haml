@@ -9,7 +9,7 @@
   .col-sm-6
     %select.selectpicker{name: "name[parent_name_id]", :"data-live-search" => "true", :"data-max-options"=>"2"}
       %option.special_option{value:  '', selected: @name.parent_name_id.nil? } Главное имя
-      - Name.parent_names.males.each do |name|
+      - @parent_names.each do |name|
         %option{value: name.id, selected: @name.parent_name_id == name.id}
           = name.name
 
