@@ -18,10 +18,12 @@ module ProfileKeysGeneration
           new_tree.user_id        = tree_id          # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый (user_id ID От_Профиля (From_Profile))
           new_tree.profile_id     = base_profile_id  # base_profile.id - profile_id базового профиля # От_Профиля
           new_tree.name_id        = base_name_id     # base_profile.name_id   # name_id базового профиля # От_Профиля
+#           new_tree.display_name_id        = base_display_name_id     # base_profile.name_id   # name_id базового профиля # От_Профиля
 
-          new_tree.relation_id    = new_relation_id  # ID добавляемого Родства - кого добавляем (отца, сына, жену и т.д.) От_Профиля с К_Профилю
+        new_tree.relation_id    = new_relation_id  # ID добавляемого Родства - кого добавляем (отца, сына, жену и т.д.) От_Профиля с К_Профилю
 
           new_tree.is_profile_id  = new_profile_id      # is_profile_id нового К_Профиля
+#           new_tree.is_display_name_id        = new_profile_is_display_name_id     # base_profile.name_id   # name_id базового профиля # От_Профиля
           new_tree.is_name_id     = new_profile_name_id # is_name_id нового К_Профиля
           new_tree.is_sex_id      = new_profile_sex     # is_sex_id нового К_Профиля
   #########################
@@ -31,6 +33,7 @@ module ProfileKeysGeneration
         #1053;127     ;1052        ;8              ;FALSE;   "2014-"; 370     ;1053               ;354                    ;0
 
         @add_row_to_tree = [ #author_user.id, # Главный автор= юзер на сайте -- не иcп-ся
+# + +
                             base_profile_id, base_sex_id, base_name_id,
                             new_relation_id.to_i, new_profile_id, new_profile_name_id]
      end
@@ -45,10 +48,11 @@ module ProfileKeysGeneration
         new_profile_key_row.user_id = base_profile_tree_id         # @@current_user_id            # - from cycle:
         new_profile_key_row.profile_id = profile_id                # profile_id
         new_profile_key_row.name_id = name_id                      # name_id
+# display_name_id
         new_profile_key_row.relation_id = new_relation_id          # relation_id
         new_profile_key_row.is_profile_id = new_profile_id         # is_profile_id
         new_profile_key_row.is_name_id = new_profile_name_id       # is_name_id
-
+# is_display_name_id
 
  #########################
       new_profile_key_row.save
@@ -58,9 +62,12 @@ module ProfileKeysGeneration
       one_profile_key_arr[0] = base_profile_tree_id # @@current_user_id
       one_profile_key_arr[1] = profile_id
       one_profile_key_arr[2] = name_id
+ # display_name_id
+
       one_profile_key_arr[3] = new_relation_id
       one_profile_key_arr[4] = new_profile_id
       one_profile_key_arr[5] = new_profile_name_id
+ # is_display_name_id
 
       @one_profile_key_arr = one_profile_key_arr   # DEBUGG_TO_VIEW
       logger.info "== In add_new_ProfileKey_row:: one_profile_key_arr = #{one_profile_key_arr}, base_profile_tree_id = #{base_profile_tree_id}   ============"
@@ -344,8 +351,11 @@ module ProfileKeysGeneration
       profile_id = add_row_to_tree[0]
       sex_id = add_row_to_tree[1]  # исп-ся для определения обратного relation в завис-ти от пола базового профиля, к кому добавляем
       name_id = add_row_to_tree[2]
+# display_name_id
+
       new_relation_id = add_row_to_tree[3]
       new_profile_id = add_row_to_tree[4]
+# is_display_name_id
       new_profile_name_id = add_row_to_tree[5]
 
       @profile_key_arr_added = [] #
@@ -452,14 +462,17 @@ module ProfileKeysGeneration
       # сбор circles
 
       @profile_id = base_profile.id # DEBUGG_TO_VIEW
+ #     @display_name_id = base_profile.display_name_id # DEBUGG_TO_VIEW
       @sex_id = base_profile.sex_id # DEBUGG_TO_VIEW
       @name_id = base_profile.name_id # DEBUGG_TO_VIEW
       @new_relation_id = new_relation_id # DEBUGG_TO_VIEW
       @new_profile_id = new_profile.id # DEBUGG_TO_VIEW
       @new_profile_name_id = new_profile.name_id # DEBUGG_TO_VIEW
+ #     @new_profile_is_display_iname_id = new_profile.display_name_id # DEBUGG_TO_VIEW
       @new_profile_sex = new_profile.sex_id # DEBUGG_TO_VIEW
 
       add_row_to_tree = save_new_tree_row(base_profile.id, base_profile.sex_id,
+
                                            base_profile.name_id, new_relation_id,
                                            new_profile.id, new_profile.name_id, new_profile.sex_id,
                                            base_profile.tree_id) # это чтобы в поле tree_id записать для нового профиля,
@@ -468,7 +481,8 @@ module ProfileKeysGeneration
       @add_row_to_tree = add_row_to_tree # DEBUGG_TO_VIEW
       logger.info " @add_row_to_tree = #{add_row_to_tree} "
       logger.info "Before: make_profilekeys_rows:: base_profile.tree_id = #{base_profile.tree_id}, tree_ids = #{tree_ids} "
-      make_profilekeys_rows(base_sex_id, base_profile.tree_id, add_row_to_tree)
+      make_profilekeys_rows(base_sex_id, # + +
+                            base_profile.tree_id, add_row_to_tree)
 
       logger.info "======= add_new_profile = END ================"
     end
