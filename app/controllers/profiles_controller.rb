@@ -180,7 +180,7 @@ class ProfilesController < ApplicationController
   def enter_email
     @profile_id = params[:profile_id].to_i #
     logger.info "In enter_email:  params[:profile_id].to_i = #{params[:profile_id].to_i.inspect}"
-    session[:profile_id] = {:value => profile_id} if profile_id != 0
+    session[:profile_id] = {:value => @profile_id} if @profile_id != 0
     email_name = params[:profile_email] #
 
     # konstantin.starovoytov@gmail.com
