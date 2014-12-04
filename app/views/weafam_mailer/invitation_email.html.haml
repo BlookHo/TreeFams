@@ -4,20 +4,23 @@
     %title Weafam INVITATION EMAIL
     %meta{:charset => "utf-8"}/
     %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
-    -#= stylesheet_link_tag "v1/application"
-    -#= javascript_include_tag 'v1/application'
 
     :css
       body {
         text-align: center;
+        -#font-size: 18px;
         -#font-family: "droid-sans-mono-1","droid-sans-mono-2", monaco, courier, monospace;
         margin: 161;
+        font-weight: bold;
+        margin-bottom: 10px;
         -#padding: 120;
         background: #D99AA7;
       }
+
       #main {
         background: #e7d6f6;
         padding: 500px 250;
+        color: #d9368b;
       }
       h2 {
         margin: 0;
@@ -32,58 +35,30 @@
       p {
         font-size: 18px;
       }
-      -#p#message {
-      -#  color: #ff0000;
-      -#  font-size: 12px;
-      -#  text-transform: uppercase;
-      -#}
-
-      -#textarea {
-      -#  font-family: monaco, courier, monospace;
-      -#  width: 500px;
-      -#  height: 600px;
-      -#  font-size: 12px;
-      -#}
-      -#footer {
-      -#  background: #000;
-      -#  color: #fff;
-      -#  text-transform: uppercase;
-      -#  text-align: center;
-      -#  padding: 10px 0;
-      -#  font-size: 12px;
-      -#}
-      -#footer p {
-      -#  margin: 5px 0;
-      -#}
-      -#footer a {
-      -#  color: #f00;
-      -#  text-decoration: none;
-      -#    border-bottom: 1px dotted #aaa;
-      -#}
-      -#footer a:hover {
-      -#  border-bottom: 1px dotted #fff;
-      -#}
 
   %body
     #main
-      %h2
-        #{@mail_number.inspect}
       %h3
         Получатель: #{@email_name}.
       %h2
         ПРИГЛАШЕНИЕ НА САЙТ
       %br
-      -#%img(src="http://.org/assets/userback.jpg")
-      -#alt="" style="width:680px"/>
-      -#%img(src= "http://www.weallfamily.ru/assets/logo-tree.png" style="width:100px height:100")
-      = image_tag("http://www.weallfamily.ru/assets/logo-tree.png", {:width => "120", :height =>"120"})
+      = image_tag("http://www.weallfamily.ru/assets/logo-tree.png", {:width =>120, :height => 120})
+
+      - if @profile_sex == 1
+        %h2 Дорогой #{@profile_name}!
+      - else
+        %h2 Дорогая #{@profile_name}!
 
       %h2
-        Дорогой(ая) #{@profile_name}!
+        Твой родственник #{@current_user_name}
+        - if @current_user_sex == 1
+          %h2 добавил тебя в общее семейное дерево
+        - else
+          %h2 добавила тебя в общее семейное дерево
+
       %h2
-        Твой родственник #{@current_user_name} добавил(а) тебя в общее семейное дерево
-      %h2
-        и приглашает посетить вебсайт 'Мы все - родня'
+        и приглашает посетить вебсайт 'Мы все - родня'.
       %h2
         Добро пожаловать на www.weallfamily.ru!
       %h2
@@ -92,22 +67,22 @@
       %br
 
       %h3
-        Приходи на вебсайт 'Мы все - родня', здесь нашли тебя - ты найдешь других своих родственников!
+        Приходи на вебсайт 'Мы все - родня'.
+      %h3
+        Здесь нашли тебя - ты найдешь других своих родственников!
       %h3
         Это - вебсайт, который помогает создавать и наращивать дерево родственников,
       %h3
-        обмениваться информацией и поддерживать семейные связи
+        обмениваться информацией и поддерживать семейные связи.
       %h3
         Чувствуй себя как дома, #{@profile_name}!
       %h3
         Мы направили тебе это приглашение, с целью помочь тебе
       %h3
-        в исследовании семейной истории на www.weallfamily.ru
+        в исследовании семейной истории на www.weallfamily.ru.
       %br
       %p
-        Если этот почтовый адрес #{@email_name.inspect} - не твой,
-        просто проигнорируй это письмо.
-      %br
+        Если этот почтовый адрес #{@email_name.inspect} - не твой, просто проигнорируй это письмо.
       %br
       %p (С)  "МыВсеРодня".OOO, 190000, С.-Петербург, Дворцовая пл. д.1
 

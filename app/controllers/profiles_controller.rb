@@ -354,29 +354,44 @@ class ProfilesController < ApplicationController
 
   def enter_email
 
-    @profile_id = params[:profile_id].to_i #
+    profile_id = params[:profile_id].to_i #
     logger.info "In enter_email:  params[:profile_id].to_i = #{params[:profile_id].to_i.inspect}"
-    session[:profile_id] = {:value => @profile_id} if @profile_id != 0
-    @email_name = params[:profile_email] #
+    session[:profile_id] = {:value => profile_id} if profile_id != 0
+    email_name = params[:profile_email] #
+
     # konstantin.starovoytov@gmail.com
     # denis@lobkov.net
     # medvedev.alexey@gmail.com
-    # email = "zoneiva@gmail.com" #@profile.email
-    if !@email_name.blank?
-      @profile_id = session[:profile_id][:value]
-      logger.info "In enter_email: delivered - @email_name = #{@email_name.inspect}" if WeafamMailer.invitation_email(@email_name, @profile_id, current_user.id).deliver
-      logger.info "In enter_email: delivered - @profile_id = #{@profile_id.inspect}, current_user.id = #{current_user.id.inspect}"
-      #logger.info "In enter_email: delivered - @email_name = #{@email_name.inspect}" if WeafamMailer.invitation_email(@email_name, current_user.id).deliver
-      #logger.info "In enter_email: delivered - current_user.id = #{current_user.id.inspect}"
+    # zoneiva@gmail.com
+
+    if !email_name.blank?
+      if is_a_valid_email?(email_name)
+        profile_id = session[:profile_id][:value]
+        logger.info "In enter_email1: delivered - email_name = #{email_name.inspect}" if WeafamMailer.invitation_email(email_name, profile_id, current_user.id).deliver
+        logger.info "In enter_email2: delivered - profile_id = #{profile_id.inspect}, current_user.id = #{current_user.id.inspect}"
+      else
+        flash[:alert] = "Некорректный адрес электронной почты #{email_name.inspect}. Повторите ввод." if !is_a_valid_email?(email_name)
+        logger.info "In enter_email3: email_name = #{email_name.inspect}, !email_name.blank?: #{!email_name.blank?} OR not valid email address "
+      end
     else
-      logger.info "In enter_email: enter_email  !@email_name.blank?: #{!@email_name.blank?}"
-      flash[:alert] = "Введите адрес электронной почты. Почтовое сообщение не отправлено. "
+      logger.info "In enter_email4: email_name = #{email_name.inspect}, email_name.blank?: #{email_name.blank?} "
+      #flash[:alert] = "Некорректный адрес электронной почты. Повторите ввод." if !is_a_valid_email?(email_name)
     end
 
   end
 
   private
 
+  # Проверяет email - это реальный email address?
+  def is_a_valid_email?(email)
+    if email  =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+      logger.info "In is_a_valid_email?: TRUE email = #{email.inspect}, #{email  =~ /^[\w\d]+@[\w\d]+(.[\w\d]+)+$/} "
+      return true
+    else
+      logger.info "In is_a_valid_email?: FALSE email = #{email.inspect}, #{email  =~ /^[\w\d]+@[\w\d]+(.[\w\d]+)+$/} "
+      return false
+    end
+  end
 
   def questions_valid?(questions_hash)
     # return true if questions_hash.blank?
