@@ -9,7 +9,7 @@
   .col-sm-6
     %select.selectpicker{name: "name[parent_name_id]", :"data-live-search" => "true", :"data-max-options"=>"2"}
       %option.special_option{value:  '', selected: @name.parent_name_id.nil? } Главное имя
-      - Name.parent_names.males.each do |name|
+      - @parent_names.each do |name|
         %option{value: name.id, selected: @name.parent_name_id == name.id}
           = name.name
 
@@ -20,6 +20,13 @@
     %select.selectpicker{name: "name[sex_id]"}
       %option{value: 1, selected: @name.sex_id == 1} Мужской
       %option{value: 0, selected: @name.sex_id == 0} Женский
+
+
+.form-group
+  = f.label :search_name_id, "search_name_id", class: "col-sm-2 control-label"
+  .col-sm-2
+    %input.form-control{type: :text, disabled: true, value: @name.search_name_id}
+
 
 %br
 %br

@@ -5,7 +5,7 @@ class SignupController < ApplicationController
   before_filter :already_logged_in?
 
   # data
-  # {family =>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28, "display_name_id" => nil},"father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com", "signup"=>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28}, "father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com"}}
+  # {family =>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28, "search_name_id" => nil},"father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com", "signup"=>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28}, "father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com"}}
 
   def index
     # just render js application
@@ -48,9 +48,10 @@ class SignupController < ApplicationController
 
   def create_profile(data)
     Profile.create({
-      name_id:  data['id'],
-      sex_id:   data['sex_id'],
-      tree_id:  data['tree_id']
+      name_id:          data['search_name_id'],
+      display_name_id:  data['id'],
+      sex_id:           data['sex_id'],
+      tree_id:          data['tree_id']
     })
   end
 

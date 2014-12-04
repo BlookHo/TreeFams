@@ -1,0 +1,16 @@
+.dropdown-menu span.parent_name{
+  color:grey;
+
+  &:before{
+    content:'( от ';
+  }
+
+  &:after{
+    content:' )';
+  }
+}
+
+.dropdown-menu > li.active span.parent_name,
+.dropdown-menu > li > a:hover span.parent_name{
+  color:#fff;
+}

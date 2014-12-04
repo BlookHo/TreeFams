@@ -99,8 +99,6 @@ gem 'rvm-capistrano', '1.5.1', group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-# Админка
-# gem 'rails_admin'
 
 gem 'newrelic_rpm'
 

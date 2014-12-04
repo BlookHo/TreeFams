@@ -18,10 +18,12 @@ class Admin::NamesController < Admin::AdminController
 
   def edit
     @name = Name.find params[:id]
+    @parent_names = Name.parent_names
   end
 
   def new
     @name = Name.new
+    @parent_names = Name.parent_names
   end
 
 
@@ -30,6 +32,7 @@ class Admin::NamesController < Admin::AdminController
     if @name.save
       redirect_to :admin_names, notice: "Имя добавлено"
     else
+      @parent_names = Name.parent_names
       render :new
     end
   end
@@ -40,6 +43,7 @@ class Admin::NamesController < Admin::AdminController
     if @name.update_attributes name_params
       redirect_to :admin_names, notice: "Изменения сохранены"
     else
+      @parent_names = Name.parent_names
       render :edit
     end
   end
