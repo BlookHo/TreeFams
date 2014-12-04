@@ -36,7 +36,7 @@ class Name < ActiveRecord::Base
     if parent_name_id.nil?
       self.update_column(:search_name_id, self.id)
     else
-      self.update_column(:search_name_id,  name.parent_name_id)
+      self.update_column(:search_name_id,  self.parent_name_id)
     end
   end
 

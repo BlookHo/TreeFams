@@ -21,6 +21,13 @@
       %option{value: 1, selected: @name.sex_id == 1} Мужской
       %option{value: 0, selected: @name.sex_id == 0} Женский
 
+
+.form-group
+  = f.label :search_name_id, "search_name_id", class: "col-sm-2 control-label"
+  .col-sm-2
+    %input.form-control{type: :text, disabled: true, value: @name.search_name_id}
+
+
 %br
 %br
 .form-group

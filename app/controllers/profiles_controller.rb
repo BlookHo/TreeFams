@@ -62,9 +62,25 @@ class ProfilesController < ApplicationController
     # Имя
     @name = Name.where(id: params[:profile_name_id]).first
 
+    logger.info "=====================NAME==========="
+    logger.info @name.inspect
+    logger.info "=====================NAME==========="
+
     if @name
-      @profile.name_id = @name.id
+
+      @profile.name_id = @name.search_name_id
+      @profile.display_name_id = @name.id
       @profile.profile_name = @name.name
+
+
+      logger.info "=====================PROFILE==========="
+      logger.info @name.inspect
+      logger.info "=====================name id==========="
+      logger.info @name.id
+      logger.info "=====================profile inspect==========="
+      logger.info @profile.inspect
+      logger.info "=====================PROFILE==========="
+
 
       make_questions_data = {
           current_user_id:     current_user.id,
@@ -118,198 +134,6 @@ class ProfilesController < ApplicationController
 
 
 
-  def pre_create
-
-    # Профиль, к которому добавляем (на котором вызвали меню +)
-    @base_profile = Profile.find(params[:base_profile_id])
-    @base_profile_id   = @base_profile.id
-
-    # текущий автор отображаемого круга - путь минус один шаг назад или профиль текущего юзера
-    @author_profile_id = params[:author_profile_id]
-
-    # relation того, к кому добавляем, к автору отображаемого круга
-    # Его отношение к текущему центру круга
-    @base_relation_id  = params[:base_relation_id]
-
-
-    @profile = Profile.new(profile_params)  # Новый добавляемый профиль
-    @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
-    @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
-
-
-    @name = Name.where(name: params[:profile_name].mb_chars.capitalize).first
-
-    # if !@name and !params[:profile_name].blank? and params[:new_name_confirmation]
-    #   @name = Name.create(name: params[:profile_name])
-    # end
-
-    # Name exist and valid:
-    # 1. collect questions
-    # 2. Validate answers
-    if @name
-      @profile.name_id = @name.id
-      @profile.profile_name = @name.name
-
-      make_questions_data = {
-          current_user_id:     current_user.id, #
-          base_profile_id:     @base_profile.id, #
-          base_relation_id:    @base_relation_id.to_i, #
-          profile_relation_id: @profile.relation_id.to_i, #
-          profile_name_id:     @profile.name_id.to_i, #
-          author_profile_id:   @author_profile_id, #
-          connected_users:     current_user.get_connected_users #
-      }
-
-      ################ MAIN MAKE NON-STANDARD QUESTIONS #####################
-      questions_hash = current_user.profile.make_questions(make_questions_data)
-
-      @questions = create_questions_from_hash(questions_hash)
-
-      ################ COILLECT ANSWERS FOR NON-STANDARD QUESTIONS #####################
-      @profile.answers_hash = params[:answers]
-      logger.info "==== Вопросы по новому профилю  @questions = #{@questions.inspect}"
-      logger.info " @profile.answers_hash = #{@profile.answers_hash} " if !@profile.answers_hash.nil?
-
-      # Validate for relation questions
-      if questions_valid?(questions_hash) and @profile.save
-        logger.info "==== Start ProfileKey.add_new_profile ====== "
-
-        # ProfileKey.add_new_profile(@base_profile,
-        #     @profile, @profile.relation_id,
-        #     exclusions_hash: @profile.answers_hash,
-        #     tree_ids: current_user.get_connected_users)
-
-        # redirect_to to profile circle path if exist, via js
-        # if params[:path_link].blank?
-        #   @circle = current_user.profile.circle(current_user.id)
-        #   @author = current_user.profile
-        # else
-        #   @path_link = params[:path_link]
-        # end
-
-      # Ask relations questions
-      else
-        flash.now[:alert] = "Уточняющие вопросы"
-        render :new
-      end
-
-    # Name validation
-    # reset question
-    else
-      @questions = nil
-      @profile.answers_hash = nil
-
-      if params[:profile][:name].blank?
-        flash.now[:alert] = "Вы не указали имя."
-        render :new
-      else
-        flash.now[:name_warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
-        render :new
-      end
-    end
-  end
-
-
-
-
-
-
-  def OLD_create
-
-    logger.info "==== Profiles_controller.Create ===== Start add new profile!!!"
-
-    @base_profile = Profile.find(params[:base_profile_id]) # Старый профиль, к которому добавляем
-    @base_profile_id   = params[:base_profile_id] #  профиль того, к кому добавляем
-    @author_profile_id = params[:author_profile_id] # текущий автор отображаемого круга
-    @base_relation_id  = params[:base_relation_id] # relation того, к кому добавляем, к автору отображаемого круга
-
-    @profile = Profile.new(profile_params)  # Новый добавляемый профиль
-    @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
-    @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
-
-    logger.info " @author_profile_id = #{@author_profile_id}, @profile.tree_id = #{@profile.tree_id} "
-
-    @name = Name.where(name: params[:profile_name].mb_chars.capitalize).first
-    #  :profile_name = имя нового профиля
-
-    if !@name and !params[:profile_name].blank? and params[:new_name_confirmation]
-      @name = Name.create(name: params[:profile_name])
-    end
-
-    logger.info " in create: @name.name = #{@name.name}"
-    # Name exist and valid:
-    # 1. collect questions
-    # 2. Validate answers
-    if @name
-      @profile.name_id = @name.id
-      logger.info " in create: @base_profile.id = #{@base_profile.id}, @base_relation_id.to_i = #{@base_relation_id.to_i}, @profile.relation_id.to_i = #{@profile.relation_id.to_i}, "
-      logger.info " in create: current_user.id = #{current_user.id}, @profile.name_id.to_i = #{@profile.name_id.to_i} "
-      logger.info " in create: @author_profile_id = #{@author_profile_id}, current_user.get_connected_users = #{current_user.get_connected_users} "
-      logger.info " in create: current_user.profile.id = #{current_user.profile.id} "
-
-      make_questions_data = {
-          current_user_id:     current_user.id, #
-          base_profile_id:     @base_profile.id, #
-          base_relation_id:    @base_relation_id.to_i, #
-          profile_relation_id: @profile.relation_id.to_i, #
-          profile_name_id:     @profile.name_id.to_i, #
-          author_profile_id:   @author_profile_id, #
-          connected_users:     current_user.get_connected_users #
-      }
-
-      ################ MAIN MAKE NON-STANDARD QUESTIONS #####################
-      questions_hash = current_user.profile.make_questions(make_questions_data)
-      logger.info " in create: questions_hash = #{questions_hash}"
-
-      @questions = create_questions_from_hash(questions_hash)
-
-      ################ COILLECT ANSWERS FOR NON-STANDARD QUESTIONS #####################
-      @profile.answers_hash = params[:answers]
-      logger.info "==== Вопросы по новому профилю  @questions = #{@questions.inspect}"
-      logger.info " @profile.answers_hash = #{@profile.answers_hash} " if !@profile.answers_hash.nil?
-
-      # Validate for relation questions
-      if questions_valid?(questions_hash) and @profile.save
-        logger.info "==== Start ProfileKey.add_new_profile ====== "
-        ProfileKey.add_new_profile(@base_profile,
-            @profile, @profile.relation_id,
-            exclusions_hash: @profile.answers_hash,
-            tree_ids: current_user.get_connected_users)
-        #
-        # redirect_to to profile circle path if exist, via js
-        # if params[:path_link].blank?
-        #   @circle = current_user.profile.circle(current_user.id)
-        #   @author = current_user.profile
-        # else
-        #   @path_link = params[:path_link]
-        # end
-
-      # Ask relations questions
-      else
-        # flash.now[:alert] = "Уточняющие вопросы"
-        render :new
-      end
-
-    # Name validation
-    # reset question
-    else
-      @questions = nil
-      @profile.answers_hash = nil
-
-      if params[:profile][:name].blank?
-        flash.now[:alert] = "Вы не указали имя."
-        render :new
-      else
-        flash.now[:name_warning] = "Вы указали имя, которого нет в нашей базе, возможно, вы ошиблись!?"
-        render :new
-      end
-    end
-  end
-
-
-
-
-
   def destroy
     @profile = Profile.where(id: params[:id]).first
     if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
@@ -352,8 +176,9 @@ class ProfilesController < ApplicationController
   end
 
 
-  def enter_email
 
+
+  def enter_email
     @profile_id = params[:profile_id].to_i #
     logger.info "In enter_email:  params[:profile_id].to_i = #{params[:profile_id].to_i.inspect}"
     session[:profile_id] = {:value => @profile_id} if @profile_id != 0
@@ -420,15 +245,9 @@ class ProfilesController < ApplicationController
 
 
   def profile_params
-    params[:profile].permit(:surname,
-                            :profile_birthday,
-                            :profile_deathday,
-                            :country,
-                            :city,
-                            :about,
-                            :profile_name,
+    params[:profile].permit(:profile_name,
                             :relation_id,
-                            :profile_datas_attributes =>[:id, :middle_name, :last_name])
+                            :display_name_id)
   end
 
 end

@@ -15,8 +15,14 @@ initNameAutocomplete = function(field_id, sex_id){
             return false;
         },
     }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+      var name_html;
+      if (item.parent_name){
+        name_html = item.name + ' <span class="parent_name">( от' + item.parent_name + ' )</span>';
+      }else{
+        name_html = item.name;
+      };
       return $( "<li>" )
-      .append( "<a>" + item.name + "</a>" )
+      .append( "<a>" + name_html + "</a>" )
       .appendTo( ul );
     };
 

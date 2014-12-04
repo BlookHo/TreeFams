@@ -95,11 +95,12 @@
 
     - if @questions
       = hidden_field_tag :profile_name, @profile.profile_name, placeholder: "Имя...", id: :new_profile_name
-      = hidden_field_tag :profile_name_id, @profile.name_id, id: :new_profile_name_id
+      -# происходит вариант с пожменой id
+      = text_field_tag :profile_name_id, @profile.display_name_id, id: :new_profile_name_id
     - else
       .row
         = text_field_tag :profile_name, @profile.profile_name, placeholder: "Имя...", id: :new_profile_name
-        = hidden_field_tag :profile_name_id, @profile.name_id, id: :new_profile_name_id
+        = text_field_tag :profile_name_id, @profile.name_id, id: :new_profile_name_id
 
     - if !@questions
       .actions
