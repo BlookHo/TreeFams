@@ -1,6 +1,8 @@
 // hide search info
 .ui-helper-hidden-accessible{display:none;}
 
+.ui-menu span.parent_name{color:grey;}
+
 ul.ui-menu {
   z-index:10000;
   list-style:none;

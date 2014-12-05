@@ -1,0 +1,94 @@
+!!!
+%html
+  %head
+    %title Weafam INVITATION EMAIL
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+
+    :css
+      body {
+        text-align: center;
+        -#font-size: 18px;
+        -#font-family: "droid-sans-mono-1","droid-sans-mono-2", monaco, courier, monospace;
+        margin: 161;
+        font-weight: bold;
+        margin-bottom: 10px;
+        -#padding: 120;
+        background: #D99AA7;
+      }
+
+      #main {
+        background: #e7d6f6;
+        padding: 500px 250;
+        color: #d9368b;
+      }
+      h2 {
+        margin: 0;
+      }
+      -#h3 {
+      -#  margin: 0;
+      -#}
+      a {
+        font-size: 25px;
+        color: #d9368b;
+      }
+      p {
+        font-size: 18px;
+      }
+
+  %body
+    #main
+      %h3
+        Получатель: #{@email_name}.
+      %h2
+        ПРИГЛАШЕНИЕ НА САЙТ
+      %br
+      = image_tag("http://www.weallfamily.ru/assets/logo-tree.png", {:width =>120, :height => 120})
+
+      - if @profile_sex == 1
+        %h2 Дорогой #{@profile_name}!
+      - else
+        %h2 Дорогая #{@profile_name}!
+
+      %h2
+        Твой родственник #{@current_user_name}
+        - if @current_user_sex == 1
+          %h2 добавил тебя в общее семейное дерево
+        - else
+          %h2 добавила тебя в общее семейное дерево
+
+      %h2
+        и приглашает посетить вебсайт 'Мы все - родня'.
+      %h2
+        - if @current_user_sex == 1
+          %h2 Его адрес электронной почты: #{@current_user_email}
+        - else
+          %h2 Ее адрес электронной почты: #{@current_user_email}
+      %h2
+        Добро пожаловать на www.weallfamily.ru!
+      %h2
+        = link_to image_tag( 'http://www.weallfamily.ru/assets/logo-tree.png', {:width => "45", :height =>"45"}), 'http://www.weallfamily.ru'
+        = link_to 'Пройди по этой ссылке и зарегистрируйся на нашем сайте', 'http://www.weallfamily.ru',  class: :request
+      %br
+
+      %h3
+        Приходи на вебсайт 'Мы все - родня'.
+      %h3
+        Здесь нашли тебя - ты найдешь других своих родственников!
+      %h3
+        Это - вебсайт, который помогает создавать и наращивать дерево родственников,
+      %h3
+        обмениваться информацией и поддерживать семейные связи.
+      %h3
+        Чувствуй себя как дома, #{@profile_name}!
+      %h3
+        Мы направили тебе это приглашение, с целью помочь тебе
+      %h3
+        в исследовании семейной истории на www.weallfamily.ru.
+      %br
+      %p
+        Если этот почтовый адрес #{@email_name.inspect} - не твой, просто проигнорируй это письмо.
+      %br
+      %p (С)  "МыВсеРодня".OOO, 190000, С.-Петербург, Дворцовая пл. д.1
+
+

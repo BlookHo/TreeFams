@@ -1,5 +1,4 @@
 <h1>У вас есть дочери?</h1>
-
 <!-- ng-form -->
 <div ng-repeat="daughter in family.daughters" class="control">
   <a ng-click="removeMember($index, 'daughters')" class="remove-field">удалить</a>
@@ -11,13 +10,14 @@
          typeahead="item as item.name for item in getNames($viewValue, 0)"
          typeahead-editable="false"
          typeahead-loading="loading..."
+
          autoFocus>
 </div>
 <div class="control add">
   <a ng-click="addMember('daughters')" class="add">Да, добавить дочь</a>
 </div>
 <div class="actions">
-  <a ui-sref="form.sons"    class="bttn silver right">Назад</a>
-  <button ui-sref="form.wife"    class="bttn green left" ng-show="hasWife()">Дальше</button>
+  <a ui-sref="form.sons" class="bttn silver right">Назад</a>
+  <button ui-sref="form.wife" class="bttn green left" ng-show="hasWife()">Дальше</button>
   <button ui-sref="form.husband" class="bttn green left" ng-show="hasHusband()">Дальше</button>
 </div>

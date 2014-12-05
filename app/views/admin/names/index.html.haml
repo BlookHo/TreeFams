@@ -1,0 +1,9 @@
+.page-header
+  %h2
+    Имена
+    = link_to "Добавить", new_admin_name_path, class: 'btn btn-default pull-right'
+
+= paginate @names, :theme => 'admin'
+= render 'tabs'
+= render 'table'
+= paginate @names, :theme => 'admin'

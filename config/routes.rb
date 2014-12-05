@@ -59,8 +59,8 @@ Weafam::Application.routes.draw do
   get "graph_tree/show_graph_tree"
   get "graph_tree/edit"
   get "graph_tree/move"
-  get "admin_methods/service_method_1"
-  get "admin_methods/service_method_2"
+  # get "admin_methods/service_method_1"
+  # get "admin_methods/service_method_2"
   # mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
 
 
@@ -73,7 +73,7 @@ Weafam::Application.routes.draw do
 
   # pages controller
   match 'landing' => 'pages#landing', via: :get
-  match 'admin' => 'pages#admin', via: :get
+  # match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
   match 'mypage' => 'pages#mypage', via: :get
@@ -89,11 +89,6 @@ Weafam::Application.routes.draw do
   match 'relative_menu' =>   'main#relative_menu', via: :get
   match 'match_approval' => 'main#match_approval', via: :get
   match 'add_new_profile' => 'new_profile#add_new_profile', via: [:get, :post]
-
-  # graph_tree controller
-  # match 'show_graph_tree' => 'graph_tree#show_graph_tree', via: :get
-  # match 'edit_graph_tree' => 'graph_tree#edit_graph_tree', via: :get
-  # match 'move_graph_tree' => 'graph_tree#move_graph_tree', via: :get
 
   # start controller
   #####################
@@ -171,9 +166,21 @@ Weafam::Application.routes.draw do
   end
 
 
+
+
+  # for Mailer
+  match 'enter_email' => 'profiles#enter_email', via: :get
+  match 'enter_email' => 'profiles#enter_email', via: :post
+
+  match 'invitation_email' => 'weafam_mailer#invitation_email', via: :get
+  match 'invitation_email' => 'weafam_mailer#invitation_email', via: :post
+
+
   resources :users
   resources :names
   resources :relations
+
+  resources :invites, only: [:new, :create]
 
 
   # get 'main/circles/(:path)',                          to: "circles#show",            as: :circle
@@ -196,6 +203,28 @@ Weafam::Application.routes.draw do
   # Debug path - Login as user
   get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
 
+
+
+  # Admin
+  ##################################################
+  namespace :admin do
+
+    resources :sessions
+    get '/login'  => 'sessions#new',      :as => :login
+    get '/logout' => 'sessions#destroy',  :as => :logout
+
+
+    resources :admins
+    resources :users
+    resources :subnames
+
+    resources :names do
+      get 'males',   to: "names#males",   on: :collection, as: :males
+      get 'females', to: "names#females", on: :collection, as: :females
+    end
+
+    root "names#index"
+  end
 
 
   # New version
@@ -226,6 +255,10 @@ Weafam::Application.routes.draw do
   # Autocompletes
   ##################################################
   get '/autocomplete/names', to: 'autocomplete#names'
+
+
+
+
 
   # Root
   ##################################################

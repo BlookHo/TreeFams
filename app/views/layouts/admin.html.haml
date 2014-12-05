@@ -1,0 +1,16 @@
+!!!
+%html
+  %head
+    %title Admin || Weallfamily.ru
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:name=>"viewport", :content=>"width=device-width, initial-scale=1"}/
+    = stylesheet_link_tag "admin/application"
+    = javascript_include_tag 'admin/application'
+    = csrf_meta_tags
+  %body
+    - if current_admin
+      = render 'admin/shared/header'
+    .container
+      = render 'admin/shared/flash', :flash => flash
+      = yield

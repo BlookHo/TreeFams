@@ -1,6 +1,9 @@
 #header
   .container
-    = link_to "Мы все &mdash; родня".html_safe, "/home", id: :logo
+    - if current_user
+      = link_to "Мы все &mdash; родня".html_safe, "/home", id: :logo
+    - else
+      = link_to "Мы все &mdash; родня".html_safe, "/", id: :logo
 
     %ul
       - if current_user

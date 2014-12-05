@@ -2,14 +2,15 @@ class SignupController < ApplicationController
 
   layout 'application.new'
 
-  # {family =>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28},"father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com", "signup"=>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28}, "father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com"}}
+  before_filter :already_logged_in?
+
+  # data
+  # {family =>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28, "search_name_id" => nil},"father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com", "signup"=>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28}, "father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com"}}
 
   def index
     # just render js application
   end
 
-
-  # {"author"=>{"name"=>"Александр", "sex_id"=>1, "id"=>27}, "father"=>{"name"=>"Давид", "sex_id"=>1, "id"=>147}, "mother"=>{"name"=>"Лариса", "sex_id"=>0, "id"=>262}, "sisters"=>[{"name"=>"Виктория", "sex_id"=>0, "id"=>107}], "email"=>"david@mail.ru"}
 
   def create
     @data = params['family'].compact
@@ -33,7 +34,7 @@ class SignupController < ApplicationController
     user = User.create_with_email( @data["email"] )
     user.profile = create_profile( @data["author"].merge(tree_id: user.id) )
     @data.except('author', 'email').each do |key, value|
-      if value.class == Array
+      if value.kind_of? Array # brothres, sisters
         value.each do |v|
           create_keys(key, v, user)
         end
@@ -47,21 +48,30 @@ class SignupController < ApplicationController
 
   def create_profile(data)
     Profile.create({
-      name_id:  data['id'],
-      sex_id:   data['sex_id'],
-      tree_id:  data['tree_id']
+      name_id:          data['search_name_id'],
+      display_name_id:  data['id'],
+      sex_id:           data['sex_id'],
+      tree_id:          data['tree_id']
     })
   end
 
 
   def create_keys(relation_name, data, user)
-    ProfileKey.add_new_profile(
+    logger.info "============ In create_keys ==================DDDDDDDD"
+    logger.info "user.profile.sex_id = #{user.profile.sex_id}"
+
+    ProfileKey.add_new_profile(user.profile.sex_id,
       user.profile,
       create_profile(data.merge(tree_id: user.id)),
       Relation.name_to_id(relation_name),
       exclusions_hash: nil,
       tree_ids: user.get_connected_users
     )
+  end
+
+
+  def already_logged_in?
+    redirect_to :home if current_user
   end
 
 

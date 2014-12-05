@@ -144,7 +144,7 @@ start = function(){
               .attr("text-anchor", "middle")
               .attr("y", 55)
               // .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
-              .text( function(d){ return d.name; });
+              .text( function(d){ return d.display_name; });
 
 
 
@@ -227,7 +227,7 @@ start = function(){
               .attr("text-anchor", "middle")
               .attr("y", 35)
               //.text( function(d){ return d.name + ' (id:'+ d.id+')'; });
-              .text( function(d){ return d.name; });
+              .text( function(d){ return d.display_name; });
 
 
         // Profile icon
@@ -295,7 +295,7 @@ start = function(){
               .attr("text-anchor", "middle")
               .attr("y", 35)
               // .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
-              .text( function(d){ return d.name; });
+              .text( function(d){ return d.display_name; });
 
 
         // Profile's icon
@@ -381,6 +381,18 @@ start = function(){
             .attr("y", -20)
             .attr("class", "add-icon");
         }
+
+          // Registrated user's icon
+          if (d.user_id){
+              d3.select(this)
+                  .append("svg:image")
+                  .attr("xlink:href", "/assets/registrated.svg")
+                  .attr("width", 12)
+                  .attr("height", 12)
+                  .attr("x", -12)
+                  .attr("y", 2)
+                  .attr("class", "registrated-icon");
+          }
 
         // Click event
         d3.select(this)

@@ -20,10 +20,11 @@ class Profile < ActiveRecord::Base
   has_one    :owner_user,
               primary_key: :tree_id,
               foreign_key: :id,
-              class: User
+              class_name: User
 
 
   belongs_to :name
+  belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key: :display_name_id
   has_many   :trees
 
 

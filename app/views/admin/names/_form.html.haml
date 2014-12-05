@@ -1,0 +1,40 @@
+.form-group.form-group-lgs
+  = f.label :name, "Имя", class: "col-sm-2 control-label"
+  .col-sm-6
+    = f.text_field :name, class: "form-control"
+
+
+.form-group.form-group-lgs
+  = f.label :name, "Синоним для имени", class: "col-sm-2 control-label"
+  .col-sm-6
+    %select.selectpicker{name: "name[parent_name_id]", :"data-live-search" => "true", :"data-max-options"=>"2"}
+      %option.special_option{value:  '', selected: @name.parent_name_id.nil? } Главное имя
+      - @parent_names.each do |name|
+        %option{value: name.id, selected: @name.parent_name_id == name.id}
+          = name.name
+
+
+.form-group
+  = f.label :sex_id, "Пол", class: "col-sm-2 control-label"
+  .col-sm-2
+    %select.selectpicker{name: "name[sex_id]"}
+      %option{value: 1, selected: @name.sex_id == 1} Мужской
+      %option{value: 0, selected: @name.sex_id == 0} Женский
+
+
+.form-group
+  = f.label :search_name_id, "search_name_id", class: "col-sm-2 control-label"
+  .col-sm-2
+    %input.form-control{type: :text, disabled: true, value: @name.search_name_id}
+
+
+%br
+%br
+.form-group
+  .col-sm-offset-2.col-sm-6
+    = f.submit "Сохранить", class: "btn btn-success btn-lg"
+    - unless @name.new_record?
+      = link_to "Удалить имя", admin_name_path(@name),
+                               method: :delete,
+                               :data => {confirm: "Вы уверены, что хотите удалить имя #{@name.name}"},
+                               class: "btn btn-danger btn-lg pull-right"

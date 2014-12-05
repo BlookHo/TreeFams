@@ -1,14 +1,17 @@
 .flash{
-  padding:10px 0;
+  padding:10px;
   color:#fff;
   margin-bottom:0;
 
   &.notice{
     background-color:#14af42;
+    color:#fff;
   }
+
 
   &.alert{
     background-color:#e54467;
+    color:#fff;
   }
 
   .close{

@@ -11,7 +11,7 @@
 
   -# пригласить
   - if @profile.allow_invite
-    %li= link_to "Пригласить", '#', class: :grey
+    %li= link_to "Пригласить", new_invite_path(profile_id: @profile.id), class: :grey, remote: true
 
   -# Написать личное сообщение
   - if @profile.allow_conversation

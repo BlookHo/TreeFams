@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141127084708) do
+ActiveRecord::Schema.define(version: 20141204202523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "admins", force: true do |t|
+    t.string   "email"
+    t.string   "password_digest"
+    t.datetime "logged_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "connected_users", force: true do |t|
     t.integer  "user_id"
@@ -51,9 +59,11 @@ ActiveRecord::Schema.define(version: 20141127084708) do
     t.boolean  "only_male"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "name_freq",   default: 0
-    t.boolean  "is_approved", default: false
+    t.integer  "name_freq",      default: 0
+    t.boolean  "is_approved",    default: false
     t.integer  "sex_id"
+    t.integer  "parent_name_id"
+    t.integer  "search_name_id"
   end
 
   create_table "profile_data", force: true do |t|
@@ -77,6 +87,8 @@ ActiveRecord::Schema.define(version: 20141127084708) do
     t.integer  "is_name_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "display_name_id"
+    t.integer  "is_display_name_id"
   end
 
   create_table "profiles", force: true do |t|
@@ -86,6 +98,7 @@ ActiveRecord::Schema.define(version: 20141127084708) do
     t.integer  "name_id"
     t.integer  "sex_id"
     t.integer  "tree_id"
+    t.integer  "display_name_id"
   end
 
   create_table "relations", force: true do |t|
@@ -103,13 +116,15 @@ ActiveRecord::Schema.define(version: 20141127084708) do
     t.integer  "user_id"
     t.integer  "profile_id"
     t.integer  "relation_id"
-    t.boolean  "connected",     default: false
+    t.boolean  "connected",          default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "name_id"
     t.integer  "is_profile_id"
     t.integer  "is_name_id"
     t.integer  "is_sex_id"
+    t.integer  "display_name_id"
+    t.integer  "is_display_name_id"
   end
 
   create_table "users", force: true do |t|
