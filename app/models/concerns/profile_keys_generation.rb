@@ -102,6 +102,8 @@ module ProfileKeysGeneration
     # Добавление нового ряда в таблицу ProfileKey
     # @note GET /
     def add_two_main_ProfileKeys_rows(base_profile_tree_id, profile_id, sex_id, name_id, new_relation_id, add_relation_data ) # new_profile_id, new_profile_name_id, display_name_id, new_prf_disp_name_id)
+      #add_two_main_ProfileKeys_rows(base_profile_tree_id, profile_id, sex_id, name_id, display_name_id, new_relation_id, new_profile_id, new_profile_name_id, new_prf_display_name_id)
+      #add_two_main_ProfileKeys_rows(base_profile_tree_id, profile_id, sex_id, name_id, new_relation_id, add_relation_data ) # new_profile_id, new_profile_name_id, display_name_id, new_prf_disp_name_id)
 
       new_profile_id          = add_relation_data[:new_profile_id]
       new_profile_name_id     = add_relation_data[:new_profile_name_id]
@@ -133,8 +135,8 @@ module ProfileKeysGeneration
 
         new_profile_id          = add_relation_data[:new_profile_id]
         new_profile_name_id     = add_relation_data[:new_profile_name_id]
-        display_name_id         = add_relation_data[:display_name_id]
-        new_prf_display_name_id = add_relation_data[:new_prf_display_name_id]
+        #display_name_id         = add_relation_data[:display_name_id]
+        #new_prf_display_name_id = add_relation_data[:new_prf_display_name_id]
 
         profiles_arr = relation_name_hash.keys  # profile_id array
         @fathers_profiles_arr = profiles_arr   # DEBUGG_TO_VIEW
@@ -142,13 +144,21 @@ module ProfileKeysGeneration
         @fathers_names_arr = names_arr   # DEBUGG_TO_VIEW
         if !names_arr.blank?
           for arr_ind in 0 .. names_arr.length - 1
-            # Добавить ряд Мать_Профиля - Муж - Новый_профиль
-            add_new_ProfileKey_row(base_profile_tree_id, profiles_arr[arr_ind], names_arr[arr_ind], display_name_id, relation_id, new_profile_id, new_profile_name_id, new_prf_display_name_id)
+
+            # извлечение полей display_name_id для обоих профилей
+            disp_name_id = Profile.find(profiles_arr[arr_ind]).display_name_id
+            is_disp_name_id = Profile.find(new_profile_id).display_name_id
+
+            # запись с прямым отношением
+            add_new_ProfileKey_row(base_profile_tree_id, profiles_arr[arr_ind], names_arr[arr_ind], disp_name_id, relation_id, new_profile_id, new_profile_name_id, is_disp_name_id)
             @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
-            # Добавить ряд Новый_профиль - Жена - Мать_Профиля
+
+            # извлечение обратного отношения
             current_reverse_relation_id = Relation.where(:relation_id => relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
+
+            # запись c обратным отношением
             logger.info "== In fill_relation_rows:: current_reverse_relation_id = #{current_reverse_relation_id}, relation_id = #{relation_id} , sex_id = #{sex_id}  ============"
-            add_new_ProfileKey_row(base_profile_tree_id, new_profile_id, new_profile_name_id, new_prf_display_name_id, current_reverse_relation_id, profiles_arr[arr_ind], names_arr[arr_ind], display_name_id)
+            add_new_ProfileKey_row(base_profile_tree_id, new_profile_id, new_profile_name_id, is_disp_name_id, current_reverse_relation_id, profiles_arr[arr_ind], names_arr[arr_ind], disp_name_id)
             @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
           end
         end
@@ -162,10 +172,10 @@ module ProfileKeysGeneration
     # @see News
     def add_father_to_ProfileKeys(base_sex_id, base_profile_tree_id, add_relation_data ) #new_profile_id, new_profile_name_id)
 
-      new_profile_id          = add_relation_data[:new_profile_id]
-      new_profile_name_id     = add_relation_data[:new_profile_name_id]
-      display_name_id         = add_relation_data[:display_name_id]
-      new_prf_display_name_id = add_relation_data[:new_prf_display_name_id]
+      #new_profile_id          = add_relation_data[:new_profile_id]
+      #new_profile_name_id     = add_relation_data[:new_profile_name_id]
+      #display_name_id         = add_relation_data[:display_name_id]
+      #new_prf_display_name_id = add_relation_data[:new_prf_display_name_id]
 
       # Хэш_родста, Пол_родства_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 7, add_relation_data ) #new_profile_id, new_profile_name_id, display_name_id, new_prf_display_name_id)
