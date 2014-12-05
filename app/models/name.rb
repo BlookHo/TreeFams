@@ -2,7 +2,7 @@ class Name < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            uniqueness: true
+            uniqueness: { scope: :parent_name_id, message: "Должно быть уникальным в пределах группы" }
 
   # Нельзя сохранить имя, не указав пол
   # 1 - муж, 0 - жен
@@ -24,7 +24,7 @@ class Name < ActiveRecord::Base
 
 
   def allow_set_parent_name_id
-    unless self.synonyms.empty?
+    if !self.synonyms.empty? and !parent_name_id.nil?
       errors.add(:parent_name_id, "Имя у которого уже есть синонимы, нельзя сделать синонимом.")
     end
   end

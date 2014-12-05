@@ -16,18 +16,6 @@ class ProfilesController < ApplicationController
   end
 
 
-  # def update
-  #   @profile = Profile.find(params[:id])
-  #   @profile_data = find_or_create_profile_data
-  #   if @profile_data.update_attributes(profile_data_params)
-  #     redirect_to profile_path(@profile), :notice => "Профиль сохранен!"
-  #   else
-  #     render :edit, :alert => "Ошибки при сохранении профиля!"
-  #   end
-  # end
-
-
-
   def new
     # Новый профиль
     @profile = Profile.new
@@ -62,24 +50,12 @@ class ProfilesController < ApplicationController
     # Имя
     @name = Name.where(id: params[:profile_name_id]).first
 
-    logger.info "=====================NAME==========="
-    logger.info @name.inspect
-    logger.info "=====================NAME==========="
 
     if @name
 
       @profile.name_id = @name.search_name_id
       @profile.display_name_id = @name.id
       @profile.profile_name = @name.name
-
-
-      logger.info "=====================PROFILE==========="
-      logger.info @name.inspect
-      logger.info "=====================name id==========="
-      logger.info @name.id
-      logger.info "=====================profile inspect==========="
-      logger.info @profile.inspect
-      logger.info "=====================PROFILE==========="
 
 
       make_questions_data = {
@@ -105,7 +81,6 @@ class ProfilesController < ApplicationController
             exclusions_hash: @profile.answers_hash,
             tree_ids: current_user.get_connected_users)
 
-
         @questions = nil
         @profile.answers_hash = nil
 
@@ -113,7 +88,6 @@ class ProfilesController < ApplicationController
         # flash.now[:alert] = "Вопросы валидны - профиль coздан"
         # render :new
         # render create.js.erb
-
 
       # Ask relations questions
       else
@@ -177,45 +151,8 @@ class ProfilesController < ApplicationController
 
 
 
-  def enter_email
-    @profile_id = params[:profile_id].to_i #
-    logger.info "In enter_email:  params[:profile_id].to_i = #{params[:profile_id].to_i.inspect}"
-    session[:profile_id] = {:value => @profile_id} if @profile_id != 0
-    email_name = params[:profile_email] #
-
-    # konstantin.starovoytov@gmail.com
-    # denis@lobkov.net
-    # medvedev.alexey@gmail.com
-    # zoneiva@gmail.com
-
-    if !email_name.blank?
-      if is_a_valid_email?(email_name)
-        profile_id = session[:profile_id][:value]
-        logger.info "In enter_email1: delivered - email_name = #{email_name.inspect}" if WeafamMailer.invitation_email(email_name, profile_id, current_user.id).deliver
-        logger.info "In enter_email2: delivered - profile_id = #{profile_id.inspect}, current_user.id = #{current_user.id.inspect}"
-      else
-        flash[:alert] = "Некорректный адрес электронной почты #{email_name.inspect}. Повторите ввод." if !is_a_valid_email?(email_name)
-        logger.info "In enter_email3: email_name = #{email_name.inspect}, !email_name.blank?: #{!email_name.blank?} OR not valid email address "
-      end
-    else
-      logger.info "In enter_email4: email_name = #{email_name.inspect}, email_name.blank?: #{email_name.blank?} "
-      #flash[:alert] = "Некорректный адрес электронной почты. Повторите ввод." if !is_a_valid_email?(email_name)
-    end
-
-  end
-
   private
 
-  # Проверяет email - это реальный email address?
-  def is_a_valid_email?(email)
-    if email  =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-      logger.info "In is_a_valid_email?: TRUE email = #{email.inspect}, #{email  =~ /^[\w\d]+@[\w\d]+(.[\w\d]+)+$/} "
-      return true
-    else
-      logger.info "In is_a_valid_email?: FALSE email = #{email.inspect}, #{email  =~ /^[\w\d]+@[\w\d]+(.[\w\d]+)+$/} "
-      return false
-    end
-  end
 
   def questions_valid?(questions_hash)
     # return true if questions_hash.blank?
@@ -225,10 +162,6 @@ class ProfilesController < ApplicationController
 
 
   def create_questions_from_hash(questions_hash)
-    logger.info "=== debugging in  create_questions_from_hash========="
-    logger.info " questions_hash = #{questions_hash.inspect}"
-    logger.info questions_hash.blank?
-
     if questions_hash.nil? or questions_hash.empty?
       return nil
     else

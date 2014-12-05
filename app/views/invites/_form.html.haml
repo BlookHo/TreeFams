@@ -1,0 +1,9 @@
+.context-menu-form
+  %h2
+    Введи Электронную почту приглашаемого Профиля:
+  = form_tag invites_path(profile_id: @profile_id), remote: true do
+    = render 'shared/ui/flash', flash: flash
+    .row
+      = text_field_tag 'profile_email', @email_name, :placeholder => 'email...'
+    .actions
+      = submit_tag "Отправить", class: [:bttn, :green], data: { disable_with: "Подождите..." }

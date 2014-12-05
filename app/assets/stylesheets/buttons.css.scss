@@ -1,12 +1,13 @@
-.bttn{
-    height:34px;
-    line-height:34px;
+.bttn,
+a.bttn{
+    height:34px !important;
+    line-height:34px  !important;
     padding:0 21px;
     font-size:12px;
     font-weight: 700;
     text-decoration:none;
-    display:inline-block;
-    color:#fff;
+    display:inline-block  !important;
+    color:#fff  !important;
     background-color:grey;
     border:none;
     outline:none;

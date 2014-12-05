@@ -144,7 +144,7 @@ start = function(){
               .attr("text-anchor", "middle")
               .attr("y", 55)
               // .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
-              .text( function(d){ return d.name; });
+              .text( function(d){ return d.display_name; });
 
 
 
@@ -227,7 +227,7 @@ start = function(){
               .attr("text-anchor", "middle")
               .attr("y", 35)
               //.text( function(d){ return d.name + ' (id:'+ d.id+')'; });
-              .text( function(d){ return d.name; });
+              .text( function(d){ return d.display_name; });
 
 
         // Profile icon
@@ -295,7 +295,7 @@ start = function(){
               .attr("text-anchor", "middle")
               .attr("y", 35)
               // .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
-              .text( function(d){ return d.name; });
+              .text( function(d){ return d.display_name; });
 
 
         // Profile's icon

@@ -166,6 +166,8 @@ Weafam::Application.routes.draw do
   end
 
 
+
+
   # for Mailer
   match 'enter_email' => 'profiles#enter_email', via: :get
   match 'enter_email' => 'profiles#enter_email', via: :post
@@ -177,6 +179,8 @@ Weafam::Application.routes.draw do
   resources :users
   resources :names
   resources :relations
+
+  resources :invites, only: [:new, :create]
 
 
   # get 'main/circles/(:path)',                          to: "circles#show",            as: :circle

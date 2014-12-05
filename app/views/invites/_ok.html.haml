@@ -1,0 +1,6 @@
+.context-menu-form
+  %h2 Введи Электронную почту приглашаемого Профиля:
+  .form
+    .row= render 'shared/ui/flash', flash: flash
+    .action
+      %button.bttn.silver{onclick: '$("#profile-context-menu").hide();'} Закрыть

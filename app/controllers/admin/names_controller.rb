@@ -30,7 +30,8 @@ class Admin::NamesController < Admin::AdminController
   def create
     @name = Name.new name_params
     if @name.save
-      redirect_to :admin_names, notice: "Имя добавлено"
+      path = @name.sex_id == 1 ? :males_admin_names : :females_admin_names
+      redirect_to path, notice: "Имя добавлено"
     else
       @parent_names = Name.parent_names
       render :new
@@ -41,7 +42,8 @@ class Admin::NamesController < Admin::AdminController
   def update
     @name = Name.find params[:id]
     if @name.update_attributes name_params
-      redirect_to :admin_names, notice: "Изменения сохранены"
+      path = @name.sex_id == 1 ? :males_admin_names : :females_admin_names
+      redirect_to path, notice: "Изменения сохранены"
     else
       @parent_names = Name.parent_names
       render :edit
