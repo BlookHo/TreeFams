@@ -60,6 +60,11 @@
       %h2
         и приглашает посетить вебсайт 'Мы все - родня'.
       %h2
+        - if @current_user_sex == 1
+          %h2 Его адрес электронной почты: #{@current_user_email}
+        - else
+          %h2 Ее адрес электронной почты: #{@current_user_email}
+      %h2
         Добро пожаловать на www.weallfamily.ru!
       %h2
         = link_to image_tag( 'http://www.weallfamily.ru/assets/logo-tree.png', {:width => "45", :height =>"45"}), 'http://www.weallfamily.ru'

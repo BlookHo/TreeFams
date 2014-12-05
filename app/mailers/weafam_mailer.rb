@@ -10,8 +10,11 @@ class WeafamMailer < ActionMailer::Base
       #logger.info "In invitation_email:  profile_id = #{profile_id.inspect}, email_name = #{email_name.inspect}"
 
       @profile_name, @profile_sex = get_name_data(profile_id)
-      current_profile_id = User.find(current_user_id).profile_id
+      current_user = User.find(current_user_id)
+      current_profile_id = current_user.profile_id
       @current_user_name, @current_user_sex = get_name_data(current_profile_id)
+      @current_user_email = current_user.email
+
 
       logger.info "In invitation_email:  @profile_name = #{@profile_name}, @current_user_name = #{@current_user_name} " #
 

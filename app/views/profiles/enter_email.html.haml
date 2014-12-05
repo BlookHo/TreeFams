@@ -1,21 +1,19 @@
 %section.admin
-%p
-  zoneiva@gmail.com   konstantin.starovoytov@gmail.com
-%p
-  denis@lobkov.net    medvedev.alexey@gmail.com
+-#%p
+-#  zoneiva@gmail.com   konstantin.starovoytov@gmail.com
+-#%p
+-#  denis@lobkov.net    medvedev.alexey@gmail.com
 
 %br
   = form_tag do
     = label_tag 'Введи Электронную почту приглашаемого Профиля: '
     = text_field_tag 'profile_email', '', :placeholder => @email_name, :maxlength => 85, :size => 85
     %li
-    = submit_tag 'Отправить сообщение (Ввод)'
+    = submit_tag 'Отправить приглашение (Ввод)'
 
 - if !@email_name.blank?
   %h3
-    Дорогой новый ПОЛЬЗОВАТЕЛЬ" !
-  %h3
-    Мы направили Вам приглашение на вебсайт "Weallfamily.ru"
+    Приглашение на вебсайт "Weallfamily.ru" - отправлено
 
 %br
 = link_to 'Возврат к Просмотру вашего дерева', home_path,  class: :request
