@@ -13,7 +13,8 @@ class SignupController < ApplicationController
 
 
   def create
-    @data = params['family'].compact
+    # @data = params['family'].compact
+    @data = prepare_data(params['family'])
 
     user = User.new( email: @data["email"] )
     user.valid?
@@ -73,6 +74,13 @@ class SignupController < ApplicationController
   def already_logged_in?
     redirect_to :home if current_user
   end
+
+
+  def prepare_data(data)
+    proc = Proc.new { |k, v| v.kind_of?(Hash) ? (v.delete_if(&proc); nil) : v.blank? };
+    data.delete_if(&proc)
+  end
+
 
 
 end

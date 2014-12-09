@@ -2,7 +2,15 @@
 
 <!-- ng-form -->
 <div ng-repeat="sister in family.sisters" class="control">
-<a ng-click="removeMember($index, 'sisters')" class="remove-field">удалить</a>
+  <div class="warning" ng-hide="isNameValid(sister)">
+    <i class="fa fa-question-circle"></i>
+    Пожалуйста, выберите имя из списка
+  </div>
+  <div class="success" ng-show="isNameValid(sister)">
+    <i class="fa fa-thumbs-up"></i>
+    Отлично, можно двигаться дальше...
+  </div>
+  <a ng-click="removeMember($index, 'sisters')" class="remove-field">удалить</a>
   <input type="text"
          ng-model="sister"
          ng-change="changeMultipleName('sisters', $index)"
@@ -16,9 +24,9 @@
 
 </div>
 <div class="control add">
-  <a ng-click="addMember('sisters')" class="add">Да, добавить сестру</a>
+  <a ng-click="addMember('sisters')" class="bttn small">Да, добавить сестру</a>
 </div>
 <div class="actions">
   <a ui-sref="form.brothers" class="bttn silver right">Назад</a>
-  <a ui-sref="form.sons" class="bttn green left">Дальше</a>
+  <button ui-sref="form.sons" class="bttn green left" ng-disabled="!isAllNamesValid(family.sisters)">Дальше</button>
 </div>

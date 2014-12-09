@@ -1,5 +1,13 @@
 <h1>У вас есть муж?</h1>
 <div class="control">
+  <div class="warning" ng-hide="isNameValid(family.husband)">
+    <i class="fa fa-question-circle"></i>
+    Пожалуйста, выберите имя из списка
+  </div>
+  <div class="success" ng-show="isNameValid(family.husband)">
+    <i class="fa fa-thumbs-up"></i>
+    Отлично, теперь нажмите кнопку далее...
+  </div>
   <input type="text"
          ng-model="family.husband"
          ng-change="changeName('husband')"
@@ -14,5 +22,5 @@
 </div>
 <div class="actions">
   <a ui-sref="form.daughters" class="bttn silver right">Назад</a>
-  <a ui-sref="form.email" class="bttn green left">Дальше</a>
+  <a ui-sref="form.email" class="bttn green left" ng-disabled="!isNameValid(family.husband)">Дальше</a>
 </div>
