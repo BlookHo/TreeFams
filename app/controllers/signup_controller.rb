@@ -5,7 +5,7 @@ class SignupController < ApplicationController
   before_filter :already_logged_in?
 
   # data
-  # {family =>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28, "search_name_id" => nil},"father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com", "signup"=>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28}, "father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com"}}
+  # {"family" =>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28, "search_name_id" => nil},"father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com", "signup"=>{"author"=>{"name"=>"Алексей", "sex_id"=>1, "id"=>28}, "father"=>{"name"=>"Сергей", "sex_id"=>1, "id"=>422}, "mother"=>{"name"=>"Алла", "sex_id"=>0, "id"=>31}, "wife"=>"", "brothers"=>nil, "sisters"=>nil, "sons"=>nil, "daughters"=>nil, "email"=>"maria@maria.com"}}}
 
   def index
     # just render js application
@@ -14,7 +14,10 @@ class SignupController < ApplicationController
 
   def create
     # @data = params['family'].compact
-    @data = prepare_data(params['family'])
+    @data = prepare_data(params['family'].compact)
+
+    logger.info "======PREPARE DATA incoming data"
+    logger.info @data
 
     user = User.new( email: @data["email"] )
     user.valid?
@@ -60,6 +63,10 @@ class SignupController < ApplicationController
   def create_keys(relation_name, data, user)
     logger.info "============ In create_keys ==================DDDDDDDD"
     logger.info "user.profile.sex_id = #{user.profile.sex_id}"
+
+    logger.info "======= CREATE RELATION==========FOR="
+    logger.info Relation.name_to_id(relation_name)
+    logger.info "======= CREATE RELATION==========END="
 
     ProfileKey.add_new_profile(user.profile.sex_id,
       user.profile,

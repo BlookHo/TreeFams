@@ -104,12 +104,12 @@ var app = angular
     daughters: [],
     wife: '',
     hasband: '',
-    others: {
-      grandFatherFather: '',
-      grandFatherMother: '',
-      grandMotherFather: '',
-      grandMotherMother: '',
-    }
+    // others: {
+    //   grandFatherFather: '',
+    //   grandFatherMother: '',
+    //   grandMotherFather: '',
+    //   grandMotherMother: '',
+    // }
   }
 
 
@@ -124,12 +124,12 @@ var app = angular
     daughters: [],
     wife: '',
     hasband: '',
-    others: {
-      grandFatherFather: '',
-      grandFatherMother: '',
-      grandMotherFather: '',
-      grandMotherMother: '',
-    }
+    // others: {
+    //   grandFatherFather: '',
+    //   grandFatherMother: '',
+    //   grandMotherFather: '',
+    //   grandMotherMother: '',
+    // }
   }
 
 
