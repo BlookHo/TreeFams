@@ -1,8 +1,12 @@
+%h1 New message
+
+-#= render 'form'
+
 %section.admin
 %p
   @current_user.id = #{current_user.id.inspect}
 %br
-  %h3 SEND_MESSAGE: ОТПРАВИТЬ СООБЩЕНИЕ
+  %h3 ОТПРАВИТЬ СООБЩЕНИЕ (SEND_MESSAGE)
 %br
 
   = form_tag do
@@ -27,8 +31,7 @@
 %br
 = link_to 'Смотреть диалог с Юзером - получателем: ', show_one_dialoge_path(user_id: params[:receiver_id]), class: :messages  if !params[:receiver_id].blank?
 %br
-= link_to 'Смотреть все диалоги: ', show_all_dialoges_path
-%br
-= link_to 'Возврат к списку диалогов и сообщений', show_all_messages_path
+= link_to 'Смотреть все диалоги: ', messages_path
+
 
 

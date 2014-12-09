@@ -20,13 +20,11 @@ Weafam::Application.routes.draw do
   match 'make_connection_request' => 'connection_requests#make_connection_request', via: :post
 
 
-  resources :messages
   # messages controller
-  match 'make_messages' => 'messages#make_messages', via: :get
-  match 'make_messages' => 'messages#make_messages', via: :post
+  resources :messages, except: [:update, :show, :destroy, :new, :edit]
 
-  match 'search_dialoge_agent' => 'messages#search_dialoge_agent', via: :get
-  match 'search_dialoge_agent' => 'messages#search_dialoge_agent', via: :post
+  match 'create_new_message' => 'messages#create_new_message', via: :get
+  match 'create_new_message' => 'messages#create_new_message', via: :post
 
   match 'show_all_messages' => 'messages#show_all_messages', via: :get
   match 'show_all_messages' => 'messages#show_all_messages', via: :post
@@ -34,14 +32,8 @@ Weafam::Application.routes.draw do
   match 'show_all_dialoges' => 'messages#show_all_dialoges', via: :get
   #match 'show_all_dialoges' => 'messages#show_all_dialoges', via: :post
 
-  match 'send_message' => 'messages#send_message', via: :get
-  match 'send_message' => 'messages#send_message', via: :post
-
   match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :get
   #match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :post
-
-  match 'read_message' => 'messages#read_message', via: :get
-  #match 'read_message' => 'messages#read_message', via: :post
 
   match 'important_message' => 'messages#important_message', via: :get
   #match 'important_message' => 'messages#important_message', via: :post

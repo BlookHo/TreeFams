@@ -27,9 +27,11 @@
 
 
         - if count_new_messages > 0
-          %li= link_to raw("<i class='fa fa-envelope-o'></i> Сообщения (#{count_new_messages})"), show_all_messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
+          -#%li= link_to raw("<i class='fa fa-envelope-o'></i> Сообщения (#{count_new_messages})"), show_all_messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
+          %li= link_to raw("<i class='fa fa-envelope-o'></i> Сообщения (#{count_new_messages})"), messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
         - else
-          %li= link_to raw("<i class='fa fa-envelope-o'></i> Сообщения"), show_all_messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
+          -#%li= link_to raw("<i class='fa fa-envelope-o'></i> Сообщения"), show_all_messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
+          %li= link_to raw("<i class='fa fa-envelope-o'></i> Сообщения"), messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
 
 
 

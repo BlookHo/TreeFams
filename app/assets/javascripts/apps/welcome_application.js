@@ -70,6 +70,11 @@ var app = angular
       templateUrl: 'welcome-husband.html'
     })
 
+    .state('form.grandFatherFather', {
+      url: '/form.grandFatherFather',
+      templateUrl: 'welcome-father-father.html'
+    })
+
     .state('form.email', {
       url: '/form.email',
       templateUrl: 'welcome-email.html'
@@ -87,7 +92,7 @@ var app = angular
 
 
   // Error container
-  $scope.errors = {}
+  $scope.errors = {};
 
   $scope.empty_family = {
     author: '',
@@ -96,8 +101,17 @@ var app = angular
     brothers: [],
     sisters: [],
     sons: [],
-    daughters: []
+    daughters: [],
+    wife: '',
+    hasband: '',
+    others: {
+      grandFatherFather: '',
+      grandFatherMother: '',
+      grandMotherFather: '',
+      grandMotherMother: '',
+    }
   }
+
 
   // Data container
   $scope.family = {
@@ -107,7 +121,15 @@ var app = angular
     brothers: [],
     sisters: [],
     sons: [],
-    daughters: []
+    daughters: [],
+    wife: '',
+    hasband: '',
+    others: {
+      grandFatherFather: '',
+      grandFatherMother: '',
+      grandMotherFather: '',
+      grandMotherMother: '',
+    }
   }
 
 
@@ -126,23 +148,24 @@ var app = angular
 
 
   // Update model
-  $scope.changeName = function(modelName){
+  $scope.changeName = function(modelName, name){
     //clear error on server validation
+    console.log("Change name "+ Date.now() + name );
     $scope.error = '';
-    eval('$scope.family'+modelName+'="";');
+
+    // eval('$scope.family.'+modelName+'=null;');
+
+
     removeDataFormGraph(modelName);
     if (modelName == 'author'){
-      $scope.family.father = '';
-      $scope.family.mother = '';
-      $scope.family.sisters = [];
-      $scope.family.brothers = [];
-      $scope.family.sons = [];
-      $scope.family.daughters = [];
+      $scope.family = $scope.empty_family;
       removeAllDataFormGraph();
     }else{
       removeDataFormGraph(modelName);
     }
+
   };
+
 
 
   $scope.onSelectName = function(model, modelName){
@@ -179,8 +202,49 @@ var app = angular
 
 
   // Validation
+  $scope.isNameValid = function(model){
+    try {
+      return model.hasOwnProperty('name');
+    }catch(e){
+      return false;
+    }
+  }
+
+
+  $scope.isOptionalNameValid = function(model){
+    try {
+      // return model.hasOwnProperty('name');
+      if (model.hasOwnProperty('name') ){
+        return true;
+      }else{
+        return model.length > 0 ? false : true;
+      }
+    }catch(e){
+      return false;
+    }
+  }
+
+
+  $scope.isAllNamesValid = function(models){
+    if (models.length > 0){
+      var name_vals = [];
+      angular.forEach(models, function(model) {
+        console.log("Each names valid" + $scope.isNameValid(model) );
+        name_vals.push( $scope.isNameValid(model) )
+      })
+      var result = name_vals.indexOf(false) > -1 ? false : true;
+      name_vals = [];
+      return result;
+    }else{
+      return true;
+    }
+  }
+
+
+
   $scope.isAuthorValid = function(){
     try {
+      console.log("Validate author name");
       return $scope.family.author.hasOwnProperty('name');
     }catch(e){
       return false;
@@ -278,7 +342,6 @@ var app = angular
       }
 
   });
-
 
 
 

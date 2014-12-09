@@ -1,8 +1,16 @@
 <h1>Как Вас зовут?</h1>
 <div class="control">
+  <div class="warning" ng-hide="isNameValid(family.author)">
+    <i class="fa fa-question-circle"></i>
+    Пожалуйста, выберите имя из списка
+  </div>
+  <div class="success" ng-show="isNameValid(family.author)">
+    <i class="fa fa-thumbs-up"></i>
+    Отлично, теперь нажмите кнопку далее...
+  </div>
   <input type="text"
          ng-model="family.author"
-         ng-change="changeName('author')"
+         ng-change="changeName('author', family.author)"
          ng-value="name"
          typeahead-on-select="onSelectName($model, 'author')"
          placeholder="Начните вводить ваше имя..."
@@ -11,7 +19,9 @@
          typeahead-loading="loading..."
          typeahead-template-url="customDropDownTemplate.html"
          autoFocus>
+
 </div>
 <div class="actions">
-  <button ui-sref="form.father" ng-disabled="!isAuthorValid()" class="bttn green left">Дальше</button>
+  <button ui-sref="form.father" ng-disabled="!isNameValid(family.author)" class="bttn green left">Дальше</button>
 </div>
+<!-- typeahead-editable="false" -->

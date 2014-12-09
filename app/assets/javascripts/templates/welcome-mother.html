@@ -1,5 +1,13 @@
 <h1>Как зовут вашу маму?</h1>
 <div class="control">
+  <div class="warning" ng-hide="isNameValid(family.mother)">
+    <i class="fa fa-question-circle"></i>
+    Пожалуйста, выберите имя из списка
+  </div>
+  <div class="success" ng-show="isNameValid(family.mother)">
+    <i class="fa fa-thumbs-up"></i>
+    Отлично, можно двигаться дальше...
+  </div>
   <input type="text"
          ng-model="family.mother"
          ng-change="changeName('mother')"
@@ -14,5 +22,5 @@
 </div>
 <div class="actions">
   <a ui-sref="form.father" class="bttn silver right">Назад</a>
-  <button ui-sref="form.brothers" ng-disabled="!isMotherValid()" class="bttn green left">Дальше</button>
+  <button ui-sref="form.brothers" ng-disabled="!isNameValid(family.mother)" class="bttn green left">Дальше</button>
 </div>
