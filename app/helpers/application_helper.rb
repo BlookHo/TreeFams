@@ -1,6 +1,12 @@
 module ApplicationHelper
 
 
+  def prepare_data(data)
+    proc = Proc.new { |k, v| v.kind_of?(Hash) ? (v.delete_if(&proc); nil) : v.blank? };
+    data.delete_if(&proc)
+  end
+
+
   def circle_path_helper(current_path, profile_id, relation_id)
     if current_path.blank?
       return profile_id.to_s+','+relation_id.to_s
