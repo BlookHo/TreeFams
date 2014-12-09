@@ -1,19 +1,19 @@
-<h1>Как зовут вашего деда по отца?</h1>
+<h1>Как зовут вашего деда по отцу?</h1>
 
 <div class="control">
-  <div class="warning" ng-hide="isNameValid(family.father)">
+  <div class="warning" ng-hide="isNameValid(family.others.grandFatherFather)">
     <i class="fa fa-question-circle"></i>
     Пожалуйста, выберите имя из списка
   </div>
-  <div class="success" ng-show="isNameValid(family.father)">
+  <div class="success" ng-show="isNameValid(family.others.grandFatherFather)">
     <i class="fa fa-thumbs-up"></i>
     Отлично, можно двигаться дальше...
   </div>
   <input type="text"
-          ng-model="family.father"
-          ng-change="changeName('father')"
+          ng-model="family.others.grandFatherFather"
+          ng-change="changeName('others.grandFatherFather')"
           ng-value="name"
-          typeahead-on-select="onSelectName($model, 'father')"
+          typeahead-on-select="onSelectName($model, 'others.grandFatherFather')"
           placeholder="Начните вводить имя..."
           typeahead="item as item.name for item in getNames($viewValue, 1)"
           typeahead-editable="false"

@@ -15,12 +15,11 @@
          typeahead-on-select="onSelectName($model, 'wife')"
          placeholder="Начните вводить имя..."
          typeahead="item as item.name for item in getNames($viewValue, 0)"
-         typeahead-editable="false"
          typeahead-loading="loading..."
          typeahead-template-url="customDropDownTemplate.html"
          autoFocus>
 </div>
 <div class="actions">
   <a ui-sref="form.daughters" class="bttn silver right">Назад</a>
-  <a ui-sref="form.email" class="bttn green left" ng-disabled="!isNameBlankOrValid(family.wife)">Дальше</a>
+  <button ui-sref="form.email" class="bttn green left" ng-disabled="!isOptionalNameValid(family.wife)">Дальше</button>
 </div>

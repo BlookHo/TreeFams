@@ -70,6 +70,11 @@ var app = angular
       templateUrl: 'welcome-husband.html'
     })
 
+    .state('form.grandFatherFather', {
+      url: '/form.grandFatherFather',
+      templateUrl: 'welcome-father-father.html'
+    })
+
     .state('form.email', {
       url: '/form.email',
       templateUrl: 'welcome-email.html'
@@ -98,7 +103,13 @@ var app = angular
     sons: [],
     daughters: [],
     wife: '',
-    hasband: ''
+    hasband: '',
+    others: {
+      grandFatherFather: '',
+      grandFatherMother: '',
+      grandMotherFather: '',
+      grandMotherMother: '',
+    }
   }
 
 
@@ -112,7 +123,13 @@ var app = angular
     sons: [],
     daughters: [],
     wife: '',
-    hasband: ''
+    hasband: '',
+    others: {
+      grandFatherFather: '',
+      grandFatherMother: '',
+      grandMotherFather: '',
+      grandMotherMother: '',
+    }
   }
 
 
@@ -188,6 +205,20 @@ var app = angular
   $scope.isNameValid = function(model){
     try {
       return model.hasOwnProperty('name');
+    }catch(e){
+      return false;
+    }
+  }
+
+
+  $scope.isOptionalNameValid = function(model){
+    try {
+      // return model.hasOwnProperty('name');
+      if (model.hasOwnProperty('name') ){
+        return true;
+      }else{
+        return model.length > 0 ? false : true;
+      }
     }catch(e){
       return false;
     }
