@@ -5,30 +5,52 @@ class MessagesController < ApplicationController
 
   before_filter :logged_in?
 
-  before_action :set_message, only: [:show, :edit, :update, :destroy]
 
   # if current_user # && !banned?
 
+  # GET /messages
+  # GET /messages.json
+  # Показываем все диалоги текущего юзера
+  # с возможностью перехода к просмотру одного выбранного диалога
+  # с одним юзером.
+  def index
 
-  # Получаем диалоги и сообщения всех контрагентов текущего юзера
-  # Альтернативное отображение.
-  def show_all_messages
+    @receiver_id = params[:receiver_id].to_i #
+    @text = params[:text] #
 
-    @users_ids = User.all.pluck(:id)
+    @new_messages_count = count_new_messages
+    find_agents # find all contragent of current_user by messages
 
-      @new_messages_count = count_new_messages
-      logger.info "== show_all_messages == @new_messages_count = #{@new_messages_count}"
-
-      find_agents # find all contragent of current_user by messages
-      @talks_and_messages = []
-      @agents_talks.each do |user_id|
-        user_dialoge = get_user_messages(user_id)
-        @talks_and_messages << user_dialoge
-
-      end
+    @talks_and_messages = []
+    @agents_talks.each do |user_id|
+      user_dialoge = get_user_messages(user_id)
+      @talks_and_messages << user_dialoge
+    end
 
   end
 
+
+
+  ## NO USE with show_all_messages.html
+  ## Получаем диалоги и сообщения всех контрагентов текущего юзера
+  ## Альтернативное отображение.
+  #def show_all_messages
+  #
+  #  @users_ids = User.all.pluck(:id)
+  #
+  #    @new_messages_count = count_new_messages
+  #    logger.info "== show_all_messages == @new_messages_count = #{@new_messages_count}"
+  #
+  #    find_agents # find all contragent of current_user by messages
+  #    @talks_and_messages = []
+  #    @agents_talks.each do |user_id|
+  #      user_dialoge = get_user_messages(user_id)
+  #      @talks_and_messages << user_dialoge
+  #
+  #    end
+  #
+  #end
+  #
 
 
   # Получаем диалоги всех контрагентов текущего юзера
@@ -78,9 +100,11 @@ class MessagesController < ApplicationController
   end
 
   # чтение всех сообщений получателем при открывании диалога
+  # используется для управления отображения сообщений
   def read_one_message(message)
-
     message.read = true  if !message.read && message.receiver_id == current_user.id
+
+    ## NOTIFICATION #### Установка уведомлений отправителю  ########
 
   end
 
@@ -100,91 +124,41 @@ class MessagesController < ApplicationController
 
   end
 
-  # later
-  def search_dialoge_agent
-
-    # Выбор Юзера по имени(?)
-    #if params[:receiver_name]
-    #  user = User.find_by_nick(params[:receiver_name])
-    #  unless user.blank?
-    #    receiver_id = user.id
-    #  end
-    #else
-    #  receiver_id = params[:receiver_id]
-    #end
-
-  end
-
-  def send_message # отправление нового сообщения
-
-
-
-      receiver_id = params[:receiver_id] # From view
-      text = params[:text] # From view
-
-      if !(receiver_id.blank? || text.blank?)
-        @receiver_id = receiver_id # # DEBUGG_TO_VIEW
-        @text = text #params[:text] # # DEBUGG_TO_VIEW
-        logger.info "receiver_id = #{receiver_id}, text = #{text}" # DEBUGG_TO_VIEW
-
-        message = Message.new(text: text, receiver_id: receiver_id, sender_id: current_user.id)
-        message.save
-
-        # Установка уведомления
-
-      end
-
-  end
-
-  # Удаление выбранного one_message
-  # GET /messages
+  # Пометка в БД выбранного сообщения как Удаленного
+  #
   def delete_message
 
-    #user_id = params[:user_id] # From view # всего диалога
+    message = Message.find(params[:message_id])
+    if message.receiver_id == current_user.id
+      message.receiver_deleted = true
+      message.save
+      user_id = message.sender_id
+      check_deletion(message)
+    else
+      flash[:error] = "Ты не можешь удалить это сообщение"
+    end
+    if message.sender_id == current_user.id
+      message.sender_deleted = true
+      message.save
+      user_id = message.receiver_id
+      check_deletion(message)
+    else
+      flash[:error] = "Ты не можешь удалить это сообщение"
+    end
+    redirect_to show_one_dialoge_path(user_id: user_id)
 
-      #one_user_dialoge =  Message.where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})")#.where(:receiver_deleted => false)#, :sender_deleted => false)#.order('created_at').reverse_order
-      #one_user_dialoge.each do |one_message|
-      #
-      #  one_message.receiver_deleted = true if one_message.receiver_id == current_user.id
-      #  one_message.sender_deleted = true   if one_message.sender_id == current_user.id
-      #  one_message.save
-      #
-      #
-      #end
+  end
 
-      message = Message.find(params[:message_id])
-      if message.receiver_id == current_user.id
-        message.receiver_deleted = true
-        message.save
-        user_id = message.sender_id
-        if message.persisted?
-          flash[:success] = "Письмо удалено"
-        else
-          flash[:error] = "Ошибки при удалении письма"
-        end
-      else
-        flash[:error] = "Ты не можешь удалить это сообщение"
-      end
-      if message.sender_id == current_user.id
-        message.sender_deleted = true
-        message.save
-        user_id = message.receiver_id
-
-        if message.persisted?
-          flash[:success] = "Письмо удалено"
-        else
-          flash[:error] = "Ошибки при удалении письма"
-        end
-      else
-        flash[:error] = "Ты не можешь удалить это сообщение"
-      end
-      redirect_to show_one_dialoge_path(user_id: user_id)
-
-
+  # Сигнал-я о корректности "удаления"
+  def check_deletion(message)
+    if message.persisted?
+      flash[:success] = "Письмо удалено"
+    else
+      flash[:error] = "Ошибки при удалении письма"
+    end
   end
 
   # Пометка сообщения как Важного (important_message)
-  # GET /messages
   def important_message
     message = Message.find(params[:message_id]) # From view
     if message.receiver_id == current_user.id || message.sender_id == current_user.id
@@ -203,130 +177,47 @@ class MessagesController < ApplicationController
     end
   end
 
-  # later
-  # GET /messages
+  # later - Пометка сообщения как Spam
   def spam_dialoge
     user_id = params[:user_id] # From view
-
-
-  end
-
-  # Не используется
-  # чтение непрочитанных сообщений - по-одному
-  # Необходимо Изменение счетчика непрочитанных сообщений - для header
-  def read_message
-
-      message = Message.find(params[:message_id])
-      if message.receiver_id == current_user.id && message.read == false #|| message.sender_id == current_user.id
-          message.read = true
-          message.save
-
-          # Изменение счетчика непрочитанных сообщений - для header
-          @new_messages_count = count_new_messages
-          logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
-
-      end
-      user_id = message.sender_id # для рендера
-
-      respond_to do |format|
-        format.html { redirect_to show_one_dialoge_path(user_id: user_id) }
-        format.js { render "messages/mail/renderMessage" }
-      end
+    #
 
   end
-
 
   # Найти всех контрагентов current_user по сообщениям
+  # Исп-ся при отображении сообщений
   def find_agents
 
     agents_senders = Message.where(:receiver_id => current_user.id).pluck(:sender_id).uniq
     agents_receivers = Message.where(:sender_id => current_user.id).pluck(:receiver_id).uniq
-
-    logger.info "@agents_senders = #{agents_senders}"
-    logger.info "@agents_receivers = #{agents_receivers}"
+    #logger.info "@agents_senders = #{agents_senders}"
+    #logger.info "@agents_receivers = #{agents_receivers}"
 
     @agents_talks = (agents_senders + agents_receivers).uniq
 
   end
 
 
+  # Создание и сохранение нового сообщения
+  def create_new_message
 
+    receiver_id = params[:receiver_id] # From view
+    text = params[:text] # From view
 
+    if !(receiver_id.blank? || text.blank?)
 
-  # GET /messages
-  # GET /messages.json
-  def index
-    @messages = Message.all.order('created_at desc')
+      @receiver_id = receiver_id # # DEBUGG_TO_VIEW
+      @text = text #params[:text] # # DEBUGG_TO_VIEW
+      logger.info "receiver_id = #{receiver_id}, text = #{text}" # DEBUGG_TO_VIEW
 
-    @receiver_id = params[:receiver_id].to_i #
-    @text = params[:text] #
+      message = Message.new(text: text, receiver_id: receiver_id, sender_id: current_user.id)
+      message.save
 
-  end
+      ## NOTIFICATION #### Установка уведомлений  получателю  ########
 
-  # GET /messages/1
-  # GET /messages/1.json
-  def show
-  end
-
-  # GET /messages/new
-  def new
-    @message = Message.new
-  end
-
-  # GET /messages/1/edit
-  def edit
-  end
-
-  # POST /messages
-  # POST /messages.json
-  def create
-    @message = Message.new(message_params)
-
-    respond_to do |format|
-      if @message.save
-        format.html { redirect_to @message, notice: 'Message was successfully created.' }
-        format.json { render :show, status: :created, location: @message }
-      else
-        format.html { render :new }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /messages/1
-  # PATCH/PUT /messages/1.json
-  def update
-    respond_to do |format|
-      if @message.update(message_params)
-        format.html { redirect_to @message, notice: 'Message was successfully updated.' }
-        format.json { render :show, status: :ok, location: @message }
-      else
-        format.html { render :edit }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /messages/1
-  # DELETE /messages/1.json
-  def destroy
-    @message.destroy
-    respond_to do |format|
-      format.html { redirect_to messages_url, notice: 'Message was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-
-  private
-   # Use callbacks to share common setup or constraints between actions.
-    def set_message
-      @message = Message.find(params[:id])
     end
 
-  #  Never trust parameters from the scary internet, only allow the white list through.
-    def message_params
-      params.require(:message).permit(:text, :sender_id, :receiver_id, :read, :sender_deleted, :receiver_deleted)
-    end
+  end
 
 
 end

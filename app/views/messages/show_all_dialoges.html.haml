@@ -5,7 +5,6 @@
   @new_messages_count = #{@new_messages_count.inspect}
 %br
 %h1 Диалоги всех Юзеров (Listing All Dialoges)
--#= link_to 'Написать сообщение .', send_message_path
 %br
 %br
 - if !@talks_and_messages.blank?
@@ -23,7 +22,7 @@
             %tr
             %tr
               %td= user_id
-              %td= link_to 'Написать сообщение .', send_message_path(receiver_id: user_id)
+              %td= link_to 'Написать сообщение .', create_new_message_path(receiver_id: user_id)
               -#%td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
             %li
 
@@ -49,7 +48,7 @@
                   %td= one_talk_messages.values_at(:read).flatten[0]
                   %td= one_talk_messages.values_at(:sender_deleted).flatten[0]
                   %td= one_talk_messages.values_at(:receiver_deleted).flatten[0]
-                  %td= link_to 'Прочитать', "read_message", class: :messages
+                  -#%td= link_to 'Прочитать', "read_message", class: :messages
                   %td= link_to 'Показать весь диалог с этим Юзером .', show_one_dialoge_path(user_id: user_id), class: :messages
             - else
               %h4 No Listing user_talk_arr!
@@ -65,6 +64,4 @@
 %br
 = link_to 'Смотреть все Диалоги и Сообщения:', show_all_messages_path
 
--#
--#%p
--#  @new_mail_count = #{@new_mail_count.inspect}
+-
