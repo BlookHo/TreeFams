@@ -87,7 +87,7 @@ var app = angular
 
 
   // Error container
-  $scope.errors = {}
+  $scope.errors = {};
 
   $scope.empty_family = {
     author: '',
@@ -98,6 +98,7 @@ var app = angular
     sons: [],
     daughters: []
   }
+
 
   // Data container
   $scope.family = {
@@ -128,6 +129,7 @@ var app = angular
   // Update model
   $scope.changeName = function(modelName){
     //clear error on server validation
+    console.log("Change name...");
     $scope.error = '';
     eval('$scope.family'+modelName+'="";');
     removeDataFormGraph(modelName);
@@ -278,7 +280,6 @@ var app = angular
       }
 
   });
-
 
 
 
