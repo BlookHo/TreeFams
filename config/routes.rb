@@ -21,13 +21,13 @@ Weafam::Application.routes.draw do
 
 
   # messages controller
-  resources :messages, except: [:update, :edit] do
+  resources :messages, except: [:update, :show, :destroy, :new, :edit] do
     #get '/edit/data', to: 'messages#edit', as: :edit_data
 
   end
 
-  match 'make_messages' => 'messages#make_messages', via: :get
-  match 'make_messages' => 'messages#make_messages', via: :post
+  match 'create_new_message' => 'messages#create_new_message', via: :get
+  match 'create_new_message' => 'messages#create_new_message', via: :post
 
   match 'search_dialoge_agent' => 'messages#search_dialoge_agent', via: :get
   match 'search_dialoge_agent' => 'messages#search_dialoge_agent', via: :post

@@ -1,17 +1,12 @@
 %section.admin
 
-%br
-  %h3 INDEX: Отладка работы с сообщениями
-%br
-  %div
-  %p
-    @current_user.id = #{current_user.id.inspect}
-%br
+%p
+  @current_user.id = #{current_user.id.inspect}
 %p
   @new_messages_count = #{@new_messages_count.inspect}
+
 %br
-%h1 Диалоги всех Юзеров (Listing All Dialoges)
--#= link_to 'Написать сообщение .', send_message_path
+%h1 Все существующие диалоги с другими Юзерами (INDEX Listing All Dialoges)
 %br
 %br
 - if !@talks_and_messages.blank?
@@ -29,7 +24,7 @@
             %tr
             %tr
               %td= user_id
-              %td= link_to 'Написать сообщение .', send_message_path(receiver_id: user_id)
+              %td= link_to 'Написать сообщение .', create_new_message_path(receiver_id: user_id)
               -#%td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
             %li
 
@@ -49,36 +44,23 @@
                 - user_talk_arr.take(1).each do |one_talk_messages|
                   %tr
                   %td= one_talk_messages.values_at(:message_id).flatten[0]
-                  %td= one_talk_messages.values_at(:text).flatten[0][0..9]
+                  %td= one_talk_messages.values_at(:text).flatten[0][0..20]
                   %td= one_talk_messages.values_at(:sender_id).flatten[0]
                   %td= one_talk_messages.values_at(:receiver_id).flatten[0]
                   %td= one_talk_messages.values_at(:read).flatten[0]
                   %td= one_talk_messages.values_at(:sender_deleted).flatten[0]
                   %td= one_talk_messages.values_at(:receiver_deleted).flatten[0]
-                  %td= link_to 'Прочитать', "read_message", class: :messages
                   %td= link_to 'Показать весь диалог с этим Юзером .', show_one_dialoge_path(user_id: user_id), class: :messages
+                  %td= link_to 'Удалить сообщение .', delete_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]), class: :messages
+
             - else
               %h4 No Listing user_talk_arr!
     - else
       %h4 No Listing one_talk_arr!
-
 - else
   %h4 No Listing @talks_and_messages!
 
-
 %br
-%br
-%br
-= link_to 'Смотреть все Диалоги и Сообщения:', show_all_messages_path
-
-
-= form_tag do
-  = label_tag 'Введи ID User = Receiver message: :'
-  = number_field_tag 'receiver_id', '', :maxlength => 4, :size => 5
-  = label_tag 'Введи текст сообщения'
-  = text_field_tag 'text', '', :maxlength => 50, :size => 50
-  = submit_tag 'Отправить сообщение (Ввод)'
-
 %br
   %p
     @receiver_id = #{@receiver_id.inspect}
@@ -86,36 +68,6 @@
     @text = #{@text.inspect}
 %br
 %br
-
-%h1 Listing messages
+  %h3 НАПИСАТЬ И ОТПРАВИТЬ СООБЩЕНИЕ
 %br
-%br
-
-%table
-  %tr
-    %th Text
-    %th Sender
-    %th Receiver
-    %th Read
-    %th Sender deleted
-    %th Receiver deleted
-    %th
-    %th
-    %th
-
-  - @messages.each do |message|
-    %tr
-      %td= message.text
-      %td= message.sender_id
-      %td= message.receiver_id
-      %td= message.read
-      %td= message.sender_deleted
-      %td= message.receiver_deleted
-      %td= link_to 'Show', message
-      %td= link_to 'Edit', edit_message_path(message)
-      %td= link_to 'Destroy', message, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-%br
-%br
-= link_to 'New Message', new_message_path
+= link_to 'Написать сообщение. New Message', create_new_message_path

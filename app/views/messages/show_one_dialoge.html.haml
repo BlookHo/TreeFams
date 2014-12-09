@@ -20,7 +20,7 @@
 
           - one_talk_arr.each do |user_id, user_talk_arr|
             %td= user_id
-            %td= link_to 'Написать сообщение .', send_message_path(receiver_id: user_id),  class: :messages
+            %td= link_to 'Написать сообщение .', create_new_message_path(receiver_id: user_id),  class: :messages
             %br
             -#%td= link_to 'Cпам - пометить ненужный более диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
             %li
@@ -61,5 +61,5 @@
 
 %br
 
-= link_to 'Смотреть все диалоги:', show_all_dialoges_path
+= link_to 'Смотреть все диалоги:', messages_path
 
