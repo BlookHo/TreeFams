@@ -13,7 +13,6 @@ class WeafamMailer < ActionMailer::Base
       @current_user_name, @current_user_sex = get_name_data(current_profile_id)
       @current_user_email = current_user.email
 
-
       logger.info "In invitation_email:  @profile_name = #{@profile_name}, @current_user_name = #{@current_user_name} " #
 
       mail(to: email_name, subject: "Приглашение на сайт < Мы все - родня >", reply_to: 'weallfamily@yandex.ru')

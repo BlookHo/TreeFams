@@ -13,6 +13,13 @@ class InvitesController < ApplicationController
     if !@email_name.blank? and is_a_valid_email?(@email_name)
       WeafamMailer.invitation_email(@email_name, @profile_id, current_user.id).deliver
       flash.now[:notice] = "Приглашение отправлено"
+
+      ##########  UPDATES - № 5  ####################
+      updates_data = { user_id: current_user.id, update_id: 5, agent_user_id: params[:profile_id].to_i}
+      UpdatesFeed.create(updates_data)
+      logger.info "In create_InvitesController:  after UpdatesFeed.create(updates_data) params[:profile_id] = #{params[:profile_id].to_i.inspect} " #
+      ###############################################
+
     else
       flash.now[:alert] = "Некорректный email"
       render :new

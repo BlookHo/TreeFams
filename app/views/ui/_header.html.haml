@@ -19,7 +19,7 @@
         - if count_new_requests > 0
           %li= link_to raw("<i class='fa fa-globe'></i> Рукопожатия <span>#{count_new_requests}</span>"), show_user_requests_path, :class => "ttip", title: "К тебе есть новые запросы на рукопожатия"
         - else
-          %li= link_to raw("<i class='fa fa-globe'></i> Рукопожатия"), show_user_requests_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
+          %li= link_to raw("<i class='fa fa-globe'></i> Рукопожатия "), show_user_requests_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
 
 
         - if count_new_updates > 0
