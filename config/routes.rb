@@ -1,5 +1,9 @@
 Weafam::Application.routes.draw do
 
+  resources :updates_events
+
+  resources :update_feeds
+
   resources :weafam_settings
 
   resources :connection_requests

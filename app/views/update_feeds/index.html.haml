@@ -1,0 +1,23 @@
+%h1 Listing update_feeds
+
+%table
+  %tr
+    %th User
+    %th Update
+    %th Agent user
+    %th
+    %th
+    %th
+
+  - @update_feeds.each do |update_feed|
+    %tr
+      %td= update_feed.user_id
+      %td= update_feed.update_id
+      %td= update_feed.agent_user_id
+      %td= link_to 'Show', update_feed
+      %td= link_to 'Edit', edit_update_feed_path(update_feed)
+      %td= link_to 'Destroy', update_feed, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Update feed', new_update_feed_path

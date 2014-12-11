@@ -1,0 +1,21 @@
+%h1 Listing updates_events
+
+%table
+  %tr
+    %th Name
+    %th Image
+    %th
+    %th
+    %th
+
+  - @updates_events.each do |updates_event|
+    %tr
+      %td= updates_event.name
+      %td= updates_event.image
+      %td= link_to 'Show', updates_event
+      %td= link_to 'Edit', edit_updates_event_path(updates_event)
+      %td= link_to 'Destroy', updates_event, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Updates event', new_updates_event_path
