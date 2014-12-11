@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @updates_feed.user_id
+%p
+  %b Update:
+  = @updates_feed.update_id
+%p
+  %b Agent user:
+  = @updates_feed.agent_user_id
+
+= link_to 'Edit', edit_updates_feed_path(@updates_feed)
+\|
+= link_to 'Back', updates_feeds_path

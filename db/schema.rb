@@ -11,10 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141204202523) do
+ActiveRecord::Schema.define(version: 20141211081730) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "adminpack"
   enable_extension "plpgsql"
 
   create_table "admins", force: true do |t|
@@ -126,6 +125,21 @@ ActiveRecord::Schema.define(version: 20141204202523) do
     t.integer  "is_sex_id"
     t.integer  "display_name_id"
     t.integer  "is_display_name_id"
+  end
+
+  create_table "updates_events", force: true do |t|
+    t.string   "name"
+    t.string   "image"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "updates_feeds", force: true do |t|
+    t.integer  "user_id",       null: false
+    t.integer  "update_id",     null: false
+    t.integer  "agent_user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

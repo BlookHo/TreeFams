@@ -1,9 +1,9 @@
-= form_for @update_feed do |f|
-  - if @update_feed.errors.any?
+= form_for @updates_feed do |f|
+  - if @updates_feed.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@update_feed.errors.count, "error")} prohibited this update_feed from being saved:"
+      %h2= "#{pluralize(@updates_feed.errors.count, "error")} prohibited this updates_feed from being saved:"
       %ul
-        - @update_feed.errors.full_messages.each do |msg|
+        - @updates_feed.errors.full_messages.each do |msg|
           %li= msg
 
   .field

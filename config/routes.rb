@@ -2,7 +2,7 @@ Weafam::Application.routes.draw do
 
   resources :updates_events
 
-  resources :update_feeds
+  resources :updates_feeds
 
   resources :weafam_settings
 
