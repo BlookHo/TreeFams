@@ -1,9 +1,10 @@
 class UpdatesFeedsController < ApplicationController
 
   # GET /updates_feeds_path
+  # Переход к выбору обновлений для показа тебе: current_user
   def index
-    @updates_feeds = UpdatesFeed.select_updates(current_user)
-    logger.info "In index: @updates_feeds = #{@updates_feeds} "
+    @view_update_data = UpdatesFeed.select_updates(current_user)
+    logger.info "In index: @view_update_data = #{@view_update_data} "
 
   end
 

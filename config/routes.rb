@@ -2,7 +2,7 @@ Weafam::Application.routes.draw do
 
   resources :updates_events
 
-  resources :updates_feeds, except: [:update, :destroy, :new, :edit]
+  resources :updates_feeds, except: [:update, :show, :destroy, :new, :edit]
 
   resources :weafam_settings
 
