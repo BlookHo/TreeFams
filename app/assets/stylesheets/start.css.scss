@@ -46,6 +46,13 @@
 
   }
 
+  #dragger{
+    position:absolute;
+    right:8px;
+    top:8px;
+    color:grey;
+  }
+
 
   input[type=text],
   input[type=password],
@@ -56,19 +63,27 @@
   }
 
   .error{
-    color:red;
+    background-color:#ff7964;
+    color:#fff;
     font-size:small;
-    font-style:italic;
+    padding:4px;
+    margin-bottom:5px;
   }
-
 
   .warning{
-    color:#87815c;
     font-size:small;
-
-
-    .fa{color:green;}
+    background-color:#fffcb7;
+    color:#1b1302;
+    padding:4px;
+    margin-bottom:5px;
   }
+
+
+  // .warning{
+  //   color:#87815c;
+  //   font-size:small;
+  //   .fa{color:green;}
+  // }
 
 
   .success{

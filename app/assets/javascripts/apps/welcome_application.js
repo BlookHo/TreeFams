@@ -91,6 +91,8 @@ var app = angular
 .controller('welcomeApplicationController', function($scope, $http, $state) {
 
 
+  $('#start form').draggable({ handle: "#dragger" });
+
   // Error container
   $scope.errors = {};
 
@@ -103,14 +105,22 @@ var app = angular
     sons: [],
     daughters: [],
     wife: '',
-    hasband: '',
-    // others: {
-    //   grandFatherFather: '',
-    //   grandFatherMother: '',
-    //   grandMotherFather: '',
-    //   grandMotherMother: '',
-    // }
+    hasband: ''
   }
+
+  // Step is requerd
+  $scope.required = {
+    author: true,
+    father: true,
+    mother: true,
+    brothers: false,
+    sisters: false,
+    sons: false,
+    daughters: false,
+    wife: false,
+    hasband: false
+  }
+
 
 
   // Data container
@@ -123,15 +133,8 @@ var app = angular
     sons: [],
     daughters: [],
     wife: '',
-    hasband: '',
-    // others: {
-    //   grandFatherFather: '',
-    //   grandFatherMother: '',
-    //   grandMotherFather: '',
-    //   grandMotherMother: '',
-    // }
+    hasband: ''
   }
-
 
   // Get names for autocomplete
   $scope.getNames = function(term, sex_id){
@@ -146,15 +149,13 @@ var app = angular
   };
 
 
-
   // Update model
   $scope.changeName = function(modelName, name){
     //clear error on server validation
-    console.log("Change name "+ Date.now() + name );
-    $scope.error = '';
+    // console.log("Change name "+ Date.now() + name );
+    // $scope.error = '';
 
     // eval('$scope.family.'+modelName+'=null;');
-
 
     removeDataFormGraph(modelName);
     if (modelName == 'author'){
@@ -163,13 +164,12 @@ var app = angular
     }else{
       removeDataFormGraph(modelName);
     }
-
   };
 
 
 
+
   $scope.onSelectName = function(model, modelName){
-    // $scope.author = model;
     eval('$scope.family'+modelName+'= model;');
     pushDataToGraph(modelName, model);
   }
@@ -201,7 +201,49 @@ var app = angular
   };
 
 
-  // Validation
+
+
+  /* Validation
+  ------------------------------------------ */
+  $scope.validateStep = function(model, modelName){
+
+    if ( $scope.isNameValid(model) ){
+          $scope.goToNextStep();
+    }else{
+          $http.get('/names/find', {
+            params: {term: model}
+          })
+          .success(function(response){
+              var name = response;
+
+              if ( name.hasOwnProperty('error') ){
+                // Name is not exist
+                var name = {name: model, error: "Вы ввели уникальное имя, которого нет у нас базе.", new_name: true};
+                eval('$scope.family.'+modelName+' = name;');
+                pushDataToGraph(modelName, name);
+              }else{
+                // Name exist - go to next step
+                eval('$scope.family.'+modelName+' = name;');
+                pushDataToGraph(modelName, name);
+                $scope.goToNextStep();
+              }
+
+          })
+          .error(function(){
+              alert("Не известная ошибка :(");
+          });
+    }
+  }
+
+
+
+  // Check if model has errors
+  $scope.hasError = function(modelName){
+    return eval('$scope.family.'+modelName+'.hasOwnProperty("error");');
+  }
+
+
+  // Check name
   $scope.isNameValid = function(model){
     try {
       return model.hasOwnProperty('name');
@@ -209,6 +251,11 @@ var app = angular
       return false;
     }
   }
+
+
+
+
+
 
 
   $scope.isOptionalNameValid = function(model){
@@ -342,6 +389,17 @@ var app = angular
       }
 
   });
+
+
+
+  // Redirect to next state from current
+  $scope.goToNextStep = function(){
+    // author -> father
+    if ($state.current.name == 'form.author'){
+        $state.go('form.father');
+    }
+
+  }
 
 
 

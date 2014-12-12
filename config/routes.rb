@@ -65,7 +65,6 @@ Weafam::Application.routes.draw do
 
   # pages controller
   match 'landing' => 'pages#landing', via: :get
-  # match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
   match 'mypage' => 'pages#mypage', via: :get
@@ -141,8 +140,7 @@ Weafam::Application.routes.draw do
   get "connect_users_trees/connect_profiles_keys"
 
 
-  # resources :members, except: :index
-  resources :trees
+
 
 
   # resources :profiles, except: [:index, :edit]
@@ -168,32 +166,58 @@ Weafam::Application.routes.draw do
   match 'invitation_email' => 'weafam_mailer#invitation_email', via: :post
 
 
-  resources :users
-  resources :names
+
   resources :relations
 
+
+
+  # Send invite email
   resources :invites, only: [:new, :create]
-
-
-  # get 'main/circles/(:path)',                          to: "circles#show",            as: :circle
-  # get 'search/circles/:path_id/:tree_id/(:path)',               to: "circles#show_search",     as: :search_circle
-  # get 'search/circle_path/:path_id/:tree_id/(:path)',  to: "circles#show_search_path", as: :search_circle_path
-
-
-
-
-  # Landing & start singup
-  # get    'welcome/start',                  to: 'welcome#start',                as: :start
-  # match  'welcome/start/proceed',          to: 'welcome#proceed',              as: :proceed_start, via: [:get, :post]
-  # get    'welcome/start/to/step/:step',    to: 'welcome#to_step',              as: :to_start_step
-  # get    'welcome/start/step/previous',    to: 'welcome#previous',             as: :previous
-  # get    'welcome/start/add/:member',      to: 'welcome#add_member_field',     as: :add_member_field
-  # get    'welcome/start/show_data',        to: 'welcome#show_data',            as: :show_data
-
 
 
   # Debug path - Login as user
   get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
+
+
+  # Users Sessions Signup
+  ##################################################
+  resources :users
+  resources :sessions, except: :edit
+  get  'login',      to:   "sessions#new",      as: :login
+  get  'logout',     to:   "sessions#destroy",  as: :logout
+  get  'signup',     to:   'signup#index',      as: :signup
+  post 'register',   to:   'signup#create',     as: :register
+
+
+
+
+  # Home
+  ##################################################
+  get '/home',        to: 'home#index',  as: :home
+  get '/home/search', to: 'home#search', as: :home_search
+
+
+
+  # Autocompletes
+  ##################################################
+  get '/autocomplete/names', to: 'autocomplete#names'
+
+
+  # Names
+  ##################################################
+  # resources :names
+  get '/names/find', to: "names#find", as: :find_name
+
+
+
+  # API
+  ##################################################
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      get 'circles', to: 'circles#show'
+      get 'search',  to: 'search#index'
+    end
+  end
 
 
 
@@ -217,36 +241,6 @@ Weafam::Application.routes.draw do
 
     root "names#index"
   end
-
-
-  # New version
-  ##################################################
-  namespace :api, defaults: {format: 'json'} do
-    namespace :v1 do
-      get 'circles', to: 'circles#show'
-      get 'search',  to: 'search#index'
-    end
-  end
-
-
-  # Users Sessions Signup
-  resources :sessions, except: :edit
-  get  'login',      to:   "sessions#new",      as: :login
-  get  'logout',     to:   "sessions#destroy",  as: :logout
-  get  'signup',     to:   'signup#index',      as: :signup
-  post 'register',   to:   'signup#create',     as: :register
-
-
-  # Home
-  ##################################################
-  get '/home',        to: 'home#index',  as: :home
-  get '/home/search', to: 'home#search', as: :home_search
-  # get '/home/show',   to: 'home#show',   as: :home_show
-
-
-  # Autocompletes
-  ##################################################
-  get '/autocomplete/names', to: 'autocomplete#names'
 
 
 
