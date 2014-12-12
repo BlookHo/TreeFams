@@ -15,9 +15,8 @@ class InvitesController < ApplicationController
       flash.now[:notice] = "Приглашение отправлено"
 
       ##########  UPDATES - № 5  ####################
-      updates_data = { user_id: current_user.id, update_id: 5, agent_user_id: params[:profile_id].to_i}
+      updates_data = { user_id: current_user.id, update_id: 5, agent_user_id: params[:profile_id].to_i, read: false}
       UpdatesFeed.create(updates_data)
-      logger.info "In create_InvitesController:  after UpdatesFeed.create(updates_data) params[:profile_id] = #{params[:profile_id].to_i.inspect} " #
       ###############################################
 
     else

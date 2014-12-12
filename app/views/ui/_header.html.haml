@@ -1,7 +1,7 @@
 #header
   .container
     - if current_user
-      = link_to "Мы все &mdash; родня".html_safe, "/home", id: :logo
+      = link_to "Мы все &mdash; родня".html_safe, "/home", id: :logo, :class => "ttip", title: "Твое дерево"
     - else
       = link_to "Мы все &mdash; родня".html_safe, "/", id: :logo
 

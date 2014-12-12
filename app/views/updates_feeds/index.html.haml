@@ -1,23 +1,27 @@
-%h1 Listing updates_feeds
+
+
+
+%h1 Ваши обновления (Listing updates_feeds)
+%br
+%br
 
 %table
   %tr
-    %th User
-    %th Update
-    %th Agent user
-    %th
-    %th
-    %th
+    %th Пользователь - Кто
+    %th Содержание обновления
+    %th С кем
+    %th Прочитано
+    %th Изображение
 
   - @updates_feeds.each do |updates_feed|
     %tr
       %td= updates_feed.user_id
-      %td= updates_feed.update_id
+      %td= updates_feed.data_update(updates_feed.update_id)[:text]
       %td= updates_feed.agent_user_id
-      %td= link_to 'Show', updates_feed
-      %td= link_to 'Edit', edit_updates_feed_path(updates_feed)
-      %td= link_to 'Destroy', updates_feed, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %td= updates_feed.read
+      %td= updates_feed.data_update(updates_feed.update_id)[:image]
+      -#%td= link_to 'Show', updates_feed
 
 %br
 
-= link_to 'New Update feed', new_updates_feed_path
+= link_to 'К просмотру дерева', home_path
