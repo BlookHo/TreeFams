@@ -16,6 +16,11 @@ class ConnectionRequestsController < ApplicationController
       ##########################################
             new_connection_request.save
       ##########################################
+
+      ##########  UPDATES - № 1  ####################
+      updates_data = { user_id: current_user.id, update_id: 1, agent_user_id: user_to_connect, read: false}
+      UpdatesFeed.create(updates_data)
+      ###############################################
     end
   end
 
