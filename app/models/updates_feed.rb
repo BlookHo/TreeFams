@@ -44,10 +44,28 @@ class UpdatesFeed < ActiveRecord::Base
     update_data[:user_author_email]  = updates_feed.user_update_data(updates_feed.user_id)[:user_email]
     update_data[:update_text]        = updates_feed.update_event_data(updates_feed.update_id)[:text]
     #  Если в данном виде обновления профиль-агент не используется, то во View - ничего не показываем
-    if !updates_feed.agent_user_id.blank?
-      update_data[:profile_in_update] = updates_feed.profile_update_data(updates_feed.agent_user_id)[:profile_name]
-    else
-      update_data[:profile_in_update] = nil
+    case updates_feed.update_id
+
+      when 1, 2
+        if !updates_feed.agent_user_id.blank?
+          update_data[:profile_in_update] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name]
+        else
+          update_data[:profile_in_update] = nil
+        end
+
+      when 3
+
+        if !updates_feed.agent_user_id.blank?
+          update_data[:profile_in_update] = updates_feed.profile_update_data(updates_feed.agent_user_id)[:profile_name]
+        else
+          update_data[:profile_in_update] = nil
+        end
+
+
+      when 4
+
+      else
+
     end
     update_data[:update_read]     = updates_feed.read
     update_data[:update_image]    = updates_feed.update_event_data(updates_feed.update_id)[:image]

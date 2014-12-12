@@ -6,8 +6,8 @@ UpdatesEvent.reset_pk_sequence
 UpdatesEvent.create([
 
 
-{name: 'Запрос на объединение', image: 'updates/connect_request.png'},
-{name: 'Объединение', image: 'updates/connection_tree.png'},
+{name: 'Отправлен запрос на объединение с пользователем по имени ', image: 'updates/connect_request.png'},
+{name: 'Объединился с пользователем по имени ', image: 'updates/connection_tree.png'},
 {name: 'Выбор избранного', image: 'updates/fav_choose.png'},
 {name: 'Добавлен профиль', image: 'updates/add_profile.png'},
 {name: 'На сайт приглашен новый пользователь по имени ', image: 'updates/invitation.png'},
