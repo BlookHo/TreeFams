@@ -76,41 +76,15 @@ class ProfilesController < ApplicationController
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
 
-        #ProfileKey.add_new_profile(@base_sex_id, @base_profile,
-        #    @profile, @profile.relation_id,
-        #    exclusions_hash: @profile.answers_hash,
-        #    tree_ids: current_user.get_connected_users)
+        ProfileKey.add_new_profile(@base_sex_id, @base_profile,
+            @profile, @profile.relation_id,
+            exclusions_hash: @profile.answers_hash,
+            tree_ids: current_user.get_connected_users)
 
         ##########  UPDATES FEEDS - № 4  ####################
         UpdatesFeed.create(user_id: current_user.id, update_id: 4, agent_user_id: @profile.id, read: false)
-
-        tree_profiles_amount = Tree.tree_amount(current_user)
-        logger.info "In create: tree_profiles_amount = #{tree_profiles_amount} "
-
-        case tree_profiles_amount
-
-          when 10 .. 26 # кол-во родни в дереве больше 25
-
-            #logger.info "In create case: tree_profiles_amount = #{tree_profiles_amount} "
-
-            ##########  UPDATES FEEDS - № 8  ####################
-            UpdatesFeed.create(user_id: current_user.id, update_id: 8, agent_user_id: @profile.id, read: false)
-
-          when 51  # кол-во родни в дереве больше 50
-
-            ##########  UPDATES FEEDS - № 9  ####################
-            UpdatesFeed.create(user_id: current_user.id, update_id: 9, agent_user_id: @profile.id, read: false)
-
-          when 151  # кол-во родни в дереве больше 150
-
-            ##########  UPDATES FEEDS - № 10  ####################
-            UpdatesFeed.create(user_id: current_user.id, update_id: 10, agent_user_id: @profile.id, read: false)
-
-          else  # No update
-
-
-        end
-
+        ##########  UPDATES FEEDS - № 8, 9, 10  #############
+        @profile.case_update_amounts(@profile, current_user)
 
         @questions = nil
         @profile.answers_hash = nil
