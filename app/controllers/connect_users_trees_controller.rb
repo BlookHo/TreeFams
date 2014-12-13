@@ -472,11 +472,11 @@ class ConnectUsersTreesController < ApplicationController
     #         after_conn_update_requests  # From Helper
             ##############################################
 
-            ##########  UPDATES - № 2  ####################
-            updates_data = { user_id: current_user_id, update_id: 2, agent_user_id: user_id, read: false}
-            UpdatesFeed.create(updates_data)
-            updates_data = { user_id: user_id, update_id: 2, agent_user_id: current_user_id, read: false}
-            UpdatesFeed.create(updates_data)
+            ##########  UPDATES FEEDS - № 2  ##############
+            #updates_data = { user_id: current_user_id, update_id: 2, agent_user_id: user_id, read: false}
+            UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, read: false)
+            #updates_data = { user_id: user_id, update_id: 2, agent_user_id: current_user_id, read: false}
+            UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, read: false)
             ###############################################
 
 

@@ -18,8 +18,8 @@ class ConnectionRequestsController < ApplicationController
       ##########################################
 
       ##########  UPDATES - № 1  ####################
-      updates_data = { user_id: current_user.id, update_id: 1, agent_user_id: user_to_connect, read: false}
-      UpdatesFeed.create(updates_data)
+      UpdatesFeed.create(user_id: current_user.id, update_id: 1, agent_user_id: user_to_connect, read: false)
+      logger.info "In create_requests: UpdatesFeed.create"
       ###############################################
     end
   end
