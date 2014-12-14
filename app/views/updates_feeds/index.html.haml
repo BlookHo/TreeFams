@@ -4,7 +4,7 @@
 
 
 
-- if !@view_update_data.blank?
+- if !@paged_update_data.blank?
 
   %h1 Твои обновления (Listing updates_feeds)
   %br
@@ -20,7 +20,7 @@
       %th Изображение
       %th Дата обновления
 
-    - @view_update_data.each do |updates_feed|
+    - @paged_update_data.each do |updates_feed|
       %tr
         %td= updates_feed[:user_update_author]
         %td= updates_feed[:user_author_email]
@@ -29,6 +29,13 @@
         %td= updates_feed[:update_read]
         %td= updates_feed[:update_image]
         %td= updates_feed[:update_created]
+
+        -#%td= updates_feed.user_id
+        -#%td= updates_feed.agent_user_id
+        -#%td= updates_feed.read
+
+
+  = paginate @paged_update_data
 
 - else
   %br

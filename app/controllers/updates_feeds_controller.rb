@@ -1,13 +1,13 @@
 class UpdatesFeedsController < ApplicationController
 
   # GET /updates_feeds_path
-  # Переход к выбору обновлений для показа тебе: current_user
+  # Подготовка массива обновлений для показа тебе: current_user
+  #  Пагинация
   def index
-    @view_update_data = UpdatesFeed.select_updates(current_user)
-    logger.info "In index: @view_update_data = #{@view_update_data} "
-
+    view_update_data = UpdatesFeed.select_updates(current_user)
+    @paged_update_data = pages_of(view_update_data, 10) # Пагинация
+    logger.info "In index: @@paged_update_data.size = #{@paged_update_data.size} "
   end
-
 
 
 end

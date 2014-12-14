@@ -227,32 +227,14 @@ class Profile < ActiveRecord::Base
     return hash
   end
 
-  #def call_update_methods(current_user, profile)
-  #
-  #  #ProfileKey.add_new_profile(@base_sex_id, @base_profile,
-  #  #                           @profile, @profile.relation_id,
-  #  #                           exclusions_hash: @profile.answers_hash,
-  #  #                           tree_ids: current_user.get_connected_users)
-  #
-  #  ##########  UPDATES FEEDS - № 4  ####################
-  #  UpdatesFeed.create(user_id: current_user.id, update_id: 4, agent_user_id: profile.id, read: false)
-  #  ##########  UPDATES FEEDS - № 8, 9, 10  #############
-  #  profile.case_update_amounts(profile, current_user)
-  #
-  #
-  #end
-
-
-
 
   # Выбор способа UpdatesFeed взавис-ти от текущего кол-ва профилей в дереве
   # Исп-ся в ProfilesController
   def case_update_amounts(profile, current_user)
 
-    logger.info "In case_update_amounts: profile.id = #{profile.id} "
-   # Определение кол-во профилей в дереве после добавления нового профиля
+    # Определение кол-во профилей в дереве после добавления нового профиля
     tree_profiles_amount = Tree.tree_amount(current_user)
-    logger.info "In create: tree_profiles_amount = #{tree_profiles_amount} "
+    #logger.info "In create: tree_profiles_amount = #{tree_profiles_amount} "
 
     case tree_profiles_amount
       when 11 # кол-во родни в дереве больше 10
