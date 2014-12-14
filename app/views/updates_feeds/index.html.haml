@@ -15,6 +15,7 @@
       %th Aвтор обновления
       %th Эл.почта автора
       %th Содержание
+      %th No
       %th С кем связано
       %th Прочитано
       %th Изображение
@@ -24,8 +25,10 @@
       %tr
         %td= updates_feed[:user_update_author]
         %td= updates_feed[:user_author_email]
-        %td= updates_feed[:update_text]
-        %td= updates_feed[:agent_in_update]
+        %td= updates_feed[:update_text].inspect
+        %td= updates_feed[:update_id]
+
+        %td= updates_feed[:agent_in_update].inspect
         %td= updates_feed[:update_read]
         %td= updates_feed[:update_image]
         %td= updates_feed[:update_created]
