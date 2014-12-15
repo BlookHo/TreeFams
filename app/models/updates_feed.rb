@@ -126,41 +126,21 @@ class UpdatesFeed < ActiveRecord::Base
     text_data = updates_feed.get_text_data(updates_feed)
     prefix, suffix = ""
 
-    case updates_feed.update_id
+    case updates_feed.update_id # по типу UpdatesEvent
       when 1 # запросы на объединение in ConnectionRequestsController  # OK
-        !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
-
-        text_data[:author_name] != "" ? suffix = text_data[:author_name] : suffix = ""
-        text_data[:agent_name] != "" ? inflected_name = YandexInflect.inflections(text_data[:agent_name])[2]["__content__"] : inflected_name = ""
-
-        updates_feed.agent_user_id == current_user_id ? prefix = text_data[:agent_name] + '! Тебе' : prefix = 'Твоему родственнику ' + inflected_name
+        prefix, suffix = updates_feed.combine_1_text(updates_feed, text_data, current_user_id)
 
       when 2 # объединения in ConnectUsersTreesController  # OK
-        !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
-
-        current_user_name =  updates_feed.user_update_data(current_user_id)[:user_name]
-        prefix = 'Поздравляем, ' + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:author_name]
-
-        updates_feed.agent_user_id == current_user_id ? suffix = 'твоим деревом' : suffix = 'деревом твоего родственника по имени ' + text_data[:agent_name]
+        prefix, suffix = updates_feed.combine_2_text(updates_feed, text_data, current_user_id)
 
       when 3  # избранный профиль -
-        !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_user_id) : text_data[:agent_name] = ""
-        text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
-        prefix = 'Твой родственник ' + text_data[:author_name]
+        prefix, suffix = updates_feed.combine_3_text(updates_feed, text_data)
 
       when 4  # добавлен профиль in ProfilesController   # OK
-        !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_user_id) : text_data[:agent_name] = ""
-
-        inflected_name = YandexInflect.inflections(text_data[:author_name])[4]["__content__"]
-        prefix = 'Твоим родственником ' + inflected_name
-        text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
+        prefix, suffix = updates_feed.combine_4_text(updates_feed, text_data)
 
       when 5  # приглашение на сайт по почте in InvitesController   # OK
-        !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_user_id) : text_data[:agent_name] = ""
-        text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
-
-        inflected_name = YandexInflect.inflections(text_data[:author_name])[4]["__content__"]
-        prefix = 'Твоим родственником ' + inflected_name
+        prefix, suffix = updates_feed.combine_5_text(updates_feed, text_data)
 
       when 6  # изменились данные профиля
 
@@ -168,8 +148,7 @@ class UpdatesFeed < ActiveRecord::Base
 
       when 8,9,10 # изменилось кол-во родни в объединенном дереве   # OK
                   # в рез-те добавления профиля или объединения деревьев in ProfilesController, ConnectUsersTreesController
-        prefix = 'Поздравляем, ' + updates_feed.user_update_data(current_user_id)[:user_name] + '!'
-        suffix = ""
+        prefix, suffix = updates_feed.combine_8_9_10_text(updates_feed, current_user_id)
 
       else
         ""
@@ -181,16 +160,88 @@ class UpdatesFeed < ActiveRecord::Base
 
   # Сбор данных для формирования текста updates_feed
   def get_text_data(updates_feed)
-
     text_data = Hash.new
     text_data[:author_name] = updates_feed.user_update_data(updates_feed.user_id)[:user_name]
     text_data[:event_text] = updates_feed.update_event_data(updates_feed.update_id)[:text]
 
-    # condition ? true : false
-    # !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
-
     text_data
+  end
 
+  # Формирование итоговой текстовой фразы одного сообщения updates_feed
+  # для UpdatesEvent типа 1
+  def combine_1_text(updates_feed, text_data, current_user_id)
+
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
+
+    text_data[:author_name] != "" ? suffix = text_data[:author_name] : suffix = ""
+
+    updates_feed.agent_user_id == current_user_id ? prefix = text_data[:agent_name] + '! Тебе' : prefix = 'Твоему родственнику ' + inflect_name(text_data[:agent_name], 2)
+
+    return prefix, suffix
+  end
+
+  # Формирование итоговой текстовой фразы одного сообщения updates_feed
+  # для UpdatesEvent типа 2
+  def combine_2_text(updates_feed, text_data, current_user_id)
+
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
+
+    current_user_name =  updates_feed.user_update_data(current_user_id)[:user_name]
+    prefix = 'Поздравляем, ' + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:author_name]
+
+    updates_feed.agent_user_id == current_user_id ? suffix = 'твоим деревом' : suffix = 'деревом твоего родственника по имени ' + text_data[:agent_name]
+
+    return prefix, suffix
+  end
+
+  # Формирование итоговой текстовой фразы одного сообщения updates_feed
+  # для UpdatesEvent типа 3
+  def combine_3_text(updates_feed, text_data)
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_user_id) : text_data[:agent_name] = ""
+    text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
+    prefix = 'Твой родственник ' + text_data[:author_name]
+    return prefix, suffix
+  end
+
+  # Формирование итоговой текстовой фразы одного сообщения updates_feed
+  # для UpdatesEvent типа 4
+  def combine_4_text(updates_feed, text_data)
+
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_user_id) : text_data[:agent_name] = ""
+
+    prefix = 'Твоим родственником ' + inflect_name(text_data[:author_name],4)
+
+    text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
+
+    return prefix, suffix
+  end
+
+  # Формирование итоговой текстовой фразы одного сообщения updates_feed
+  # для UpdatesEvent типа 5
+  def combine_5_text(updates_feed, text_data)
+
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_user_id) : text_data[:agent_name] = ""
+    text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
+
+    prefix = 'Твоим родственником ' + inflect_name(text_data[:author_name],4)
+
+    return prefix, suffix
+  end
+
+  # Формирование итоговой текстовой фразы одного сообщения updates_feed
+  # для UpdatesEvent типа 8_9_10
+  def combine_8_9_10_text(updates_feed, current_user_id)
+
+    prefix = 'Поздравляем, ' + updates_feed.user_update_data(current_user_id)[:user_name] + '!'
+    suffix = ""
+
+    return prefix, suffix
+  end
+
+  # Склонение имени по падежу == padej
+  def inflect_name(text_data_name, padej)
+    text_data_name != "" ? inflected_name = YandexInflect.inflections(text_data_name)[padej]["__content__"] : inflected_name = ""
+    inflected_name
   end
 
 
