@@ -2,11 +2,11 @@
 <div ng-show="hasError('author')" class="error">
   {{family.author.error}}
 </div>
-<div ng-show="hasError('author')" class="warning">
-  Если вы хотите продолжить с этим имененм, пожалуйста, укажите ваш пол:
+<div ng-show="hasNewName('author')" class="warning">
+  Если вы хотите продолжить с этим именем, пожалуйста, укажите ваш пол:
   <br>
-  <input type="radio" name="sex" group="sex" value="1">Муж<br>
-  <input type="radio" name="sex" group="sex" value="0">Жен
+  <button class="bttn blue small" ng-click="confirmNewName('author', 1)">Мужской</button>
+  <button class="bttn pink small" ng-click="confirmNewName('author', 0)">Женский</button>
 </div>
 
 <div class="control">
@@ -24,6 +24,6 @@
 </div>
 <div class="actions">
   <!--<button ui-sref="form.father" ng-disabled="!isNameValid(family.author)" class="bttn green left">Дальше</button>-->
-  <button ng-click="validateStep(family.author, 'author')" class="bttn green left">Дальше</button>
+  <button ng-click="validateName('author')" class="bttn green left">Дальше</button>
 </div>
 <!-- typeahead-editable="false" -->

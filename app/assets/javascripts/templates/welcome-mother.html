@@ -1,26 +1,29 @@
 <h1>Как зовут вашу маму?</h1>
+
+  <div ng-show="hasError('mother')" class="error">
+    {{family.mother.error}}
+  </div>
+  <div ng-show="hasNewName('mother')" class="warning">
+    Если вы хотите продолжить с этим именем, пожалуйста, подтвердите:
+    <br>
+    <button class="bttn green small" ng-click="confirmNewName('mother', 0)">Да, продолжить</button>
+    <button class="bttn red small" ng-click="resetNewName('mother')">Нет</button>
+  </div>
+
 <div class="control">
-  <div class="warning" ng-hide="isNameValid(family.mother)">
-    <i class="fa fa-question-circle"></i>
-    Пожалуйста, выберите имя из списка
-  </div>
-  <div class="success" ng-show="isNameValid(family.mother)">
-    <i class="fa fa-thumbs-up"></i>
-    Отлично, можно двигаться дальше...
-  </div>
   <input type="text"
          ng-model="family.mother"
-         ng-change="changeName('mother')"
+         ng-change="changeName('mother', family.mother)"
          ng-value="name"
          typeahead-on-select="onSelectName($model, 'mother')"
          placeholder="Начните вводить имя..."
          typeahead="item as item.name for item in getNames($viewValue, 0)"
-         typeahead-editable="false"
+         typeahead-editable="true"
          typeahead-loading="loading..."
          typeahead-template-url="customDropDownTemplate.html"
          autoFocus>
 </div>
 <div class="actions">
   <a ui-sref="form.father" class="bttn silver right">Назад</a>
-  <button ui-sref="form.brothers" ng-disabled="!isNameValid(family.mother)" class="bttn green left">Дальше</button>
+  <button ng-click="validateName('mother')" class="bttn green left">Дальше</button>
 </div>

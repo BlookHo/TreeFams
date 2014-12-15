@@ -43,6 +43,19 @@
       &:hover{ background-color:#c0392b; }
     }
 
+
+    &.pink{
+      background-color:#e02a94;
+      color:#fff;
+      &:hover{ background-color:#f62eba; }
+    }
+
+    &.blue{
+      background-color:#1a57e5;
+      color:#fff;
+      &:hover{ background-color:#4385f9; }
+    }
+
     &:disabled{
       background-color:#bdc3c7;
       opacity:0.4;
