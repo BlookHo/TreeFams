@@ -1,0 +1,69 @@
+.container#search_similars
+  %h1 Тест на "Похожие" (SearchSimilars#index)
+
+
+  %h1 Данные о текущем дереве
+  - if @tree_info.empty?
+    %table
+      %tr
+        %td.left.grey.italic
+          Данныx о текущем дереве - нет
+  - else
+    %h2 Количество профилей в дереве: #{@tree_info[:tree_profiles_amount]}
+    %h2 Пользователи - авторы дерева: #{@tree_info[:connected_users]}
+    %h2 Массив профилей в дереве:     #{@tree_info[:tree_is_profiles]}
+  %br
+  %br
+  %br
+  %br
+
+
+  %h1 Найденные "Похожие"
+  - if @paged_similars_data.blank?
+    %table
+      %tr
+        %td.left.grey.italic
+          "Похожих" - нет! И это - неплохо.. (@paged_similars_data = empty)
+  - else
+    %table
+      %tr
+        -#%th Aвтор обновления
+        -#%th Эл.почта автора
+        %th Содержание
+        -#%th No
+        -#%th С кем связано
+        -#%th Прочитано
+        -#%th Изображение
+        %th Дата обновления
+
+      - @paged_similars_data.each do |updates_feed|
+        %tr
+          -#%td= updates_feed[:user_update_author]
+          -#%td= updates_feed[:user_author_email]
+          %td= updates_feed[:update_text]#.inspect
+          -#%td= updates_feed[:update_id]
+
+          -#%td= updates_feed[:agent_in_update].inspect
+          -#%td= updates_feed[:update_read]
+          -#%td= updates_feed[:update_image]
+          %td= updates_feed[:update_created]
+
+          -#%td= updates_feed.user_id
+          -#%td= updates_feed.agent_user_id
+          -#%td= updates_feed.read
+
+
+    = paginate @paged_similars_data
+
+
+
+  %br
+  = link_to 'К просмотру твоего дерева', home_path
+
+
+
+
+
+
+
+

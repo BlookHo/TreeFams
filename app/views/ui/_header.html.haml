@@ -7,6 +7,9 @@
 
     %ul
       - if current_user
+
+        %li= link_to raw("<i class='fa fa-gears'></i> Тест 'Похожие' <span>#{count_new_requests}</span>"), internal_similars_search_path, :class => "ttip", title: "Запуск теста на наличие похожих профилей в дереве пользователя сайтаК тебе есть новые запросы на рукопожатия"
+
         -# = count_new_requests
         -# - if @new_requests_count.blank? || @new_requests_count == 0
         -#   %li= link_to raw("Рукопожатия <i class='fa fa-globe '></i> "), show_user_requests_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
@@ -14,7 +17,6 @@
         -#   %li= link_to raw("Рукопожатия <i class='fa fa-globe '></i> <strong>(*)</strong>"), show_user_requests_path, :class => "ttip", title: "К тебе есть новые запросы на рукопожатия"
         -# - else
         -#   %li= link_to raw("Рукопожатия <i class='fa fa-globe'></i> <strong>(#{@new_requests_count})</strong>"), show_user_requests_path, :class => "ttip", title: "К тебе есть новые запросы на рукопожатия"
-
 
         - if count_new_requests > 0
           %li= link_to raw("<i class='fa fa-globe'></i> Рукопожатия <span>#{count_new_requests}</span>"), show_user_requests_path, :class => "ttip", title: "К тебе есть новые запросы на рукопожатия"

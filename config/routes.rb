@@ -1,5 +1,7 @@
 Weafam::Application.routes.draw do
 
+  get 'search_similars/index'
+
   resources :updates_events
 
   resources :updates_feeds, except: [:update, :show, :destroy, :new, :edit]
@@ -22,6 +24,10 @@ Weafam::Application.routes.draw do
 
   match 'make_connection_request' => 'connection_requests#make_connection_request', via: :get
   match 'make_connection_request' => 'connection_requests#make_connection_request', via: :post
+
+  # SearchSimilars controller
+  match 'internal_similars_search' => 'search_similars#internal_similars_search', via: :get
+
 
 
   # messages controller

@@ -1,0 +1,2 @@
+module SearchSimilarsHelper
+end

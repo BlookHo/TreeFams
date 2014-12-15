@@ -23,6 +23,8 @@ class UpdatesFeed < ActiveRecord::Base
     end
   end
 
+
+
   # Пометка отображенных обновлений как прочитанные
   # для подсвечивания в View.
   def self.read_updates(updates_feeds)

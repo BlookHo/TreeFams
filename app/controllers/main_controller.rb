@@ -26,7 +26,7 @@ class MainController < ApplicationController
       @author_id = current_user.id # DEBUGG_TO_VIEW
 
       connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
-      author_tree_arr = get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree # DEBUGG_TO_VIEW
+      author_tree_arr = Tree.get_connected_tree(connected_author_arr) # Массив объединенного дерева из Tree # DEBUGG_TO_VIEW
       @author_tree_arr = author_tree_arr # DEBUGG_TO_VIEW
       @tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq # DEBUGG_TO_VIEW
 
