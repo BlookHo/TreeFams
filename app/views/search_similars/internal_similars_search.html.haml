@@ -1,5 +1,6 @@
 .container#search_similars
   %h1 Тест на "Похожие" (SearchSimilars#index)
+  %br
 
 
   %h1 Данные о текущем дереве
@@ -9,10 +10,9 @@
         %td.left.grey.italic
           Данныx о текущем дереве - нет
   - else
-    %h2 Количество профилей в дереве: #{@tree_info[:tree_profiles_amount]}
     %h2 Пользователи - авторы дерева: #{@tree_info[:connected_users]}
     %h2 Массив профилей в дереве:     #{@tree_info[:tree_is_profiles]}
-  %br
+    %h2 Количество профилей в дереве: #{@tree_info[:tree_profiles_amount]}
   %br
   %br
   %br

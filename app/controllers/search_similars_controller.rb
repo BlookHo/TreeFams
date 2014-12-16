@@ -11,8 +11,8 @@ class SearchSimilarsController < ApplicationController
 
     @tree_info = get_tree_info(current_user)
     view_similars_data = ProfileKey.search_similars(@tree_info)
-  #  @paged_similars_data = pages_of(view_similars_data, 10) # Пагинация - по 10 строк на стр.(?)
-  #  logger.info "In internal_similars_search: @paged_similars_data.size = #{@paged_similars_data.size} "
+    @paged_similars_data = pages_of(view_similars_data, 10) # Пагинация - по 10 строк на стр.(?)
+    logger.info "In internal_similars_search: @paged_similars_data.size = #{@paged_similars_data.size} "  if !view_similars_data.blank?
 
   end
 
