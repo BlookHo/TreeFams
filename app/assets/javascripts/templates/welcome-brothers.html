@@ -1,25 +1,39 @@
 <h1>У вас есть братья?</h1>
 
 <!-- ng-form -->
-<div ng-repeat="brother in family.brothers" class="control">
+<div ng-repeat="brother in family.brothers">
 
-  <a ng-click="removeMember($index, 'brothers')" class="remove-field">удалить</a>
-  <input type="text"
-         ng-model="brother"
-         ng-change="changeMultipleName('brothers', $index, brother)"
-         typeahead-on-select="onMultipleSelectName($model, 'brothers', $index)"
-         placeholder="Начните вводить имя..."
-         typeahead="item as item.name for item in getNames($viewValue)"
-         typeahead-editable="true"
-         typeahead-loading="loading..."
-         typeahead-template-url="customDropDownTemplate.html"
-         autoFocus>
+  <div ng-show="hasError('brothers', $index)" class="error">
+    {{brother.error}}
+  </div>
 
+  <div ng-show="hasNewName('brothers', $index)" class="warning">
+    Если вы хотите продолжить с этим именем, пожалуйста, подтвердите:
+    <br>
+    <button class="bttn green small" ng-click="confirmNewName('brothers', 1, $index)">Да, продолжить</button>
+    <button class="bttn red small" ng-click="resetNewName('brothers', $index)">Нет</button>
+  </div>
+
+  <div class="control">
+    <a ng-click="removeMember($index, 'brothers')" class="remove-field">удалить</a>
+    <input type="text"
+           ng-model="family.brothers[$index].name"
+           ng-change="changeMemberName('brothers', $index, family.brothers[$index].name)"
+           typeahead-on-select="onMultipleSelectName($model, 'brothers', $index)"
+           placeholder="Начните вводить имя, например: Иван"
+           typeahead="item as item.name for item in getNames($viewValue, 1)"
+           typeahead-editable="true"
+           typeahead-loading="loading..."
+           typeahead-template-url="customDropDownTemplate.html"
+           autoFocus >
+  </div>
 </div>
+
 
 <div class="control add">
-  <a ng-click="addMember('brothers')" class="bttn small">Добавить брата</a>
+  <a ng-click="addMember('brothers')" class="bttn blue small">+ Добавить брата</a>
 </div>
+
 
 <div class="actions">
   <a ui-sref="form.mother" class="bttn silver right">Назад</a>

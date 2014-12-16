@@ -9,6 +9,15 @@
   h1{
     font-size:2em;
     margin-bottom:.8em;
+    position:relative;
+
+    &.required:before{
+      content:'*';
+      color:red;
+      position:absolute;
+      left:-10px;
+      top:0;
+    }
   }
 
 
@@ -21,7 +30,7 @@
 
   form{
     width:400px;
-    margin-top:40%;
+    margin-top:20%;
     margin-left: auto;
     margin-right: auto;
     box-shadow:0 -1px 8px rgba(0,0,0,0.35);
@@ -86,13 +95,13 @@
   // }
 
 
-  .success{
-    color:green;
-    font-size:small;
-
-
-    .fa{color:green;}
-  }
+  // .success{
+  //   color:green;
+  //   font-size:small;
+  //
+  //
+  //   .fa{color:green;}
+  // }
 
 
   .control, .actions{
@@ -129,7 +138,7 @@
     z-index:20;
     text-indent:-10000px;
     right:2px;
-    bottom:-13px;
+    top:10px;
 
     &:after{
       position:absolute;

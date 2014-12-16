@@ -19,7 +19,6 @@
 //= require angular-rails-templates
 //= require libs/ui-bootstrap-tpls-0.9.0
 //= require_tree ./templates
-//= require libs/ngRemoteValidate.0.6.1.min.js
 //= require apps/welcome_application
 
 

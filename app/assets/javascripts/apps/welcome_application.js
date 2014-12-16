@@ -84,6 +84,7 @@ var app = angular
   // catch all route
   // send users to the root form page
   $urlRouterProvider.otherwise('/form/author');
+
 })
 
 
@@ -93,7 +94,7 @@ var app = angular
 .controller('welcomeApplicationController', function($scope, $http, $state) {
 
 
-  // Drag form
+  // Start Drag form
   $('#start form').draggable({ handle: "#dragger" });
 
 
@@ -170,6 +171,7 @@ var app = angular
   };
 
 
+
   $scope.onSelectName = function(model, modelName){
     console.log("onSelectName "+ Date.now() );
     eval('$scope.family'+modelName+'= model;');
@@ -177,11 +179,29 @@ var app = angular
   }
 
 
-  $scope.changeMultipleName = function(modelName, index, name){
-    console.log("changeMultipleName "+ Date.now() );
+
+  $scope.changeMemberName = function(modelName, index, name){
+    // По всей видимости баг в angular или в ui-bootstrap
+    // который ломает выпадающий список при изменении данных на ng-change
+    // поэтому чистим возможный аттрибуты таким образом
+    eval("delete $scope.family."+modelName+"[index]['sex_id']");
+    eval("delete $scope.family."+modelName+"[index]['id']");
+    eval("delete $scope.family."+modelName+"[index]['new']");
+    eval("delete $scope.family."+modelName+"[index]['search_name_id']");
+    eval("delete $scope.family."+modelName+"[index]['parent_name']");
     removeMultipleDataFormGraph(modelName, index);
-    eval('$scope.family.'+modelName+'[index] = {name: name};');
-  };
+  }
+
+
+
+
+  // $scope.changeMultipleName = function(modelName, index, name){
+  //   console.log("changeMultipleName "+ Date.now());
+  //   console.log(name);
+  //   removeMultipleDataFormGraph(modelName, index);
+  //   eval('$scope.family.'+modelName+'[index] = {name: name};');
+  // };
+
 
 
   $scope.onMultipleSelectName = function(model, modelName, index){
@@ -191,10 +211,11 @@ var app = angular
   }
 
 
+
   // Add or remove member
   $scope.addMember = function(modelName) {
     console.log("addMember "+ Date.now() );
-    eval('$scope.family.'+modelName+'.push({name: ""}) ')
+    eval('$scope.family.'+modelName+'.push({name:""}) ')
   };
 
 
@@ -212,23 +233,56 @@ var app = angular
   ------------------------------------------ */
   // Single name fields
   $scope.validateName = function(modelName){
-    if ( $scope.stepIsRequired(modelName) && $scope.isNameValid(modelName) ){
+    // if ( $scope.stepIsRequired(modelName) && $scope.isNameValid(modelName) ){
+    if ( $scope.isNameValid(modelName) ){
       pushDataToGraph(modelName, eval('$scope.family.'+modelName+';') );
       $scope.goToNextStep();
     }
   }
 
 
-  // Multiple name fields
+
+  // Multiple name fields validation
   $scope.validateNames = function(modelName){
     var members = eval("$scope.family."+ modelName);
+    var no_errors;
     if (members.length > 0 ){
-      // alert("Validate each member");
       angular.forEach( eval("$scope.family."+ modelName), function(value, key) {
-        console.log('validate brother'+ value );
-        // alert(value);
-        // alert(key);
-      })
+
+        // If name selected from list
+        if ( value.hasOwnProperty('name') && value.hasOwnProperty('sex_id') ){
+          no_errors = true;
+          pushMultipleDataToGraph(modelName, value, key);
+          return true;
+        }else{
+          // Validate blank name
+          if ( $scope.isNameBlank(modelName, key) ){
+            var name_error = {name: "", error: "Нужно указать имя"};
+            eval('$scope.family.'+modelName+'[key] = name_error;');
+            no_errors = false;
+            return false;
+          }
+
+          // if name not selected from list
+          $http.get('/names/find', {
+            params: {term: value.name}
+          }).success(function(response){
+            eval('$scope.family.'+modelName+'[key] = response;');
+            $scope.validateNames(modelName); // reRun names validation
+            return true;
+          }).error(function(){
+            var name_error = {name: value.name, new: true, error: "Вы указали имя, которого нет у нас в базе. Вы уверены, что не ошиблись при вводе?"}
+            eval('$scope.family.'+modelName+'[key] = name_error;');
+            no_errors = false;
+            return false;
+          })
+        }
+      }) // each
+
+      // // if memebrs has no error
+      if (no_errors){
+        $scope.goToNextStep();
+      }
     }else{
       $scope.goToNextStep();
     }
@@ -245,12 +299,21 @@ var app = angular
 
 
 
+
   // Пустое имя?
-  $scope.isNameBlank = function(modelName){
-    if ( eval('$scope.family.'+modelName+'.hasOwnProperty("name");') ){
-      return eval('$scope.family.'+modelName+'.name.length == 0;');
+  $scope.isNameBlank = function(modelName, index){
+    if (typeof index != 'undefined'){
+        if ( eval('$scope.family.'+modelName+'[index].hasOwnProperty("name");') ){
+          return eval('$scope.family.'+modelName+'[index].name.length == 0;');
+        }else{
+          return true;
+        }
     }else{
-      return true;
+      if ( eval('$scope.family.'+modelName+'.hasOwnProperty("name");') ){
+        return eval('$scope.family.'+modelName+'.name.length == 0;');
+      }else{
+        return true;
+      }
     }
   }
 
@@ -259,18 +322,29 @@ var app = angular
   // Check name
   $scope.isNameValid = function(modelName){
     try {
+
       // If name selected from list
       var model = eval("$scope.family."+modelName+";");
       if ( model.hasOwnProperty('name') && model.hasOwnProperty('sex_id') ){
         return true;
+
+      // if name not selected from list
       }else{
-        // if name blank
-        if ( $scope.stepIsRequired(modelName) &&  $scope.isNameBlank(modelName)){
+
+        // if name required
+        if ( $scope.stepIsRequired(modelName) && $scope.isNameBlank(modelName)){
           var name_error = {name: "", error: "Нужно указать имя"};
           eval('$scope.family.'+modelName+' = name_error;');
           return false;
         }
-        // if name not selected from list
+
+
+        // if name NOT required and blank
+        if (!$scope.stepIsRequired(modelName) && $scope.isNameBlank(modelName) ){
+          return true;
+        }
+
+        // otherwise
         $http.get('/names/find', {
           params: {term: model.name}
         }).success(function(response){
@@ -282,8 +356,8 @@ var app = angular
           eval('$scope.family.'+modelName+' = name_error;');
           return false;
         })
-      }
 
+      }
     }catch(e){
       return false;
     }
@@ -291,33 +365,53 @@ var app = angular
 
 
 
-  $scope.confirmNewName = function(modelName, sex_id){
-    $scope.clearNameError(modelName);
-    eval('$scope.family.'+modelName+'["sex_id"] = sex_id;');
+  $scope.confirmNewName = function(modelName, sex_id, index){
+    if (typeof index != 'undefined'){
+      $scope.clearNameError(modelName, index);
+      eval('$scope.family.'+modelName+'[index]["sex_id"] = sex_id;');
+    }else{
+      $scope.clearNameError(modelName);
+      eval('$scope.family.'+modelName+'["sex_id"] = sex_id;');
+    }
   }
 
 
-  $scope.resetNewName = function(modelName){
-    eval('$scope.family.'+modelName+' = "";');
+  $scope.resetNewName = function(modelName, index){
+    if (typeof index != 'undefined'){
+      eval('$scope.family.'+modelName+'[index]={name: ""}');
+    }else{
+      eval('$scope.family.'+modelName+' = "";');
+    }
   }
 
 
-
-  $scope.clearNameError = function(modelName){
-    eval('delete $scope.family.'+modelName+'["error"];');
+  $scope.clearNameError = function(modelName, index){
+    if (typeof index != 'undefined'){
+      eval('delete $scope.family.'+modelName+'[index]["error"];');
+    }else{
+      eval('delete $scope.family.'+modelName+'["error"];');
+    }
   }
 
 
 
   // Check if model has errors
-  $scope.hasError = function(modelName){
-    return eval('$scope.family.'+modelName+'.hasOwnProperty("error");');
+  $scope.hasError = function(modelName, index){
+    if (typeof index != 'undefined'){
+      return eval('$scope.family.'+modelName+'[index].hasOwnProperty("error");');
+    }else{
+      return eval('$scope.family.'+modelName+'.hasOwnProperty("error");');
+    }
   }
 
 
 
-  $scope.hasNewName = function(modelName){
-    var result = ( (eval('$scope.family.'+modelName+'.hasOwnProperty("new")')) && !(eval('$scope.family.'+modelName+'.hasOwnProperty("sex_id")'))  );
+  $scope.hasNewName = function(modelName, index){
+    if (typeof index != 'undefined'){
+      var result = ( (eval('$scope.family.'+modelName+'[index].hasOwnProperty("new")')) && !(eval('$scope.family.'+modelName+'[index].hasOwnProperty("sex_id")'))  );
+    }else{
+      var result = ( (eval('$scope.family.'+modelName+'.hasOwnProperty("new")')) && !(eval('$scope.family.'+modelName+'.hasOwnProperty("sex_id")'))  );
+    }
     return result;
   }
 
@@ -326,9 +420,8 @@ var app = angular
 
 
 
-
-
   // State validation with redirect
+  /*
   $scope.$on('$viewContentLoaded', function () {
 
     // father -> author
@@ -355,7 +448,6 @@ var app = angular
     }
 
 
-    // TEMP: stop here
     // sisters -> mother
     if ($state.current.name == 'form.sisters'){
       if (!$scope.isMotherValid()){
@@ -402,6 +494,7 @@ var app = angular
     }
 
   });
+  */
 
 
 
@@ -430,7 +523,37 @@ var app = angular
       $state.go('form.sisters');
     }
 
+
+    // sisters -> sons
+    if ($state.current.name == 'form.sisters'){
+      $state.go('form.sons');
+    }
+
+
+    // sons -> daughters
+    if ($state.current.name == 'form.sons'){
+      $state.go('form.daughters');
+    }
+
+
+    // daughters -> wife || husband
+    if ($state.current.name == 'form.daughters'){
+      if ($scope.family.author.sex_id == 0){
+        $state.go('form.husband');
+      }else{
+        $state.go('form.wife');
+      }
+    }
+
+
+    // wife || husband -> email
+    if (($state.current.name == 'form.husband') || ($state.current.name == 'form.wife')){
+      $state.go('form.email');
+    }
+
+
   }
+
 
 
 
@@ -441,6 +564,7 @@ var app = angular
       return false;
     }
   }
+
 
   $scope.hasHusband = function(){
     try {
@@ -454,22 +578,23 @@ var app = angular
 
 
   $scope.submitData = function(){
-    $scope.loading = true;
-    $http({
-      method : 'POST',
-      url : '/register',
-      data : {family: $scope.family}
-    }).success(function(data){
-      $scope.loading = false;
-      if (data.errors) {
-        $scope.error = "Email "+data.errors['email'];
-      }else{
-        window.location.href = '/home';
-      }
-    }).error(function(data){
-      $scope.loading = false;
-      alert('Неизвестная ошибка ;(');
-    });
+    alert("Form complete. Send data to the server.");
+    // $scope.loading = true;
+    // $http({
+    //   method : 'POST',
+    //   url : '/register',
+    //   data : {family: $scope.family}
+    // }).success(function(data){
+    //   $scope.loading = false;
+    //   if (data.errors) {
+    //     $scope.error = "Email "+data.errors['email'];
+    //   }else{
+    //     window.location.href = '/home';
+    //   }
+    // }).error(function(data){
+    //   $scope.loading = false;
+    //   alert('Неизвестная ошибка ;(');
+    // });
   };
 
 
