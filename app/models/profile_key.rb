@@ -9,6 +9,22 @@ class ProfileKey < ActiveRecord::Base
   belongs_to :display_name, class_name: Name, foreign_key: :is_display_name_id
   belongs_to :relation, primary_key: :relation_id
 
+  # пересечение 2-х хэшей, у которых - значения = массивы
+  def self.intersection(first, other)
+    result = {}
+    first.reject { |k, v| !(other.include?(k)) }.each do |k, v|
+      result.merge!({k => (other[k] & v)})
+    end
+    result
+  end
+
+  # Наращивание массива значений Хаша для одного ключа
+  # Если ключ - новый, то формирование новой пары.
+  def self.growing_val_arr(hash, other_key, other_val )
+    hash.keys.include?(other_key) ? hash[other_key] << other_val : hash.merge!({other_key => [other_val]})
+    hash
+  end
+
 
   # Это обновления связ. с запросами на объединения
   # Дурацкая запись SQL запроса из-за OR
@@ -23,27 +39,24 @@ class ProfileKey < ActiveRecord::Base
       tree_info[:tree_is_profiles]
       logger.info "In  self.search_similars: tree_info = #{tree_info}"
 
+      logger.info "-----"
+      # TEST growing_val_arr
+      hash_1 = {1 =>[11, 58, 66], 2 =>[ 66], 12 => [1, 100],  13 => [1100]}
+      key_2 = 124
+      val_2 = 2333
+      growing_hash = ProfileKey.growing_val_arr(hash_1, key_2, val_2)
+      logger.info "In TEST1 search_similars grow val << growing_hash = #{growing_hash}"
 
-      hash1 = {'fa' =>[58, 66], 'fo' => 100} #, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
-      hash2 = {'fa' =>[58], 'fo' => 100} #, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
-      common_hash = hash1 & hash2
-      logger.info "In search_similars common_hash = #{common_hash}"
+      logger.info "-----"
+      # TEST intersection
+      hash1 = {1 =>[11, 58, 66], 2 =>[ 66], 12 => [1, 100],  13 => [1100]}
+      hash2 = {1 =>[58], 12 => [100], 2 =>[58, 66],}
+      common_hash = ProfileKey.intersection(hash1,hash2)
+      logger.info "In TEST2 search_similars common_hash = #{common_hash}"
 
-     rez = {'fa' =>[58], 'fo' => 100}
+      logger.info "-----"
 
-      hash11 = {'fa1' =>[58], 'fa2' => 66,               'fo1' => 100} #, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
-      hash22 = {'fa1' =>[58], 'fa2' => 68,  'fa3' => 66, 'fo1' => 100} #, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
-
-      common_hash12 = hash11 & hash22
-      logger.info "In search_similars common_hash12 = #{common_hash12}"
-
-      arr1 = [58, 66]
-      arr2 = [58]
-      common_arr = arr1 & arr2
-      logger.info "In search_similars common_arr = #{common_arr}"
-
-
-    #  tree_circles = ProfileKey.get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
+      tree_circles = ProfileKey.get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
 
       ProfileKey.compare_tree_circles(tree_info) # Сравниваем все круги на похожесть (совпадение)
 
@@ -76,17 +89,20 @@ class ProfileKey < ActiveRecord::Base
   # Получаем один круг для одного профиля в дереве
   def self.get_profile_circle(profile_id, connected_users_arr)
 
-    profile_circle = ProfileKey.where(:user_id => connected_users_arr, :profile_id => profile_id).order('user_id','relation_id','is_name_id').select( :user_id, :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
-    ProfileKey.show_in_logger(profile_circle, "profile_circle - запись" )  # DEBUGG_TO_LOGG
-    logger.info "In get_profile_circle: profile_circle.size = #{profile_circle.size}" if !profile_circle.blank?
+    profile_circle = ProfileKey.where(:user_id => connected_users_arr, :profile_id => profile_id).order('relation_id','is_name_id').select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
+    ProfileKey.show_in_logger(profile_circle, "profile_circle - запись" )  # Ok DEBUGG_TO_LOGG
+    logger.info "In get_profile_circle1: profile_circle.size = #{profile_circle.size}" if !profile_circle.blank?
 
-    circle_profiles_arr = ProfileKey.make_arrays_from_circle(profile_circle)
-    logger.info "In get_profile_circle: circle_profiles_arr = #{circle_profiles_arr}" if !circle_profiles_arr.blank?
+    circle_profiles_arr = ProfileKey.make_arrays_from_circle(profile_circle)  # Ok
+    logger.info "In get_profile_circle2: circle_profiles_arr = #{circle_profiles_arr}" if !circle_profiles_arr.blank?
 
     profile_circle_hash = ProfileKey.convert_circle_to_hash(circle_profiles_arr)
-    logger.info "In get_profile_circle: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
+    logger.info "In get_profile_circle3: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
 
-    return profile_circle_hash
+    profile_circle = ProfileKey.make_profile_circle(profile_id, profile_circle_hash)
+    logger.info "In get_profile_circle4: profile_circle = #{profile_circle}" if !profile_circle.empty?
+
+    return profile_circle
 
   end
 
@@ -109,18 +125,30 @@ class ProfileKey < ActiveRecord::Base
     circle_arr.each do |one_row_hash|
       circle_keys_arr = profile_circle_hash.keys
       relation_val, is_name_val, is_profile_val = ProfileKey.get_row_data(one_row_hash)
-      logger.info "In convert_circle_to_hash: relation_val = #{relation_val}, is_name_val = #{is_name_val}, is_profile_val = #{is_profile_val}"# if !profile_circle_hash.empty?
+      logger.info "In convert_circle_to_hash1: relation_val = #{relation_val}, is_name_val = #{is_name_val}, is_profile_val = #{is_profile_val}"# if !profile_circle_hash.empty?
       name_relation = ProfileKey.get_name_relation(relation_val)
-      logger.info "In convert_circle_to_hash: name_relation = #{name_relation}"
+      logger.info "In convert_circle_to_hash2: name_relation = #{name_relation}"
       # Получаем новое по порядку имя отношения в новый элемент хэша круга
       new_name_relation = ProfileKey.get_new_elem_name(circle_keys_arr, name_relation)
-      logger.info "In convert_circle_to_hash: new_name_relation = #{new_name_relation}"
+      logger.info "In convert_circle_to_hash3: new_name_relation = #{new_name_relation}"
       # Наращиваем круг в виде хэша
       profile_circle_hash.merge!( new_name_relation => is_name_val )
+      logger.info "In convert_circle_to_hash4: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
+      logger.info "-----"
     end
-    logger.info "In convert_circle_to_hash: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
+    logger.info "In convert_circle_to_hash5: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
     return profile_circle_hash
   end
+
+  # МЕТОД Получения Круга профиля в виде Хэша: { профиль => хэш круга }
+  def self.make_profile_circle(profile_id, profile_circle_hash)
+    profile_circle = {}
+    profile_circle.merge!( profile_id => profile_circle_hash )  if !profile_circle_hash.empty?
+    logger.debug " In make_profile_circle: profile_circle  = #{profile_circle}"
+    return profile_circle
+  end
+
+
 
   def self.get_row_data(one_row_hash)
     if !one_row_hash.empty?
