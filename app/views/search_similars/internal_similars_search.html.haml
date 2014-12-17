@@ -18,7 +18,7 @@
   %br
 
 
-  %h1 Найденные "Похожие"
+  %h1 Найденные пары "Похожих"
   - if @paged_similars_data.blank?
     %table
       %tr
@@ -27,34 +27,28 @@
   - else
     %table
       %tr
-        -#%th Aвтор обновления
-        -#%th Эл.почта автора
-        %th Содержание
-        -#%th No
-        -#%th С кем связано
-        -#%th Прочитано
-        -#%th Изображение
-        %th Дата обновления
+        %th Первый профиль
+        %th Первое имя
+        %th Первый пол
+        %th Второй профиль
+        %th Второе имя
+        %th Второй пол
+        %th Общие отношения
+        %th Мощность общности
 
-      - @paged_similars_data.each do |updates_feed|
+      - @paged_similars_data.each do |similars_data|
         %tr
-          -#%td= updates_feed[:user_update_author]
-          -#%td= updates_feed[:user_author_email]
-          %td= updates_feed[:update_text]#.inspect
-          -#%td= updates_feed[:update_id]
-
-          -#%td= updates_feed[:agent_in_update].inspect
-          -#%td= updates_feed[:update_read]
-          -#%td= updates_feed[:update_image]
-          %td= updates_feed[:update_created]
-
-          -#%td= updates_feed.user_id
-          -#%td= updates_feed.agent_user_id
-          -#%td= updates_feed.read
+          %td= similars_data[:first_profile_id]
+          %td= similars_data[:first_name_id]
+          %td= similars_data[:first_sex_id]#.inspect
+          %td= similars_data[:second_profile_id]
+          %td= similars_data[:second_name_id].inspect
+          %td= similars_data[:second_sex_id]
+          %td= similars_data[:common_relations]
+          %td= similars_data[:common_power]
 
 
     = paginate @paged_similars_data
-
 
 
   %br
