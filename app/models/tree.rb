@@ -13,7 +13,7 @@ class Tree < ActiveRecord::Base
       tree_is_profiles = profiles.map {|p| p.is_profile_id }.uniq
       profiles_qty = tree_is_profiles.size #+ connected_users.size
 
-      return profiles_qty
+      return profiles_qty, tree_is_profiles
     end
   end
 
@@ -22,17 +22,9 @@ class Tree < ActiveRecord::Base
   # Получение массива дерева соединенных Юзеров из Tree
   # На входе - массив соединенных Юзеров
   def self.get_connected_tree(connected_users_arr)
-    tree_arr = Tree.where(:user_id => connected_users_arr).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct#.group(:is_profile_id)
+    tree_arr = Tree.where(:user_id => connected_users_arr).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
     return tree_arr
   end
-
-  # На входе - массив соединенных Юзеров
-  def self.get_uniq_connected_tree(connected_users_arr)
-   # tree_arr = Tree.where(:user_id => connected_users_arr).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct# (:is_profile_id)
-    tree_arr = Tree.where(:user_id => connected_users_arr).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct(:is_profile_id) # profile_id name_id,:relation_id")#:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct(:is_profile_id)
-    return tree_arr
-  end
-
 
 
 end

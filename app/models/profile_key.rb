@@ -39,40 +39,34 @@ class ProfileKey < ActiveRecord::Base
       tree_info[:current_user]
       tree_info[:tree_profiles_amount]
       tree_info[:connected_users]
-      tree_info[:author_tree_arr]
       tree_info[:tree_is_profiles]
+      tree_info[:profiles]
       logger.info "In  self.search_similars: tree_info = #{tree_info}"
 
 
-       logger.info "-----"
-      # TEST growing_val_arr
-      hash_1 = {1 =>[11, 58, 66], 2 =>[ 66], 12 => [1, 100],  13 => [1100]}
-      key_2 = 124
-      val_2 = 2333
-      growing_hash = ProfileKey.growing_val_arr(hash_1, key_2, val_2)
-      logger.info "In TEST1 search_similars grow val << growing_hash = #{growing_hash}"
-
-      logger.info "-----"
-      # TEST intersection
-      hash1 = {1 =>[11, 58, 66], 2 =>[ 68], 12 => [1, 100],  13 => [1100]}
-      hash2 = {1 =>[58], 12 => [100], 2 =>[58, 66],}
-      common_hash = ProfileKey.intersection(hash1,hash2)
-      logger.info "In TEST2 search_similars common_hash = #{common_hash}"
-
+      # logger.info "-----"
+      ## TEST growing_val_arr
+      #hash_1 = {1 =>[11, 58, 66], 2 =>[ 66], 12 => [1, 100],  13 => [1100]}
+      #key_2 = 124
+      #val_2 = 2333
+      #growing_hash = ProfileKey.growing_val_arr(hash_1, key_2, val_2)
+      #logger.info "In TEST1 search_similars grow val << growing_hash = #{growing_hash}"
+      #
+      #logger.info "-----"
+      ## TEST intersection
+      #hash1 = {1 =>[11, 58, 66], 2 =>[ 68], 12 => [1, 100],  13 => [1100]}
+      #hash2 = {1 =>[58], 12 => [100], 2 =>[58, 66],}
+      #common_hash = ProfileKey.intersection(hash1,hash2)
+      #logger.info "In TEST2 search_similars common_hash = #{common_hash}"
+      #
       logger.info "-----"
 
       tree_circles = ProfileKey.get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
       logger.info "In search_similars 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
       logger.info "In search_similars 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
 
+
       similars = ProfileKey.compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
-
- #     view_similars_data = ProfileKey.make_view_data(tree_info, similars) # Формируем инфу для View
-
-      #logger.info "In  self.search_similars: view_similars_data.size = #{view_similars_data.size}" if !view_similars_data.blank?
-      #logger.info "In  self.search_similars: view_similars_data = #{view_similars_data}" if !view_similars_data.blank?
-      #logger.info "In  self.search_similars: view_similars_data.kind of Array = #{view_similars_data.kind_of?(Array)}" if !view_similars_data.empty?
-      #logger.info "In  self.search_similars: view_similars_data.kind of Hash = #{view_similars_data.kind_of?(Hash)}" if !view_similars_data.empty?
 
       return similars
 
