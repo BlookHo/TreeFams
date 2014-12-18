@@ -226,6 +226,15 @@ var app = angular
   };
 
 
+  $scope.addNameDescription = function(modeName, data, index){
+    if (typeof index != 'undefined'){
+
+    }else{
+      eval('$scope.family.'+modelName+'.name_description = data;')
+    }
+  }
+
+
 
 
 
@@ -352,7 +361,7 @@ var app = angular
           $scope.validateName(modelName); // reRun name validation
           return true;
         }).error(function(){
-          var name_error = {name: model.name, new: true, error: "Вы указали имя, которого нет у нас в базе. Вы уверены, что не ошиблись при вводе?"}
+          var name_error = {name: model.name, new: true, error: "Вы указали имя, которого нет у нас в базе. Вы уверены, что не ошиблись при вводе?", name_description: model.name_description}
           eval('$scope.family.'+modelName+' = name_error;');
           return false;
         })
@@ -578,23 +587,23 @@ var app = angular
 
 
   $scope.submitData = function(){
-    alert("Form complete. Send data to the server.");
-    // $scope.loading = true;
-    // $http({
-    //   method : 'POST',
-    //   url : '/register',
-    //   data : {family: $scope.family}
-    // }).success(function(data){
-    //   $scope.loading = false;
-    //   if (data.errors) {
-    //     $scope.error = "Email "+data.errors['email'];
-    //   }else{
-    //     window.location.href = '/home';
-    //   }
-    // }).error(function(data){
-    //   $scope.loading = false;
-    //   alert('Неизвестная ошибка ;(');
-    // });
+
+    $scope.loading = true;
+    $http({
+      method : 'POST',
+      url : '/register',
+      data : {family: $scope.family}
+    }).success(function(data){
+      $scope.loading = false;
+      if (data.errors) {
+        $scope.error = "Email "+data.errors['email'];
+      }else{
+        window.location.href = data.redirect;
+      }
+    }).error(function(data){
+      $scope.loading = false;
+      alert('Неизвестная ошибка ;(');
+    });
   };
 
 

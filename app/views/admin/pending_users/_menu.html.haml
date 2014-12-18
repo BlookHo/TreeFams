@@ -1,0 +1,6 @@
+.dropdown
+  %button.btn.btn-default.dropdown-toggle#name_menu{type: 'button', 'data-toggle'=>"dropdown", 'aria-expanded'=>"true"}
+    Модерировать имя
+    %span.caret
+  %ul.dropdown-menu{role: "menu", "aria-labelledby"=>"name_menu"}
+    %li= link_to "Добавить имя в базу"

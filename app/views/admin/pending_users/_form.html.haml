@@ -1,0 +1,16 @@
+.form-group.form-group-lgs{class: ('warning' if data.has_key? "new")}
+  = label_tag :name, role, class: "col-sm-2 control-label"
+  .col-sm-2
+    = text_field_tag :name, data["name"], class: "form-control"
+  - if data.has_key? "new"
+    .col-sm-2
+      = link_to "Добавить имя в базу", new_admin_name_path(name: data["name"], sex_id: data["sex_id"]), class: [:btn, 'btn-default']
+    .col-sm-2
+      %select.selectpicker{name: "name[parent_name_id]", :"data-live-search" => "true", :"data-max-options"=>"2"}
+        %option.special_option{value:  '', selected: false } Заменить имя
+        - Name.all.each do |name|
+          %option{value: name.id, selected: false}
+            = name.name
+  - else
+    .col-sm-2
+      %i.fa.fa-check{style:"color:green;"}

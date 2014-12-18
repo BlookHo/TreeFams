@@ -1,0 +1,28 @@
+.page-header
+  %h2
+    Модерация пользователя
+    %small= @pending_user.id
+
+= form_for @pending_user, url: admin_pending_user_path(@pending_user), html:{role: :form, class: "form-horizontal"} do |f|
+
+  = render 'admin/shared/errors', :objekt => @pending_user
+
+  - @data.each do |key, value|
+    - if value.kind_of? Array
+      - value.each do |v|
+        = render 'form', data: v, role: key
+    - else
+      = render 'form', data: value, role: key
+
+  %br
+  %br
+  .form-group.form-group-lgs
+    .col-sm-2
+    .col-sm-4
+      = f.submit "Утвердить", class: "btn btn-success"
+      = f.submit "Заблокировать", class: "btn btn-danger"
+
+
+%hr
+
+= @pending_user.family

@@ -8,6 +8,11 @@
   <br>
   <button class="bttn blue small" ng-click="confirmNewName('author', 1)">Мужской</button>
   <button class="bttn pink small" ng-click="confirmNewName('author', 0)">Женский</button>
+  <a href="#" onclick="$('.description').toggle();">Подробнее...</a>
+  <div class="description" style="display:none;">
+    <textarea ng-model="family.author.name_description">
+    </textarea>
+  </div>
 </div>
 
 <div class="control">

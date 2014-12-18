@@ -187,6 +187,7 @@ Weafam::Application.routes.draw do
   get  'logout',     to:   "sessions#destroy",  as: :logout
   get  'signup',     to:   'signup#index',      as: :signup
   post 'register',   to:   'signup#create',     as: :register
+  get  'pending',    to:   'signup#pending',   as: :pending
 
 
 
@@ -232,6 +233,7 @@ Weafam::Application.routes.draw do
 
     resources :admins
     resources :users
+    resources :pending_users
     resources :subnames
 
     resources :names do
