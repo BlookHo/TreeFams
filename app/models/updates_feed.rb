@@ -146,7 +146,7 @@ class UpdatesFeed < ActiveRecord::Base
 
       when 7  # семейное событие в дереве
 
-      when 8,9,10 # изменилось кол-во родни в объединенном дереве   # OK
+      when 8 .. 16 # изменилось кол-во родни в объединенном дереве   # OK
                   # в рез-те добавления профиля или объединения деревьев in ProfilesController, ConnectUsersTreesController
         prefix, suffix = updates_feed.combine_8__16_text(updates_feed, current_user_id)
 
