@@ -283,89 +283,139 @@ class ProfileKey < ActiveRecord::Base
 
   # Сравниваем все круги на похожесть (совпадение)
   def self.compare_tree_circles(tree_info, tree_circles)
-    profiles_arr = tree_info[:tree_is_profiles]
-    profiles_arr = [27, 13, 11, 10, 28, 999, 61, 9, 7, 3, 12, 63, 8, 2]
 
-    logger.info "In compare_tree_circles -1: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
- #   rez_compare = {}
 
-    tree_circles =
-          {27=>{"son"=>[122], "wif"=>[449], "dil"=>[82], "gsf"=>[28]},
-           13=>{"fat"=>[122], "mot"=>[82], "son"=>[370, 465], "wif"=>[48], "wfl"=>[343], "wml"=>[82], "dil"=>[147], "gff"=>[90], "gmf"=>[449], "gdf"=>[446]},
-           11=>{"fat"=>[28], "mot"=>[48], "dau"=>[446], "bro"=>[465], "wif"=>[147], "gff"=>[122], "gfm"=>[343], "gmf"=>[82], "gmm"=>[82], "amo"=>[331]},
-           10=>{"fat"=>[343], "mot"=>[82], "sis"=>[48], "nem"=>[370, 465]},
-           28=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
 
-           999=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
+     tree_circles =    # test
+    {27=>{"son"=>[122], "wif"=>[449], "dil"=>[82], "gsf"=>[28]},
+     13=>{"fat"=>[122], "mot"=>[82], "son"=>[370, 465], "wif"=>[48], "wfl"=>[343], "wml"=>[82], "dil"=>[147], "gff"=>[90], "gmf"=>[449], "gdf"=>[446]},
+     11=>{"fat"=>[28], "mot"=>[48], "dau"=>[446], "bro"=>[465], "wif"=>[147], "gff"=>[122], "gfm"=>[343], "gmf"=>[82], "gmm"=>[82], "amo"=>[331]},
+     10=>{"fat"=>[343], "mot"=>[82], "sis"=>[48], "nem"=>[370, 465]},
+     28=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
 
-           61=>{"dau"=>[446], "hus"=>[370], "hfl"=>[28], "hml"=>[48]},
-           9=>{"dau"=>[48, 331], "hus"=>[343], "sil"=>[28], "gsm"=>[370, 465]},
-           7=>{"fat"=>[343], "mot"=>[82], "son"=>[370, 465], "sis"=>[331], "hus"=>[28], "hfl"=>[122], "hml"=>[82], "dil"=>[147], "gdf"=>[446]},
-           3=>{"son"=>[28], "hus"=>[122], "hfl"=>[90], "hml"=>[449], "dil"=>[48], "gsf"=>[370, 465]},
-           12=>{"fat"=>[28], "mot"=>[48], "bro"=>[370], "gff"=>[122], "gfm"=>[343], "gmf"=>[82], "gmm"=>[82], "amo"=>[331], "nif"=>[446]},
-           63=>{"fat"=>[370], "mot"=>[147], "gff"=>[28], "gmf"=>[48], "ufa"=>[465]},
-           8=>{"dau"=>[48, 331], "wif"=>[82], "sil"=>[28], "gsm"=>[370, 465]},
-           2=>{"fat"=>[90], "mot"=>[449], "son"=>[28], "wif"=>[82], "dil"=>[48], "gsf"=>[370, 465]}}
+     999=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
 
+     61=>{"dau"=>[446], "hus"=>[370], "hfl"=>[28], "hml"=>[48]},
+     9=>{"dau"=>[48, 331], "hus"=>[343], "sil"=>[28], "gsm"=>[370, 465]},
+     7=>{"fat"=>[343], "mot"=>[82], "son"=>[370, 465], "sis"=>[331], "hus"=>[28], "hfl"=>[122], "hml"=>[82], "dil"=>[147], "gdf"=>[446]},
+     3=>{"son"=>[28], "hus"=>[122], "hfl"=>[90], "hml"=>[449], "dil"=>[48], "gsf"=>[370, 465]},
+     12=>{"fat"=>[28], "mot"=>[48], "bro"=>[370], "gff"=>[122], "gfm"=>[343], "gmf"=>[82], "gmm"=>[82], "amo"=>[331], "nif"=>[446]},
+     63=>{"fat"=>[370], "mot"=>[147], "gff"=>[28], "gmf"=>[48], "ufa"=>[465]},
+     8=>{"dau"=>[48, 331], "wif"=>[82], "sil"=>[28], "gsm"=>[370, 465]},
+     2=>{"fat"=>[90], "mot"=>[449], "son"=>[28], "wif"=>[82], "dil"=>[48], "gsf"=>[370, 465]}}
     logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
     logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
 
+ #   profiles_arr = tree_info[:tree_is_profiles]  # from tree
+     profiles_arr = [27, 13, 11, 10, 28, 999, 61, 9, 7, 3, 12, 63, 8, 2]  # test
+    logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
+
+    profiles =   # test
+                {27=>{:is_name_id=>90, :is_sex_id=>1},
+                13=>{:is_name_id=>28, :is_sex_id=>1},
+                11=>{:is_name_id=>370, :is_sex_id=>1},
+                10=>{:is_name_id=>331, :is_sex_id=>0},
+                28=>{:is_name_id=>449, :is_sex_id=>0},
+
+                999=>{:is_name_id=>449, :is_sex_id=>0},
+
+                61=>{:is_name_id=>147, :is_sex_id=>0},
+                66=>{:is_name_id=>97, :is_sex_id=>0},
+                9=>{:is_name_id=>82, :is_sex_id=>0},
+                65=>{:is_name_id=>110, :is_sex_id=>1},
+                7=>{:is_name_id=>48, :is_sex_id=>0},
+                3=>{:is_name_id=>82, :is_sex_id=>0},
+                12=>{:is_name_id=>465, :is_sex_id=>1},
+                63=>{:is_name_id=>446, :is_sex_id=>0},
+                8=>{:is_name_id=>343, :is_sex_id=>1},
+                2=>{:is_name_id=>122, :is_sex_id=>1}}
+
+  #  profiles = tree_info[:profiles]     # from tree
+
+    logger.info "In compare_tree_circles 4: profiles = #{profiles}" if !profiles.blank?
+    logger.info "In compare_tree_circles 5: profiles.size = #{profiles.size}" if !profiles.blank?
+
+
     # Перебор по парам профилей (неповторяющимся)
     # с целью выявления похожих профилей
-    similars = [] # Похожие
+    similars = [] # Похожие - РЕЗУЛЬТАТ
 
     c =0
     IDArray.each_pair(profiles_arr) { |a,b|
-      (logger.info "In compare_tree_circles 3: a: #{a} - b: #{b}"
+      (logger.info "In compare_tree_circles 6: a: #{a} - b: #{b}"
       c = c + 1; logger.info " c = #{c} "
-      hash1 = tree_circles[a]
-      hash2 = tree_circles[b]
+      # сравниваемые хэши кругов профилей
+      hash1 = tree_circles[a] # # from tree
+      hash2 = tree_circles[b]  # from tree
 
-      # Определение общей части кругов профилей
-      common_hash = ProfileKey.intersection(hash1,hash2)
-      logger.info "In compare_tree_circles 4: common_hash = #{common_hash}"
-      logger.info "-----"
+      # доп.данные профилей: имя пол
+      profile_a_data = profiles[a]
+      profile_b_data = profiles[b]
+      logger.info "In compare_tree_circles 7ab: profile_a_data == profile_b_data: #{profile_a_data == profile_b_data} "
+      logger.info "In compare_tree_circles 7ab: profile_a_data: #{profile_a_data} - profile_b_data: #{profile_b_data}"
+      logger.info "In compare_tree_circles 7ab: profile_a is_name_id: #{profile_a_data[:is_name_id]}, profile_a is_sex_id: #{profile_a_data[:is_sex_id]} "
+      logger.info "In compare_tree_circles 7ab: profile_b is_name_id: #{profile_b_data[:is_name_id]}, profile_b is_sex_id: #{profile_b_data[:is_sex_id]} "
 
-      # Вычисление мощности общей части кругов профилей
-      common_power = ProfileKey.common_circle_power(common_hash)
+      if profile_a_data == profile_b_data
 
-      #  Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та
-      if common_power >= 4
 
-        # Формирование данных об одной паре похожих
-        one_similars_pair = {}
+        # Определение общей части кругов профилей
+        common_hash = ProfileKey.intersection(hash1,hash2)
+        logger.info "In compare_tree_circles 8: common_hash = #{common_hash}"
+        logger.info "-----"
 
-        one_similars_pair.merge!(:first_profile_id => a)
-        one_similars_pair.merge!(:first_name_id => a)
-        one_similars_pair.merge!(:first_sex_id => a)
+        # Вычисление мощности общей части кругов профилей
+        common_power = ProfileKey.common_circle_power(common_hash)
 
-        one_similars_pair.merge!(:second_profile_id => b)
-        one_similars_pair.merge!(:second_name_id => b)
-        one_similars_pair.merge!(:second_sex_id => b)
+        #  Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та
+        if common_power >= 4
 
-        one_similars_pair.merge!(:common_relations => common_hash)
-        one_similars_pair.merge!(:common_power => common_power)
+          # Формирование данных об одной паре похожих
+          one_similars_pair = {}
 
-        similars << one_similars_pair
+          one_similars_pair.merge!(:first_profile_id => a)
+          name_a = Name.find(profile_a_data[:is_name_id]).name
+          one_similars_pair.merge!(:first_name_id => name_a)
+          profile_a_data[:is_sex_id] == 1 ? sex_a = 'М' : sex_a = 'Ж'
+          one_similars_pair.merge!(:first_sex_id => sex_a)
+
+          one_similars_pair.merge!(:second_profile_id => b)
+          name_b = Name.find(profile_b_data[:is_name_id]).name
+
+          one_similars_pair.merge!(:second_name_id => name_b)
+          profile_b_data[:is_sex_id] == 1 ? sex_b = 'М' : sex_b = 'Ж'
+          one_similars_pair.merge!(:second_sex_id => sex_b)
+
+          display_commoin_relations = ProfileKey.create_display_common(common_hash)
+          one_similars_pair.merge!(:common_relations => display_commoin_relations)
+          one_similars_pair.merge!(:common_power => common_power)
+
+          similars << one_similars_pair # Похожие - РЕЗУЛЬТАТ
+
+        end
 
       end
 
       )
     }
 
-
-    logger.info "In compare_tree_circles 5: similars = #{similars}"
-    logger.info "In compare_tree_circles 6: similars.size = #{similars.size}" if !similars.empty?
+    logger.info "In compare_tree_circles 9: similars = #{similars}"
+    logger.info "In compare_tree_circles 10: similars.size = #{similars.size}" if !similars.empty?
 
     similars
   end
 
-  # Формируем инфу для View
-  def self.make_view_data(tree_info, similars)
+  # Формируем инфу для View - отображение Общих отношений 2-х профилей, кот-е Похожие
+  def self.create_display_common(common_hash)
 
-    logger.info "In  self.make_view_data: view_similars_data.size = #{view_similars_data.size}" if !view_similars_data.empty?
-    return view_similars_data
 
+
+    display_commoin_relations = common_hash
+
+
+    
+    logger.info "In  self.make_view_data: display_commoin_relations.size = #{display_commoin_relations.size}" if !display_commoin_relations.empty?
+    return display_commoin_relations
   end
 
 
