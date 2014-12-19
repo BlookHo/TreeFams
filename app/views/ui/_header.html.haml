@@ -1,7 +1,7 @@
 #header
   .container
     - if current_user
-      = link_to "Мы все &mdash; родня".html_safe, "/home", id: :logo
+      = link_to "Мы все &mdash; родня".html_safe, "/home", id: :logo, :class => "ttip", title: "Твое дерево"
     - else
       = link_to "Мы все &mdash; родня".html_safe, "/", id: :logo
 
@@ -19,11 +19,13 @@
         - if count_new_requests > 0
           %li= link_to raw("<i class='fa fa-globe'></i> Рукопожатия <span>#{count_new_requests}</span>"), show_user_requests_path, :class => "ttip", title: "К тебе есть новые запросы на рукопожатия"
         - else
-          %li= link_to raw("<i class='fa fa-globe'></i> Рукопожатия"), show_user_requests_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
+          %li= link_to raw("<i class='fa fa-globe'></i> Рукопожатия "), show_user_requests_path, :class => "ttip", title: "Запросы на рукопожатия (объединение родственных деревьев)"
 
 
-
-        %li= link_to 'Мои новости (Лента)', '#', :class => "ttip", title: "Мои новости"
+        - if count_new_updates > 0
+          %li= link_to raw("<i class='fa fa-bars'></i> Мои новости  <span>#{count_new_updates}</span>"), updates_feeds_path, :class => "ttip", title: "Для тебя есть новости и обновления"
+        - else
+          %li= link_to raw("<i class='fa fa-bars'></i> Мои новости "), updates_feeds_path, :class => "ttip", title: "Просмотр твоих новостей и обновлений"
 
 
         - if count_new_messages > 0
@@ -32,7 +34,6 @@
         - else
           -#%li= link_to raw("<i class='fa fa-envelope-o'></i> Сообщения"), show_all_messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
           %li= link_to raw("<i class='fa fa-envelope-o'></i> Сообщения"), messages_path, :class => "ttip", title: "У тебя есть новые сообщения"
-
 
 
         -# = count_new_messages

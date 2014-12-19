@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20141219061550) do
+=======
+ActiveRecord::Schema.define(version: 20141218075356) do
+>>>>>>> master
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,6 +137,23 @@ ActiveRecord::Schema.define(version: 20141219061550) do
     t.integer  "is_sex_id"
     t.integer  "display_name_id"
     t.integer  "is_display_name_id"
+  end
+
+  create_table "updates_events", force: true do |t|
+    t.string   "name"
+    t.string   "image"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "updates_feeds", force: true do |t|
+    t.integer  "user_id",          null: false
+    t.integer  "update_id",        null: false
+    t.integer  "agent_user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "read"
+    t.integer  "agent_profile_id"
   end
 
   create_table "users", force: true do |t|

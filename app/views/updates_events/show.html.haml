@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @updates_event.name
+%p
+  %b Image:
+  = @updates_event.image
+
+= link_to 'Edit', edit_updates_event_path(@updates_event)
+\|
+= link_to 'Back', updates_events_path

@@ -1,0 +1,46 @@
+.container#updates_feeds
+  %h1 Твои обновления
+
+  - if @paged_update_data.blank?
+    %table
+      %tr
+        %td.left.grey.italic
+          Обновлений - нет
+  - else
+    %table
+      %tr
+        -#%th Aвтор обновления
+        -#%th Эл.почта автора
+        %th Содержание
+        -#%th No
+        -#%th С кем связано
+        -#%th Прочитано
+        -#%th Изображение
+        %th Дата обновления
+
+      - @paged_update_data.each do |updates_feed|
+        %tr
+          -#%td= updates_feed[:user_update_author]
+          -#%td= updates_feed[:user_author_email]
+          %td= updates_feed[:update_text]#.inspect
+          -#%td= updates_feed[:update_id]
+
+          -#%td= updates_feed[:agent_in_update].inspect
+          -#%td= updates_feed[:update_read]
+          -#%td= updates_feed[:update_image]
+          %td= updates_feed[:update_created]
+
+          -#%td= updates_feed.user_id
+          -#%td= updates_feed.agent_user_id
+          -#%td= updates_feed.read
+
+
+    = paginate @paged_update_data
+
+
+
+  %br
+  = link_to 'К просмотру твоего дерева', home_path
+
+
+

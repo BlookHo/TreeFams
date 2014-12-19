@@ -50,7 +50,16 @@ class ApplicationController < ActionController::Base
     @get_certain_koeff ||= WeafamSetting.first.certain_koeff
   end
 
-
+  # Включение метода постраничного отображения в зависимости от класса
+  # data - Array или AR
+  # gem Kaminari
+  def pages_of(data, records_per_pages)
+    unless data.kind_of?(Array)
+      data.page(params[:page]).per(records_per_pages)
+    else
+      Kaminari.paginate_array(data).page(params[:page]).per(records_per_pages)
+    end
+  end
 
 
 

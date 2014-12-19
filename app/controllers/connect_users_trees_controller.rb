@@ -338,6 +338,12 @@ class ConnectUsersTreesController < ApplicationController
 
     current_user_id = current_user.id #
     user_id = params[:user_id_to_connect] # From view
+
+    profile_current_user = current_user.profile_id #
+    profile_user_id = User.find(user_id).profile_id  #
+    logger.info "== in connection_of_trees 1 :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
+
+
     @current_user_id = current_user_id # DEBUGG_TO_VIEW
     @user_id = user_id # DEBUGG_TO_VIEW
     @certain_koeff_for_connect = params[:certain_koeff] # From view
@@ -471,6 +477,12 @@ class ConnectUsersTreesController < ApplicationController
             # - update all requests - with users, connected with current_user
              after_conn_update_requests  # From Helper
             ##############################################
+
+            ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
+            logger.info "== in connection_of_trees UPDATES :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
+            UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
+            UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
+            ###############################################
 
           else
             @stop_connection = true  # for view

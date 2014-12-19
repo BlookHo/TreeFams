@@ -228,6 +228,56 @@ class Profile < ActiveRecord::Base
   end
 
 
+  # Выбор способа UpdatesFeed взавис-ти от текущего кол-ва профилей в дереве
+  # Исп-ся в ProfilesController
+  def case_update_amounts(profile, current_user)
+
+    # Определение кол-во профилей в дереве после добавления нового профиля
+    tree_profiles_amount = Tree.tree_amount(current_user)
+    #logger.info "In create: tree_profiles_amount = #{tree_profiles_amount} "
+
+    case tree_profiles_amount
+      when 11 # кол-во родни в дереве больше 10
+        ##########  UPDATES FEEDS - № 8  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 8, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+
+      when 16  # кол-во родни в дереве больше 15
+        ##########  UPDATES FEEDS - № 9  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 9, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+
+      when 21  # кол-во родни в дереве больше 20
+        ##########  UPDATES FEEDS - № 10  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 10, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+
+      when 26  # кол-во родни в дереве больше 25
+        ##########  UPDATES FEEDS - № 11  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 11, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+
+      when 31  # кол-во родни в дереве больше 30
+        ##########  UPDATES FEEDS - № 12  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 12, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+
+      when 41  # кол-во родни в дереве больше 40
+        ##########  UPDATES FEEDS - № 13  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 13, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+
+      when 51  # кол-во родни в дереве больше 50
+        ##########  UPDATES FEEDS - № 14  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 14, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+
+      when 101  # кол-во родни в дереве больше 100
+        ##########  UPDATES FEEDS - № 15  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 15, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+
+      when 151  # кол-во родни в дереве больше 150
+        ##########  UPDATES FEEDS - № 16  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 16, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+
+      else  # No update
+
+    end
+
+  end
 
 
 

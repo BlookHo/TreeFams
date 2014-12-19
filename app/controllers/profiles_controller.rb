@@ -81,6 +81,11 @@ class ProfilesController < ApplicationController
             exclusions_hash: @profile.answers_hash,
             tree_ids: current_user.get_connected_users)
 
+        ##########  UPDATES FEEDS - № 4  ####################
+        UpdatesFeed.create(user_id: current_user.id, update_id: 4, agent_user_id: current_user.id, agent_profile_id: @profile.id, read: false)
+        ##########  UPDATES FEEDS - № 8, 9, 10  #############
+        @profile.case_update_amounts(@profile, current_user)
+
         @questions = nil
         @profile.answers_hash = nil
 

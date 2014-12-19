@@ -1,0 +1,2 @@
+module UpdatesEventsHelper
+end
