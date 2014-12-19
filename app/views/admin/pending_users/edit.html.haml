@@ -2,27 +2,25 @@
   %h2
     Модерация пользователя
     %small= @pending_user.id
-
-= form_for @pending_user, url: admin_pending_user_path(@pending_user), html:{role: :form, class: "form-horizontal"} do |f|
-
-  = render 'admin/shared/errors', :objekt => @pending_user
-
-  - @data.each do |key, value|
-    - if value.kind_of? Array
-      - value.each do |v|
-        = render 'form', data: v, role: key
-    - else
-      = render 'form', data: value, role: key
-
-  %br
-  %br
-  .form-group.form-group-lgs
-    .col-sm-2
-    .col-sm-4
-      = f.submit "Утвердить", class: "btn btn-success"
-      = f.submit "Заблокировать", class: "btn btn-danger"
+    .pull-right
+      = link_to "Сбросить изменения", admin_pending_user_reset_path(@pending_user), class: [:btn, 'btn-warning'], data:{confirm: "Вы уверены, что хотите отменить изменения?"}
+      = link_to "Заблокировать", admin_pending_user_block_path(@pending_user), class: [:btn, 'btn-danger'], data:{confirm: "Вы уверены, что хотите заблокировать этого пользователя?"}
 
 
-%hr
+- @data.each do |key, value|
+  - if value.kind_of? Array
+    - value.each_with_index do |v, index|
+      = render 'form', data: v, relation: key, index: index
+      %hr
+  - else
+    = render 'form', data: value, relation: key, index: nil
+    %hr
 
-= @pending_user.family
+
+.form-group.form-group-lgs
+  .col-sm-2
+  = button_to "Утвердить пользователя", admin_pending_user_approve_path(@pending_user), class: [:btn, 'btn-success btn-lg'], data:{confirm: "Вы уверены, что хотите УТВЕРДИТЬ пользователя и создать аккаунт?"}
+
+
+
+= @data

@@ -228,7 +228,7 @@ var app = angular
 
   $scope.addNameDescription = function(modeName, data, index){
     if (typeof index != 'undefined'){
-
+      eval('$scope.family.'+modelName+'[index].name_description = data;')
     }else{
       eval('$scope.family.'+modelName+'.name_description = data;')
     }

@@ -1,0 +1,4 @@
+%ul.nav.nav-tabs
+  %li{class: ('active' if action_name == 'index')}= link_to "Ожидают", admin_pending_users_path
+  %li{class: ('active' if action_name == 'blocked')}= link_to "Заблокированные", blocked_admin_pending_users_path
+  %li{class: ('active' if action_name == 'approved')}= link_to "Утвержденные", approved_admin_pending_users_path

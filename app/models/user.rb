@@ -3,7 +3,9 @@ class User < ActiveRecord::Base
   include SearchHard
   include SearchFirst
   include Search
-  include UserLock
+  include UserLock # вроде бы не используется
+  include UserAccount
+
 
   before_create :generate_access_token
 
@@ -23,10 +25,10 @@ class User < ActiveRecord::Base
   has_many :connection_requests, dependent: :destroy
 
 
-
   def name
     profile.name.name.capitalize
   end
+
 
   # Получение массива соединенных Юзеров
   # для заданного "стартового" Юзера

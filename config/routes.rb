@@ -233,13 +233,25 @@ Weafam::Application.routes.draw do
 
     resources :admins
     resources :users
-    resources :pending_users
-    resources :subnames
+
+    resources :resets, only: [:new, :create]
+
+    resources :pending_users do
+      get 'blocked',    to: 'pending_users#blocked',    as: :blocked, on: :collection
+      get 'approved',    to: 'pending_users#approved',  as: :approved, on: :collection
+      get 'block',      to: 'pending_users#block',      as: :block
+      get 'reset',      to: 'pending_users#reset',      as: :reset
+      post 'approve',   to: 'pending_users#approve',    as: :approve
+    end
+
 
     resources :names do
       get 'males',   to: "names#males",   on: :collection, as: :males
       get 'females', to: "names#females", on: :collection, as: :females
     end
+
+    resources :subnames
+
 
     root "names#index"
   end

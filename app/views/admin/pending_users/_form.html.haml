@@ -1,16 +1,31 @@
-.form-group.form-group-lgs{class: ('warning' if data.has_key? "new")}
-  = label_tag :name, role, class: "col-sm-2 control-label"
-  .col-sm-2
-    = text_field_tag :name, data["name"], class: "form-control"
-  - if data.has_key? "new"
+= form_tag admin_pending_user_path, method: :patch, role: :form, class: "form-horizontal" do
+  = hidden_field_tag :relation, relation
+  = hidden_field_tag :index, index
+
+  .form-group.form-group-lgs
+    = label_tag :name, relation, class: "col-sm-2 control-label"
+
     .col-sm-2
-      = link_to "Добавить имя в базу", new_admin_name_path(name: data["name"], sex_id: data["sex_id"]), class: [:btn, 'btn-default']
-    .col-sm-2
-      %select.selectpicker{name: "name[parent_name_id]", :"data-live-search" => "true", :"data-max-options"=>"2"}
-        %option.special_option{value:  '', selected: false } Заменить имя
-        - Name.all.each do |name|
-          %option{value: name.id, selected: false}
-            = name.name
-  - else
-    .col-sm-2
-      %i.fa.fa-check{style:"color:green;"}
+      .form-control= data["name"]
+
+    - if data.has_key?("new")
+      - existing_name = Name.where(name: data["name"].mb_chars.capitalize).first
+      .col-sm-2
+        - if existing_name
+          .label.label-success имя уже есть в базе
+        - else
+          = link_to "Добавить имя в базу", new_admin_name_path(name: data["name"], sex_id: data["sex_id"]), class: [:btn, 'btn-default']
+      .col-sm-3
+        %select.selectpicker{name: "name_id", :"data-live-search" => "true", :"data-max-options"=>"2"}
+          %option.special_option{value:  '', selected: false } Заменить имя
+          - Name.where(sex_id: data["sex_id"]).each do |name|
+            %option{value: name.id, selected: existing_name.try(:id) == name.id}
+              = name.name
+
+      .col-sm-2
+        = submit_tag "заменить имя", class: "btn btn-success"
+
+
+    - else
+      .col-sm-2
+        %i.fa.fa-check{style:"color:green;"}

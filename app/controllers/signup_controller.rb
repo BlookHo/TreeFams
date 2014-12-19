@@ -63,7 +63,7 @@ class SignupController < ApplicationController
   def create_user
     user = User.create_with_email( @data["author"]["email"] )
     user.profile = create_profile( @data["author"].merge(tree_id: user.id) )
-    @data.except('author', 'email').each do |key, value|
+    @data.except('author').each do |key, value|
       if value.kind_of? Array # brothres, sisters
         value.each do |v|
           create_keys(key, v, user)
@@ -93,7 +93,6 @@ class SignupController < ApplicationController
     ProfileKey.add_new_profile(user.profile.sex_id,
       user.profile,
       create_profile(data.merge(tree_id: user.id)),
-      # Relation.name_to_id(relation_name),
       exclusions_hash: nil,
       tree_ids: user.get_connected_users
     )
@@ -119,6 +118,7 @@ class SignupController < ApplicationController
     end
     return result.include? true
   end
+
 
 
   def already_logged_in?

@@ -1,16 +1,18 @@
 class PendingUser < ActiveRecord::Base
-  enum status: [ :pending, :blocked ]
+  enum status: [ :pending, :blocked, :approved ]
+
+  scope :pending,  -> {where(status: 0)}
+  scope :blocked,  -> {where(status: 1)}
+  scope :approved, -> {where(status: 2)}
 
 
+  def json_data
+    updated_data.blank? ? JSON.parse(data) : JSON.parse(updated_data)
+  end
 
-  def family
-    result = []
-    family_data = JSON.parse(self.data)
 
-    family_data.each do |key, value|
-      value.kind_of?(Array) ? value.each { |v| result << v } : result << value
-    end
-    return result
+  def block!
+    update_column(:status, 1)
   end
 
 
