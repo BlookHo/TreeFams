@@ -60,46 +60,6 @@ class SignupController < ApplicationController
 
 
 
-  # def create_user
-  #   user = User.create_with_email( @data["author"]["email"] )
-  #   user.profile = create_profile( @data["author"].merge(tree_id: user.id) )
-  #   @data.except('author').each do |key, value|
-  #     if value.kind_of? Array # brothres, sisters
-  #       value.each do |v|
-  #         create_keys(key, v, user)
-  #       end
-  #     else
-  #       create_keys( key, value, user )
-  #     end
-  #   end
-  #   return user
-  # end
-  #
-  #
-  #
-  # def create_profile(data)
-  #   Profile.create({
-  #     name_id:          data['search_name_id'],
-  #     display_name_id:  data['id'],
-  #     sex_id:           data['sex_id'],
-  #     tree_id:          data['tree_id']
-  #   })
-  # end
-  #
-  #
-  #
-  #
-  # def create_keys(relation_name, data, user)
-  #   ProfileKey.add_new_profile(user.profile.sex_id,
-  #     user.profile,
-  #     create_profile(data.merge(tree_id: user.id)),
-  #     Relation.name_to_id(relation_name),
-  #     exclusions_hash: nil,
-  #     tree_ids: user.get_connected_users
-  #   )
-  # end
-
-
 
   def sanitize_data(data)
     proc = Proc.new { |k, v| v.kind_of?(Hash) ? (v.delete_if(&proc); nil) : v.blank? };
