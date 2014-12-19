@@ -14,7 +14,6 @@ class ProfileKey < ActiveRecord::Base
     result = {}
     first.reject { |k, v| !(other.include?(k)) }.each do |k, v|
       intersect = other[k] & v
-#      result.merge!({k => (other[k] & v)})
       result.merge!({k => intersect}) if !intersect.blank?
     end
     result
@@ -36,35 +35,9 @@ class ProfileKey < ActiveRecord::Base
 
     if !tree_info.empty?  # Исходные данные
 
-      tree_info[:current_user]
-      tree_info[:tree_profiles_amount]
-      tree_info[:connected_users]
-      tree_info[:tree_is_profiles]
-      tree_info[:profiles]
-      logger.info "In  self.search_similars: tree_info = #{tree_info}"
-
-
-      # logger.info "-----"
-      ## TEST growing_val_arr
-      #hash_1 = {1 =>[11, 58, 66], 2 =>[ 66], 12 => [1, 100],  13 => [1100]}
-      #key_2 = 124
-      #val_2 = 2333
-      #growing_hash = ProfileKey.growing_val_arr(hash_1, key_2, val_2)
-      #logger.info "In TEST1 search_similars grow val << growing_hash = #{growing_hash}"
-      #
-      #logger.info "-----"
-      ## TEST intersection
-      #hash1 = {1 =>[11, 58, 66], 2 =>[ 68], 12 => [1, 100],  13 => [1100]}
-      #hash2 = {1 =>[58], 12 => [100], 2 =>[58, 66],}
-      #common_hash = ProfileKey.intersection(hash1,hash2)
-      #logger.info "In TEST2 search_similars common_hash = #{common_hash}"
-      #
-      logger.info "-----"
-
       tree_circles = ProfileKey.get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
       logger.info "In search_similars 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
       logger.info "In search_similars 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
-
 
       similars = ProfileKey.compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
 
@@ -78,12 +51,9 @@ class ProfileKey < ActiveRecord::Base
   #def self.get_tree_circles(tree_info)
   def self.get_tree_circles(tree_info)
 
-  #  tree_circles = Array.new
     tree_circles = {}
     tree_info[:tree_is_profiles].each do |profile_id|
       tree_circles.merge!( ProfileKey.get_profile_circle(profile_id, tree_info[:connected_users]) ) # if !profile_circle_hash.empty?
-
-   #   tree_circles << ProfileKey.get_profile_circle(profile_id, tree_info[:connected_users])
     end
     return tree_circles
 
@@ -93,20 +63,14 @@ class ProfileKey < ActiveRecord::Base
   def self.get_profile_circle(profile_id, connected_users_arr)
 
     profile_circle = ProfileKey.where(:user_id => connected_users_arr, :profile_id => profile_id).order('relation_id','is_name_id').select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
- #   ProfileKey.show_in_logger(profile_circle, "profile_circle - запись" )  # Ok DEBUGG_TO_LOGG
-    logger.info "In get_profile_circle1: profile_circle.size = #{profile_circle.size}" if !profile_circle.blank?
+    #logger.info "In get_profile_circle1: profile_circle.size = #{profile_circle.size}" if !profile_circle.blank?
 
     circle_profiles_arr = ProfileKey.make_arrays_from_circle(profile_circle)  # Ok
-    logger.info "In get_profile_circle2: circle_profiles_arr = #{circle_profiles_arr}" if !circle_profiles_arr.blank?
+    #logger.info "In get_profile_circle2: circle_profiles_arr = #{circle_profiles_arr}" if !circle_profiles_arr.blank?
 
     profile_circle_hash = ProfileKey.convert_circle_to_hash(circle_profiles_arr)
-    logger.info "In get_profile_circle3: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
+    #logger.info "In get_profile_circle3: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
 
-    #profile_circle = {profile_id => profile_circle_hash}
-      #  ProfileKey.make_profile_circle(profile_id, profile_circle_hash)
-    #logger.info "In get_profile_circle4: profile_circle = #{profile_circle}" if !profile_circle.empty?
-
-    #return profile_circle
     return profile_id => profile_circle_hash
 
   end
@@ -118,7 +82,6 @@ class ProfileKey < ActiveRecord::Base
     bk_rows.each do |row|
       circle_array << row.attributes.except('id','user_id','profile_id','created_at','updated_at')
     end
-    #logger.debug " In make_arrays_from_circle: circle_array  = #{circle_array}"
     return circle_array
   end
 
@@ -129,21 +92,10 @@ class ProfileKey < ActiveRecord::Base
     profile_circle_hash = {}
     circle_arr.each do |one_row_hash|
       relation_val, is_name_val, is_profile_val = ProfileKey.get_row_data(one_row_hash)
-      #logger.info "In convert_circle_to_hash1: relation_val = #{relation_val}, is_name_val = #{is_name_val}, is_profile_val = #{is_profile_val}"# if !profile_circle_hash.empty?
-
-      #circle_keys_arr = profile_circle_hash.keys
       name_relation = ProfileKey.get_name_relation(relation_val)
-      #logger.info "In convert_circle_to_hash2: name_relation = #{name_relation}"
-      # Получаем новое по порядку имя отношения в новый элемент хэша круга
-      #new_name_relation = ProfileKey.get_new_elem_name(circle_keys_arr, name_relation)
-      #logger.info "In convert_circle_to_hash3: new_name_relation = #{new_name_relation}"
       # Наращиваем круг в виде хэша
       profile_circle_hash = ProfileKey.growing_val_arr(profile_circle_hash, name_relation, is_name_val)
-
-      #logger.info "In convert_circle_to_hash4: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
-      #logger.info "-----"
     end
-    #logger.info "In convert_circle_to_hash5: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
     return profile_circle_hash
   end
 
@@ -151,14 +103,9 @@ class ProfileKey < ActiveRecord::Base
   def self.make_profile_circle(profile_id, profile_circle_hash)
     profile_circle = {}
     profile_circle.merge!( profile_id => profile_circle_hash )  if !profile_circle_hash.empty?
-    #logger.debug " In make_profile_circle: profile_circle  = #{profile_circle}"
-  #  profile_circle = {profile_id => profile_circle_hash}
-
 
     return profile_circle
   end
-
-
 
   def self.get_row_data(one_row_hash)
     if !one_row_hash.empty?
@@ -245,22 +192,21 @@ class ProfileKey < ActiveRecord::Base
   def self.get_new_elem_name(circle_keys_arr, name_relation)
     name_qty = ProfileKey.name_next_qty(circle_keys_arr, name_relation)
     new_name = name_relation.concat(name_qty.to_s)
-    logger.info "In get_new_elem_name: new_name = #{new_name} "
+    #logger.info "In get_new_elem_name: new_name = #{new_name} "
     return new_name
   end
 
   # No use
   # Получаем кол-во для нового имени отношения в хэш круга
+  # длина имени отношения - 3 символа. можно изменить в: one_name_key[0, 3 ]
   def self.name_next_qty(circle_keys_arr, name_relation)
     name_qty = 0
     circle_keys_arr.each do |one_name_key|
-      #name_qty += 1 if one_name_key.first == name_relation
       name_qty += 1 if one_name_key[0,3] == name_relation
     end
     name_qty += 1
     return name_qty
   end
-
 
   # Служебный метод для отладки - для LOGGER
   # Показывает массив в logger
@@ -280,22 +226,24 @@ class ProfileKey < ActiveRecord::Base
     common_power
   end
 
-
   # Сравниваем все круги на похожесть (совпадение)
   def self.compare_tree_circles(tree_info, tree_circles)
-
-
 
      tree_circles =    # test
     {27=>{"son"=>[122], "wif"=>[449], "dil"=>[82], "gsf"=>[28]},
      13=>{"fat"=>[122], "mot"=>[82], "son"=>[370, 465], "wif"=>[48], "wfl"=>[343], "wml"=>[82], "dil"=>[147], "gff"=>[90], "gmf"=>[449], "gdf"=>[446]},
      11=>{"fat"=>[28], "mot"=>[48], "dau"=>[446], "bro"=>[465], "wif"=>[147], "gff"=>[122], "gfm"=>[343], "gmf"=>[82], "gmm"=>[82], "amo"=>[331]},
      10=>{"fat"=>[343], "mot"=>[82], "sis"=>[48], "nem"=>[370, 465]},
-     28=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
+     28=>{"son"=>[122], "hus"=>[90], "dil"=>[82],    "sis"=>[48, 55], "nem"=>[370, 465],    "gsf"=>[28]},
 
-     999=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
+     999=>{"son"=>[122], "hus"=>[90],    "sis"=>[48, 55],   "dil"=>[82], "gsf"=>[28]},
+     998=>{"son"=>[122], "hus"=>[90],    "sis"=>[48, 55],   "dil"=>[82], "gsf"=>[28]},
 
      61=>{"dau"=>[446], "hus"=>[370], "hfl"=>[28], "hml"=>[48]},
+     66=>{"dau"=>[446], "hus"=>[370], "hfl"=>[28], "hml"=>[48]},
+
+
+
      9=>{"dau"=>[48, 331], "hus"=>[343], "sil"=>[28], "gsm"=>[370, 465]},
      7=>{"fat"=>[343], "mot"=>[82], "son"=>[370, 465], "sis"=>[331], "hus"=>[28], "hfl"=>[122], "hml"=>[82], "dil"=>[147], "gdf"=>[446]},
      3=>{"son"=>[28], "hus"=>[122], "hfl"=>[90], "hml"=>[449], "dil"=>[48], "gsf"=>[370, 465]},
@@ -307,7 +255,7 @@ class ProfileKey < ActiveRecord::Base
     logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
 
  #   profiles_arr = tree_info[:tree_is_profiles]  # from tree
-     profiles_arr = [27, 13, 11, 10, 28, 999, 61, 9, 7, 3, 12, 63, 8, 2]  # test
+     profiles_arr = [27, 13, 11, 10, 28,   999, 998,    61,   66,   9, 7, 3, 12, 63, 8, 2]  # test
     logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
 
     profiles =   # test
@@ -318,9 +266,11 @@ class ProfileKey < ActiveRecord::Base
                 28=>{:is_name_id=>449, :is_sex_id=>0},
 
                 999=>{:is_name_id=>449, :is_sex_id=>0},
+                998=>{:is_name_id=>449, :is_sex_id=>0},
 
                 61=>{:is_name_id=>147, :is_sex_id=>0},
-                66=>{:is_name_id=>97, :is_sex_id=>0},
+                66=>{:is_name_id=>147, :is_sex_id=>0},
+                
                 9=>{:is_name_id=>82, :is_sex_id=>0},
                 65=>{:is_name_id=>110, :is_sex_id=>1},
                 7=>{:is_name_id=>48, :is_sex_id=>0},
@@ -332,45 +282,28 @@ class ProfileKey < ActiveRecord::Base
 
   #  profiles = tree_info[:profiles]     # from tree
 
-    logger.info "In compare_tree_circles 4: profiles = #{profiles}" if !profiles.blank?
-    logger.info "In compare_tree_circles 5: profiles.size = #{profiles.size}" if !profiles.blank?
 
-
-    # Перебор по парам профилей (неповторяющимся)
-    # с целью выявления похожих профилей
+    # Перебор по парам профилей (неповторяющимся) с целью выявления похожих профилей
     similars = [] # Похожие - РЕЗУЛЬТАТ
 
-    c =0
-    IDArray.each_pair(profiles_arr) { |a,b|
-      (logger.info "In compare_tree_circles 6: a: #{a} - b: #{b}"
+    c =0  # count ifferent dprofiles pairs
+    IDArray.each_pair(profiles_arr) { |a_profile_id, b_profile_id|
+      (
+      logger.info "In compare_tree_circles 6: one_profile_id: #{a_profile_id} - b_profile_id: #{b_profile_id}"
       c = c + 1; logger.info " c = #{c} "
 
-      # доп.данные профилей: имя пол
-      profile_a_data = profiles[a]
-      profile_b_data = profiles[b]
-      logger.info "In compare_tree_circles 7ab: profile_a_data == profile_b_data: #{profile_a_data == profile_b_data} "
-      logger.info "In compare_tree_circles 7ab: profile_a_data: #{profile_a_data} - profile_b_data: #{profile_b_data}"
-      logger.info "In compare_tree_circles 7ab: profile_a is_name_id: #{profile_a_data[:is_name_id]}, profile_a is_sex_id: #{profile_a_data[:is_sex_id]} "
-      logger.info "In compare_tree_circles 7ab: profile_b is_name_id: #{profile_b_data[:is_name_id]}, profile_b is_sex_id: #{profile_b_data[:is_sex_id]} "
-
-      if profile_a_data == profile_b_data
-
-        # сравниваемые хэши кругов профилей
-        hash1 = tree_circles[a] # # from tree
-        hash2 = tree_circles[b]  # from tree
-        # Определение общей части кругов профилей
-        common_hash = ProfileKey.intersection(hash1,hash2)
-        logger.info "In compare_tree_circles 8: common_hash = #{common_hash}"
-
+      if profiles[a_profile_id] == profiles[b_profile_id]
+        # сравниваемые хэши кругов профилей и определение их общей части кругов профилей
+        common_hash = ProfileKey.intersection(tree_circles[a_profile_id], tree_circles[b_profile_id])
         # Вычисление мощности общей части кругов профилей
         common_power = ProfileKey.common_circle_power(common_hash)
-
+        # Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та достоверности
         if common_power >= 4
           common_data =
-              { first_profile_id:  a,
-                profile_a_data:  profile_a_data,
-                second_profile_id:  b,
-                profile_b_data:  profile_b_data,
+              { first_profile_id:  a_profile_id,
+                profile_a_data:  profiles[a_profile_id],
+                second_profile_id:  b_profile_id,
+                profile_b_data:  profiles[b_profile_id],
                 common_hash:  common_hash,
                 common_power:  common_power
               }
@@ -379,9 +312,7 @@ class ProfileKey < ActiveRecord::Base
         end
 
       end
-
-      )
-    }
+      ) }
 
     logger.info "In compare_tree_circles 9: similars = #{similars}"
     logger.info "In compare_tree_circles 10: similars.size = #{similars.size}" if !similars.empty?
@@ -389,11 +320,9 @@ class ProfileKey < ActiveRecord::Base
     similars
   end
 
+  # Формирование данных об одной паре похожих профилей для отображения в view
   def self.get_similars_data(common_data)
 
-    #  Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та
-
-      # Формирование данных об одной паре похожих
       one_similars_pair = {}
 
       one_similars_pair.merge!(:first_profile_id => common_data[:first_profile_id])
@@ -414,22 +343,19 @@ class ProfileKey < ActiveRecord::Base
 
       one_similars_pair
 
-
   end
 
-
-
-  # Формируем инфу для View - отображение Общих отношений 2-х профилей, кот-е Похожие
+  # Формируем отображение для View Общих отношений 2-х профилей, кот-е Похожие
   def self.create_display_common(common_hash)
 
 
 
-    display_commoin_relations = common_hash
+    display_common_relations = common_hash
 
 
 
-    logger.info "In  self.make_view_data: display_commoin_relations.size = #{display_commoin_relations.size}" if !display_commoin_relations.empty?
-    return display_commoin_relations
+    logger.info "In  self.make_view_data: display_common_relations.size = #{display_common_relations.size}" if !display_common_relations.empty?
+    return display_common_relations
   end
 
 
