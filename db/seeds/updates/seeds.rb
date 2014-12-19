@@ -1,10 +1,8 @@
 # encoding: utf-8
 
-
 UpdatesEvent.delete_all
 UpdatesEvent.reset_pk_sequence
 UpdatesEvent.create([
-
 
 {name: ' отправлен запрос на объединение деревьев от пользователя по имени ', image: 'updates/connect_request.png'},
 {name: ' проведено объединение с ', image: 'updates/connection_tree.png'},
@@ -23,11 +21,4 @@ UpdatesEvent.create([
 {name: ' Количество родни в твоем дереве (размер дерева) превысило 100 человек!', image: 'updates/tree_vol_100.png'},  # 15-  100
 {name: ' Количество родни в твоем дереве (размер дерева) превысило 150 человек!', image: 'updates/tree_vol_150.png'}  # 16-  150
 
-
-
-
-
-
-
 ])
-
