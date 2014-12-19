@@ -6,7 +6,7 @@
 <div ng-show="hasNewName('husband')" class="warning">
   Если вы хотите продолжить с этим именем, пожалуйста, подтвердите:
   <br>
-  <button class="bttn green small" ng-click="confirmNewName('husband', 0)">Да, продолжить</button>
+  <button class="bttn green small" ng-click="confirmNewName('husband', 1)">Да, продолжить</button>
   <button class="bttn red small" ng-click="resetNewName('husband')">Нет</button>
 </div>
 
@@ -17,7 +17,7 @@
   ng-value="name"
   typeahead-on-select="onSelectName($model, 'husband')"
   placeholder="Начните вводить имя, например: Владимир"
-  typeahead="item as item.name for item in getNames($viewValue, 0)"
+  typeahead="item as item.name for item in getNames($viewValue, 1)"
   typeahead-editable="true"
   typeahead-loading="loading..."
   typeahead-template-url="customDropDownTemplate.html"

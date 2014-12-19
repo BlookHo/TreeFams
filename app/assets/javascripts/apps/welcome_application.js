@@ -110,7 +110,7 @@ var app = angular
     sons: [],
     daughters: [],
     wife: '',
-    hasband: ''
+    husband: ''
   }
 
 
@@ -125,7 +125,7 @@ var app = angular
     sons: false,
     daughters: false,
     wife: false,
-    hasband: false
+    husband: false
   }
 
 
@@ -139,7 +139,7 @@ var app = angular
     sons: [],
     daughters: [],
     wife: '',
-    hasband: ''
+    husband: ''
   }
 
 

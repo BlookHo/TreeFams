@@ -51,7 +51,7 @@ class Admin::PendingUsersController < Admin::AdminController
     if has_new_names?(current_data)
       redirect_to :back, alert: "Ошибка. Есть не утвержденные имена."
     else
-      create_user(current_data)
+      create_user(current_data, pending_user)
     end
   end
 
@@ -60,16 +60,18 @@ class Admin::PendingUsersController < Admin::AdminController
   private
 
 
-  def create_user(data)
+  def create_user(data, pending_user)
     user = User.new( email: data["author"]["email"] )
     user.valid? # нужно дернуть метод, чтобы получить ошибки
     if user.errors.messages[:email].nil?
       User.create_user_account_with_json_data(data)
+      pending_user.approve!
       redirect_to :admin_pending_users, notice: "Пользователь утвержден. Аккаунт создан."
     else
       redirect_to :back, alert: "Ошибка. Пользователь с таким email уже зарегистрирован."
     end
   end
+
 
 
   def update_member
@@ -78,7 +80,13 @@ class Admin::PendingUsersController < Admin::AdminController
       name = Name.find(params[:name_id])
       current_data = pending_user.json_data
       if params[:index].blank?
-        current_data[params[:relation]] = name.as_json(only: [:id, :name, :sex_id, :search_name_id])
+        if params[:relation] == "author"
+          user_email = current_data[params[:relation]]["email"]
+          current_data[params[:relation]] = name.as_json(only: [:id, :name, :sex_id, :search_name_id])
+          current_data[params[:relation]].merge!({"email" => user_email}.as_json)
+        else
+          current_data[params[:relation]] = name.as_json(only: [:id, :name, :sex_id, :search_name_id])
+        end
       else
         current_data[params[:relation]][params[:index].to_i] = name.as_json(only: [:id, :name, :sex_id, :search_name_id])
       end

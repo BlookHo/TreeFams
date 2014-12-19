@@ -16,4 +16,9 @@ class PendingUser < ActiveRecord::Base
   end
 
 
+  def approve!
+    update_column(:status, 2)
+  end
+
+
 end

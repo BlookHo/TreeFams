@@ -5,7 +5,7 @@ module UserAccount
 
     def create_user_account_with_json_data(data)
       user = User.create_with_email( data["author"]["email"] )
-      user.profile = create_profile( data["author"].merge(tree_id: user.id) )
+      user.profile = create_profile( data["author"].merge({tree_id: user.id}.as_json) )
       data.except('author').each do |key, value|
         if value.kind_of? Array # brothres, sisters
           value.each do |v|
@@ -34,7 +34,8 @@ module UserAccount
     def create_keys(relation_name, data, user)
         ProfileKey.add_new_profile(user.profile.sex_id,
         user.profile,
-        create_profile(data.merge(tree_id: user.id)),
+        create_profile(data.merge({tree_id: user.id}.as_json)),
+        Relation.name_to_id(relation_name),
         exclusions_hash: nil,
         tree_ids: user.get_connected_users
         )
