@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   include Search
   include UserLock # вроде бы не используется
   include UserAccount
+  
 
 
   before_create :generate_access_token

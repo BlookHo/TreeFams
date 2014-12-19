@@ -1,4 +1,6 @@
 class PendingUser < ActiveRecord::Base
+  include Slack # Уведомления в slack
+  
   enum status: [ :pending, :blocked, :approved ]
 
   scope :pending,  -> {where(status: 0)}

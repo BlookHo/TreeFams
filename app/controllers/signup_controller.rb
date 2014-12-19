@@ -50,7 +50,8 @@ class SignupController < ApplicationController
     user = User.new( email: @data["author"]["email"] )
     user.valid? # нужно дернуть метод, чтобы получить ошибки
     if user.errors.messages[:email].nil?
-      PendingUser.create(data: @data.to_json)
+      pu = PendingUser.create(data: @data.to_json)
+      pu.send_new_pending_user_message_to_slack
       render json: { status: 'ok', redirect: '/pending' }
     else
       render json: { errors: user.errors.messages }
