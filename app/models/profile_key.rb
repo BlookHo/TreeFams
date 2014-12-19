@@ -344,9 +344,6 @@ class ProfileKey < ActiveRecord::Base
     IDArray.each_pair(profiles_arr) { |a,b|
       (logger.info "In compare_tree_circles 6: a: #{a} - b: #{b}"
       c = c + 1; logger.info " c = #{c} "
-      # сравниваемые хэши кругов профилей
-      hash1 = tree_circles[a] # # from tree
-      hash2 = tree_circles[b]  # from tree
 
       # доп.данные профилей: имя пол
       profile_a_data = profiles[a]
@@ -358,40 +355,27 @@ class ProfileKey < ActiveRecord::Base
 
       if profile_a_data == profile_b_data
 
-
+        # сравниваемые хэши кругов профилей
+        hash1 = tree_circles[a] # # from tree
+        hash2 = tree_circles[b]  # from tree
         # Определение общей части кругов профилей
         common_hash = ProfileKey.intersection(hash1,hash2)
         logger.info "In compare_tree_circles 8: common_hash = #{common_hash}"
-        logger.info "-----"
 
         # Вычисление мощности общей части кругов профилей
         common_power = ProfileKey.common_circle_power(common_hash)
 
-        #  Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та
         if common_power >= 4
-
-          # Формирование данных об одной паре похожих
-          one_similars_pair = {}
-
-          one_similars_pair.merge!(:first_profile_id => a)
-          name_a = Name.find(profile_a_data[:is_name_id]).name
-          one_similars_pair.merge!(:first_name_id => name_a)
-          profile_a_data[:is_sex_id] == 1 ? sex_a = 'М' : sex_a = 'Ж'
-          one_similars_pair.merge!(:first_sex_id => sex_a)
-
-          one_similars_pair.merge!(:second_profile_id => b)
-          name_b = Name.find(profile_b_data[:is_name_id]).name
-
-          one_similars_pair.merge!(:second_name_id => name_b)
-          profile_b_data[:is_sex_id] == 1 ? sex_b = 'М' : sex_b = 'Ж'
-          one_similars_pair.merge!(:second_sex_id => sex_b)
-
-          display_commoin_relations = ProfileKey.create_display_common(common_hash)
-          one_similars_pair.merge!(:common_relations => display_commoin_relations)
-          one_similars_pair.merge!(:common_power => common_power)
-
-          similars << one_similars_pair # Похожие - РЕЗУЛЬТАТ
-
+          common_data =
+              { first_profile_id:  a,
+                profile_a_data:  profile_a_data,
+                second_profile_id:  b,
+                profile_b_data:  profile_b_data,
+                common_hash:  common_hash,
+                common_power:  common_power
+              }
+          one_similars_pair = ProfileKey.get_similars_data(common_data)
+          similars << one_similars_pair if !one_similars_pair.empty?  # Похожие - РЕЗУЛЬТАТ
         end
 
       end
@@ -405,6 +389,36 @@ class ProfileKey < ActiveRecord::Base
     similars
   end
 
+  def self.get_similars_data(common_data)
+
+    #  Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та
+
+      # Формирование данных об одной паре похожих
+      one_similars_pair = {}
+
+      one_similars_pair.merge!(:first_profile_id => common_data[:first_profile_id])
+      name_a = Name.find(common_data[:profile_a_data][:is_name_id]).name
+      one_similars_pair.merge!(:first_name_id => name_a)
+      common_data[:profile_a_data][:is_sex_id] == 1 ? sex_a = 'М' : sex_a = 'Ж'
+      one_similars_pair.merge!(:first_sex_id => sex_a)
+
+      one_similars_pair.merge!(:second_profile_id => common_data[:second_profile_id])
+      name_b = Name.find(common_data[:profile_b_data][:is_name_id]).name
+      one_similars_pair.merge!(:second_name_id => name_b)
+      common_data[:profile_b_data][:is_sex_id] == 1 ? sex_b = 'М' : sex_b = 'Ж'
+      one_similars_pair.merge!(:second_sex_id => sex_b)
+
+      display_commoin_relations = ProfileKey.create_display_common(common_data[:common_hash])
+      one_similars_pair.merge!(:common_relations => display_commoin_relations)
+      one_similars_pair.merge!(:common_power => common_data[:common_power])
+
+      one_similars_pair
+
+
+  end
+
+
+
   # Формируем инфу для View - отображение Общих отношений 2-х профилей, кот-е Похожие
   def self.create_display_common(common_hash)
 
@@ -413,7 +427,7 @@ class ProfileKey < ActiveRecord::Base
     display_commoin_relations = common_hash
 
 
-    
+
     logger.info "In  self.make_view_data: display_commoin_relations.size = #{display_commoin_relations.size}" if !display_commoin_relations.empty?
     return display_commoin_relations
   end
