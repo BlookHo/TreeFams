@@ -270,7 +270,7 @@ class ProfileKey < ActiveRecord::Base
 
                 61=>{:is_name_id=>147, :is_sex_id=>0},
                 66=>{:is_name_id=>147, :is_sex_id=>0},
-                
+
                 9=>{:is_name_id=>82, :is_sex_id=>0},
                 65=>{:is_name_id=>110, :is_sex_id=>1},
                 7=>{:is_name_id=>48, :is_sex_id=>0},
