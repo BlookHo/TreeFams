@@ -19,9 +19,11 @@ class UpdatesFeed < ActiveRecord::Base
     if !connected_users.blank?
       updates_feeds = UpdatesFeed.where("user_id in (?) or agent_user_id  in (?)", connected_users, connected_users ).where.not(user_id: current_user.id).order('created_at').reverse_order
       logger.info "In select_updates: updates_feeds.size = #{updates_feeds.size}"
-      UpdatesFeed.create_view_data(read_updates(updates_feeds), current_user.id)
+      UpdatesFeed.make_view_data(read_updates(updates_feeds), current_user.id)
     end
   end
+
+
 
   # Пометка отображенных обновлений как прочитанные
   # для подсвечивания в View.
@@ -34,7 +36,7 @@ class UpdatesFeed < ActiveRecord::Base
   end
 
   # Создание массива для отображения обновлений для View
-  def self.create_view_data(updates_feeds, current_user_id)
+  def self.make_view_data(updates_feeds, current_user_id)
     view_update_data = []
     updates_feeds.each do |updates_feed|
       view_update_data << UpdatesFeed.collect_one_update_data(updates_feed, current_user_id) if !updates_feed.blank?

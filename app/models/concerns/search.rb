@@ -6,7 +6,7 @@ module Search
                                      # Значение certain_koeff - из вьюхи/
 
     connected_author_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
-    author_tree_arr = get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
+    author_tree_arr = Tree.get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
     ###################################
     #from_profile_searching = author_tree_arr.profile_id     # От какого профиля осущ-ся Поиск DEBUGG_TO_LOGG
     #name_id_searched       = author_tree_arr.name_id        # Имя Профиля DEBUGG_TO_LOGG
