@@ -77,9 +77,9 @@ class ProfileKey < ActiveRecord::Base
 
   # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
   # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
-  def self.make_arrays_from_circle(bk_rows)
+  def self.make_arrays_from_circle(circle_rows)
     circle_array = []
-    bk_rows.each do |row|
+    circle_rows.each do |row|
       circle_array << row.attributes.except('id','user_id','profile_id','created_at','updated_at')
     end
     return circle_array
@@ -229,58 +229,58 @@ class ProfileKey < ActiveRecord::Base
   # Сравниваем все круги на похожесть (совпадение)
   def self.compare_tree_circles(tree_info, tree_circles)
 
-     tree_circles =    # test
+     tree_circles =    # test 1 Алексей
     {27=>{"son"=>[122], "wif"=>[449], "dil"=>[82], "gsf"=>[28]},
      13=>{"fat"=>[122], "mot"=>[82], "son"=>[370, 465], "wif"=>[48], "wfl"=>[343], "wml"=>[82], "dil"=>[147], "gff"=>[90], "gmf"=>[449], "gdf"=>[446]},
-     11=>{"fat"=>[28], "mot"=>[48], "dau"=>[446], "bro"=>[465], "wif"=>[147], "gff"=>[122], "gfm"=>[343], "gmf"=>[82], "gmm"=>[82], "amo"=>[331]},
+     11=>{"fat"=>[28], "mot"=>[48], "dau"=>[446], "bro"=>[465], "wif"=>[147], "wfl"=>[110], "wml"=>[97], "gff"=>[122], "gfm"=>[343], "gmf"=>[82], "gmm"=>[82], "amo"=>[331]},
      10=>{"fat"=>[343], "mot"=>[82], "sis"=>[48], "nem"=>[370, 465]},
-     28=>{"son"=>[122], "hus"=>[90], "dil"=>[82],    "sis"=>[48, 55], "nem"=>[370, 465],    "gsf"=>[28]},
+     28=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
 
-     999=>{"son"=>[122], "hus"=>[90],    "sis"=>[48, 55],   "dil"=>[82], "gsf"=>[28]},
-     998=>{"son"=>[122], "hus"=>[90],    "sis"=>[48, 55],   "dil"=>[82], "gsf"=>[28]},
-
-     61=>{"dau"=>[446], "hus"=>[370], "hfl"=>[28], "hml"=>[48]},
-     66=>{"dau"=>[446], "hus"=>[370], "hfl"=>[28], "hml"=>[48]},
+     999=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
 
 
-
+     61=>{"fat"=>[110], "mot"=>[97], "dau"=>[446], "hus"=>[370], "hfl"=>[28], "hml"=>[48]},
+     66=>{"dau"=>[147], "hus"=>[110], "sil"=>[370], "gdm"=>[446]},
      9=>{"dau"=>[48, 331], "hus"=>[343], "sil"=>[28], "gsm"=>[370, 465]},
+     65=>{"dau"=>[147], "wif"=>[97], "sil"=>[370], "gdm"=>[446]},
      7=>{"fat"=>[343], "mot"=>[82], "son"=>[370, 465], "sis"=>[331], "hus"=>[28], "hfl"=>[122], "hml"=>[82], "dil"=>[147], "gdf"=>[446]},
      3=>{"son"=>[28], "hus"=>[122], "hfl"=>[90], "hml"=>[449], "dil"=>[48], "gsf"=>[370, 465]},
      12=>{"fat"=>[28], "mot"=>[48], "bro"=>[370], "gff"=>[122], "gfm"=>[343], "gmf"=>[82], "gmm"=>[82], "amo"=>[331], "nif"=>[446]},
-     63=>{"fat"=>[370], "mot"=>[147], "gff"=>[28], "gmf"=>[48], "ufa"=>[465]},
+     63=>{"fat"=>[370], "mot"=>[147], "gff"=>[28], "gfm"=>[110], "gmf"=>[48], "gmm"=>[97], "ufa"=>[465]},
      8=>{"dau"=>[48, 331], "wif"=>[82], "sil"=>[28], "gsm"=>[370, 465]},
      2=>{"fat"=>[90], "mot"=>[449], "son"=>[28], "wif"=>[82], "dil"=>[48], "gsf"=>[370, 465]}}
+
     logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
     logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
 
- #   profiles_arr = tree_info[:tree_is_profiles]  # from tree
-     profiles_arr = [27, 13, 11, 10, 28,   999, 998,    61,   66,   9, 7, 3, 12, 63, 8, 2]  # test
-    logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
-
-    profiles =   # test
-                {27=>{:is_name_id=>90, :is_sex_id=>1},
-                13=>{:is_name_id=>28, :is_sex_id=>1},
-                11=>{:is_name_id=>370, :is_sex_id=>1},
-                10=>{:is_name_id=>331, :is_sex_id=>0},
-                28=>{:is_name_id=>449, :is_sex_id=>0},
-
-                999=>{:is_name_id=>449, :is_sex_id=>0},
-                998=>{:is_name_id=>449, :is_sex_id=>0},
-
-                61=>{:is_name_id=>147, :is_sex_id=>0},
-                66=>{:is_name_id=>147, :is_sex_id=>0},
-
-                9=>{:is_name_id=>82, :is_sex_id=>0},
-                65=>{:is_name_id=>110, :is_sex_id=>1},
-                7=>{:is_name_id=>48, :is_sex_id=>0},
-                3=>{:is_name_id=>82, :is_sex_id=>0},
-                12=>{:is_name_id=>465, :is_sex_id=>1},
-                63=>{:is_name_id=>446, :is_sex_id=>0},
-                8=>{:is_name_id=>343, :is_sex_id=>1},
-                2=>{:is_name_id=>122, :is_sex_id=>1}}
+ #   profiles_arr = tree_info[:tree_is_profiles]
+    profiles_arr =
+        [27, 13, 11, 10, 28,  999,   61, 66, 9, 65, 7, 3, 12, 63, 8, 2] # from tree 1
+        logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
 
   #  profiles = tree_info[:profiles]     # from tree
+    profiles =   # test # from tree 1
+    {27=>{:is_name_id=>90, :is_sex_id=>1, :profile_id=>2, :relation_id=>1},
+     13=>{:is_name_id=>28, :is_sex_id=>1, :profile_id=>7, :relation_id=>7},
+     11=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>7, :relation_id=>3},
+     10=>{:is_name_id=>331, :is_sex_id=>0, :profile_id=>7, :relation_id=>6},
+     28=>{:is_name_id=>449, :is_sex_id=>0, :profile_id=>2, :relation_id=>2},
+
+     999=>{:is_name_id=>449, :is_sex_id=>0, :profile_id=>7, :relation_id=>3}, # from balda
+
+
+     61=>{:is_name_id=>147, :is_sex_id=>0, :profile_id=>11, :relation_id=>8},
+     66=>{:is_name_id=>97, :is_sex_id=>0, :profile_id=>61, :relation_id=>2},
+     9=>{:is_name_id=>82, :is_sex_id=>0, :profile_id=>7, :relation_id=>2},
+     65=>{:is_name_id=>110, :is_sex_id=>1, :profile_id=>61, :relation_id=>1},
+     7=>{:is_name_id=>48, :is_sex_id=>0, :profile_id=>13, :relation_id=>8},
+     3=>{:is_name_id=>82, :is_sex_id=>0, :profile_id=>13, :relation_id=>2},
+     12=>{:is_name_id=>465, :is_sex_id=>1, :profile_id=>7, :relation_id=>3},
+     63=>{:is_name_id=>446, :is_sex_id=>0, :profile_id=>11, :relation_id=>4},
+     8=>{:is_name_id=>343, :is_sex_id=>1, :profile_id=>7, :relation_id=>1},
+     2=>{:is_name_id=>122, :is_sex_id=>1, :profile_id=>13, :relation_id=>1}}
+
+    logger.info "==== In compare_tree_circles 4: profiles = #{profiles}" if !profiles.blank?
 
 
     # Перебор по парам профилей (неповторяющимся) с целью выявления похожих профилей
@@ -292,7 +292,11 @@ class ProfileKey < ActiveRecord::Base
       logger.info "In compare_tree_circles 6: one_profile_id: #{a_profile_id} - b_profile_id: #{b_profile_id}"
       c = c + 1; logger.info " c = #{c} "
 
-      if profiles[a_profile_id] == profiles[b_profile_id]
+      data_a_to_compare = [profiles[a_profile_id][:is_name_id], profiles[a_profile_id][:is_sex_id]]
+      data_b_to_compare = [profiles[b_profile_id][:is_name_id], profiles[b_profile_id][:is_sex_id]]
+
+      #if profiles[a_profile_id] == profiles[b_profile_id]
+      if data_a_to_compare == data_b_to_compare
         # сравниваемые хэши кругов профилей и определение их общей части кругов профилей
         common_hash = ProfileKey.intersection(tree_circles[a_profile_id], tree_circles[b_profile_id])
         # Вычисление мощности общей части кругов профилей
@@ -326,12 +330,16 @@ class ProfileKey < ActiveRecord::Base
       one_similars_pair = {}
 
       one_similars_pair.merge!(:first_profile_id => common_data[:first_profile_id])
+      one_similars_pair.merge!(:first_relation_id => common_data[:profile_a_data][:relation_id])
+      one_similars_pair.merge!(:main_first_relation_id => common_data[:profile_a_data][:profile_id])
       name_a = Name.find(common_data[:profile_a_data][:is_name_id]).name
       one_similars_pair.merge!(:first_name_id => name_a)
       common_data[:profile_a_data][:is_sex_id] == 1 ? sex_a = 'М' : sex_a = 'Ж'
       one_similars_pair.merge!(:first_sex_id => sex_a)
 
       one_similars_pair.merge!(:second_profile_id => common_data[:second_profile_id])
+      one_similars_pair.merge!(:second_relation_id => common_data[:profile_b_data][:relation_id])
+      one_similars_pair.merge!(:main_second_relation_id => common_data[:profile_b_data][:profile_id])
       name_b = Name.find(common_data[:profile_b_data][:is_name_id]).name
       one_similars_pair.merge!(:second_name_id => name_b)
       common_data[:profile_b_data][:is_sex_id] == 1 ? sex_b = 'М' : sex_b = 'Ж'

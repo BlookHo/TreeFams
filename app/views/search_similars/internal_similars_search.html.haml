@@ -11,8 +11,11 @@
           Данныx о текущем дереве - нет
   - else
     %h2 Пользователи - авторы дерева: #{@tree_info[:connected_users]}
+    %h2 ID Профилей Пользователей - авторов дерева: #{@tree_info[:users_profiles_ids]}
     %h2 Массив профилей в дереве:     #{@tree_info[:tree_is_profiles]}
     %h2 Количество профилей в дереве: #{@tree_info[:tree_profiles_amount]}
+    %h2 Полный массив профилей в дереве (с авторами):  #{@tree_info[:all_tree_profiles]}
+    %h2 Полное количество профилей в дереве (с авторами): #{@tree_info[:all_tree_profiles_amount]}
   %br
   %br
   %br
@@ -28,9 +31,13 @@
     %table
       %tr
         %th Первый профиль
+        %th Родство первого
+        %th С кем родство первого
         %th Первое имя
         %th Первый пол
         %th Второй профиль
+        %th Родство второго
+        %th С кем родство второго
         %th Второе имя
         %th Второй пол
         %th Общие отношения
@@ -39,9 +46,13 @@
       - @paged_similars_data.each do |similars_data|
         %tr
           %td= similars_data[:first_profile_id]
+          %td= similars_data[:first_relation_id]
+          %td= similars_data[:main_first_relation_id]
           %td= similars_data[:first_name_id]
           %td= similars_data[:first_sex_id]#.inspect
           %td= similars_data[:second_profile_id]
+          %td= similars_data[:second_relation_id]
+          %td= similars_data[:main_second_relation_id]
           %td= similars_data[:second_name_id].inspect
           %td= similars_data[:second_sex_id]
           %td= similars_data[:common_relations]
