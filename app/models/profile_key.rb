@@ -92,7 +92,7 @@ class ProfileKey < ActiveRecord::Base
     profile_circle_hash = {}
     circle_arr.each do |one_row_hash|
       relation_val, is_name_val, is_profile_val = ProfileKey.get_row_data(one_row_hash)
-      name_relation = ProfileKey.get_name_relation(relation_val)
+      name_relation = ProfileKey.get_name_relation(relation_val)[:code_relation]
       # Наращиваем круг в виде хэша
       profile_circle_hash = ProfileKey.growing_val_arr(profile_circle_hash, name_relation, is_name_val)
     end
@@ -119,72 +119,109 @@ class ProfileKey < ActiveRecord::Base
   # No use
   def self.get_name_relation(relation_val)
     name_relation = ""
+    code_relation = ""
     case relation_val
       when 1
-        name_relation = "fat" # father
+        code_relation = "fat" # father
+        name_relation = "Отец"
       when 2
-        name_relation = "mot" # mother
+        code_relation = "mot" # mother
+        name_relation = "Мама" # mother
       when 3
-        name_relation = "son" # son
+        code_relation = "son" #
+        name_relation = "Сын" # son
       when 4
-        name_relation = "dau" # daughter
+        code_relation = "dau" # daughter
+        name_relation = "Дочь" # daughter
       when 5
-        name_relation = "bro" # brother
+        code_relation = "bro" # brother
+        name_relation = "брат" # brother
       when 6
-        name_relation = "sis" # sister
+        code_relation = "sis" # sister
+        name_relation = "сестра" # sister
       when 7
-        name_relation = "hus"   # husband
+        code_relation = "hus" # husband
+        name_relation = "муж" # husband
       when 8
-        name_relation = "wif"   # wife
+        code_relation = "wif" # wife
+        name_relation = "жена" # wife
       when 91
-        name_relation = "gff" # grand father father
+        code_relation = "gff" # grand father father
+        name_relation = "дед" # grand father father
       when 92
-        name_relation = "gfm" # grand father mother
+        code_relation = "gfm" # grand father mother
+        name_relation = "дед" # grand father mother
       when 101
-        name_relation = "gmf" # grand mother father
+        code_relation = "gmf" # grand mother father
+        name_relation = "бабка" # grand mother father
       when 102
-        name_relation = "gmm" # grand mother mother
+        code_relation = "gmm" # grand mother mother
+        name_relation = "бабка" # grand mother mother
       when 111
-        name_relation = "gsf" # grand son father - внук
+        code_relation = "gsf" # grand son father - внук
+        name_relation = "внук" # grand son father - внук
       when 112
-        name_relation = "gsm" # grand son mother - внук
+        code_relation = "gsm" #
+        name_relation = "внук" # grand son mother - внук
       when 121
-        name_relation = "gdf" # grand daughter father - внучка по отцу
+        code_relation = "gdf" #
+        name_relation = "внучка" # grand daughter father - внучка по отцу
       when 122
-        name_relation = "gdm" # grand daughter mother - внучка по матери
+        code_relation = "gdm" #
+        name_relation = "внучка" # grand daughter mother - внучка по матери
       when 13
-        name_relation = "hfl" # husband father-in-law - свекор
+        code_relation = "hfl" #
+        name_relation = "свекор" # husband father-in-law - свекор
       when 14
-        name_relation = "hml" # husband mother-in-law - свекровь
+        code_relation = "hml" #
+        name_relation = "свекровь" # husband mother-in-law - свекровь
       when 15
-        name_relation = "wfl" # wife father-in-law - тесть
+        code_relation = "wfl" #
+        name_relation = "тесть" # wife father-in-law - тесть
       when 16
-        name_relation = "wml" # wife mother-in-law - теща
+        code_relation = "wml" #
+        name_relation = "теща" # wife mother-in-law - теща
       when 17
-        name_relation = "dil" # daughter-in-law - невестка
+        code_relation = "dil" #
+        name_relation = "невестка" # daughter-in-law - невестка
       when 18
-        name_relation = "sil" # son-in-law - зять
+        code_relation = "sil" #
+        name_relation = "зять" # son-in-law - зять
       when 191
-        name_relation = "ufa" # uncle father - дядя по отцу
+        code_relation = "ufa" #
+        name_relation = "дядя" # uncle father - дядя по отцу
       when 192
-        name_relation = "umo" # uncle mother - дядя по матери
+        code_relation = "umo" #
+        name_relation = "дядя" # uncle mother - дядя по матери
       when 201
-        name_relation = "afa" # aunt father - тетя по отцу
+        code_relation = "afa" #
+        name_relation = "тетя" # aunt father - тетя по отцу
       when 202
-        name_relation = "amo" # aunt mother - тетя по матери
+        code_relation = "amo" #
+        name_relation = "тетя" # aunt mother - тетя по матери
       when 211
-        name_relation = "nef" # nephew father - племянник по отцу
+        code_relation = "nef" #
+        name_relation = "племянник" # nephew father - племянник по отцу
       when 212
-        name_relation = "nem" # nephew mother - племянник по матери
+        code_relation = "nem" #
+        name_relation = "племянник" # nephew mother - племянник по матери
       when 221
-        name_relation = "nif" # niece father - племянница по отцу
+        code_relation = "nif" #
+        name_relation = "племянница" # niece father - племянница по отцу
       when 222
-        name_relation = "nim" # niece father - племянница по матери
+        code_relation = "nim" #
+        name_relation = "племянница" # niece father - племянница по матери
 
       else
         logger.info "ERROR: No relation_id in Circle "
     end
-    return name_relation
+
+    { code_relation: code_relation,
+      name_relation: name_relation
+
+    }
+
+   # return code_relation, name_relation
   end
 
   # No use
@@ -229,14 +266,14 @@ class ProfileKey < ActiveRecord::Base
   # Сравниваем все круги на похожесть (совпадение)
   def self.compare_tree_circles(tree_info, tree_circles)
 
-     tree_circles =    # test 1 Алексей
+   #  tree_circles =    # test 1 Алексей
     {27=>{"son"=>[122], "wif"=>[449], "dil"=>[82], "gsf"=>[28]},
      13=>{"fat"=>[122], "mot"=>[82], "son"=>[370, 465], "wif"=>[48], "wfl"=>[343], "wml"=>[82], "dil"=>[147], "gff"=>[90], "gmf"=>[449], "gdf"=>[446]},
      11=>{"fat"=>[28], "mot"=>[48], "dau"=>[446], "bro"=>[465], "wif"=>[147], "wfl"=>[110], "wml"=>[97], "gff"=>[122], "gfm"=>[343], "gmf"=>[82], "gmm"=>[82], "amo"=>[331]},
      10=>{"fat"=>[343], "mot"=>[82], "sis"=>[48], "nem"=>[370, 465]},
      28=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
 
-     999=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
+     35=>{"son"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28]},
 
 
      61=>{"fat"=>[110], "mot"=>[97], "dau"=>[446], "hus"=>[370], "hfl"=>[28], "hml"=>[48]},
@@ -253,20 +290,20 @@ class ProfileKey < ActiveRecord::Base
     logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
     logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
 
- #   profiles_arr = tree_info[:tree_is_profiles]
-    profiles_arr =
-        [27, 13, 11, 10, 28,  999,   61, 66, 9, 65, 7, 3, 12, 63, 8, 2] # from tree 1
+    profiles_arr = tree_info[:tree_is_profiles]
+ #   profiles_arr =
+        [27, 13, 11, 10, 28,  35,   61, 66, 9, 65, 7, 3, 12, 63, 8, 2] # from tree 1
         logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
 
-  #  profiles = tree_info[:profiles]     # from tree
-    profiles =   # test # from tree 1
+    profiles = tree_info[:profiles]     # from tree
+  #  profiles =   # test # from tree 1
     {27=>{:is_name_id=>90, :is_sex_id=>1, :profile_id=>2, :relation_id=>1},
      13=>{:is_name_id=>28, :is_sex_id=>1, :profile_id=>7, :relation_id=>7},
      11=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>7, :relation_id=>3},
      10=>{:is_name_id=>331, :is_sex_id=>0, :profile_id=>7, :relation_id=>6},
      28=>{:is_name_id=>449, :is_sex_id=>0, :profile_id=>2, :relation_id=>2},
 
-     999=>{:is_name_id=>449, :is_sex_id=>0, :profile_id=>7, :relation_id=>3}, # from balda
+     35=>{:is_name_id=>449, :is_sex_id=>0, :profile_id=>7, :relation_id=>3}, # from balda
 
 
      61=>{:is_name_id=>147, :is_sex_id=>0, :profile_id=>11, :relation_id=>8},
@@ -330,18 +367,20 @@ class ProfileKey < ActiveRecord::Base
       one_similars_pair = {}
 
       one_similars_pair.merge!(:first_profile_id => common_data[:first_profile_id])
-      one_similars_pair.merge!(:first_relation_id => common_data[:profile_a_data][:relation_id])
-      one_similars_pair.merge!(:main_first_relation_id => common_data[:profile_a_data][:profile_id])
-      name_a = Name.find(common_data[:profile_a_data][:is_name_id]).name
-      one_similars_pair.merge!(:first_name_id => name_a)
+      one_similars_pair.merge!(:first_relation_id => get_name_relation(common_data[:profile_a_data][:relation_id])[:name_relation] ) #common_data[:profile_a_data][:relation_id])
+
+      one_similars_pair.merge!(:name_first_relation_id => ProfileKey.inflect_name(get_name(common_data[:profile_a_data][:profile_id]), 1))
+      one_similars_pair.merge!(:first_name_id => get_name(common_data[:first_profile_id]))
+
       common_data[:profile_a_data][:is_sex_id] == 1 ? sex_a = 'М' : sex_a = 'Ж'
       one_similars_pair.merge!(:first_sex_id => sex_a)
 
       one_similars_pair.merge!(:second_profile_id => common_data[:second_profile_id])
-      one_similars_pair.merge!(:second_relation_id => common_data[:profile_b_data][:relation_id])
-      one_similars_pair.merge!(:main_second_relation_id => common_data[:profile_b_data][:profile_id])
-      name_b = Name.find(common_data[:profile_b_data][:is_name_id]).name
-      one_similars_pair.merge!(:second_name_id => name_b)
+      one_similars_pair.merge!(:second_relation_id => get_name_relation(common_data[:profile_b_data][:relation_id])[:name_relation] ) #
+
+      one_similars_pair.merge!(:name_second_relation_id => ProfileKey.inflect_name(get_name(common_data[:profile_b_data][:profile_id]), 1))
+      one_similars_pair.merge!(:second_name_id => get_name(common_data[:second_profile_id]))
+
       common_data[:profile_b_data][:is_sex_id] == 1 ? sex_b = 'М' : sex_b = 'Ж'
       one_similars_pair.merge!(:second_sex_id => sex_b)
 
@@ -365,6 +404,23 @@ class ProfileKey < ActiveRecord::Base
     logger.info "In  self.make_view_data: display_common_relations.size = #{display_common_relations.size}" if !display_common_relations.empty?
     return display_common_relations
   end
+
+  # Извлечение имени профиля
+  def self.get_name(profile_id)
+    #profile = Profile.find(profile_id)
+    #name_id = profile.name_id
+    #Name.find(name_id).name
+    Name.find(Profile.find(profile_id).name_id).name
+
+  end
+
+  # Склонение имени по падежу == padej
+  def self.inflect_name(text_data_name, padej)
+    text_data_name != "" ? inflected_name = YandexInflect.inflections(text_data_name)[padej]["__content__"] : inflected_name = ""
+    inflected_name
+  end
+
+
 
 
 

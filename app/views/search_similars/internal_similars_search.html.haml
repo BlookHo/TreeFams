@@ -31,30 +31,34 @@
     %table
       %tr
         %th Первый профиль
+        %th Первое имя
+        -#%th Пол первого
         %th Родство первого
         %th С кем родство первого
-        %th Первое имя
-        %th Первый пол
+
         %th Второй профиль
+        %th Второе имя
+        -#%th Пол второго
         %th Родство второго
         %th С кем родство второго
-        %th Второе имя
-        %th Второй пол
+
         %th Общие отношения
         %th Мощность общности
 
       - @paged_similars_data.each do |similars_data|
         %tr
           %td= similars_data[:first_profile_id]
-          %td= similars_data[:first_relation_id]
-          %td= similars_data[:main_first_relation_id]
           %td= similars_data[:first_name_id]
-          %td= similars_data[:first_sex_id]#.inspect
+          -#%td= similars_data[:first_sex_id]#.inspect
+          %td= similars_data[:first_relation_id]  #
+          %td= similars_data[:name_first_relation_id] #
+
           %td= similars_data[:second_profile_id]
-          %td= similars_data[:second_relation_id]
-          %td= similars_data[:main_second_relation_id]
-          %td= similars_data[:second_name_id].inspect
-          %td= similars_data[:second_sex_id]
+          %td= similars_data[:second_name_id]#
+          -#%td= similars_data[:second_sex_id]
+          %td= similars_data[:second_relation_id] #
+          %td= similars_data[:name_second_relation_id]
+
           %td= similars_data[:common_relations]
           %td= similars_data[:common_power]
 
