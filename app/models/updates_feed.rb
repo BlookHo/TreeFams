@@ -48,20 +48,22 @@ class UpdatesFeed < ActiveRecord::Base
   def self.collect_one_update_data(updates_feed, current_user_id)
     update_data = Hash.new
 
-    update_data[:user_update_author] = updates_feed.user_update_data(updates_feed.user_id)[:user_name]
-    update_data[:user_author_email]  = updates_feed.user_update_data(updates_feed.user_id)[:user_email]
-
+    #update_data[:user_update_author] = updates_feed.user_update_data(updates_feed.user_id)[:user_name]
+    #update_data[:user_author_email]  = updates_feed.user_update_data(updates_feed.user_id)[:user_email]
     #  Если в данном виде обновления профиль-агент не используется, то во View - ничего не показываем
-    update_data[:agent_in_update]    = updates_feed.fill_agent_field(updates_feed) if !updates_feed.agent_user_id.blank?
+    #update_data[:agent_in_update]    = updates_feed.fill_agent_field(updates_feed) if !updates_feed.agent_user_id.blank?
+    #update_data[:update_id]          = updates_feed.update_id # DEBUGG TO VIEW
 
+    # Show in View /index
     update_data[:update_text]        = updates_feed.combine_update_text(updates_feed, current_user_id)
-    update_data[:update_id]          = updates_feed.update_id # DEBUGG TO VIEW
-
-    update_data[:update_read]        = updates_feed.read
-    update_data[:update_image]       = updates_feed.update_event_data(updates_feed.update_id)[:image]
+    # Show in View /index
     update_data[:update_created]     = updates_feed.read_datatime_created(updates_feed)
 
-    return update_data
+    # JUST NOW - Did not Show in View /index(later)
+    update_data[:update_read]        = updates_feed.read
+    update_data[:update_image]       = updates_feed.update_event_data(updates_feed.update_id)[:image]
+
+    update_data
   end
 
   # Извлечение данных о типовых событиях-обновлениях для одного обновления для View
@@ -69,7 +71,6 @@ class UpdatesFeed < ActiveRecord::Base
     one_update = UpdatesEvent.find(updates_feed_id)
     { text: one_update.name, image: one_update.image }
   end
-
 
   # Извлечение данных для User из одного обновления для View
   # Заполнение Именем agent_user_id поля agent_in_update для отображения
@@ -97,30 +98,30 @@ class UpdatesFeed < ActiveRecord::Base
   # в случае когда agent_user_id - user
   # ИЛИ
   # в случае когда agent_user_id - profile
-  def fill_agent_field(updates_feed)
-
-      case updates_feed.update_id
-        when 1, 2 # запросы на объединение, объединения   ИЛИ
-          # ConnectionRequestsController, ConnectUsersTreesController
-          updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name]
-
-        when 3, 4, 5  # избранный профиль -       ИЛИ
-          # добавлен профиль - ProfilesController  ИЛИ
-          # приглашение на сайт по почте -  InvitesController
-          get_name(updates_feed.agent_profile_id)
-
-        when 6  # изменились данные профиля
-
-        when 7  # семейное событие в дереве
-
-        when 8 .. 16  # кол-во родни в дереве больше 25, 50, 100... - ProfilesController
-          get_name(updates_feed.agent_profile_id)
-
-        else
-          nil
-      end
-
-  end
+  #def fill_agent_field(updates_feed)
+  #
+  #    case updates_feed.update_id
+  #      when 1, 2 # запросы на объединение, объединения   ИЛИ
+  #        # ConnectionRequestsController, ConnectUsersTreesController
+  #        updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name]
+  #
+  #      when 3, 4, 5  # избранный профиль -       ИЛИ
+  #        # добавлен профиль - ProfilesController  ИЛИ
+  #        # приглашение на сайт по почте -  InvitesController
+  #        get_name(updates_feed.agent_profile_id)
+  #
+  #      when 6  # изменились данные профиля
+  #
+  #      when 7  # семейное событие в дереве
+  #
+  #      when 8 .. 16  # кол-во родни в дереве больше 25, 50, 100... - ProfilesController
+  #        get_name(updates_feed.agent_profile_id)
+  #
+  #      else
+  #        nil
+  #    end
+  #
+  #end
 
   # Формирование полного связного текста каждого из сообщений updates_feed
   def combine_update_text(updates_feed, current_user_id)
@@ -131,22 +132,17 @@ class UpdatesFeed < ActiveRecord::Base
     case updates_feed.update_id # по типу UpdatesEvent
       when 1 # запросы на объединение in ConnectionRequestsController  # OK
         prefix, suffix = updates_feed.combine_1_text(updates_feed, text_data, current_user_id)
-
       when 2 # объединения in ConnectUsersTreesController  # OK
         prefix, suffix = updates_feed.combine_2_text(updates_feed, text_data, current_user_id)
-
       when 3  # избранный профиль -
         prefix, suffix = updates_feed.combine_3_text(updates_feed, text_data)
-
       when 4  # добавлен профиль in ProfilesController   # OK
         prefix, suffix = updates_feed.combine_4_text(updates_feed, text_data)
-
       when 5  # приглашение на сайт по почте in InvitesController   # OK
         prefix, suffix = updates_feed.combine_5_text(updates_feed, text_data)
 
-      when 6  # изменились данные профиля
-
-      when 7  # семейное событие в дереве
+      when 6  # изменились данные профиля - To be defined later
+      when 7  # семейное событие в дереве - To be defined later
 
       when 8 .. 16 # изменилось кол-во родни в объединенном дереве   # OK
                   # в рез-те добавления профиля или объединения деревьев in ProfilesController, ConnectUsersTreesController
@@ -174,9 +170,7 @@ class UpdatesFeed < ActiveRecord::Base
   def combine_1_text(updates_feed, text_data, current_user_id)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
-
     text_data[:author_name] != "" ? suffix = text_data[:author_name] : suffix = ""
-
     updates_feed.agent_user_id == current_user_id ? prefix = text_data[:agent_name] + '! Тебе' : prefix = 'Твоему родственнику ' + inflect_name(text_data[:agent_name], 2)
 
     return prefix, suffix
@@ -187,10 +181,8 @@ class UpdatesFeed < ActiveRecord::Base
   def combine_2_text(updates_feed, text_data, current_user_id)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
-
     current_user_name =  updates_feed.user_update_data(current_user_id)[:user_name]
     prefix = 'Поздравляем, ' + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:author_name]
-
     updates_feed.agent_user_id == current_user_id ? suffix = 'твоим деревом' : suffix = 'деревом твоего родственника по имени ' + text_data[:agent_name]
 
     return prefix, suffix
@@ -210,9 +202,7 @@ class UpdatesFeed < ActiveRecord::Base
   def combine_4_text(updates_feed, text_data)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_profile_id) : text_data[:agent_name] = ""
-
     prefix = 'Твоим родственником ' + inflect_name(text_data[:author_name],4)
-
     text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
 
     return prefix, suffix
@@ -224,7 +214,6 @@ class UpdatesFeed < ActiveRecord::Base
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_profile_id) : text_data[:agent_name] = ""
     text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
-
     prefix = 'Твоим родственником ' + inflect_name(text_data[:author_name],4)
 
     return prefix, suffix
