@@ -1,73 +1,41 @@
-%section.admin
+.container#messages
+  %h1 Все существующие диалоги с другими Юзерами
+  %h2 У тебя #{@new_messages_count} новых сообщений
 
--#%p
--#  @current_user.id = #{current_user.id.inspect}
--#%p
--#  @new_messages_count = #{@new_messages_count.inspect}
 
-%br
-%h1 Все существующие диалоги с другими Юзерами (INDEX Listing All Dialoges)
-%br
-%br
-- if !@talks_and_messages.blank?
-
-  - @talks_and_messages.each do |one_talk_arr|
-    %br
-    - if !one_talk_arr.blank?
-      %div
-        %table
-          %tr
-            %th User_Id
-            %th
-
-          - one_talk_arr.each do |user_id, user_talk_arr|
+  %br
+  - if @talks_and_messages.blank?
+    %table
+      %tr
+        %td.left.grey.italic
+          Сообщений - нет.
+  - else
+    - @talks_and_messages.each do |one_talk_arr|
+      %table
+        %tr
+          %td.left.grey.italic
+          %th
+          %th
+          %th
+          %th
+          - one_talk_arr.each do |user_talk_id, user_talk_arr|
             %tr
             %tr
-              %td= user_id
-              %td= link_to 'Написать сообщение .', create_new_message_path(receiver_id: user_id)
-              -#%td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_id),  class: :messages
-            %li
+              %td.left.grey.italic
+              %td
+                %h2 Диалог с #{user_talk_id}
+              %td= link_to 'Написать ему сообщение .', create_new_message_path(receiver_id: user_talk_id),  class: :messages
+              %td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_talk_id),  class: :messages
+              %td= link_to 'Удалить весь диалог с этим Юзером .', delete_one_dialoge_path(user_id: user_talk_id ), class: :messages
 
-            - if !user_talk_arr.blank?
-              %table
-                %tr
-                %tr
-                  %th Id Msg
-                  %th Text
-                  %th Sender
-                  %th Receiver
-                  %th Read
-                  %th Sender_deleted
-                  %th Receiver_deleted
-                  %th
-                  %th
-                - user_talk_arr.take(1).each do |one_talk_messages|
-                  %tr
-                  %td= one_talk_messages.values_at(:message_id).flatten[0]
-                  %td= one_talk_messages.values_at(:text).flatten[0][0..20]
-                  %td= one_talk_messages.values_at(:sender_id).flatten[0]
-                  %td= one_talk_messages.values_at(:receiver_id).flatten[0]
-                  %td= one_talk_messages.values_at(:read).flatten[0]
-                  %td= one_talk_messages.values_at(:sender_deleted).flatten[0]
-                  %td= one_talk_messages.values_at(:receiver_deleted).flatten[0]
-                  %td= link_to 'Показать весь диалог с этим Юзером .', show_one_dialoge_path(user_id: user_id), class: :messages
-                  %td= link_to 'Удалить сообщение .', delete_message_path(message_id: one_talk_messages.values_at(:message_id).flatten[0]), class: :messages
+              = render 'messages/show_dialoge', :user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length
+              %td= link_to 'Показать весь диалог с этим Юзером .', show_one_dialoge_path(:user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length), class: :messages
+              %br
+              %br
 
-            - else
-              %h4 No Listing user_talk_arr!
-    - else
-      %h4 No Listing one_talk_arr!
-- else
-  %h4 No Listing @talks_and_messages!
+  %br
+  = link_to 'Написать новое сообщение.', create_new_message_path
+  %br
+  %br
+  = link_to 'К просмотру твоего дерева', home_path
 
-%br
-%br
--#  %p
--#    @receiver_id = #{@receiver_id.inspect}
--#  %p
--#    @text = #{@text.inspect}
--#%br
-%br
-  %h3 НАПИСАТЬ И ОТПРАВИТЬ СООБЩЕНИЕ
-%br
-= link_to 'Написать сообщение. New Message', create_new_message_path

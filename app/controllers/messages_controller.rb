@@ -3,6 +3,9 @@
 class MessagesController < ApplicationController
   include MessagesHelper
 
+  layout 'application.new'
+
+
   before_filter :logged_in?
 
 
@@ -15,98 +18,13 @@ class MessagesController < ApplicationController
   # с одним юзером.
   def index
 
-    @receiver_id = params[:receiver_id].to_i #
-    @text = params[:text] #
-
-    @new_messages_count = count_new_messages
-    find_agents # find all contragent of current_user by messages
-
-    @talks_and_messages = []
-    @agents_talks.each do |user_id|
-      user_dialoge = get_user_messages(user_id)
-      @talks_and_messages << user_dialoge
-    end
-
+    user_id = params[:user_talk_id] # From view
+    @new_messages_count = count_new_messages  # To show in View
+    agents_talks = Message.find_agents(current_user) # find all contragent of current_user by messages
+    @talks_and_messages = Message.view_messages_data(agents_talks, current_user)  # To show in View
+    @one_dialoge_length = 1
   end
 
-
-
-  ## NO USE with show_all_messages.html
-  ## Получаем диалоги и сообщения всех контрагентов текущего юзера
-  ## Альтернативное отображение.
-  #def show_all_messages
-  #
-  #  @users_ids = User.all.pluck(:id)
-  #
-  #    @new_messages_count = count_new_messages
-  #    logger.info "== show_all_messages == @new_messages_count = #{@new_messages_count}"
-  #
-  #    find_agents # find all contragent of current_user by messages
-  #    @talks_and_messages = []
-  #    @agents_talks.each do |user_id|
-  #      user_dialoge = get_user_messages(user_id)
-  #      @talks_and_messages << user_dialoge
-  #
-  #    end
-  #
-  #end
-  #
-
-
-  # Получаем диалоги всех контрагентов текущего юзера
-  def show_all_dialoges
-
-      @new_messages_count = count_new_messages
-      logger.info "== show_all_dialoges == @new_messages_count = #{@new_messages_count}"
-      find_agents # find all contragent of current_user by messages
-
-      @talks_and_messages = []
-      @agents_talks.each do |user_id|
-        user_dialoge = get_user_messages(user_id)
-        @talks_and_messages << user_dialoge
-      end
-    @new_mail_count = count_new_messages
-    logger.info "===== @new_mail_count = #{@new_mail_count}"
-
-  end
-
-  # Получаем массив сообщений для одного юзера
-  # чтение всех сообщений получателем при открывании диалога
-  def get_user_messages(user_id)
-    user_dialoge = {}
-    user_messages = []
-    one_user_talk =  Message.where(:receiver_deleted => false).where(:sender_deleted => false).where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").order('created_at').reverse_order
-    one_user_talk.each do |one_message|
-      one_message_hash = {}
-      one_message_hash.merge!(:message_id => one_message.id)
-      one_message_hash.merge!(:text => one_message.text)
-      one_message_hash.merge!(:sender_id => one_message.sender_id)
-      one_message_hash.merge!(:receiver_id => one_message.receiver_id)
-      one_message_hash.merge!(:read => one_message.read)
-      one_message_hash.merge!(:sender_deleted => one_message.sender_deleted)
-      one_message_hash.merge!(:receiver_deleted => one_message.receiver_deleted)
-      one_message_hash.merge!(:important => one_message.important)
-      user_messages << one_message_hash
-
-      # чтение одного сообщения получателем при открывании диалога
-      if user_id == params[:user_id]
-        read_one_message(one_message)
-        one_message.save
-      end
-
-    end
-    user_dialoge.merge!(user_id => user_messages)
-    return user_dialoge
-  end
-
-  # чтение всех сообщений получателем при открывании диалога
-  # используется для управления отображения сообщений
-  def read_one_message(message)
-    message.read = true  if !message.read && message.receiver_id == current_user.id
-
-    ## NOTIFICATION #### Установка уведомлений отправителю  ########
-
-  end
 
 
   # Получаем диалог одного юзера
@@ -115,14 +33,20 @@ class MessagesController < ApplicationController
       @new_messages_count = count_new_messages
       #logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
 
-      find_agents # find all contragent of current_user by messages
-      user_id = params[:user_id] # From view
+      user_id = params[:user_talk_id] # From view
 
       @talks_and_messages = []
-      user_dialoge = get_user_messages(user_id)
+      user_dialoge = Message.get_user_messages(user_id, current_user)
       @talks_and_messages << user_dialoge
+      @one_dialoge_length = user_dialoge[user_id].length if !user_dialoge[user_id].blank?
 
   end
+
+  def delete_one_dialoge
+
+
+  end
+
 
   # Пометка в БД выбранного сообщения как Удаленного
   #
@@ -181,19 +105,6 @@ class MessagesController < ApplicationController
   def spam_dialoge
     user_id = params[:user_id] # From view
     #
-
-  end
-
-  # Найти всех контрагентов current_user по сообщениям
-  # Исп-ся при отображении сообщений
-  def find_agents
-
-    agents_senders = Message.where(:receiver_id => current_user.id).pluck(:sender_id).uniq
-    agents_receivers = Message.where(:sender_id => current_user.id).pluck(:receiver_id).uniq
-    #logger.info "@agents_senders = #{agents_senders}"
-    #logger.info "@agents_receivers = #{agents_receivers}"
-
-    @agents_talks = (agents_senders + agents_receivers).uniq
 
   end
 

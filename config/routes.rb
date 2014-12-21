@@ -51,6 +51,8 @@ Weafam::Application.routes.draw do
   match 'delete_message' => 'messages#delete_message', via: :get
   #match 'delete_message' => 'messages#delete_message', via: :post
 
+  match 'delete_one_dialoge' => 'messages#delete_one_dialoge', via: :get
+
   match 'spam_dialoge' => 'messages#spam_dialoge', via: :get
   #match 'spam_dialoge' => 'messages#spam_dialoge', via: :post
 
