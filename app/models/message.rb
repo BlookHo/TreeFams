@@ -79,13 +79,12 @@ class Message < ActiveRecord::Base
   # чтение всех сообщений получателем при открывании диалога
   # Если текущий юзер явл-ся получателем
   # используется для управления отображения сообщений
+  
   def important_message(message, current_user) #, choosed_message_id)
-    #logger.info "Bef: message.id = #{message.id}, message.read = #{message.read}"
     message.important = true if !message.important &&
         (message.receiver_id == current_user.id ||
             message.sender_id == current_user.id )
     message.save
-    #logger.info "Aft: message.id = #{message.id}, message.read = #{message.read}"
 
     ## NOTIFICATION #### Установка уведомлений отправителю  ########
 
