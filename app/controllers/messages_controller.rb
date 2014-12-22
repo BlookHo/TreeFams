@@ -86,22 +86,8 @@ class MessagesController < ApplicationController
   def mark_important
 
     message = Message.find(params[:message_id]) # From view
-    message.important_message(message, current_user)
-
-    #if message.receiver_id == current_user.id || message.sender_id == current_user.id
-    #  if !message.important
-    #    message.important = true
-    #    message.save
-    #    if message.receiver_id == current_user.id
-    #      user_id = message.sender_id
-    #    elsif message.sender_id == current_user.id
-    #      user_id = message.receiver_id
-    #    end
-    #  end
-    #  redirect_to show_one_dialoge_path(user_id: user_id)
-    #else
-    #  flash[:error] = "Ты не можешь удалить это сообщение"
-    #end
+    message.important_message(message, current_user ) #,
+    #@mark_important = message.important
 
   end
 
