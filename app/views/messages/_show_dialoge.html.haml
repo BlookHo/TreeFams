@@ -28,5 +28,5 @@
         %td= one_talk_message[:one_message_important]
         -#%td= link_to 'Показать весь диалог с этим Юзером .', show_one_dialoge_path(:user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => one_dialoge_length), class: :messages
         %td= link_to 'Удалить сообщение', delete_message_path(message_id: one_talk_message[:one_message_id]), class: :messages
-        %td= link_to 'Пометить как важное', mark_important_path(message_id: one_talk_message[:one_message_id]), class: :messages
+        %td= link_to 'Пометить как важное', mark_important_path(message_id: one_talk_message[:one_message_id]), method: :post, remote: true, class: :messages
         %td= one_talk_message[:one_message_read]

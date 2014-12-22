@@ -45,7 +45,7 @@ Weafam::Application.routes.draw do
   match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :get
   #match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :post
 
-  match 'mark_important' => 'messages#mark_important', via: :get
+  match 'mark_important' => 'messages#mark_important', via: :post
   #match 'important_message' => 'messages#important_message', via: :post
 
   match 'delete_message' => 'messages#delete_message', via: :get
