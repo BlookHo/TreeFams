@@ -79,7 +79,7 @@ class Message < ActiveRecord::Base
   # чтение всех сообщений получателем при открывании диалога
   # Если текущий юзер явл-ся получателем
   # используется для управления отображения сообщений
-  
+
   def important_message(message, current_user) #, choosed_message_id)
     message.important = true if !message.important &&
         (message.receiver_id == current_user.id ||
