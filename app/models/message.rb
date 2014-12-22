@@ -12,19 +12,16 @@ class Message < ActiveRecord::Base
 
   # Найти всех контрагентов current_user по сообщениям
   # Исп-ся при отображении сообщений
+  # @param data [current_user] текущий юзер - logged_in
   def self.find_agents(current_user)
-
     agents_senders = self.where(:receiver_id => current_user.id).pluck(:sender_id).uniq
     agents_receivers = self.where(:sender_id => current_user.id).pluck(:receiver_id).uniq
-    #logger.info "@agents_senders = #{agents_senders}"
-    #logger.info "@agents_receivers = #{agents_receivers}"
     (agents_senders + agents_receivers).uniq
-
   end
-
 
   # Формирование выходного массива
   # для отображения сообщений в вьюхе
+  # @param data [current_user] текущий юзер - logged_in
   def self.view_messages_data(agents_talks, current_user)
     talks_and_messages = []
     agents_talks.each do |user_id|
@@ -35,37 +32,42 @@ class Message < ActiveRecord::Base
 
   # Получаем массив сообщений для одного юзера
   # чтение всех сообщений получателем при открывании диалога
+  # @param data [current_user] текущий юзер - logged_in
   def self.get_user_messages(user_id, current_user)
     user_dialoge = {}
     user_messages = []
+    user_name = User.show_user_name(user_id, 4)
+
     one_user_talk =  self.where(:receiver_deleted => false).where(:sender_deleted => false).where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").order('created_at').reverse_order
     one_user_talk.each do |one_message|
-      one_message_hash = {}
+      sender_name = User.show_user_name(one_message.sender_id, 0)
 
-      one_message_hash[:one_message_id] = one_message.id
-      one_message_hash[:one_message_text] = one_message.text
-      one_message_hash[:one_message_sender_id] = one_message.sender_id
-      one_message_hash[:one_message_receiver_id] = one_message.receiver_id
-      one_message_hash[:one_message_read] = one_message.read
-      one_message_hash[:one_message_sender_deleted] = one_message.sender_deleted
-      one_message_hash[:one_message_receiver_deleted] = one_message.receiver_deleted
-      one_message_hash[:one_message_important] = one_message.important
+      one_message_hash = {
+       one_message_user_name: user_name,
+       one_message_id: one_message.id,
+       one_message_text: one_message.text,
+       one_message_sender_id: one_message.sender_id,
+       one_message_sender_name: sender_name,
 
+       one_message_receiver_id: one_message.receiver_id,
+       one_message_read: one_message.read,
+       one_message_sender_deleted: one_message.sender_deleted,
+       one_message_receiver_deleted: one_message.receiver_deleted,
+       one_message_important: one_message.important
+      }
       user_messages << one_message_hash
-
       # чтение одного сообщения получателем при открывании всего диалога
       one_message.read_one_message(one_message, current_user)
-
     end
-    user_dialoge.merge!(user_id => user_messages)
-    return user_dialoge
-  end
 
+    user_dialoge.merge!(user_id => user_messages)
+  end
 
 
   # чтение всех сообщений получателем при открывании диалога
   # Если текущий юзер явл-ся получателем
   # используется для управления отображения сообщений
+  # @param data [current_user] текущий юзер - logged_in
   def read_one_message(message, current_user)
     #logger.info "Bef: message.id = #{message.id}, message.read = #{message.read}"
     message.read = true if !message.read && message.receiver_id == current_user.id
@@ -79,7 +81,7 @@ class Message < ActiveRecord::Base
   # чтение всех сообщений получателем при открывании диалога
   # Если текущий юзер явл-ся получателем
   # используется для управления отображения сообщений
-
+  # @param data [current_user] текущий юзер - logged_in
   def important_message(message, current_user) #, choosed_message_id)
     message.important = true if !message.important &&
         (message.receiver_id == current_user.id ||
@@ -89,6 +91,9 @@ class Message < ActiveRecord::Base
     ## NOTIFICATION #### Установка уведомлений отправителю  ########
 
   end
+
+
+
 
 
 end

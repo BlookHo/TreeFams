@@ -1,7 +1,10 @@
 .container#messages
-  %h1 Все существующие диалоги с другими Юзерами
-  %h2 У тебя #{@new_messages_count} новых сообщений
+  %h1 Все твои диалоги
+  -#%h2 У тебя #{@new_messages_count} новых сообщений
 
+  %br
+  = link_to 'Написать новое сообщение.',
+    send_message_path(receiver_id: nil), class: :messages
 
   %br
   - if @talks_and_messages.blank?
@@ -23,18 +26,21 @@
             %tr
               %td.left.grey.italic
               %td
-                %h2 Диалог с #{user_talk_id}
-              %td= link_to 'Написать ему сообщение .', create_new_message_path(receiver_id: user_talk_id),  class: :messages
-              %td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_talk_id),  class: :messages
-              %td= link_to 'Удалить весь диалог с этим Юзером .', delete_one_dialoge_path(user_id: user_talk_id ), class: :messages
+                %h2 Диалог с #{user_talk_arr[0][:one_message_user_name]}
+              %td= link_to 'Написать ему сообщение .',
+                send_message_path(receiver_id: user_talk_id), class: :messages
+              %td= link_to 'Cпам - пометить диалог .',
+                spam_dialoge_path(user_id: user_talk_id),  class: :messages
+              %td= link_to 'Удалить весь диалог с этим Юзером .',
+                delete_one_dialoge_path(user_id: user_talk_id ), class: :messages
 
               = render 'messages/show_dialoge', :user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length, :current_user => @current_user
-              %td= link_to 'Показать весь диалог с этим Юзером .', show_one_dialoge_path(:user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length), class: :messages
+              %td= link_to 'Показать весь диалог с этим Юзером .',
+                show_one_dialoge_path(:user_talk_id => user_talk_id)
+                -#, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length), class: :messages
               %br
               %br
 
-  %br
-  = link_to 'Написать новое сообщение.', create_new_message_path
   %br
   = link_to 'К просмотру твоего дерева', home_path
 

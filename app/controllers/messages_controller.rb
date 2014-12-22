@@ -22,23 +22,21 @@ class MessagesController < ApplicationController
     @talks_and_messages = Message.view_messages_data(agents_talks, current_user)  # To show in View
     @one_dialoge_length = 1
     @current_user = current_user
+    #@display_receiver_name = show_user_name(user_id, 4)
   end
-
 
 
   # Получаем диалог одного юзера
   def show_one_dialoge
 
       @new_messages_count = count_new_messages
-      #logger.info "== show_one_dialoge == @new_messages_count = #{@new_messages_count}"
 
       user_id = params[:user_talk_id] # From view
-
-      @talks_and_messages = []
       user_dialoge = Message.get_user_messages(user_id, current_user)
+      @talks_and_messages = []
       @talks_and_messages << user_dialoge
       @one_dialoge_length = user_dialoge[user_id].length if !user_dialoge[user_id].blank?
-      @current_user = current_user
+      @display_receiver_name = User.show_user_name(user_id, 4)
 
   end
 
@@ -86,7 +84,7 @@ class MessagesController < ApplicationController
   def mark_important
 
     message = Message.find(params[:message_id]) # From view
-    message.important_message(message, current_user ) #,
+    message.important_message(message, current_user ) #
     #@mark_important = message.important
 
   end
@@ -95,30 +93,19 @@ class MessagesController < ApplicationController
   def spam_dialoge
     user_id = params[:user_id] # From view
     #
-
   end
-
 
   # Создание и сохранение нового сообщения
-  def create_new_message
+  def send_message
 
-    receiver_id = params[:receiver_id] # From view
-    text = params[:text] # From view
-
-    if !(receiver_id.blank? || text.blank?)
-
-      @receiver_id = receiver_id # # DEBUGG_TO_VIEW
-      @text = text #params[:text] # # DEBUGG_TO_VIEW
-      logger.info "receiver_id = #{receiver_id}, text = #{text}" # DEBUGG_TO_VIEW
-
-      message = Message.new(text: text, receiver_id: receiver_id, sender_id: current_user.id)
-      message.save
-
-      ## NOTIFICATION #### Установка уведомлений  получателю  ########
-
-    end
+    @receiver_id = params[:receiver_id]#.to_i # From view
+    @receiver_id.present? ? @display_receiver_name = User.show_user_name(@receiver_id, 2) : @receiver_name = ''
+    @text = params[:text] # From view
+    Message.create(text: @text, receiver_id: @receiver_id, sender_id: current_user.id) if !(@receiver_id.blank? || @text.blank?)
 
   end
+
+
 
 
 end

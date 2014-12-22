@@ -1,0 +1,32 @@
+.container#messages
+  %h1 Отправить новое сообщение #{@display_receiver_name}
+  %br
+
+    = form_tag do
+      = label_tag 'Подтверди получателя сообщения: '
+      = number_field_tag 'receiver_id', '', :placeholder => params[:receiver_id], :maxlength => 4, :size => 5
+      %li
+      = label_tag 'Введи текст сообщения:'
+      = text_field_tag 'text', '', :maxlength => 100, :size => 100
+      = submit_tag 'Отправить'
+      %li
+
+  %br
+    %div
+      %h3 Параметры сообщения:
+      %p
+        Получатель: #{@receiver_name}
+      %p
+        Текст: #{@text.inspect}
+
+  %br
+  %br
+    - if !params[:receiver_id].blank?
+      = link_to 'Смотреть диалог с получателем: ',
+        show_one_dialoge_path(:user_talk_id => @receiver_id )
+  %br
+  %br
+  = link_to 'Смотреть все диалоги: ', messages_path
+
+
+

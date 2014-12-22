@@ -66,6 +66,33 @@ class User < ActiveRecord::Base
     end while self.class.exists?(access_token: access_token)
   end
 
+  # Извлечение имени юзера и склонение его по падежу
+  # @param data [receiver_id] id юзера - получателя сообщения
+  # @param data [padej] падеж
+  def self.show_user_name(user_id, padej)
+    user = User.find(user_id)
+    user_name = user.get_user_name # Определение имени юзера
+    user_name != "" ? inflected_name = YandexInflect.inflections(user_name)[padej]["__content__"] : inflected_name = ""
+    inflected_name
+  end
+
+
+  # Определение имени юзера
+  def get_user_name
+    Name.find(Profile.find(self.profile_id).name_id).name
+  end
+
+  # Определение имени юзера - из списка имен юзеров
+  def self.all_users_names
+    users = User.all
+    users_names = []
+    users.each do |user|
+      users_names << user.get_user_name
+    end
+    users_names
+  end
+
+
 
   private
 
@@ -76,6 +103,9 @@ class User < ActiveRecord::Base
   def self.generate_password
     '1111'
   end
+
+
+
 
 
 
