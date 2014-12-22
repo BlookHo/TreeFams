@@ -40,39 +40,39 @@ var app = angular
   })
 
   .state('form.brothers', {
-    url: '/form.brothers',
+    url: '/brothers',
     templateUrl: 'welcome-brothers.html'
   })
 
   .state('form.sisters', {
-    url: '/form.sisters',
+    url: '/sisters',
     templateUrl: 'welcome-sisters.html'
   })
 
   .state('form.sons', {
-    url: '/form.sons',
+    url: '/sons',
     templateUrl: 'welcome-sons.html'
   })
 
 
   .state('form.daughters', {
-    url: '/form.daughters',
+    url: '/daughters',
     templateUrl: 'welcome-daughters.html'
   })
 
   .state('form.wife', {
-    url: '/form.wife',
+    url: '/wife',
     templateUrl: 'welcome-wife.html'
   })
 
 
   .state('form.husband', {
-    url: '/form.husband',
+    url: '/husband',
     templateUrl: 'welcome-husband.html'
   })
 
-  .state('form.grandFatherFather', {
-    url: '/form.grandFatherFather',
+  .state('form.father-father', {
+    url: '/father-father',
     templateUrl: 'welcome-father-father.html'
   })
 
@@ -110,7 +110,13 @@ var app = angular
     sons: [],
     daughters: [],
     wife: '',
-    husband: ''
+    husband: '',
+    others:{
+      father_father:'',
+      father_mother:'',
+      mother_father:'',
+      mother_mother:''
+    }
   }
 
 
@@ -139,7 +145,13 @@ var app = angular
     sons: [],
     daughters: [],
     wife: '',
-    husband: ''
+    husband: '',
+    others:{
+      father_father:'',
+      father_mother:'',
+      mother_father:'',
+      mother_mother:''
+    }
   }
 
 
@@ -555,10 +567,18 @@ var app = angular
     }
 
 
-    // wife || husband -> email
+
+    // wife || husband -> father.father
     if (($state.current.name == 'form.husband') || ($state.current.name == 'form.wife')){
-      $state.go('form.email');
+      $state.go('form.father-father');
     }
+
+
+
+    // wife || husband -> email
+    // if (($state.current.name == 'form.husband') || ($state.current.name == 'form.wife')){
+    //   $state.go('form.email');
+    // }
 
 
   }

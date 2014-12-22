@@ -272,6 +272,36 @@
 
 
 
+  // Father Father
+  function add_father_father(data){
+    var node = {id: 91, name: data.name, target: 1, relation: "отец", circle: 1};
+    pushNode(node)
+    start();
+  }
+
+
+  function remove_father_father(){
+    deleteNode(91)
+    start();
+  }
+
+
+  // Father Mother
+  function add_father_mother(data){
+    var node = {id: 101, name: data.name, target: 1, relation: "мать", circle: 1};
+    pushNode(node)
+    start();
+  }
+
+
+  function remove_father_mother(){
+    deleteNode(101)
+    start();
+  }
+
+
+
+
 
   // Data wirks
   pushNode = function(data){
