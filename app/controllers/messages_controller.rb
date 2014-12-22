@@ -17,12 +17,11 @@ class MessagesController < ApplicationController
   # с возможностью перехода к просмотру одного выбранного диалога
   # с одним юзером.
   def index
-
-    user_id = params[:user_talk_id] # From view
     @new_messages_count = count_new_messages  # To show in View
     agents_talks = Message.find_agents(current_user) # find all contragent of current_user by messages
     @talks_and_messages = Message.view_messages_data(agents_talks, current_user)  # To show in View
     @one_dialoge_length = 1
+    @current_user = current_user
   end
 
 
@@ -39,6 +38,7 @@ class MessagesController < ApplicationController
       user_dialoge = Message.get_user_messages(user_id, current_user)
       @talks_and_messages << user_dialoge
       @one_dialoge_length = user_dialoge[user_id].length if !user_dialoge[user_id].blank?
+      @current_user = current_user
 
   end
 
@@ -83,22 +83,26 @@ class MessagesController < ApplicationController
   end
 
   # Пометка сообщения как Важного (important_message)
-  def important_message
+  def mark_important
+
     message = Message.find(params[:message_id]) # From view
-    if message.receiver_id == current_user.id || message.sender_id == current_user.id
-      if !message.important
-        message.important = true
-        message.save
-        if message.receiver_id == current_user.id
-          user_id = message.sender_id
-        elsif message.sender_id == current_user.id
-          user_id = message.receiver_id
-        end
-      end
-      redirect_to show_one_dialoge_path(user_id: user_id)
-    else
-      flash[:error] = "Ты не можешь удалить это сообщение"
-    end
+    message.important_message(message, current_user)
+
+    #if message.receiver_id == current_user.id || message.sender_id == current_user.id
+    #  if !message.important
+    #    message.important = true
+    #    message.save
+    #    if message.receiver_id == current_user.id
+    #      user_id = message.sender_id
+    #    elsif message.sender_id == current_user.id
+    #      user_id = message.receiver_id
+    #    end
+    #  end
+    #  redirect_to show_one_dialoge_path(user_id: user_id)
+    #else
+    #  flash[:error] = "Ты не можешь удалить это сообщение"
+    #end
+
   end
 
   # later - Пометка сообщения как Spam

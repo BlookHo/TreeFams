@@ -11,20 +11,22 @@
       %th Текст сообщения
       %th Отправитель Sender
       %th Получатель Receiver
-      %th Прочитано Read
       %th Удалить Sender_deleted
       %th Удалить Receiver_deleted
+      %th Важное сообщение
       %th
       %th
-    - user_talk_arr.take(one_dialoge_length).each do |one_talk_messages|
+      %th Прочитано Read
+    - user_talk_arr.take(one_dialoge_length).each do |one_talk_message|
       %tr
-        %td= one_talk_messages[:one_message_id]
-        %td= one_talk_messages[:one_message_text]
-        %td= one_talk_messages[:one_message_sender_id]
-        %td= one_talk_messages[:one_message_receiver_id]
-        %td= one_talk_messages[:one_message_read]
-        %td= one_talk_messages[:one_message_sender_deleted]
-        %td= one_talk_messages[:one_message_receiver_deleted]
-        %td= one_talk_messages[:one_message_important]
+        %td= one_talk_message[:one_message_id]
+        %td= one_talk_message[:one_message_text]
+        %td= one_talk_message[:one_message_sender_id]
+        %td= one_talk_message[:one_message_receiver_id]
+        %td= one_talk_message[:one_message_sender_deleted]
+        %td= one_talk_message[:one_message_receiver_deleted]
+        %td= one_talk_message[:one_message_important]
         -#%td= link_to 'Показать весь диалог с этим Юзером .', show_one_dialoge_path(:user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => one_dialoge_length), class: :messages
-        %td= link_to 'Удалить сообщение .', delete_message_path(message_id: one_talk_messages[:one_message_id]), class: :messages
+        %td= link_to 'Удалить сообщение', delete_message_path(message_id: one_talk_message[:one_message_id]), class: :messages
+        %td= link_to 'Пометить как важное', mark_important_path(message_id: one_talk_message[:one_message_id]), class: :messages
+        %td= one_talk_message[:one_message_read]

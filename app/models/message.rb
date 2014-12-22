@@ -53,11 +53,8 @@ class Message < ActiveRecord::Base
 
       user_messages << one_message_hash
 
-      # чтение одного сообщения получателем при открывании диалога
- #     if user_id == params[:user_id]
-        one_message.read_one_message(one_message, current_user)
-        one_message.save
- #     end
+      # чтение одного сообщения получателем при открывании всего диалога
+      one_message.read_one_message(one_message, current_user)
 
     end
     user_dialoge.merge!(user_id => user_messages)
@@ -67,14 +64,30 @@ class Message < ActiveRecord::Base
 
 
   # чтение всех сообщений получателем при открывании диалога
+  # Если текущий юзер явл-ся получателем
   # используется для управления отображения сообщений
   def read_one_message(message, current_user)
-    message.read = true  if !message.read && message.receiver_id == current_user.id
+    #logger.info "Bef: message.id = #{message.id}, message.read = #{message.read}"
+    message.read = true if !message.read && message.receiver_id == current_user.id
+    message.save
+    #logger.info "Aft: message.id = #{message.id}, message.read = #{message.read}"
 
     ## NOTIFICATION #### Установка уведомлений отправителю  ########
 
   end
 
+  # чтение всех сообщений получателем при открывании диалога
+  # Если текущий юзер явл-ся получателем
+  # используется для управления отображения сообщений
+  def important_message(message, current_user)
+    #logger.info "Bef: message.id = #{message.id}, message.read = #{message.read}"
+    message.important = true if !message.important && (message.receiver_id == current_user.id || message.sender_id == current_user.id )
+    message.save
+    #logger.info "Aft: message.id = #{message.id}, message.read = #{message.read}"
+
+    ## NOTIFICATION #### Установка уведомлений отправителю  ########
+
+  end
 
 
 end
