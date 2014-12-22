@@ -28,7 +28,9 @@
 
 
         - if count_new_updates > 0
-          %li= link_to raw("<i class='fa fa-bars'></i> Мои новости  <span>#{count_new_updates}</span>"), updates_feeds_path, :class => "ttip", title: "Для тебя есть новости и обновления"
+          %li
+            = link_to raw("<i class='fa fa-bars'></i> Мои новости  <span>#{count_new_updates}</span>"),
+             updates_feeds_path, class: 'ttip', title: "Для тебя есть новости и обновления"
         - else
           %li= link_to raw("<i class='fa fa-bars'></i> Мои новости "), updates_feeds_path, :class => "ttip", title: "Просмотр твоих новостей и обновлений"
 

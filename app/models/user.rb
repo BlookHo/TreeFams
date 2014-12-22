@@ -25,6 +25,8 @@ class User < ActiveRecord::Base
 
   has_many :connection_requests, dependent: :destroy
 
+  has_many :updates_feeds, dependent: :destroy
+
 
   def name
     profile.name.name.capitalize
@@ -35,19 +37,24 @@ class User < ActiveRecord::Base
   # для заданного "стартового" Юзера
   #
   def get_connected_users
+    #todo:
+    # connected_users_arr = [self.id]
     connected_users_arr = []
     connected_users_arr << self.id
-    first_users_arr = ConnectedUser.where(user_id: self.id).pluck(:with_user_id)
+    #first_users_arr = ConnectedUser.where(user_id: self.id).pluck(:with_user_id)
+    first_users_arr = ConnectedUser.connected_users_ids(self)
     if first_users_arr.blank?
       first_users_arr = ConnectedUser.where(with_user_id: self.id).pluck(:user_id)
     end
     one_connected_users_arr = first_users_arr
+    #todo: unless вместо if!
+    #todo: вынести в метод
     if !one_connected_users_arr.blank?
       connected_users_arr << one_connected_users_arr
-      connected_users_arr.flatten!.uniq! if !connected_users_arr.blank?
+      connected_users_arr.flatten!.uniq! unless connected_users_arr.blank?
       one_connected_users_arr.each do |conn_arr_el|
         next_connected_users_arr = ConnectedUser.where("(user_id = #{conn_arr_el} or with_user_id = #{conn_arr_el})").pluck(:user_id, :with_user_id)
-        if !next_connected_users_arr.blank?
+        unless next_connected_users_arr.blank?
           one_connected_users_arr << next_connected_users_arr
           one_connected_users_arr.flatten!.uniq! if !one_connected_users_arr.blank?
           connected_users_arr << next_connected_users_arr
@@ -55,7 +62,7 @@ class User < ActiveRecord::Base
         end
       end
     end
-    return connected_users_arr
+    connected_users_arr
   end
 
 

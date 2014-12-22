@@ -5,7 +5,7 @@ class InvitesController < ApplicationController
     @profile_id = params[:profile_id]
   end
 
-
+  # todo: Разнесим на методы create Updates
   def create
     @profile_id = params[:profile_id]
     @email_name = params[:profile_email]

@@ -5,6 +5,7 @@ class UpdatesFeed < ActiveRecord::Base
   validates_numericality_of :user_id, :update_id, :greater_than => 0, :message => "ID автора нового события и ID события должны быть больше 0 в UpdatesFeed"
   validates_inclusion_of :read, :in => [true, false]
 
+  belongs_to :user
 
   # Выбираем те обновления, кот. относятся к дереву, в котором сидит current_user,
   # т.е. сгенерированные членами твоего дерева (и избранными тобой профилями-юзерами)
@@ -41,12 +42,16 @@ class UpdatesFeed < ActiveRecord::Base
     updates_feeds.each do |updates_feed|
       view_update_data << UpdatesFeed.collect_one_update_data(updates_feed, current_user_id) if !updates_feed.blank?
     end
-    return view_update_data
+    view_update_data
   end
 
   # Создание одного хэша - элемента массива для отображения обновлений для View
+  # todo: переделать в компактный хэш
   def self.collect_one_update_data(updates_feed, current_user_id)
     update_data = Hash.new
+    #update_data = {
+    #    update_text: updates_feed.combine_update_text(updates_feed, current_user_id)
+    #}
 
     #update_data[:user_update_author] = updates_feed.user_update_data(updates_feed.user_id)[:user_name]
     #update_data[:user_author_email]  = updates_feed.user_update_data(updates_feed.user_id)[:user_email]
@@ -234,14 +239,6 @@ class UpdatesFeed < ActiveRecord::Base
     text_data_name != "" ? inflected_name = YandexInflect.inflections(text_data_name)[padej]["__content__"] : inflected_name = ""
     inflected_name
   end
-
-
-
-  #UpdatesFeed.last.elol
-
-  #def elol
-  #  "5"
-  #end
 
 
 
