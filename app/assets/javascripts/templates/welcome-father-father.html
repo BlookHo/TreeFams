@@ -1,0 +1,29 @@
+<h1>Как зовут ваше деда по отцу?</h1>
+
+<div ng-show="hasError('husband')" class="error">
+  {{family.husband.error}}
+</div>
+<div ng-show="hasNewName('husband')" class="warning">
+  Если вы хотите продолжить с этим именем, пожалуйста, подтвердите:
+  <br>
+  <button class="bttn green small" ng-click="confirmNewName('husband', 1)">Да, продолжить</button>
+  <button class="bttn red small" ng-click="resetNewName('husband')">Нет</button>
+</div>
+
+<div class="control">
+  <input type="text"
+  ng-model="family.husband"
+  ng-change="changeName('husband', family.husband)"
+  ng-value="name"
+  typeahead-on-select="onSelectName($model, 'husband')"
+  placeholder="Начните вводить имя, например: Владимир"
+  typeahead="item as item.name for item in getNames($viewValue, 1)"
+  typeahead-editable="true"
+  typeahead-loading="loading..."
+  typeahead-template-url="customDropDownTemplate.html"
+  autoFocus>
+</div>
+<div class="actions">
+  <a ui-sref="form.daughters" class="bttn silver right">Назад</a>
+  <button ng-click="validateName('husband')" class="bttn green left">Дальше</button>
+</div>
