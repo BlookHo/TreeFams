@@ -22,7 +22,6 @@ class MessagesController < ApplicationController
     @talks_and_messages = Message.view_messages_data(agents_talks, current_user)  # To show in View
     @one_dialoge_length = 1
     @current_user = current_user
-    #@display_receiver_name = show_user_name(user_id, 4)
   end
 
 
@@ -40,9 +39,18 @@ class MessagesController < ApplicationController
 
   end
 
-  def delete_one_dialoge
-
-
+  # Удаление одного диалога - всех взаимных сообщений с Юзером = user_talk_id
+  # @param data [params[:user_talk_id]] юзер с которым диалог - акщь мшуц
+  def delete_one_dialogue
+    user_dialogue = params[:user_talk_id]
+    @user_dialogue = user_dialogue
+    unless user_dialogue.blank?
+      @user_dialogue_name = User.show_user_name(user_dialogue, 4)
+      logger.info "In delete_one_dialoge: user_dialogue_name = #{@user_dialogue_name}"
+      flash[:notice] = "Происходит удаление твоего диалога с #{@user_dialogue_name} "
+      Message.delete_one_dialogue(user_dialogue, current_user)
+    end
+    flash[:notice] = "Удаление твоего диалога с #{@user_dialogue_name} - завершено"
   end
 
 
@@ -85,6 +93,7 @@ class MessagesController < ApplicationController
 
     message = Message.find(params[:message_id]) # From view
     message.important_message(message, current_user ) #
+    flash[:notice] = "Сообщение помечено как важное"
     #@mark_important = message.important
 
   end
