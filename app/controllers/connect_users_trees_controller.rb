@@ -444,8 +444,8 @@ class ConnectUsersTreesController < ApplicationController
           logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_one_to_many = #{@duplicates_one_to_many} "
           logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_many_to_one = #{@duplicates_many_to_one} "
 
-          #profiles_to_rewrite = [88, 89, 90, 94, 93, 16, 16]
-          #profiles_to_destroy = [134, 136, 137, 135, 128, 16, 19]
+          #profiles_to_destroy = [65, 66, 67, 70]
+          #profiles_to_rewrite = [651, 661, 671, 701]
 
           end_search_time = Time.now   # Конец отсечки времени поиска
           @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
@@ -552,6 +552,9 @@ class ConnectUsersTreesController < ApplicationController
     ####################################################################
     ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
                             connect_users(current_user_id.to_i, user_id.to_i)
+    ##################################################################
+    ######## Перезапись profile_id при объединении деревьев
+               UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
     ##################################################################
 
   end
