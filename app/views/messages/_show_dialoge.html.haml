@@ -1,0 +1,31 @@
+
+- if user_talk_arr.blank?
+  %table
+    %tr
+      %td.left.grey.italic
+        Диалог сообщений с пользователем #{user_talk_id} отсутствует
+- else
+  %table
+    %tr
+      %th Id Msg
+      %th Текст сообщения
+      %th Отправитель
+      -#%th Получатель Receiver
+      %th Удалено Sender_deleted
+      %th Удалено Receiver_deleted
+      %th Важное сообщение
+      %th
+      %th
+      %th Прочитано Read
+    - user_talk_arr.take(one_dialoge_length).each do |one_talk_message|
+      %tr
+        %td= one_talk_message[:one_message_id]
+        %td= one_talk_message[:one_message_text].slice(0..25)
+        %td= one_talk_message[:one_message_sender_name]
+        -#%td= one_talk_message[:one_message_receiver_id]
+        %td= one_talk_message[:one_message_sender_deleted]
+        %td= one_talk_message[:one_message_receiver_deleted]
+        %td= one_talk_message[:one_message_important]
+        %td= link_to 'Удалить сообщение', delete_message_path(message_id: one_talk_message[:one_message_id]), class: :messages
+        %td= link_to 'Пометить как важное', mark_important_path(message_id: one_talk_message[:one_message_id]), method: :post, remote: true, class: :messages
+        %td= one_talk_message[:one_message_read]

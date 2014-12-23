@@ -33,6 +33,9 @@ Weafam::Application.routes.draw do
   # messages controller
   resources :messages, except: [:update, :show, :destroy, :new, :edit]
 
+  match 'send_message' => 'messages#send_message', via: :get
+  match 'send_message' => 'messages#send_message', via: :post
+
   match 'create_new_message' => 'messages#create_new_message', via: :get
   match 'create_new_message' => 'messages#create_new_message', via: :post
 
@@ -45,11 +48,13 @@ Weafam::Application.routes.draw do
   match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :get
   #match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :post
 
-  match 'important_message' => 'messages#important_message', via: :get
+  match 'mark_important' => 'messages#mark_important', via: :post
   #match 'important_message' => 'messages#important_message', via: :post
 
   match 'delete_message' => 'messages#delete_message', via: :get
   #match 'delete_message' => 'messages#delete_message', via: :post
+
+  match 'delete_one_dialoge' => 'messages#delete_one_dialoge', via: :get
 
   match 'spam_dialoge' => 'messages#spam_dialoge', via: :get
   #match 'spam_dialoge' => 'messages#spam_dialoge', via: :post
