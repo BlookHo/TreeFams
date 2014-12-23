@@ -1,5 +1,6 @@
 # Это должно быть в rails_root/lib
 class Hasher
+  
   def &(other)
     reject { |k, v| !(other.include?(k) && other[k] == v) }
   end
