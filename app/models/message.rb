@@ -14,8 +14,8 @@ class Message < ActiveRecord::Base
   # Исп-ся при отображении сообщений
   # @param data [current_user] текущий юзер - logged_in
   def self.find_agents(current_user)
-    agents_senders = self.where(:receiver_id => current_user.id).pluck(:sender_id).uniq
-    agents_receivers = self.where(:sender_id => current_user.id).pluck(:receiver_id).uniq
+    agents_senders = self.where(receiver_id: current_user.id, receiver_deleted: false).pluck(:sender_id).uniq
+    agents_receivers = self.where(sender_id: current_user.id, sender_deleted: false).pluck(:receiver_id).uniq
     (agents_senders + agents_receivers).uniq
   end
 
@@ -38,7 +38,8 @@ class Message < ActiveRecord::Base
     user_messages = []
     user_name = User.show_user_name(user_id, 4)
 
-    one_user_talk =  self.where(:receiver_deleted => false).where(:sender_deleted => false).where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").order('created_at').reverse_order
+    #one_user_talk =  self.where(receiver_deleted: false).where(sender_deleted: false).where("(receiver_id = #{current_user.id} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and receiver_id = #{user_id})").order('created_at').reverse_order
+    one_user_talk =  self.where("(receiver_id = #{current_user.id} and receiver_deleted = #{false} and sender_id = #{user_id}) or (sender_id = #{current_user.id} and sender_deleted = #{false} and receiver_id = #{user_id})").order('created_at').reverse_order
     one_user_talk.each do |one_message|
       sender_name = User.show_user_name(one_message.sender_id, 0)
 
@@ -92,7 +93,18 @@ class Message < ActiveRecord::Base
 
   end
 
+  # Удаление одного диалога - всех взаимных сообщений с Юзером = user_talk_id
+  # @param data [current_user] текущий юзер - logged_in
+  def self.delete_one_dialogue(user_dialogue, current_user) #, choosed_message_id)
 
+    one_user_talk =  Message.where("(receiver_id = #{current_user.id} and receiver_deleted = #{false} and sender_id = #{user_dialogue}) or (sender_id = #{current_user.id} and sender_deleted = #{false} and receiver_id = #{user_dialogue})")
+    one_user_talk.each do |one_message|
+      one_message.receiver_deleted = true if one_message.receiver_id == current_user.id
+      one_message.sender_deleted = true if one_message.sender_id == current_user.id
+      one_message.save
+    end
+
+  end
 
 
 
