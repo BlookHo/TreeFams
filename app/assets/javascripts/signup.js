@@ -274,7 +274,7 @@
 
   // Father Father
   function add_father_father(data){
-    var node = {id: 91, name: data.name, target: 1, relation: "отец", circle: 1};
+    var node = {id: 91, name: data.name, target: 2, relation: "отец (дед)", circle: 2};
     pushNode(node)
     start();
   }
@@ -288,7 +288,8 @@
 
   // Father Mother
   function add_father_mother(data){
-    var node = {id: 101, name: data.name, target: 1, relation: "мать", circle: 1};
+    console.log('Add father mother data');
+    var node = {id: 101, name: data.name, target: 2, relation: "мать (бабушка)", circle: 2};
     pushNode(node)
     start();
   }
@@ -296,6 +297,36 @@
 
   function remove_father_mother(){
     deleteNode(101)
+    start();
+  }
+
+
+  // Mother Father
+  function add_mother_father(data){
+    var node = {id: 92, name: data.name, target: 3, relation: "отец (дед)", circle: 2};
+    pushNode(node)
+    start();
+  }
+
+
+
+  function remove_mother_father(){
+    deleteNode(92)
+    start();
+  }
+
+
+
+  // Mother Mother
+  function add_mother_mother(data){
+    var node = {id: 102, name: data.name, target: 3, relation: "мать (бабушка)", circle: 2};
+    pushNode(node)
+    start();
+  }
+
+
+  function remove_mother_mother(){
+    deleteNode(102)
     start();
   }
 
@@ -391,10 +422,6 @@
 
 
   removeAllDataFormGraph = function(){
-    remove_mother();
-    remove_father();
-    remove_wife();
-    remove_husband();
 
     for (index = 0; index < brothers_container.length; ++index) {
       remove_brothers(index)
@@ -411,6 +438,14 @@
     for (index = 0; index < daughters_container.length; ++index) {
       remove_daughters(index)
     }
+
+    remove_father_mother();
+    remove_father_father();
+    remove_wife();
+    remove_husband();
+    remove_mother();
+    remove_father();
+
   }
 
 

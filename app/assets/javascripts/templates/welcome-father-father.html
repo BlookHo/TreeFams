@@ -1,21 +1,21 @@
 <h1>Как зовут вашего деда по отцу?</h1>
 
-<div ng-show="hasError('others.father_father')" class="error">
-  {{family.others.father_father.error}}
+<div ng-show="hasError('father_father')" class="error">
+  {{family.father_father.error}}
 </div>
-<div ng-show="hasNewName('others.father_father')" class="warning">
+<div ng-show="hasNewName('father_father')" class="warning">
   Если вы хотите продолжить с этим именем, пожалуйста, подтвердите:
   <br>
-  <button class="bttn green small" ng-click="confirmNewName('others.father_father', 1)">Да, продолжить</button>
-  <button class="bttn red small" ng-click="resetNewName('others.father_father')">Нет</button>
+  <button class="bttn green small" ng-click="confirmNewName('father_father', 1)">Да, продолжить</button>
+  <button class="bttn red small" ng-click="resetNewName('father_father')">Нет</button>
 </div>
 
 <div class="control">
   <input type="text"
-  ng-model="family.others.father_father"
-  ng-change="changeName('others.father_father', family.others.father_father)"
+  ng-model="family.father_father"
+  ng-change="changeName('father_father', family.father_father)"
   ng-value="name"
-  typeahead-on-select="onSelectName($model, 'others.father_father')"
+  typeahead-on-select="onSelectName($model, 'father_father')"
   placeholder="Начните вводить имя, например: Владимир"
   typeahead="item as item.name for item in getNames($viewValue, 1)"
   typeahead-editable="true"
@@ -25,5 +25,5 @@
 </div>
 <div class="actions">
   <a ui-sref="form.daughters" class="bttn silver right">Назад</a>
-  <button ng-click="validateName('others.father_father')" class="bttn green left">Дальше</button>
+  <button ng-click="validateName('father_father')" class="bttn green left">Дальше</button>
 </div>

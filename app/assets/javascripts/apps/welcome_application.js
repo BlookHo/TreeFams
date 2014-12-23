@@ -76,6 +76,25 @@ var app = angular
     templateUrl: 'welcome-father-father.html'
   })
 
+
+  .state('form.father-mother', {
+    url: '/father-mother',
+    templateUrl: 'welcome-father-mother.html'
+  })
+
+
+  .state('form.mother-father', {
+    url: '/mother-father',
+    templateUrl: 'welcome-mother-father.html'
+  })
+
+
+  .state('form.mother-mother', {
+    url: '/mother-mother',
+    templateUrl: 'welcome-mother-mother.html'
+  })
+
+
   .state('form.email', {
     url: '/form.email',
     templateUrl: 'welcome-email.html'
@@ -111,12 +130,10 @@ var app = angular
     daughters: [],
     wife: '',
     husband: '',
-    others:{
-      father_father:'',
-      father_mother:'',
-      mother_father:'',
-      mother_mother:''
-    }
+    father_father:'',
+    father_mother:'',
+    mother_father:'',
+    mother_mother:''
   }
 
 
@@ -131,7 +148,11 @@ var app = angular
     sons: false,
     daughters: false,
     wife: false,
-    husband: false
+    husband: false,
+    father_father:false,
+    father_mother:false,
+    mother_father:false,
+    mother_mother:false
   }
 
 
@@ -146,12 +167,10 @@ var app = angular
     daughters: [],
     wife: '',
     husband: '',
-    others:{
-      father_father:'',
-      father_mother:'',
-      mother_father:'',
-      mother_mother:''
-    }
+    father_father:'',
+    father_mother:'',
+    mother_father:'',
+    mother_mother:''
   }
 
 
@@ -174,7 +193,7 @@ var app = angular
   $scope.changeName = function(modelName, name){
     removeDataFormGraph(modelName);
     if (modelName == 'author'){
-      $scope.family = $scope.empty_family;
+      $scope.resetFamily();
       removeAllDataFormGraph();
     }else{
       removeDataFormGraph(modelName);
@@ -248,6 +267,24 @@ var app = angular
 
 
 
+  $scope.resetFamily = function(){
+    $scope.family.author = '';
+    $scope.family.father = '';
+    $scope.family.mother = '';
+    $scope.family.brothers = [];
+    $scope.family.sisters = [];
+    $scope.family.sons = [];
+    $scope.family.daughters = [];
+    $scope.family.wife = '';
+    $scope.family.husband = '';
+    $scope.family.father_father = '';
+    $scope.family.father_mother = '';
+    $scope.family.mother_father = '';
+    $scope.family.mother_mother = '';
+  }
+
+
+
 
 
   /* Validation
@@ -256,7 +293,11 @@ var app = angular
   $scope.validateName = function(modelName){
     // if ( $scope.stepIsRequired(modelName) && $scope.isNameValid(modelName) ){
     if ( $scope.isNameValid(modelName) ){
-      pushDataToGraph(modelName, eval('$scope.family.'+modelName+';') );
+      // push only if name exist
+      if (!$scope.isNameBlank(modelName)){
+        pushDataToGraph(modelName, eval('$scope.family.'+modelName+';') );
+      }
+
       $scope.goToNextStep();
     }
   }
@@ -343,7 +384,6 @@ var app = angular
   // Check name
   $scope.isNameValid = function(modelName){
     try {
-
       // If name selected from list
       var model = eval("$scope.family."+modelName+";");
       if ( model.hasOwnProperty('name') && model.hasOwnProperty('sex_id') ){
@@ -574,11 +614,28 @@ var app = angular
     }
 
 
+    // father.father -> father.mother
+    if ($state.current.name == 'form.father-father'){
+      $state.go('form.father-mother');
+    }
 
-    // wife || husband -> email
-    // if (($state.current.name == 'form.husband') || ($state.current.name == 'form.wife')){
-    //   $state.go('form.email');
-    // }
+
+    // father.mother -> mother.father
+    if ($state.current.name == 'form.father-mother'){
+      $state.go('form.mother-father');
+    }
+
+
+    // mother.father -> mother.mother
+    if ($state.current.name == 'form.mother-father'){
+      $state.go('form.mother-mother');
+    }
+
+
+    // mother.mother-> email
+    if ($state.current.name == 'form.mother-mother'){
+      $state.go('form.email');
+    }
 
 
   }
