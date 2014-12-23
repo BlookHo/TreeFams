@@ -82,16 +82,17 @@ class UpdatesFeed < ActiveRecord::Base
   # в случае когда agent_user_id - user
   def user_update_data(user_id)
     user = User.find(user_id)
-    { user_name: get_name(user.profile_id), user_email: user.email }
+    # { user_name: get_name(user.profile_id), user_email: user.email }
+    { user_name: user.profile.to_name, user_email: user.email }
   end
 
   # Извлечение имени профиля
   def get_name(profile_id)
-    #profile = Profile.find(profile_id)
+    profile = Profile.where(id: profile_id).first
+    profile.nil? ? "Merged profile" : profile.to_name
     #name_id = profile.name_id
     #Name.find(name_id).name
-    Name.find(Profile.find(profile_id).name_id).name
-
+    # Name.find(Profile.find(profile_id).name_id).name
   end
 
   # Чтение значения поля created_at для показа в View в нужном формате

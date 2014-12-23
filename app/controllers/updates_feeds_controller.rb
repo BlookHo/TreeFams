@@ -5,7 +5,6 @@ class UpdatesFeedsController < ApplicationController
   before_filter :logged_in?
 
 
-
   # GET /updates_feeds_path
   # Подготовка массива обновлений для показа тебе: current_user
   # + Пагинация
