@@ -93,7 +93,18 @@ class Message < ActiveRecord::Base
 
   end
 
+  # Удаление одного диалога - всех взаимных сообщений с Юзером = user_talk_id
+  # @param data [current_user] текущий юзер - logged_in
+  def self.delete_one_dialogue(user_dialogue, current_user) #, choosed_message_id)
 
+    one_user_talk =  Message.where("(receiver_id = #{current_user.id} and receiver_deleted = #{false} and sender_id = #{user_dialogue}) or (sender_id = #{current_user.id} and sender_deleted = #{false} and receiver_id = #{user_dialogue})")
+    one_user_talk.each do |one_message|
+      one_message.receiver_deleted = true if one_message.receiver_id == current_user.id
+      one_message.sender_deleted = true if one_message.sender_id == current_user.id
+      one_message.save
+    end
+
+  end
 
 
 
