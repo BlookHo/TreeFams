@@ -242,5 +242,21 @@ class UpdatesFeed < ActiveRecord::Base
   end
 
 
+  # Перезапись profile_id при объединении деревьев
+  # в модели UpdatesFeed
+  #
+  def self.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
+    updates_to_connect = self.where("agent_profile_id in (?) ", profiles_to_destroy)
+    profiles_to_destroy.each_with_index do |destroy_profile_id, index|
+      updates_to_connect.each do |update_feed|
+        if update_feed.agent_profile_id == destroy_profile_id
+          update_feed.update_column(:agent_profile_id, profiles_to_rewrite[index])
+        end
+      end
+    end
+
+  end
+
+
 
 end
