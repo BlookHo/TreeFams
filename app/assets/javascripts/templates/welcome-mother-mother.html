@@ -1,0 +1,29 @@
+<h1>Как зовут вашу бабушку по матери?</h1>
+
+<div ng-show="hasError('mother_mother')" class="error">
+  {{family.mother_mother.error}}
+</div>
+<div ng-show="hasNewName('mother_mother')" class="warning">
+  Если вы хотите продолжить с этим именем, пожалуйста, подтвердите:
+  <br>
+  <button class="bttn green small" ng-click="confirmNewName('mother_mother', 0)">Да, продолжить</button>
+  <button class="bttn red small" ng-click="resetNewName('mother_mother')">Нет</button>
+</div>
+
+<div class="control">
+  <input type="text"
+  ng-model="family.mother_mother"
+  ng-change="changeName('mother_mother', family.mother_mother)"
+  ng-value="name"
+  typeahead-on-select="onSelectName($model, 'mother_mother')"
+  placeholder="Начните вводить имя, например: Ольга"
+  typeahead="item as item.name for item in getNames($viewValue, 0)"
+  typeahead-editable="true"
+  typeahead-loading="loading..."
+  typeahead-template-url="customDropDownTemplate.html"
+  autoFocus>
+</div>
+<div class="actions">
+  <a ui-sref="form.mother-father" class="bttn silver right">Назад</a>
+  <button ng-click="validateName('mother_mother')" class="bttn green left">Дальше</button>
+</div>

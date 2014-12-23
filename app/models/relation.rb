@@ -8,17 +8,22 @@ class Relation < ActiveRecord::Base
 
   def self.name_to_id(name)
     case name
-      when 'author'      then 0
-      when 'father'      then 1
-      when 'mother'      then 2
-      when 'sons'        then 3
-      when 'daughters'   then 4
-      when 'brothers'    then 5
-      when 'sisters'     then 6
-      when 'husband'     then 7
-      when 'wife'        then 8
+      when 'author'         then 0
+      when 'father'         then 1
+      when 'mother'         then 2
+      when 'sons'           then 3
+      when 'daughters'      then 4
+      when 'brothers'       then 5
+      when 'sisters'        then 6
+      when 'husband'        then 7
+      when 'wife'           then 8
+      when 'father_father'  then 91
+      when 'father_mother'  then 101
+      when 'mother_father'  then 92
+      when 'mother_mother'  then 102
     end
   end
+
 
 
   def self.to_hash
