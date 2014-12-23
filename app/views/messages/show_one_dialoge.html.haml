@@ -23,7 +23,7 @@
               %td.left.grey.italic
               %td= link_to 'Написать сообщение .', send_message_path(receiver_id: user_talk_id),  class: :messages
               %td= link_to 'Cпам - пометить диалог .', spam_dialoge_path(user_id: user_talk_id),  class: :messages
-              %td= link_to 'Удалить весь диалог с этим Юзером .', delete_one_dialoge_path(user_id: user_talk_id ), class: :messages
+              %td= link_to 'Удалить весь диалог с этим Юзером .', delete_one_dialoge_path(user_talk_id: user_talk_id ), class: :messages
 
               = render 'messages/show_dialoge',  :user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length
 

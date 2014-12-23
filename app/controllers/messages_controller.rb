@@ -40,8 +40,26 @@ class MessagesController < ApplicationController
 
   end
 
+  # Удаление одного диалога - всех взаимных сообщений с Юзером = user_talk_id
+  # @param data [current_user] текущий юзер - logged_in
+  # @param data [params[:user_talk_id]] юзер с которым диалог - акщь мшуц
   def delete_one_dialoge
 
+    user_dialogue = params[:user_talk_id]
+    @user_dialogue = user_dialogue
+    logger.info "In delete_one_dialoge: user_dialogue = #{user_dialogue}"
+    unless user_dialogue.blank?
+      @user_dialogue_name = User.show_user_name(user_dialogue, 4)
+      logger.info "In delete_one_dialoge: user_dialogue_name = #{@user_dialogue_name}"
+      #one_user_talk =  Message.where(receiver_deleted: false).where(sender_deleted: false).where("(receiver_id = #{current_user.id} and sender_id = #{user_dialogue}) or (sender_id = #{current_user.id} and receiver_id = #{user_dialogue})")#.order('created_at').reverse_order
+      one_user_talk =  Message.where("(receiver_id = #{current_user.id} and receiver_deleted = #{false} and sender_id = #{user_dialogue}) or (sender_id = #{current_user.id} and sender_deleted = #{false} and receiver_id = #{user_dialogue})")#.order('created_at').reverse_order
+      one_user_talk.each do |one_message|
+        flash[:notice] = "Происходит удаление твоего диалога с #{@user_dialogue_name} "
+        one_message.receiver_deleted = true if one_message.receiver_id == current_user.id
+        one_message.sender_deleted = true if one_message.sender_id == current_user.id
+        one_message.save
+      end
+    end
 
   end
 
