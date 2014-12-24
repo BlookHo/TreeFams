@@ -51,7 +51,7 @@ Weafam::Application.routes.draw do
   match 'mark_important' => 'messages#mark_important', via: :post
   #match 'important_message' => 'messages#important_message', via: :post
 
-  match 'delete_message' => 'messages#delete_message', via: :get
+  match 'delete_message' => 'messages#delete_message', via: :post
   #match 'delete_message' => 'messages#delete_message', via: :post
 
   match 'delete_one_dialogue' => 'messages#delete_one_dialogue', via: :post

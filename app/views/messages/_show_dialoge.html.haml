@@ -26,6 +26,6 @@
         %td= one_talk_message[:one_message_sender_deleted]
         %td= one_talk_message[:one_message_receiver_deleted]
         %td= one_talk_message[:one_message_important]
-        %td= link_to 'Удалить сообщение', delete_message_path(message_id: one_talk_message[:one_message_id]), class: :messages
+        %td= link_to 'Удалить сообщение', delete_message_path(message_id: one_talk_message[:one_message_id]), method: :post, remote: true, class: :messages
         %td= link_to 'Пометить как важное', mark_important_path(message_id: one_talk_message[:one_message_id]), method: :post, remote: true, class: :messages
         %td= one_talk_message[:one_message_read]

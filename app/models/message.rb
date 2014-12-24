@@ -70,26 +70,29 @@ class Message < ActiveRecord::Base
   # используется для управления отображения сообщений
   # @param data [current_user] текущий юзер - logged_in
   def read_one_message(message, current_user)
-    #logger.info "Bef: message.id = #{message.id}, message.read = #{message.read}"
     message.read = true if !message.read && message.receiver_id == current_user.id
     message.save
-    #logger.info "Aft: message.id = #{message.id}, message.read = #{message.read}"
 
-    ## NOTIFICATION #### Установка уведомлений отправителю  ########
+    ## todo: NOTIFICATION #### Установка уведомлений отправителю ? ########
 
   end
 
-  # чтение всех сообщений получателем при открывании диалога
-  # Если текущий юзер явл-ся получателем
-  # используется для управления отображения сообщений
+  # Пометка сообщения как Важного (important_message) и обратно - в Неважное
+  # @param data [message_id] ID выбранного для Пометка сообщения как Важного и обратно - из view
   # @param data [current_user] текущий юзер - logged_in
-  def important_message(message, current_user) #, choosed_message_id)
-    message.important = true if !message.important &&
-        (message.receiver_id == current_user.id ||
-            message.sender_id == current_user.id )
-    message.save
+  def self.important_message(message_id, current_user)
 
-    ## NOTIFICATION #### Установка уведомлений отправителю  ########
+    # todo: Ввести вместо поля .important - 2 поля receiver_important и sender_important .
+    # todo: переделать логику и отобр-е для 2-х полей
+    one_message = Message.find(message_id)
+    if one_message.important  # из Важного - в Неважное
+      one_message.update_column(:important, false) if one_message.receiver_id == current_user.id ||
+          one_message.sender_id == current_user.id
+    else                      # из Неважного - в Важное
+      one_message.update_column(:important, true) if one_message.receiver_id == current_user.id ||
+          one_message.sender_id == current_user.id
+      ## todo: NOTIFICATION #### Установка уведомлений отправителю in Updates_Feeds ########
+    end
 
   end
 
@@ -99,11 +102,35 @@ class Message < ActiveRecord::Base
 
     one_user_talk =  Message.where("(receiver_id = #{current_user.id} and receiver_deleted = #{false} and sender_id = #{user_dialogue}) or (sender_id = #{current_user.id} and sender_deleted = #{false} and receiver_id = #{user_dialogue})")
     one_user_talk.each do |one_message|
-      one_message.receiver_deleted = true if one_message.receiver_id == current_user.id
-      one_message.sender_deleted = true if one_message.sender_id == current_user.id
-      one_message.save
+      one_message.update_column(:receiver_deleted, true) if one_message.receiver_id == current_user.id
+      one_message.update_column(:sender_deleted, true) if one_message.sender_id == current_user.id
     end
 
+  end
+
+  # Удаление одного сообщения
+  # @param data [message_id] ID выбранного для удаления сообщения - из view
+  # @param data [current_user] текущий юзер - logged_in
+  def self.delete_one_message(message_id, current_user) #, choosed_message_id)
+
+    one_message = Message.find(message_id)
+    unless one_message.receiver_deleted #&& one_message.receiver_id == current_user.id  # if !false & true = true
+      one_message.update_column(:receiver_deleted, true) if one_message.receiver_id == current_user.id
+    end
+    unless one_message.sender_deleted #&& one_message.sender_id == current_user.id # if !false
+      one_message.update_column(:sender_deleted, true) if one_message.sender_id == current_user.id
+    end
+    one_message.check_deletion
+
+  end
+
+  # Сигнал-я о корректности "удаления"
+  def check_deletion
+    if self.persisted?
+      flash[:success] = "Письмо удалено"
+    else
+      flash[:error] = "Ошибки при удалении письма"
+    end
   end
 
 

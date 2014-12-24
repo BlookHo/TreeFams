@@ -35,7 +35,8 @@ class MessagesController < ApplicationController
       @talks_and_messages = []
       @talks_and_messages << user_dialoge
       @one_dialoge_length = user_dialoge[user_id].length if !user_dialoge[user_id].blank?
-      @display_receiver_name = User.show_user_name(user_id, 4)
+      @display_receiver_name4 = User.show_user_name(user_id, 4)
+      @display_receiver_name2 = User.show_user_name(user_id, 2)
 
   end
 
@@ -43,59 +44,39 @@ class MessagesController < ApplicationController
   # @param data [params[:user_talk_id]] юзер с которым диалог - акщь мшуц
   def delete_one_dialogue
     user_dialogue = params[:user_talk_id]
-    @user_dialogue = user_dialogue
+   # @user_dialogue = user_dialogue
     unless user_dialogue.blank?
       @user_dialogue_name = User.show_user_name(user_dialogue, 4)
-      logger.info "In delete_one_dialoge: user_dialogue_name = #{@user_dialogue_name}"
+      #logger.info "In delete_one_dialoge: user_dialogue_name = #{@user_dialogue_name}"
       flash[:notice] = "Происходит удаление твоего диалога с #{@user_dialogue_name} "
       Message.delete_one_dialogue(user_dialogue, current_user)
+      flash[:notice] = "Удаление твоего диалога с #{@user_dialogue_name} - завершено"
     end
-    flash[:notice] = "Удаление твоего диалога с #{@user_dialogue_name} - завершено"
   end
 
 
   # Пометка в БД выбранного сообщения как Удаленного
+  # @param data [params[:message_id]] ID выбранного для удаления сообщения - из view
   #
   def delete_message
 
-    message = Message.find(params[:message_id])
-    if message.receiver_id == current_user.id
-      message.receiver_deleted = true
-      message.save
-      user_id = message.sender_id
-      check_deletion(message)
-    else
-      flash[:error] = "Ты не можешь удалить это сообщение"
+    unless params[:message_id].blank?
+      @message_id_to_delete = params[:message_id]  # to js
+      Message.delete_one_message(params[:message_id], current_user)
+      flash[:notice] = "Сообщение удалено"
     end
-    if message.sender_id == current_user.id
-      message.sender_deleted = true
-      message.save
-      user_id = message.receiver_id
-      check_deletion(message)
-    else
-      flash[:error] = "Ты не можешь удалить это сообщение"
-    end
-    redirect_to show_one_dialoge_path(user_id: user_id)
 
   end
 
-  # Сигнал-я о корректности "удаления"
-  def check_deletion(message)
-    if message.persisted?
-      flash[:success] = "Письмо удалено"
-    else
-      flash[:error] = "Ошибки при удалении письма"
-    end
-  end
-
-  # Пометка сообщения как Важного (important_message)
+  # Пометка сообщения как Важного (important_message) и обратно - в Неважное
+  # @param data [params[:message_id]] ID помеченного как важного сообщения - из view
   def mark_important
-
-    message = Message.find(params[:message_id]) # From view
-    message.important_message(message, current_user ) #
-    flash[:notice] = "Сообщение помечено как важное"
-    #@mark_important = message.important
-
+    unless params[:message_id].blank?
+      Message.important_message(params[:message_id], current_user ) #
+      flash[:notice] = "Сообщение помечено как важное"
+      #@mark_important = message.important  # to js
+      # todo: отображение изменения значения (js)
+    end
   end
 
   # later - Пометка сообщения как Spam
