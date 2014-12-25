@@ -50,6 +50,8 @@ class MessagesController < ApplicationController
       #logger.info "In delete_one_dialoge: user_dialogue_name = #{@user_dialogue_name}"
       flash[:notice] = "Происходит удаление твоего диалога с #{@user_dialogue_name} "
       Message.delete_one_dialogue(user_dialogue, current_user)
+      @deleted =
+      @text_to_js = " Удален! "
       flash[:notice] = "Удаление твоего диалога с #{@user_dialogue_name} - завершено"
     end
   end
@@ -61,23 +63,44 @@ class MessagesController < ApplicationController
   def delete_message
 
     unless params[:message_id].blank?
-      @message_id_to_delete = params[:message_id]  # to js
-      Message.delete_one_message(params[:message_id], current_user)
-      flash[:notice] = "Сообщение удалено"
+      one_message = Message.find(params[:message_id])
+      one_message.delete_one_message(one_message, current_user)
+      @receiver_del = one_message.receiver_deleted  # to js
+      @sender_del = one_message.sender_deleted  # to js
+      check_deletion(one_message)
+      #flash[:notice] = "Сообщение удалено"
     end
 
   end
+
+  # Сигнал-я о корректности "удаления"
+  def check_deletion(one_message)
+    if one_message.persisted?
+      flash[:success] = "Сообщение удалено"
+    else
+      flash[:error] = "Ошибки при удалении сообщения"
+    end
+  end
+
 
   # Пометка сообщения как Важного (important_message) и обратно - в Неважное
   # @param data [params[:message_id]] ID помеченного как важного сообщения - из view
   def mark_important
     unless params[:message_id].blank?
       Message.important_message(params[:message_id], current_user ) #
-      flash[:notice] = "Сообщение помечено как важное"
-      #@mark_important = message.important  # to js
+      flash[:notice] = "Изменена пометка важности сообщения"
+      @mark_important = Message.find(params[:message_id]).important  # to js
       # todo: отображение изменения значения (js)
     end
+
+    respond_to do |format|
+      format.html
+      format.js { render 'messages/mark_important' }
+    end
+
+
   end
+
 
   # later - Пометка сообщения как Spam
   def spam_dialoge
@@ -99,3 +122,49 @@ class MessagesController < ApplicationController
 
 
 end
+
+#== END OF start_search =========================
+#        ======== search_data:
+   {:connected_author_arr=>[3],
+    :qty_of_tree_profiles=>5,
+    :profiles_relations_arr=>
+        [{20=>{62=>3, 19=>8, 17=>15, 18=>16}},
+         {19=>{17=>1, 18=>2, 62=>3, 16=>6, 20=>7}},
+         {62=>{20=>1, 19=>2, 17=>92, 18=>102, 16=>202}},
+         {17=>{19=>4, 16=>4, 18=>8, 20=>18, 62=>112}},
+         {18=>{19=>4, 16=>4, 17=>7, 20=>18, 62=>112}}],
+    :profiles_found_arr=>
+        [{20=>{1=>{13=>[3, 8, 15, 16]},
+               2=>{13=>[3, 8, 15, 16]}}},
+         {19=>{1=>{7=>[1, 2, 3, 7]},
+               2=>{7=>[1, 2, 3, 6, 7]}}},
+         {62=>{1=>{11=>[1, 2, 92, 102]},
+               2=>{11=>[1, 2, 92, 102, 202]}}},
+         {17=>{1=>{8=>[4, 8, 18, 112]},
+               2=>{8=>[4, 4, 8, 18, 112]}}},
+         {18=>{1=>{9=>[4, 7, 18, 112]},
+               2=>{9=>[4, 4, 7, 18, 112]}}}],
+    :uniq_profiles_pairs=>
+        {20=>{1=>13, 2=>13},
+         19=>{1=>7, 2=>7},
+         62=>{1=>11, 2=>11},
+         17=>{1=>8, 2=>8},
+         18=>{1=>9, 2=>9}},
+    :profiles_with_match_hash=>
+        {9=>5, 8=>5, 7=>5, 11=>5, 13=>4},
+    :by_profiles=>
+        [{:search_profile_id=>18, :found_tree_id=>2, :found_profile_id=>9, :count=>5},
+         {:search_profile_id=>18, :found_tree_id=>1, :found_profile_id=>9, :count=>5},
+         {:search_profile_id=>17, :found_tree_id=>2, :found_profile_id=>8, :count=>5},
+         {:search_profile_id=>17, :found_tree_id=>1, :found_profile_id=>8, :count=>5},
+         {:search_profile_id=>19, :found_tree_id=>1, :found_profile_id=>7, :count=>5},
+         {:search_profile_id=>62, :found_tree_id=>1, :found_profile_id=>11, :count=>5},
+         {:search_profile_id=>19, :found_tree_id=>2, :found_profile_id=>7, :count=>5},
+         {:search_profile_id=>62, :found_tree_id=>2, :found_profile_id=>11, :count=>5},
+         {:search_profile_id=>20, :found_tree_id=>2, :found_profile_id=>13, :count=>4},
+         {:search_profile_id=>20, :found_tree_id=>1, :found_profile_id=>13, :count=>4}],
+    :by_trees=>
+        [{:found_tree_id=>1, :found_profile_ids=>[13, 7, 11, 8, 9]},
+         {:found_tree_id=>2, :found_profile_ids=>[13, 7, 11, 8, 9]}],
+    :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+#

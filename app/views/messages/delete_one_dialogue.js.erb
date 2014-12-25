@@ -1,2 +1,4 @@
 console.log(true);
-console.log("<%= @user_dialogue_name %>")
+console.log("<%= @user_dialogue_name %>");
+$("#name_container").html('@deleted: <%= @text_to_js.inspect %>.  ');
+$("#name_container").append('* Помечено: <%= @text_to_js %>. ');

@@ -1,2 +1,7 @@
-console.log(true);
-//console.log("<%= @mark_important %>")
+//console.log("<%= @mark_important %>");
+var messageId = "<%= params[:message_id] %>";
+//console.log(messageId);
+var $currentRow = $("tr[data-message-id=" + messageId + "]");
+console.log($currentRow);
+
+$currentRow.find(".important").html(' <%= @mark_important.inspect %> ');
