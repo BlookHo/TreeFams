@@ -105,14 +105,14 @@ class UpdatesFeed < ActiveRecord::Base
         when 3, 4, 5  # избранный профиль -       ИЛИ
           # добавлен профиль - ProfilesController  ИЛИ
           # приглашение на сайт по почте -  InvitesController
-          get_name(updates_feed.agent_user_id)
+          get_name(updates_feed.agent_profile_id)
 
         when 6  # изменились данные профиля
 
         when 7  # семейное событие в дереве
 
-        when 8, 9, 10  # кол-во родни в дереве больше 25, 50, 100... - ProfilesController
-          get_name(updates_feed.agent_user_id)
+        when 8 .. 16  # кол-во родни в дереве больше 25, 50, 100... - ProfilesController
+          get_name(updates_feed.agent_profile_id)
 
         else
           nil
@@ -146,9 +146,9 @@ class UpdatesFeed < ActiveRecord::Base
 
       when 7  # семейное событие в дереве
 
-      when 8,9,10 # изменилось кол-во родни в объединенном дереве   # OK
+      when 8 .. 16 # изменилось кол-во родни в объединенном дереве   # OK
                   # в рез-те добавления профиля или объединения деревьев in ProfilesController, ConnectUsersTreesController
-        prefix, suffix = updates_feed.combine_8_9_10_text(updates_feed, current_user_id)
+        prefix, suffix = updates_feed.combine_8__16_text(updates_feed, current_user_id)
 
       else
         ""
@@ -197,7 +197,7 @@ class UpdatesFeed < ActiveRecord::Base
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
   # для UpdatesEvent типа 3
   def combine_3_text(updates_feed, text_data)
-    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_user_id) : text_data[:agent_name] = ""
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_profile_id) : text_data[:agent_name] = ""
     text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
     prefix = 'Твой родственник ' + text_data[:author_name]
     return prefix, suffix
@@ -207,7 +207,7 @@ class UpdatesFeed < ActiveRecord::Base
   # для UpdatesEvent типа 4
   def combine_4_text(updates_feed, text_data)
 
-    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_user_id) : text_data[:agent_name] = ""
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_profile_id) : text_data[:agent_name] = ""
 
     prefix = 'Твоим родственником ' + inflect_name(text_data[:author_name],4)
 
@@ -220,7 +220,7 @@ class UpdatesFeed < ActiveRecord::Base
   # для UpdatesEvent типа 5
   def combine_5_text(updates_feed, text_data)
 
-    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_user_id) : text_data[:agent_name] = ""
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_profile_id) : text_data[:agent_name] = ""
     text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
 
     prefix = 'Твоим родственником ' + inflect_name(text_data[:author_name],4)
@@ -230,7 +230,7 @@ class UpdatesFeed < ActiveRecord::Base
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
   # для UpdatesEvent типа 8_9_10
-  def combine_8_9_10_text(updates_feed, current_user_id)
+  def combine_8__16_text(updates_feed, current_user_id)
 
     prefix = 'Поздравляем, ' + updates_feed.user_update_data(current_user_id)[:user_name] + '!'
     suffix = ""
