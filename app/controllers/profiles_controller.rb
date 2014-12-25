@@ -1,12 +1,18 @@
 # encoding: utf-8
 class ProfilesController < ApplicationController
 
+  layout 'application.new'
   before_filter :logged_in?
 
   def show
-    @profile = Profile.where(id: params[:id]).first
+    profile_id = params[:id].blank? ? params[:profile_id] : params[:id]
+
+    @profile = Profile.where(id: profile_id).first
     @profile_datas = @profile.profile_datas
-    @profile_data = @profile_datas.first
+
+    @current_profile_data = find_current_profile_data
+    @current_user_profile_data = current_user_profile_data_for_profile
+
   end
 
 
@@ -180,13 +186,30 @@ class ProfilesController < ApplicationController
 
 
 
-  def find_or_create_profile_data
+
+  def current_user_profile_data_for_profile
     profile_data = @profile.profile_datas.where(creator_id: current_user.id).first
     if profile_data.nil?
-      profile_data = @profile.profile_datas.create(creator_id: current_user.id)
+      profile_data = @profile.profile_datas.new(creator_id: current_user.id)
     end
     return profile_data
   end
+
+
+  def find_current_profile_data
+    if params[:profile_data_id].blank?
+      if @profile_datas.empty?
+        profile_data = @profile.profile_datas.new(creator_id: current_user.id)
+      else
+        @profile_datas.first
+      end
+    else
+      profile_data = @profile.profile_datas.where(id: params[:profile_data_id]).first
+    end
+  end
+
+
+
 
 
 

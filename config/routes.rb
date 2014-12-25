@@ -59,13 +59,13 @@ Weafam::Application.routes.draw do
   match 'spam_dialoge' => 'messages#spam_dialoge', via: :get
   #match 'spam_dialoge' => 'messages#spam_dialoge', via: :post
 
-  get "new_profile/get_profile_params"
-  get "new_profile/make_new_profile"
-  get "new_profile/make_tree_row"
-  get "new_profile/make_profilekeys_rows"
-  get "graph_tree/show_graph_tree"
-  get "graph_tree/edit"
-  get "graph_tree/move"
+  # get "new_profile/get_profile_params"
+  # get "new_profile/make_new_profile"
+  # get "new_profile/make_tree_row"
+  # get "new_profile/make_profilekeys_rows"
+  # get "graph_tree/show_graph_tree"
+  # get "graph_tree/edit"
+  # get "graph_tree/move"
   # get "admin_methods/service_method_1"
   # get "admin_methods/service_method_2"
   # mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
@@ -166,9 +166,17 @@ Weafam::Application.routes.draw do
   # end
 
   get 'profile/context-menu', to: 'profiles#context_menu', as: :profile_context_menu
+
   resources :profiles, except: [:index, :edit] do
     get '/edit/data', to: 'profiles#edit', as: :edit_data
+    get '/version/:profile_data_id', to: 'profiles#show', as: :profile_data_version
   end
+
+
+  # Profile Data
+  ##################################################
+  resources :profile_datas, only: [:update, :create]
+
 
 
 

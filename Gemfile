@@ -44,6 +44,9 @@ gem 'therubyracer'
 # Extend hash
 gem 'hashie'
 
+
+gem "paperclip", "~> 4.2"
+
 # Yandex inflection
 gem "yandex_inflect", "~> 0.1.2"
 # КТО      ЧТО     0

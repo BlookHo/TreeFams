@@ -12,6 +12,7 @@ class Profile < ActiveRecord::Base
                 :allow_invite,
                 :allow_conversation
 
+
   include ProfileQuestions
   include ProfileMerge
   include ProfileApiCircles
@@ -41,10 +42,18 @@ class Profile < ActiveRecord::Base
     name.try(:name).try(:mb_chars).try(:capitalize)
   end
 
+  def last_name
+    profile_datas.try(:first).try(:last_name)
+  end
+
+  def middle_name
+    profile_datas.try(:first).try(:middle_name)
+  end
+
 
   def full_name
-    # [self.to_name, self.surname].join(' ')
-    self.to_name
+    [self.display_name.name, self.last_name].join(' ')
+    # self.to_name
   end
 
 
@@ -52,6 +61,8 @@ class Profile < ActiveRecord::Base
     logger.info "Current profile sex id: #{self.name.sex_id}"
     self.name.sex_id == 1 ? '/assets/man.svg' : '/assets/woman.svg'
   end
+
+
 
 
   # Эксперименты по выводу кругов в объедененных деревьях
@@ -72,6 +83,7 @@ class Profile < ActiveRecord::Base
   def circle_as_array(user_id)
     circle(user_id).map {|t|  [t.user_id, t.profile_id, t.name_id, t.relation_id, t.is_profile_id, t.is_name_id, t.is_sex_id] }
   end
+
 
   def circle_as_hash(user_id)
     {

@@ -9,6 +9,11 @@ class ProfileKey < ActiveRecord::Base
   belongs_to :display_name, class_name: Name, foreign_key: :is_display_name_id
   belongs_to :relation, primary_key: :relation_id
 
+
+  def full_name
+    [self.display_name.name, self.profile.last_name].join(' ')
+  end
+
   # пересечение 2-х хэшей, у которых - значения = массивы
   def self.intersection(first, other)
     result = {}

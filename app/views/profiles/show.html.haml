@@ -1,20 +1,55 @@
-#profile
-  = render 'profile_header'
-.col_1_2
-  Кол-во редакция профиля:
-  = @profile_datas.size
-  %br
-  %br
-  Вы смотрите редакцию
-  %select
-    - @profile_datas.each do |data|
-      %option= data.creator.name.mb_chars.capitalize
+.container#profile
+  .header
+    = image_tag @current_profile_data.avatar_url(:medium), class: "avatar"
 
-  %br
-  %br
-  %hr
-  %ul
-    %li= @profile.name.to_name
-    %li= @profile_data.middle_name.mb_chars.capitalize
-    %li= @profile_data.last_name.mb_chars.capitalize
-    %li= @profile_data.biography
+    %h1
+      = @profile.to_name
+      %span= @current_profile_data.middle_name
+      = @current_profile_data.last_name
+    - if @current_profile_data.human_birth_day
+      %h2
+        День рождения:
+        = l @current_profile_data.human_birth_day
+    - if @current_profile_data.location
+      %h2= @current_profile_data.location
+
+
+  .col_1_2.profile_data
+    - if @profile_datas.to_a.delete_if{|data| data.new_record? }.empty?
+      = link_to 'Добавить информацию о родственнике', '#', onclick: '$("#profile_data_form").toggle();'
+    - else
+      .version-select
+        Вы смотрите редакцию
+        %select{onchange: "window.location.href = '/profiles/#{@profile.id}/version/'+this.value+'';"}
+          - @profile_datas.to_a.delete_if{|data| data.new_record? }.each do |data|
+            %option{value: data.id, selected: (@current_profile_data.id == data.id)}
+              = data.creator.name
+              - if  data.creator == current_user
+                (ваша версия)
+        - if @current_profile_data.creator == current_user
+          = link_to "Изменить информацию", '#', onclick: '$("#profile_data_form").toggle();'
+
+
+
+    #profile_data_form{style: 'display:none;'}
+      = form_for @current_user_profile_data, url: (@current_user_profile_data.new_record? ? profile_datas_path : profile_data_path(@current_user_profile_data)), html:{class: "wf-from"} do |f|
+        = f.hidden_field :profile_id
+        .field
+          = f.label 'Фотография'
+          = f.file_field :avatar
+        .field
+          = f.label 'Фамилия'
+          = f.text_field :last_name
+        .field
+          = f.label 'Отчество'
+          = f.text_field :middle_name
+        .field
+          = f.label 'День рождения'
+          = f.date_select :birth_date, start_year: Date.today.year, end_year: 1800, include_blank: true
+        .field
+          = f.label 'Страна'
+          = f.text_field :country
+        .field
+          = f.label 'Город'
+          = f.text_field :city
+        = f.submit 'Сохранить', class: 'bttn small green pull-right'

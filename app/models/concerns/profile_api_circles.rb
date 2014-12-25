@@ -125,8 +125,8 @@ module ProfileApiCircles
   def center_node(current_user, user_ids)
     {
       id: self.id,
-      name: self.name.name,
-      display_name: self.display_name.name,
+      name: self.to_name,
+      display_name: self.full_name,
       relation: "Центр круга",
       relation_id: 0,
       is_relation: nil,
