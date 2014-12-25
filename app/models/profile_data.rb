@@ -23,7 +23,11 @@ class ProfileData < ActiveRecord::Base
     end
 
     def avatar_url(size)
-      avatar.present? ? avatar.url(size) : profile.icon_path
+      has_avatar? ? avatar.url(size) : profile.icon_path
+    end
+
+    def has_avatar?
+      avatar.present?
     end
 
 

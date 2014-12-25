@@ -58,8 +58,17 @@ class Profile < ActiveRecord::Base
 
 
   def icon_path
-    logger.info "Current profile sex id: #{self.name.sex_id}"
     self.name.sex_id == 1 ? '/assets/man.svg' : '/assets/woman.svg'
+  end
+
+
+  def avatar_path(size)
+    avatars.empty? ? icon_path : avatars.first.avatar_url(size)
+  end
+
+
+  def avatars
+    ProfileData.where(profile_id: self.id).where.not(avatar_file_name: nil)
   end
 
 
