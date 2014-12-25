@@ -11,7 +11,7 @@ class ProfileKey < ActiveRecord::Base
 
 
   def full_name
-    [self.display_name.name, self.profile.last_name].join(' ')
+    [self.display_name.name, self.is_profile.last_name].join(' ')
   end
 
   # пересечение 2-х хэшей, у которых - значения = массивы

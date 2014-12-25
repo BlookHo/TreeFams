@@ -148,7 +148,7 @@ module ProfileApiCircles
       results << {
         id: key.is_profile_id,
         name: key.name.name,
-        display_name: key.display_name.name,
+        display_name: key.full_name,
         sex_id: key.name.sex_id,
         relation: key.relation.relation,
         relation_id: key.relation_id,
