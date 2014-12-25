@@ -13,9 +13,6 @@
   - if @profile.allow_invite
     %li= link_to "Пригласить", new_invite_path(profile_id: @profile.id), class: :grey, remote: true
 
-  -# смотреть профиль
-  %li= link_to "Смотреть профиль", profile_path(@profile), class: :grey
-
 
   -# Написать личное сообщение
   - if @profile.allow_conversation
@@ -25,7 +22,7 @@
   %li= link_to "Добавить в избранные", '#', class: :grey
 
   -# Страница профиля
-  %li= link_to "О нём", profile_edit_data_path(@profile.id)
+  %li= link_to "О нём", profile_path(@profile), class: :grey
 
   -# Может ли быть удален профиль от current_user
   - if @profile.allow_destroy
