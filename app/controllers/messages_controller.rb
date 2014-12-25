@@ -50,6 +50,8 @@ class MessagesController < ApplicationController
       #logger.info "In delete_one_dialoge: user_dialogue_name = #{@user_dialogue_name}"
       flash[:notice] = "Происходит удаление твоего диалога с #{@user_dialogue_name} "
       Message.delete_one_dialogue(user_dialogue, current_user)
+      @deleted =
+      @text_to_js = " Удален! "
       flash[:notice] = "Удаление твоего диалога с #{@user_dialogue_name} - завершено"
     end
   end
@@ -61,23 +63,44 @@ class MessagesController < ApplicationController
   def delete_message
 
     unless params[:message_id].blank?
-      @message_id_to_delete = params[:message_id]  # to js
-      Message.delete_one_message(params[:message_id], current_user)
-      flash[:notice] = "Сообщение удалено"
+      one_message = Message.find(params[:message_id])
+      one_message.delete_one_message(one_message, current_user)
+      @receiver_del = one_message.receiver_deleted  # to js
+      @sender_del = one_message.sender_deleted  # to js
+      check_deletion(one_message)
+      #flash[:notice] = "Сообщение удалено"
     end
 
   end
+
+  # Сигнал-я о корректности "удаления"
+  def check_deletion(one_message)
+    if one_message.persisted?
+      flash[:success] = "Сообщение удалено"
+    else
+      flash[:error] = "Ошибки при удалении сообщения"
+    end
+  end
+
 
   # Пометка сообщения как Важного (important_message) и обратно - в Неважное
   # @param data [params[:message_id]] ID помеченного как важного сообщения - из view
   def mark_important
     unless params[:message_id].blank?
       Message.important_message(params[:message_id], current_user ) #
-      flash[:notice] = "Сообщение помечено как важное"
-      #@mark_important = message.important  # to js
+      flash[:notice] = "Изменена пометка важности сообщения"
+      @mark_important = Message.find(params[:message_id]).important  # to js
       # todo: отображение изменения значения (js)
     end
+
+    respond_to do |format|
+      format.html
+      format.js { render 'messages/mark_important' }
+    end
+
+
   end
+
 
   # later - Пометка сообщения как Spam
   def spam_dialoge

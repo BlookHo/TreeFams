@@ -16,16 +16,21 @@
       %th Важное сообщение
       %th
       %th
+      %th
       %th Прочитано Read
     - user_talk_arr.take(one_dialoge_length).each do |one_talk_message|
-      %tr
+      %tr{data: {message_id: one_talk_message[:one_message_id]}}
         %td= one_talk_message[:one_message_id]
         %td= one_talk_message[:one_message_text].slice(0..25)
         %td= one_talk_message[:one_message_sender_name]
         -#%td= one_talk_message[:one_message_receiver_id]
-        %td= one_talk_message[:one_message_sender_deleted]
-        %td= one_talk_message[:one_message_receiver_deleted]
-        %td= one_talk_message[:one_message_important]
+        %td.sender_del= one_talk_message[:one_message_sender_deleted]
+        %td.receiver_del= one_talk_message[:one_message_receiver_deleted]
+        %td.important= one_talk_message[:one_message_important]
+        %td= @text_to_js
+
+        -#:javascript
+
         %td= link_to 'Удалить сообщение', delete_message_path(message_id: one_talk_message[:one_message_id]), method: :post, remote: true, class: :messages
-        %td= link_to 'Пометить как важное', mark_important_path(message_id: one_talk_message[:one_message_id]), method: :post, remote: true, class: :messages
+        %td= link_to 'Отметка важности', mark_important_path(message_id: one_talk_message[:one_message_id]), method: :post, remote: true,  id: 'name_container', class: :messages
         %td= one_talk_message[:one_message_read]

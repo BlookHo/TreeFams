@@ -111,27 +111,19 @@ class Message < ActiveRecord::Base
   # Удаление одного сообщения
   # @param data [message_id] ID выбранного для удаления сообщения - из view
   # @param data [current_user] текущий юзер - logged_in
-  def self.delete_one_message(message_id, current_user) #, choosed_message_id)
+  def delete_one_message(one_message, current_user) #, choosed_message_id)
 
-    one_message = Message.find(message_id)
+    #one_message = Message.find(message_id)
     unless one_message.receiver_deleted #&& one_message.receiver_id == current_user.id  # if !false & true = true
       one_message.update_column(:receiver_deleted, true) if one_message.receiver_id == current_user.id
     end
     unless one_message.sender_deleted #&& one_message.sender_id == current_user.id # if !false
       one_message.update_column(:sender_deleted, true) if one_message.sender_id == current_user.id
     end
-    one_message.check_deletion
+    #one_message.check_deletion
 
   end
 
-  # Сигнал-я о корректности "удаления"
-  def check_deletion
-    if self.persisted?
-      flash[:success] = "Письмо удалено"
-    else
-      flash[:error] = "Ошибки при удалении письма"
-    end
-  end
 
 
 
