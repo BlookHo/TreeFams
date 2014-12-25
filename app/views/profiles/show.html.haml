@@ -15,19 +15,23 @@
 
 
   .col_1_2.profile_data
-    - if @profile_datas.to_a.delete_if{|data| data.new_record? }.empty?
-      = link_to 'Добавить информацию о родственнике', '#', onclick: '$("#profile_data_form").toggle();'
-    - else
-      .version-select
-        Вы смотрите редакцию
+    .version-select
+      - unless @profile_datas.to_a.delete_if{|data| data.new_record? }.empty?
+        Вы смотрите версию
         %select{onchange: "window.location.href = '/profiles/#{@profile.id}/version/'+this.value+'';"}
           - @profile_datas.to_a.delete_if{|data| data.new_record? }.each do |data|
             %option{value: data.id, selected: (@current_profile_data.id == data.id)}
               = data.creator.name
               - if  data.creator == current_user
                 (ваша версия)
-        - if @current_profile_data.creator == current_user
-          = link_to "Изменить информацию", '#', onclick: '$("#profile_data_form").toggle();'
+
+
+      - if @current_user_profile_data.new_record?
+        = link_to 'Добавить вашу версию', '#', onclick: '$("#profile_data_form").toggle();'
+      - elsif @current_profile_data.creator == current_user
+        = link_to "Изменить информацию", '#', onclick: '$("#profile_data_form").toggle();'
+
+
 
 
 

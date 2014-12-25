@@ -557,6 +557,11 @@ class ConnectUsersTreesController < ApplicationController
                UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
     ##################################################################
 
+
+    ######## Перезапись profile_data при объединении деревьев
+    ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
+    ##################################################################
+
   end
 
 

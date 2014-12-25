@@ -64,6 +64,10 @@ class Admin::ResetsController < Admin::AdminController
     PendingUser.delete_all
     PendingUser.reset_pk_sequence
     PendingUser.create([])
+
+    UpdatesFeed.delete_all
+    UpdatesFeed.reset_pk_sequence
+    UpdatesFeed.create([])
   end
 
 

@@ -12,12 +12,14 @@ var force, svg;
 
 var current_circle_author;
 
+
 createSvg = function(){
   svg = d3.select("#graph-wrapper")
            .append("svg")
            .attr("width",  width)
            .attr("height", height)
            .attr('id', 'graph');
+
 }
 
 
@@ -59,6 +61,9 @@ tick = function(){
 
 
 var drag;
+
+
+
 
 start = function(){
 
@@ -148,16 +153,21 @@ start = function(){
 
 
 
+// http://stackoverflow.com/questions/7430580/setting-rounded-corners-for-svgimage
+// http://stackoverflow.com/questions/25524906/how-to-make-an-image-round-in-d3-js
+
+
 
         // Profile Icon
           d3.select(this)
-            .append("svg:image")
+            .append("image")
             .attr("xlink:href", function(d){ return d.icon; })
             .attr("width", 80)
             .attr("height", 80)
             .attr("x", -40)
             .attr("y", -40)
-            .attr("class", "icon");
+            .attr("class", "icon")
+            .attr("clip-path", "url(#clip-circle)");
 
 
 

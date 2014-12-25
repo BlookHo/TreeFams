@@ -23,7 +23,20 @@ class ProfileData < ActiveRecord::Base
     end
 
     def avatar_url(size)
-      avatar.present? ? avatar.url(size) : profile.icon_path
+      has_avatar? ? avatar.url(size) : profile.icon_path
+    end
+
+    def has_avatar?
+      avatar.present?
+    end
+
+
+    def self.connect!(profiles_to_rewrite, profiles_to_destroy)
+      profiles_to_destroy.each_with_index do |profile_id_to_destroy, index|
+        ProfileData.where(profile_id: profile_id_to_destroy).each do |data|
+          data.update_column(profile_id, profiles_to_rewrite[index])
+        end
+      end
     end
 
 end
