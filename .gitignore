@@ -19,18 +19,14 @@
 .ruby-gemset
 .ruby-version
 
-<<<<<<< HEAD
+
+# images
+/public/system/*
+
+
 #other
 *.DS_Store
-*load_all_seeds.rb
-*dump.rdb
-db/seeds.rb
-=======
+
+
 # Redis
 dump.rdb
->>>>>>> style
-
-.idea/*
-*.idea/
-*.idea
-.idea/workspace.xml
