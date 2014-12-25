@@ -1,0 +1,9 @@
+console.log(true);
+console.log("<%= @message_id_to_delete %>");
+//var $currentRow = $("tr[data-message-id=" + messageId + "]");
+var messageId = "<%= params[:message_id] %>";
+var $currentRow = $("tr[data-message-id=" + messageId + "]");
+console.log($currentRow);
+
+$currentRow.find(".sender_del").html(' <%= @sender_del.inspect %> ');
+$currentRow.find(".receiver_del").html(' <%= @receiver_del.inspect %> ');

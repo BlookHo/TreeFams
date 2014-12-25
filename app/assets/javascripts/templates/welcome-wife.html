@@ -1,25 +1,29 @@
 <h1>У вас есть супруга?</h1>
+
+<div ng-show="hasError('wife')" class="error">
+  {{family.wife.error}}
+</div>
+<div ng-show="hasNewName('wife')" class="warning">
+  Если вы хотите продолжить с этим именем, пожалуйста, подтвердите:
+  <br>
+  <button class="bttn green small" ng-click="confirmNewName('wife', 0)">Да, продолжить</button>
+  <button class="bttn red small" ng-click="resetNewName('wife')">Нет</button>
+</div>
+
 <div class="control">
-  <div class="warning" ng-hide="isNameValid(family.wife)">
-    <i class="fa fa-question-circle"></i>
-    Пожалуйста, выберите имя из списка
-  </div>
-  <div class="success" ng-show="isNameValid(family.wife)">
-    <i class="fa fa-thumbs-up"></i>
-    Отлично, теперь нажмите кнопку далее...
-  </div>
   <input type="text"
-         ng-model="family.wife"
-         ng-change="changeName('wife')"
-         ng-value="name"
-         typeahead-on-select="onSelectName($model, 'wife')"
-         placeholder="Начните вводить имя..."
-         typeahead="item as item.name for item in getNames($viewValue, 0)"
-         typeahead-loading="loading..."
-         typeahead-template-url="customDropDownTemplate.html"
-         autoFocus>
+  ng-model="family.wife"
+  ng-change="changeName('wife', family.wife)"
+  ng-value="name"
+  typeahead-on-select="onSelectName($model, 'wife')"
+  placeholder="Начните вводить имя, например: Вероника"
+  typeahead="item as item.name for item in getNames($viewValue, 0)"
+  typeahead-editable="true"
+  typeahead-loading="loading..."
+  typeahead-template-url="customDropDownTemplate.html"
+  autoFocus>
 </div>
 <div class="actions">
   <a ui-sref="form.daughters" class="bttn silver right">Назад</a>
-  <button ui-sref="form.email" class="bttn green left" ng-disabled="!isOptionalNameValid(family.wife)">Дальше</button>
+  <button ng-click="validateName('wife')" class="bttn green left">Дальше</button>
 </div>

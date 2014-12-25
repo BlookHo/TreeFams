@@ -1,0 +1,26 @@
+.page-header
+  %h2
+    Модерация пользователя
+    %small= @pending_user.id
+    .pull-right
+      = link_to "Сбросить изменения", admin_pending_user_reset_path(@pending_user), class: [:btn, 'btn-warning'], data:{confirm: "Вы уверены, что хотите отменить изменения?"}
+      = link_to "Заблокировать", admin_pending_user_block_path(@pending_user), class: [:btn, 'btn-danger'], data:{confirm: "Вы уверены, что хотите заблокировать этого пользователя?"}
+
+
+- @data.each do |key, value|
+  - if value.kind_of? Array
+    - value.each_with_index do |v, index|
+      = render 'form', data: v, relation: key, index: index
+      %hr
+  - else
+    = render 'form', data: value, relation: key, index: nil
+    %hr
+
+
+.form-group.form-group-lgs
+  .col-sm-2
+  = button_to "Утвердить пользователя", admin_pending_user_approve_path(@pending_user), class: [:btn, 'btn-success btn-lg'], data:{confirm: "Вы уверены, что хотите УТВЕРДИТЬ пользователя и создать аккаунт?"}
+
+
+
+= @data

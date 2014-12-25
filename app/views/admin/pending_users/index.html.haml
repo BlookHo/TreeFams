@@ -1,0 +1,7 @@
+.page-header
+  %h2
+    Пользователи на модерации
+    %small= @pending_users.size
+
+= render 'tabs'
+= render 'table'

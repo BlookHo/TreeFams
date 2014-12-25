@@ -5,7 +5,7 @@ class InvitesController < ApplicationController
     @profile_id = params[:profile_id]
   end
 
-
+  # todo: Разнесим на методы create Updates
   def create
     @profile_id = params[:profile_id]
     @email_name = params[:profile_email]
@@ -16,6 +16,7 @@ class InvitesController < ApplicationController
 
       user_profile = Profile.find(params[:profile_id].to_i).tree_id
       logger.info "In create invitation_email:  user_profile = #{user_profile}, params[:profile_id].to_i = #{params[:profile_id].to_i} " #
+
       ##########  UPDATES - № 5  ####################         agent_user_id: current_user.id,
       updates_data = { user_id: current_user.id, update_id: 5, agent_user_id: user_profile, agent_profile_id: params[:profile_id].to_i, read: false}
       UpdatesFeed.create(updates_data)

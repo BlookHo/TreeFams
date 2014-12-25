@@ -1,0 +1,3 @@
+%ul.nav.nav-tabs
+  %li{class: ('active' if controller_name == 'admins')}= link_to "Администраторы", admin_admins_path
+  %li{class: ('active' if action_name == 'blocked')}= link_to "Сброс данных", new_admin_reset_path

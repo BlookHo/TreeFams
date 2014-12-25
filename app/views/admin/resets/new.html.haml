@@ -1,0 +1,15 @@
+.page-header
+  %h2
+    Внимание, сброс пользовательских данных!
+
+
+= form_tag admin_resets_path, method: :post, role: :form, class: "form-horizontal" do
+  .form-group.form-group-lgs
+    = label_tag :password, "Пароль", class: "col-sm-2 control-label"
+    .col-sm-6
+      = text_field_tag :password, nil, class: "form-control"
+
+  %hr
+  %br
+  .col-sm-2
+  = submit_tag "Сбросить данные", class: [:btn, 'btn-lg btn-danger']

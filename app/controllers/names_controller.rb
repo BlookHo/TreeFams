@@ -1,28 +1,9 @@
 class NamesController < ApplicationController
-  def index
-  end
 
+    def find
+      term  = params[:term].mb_chars.capitalize
+      @name = Name.where(name: term).first
+      render nothing: true, status: :not_found unless @name
+    end
 
-  def show
-  end
-
-
-  def new
-  end
-
-
-  def edit
-  end
-
-
-  def create
-  end
-
-
-  def update
-  end
-
-
-  def destroy
-  end
 end

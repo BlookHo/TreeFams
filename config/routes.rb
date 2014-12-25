@@ -1,5 +1,7 @@
 Weafam::Application.routes.draw do
 
+  get 'search_similars/index'
+
   resources :updates_events
 
   resources :updates_feeds, except: [:update, :show, :destroy, :new, :edit]
@@ -23,9 +25,16 @@ Weafam::Application.routes.draw do
   match 'make_connection_request' => 'connection_requests#make_connection_request', via: :get
   match 'make_connection_request' => 'connection_requests#make_connection_request', via: :post
 
+  # SearchSimilars controller
+  match 'internal_similars_search' => 'search_similars#internal_similars_search', via: :get
+
+
 
   # messages controller
   resources :messages, except: [:update, :show, :destroy, :new, :edit]
+
+  match 'send_message' => 'messages#send_message', via: :get
+  match 'send_message' => 'messages#send_message', via: :post
 
   match 'create_new_message' => 'messages#create_new_message', via: :get
   match 'create_new_message' => 'messages#create_new_message', via: :post
@@ -39,22 +48,24 @@ Weafam::Application.routes.draw do
   match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :get
   #match 'show_one_dialoge' => 'messages#show_one_dialoge', via: :post
 
-  match 'important_message' => 'messages#important_message', via: :get
+  match 'mark_important' => 'messages#mark_important', via: :post
   #match 'important_message' => 'messages#important_message', via: :post
 
-  match 'delete_message' => 'messages#delete_message', via: :get
+  match 'delete_message' => 'messages#delete_message', via: :post
   #match 'delete_message' => 'messages#delete_message', via: :post
+
+  match 'delete_one_dialogue' => 'messages#delete_one_dialogue', via: :post
 
   match 'spam_dialoge' => 'messages#spam_dialoge', via: :get
   #match 'spam_dialoge' => 'messages#spam_dialoge', via: :post
 
-  get "new_profile/get_profile_params"
-  get "new_profile/make_new_profile"
-  get "new_profile/make_tree_row"
-  get "new_profile/make_profilekeys_rows"
-  get "graph_tree/show_graph_tree"
-  get "graph_tree/edit"
-  get "graph_tree/move"
+  # get "new_profile/get_profile_params"
+  # get "new_profile/make_new_profile"
+  # get "new_profile/make_tree_row"
+  # get "new_profile/make_profilekeys_rows"
+  # get "graph_tree/show_graph_tree"
+  # get "graph_tree/edit"
+  # get "graph_tree/move"
   # get "admin_methods/service_method_1"
   # get "admin_methods/service_method_2"
   # mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
@@ -69,7 +80,6 @@ Weafam::Application.routes.draw do
 
   # pages controller
   match 'landing' => 'pages#landing', via: :get
-  # match 'admin' => 'pages#admin', via: :get
   match 'news' => 'pages#news', via: :get
   match 'mail' => 'pages#mail', via: :get
   match 'mypage' => 'pages#mypage', via: :get
@@ -145,8 +155,7 @@ Weafam::Application.routes.draw do
   get "connect_users_trees/connect_profiles_keys"
 
 
-  # resources :members, except: :index
-  resources :trees
+
 
 
   # resources :profiles, except: [:index, :edit]
@@ -157,9 +166,17 @@ Weafam::Application.routes.draw do
   # end
 
   get 'profile/context-menu', to: 'profiles#context_menu', as: :profile_context_menu
+
   resources :profiles, except: [:index, :edit] do
     get '/edit/data', to: 'profiles#edit', as: :edit_data
+    get '/version/:profile_data_id', to: 'profiles#show', as: :profile_data_version
   end
+
+
+  # Profile Data
+  ##################################################
+  resources :profile_datas, only: [:update, :create]
+
 
 
 
@@ -172,32 +189,59 @@ Weafam::Application.routes.draw do
   match 'invitation_email' => 'weafam_mailer#invitation_email', via: :post
 
 
-  resources :users
-  resources :names
+
   resources :relations
 
+
+
+  # Send invite email
   resources :invites, only: [:new, :create]
-
-
-  # get 'main/circles/(:path)',                          to: "circles#show",            as: :circle
-  # get 'search/circles/:path_id/:tree_id/(:path)',               to: "circles#show_search",     as: :search_circle
-  # get 'search/circle_path/:path_id/:tree_id/(:path)',  to: "circles#show_search_path", as: :search_circle_path
-
-
-
-
-  # Landing & start singup
-  # get    'welcome/start',                  to: 'welcome#start',                as: :start
-  # match  'welcome/start/proceed',          to: 'welcome#proceed',              as: :proceed_start, via: [:get, :post]
-  # get    'welcome/start/to/step/:step',    to: 'welcome#to_step',              as: :to_start_step
-  # get    'welcome/start/step/previous',    to: 'welcome#previous',             as: :previous
-  # get    'welcome/start/add/:member',      to: 'welcome#add_member_field',     as: :add_member_field
-  # get    'welcome/start/show_data',        to: 'welcome#show_data',            as: :show_data
-
 
 
   # Debug path - Login as user
   get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
+
+
+  # Users Sessions Signup
+  ##################################################
+  resources :users
+  resources :sessions, except: :edit
+  get  'login',      to:   "sessions#new",      as: :login
+  get  'logout',     to:   "sessions#destroy",  as: :logout
+  get  'signup',     to:   'signup#index',      as: :signup
+  post 'register',   to:   'signup#create',     as: :register
+  get  'pending',    to:   'signup#pending',   as: :pending
+
+
+
+
+  # Home
+  ##################################################
+  get '/home',        to: 'home#index',  as: :home
+  get '/home/search', to: 'home#search', as: :home_search
+
+
+
+  # Autocompletes
+  ##################################################
+  get '/autocomplete/names', to: 'autocomplete#names'
+
+
+  # Names
+  ##################################################
+  # resources :names
+  get '/names/find', to: "names#find", as: :find_name
+
+
+
+  # API
+  ##################################################
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      get 'circles', to: 'circles#show'
+      get 'search',  to: 'search#index'
+    end
+  end
 
 
 
@@ -212,45 +256,28 @@ Weafam::Application.routes.draw do
 
     resources :admins
     resources :users
-    resources :subnames
+
+    resources :resets, only: [:new, :create]
+
+    resources :pending_users do
+      get 'blocked',    to: 'pending_users#blocked',    as: :blocked, on: :collection
+      get 'approved',    to: 'pending_users#approved',  as: :approved, on: :collection
+      get 'block',      to: 'pending_users#block',      as: :block
+      get 'reset',      to: 'pending_users#reset',      as: :reset
+      post 'approve',   to: 'pending_users#approve',    as: :approve
+    end
+
 
     resources :names do
       get 'males',   to: "names#males",   on: :collection, as: :males
       get 'females', to: "names#females", on: :collection, as: :females
     end
 
+    resources :subnames
+
+
     root "names#index"
   end
-
-
-  # New version
-  ##################################################
-  namespace :api, defaults: {format: 'json'} do
-    namespace :v1 do
-      get 'circles', to: 'circles#show'
-      get 'search',  to: 'search#index'
-    end
-  end
-
-
-  # Users Sessions Signup
-  resources :sessions, except: :edit
-  get  'login',      to:   "sessions#new",      as: :login
-  get  'logout',     to:   "sessions#destroy",  as: :logout
-  get  'signup',     to:   'signup#index',      as: :signup
-  post 'register',   to:   'signup#create',     as: :register
-
-
-  # Home
-  ##################################################
-  get '/home',        to: 'home#index',  as: :home
-  get '/home/search', to: 'home#search', as: :home_search
-  # get '/home/show',   to: 'home#show',   as: :home_show
-
-
-  # Autocompletes
-  ##################################################
-  get '/autocomplete/names', to: 'autocomplete#names'
 
 
 

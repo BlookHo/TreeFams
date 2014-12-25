@@ -1,27 +1,35 @@
-<h1>Как Вас зовут?</h1>
+<h1 class="required">Как Вас зовут?</h1>
+
+<div ng-show="hasError('author')" class="error">
+  {{family.author.error}}
+</div>
+<div ng-show="hasNewName('author')" class="warning">
+  Если вы хотите продолжить с этим именем, пожалуйста, укажите ваш пол:
+  <br>
+  <button class="bttn blue small" ng-click="confirmNewName('author', 1)">Мужской</button>
+  <button class="bttn pink small" ng-click="confirmNewName('author', 0)">Женский</button>
+  <a href="#" onclick="$('.description').toggle();">Подробнее...</a>
+  <div class="description" style="display:none;">
+    <textarea ng-model="family.author.name_description">
+    </textarea>
+  </div>
+</div>
+
 <div class="control">
-  <div class="warning" ng-hide="isNameValid(family.author)">
-    <i class="fa fa-question-circle"></i>
-    Пожалуйста, выберите имя из списка
-  </div>
-  <div class="success" ng-show="isNameValid(family.author)">
-    <i class="fa fa-thumbs-up"></i>
-    Отлично, теперь нажмите кнопку далее...
-  </div>
   <input type="text"
          ng-model="family.author"
          ng-change="changeName('author', family.author)"
          ng-value="name"
          typeahead-on-select="onSelectName($model, 'author')"
-         placeholder="Начните вводить ваше имя..."
+         placeholder="Начните вводить ваше имя, например: Сергей"
          typeahead="item as item.name for item in getNames($viewValue)"
-         typeahead-editable="false"
+         typeahead-editable="true"
          typeahead-loading="loading..."
          typeahead-template-url="customDropDownTemplate.html"
          autoFocus>
-
 </div>
 <div class="actions">
-  <button ui-sref="form.father" ng-disabled="!isNameValid(family.author)" class="bttn green left">Дальше</button>
+  <!--<button ui-sref="form.father" ng-disabled="!isNameValid(family.author)" class="bttn green left">Дальше</button>-->
+  <button ng-click="validateName('author')" class="bttn green left">Дальше</button>
 </div>
 <!-- typeahead-editable="false" -->

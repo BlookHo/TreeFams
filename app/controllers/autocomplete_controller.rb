@@ -9,6 +9,9 @@ class AutocompleteController < ApplicationController
     else
       @names = Name.where("name like ? AND sex_id = ?", term, params[:sex_id]).limit(10)
     end
+    logger.info "==========="
+    logger.info @names.pluck(:name)
+    logger.info "==========="
     # render json: json.(names, :name)
   end
 

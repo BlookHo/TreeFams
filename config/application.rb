@@ -62,8 +62,9 @@ module Weafam
     config.force_ssl = false    # сделано в целях ухода от Ошибка 107 (net::ERR_SSL_PROTOCOL_ERROR): Ошибка протокола SSL.
     # 25.06.13 - 10-25
 
-    config.time_zone = 'UTC'
-    config.active_record.default_timezone = 'UTC'
+    # todo: разобраться, почему это влияет на created_at
+    #config.time_zone = 'UTC'
+    #config.active_record.default_timezone = 'UTC'
 
     # Enable the asset pipeline
     config.assets.enabled = true

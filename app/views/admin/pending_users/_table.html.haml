@@ -1,0 +1,17 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th #
+      %th Email
+      %th Дата
+      %th Статус
+  %tbody
+    - @pending_users.each do |user|
+      - data = JSON.parse(user.data)
+      %tr
+        %td= user.id
+        %td= link_to data["author"]["email"], edit_admin_pending_user_path(user)
+        %td
+          = time_ago_in_words(user.read_attribute_before_type_cast(:created_at))
+          назад
+        %td= user.status

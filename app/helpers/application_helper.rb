@@ -1,19 +1,24 @@
 module ApplicationHelper
 
 
-  def prepare_data(data)
-    proc = Proc.new { |k, v| v.kind_of?(Hash) ? (v.delete_if(&proc); nil) : v.blank? };
-    data.delete_if(&proc)
+  def json_string_to_hash(string)
+    JSON.parse string.to_json.gsub('=>', ':')
   end
 
 
-  def circle_path_helper(current_path, profile_id, relation_id)
-    if current_path.blank?
-      return profile_id.to_s+','+relation_id.to_s
-    else
-      current_path + '-' + profile_id.to_s+','+relation_id.to_s
-    end
-  end
+  # def prepare_data(data)
+  #   proc = Proc.new { |k, v| v.kind_of?(Hash) ? (v.delete_if(&proc); nil) : v.blank? };
+  #   data.delete_if(&proc)
+  # end
+
+
+  # def circle_path_helper(current_path, profile_id, relation_id)
+  #   if current_path.blank?
+  #     return profile_id.to_s+','+relation_id.to_s
+  #   else
+  #     current_path + '-' + profile_id.to_s+','+relation_id.to_s
+  #   end
+  # end
 
   # prefix 1 - Ваш(а)
   #

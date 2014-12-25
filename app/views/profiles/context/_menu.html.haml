@@ -13,6 +13,10 @@
   - if @profile.allow_invite
     %li= link_to "Пригласить", new_invite_path(profile_id: @profile.id), class: :grey, remote: true
 
+  -# смотреть профиль
+  %li= link_to "Смотреть профиль", profile_path(@profile), class: :grey
+
+
   -# Написать личное сообщение
   - if @profile.allow_conversation
     %li= link_to "Отправить сообщение", '#', class: :grey

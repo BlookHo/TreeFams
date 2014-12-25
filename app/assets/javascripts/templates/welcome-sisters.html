@@ -1,32 +1,41 @@
 <h1>У вас есть сёстры?</h1>
 
 <!-- ng-form -->
-<div ng-repeat="sister in family.sisters" class="control">
-  <div class="warning" ng-hide="isNameValid(sister)">
-    <i class="fa fa-question-circle"></i>
-    Пожалуйста, выберите имя из списка
+<div ng-repeat="sister in family.sisters">
+
+  <div ng-show="hasError('sisters', $index)" class="error">
+    {{sister.error}}
   </div>
-  <div class="success" ng-show="isNameValid(sister)">
-    <i class="fa fa-thumbs-up"></i>
-    Отлично, можно двигаться дальше...
+
+  <div ng-show="hasNewName('sisters', $index)" class="warning">
+    Если вы хотите продолжить с этим именем, пожалуйста, подтвердите:
+    <br>
+    <button class="bttn green small" ng-click="confirmNewName('sisters', 0, $index)">Да, продолжить</button>
+    <button class="bttn red small" ng-click="resetNewName('sisters', $index)">Нет</button>
   </div>
-  <a ng-click="removeMember($index, 'sisters')" class="remove-field">удалить</a>
-  <input type="text"
-         ng-model="sister"
-         ng-change="changeMultipleName('sisters', $index)"
-         typeahead-on-select="onMultipleSelectName($model, 'sisters', $index)"
-         placeholder="Начните вводить имя..."
-         typeahead="item as item.name for item in getNames($viewValue, 0)"
-         typeahead-editable="false"
-         typeahead-loading="loading..."
-         typeahead-template-url="customDropDownTemplate.html"
-         autoFocus>
+
+  <div class="control">
+    <a ng-click="removeMember($index, 'sisters')" class="remove-field">удалить</a>
+    <input type="text"
+    ng-model="family.sisters[$index].name"
+    ng-change="changeMemberName('sisters', $index, family.sisters[$index].name)"
+    typeahead-on-select="onMultipleSelectName($model, 'sisters', $index)"
+    placeholder="Начните вводить имя, например: Ольга"
+    typeahead="item as item.name for item in getNames($viewValue, 0)"
+    typeahead-editable="true"
+    typeahead-loading="loading..."
+    typeahead-template-url="customDropDownTemplate.html"
+    autoFocus >
+  </div>
 
 </div>
+
 <div class="control add">
-  <a ng-click="addMember('sisters')" class="bttn small">Да, добавить сестру</a>
+  <a ng-click="addMember('sisters')" class="bttn blue small">+ добавить сестру</a>
 </div>
+
+
 <div class="actions">
   <a ui-sref="form.brothers" class="bttn silver right">Назад</a>
-  <button ui-sref="form.sons" class="bttn green left" ng-disabled="!isAllNamesValid(family.sisters)">Дальше</button>
+  <button ng-click="validateNames('sisters')" class="bttn green left">Дальше</button>
 </div>

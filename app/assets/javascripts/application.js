@@ -3,6 +3,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.ui.autocomplete
+//= require jquery.ui.draggable
 //= require profile-context-menu.js
 //= require autocompletes.js
 
