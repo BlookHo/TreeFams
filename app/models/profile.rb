@@ -29,7 +29,7 @@ class Profile < ActiveRecord::Base
   has_many   :trees
 
 
-  has_many   :profile_datas, dependent: :destroy
+  has_many   :profile_datas#, dependent: :destroy - не удаляются, но переписываются
   accepts_nested_attributes_for :profile_datas
 
 
