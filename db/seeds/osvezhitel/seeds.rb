@@ -56,3 +56,10 @@
 # Message.delete_all
 # Message.reset_pk_sequence
 # Message.create([])
+#
+#
+# UpdatesFeed.delete_all
+# UpdatesFeed.reset_pk_sequence
+# UpdatesFeed.create([])
+#
+#
