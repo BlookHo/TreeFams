@@ -44,6 +44,7 @@
 
         %th Общие отношения
         %th Мощность общности
+        %th Общие из необщих
 
       - @paged_similars_data.each do |similars_data|
         %tr
@@ -61,6 +62,7 @@
 
           %td= similars_data[:common_relations]
           %td= similars_data[:common_power]
+          %td= similars_data[:inter_relations]
 
 
     = paginate @paged_similars_data
