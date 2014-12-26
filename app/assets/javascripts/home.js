@@ -147,17 +147,11 @@ start = function(){
               .attr("class", 'name')
               .attr("text-anchor", "middle")
               .attr("y", 55)
-              // .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
               .text( function(d){ return d.display_name; });
 
 
 
-// http://stackoverflow.com/questions/7430580/setting-rounded-corners-for-svgimage
-// http://stackoverflow.com/questions/25524906/how-to-make-an-image-round-in-d3-js
-
-
-
-        // Profile Icon
+          // Profile SVG Icon
           d3.select(this)
             .append("image")
             .attr("xlink:href", function(d){ return d.avatar; })
@@ -165,8 +159,37 @@ start = function(){
             .attr("height", 80)
             .attr("x", -40)
             .attr("y", -40)
-            .attr("class", "icon")
-            .attr("clip-path", "url(#clip-circle)");
+            .attr("class", "icon");
+
+
+
+          // Profile Rounded Avatar EXTREMALY SLOW!!!
+
+          // http://stackoverflow.com/questions/7430580/setting-rounded-corners-for-svgimage
+          // http://stackoverflow.com/questions/25524906/how-to-make-an-image-round-in-d3-js
+
+          // d3.select(this)
+          //   .append('defs')
+          //
+          //   .append("pattern")
+          //   .attr("id", "center_pattern")
+          //   .attr("height", 100)
+          //   .attr("width", 100)
+          //
+          //   .append("image")
+          //   .attr("height", 100)
+          //   .attr("width", 100)
+          //   .attr("x", 0)
+          //   .attr("y", 0)
+          //   .attr("xlink:href", function(d){ return d.avatar; });
+          //
+          //
+          // d3.select(this)
+          //   .append("circle")
+          //   .attr("r", 80)
+          //   .attr("fill", "url(#center_pattern)");
+
+
 
 
 
@@ -178,7 +201,7 @@ start = function(){
              .attr("xlink:href", "/assets/plus.svg")
              .attr("width", 24)
              .attr("height", 24)
-             .attr("x", 8)
+             .attr("x", 18)
              .attr("y", -40)
              .attr("class", "add-icon");
          }
@@ -191,8 +214,8 @@ start = function(){
               .attr("xlink:href", "/assets/registrated.svg")
               .attr("width", 16)
               .attr("height", 16)
-              .attr("x", -30)
-              .attr("y", 20)
+              .attr("x", -32)
+              .attr("y", 22)
               .attr("class", "registrated-icon");
          }
 
@@ -235,14 +258,13 @@ start = function(){
               .attr("class", 'name')
               .attr("text-anchor", "middle")
               .attr("y", 35)
-              //.text( function(d){ return d.name + ' (id:'+ d.id+')'; });
               .text( function(d){ return d.display_name; });
 
 
         // Profile icon
         d3.select(this)
           .append("svg:image")
-          .attr("xlink:href", function(d){ return d.icon; })
+          .attr("xlink:href", function(d){ return d.avatar; })
           .attr("width", 50)
           .attr("height", 50)
           .attr("x", -25)
@@ -310,7 +332,7 @@ start = function(){
         // Profile's icon
         d3.select(this)
           .append("svg:image")
-          .attr("xlink:href", function(d){ return d.icon; })
+          .attr("xlink:href", function(d){ return d.avatar; })
           .attr("width", 30)
           .attr("height", 30)
           .attr("x", -15)

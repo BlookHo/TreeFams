@@ -6,8 +6,21 @@ class ProfileData < ActiveRecord::Base
                 :class_name => User
 
 
-    has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+    has_attached_file :avatar,
+                      :styles => { :medium => "300x300>", :thumb => "100x100>", :round_thumb => "100x100>" },
+                      :convert_options => {:round_thumb => Proc.new{self.convert_options}}
+
     validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+
+
+    def self.convert_options(px = 50)
+      trans = ""
+      trans << " \\( +clone  -alpha extract "
+      trans << "-draw 'fill black polygon 0,0 0,#{px} #{px},0 fill white circle #{px},#{px} #{px},0' "
+      trans << "\\( +clone -flip \\) -compose Multiply -composite "
+      trans << "\\( +clone -flop \\) -compose Multiply -composite "
+      trans << "\\) -alpha off -compose CopyOpacity -composite "
+    end
 
 
     def to_name

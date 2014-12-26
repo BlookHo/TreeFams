@@ -134,7 +134,7 @@ module ProfileApiCircles
       distance: 0,
       current_user_profile: current_user.try(:profile_id) == self.id,
       icon: self.icon_path,
-      avatar: self.avatar_path(:thumb),
+      avatar: self.avatar_path(:round_thumb),
       has_rights: (user_ids.include? self.tree_id),
       user_id: (self.user_id ? self.user_id : false)
     }
@@ -159,6 +159,7 @@ module ProfileApiCircles
         distance: distance,
         current_user_profile: current_user.try(:profile_id) == key.is_profile_id,
         icon: key.is_profile.icon_path,
+        avatar: key.is_profile.avatar_path(:round_thumb),
         user_id: (key.is_profile.user_id ? key.is_profile.user_id : false)
       }
     end
