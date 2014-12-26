@@ -23,7 +23,6 @@ createSvg = function(){
 }
 
 
-
 resizeGraph = function(){
   width = parseInt(d3.select("#graph-wrapper").style("width"));
   height = parseInt(d3.select("#graph-wrapper").style("height"));
@@ -161,7 +160,7 @@ start = function(){
         // Profile Icon
           d3.select(this)
             .append("image")
-            .attr("xlink:href", function(d){ return d.icon; })
+            .attr("xlink:href", function(d){ return d.avatar; })
             .attr("width", 80)
             .attr("height", 80)
             .attr("x", -40)
