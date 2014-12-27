@@ -109,15 +109,33 @@ class MessagesController < ApplicationController
   end
 
   # Создание и сохранение нового сообщения
-  def send_message
+  def new_message
 
-    @receiver_id = params[:receiver_id]#.to_i # From view
-    @receiver_id.present? ? @display_receiver_name = User.show_user_name(@receiver_id, 2) : @receiver_name = ''
-    @text = params[:text] # From view
-    Message.create(text: @text, receiver_id: @receiver_id, sender_id: current_user.id) if !(@receiver_id.blank? || @text.blank?)
+    receiver_id = params[:receiver_id].to_i # From view Index
+    #flash.now.alert = "Подтвердите выбор адресата"
+    @text = params[:text] # From view New_message
+    unless (receiver_id.blank? || @text.blank?)
+      create_data= {
+          text: @text,
+          receiver_id: receiver_id,
+          sender_id: current_user.id
+          }
+      Message.create(create_data)
+      @receiver_to_name = get_name(User.find(receiver_id).profile_id)
+    end
+    # todo: вставить flash.now.alert когда не введен текст
+    respond_to do |format|
+      format.html
+      format.js { render 'messages/new_message' }
+    end
 
   end
 
+  # Извлечение имени профиля
+  def get_name(profile_id)
+    profile = Profile.where(id: profile_id).first
+    profile.nil? ? "Merged profile" : profile.to_name
+  end
 
 
 

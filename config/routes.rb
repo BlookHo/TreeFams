@@ -36,8 +36,11 @@ Weafam::Application.routes.draw do
   match 'send_message' => 'messages#send_message', via: :get
   match 'send_message' => 'messages#send_message', via: :post
 
-  match 'create_new_message' => 'messages#create_new_message', via: :get
-  match 'create_new_message' => 'messages#create_new_message', via: :post
+  match 'enter_new_message' => 'messages#enter_new_message', via: :get
+  match 'enter_new_message' => 'messages#enter_new_message', via: :post
+
+  match 'new_message' => 'messages#new_message', via: :get
+  match 'new_message' => 'messages#new_message', via: :post
 
   match 'show_all_messages' => 'messages#show_all_messages', via: :get
   match 'show_all_messages' => 'messages#show_all_messages', via: :post

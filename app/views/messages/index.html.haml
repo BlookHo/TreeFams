@@ -3,8 +3,8 @@
   -#%h2 У тебя #{@new_messages_count} новых сообщений
 
   %br
-  = link_to 'Написать новое сообщение.',
-    send_message_path(receiver_id: nil), class: :messages
+  -#= link_to 'Написать новое сообщение.',
+  -#  send_message_path(receiver_id: nil), class: :messages
 
   %br
   - if @talks_and_messages.blank?
@@ -28,7 +28,7 @@
               %td
                 %h2 Диалог с #{user_talk_arr[0][:one_message_user_name]}
               %td= link_to "Написать сообщение ",
-                send_message_path(receiver_id: user_talk_id), class: :messages
+                new_message_path(receiver_id: user_talk_id), class: :messages
               -#%td= link_to 'Cпам - пометить диалог .',
               -#  spam_dialoge_path(user_id: user_talk_id),  class: :messages
               %td= link_to 'Удалить весь диалог с этим Юзером .',
@@ -37,7 +37,6 @@
               = render 'messages/show_dialoge', :user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length, :current_user => @current_user
               %td= link_to 'Показать весь диалог с этим Юзером .',
                 show_one_dialoge_path(:user_talk_id => user_talk_id)
-                -#, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length), class: :messages
               %br
               %br
 

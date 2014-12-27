@@ -1,0 +1,25 @@
+.container#messages
+  %h1 Отправить новое сообщение
+  %br
+
+  = form_tag(new_message_path, remote: true, id: 'new_message_form') do
+    = label_tag 'Подтверди получателя сообщения: '
+    = number_field_tag 'receiver_id', '', :placeholder => params[:receiver_id], :maxlength => 4, :size => 5
+    %li
+    = label_tag 'Введи текст сообщения:'
+    = text_field_tag 'text', '', :maxlength => 100, :size => 100
+    = submit_tag 'Отправить'
+    %li
+
+  %br
+  %p#new_message_text
+    Текст отправленного сообщения: #{@text}
+  %p#new_receiver_name
+    Получатель: #{@receiver_to_name}
+
+  %br
+  %br
+  = link_to 'Смотреть все диалоги:', messages_path
+  %br
+  %br
+  = link_to 'К просмотру твоего дерева', home_path
