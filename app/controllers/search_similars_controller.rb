@@ -4,12 +4,56 @@ class SearchSimilarsController < ApplicationController
 
   before_filter :logged_in?
 
+  # пересечение 2-х хэшей, у которых - значения = массивы
+  def intersection(first, other)
+    common_hash = {}
+    uncommon_hash = {}
+    logger.info "intersection 01: first = #{first}"
+    logger.info "intersection 01: other = #{other}"
+    # ;  uncommon_hash.merge!(other)
+    first.reject { |k, v| !(other.include?(k)) }.each do |k, v|
+      if !other.include?(k)
+        uncommon_hash.merge!({k => other})
+      end
+      intersect = other[k] & v    # пересечение = общая часть массивов
+      difference = (other[k] - v) + (v - other[k])  # разность = различие 2-х массивов
+      logger.info "intersection 02: other[k] = #{other[k]}, v = #{v}, intersect = #{intersect}, difference = #{difference} "
+      common_hash.merge!({k => intersect}) if !intersect.blank?
+      uncommon_hash.merge!({k => difference}) if !difference.blank?
+      logger.info "intersection 05: common_hash = #{common_hash}, uncommon_hash = #{uncommon_hash} "
+    end
+    return common_hash, uncommon_hash
+  end
+
 
   # Запуск методов определения похожих профилей в текущем дереве
   #
   def internal_similars_search
 
-    @tree_info = get_tree_info(current_user)
+    arr1 = [2, 1, 3, 5]
+    arr2 = [2, 0, 4]
+    inter = arr1 & arr2
+    differ = arr1 || arr2
+    differ1 = arr1 - arr2
+    differ2 = arr2 - arr1
+    resdif = differ1 + differ2
+    resdif2 = (arr1 - arr2) + (arr2 - arr1)
+
+
+    #logger.info "&&& In int_sim_search 01: arr1 = #{arr1}, arr2 = #{arr2}, inter = #{inter}, differ = #{differ}"
+    #logger.info "&&& In int_sim_search 01: differ1 = #{differ1}, differ2 = #{differ2}, resdif = #{resdif}, resdif2 = #{resdif2}"
+
+    hash1 = {"son"=>[122, 121], "hus"=>[90], "dil"=>[82], "gsf"=>[28]    ,"fat"=>[110]           }
+    hash2 = {"son"=>[122, 120], "hus"=>[90], "dil"=>[82], "gsf"=>[28]   ,"hfl"=>[28], "hml"=>[48]}  # from balda
+    common_hash, uncommon_hash = intersection(hash1, hash2)
+    logger.info "&&& In int_sim_search 021: common_hash = #{common_hash}"
+    logger.info "&&& In int_sim_search 022: uncommon_hash = #{uncommon_hash} "
+
+
+
+
+
+        @tree_info = get_tree_info(current_user)
     logger.info "In internal_similars_search 1: @tree_info = #{@tree_info} "  if !@tree_info.blank?
     logger.info "In internal_similars_search 1a: @tree_info.profiles.size = #{@tree_info[:profiles].size} "  if !@tree_info.blank?
     similars = ProfileKey.search_similars(@tree_info)
