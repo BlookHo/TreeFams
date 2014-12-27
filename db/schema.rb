@@ -14,7 +14,6 @@
 ActiveRecord::Schema.define(version: 20141225114945) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "adminpack"
   enable_extension "plpgsql"
 
   create_table "admins", force: true do |t|
