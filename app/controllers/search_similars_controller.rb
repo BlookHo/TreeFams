@@ -56,8 +56,10 @@ class SearchSimilarsController < ApplicationController
         @tree_info = get_tree_info(current_user)
     logger.info "In internal_similars_search 1: @tree_info = #{@tree_info} "  if !@tree_info.blank?
     logger.info "In internal_similars_search 1a: @tree_info.profiles.size = #{@tree_info[:profiles].size} "  if !@tree_info.blank?
-    similars = ProfileKey.search_similars(@tree_info)
+    similars, unsimilars = ProfileKey.search_similars(@tree_info)
     @similars_qty = similars.size if !similars.empty?
+    @unsimilars = unsimilars
+    @unsimilars_qty = unsimilars.size if !unsimilars.empty?
     @paged_similars_data = pages_of(similars, 10) # Пагинация - по 10 строк на стр.(?)
 
   end

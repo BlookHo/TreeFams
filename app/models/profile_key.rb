@@ -50,8 +50,8 @@ class ProfileKey < ActiveRecord::Base
       tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
       #logger.info "In search_similars 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
       #logger.info "In search_similars 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
-      similars = compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
-      return similars
+      similars, unsimilars = compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
+      return similars, unsimilars
     end
   end
 
@@ -266,7 +266,7 @@ class ProfileKey < ActiveRecord::Base
   # Сравниваем все круги на похожесть (совпадение)
   def self.compare_tree_circles(tree_info, tree_circles)
 
-     tree_circles =    # test 1 Алексей
+    # tree_circles =    # test 1 Алексей
     {27=>{"Сын"=>[122], "wif"=>[449], "dil"=>[82], "gsf"=>[28]},
      13=>{"Отец"=>[122], "Мама"=>[82], "Сын"=>[370, 465], "wif"=>[48], "wfl"=>[343], "wml"=>[82], "dil"=>[147], "Дед-о"=>[90], "Бабка-о"=>[449], "gdf"=>[446]},
      11=>{"Отец"=>[28], "Мама"=>[48], "Дочь"=>[446], "bro"=>[465], "wif"=>[147], "wfl"=>[110], "wml"=>[97], "Дед-о"=>[122], "Дед-м"=>[343], "Бабка-о"=>[82], "Бабка-м"=>[82], "amo"=>[331]},
@@ -293,17 +293,38 @@ class ProfileKey < ActiveRecord::Base
      8=>{"Дочь"=>[48, 331], "wif"=>[82], "sil"=>[28], "gsm"=>[370, 465]},
      2=>{"Отец"=>[90], "Мама"=>[449], "Сын"=>[28], "wif"=>[82], "dil"=>[48], "gsf"=>[370, 465]}}
 
+
+   #  tree_circles =      # from tree 8
+      {84=>{"Сын"=>[523], "wif"=>[528], "dil"=>[529], "gsf"=>[522, 524, 525], "gdf"=>[530, 531]},
+       81=>{"Отец"=>[523], "Мама"=>[529], "bro"=>[522, 524, 525], "sis"=>[530], "Дед-о"=>[526], "Бабка-о"=>[528]},
+       89=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[524, 525], "sis"=>[530, 532]},
+       79=>{"Отец"=>[523], "Мама"=>[529], "bro"=>[522, 525], "sis"=>[530, 531], "Дед-о"=>[526], "Бабка-о"=>[528]},
+       82=>{"Отец"=>[523], "Мама"=>[529], "bro"=>[522, 524, 525], "sis"=>[531], "Дед-о"=>[526], "Бабка-о"=>[528]},
+       88=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[524], "sis"=>[530, 531, 532]},
+       77=>{"Отец"=>[526], "Мама"=>[528], "Сын"=>[522, 524, 525], "Дочь"=>[530, 531], "wif"=>[529], "dil"=>[532]},
+       80=>{"Отец"=>[523], "Мама"=>[529], "bro"=>[522, 524], "sis"=>[530, 531], "Дед-о"=>[526], "Бабка-о"=>[528]},
+       85=>{"Сын"=>[523], "hus"=>[526], "dil"=>[529], "gsf"=>[522, 524, 525], "gdf"=>[530, 531]},
+       87=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[524, 525], "sis"=>[531, 532]},
+       92=>{"Сын"=>[524, 525], "Дочь"=>[530, 531, 532], "hus"=>[523], "sil"=>[522]},
+       86=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[525], "sis"=>[530, 531, 532]},
+       83=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[524, 525], "sis"=>[530, 531], "hus"=>[522], "hfl"=>[523], "hml"=>[529]},
+       78=>{"Сын"=>[522, 524, 525], "Дочь"=>[530, 531], "hus"=>[523], "hfl"=>[526], "hml"=>[528], "dil"=>[532]},
+       91=>{"Сын"=>[524, 525], "Дочь"=>[530, 531, 532], "wif"=>[533], "sil"=>[522]}}
+
     logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
     logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
 
-  #  profiles_arr = tree_info[:tree_is_profiles]
-    profiles_arr =
+    profiles_arr = tree_info[:tree_is_profiles]
+  #  profiles_arr =
         [27, 13, 11, 10, 28,  35,   61, 66, 9, 65, 7, 3, 12, 63, 8, 2] # from tree 1
-     #   [27, 13, 11, 10, 28,        61, 66, 9, 65, 7, 3, 12, 63, 8, 2]
+  #  profiles_arr =
+
+        [84, 81, 89, 79, 82, 88, 77, 80, 85, 87, 92, 86, 83, 78, 91]  # from tree 8
+
     logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
 
-  #  profiles = tree_info[:profiles]     # from tree
-    profiles =   # test # from tree 1
+    profiles = tree_info[:profiles]     # from tree
+  #  profiles =   # test # from tree 1
     {27=>{:is_name_id=>90, :is_sex_id=>1, :profile_id=>2, :relation_id=>1},
      13=>{:is_name_id=>28, :is_sex_id=>1, :profile_id=>7, :relation_id=>7},
      11=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>7, :relation_id=>3},
@@ -328,11 +349,31 @@ class ProfileKey < ActiveRecord::Base
      8=>{:is_name_id=>343, :is_sex_id=>1, :profile_id=>7, :relation_id=>1},
      2=>{:is_name_id=>122, :is_sex_id=>1, :profile_id=>13, :relation_id=>1}}
 
+
+    #  profiles =   # test # from tree 8
+         {84=>{:is_name_id=>526, :is_sex_id=>1, :profile_id=>77, :relation_id=>1},
+          81=>{:is_name_id=>531, :is_sex_id=>0, :profile_id=>76, :relation_id=>6},
+          89=>{:is_name_id=>531, :is_sex_id=>0, :profile_id=>83, :relation_id=>6},
+          79=>{:is_name_id=>524, :is_sex_id=>1, :profile_id=>76, :relation_id=>5},
+          82=>{:is_name_id=>530, :is_sex_id=>0, :profile_id=>76, :relation_id=>6},
+          88=>{:is_name_id=>525, :is_sex_id=>1, :profile_id=>83, :relation_id=>5},
+          77=>{:is_name_id=>523, :is_sex_id=>1, :profile_id=>76, :relation_id=>1},
+          80=>{:is_name_id=>525, :is_sex_id=>1, :profile_id=>76, :relation_id=>5},
+          85=>{:is_name_id=>528, :is_sex_id=>0, :profile_id=>77, :relation_id=>2},
+          87=>{:is_name_id=>530, :is_sex_id=>0, :profile_id=>83, :relation_id=>6},
+          92=>{:is_name_id=>533, :is_sex_id=>0, :profile_id=>83, :relation_id=>2},
+          86=>{:is_name_id=>524, :is_sex_id=>1, :profile_id=>83, :relation_id=>5},
+          83=>{:is_name_id=>532, :is_sex_id=>0, :profile_id=>76, :relation_id=>8},
+          78=>{:is_name_id=>529, :is_sex_id=>0, :profile_id=>76, :relation_id=>2},
+          91=>{:is_name_id=>523, :is_sex_id=>1, :profile_id=>83, :relation_id=>1}}
+
+
     logger.info "==== In compare_tree_circles 4: profiles = #{profiles}" if !profiles.blank?
 
 
     # Перебор по парам профилей (неповторяющимся) с целью выявления похожих профилей
     similars = [] # Похожие - РЕЗУЛЬТАТ
+    unsimilars = [] # НЕ Похожие - параллельный РЕЗУЛЬТАТ
 
     c =0  # count different profiles pairs
     IDArray.each_pair(profiles_arr) { |a_profile_id, b_profile_id|
@@ -362,9 +403,9 @@ class ProfileKey < ActiveRecord::Base
 
           unsimilar_sign, inter_relations = check_similars_exclusion(data_for_check)
           # Проверка условия исключения похожести
-      #    if ProfileKey.check_similars_exclusion(data_for_check)
-      #    if check_similars_exclusion(data_for_check)
-            if unsimilar_sign #check_similars_exclusion(data_for_check)
+       #    if ProfileKey.check_similars_exclusion(data_for_check)
+       #    if check_similars_exclusion(data_for_check)
+          if unsimilar_sign #check_similars_exclusion(data_for_check)
 
             # Если признак непохожести = true
             # значит эта пара профилей - точно НЕПОХОЖИЕ
@@ -394,13 +435,30 @@ class ProfileKey < ActiveRecord::Base
                     common_power:  common_power,
                     inter_relations:  inter_relations
                   }
+
+              #profiles_pair = [a_profile_id, b_profile_id]
+              #if !unsimilars.include?(profiles_pair)
               one_similars_pair = get_similars_data(common_data)
               similars << one_similars_pair if !one_similars_pair.empty?  # Похожие - РЕЗУЛЬТАТ
+              #
+              #else
+              #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
+              #end
+
+            #else
+            #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
             end
 
+          #else
+          #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
           end
 
+        #else
+        #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
         end
+
+      #else
+      #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
 
       end
       ) }
@@ -408,8 +466,16 @@ class ProfileKey < ActiveRecord::Base
     logger.info "In compare_tree_circles 9: similars = #{similars}"
     logger.info "In compare_tree_circles 10: similars.size = #{similars.size}" if !similars.empty?
 
-    similars
+    return similars, unsimilars
   end
+
+  # No use
+  def self.collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
+    unsimilars << [a_profile_id, b_profile_id]
+    logger.info "In compare_tree_circles 8: unsimilars = #{unsimilars}"
+    unsimilars
+  end
+
 
   # Формирование данных об одной паре похожих профилей для отображения в view
   def self.get_similars_data(common_data)
