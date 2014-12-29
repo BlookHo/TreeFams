@@ -4,8 +4,6 @@ class MessagesController < ApplicationController
   include MessagesHelper
 
   layout 'application.new'
-
-
   before_filter :logged_in?
 
 
@@ -23,6 +21,26 @@ class MessagesController < ApplicationController
     @one_dialoge_length = 1
     @current_user = current_user
   end
+
+
+  def new
+    @receiver = User.find(params[:receiver_id])
+    @message = Message.new
+    @message.receiver_id = @receiver.id
+  end
+
+
+  def create
+    @message = Message.new(message_params)
+    @message.sender_id = current_user.id
+    if @message.save
+      flash.now[:notice] = "Cообщение отправлено"
+    else
+      flash.now[:alert] = "Ошибка при отправке сообщения"
+      render :new
+    end
+  end
+
 
 
   # Получаем диалог одного юзера
@@ -108,9 +126,11 @@ class MessagesController < ApplicationController
     #
   end
 
+
+
+
   # Создание и сохранение нового сообщения
   def new_message
-
     receiver_id = params[:receiver_id].to_i # From view Index
     #flash.now.alert = "Подтвердите выбор адресата"
     @text = params[:text] # From view New_message
@@ -128,13 +148,22 @@ class MessagesController < ApplicationController
       format.html
       format.js { render 'messages/new_message' }
     end
-
   end
+
+
 
   # Извлечение имени профиля
   def get_name(profile_id)
     profile = Profile.where(id: profile_id).first
     profile.nil? ? "Merged profile" : profile.to_name
+  end
+
+
+
+  private
+
+  def message_params
+    params[:message].permit(:text, :receiver_id)
   end
 
 

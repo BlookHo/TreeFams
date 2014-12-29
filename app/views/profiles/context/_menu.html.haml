@@ -16,7 +16,7 @@
 
   -# Написать личное сообщение
   - if @profile.allow_conversation
-    %li= link_to "Отправить сообщение", messages_path, class: :grey
+    %li= link_to "Отправить сообщение", new_message_path(receiver_id: @profile.user.id), remote: true, class: :grey
 
   -# Добавить в избранное
   %li= link_to "Добавить в избранные", '#', class: :grey

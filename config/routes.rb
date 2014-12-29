@@ -31,7 +31,8 @@ Weafam::Application.routes.draw do
 
 
   # messages controller
-  resources :messages, except: [:update, :show, :destroy, :new, :edit]
+  resources :messages, except: [:update, :show, :destroy, :edit]
+
 
   match 'send_message' => 'messages#send_message', via: :get
   match 'send_message' => 'messages#send_message', via: :post

@@ -1,0 +1,12 @@
+.context-menu-form
+  %h2 Отправить сообщение
+
+  = form_for @message, remote: true do |f|
+    - if flash[:alert]
+      .flash.alert= flash[:alert]
+    - if flash[:notice]
+      .flash.notice= flash[:notice]
+    = f.hidden_field :receiver_id
+    .row
+      = f.text_area :text
+    = f.submit 'Отправить', class: [:bttn, :green]
