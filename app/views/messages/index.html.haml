@@ -12,6 +12,7 @@
       %tr
         %td.left.grey.italic
           Сообщений - нет.
+
   - else
     - @talks_and_messages.each do |one_talk_arr|
       %table
@@ -26,9 +27,10 @@
             %tr
               %td.left.grey.italic
               %td
-                %h2 Диалог с #{user_talk_arr[0][:one_message_user_name]}
+                %h2
+                  = link_to  "Диалог с #{user_talk_arr[0][:one_message_user_name]}", show_one_dialoge_path(:user_talk_id => user_talk_id)
               %td= link_to "Написать сообщение ",
-                new_message_path(receiver_id: user_talk_id), class: :messages
+                write_new_message_path(receiver_id: user_talk_id), class: :messages
               -#%td= link_to 'Cпам - пометить диалог .',
               -#  spam_dialoge_path(user_id: user_talk_id),  class: :messages
               %td= link_to 'Удалить весь диалог с этим Юзером .',
@@ -42,4 +44,3 @@
 
   %br
   = link_to 'К просмотру твоего дерева', home_path
-

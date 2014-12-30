@@ -40,8 +40,8 @@ Weafam::Application.routes.draw do
   match 'enter_new_message' => 'messages#enter_new_message', via: :get
   match 'enter_new_message' => 'messages#enter_new_message', via: :post
 
-  match 'new_message' => 'messages#new_message', via: :get
-  match 'new_message' => 'messages#new_message', via: :post
+  match 'write_new_message' => 'messages#new_message', via: :get, as: :write_new_message
+  match 'write_new_message' => 'messages#new_message', via: :post, as: :send_new_message
 
   match 'show_all_messages' => 'messages#show_all_messages', via: :get
   match 'show_all_messages' => 'messages#show_all_messages', via: :post

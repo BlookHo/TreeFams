@@ -79,7 +79,6 @@ class MessagesController < ApplicationController
   # @param data [params[:message_id]] ID выбранного для удаления сообщения - из view
   #
   def delete_message
-
     unless params[:message_id].blank?
       one_message = Message.find(params[:message_id])
       one_message.delete_one_message(one_message, current_user)
@@ -142,11 +141,10 @@ class MessagesController < ApplicationController
           }
       Message.create(create_data)
       @receiver_to_name = get_name(User.find(receiver_id).profile_id)
-    end
-    # todo: вставить flash.now.alert когда не введен текст
-    respond_to do |format|
-      format.html
-      format.js { render 'messages/new_message' }
+      redirect_to "/show_one_dialoge?user_talk_id=#{receiver_id}"
+    else
+      # flash.now[:alert] = "Ошибка при отправке сообщения"
+      render :new_message
     end
   end
 
