@@ -266,7 +266,7 @@ class ProfileKey < ActiveRecord::Base
   # Сравниваем все круги на похожесть (совпадение)
   def self.compare_tree_circles(tree_info, tree_circles)
 
-     tree_circles =    # test 1 Алексей
+   #  tree_circles =    # test 1 Алексей
     {27=>{"Сын"=>[122], "wif"=>[449], "dil"=>[82], "gsf"=>[28]},
      13=>{"Отец"=>[122], "Мама"=>[82], "Сын"=>[370, 465], "wif"=>[48], "wfl"=>[343], "wml"=>[82], "dil"=>[147], "Дед-о"=>[90], "Бабка-о"=>[449], "gdf"=>[446]},
      11=>{"Отец"=>[28], "Мама"=>[48], "Дочь"=>[446], "bro"=>[465], "wif"=>[147], "wfl"=>[110], "wml"=>[97], "Дед-о"=>[122], "Дед-м"=>[343], "Бабка-о"=>[82], "Бабка-м"=>[82], "amo"=>[331]},
@@ -296,14 +296,14 @@ class ProfileKey < ActiveRecord::Base
     logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
     logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
 
-  #  profiles_arr = tree_info[:tree_is_profiles]
-    profiles_arr =
+    profiles_arr = tree_info[:tree_is_profiles]
+  #  profiles_arr =
         [27, 13, 11, 10, 28,  35,   61, 66, 9, 65, 7, 3, 12, 63, 8, 2] # from tree 1
      #   [27, 13, 11, 10, 28,        61, 66, 9, 65, 7, 3, 12, 63, 8, 2]
     logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
 
-  #  profiles = tree_info[:profiles]     # from tree
-    profiles =   # test # from tree 1
+    profiles = tree_info[:profiles]     # from tree
+  #  profiles =   # test # from tree 1
     {27=>{:is_name_id=>90, :is_sex_id=>1, :profile_id=>2, :relation_id=>1},
      13=>{:is_name_id=>28, :is_sex_id=>1, :profile_id=>7, :relation_id=>7},
      11=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>7, :relation_id=>3},
