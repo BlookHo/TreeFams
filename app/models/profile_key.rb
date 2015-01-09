@@ -118,6 +118,7 @@ class ProfileKey < ActiveRecord::Base
 
   # No use
   def self.get_name_relation(relation_val)
+    # todo: поменять наименования всех relations на русс.
     name_relation = ""
     code_relation = ""
     case relation_val
@@ -594,8 +595,23 @@ class ProfileKey < ActiveRecord::Base
   end
 
 
+  # Объединяет похожие профили
+  def self.connecting_similars
+    msg_connection = "connecting_similars"
+    logger.info "*** In ProfileKey.connecting_similars: #{msg_connection} "
 
 
+  end
+
+  # Оставляет похожие профили без объединения
+  # помечаем их как непохожие на будущее
+  def self.without_connecting_similars
+
+    msg_connection = "without_connecting_similars"
+    logger.info "*** In ProfileKey.without_connecting_similars: #{msg_connection} "
+
+
+  end
 
 
 

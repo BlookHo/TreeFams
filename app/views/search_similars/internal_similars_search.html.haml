@@ -47,6 +47,7 @@
         %th Общие отношения
         %th Мощность общности
         %th Общие из необщих
+        %th Объединить? (Ваше решение)
 
       - @paged_similars_data.each do |similars_data|
         %tr
@@ -65,6 +66,11 @@
           %td= similars_data[:common_relations]
           %td= similars_data[:common_power]
           %td= similars_data[:inter_relations]
+          %td
+            -#%h4 Ваше решение:
+            = link_to 'Да', connect_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :green]
+            -#&nbsp;
+            = link_to 'Нет', keep_disconnected_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :red]
 
 
     = paginate @paged_similars_data

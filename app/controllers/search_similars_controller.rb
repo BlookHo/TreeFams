@@ -131,6 +131,28 @@ class SearchSimilarsController < ApplicationController
   end
 
 
+  # Объединяет похожие профили
+  def connect_similars
+    first_profile_connecting = params[:first_profile_id]
+    second_profile_connecting = params[:second_profile_id]
+    logger.info "*** In connect_similars:  first_profile_connecting = #{first_profile_connecting},  second_profile_connecting = #{second_profile_connecting} "
+    ProfileKey.connecting_similars
+
+  end
+
+  # Оставляет похожие профили без объединения
+  # помечаем их как непохожие на будущее
+  def keep_disconnected_similars
+    first_profile_connecting = params[:first_profile_id]
+    second_profile_connecting = params[:second_profile_id]
+    logger.info "*** In keep_disconnected_similars:  first_profile_connecting = #{first_profile_connecting},  second_profile_connecting = #{second_profile_connecting} "
+    ProfileKey.without_connecting_similars
+
+
+  end
+
+
+
 
 
 
