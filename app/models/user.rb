@@ -1,8 +1,14 @@
 class User < ActiveRecord::Base
-  include SearchSoft
-  include SearchHard
-  include SearchFirst
   include Search
+  # основной метод поиска
+
+ # include SimilarsExclusions
+  # методы учета отношений исключений
+
+  include SimilarsCompleteSearch
+  # метод поиска похожих и объединения их
+  include SearchHelper  # Исп-ся в Search,  SimilarsCompleteSearch
+
   include UserLock # вроде бы не используется
   include UserAccount
   
@@ -98,6 +104,30 @@ class User < ActiveRecord::Base
     end
     users_names
   end
+
+  # Объединяет похожие профили
+  def connecting_similars
+    msg_connection = "connecting_similars"
+    logger.info "*** In User.connecting_similars: #{msg_connection} "
+
+
+  end
+
+  # Оставляет похожие профили без объединения
+  # помечаем их как непохожие на будущее
+  def without_connecting_similars
+
+    msg_connection = "without_connecting_similars"
+    logger.info "*** In User.without_connecting_similars: #{msg_connection} "
+
+
+  end
+
+
+
+
+
+
 
 
 

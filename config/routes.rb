@@ -24,11 +24,11 @@ Weafam::Application.routes.draw do
   match 'make_connection_request' => 'connection_requests#make_connection_request', via: :get
   match 'make_connection_request' => 'connection_requests#make_connection_request', via: :post
 
-  # SearchSimilars controller
-  match 'internal_similars_search' => 'search_similars#internal_similars_search', via: :get
 
 
   # search similars & connecting
+  # SearchSimilars controller
+  match 'internal_similars_search' => 'search_similars#internal_similars_search', via: :get
   get 'search_similars/index'
   match 'connect_similars' => 'search_similars#connect_similars', via: :get
   match 'keep_disconnected_similars' => 'search_similars#keep_disconnected_similars', via: :get

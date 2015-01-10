@@ -1,4 +1,5 @@
 class SearchSimilarsController < ApplicationController
+  include SearchHelper
 
   layout 'application.new'
 
@@ -56,7 +57,9 @@ class SearchSimilarsController < ApplicationController
         @tree_info = get_tree_info(current_user)
     logger.info "In internal_similars_search 1: @tree_info = #{@tree_info} "  if !@tree_info.blank?
     logger.info "In internal_similars_search 1a: @tree_info.profiles.size = #{@tree_info[:profiles].size} "  if !@tree_info.blank?
-    similars, unsimilars = ProfileKey.search_similars(@tree_info)
+    ############ call of ProfileKey.module ############################################
+    similars, unsimilars = ProfileKey.similars_init_search(@tree_info)
+    #############################################################################
     @similars_qty = similars.size if !similars.empty?
     @unsimilars = unsimilars
     @unsimilars_qty = unsimilars.size if !unsimilars.empty?
@@ -133,10 +136,25 @@ class SearchSimilarsController < ApplicationController
 
   # Объединяет похожие профили
   def connect_similars
-    first_profile_connecting = params[:first_profile_id]
-    second_profile_connecting = params[:second_profile_id]
+    first_profile_connecting = params[:first_profile_id].to_i
+    second_profile_connecting = params[:second_profile_id].to_i
     logger.info "*** In connect_similars:  first_profile_connecting = #{first_profile_connecting},  second_profile_connecting = #{second_profile_connecting} "
-    ProfileKey.connecting_similars
+    init_hash = { first_profile_connecting => second_profile_connecting}
+    logger.info "*** In connect_similars 2:  init_hash = #{init_hash} "
+
+    ############ call of User.module ############################################
+    profiles_to_rewrite, profiles_to_destroy = current_user.similars_complete_search(init_hash)
+    #############################################################################
+
+    logger.info "*** In connect_similars 3:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
+
+  #   init_hash = {84=>99}
+  # *** In connect_similars 3:
+  #  profiles_to_rewrite = [84, 77, 79, 80, 82, 81],
+  #  profiles_to_destroy = [99, 91, 86, 88, 87, 89]
+
+
+    current_user.connecting_similars
 
   end
 
@@ -146,7 +164,7 @@ class SearchSimilarsController < ApplicationController
     first_profile_connecting = params[:first_profile_id]
     second_profile_connecting = params[:second_profile_id]
     logger.info "*** In keep_disconnected_similars:  first_profile_connecting = #{first_profile_connecting},  second_profile_connecting = #{second_profile_connecting} "
-    ProfileKey.without_connecting_similars
+    current_user.without_connecting_similars
 
 
   end
