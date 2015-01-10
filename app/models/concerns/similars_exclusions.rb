@@ -23,8 +23,8 @@ module SimilarsExclusions
     # get_uncommons
     # Получение не общих частей кругов профилей а и б
     def get_uncommons(a_profile_circle, b_profile_circle, common_hash)
-      uncommon_hash_a = self.unintersection(a_profile_circle, common_hash)
-      uncommon_hash_b = self.unintersection(b_profile_circle, common_hash)
+      uncommon_hash_a = unintersection(a_profile_circle, common_hash)
+      uncommon_hash_b = unintersection(b_profile_circle, common_hash)
       #logger.info "*** In get_uncommons 74: uncommon_hash_a: #{uncommon_hash_a}"
       #logger.info "*** In get_uncommons 75: uncommon_hash_b: #{uncommon_hash_b}"
       return uncommon_hash_a, uncommon_hash_b
