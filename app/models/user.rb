@@ -2,11 +2,14 @@ class User < ActiveRecord::Base
   include Search
   # основной метод поиска
 
- # include SimilarsExclusions
-  # методы учета отношений исключений
+  include SimilarsInitSearch     # методы поиска стартовых пар похожих
 
-  include SimilarsCompleteSearch
-  # метод поиска похожих и объединения их
+  include SimilarsExclusions     # методы учета отношений исключений
+
+  include SimilarsCompleteSearch # метод поиска похожих и объединения их
+
+  include SimilarsHelper  # Исп-ся в Similars
+
   include SearchHelper  # Исп-ся в Search,  SimilarsCompleteSearch
 
   include UserLock # вроде бы не используется
@@ -56,15 +59,20 @@ class User < ActiveRecord::Base
     #todo: unless вместо if!
     #todo: вынести в метод
     if !one_connected_users_arr.blank?
+
       connected_users_arr << one_connected_users_arr
       connected_users_arr.flatten!.uniq! unless connected_users_arr.blank?
+
       one_connected_users_arr.each do |conn_arr_el|
         next_connected_users_arr = ConnectedUser.where("(user_id = #{conn_arr_el} or with_user_id = #{conn_arr_el})").pluck(:user_id, :with_user_id)
         unless next_connected_users_arr.blank?
+
           one_connected_users_arr << next_connected_users_arr
           one_connected_users_arr.flatten!.uniq! if !one_connected_users_arr.blank?
+
           connected_users_arr << next_connected_users_arr
           connected_users_arr.flatten!.uniq! if !connected_users_arr.blank?
+
         end
       end
     end

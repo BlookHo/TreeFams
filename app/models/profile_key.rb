@@ -1,8 +1,8 @@
 class ProfileKey < ActiveRecord::Base
   include ProfileKeysGeneration
 
-  include SimilarsInitSearch # методы поиска стартовых пар похожих
-  include SimilarsExclusions # методы учета отношений исключений
+ # include SimilarsInitSearch # методы поиска стартовых пар похожих
+ # include SimilarsExclusions # методы учета отношений исключений
 
   include SearchHelper
 
@@ -18,6 +18,7 @@ class ProfileKey < ActiveRecord::Base
     [self.display_name.name, self.is_profile.last_name].join(' ')
   end
 
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # пересечение 2-х хэшей, у которых - значения = массивы
   def self.intersection(first, other)
     result = {}
@@ -28,6 +29,7 @@ class ProfileKey < ActiveRecord::Base
     result
   end
 
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # пересечение 2-х хэшей, у которых - значения = массивы
   def self.unintersection(first, other)
     result = {}
@@ -36,13 +38,6 @@ class ProfileKey < ActiveRecord::Base
       result.merge!({k => v}) #if !intersect.blank?
     end
     result
-  end
-
-  # Наращивание массива значений Хаша для одного ключа
-  # Если ключ - новый, то формирование новой пары.
-  def self.growing_val_arr(hash, other_key, other_val )
-    hash.keys.include?(other_key) ? hash[other_key] << other_val : hash.merge!({other_key => [other_val]})
-    hash
   end
 
 

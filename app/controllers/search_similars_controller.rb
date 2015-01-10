@@ -5,6 +5,7 @@ class SearchSimilarsController < ApplicationController
 
   before_filter :logged_in?
 
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # пересечение 2-х хэшей, у которых - значения = массивы
   def intersection(first, other)
     common_hash = {}
@@ -57,8 +58,8 @@ class SearchSimilarsController < ApplicationController
         @tree_info = get_tree_info(current_user)
     logger.info "In internal_similars_search 1: @tree_info = #{@tree_info} "  if !@tree_info.blank?
     logger.info "In internal_similars_search 1a: @tree_info.profiles.size = #{@tree_info[:profiles].size} "  if !@tree_info.blank?
-    ############ call of ProfileKey.module ############################################
-    similars, unsimilars = ProfileKey.similars_init_search(@tree_info)
+    ############ call of User.module ############################################
+    similars, unsimilars = User.similars_init_search(@tree_info)
     #############################################################################
     @similars_qty = similars.size if !similars.empty?
     @unsimilars = unsimilars
@@ -164,6 +165,9 @@ class SearchSimilarsController < ApplicationController
     first_profile_connecting = params[:first_profile_id]
     second_profile_connecting = params[:second_profile_id]
     logger.info "*** In keep_disconnected_similars:  first_profile_connecting = #{first_profile_connecting},  second_profile_connecting = #{second_profile_connecting} "
+    ############ call of User.module ############################################
+    profiles_to_rewrite, profiles_to_destroy = current_user.similars_complete_search(init_hash)
+    #############################################################################
     current_user.without_connecting_similars
 
 

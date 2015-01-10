@@ -1,6 +1,6 @@
 module SimilarsInitSearch
   extend ActiveSupport::Concern
-  # in ProfileKey model
+  # in User model
 
   module ClassMethods
 
@@ -18,6 +18,7 @@ module SimilarsInitSearch
       end
     end
 
+    # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # Получаем круги для каждого профиля в дереве
     #def self.get_tree_circles(tree_info)
     def get_tree_circles(tree_info)
@@ -28,6 +29,7 @@ module SimilarsInitSearch
       return tree_circles
     end
 
+    # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # Получаем один круг для одного профиля в дереве
     def get_profile_circle(profile_id, connected_users_arr)
       profile_circle = ProfileKey.where(:user_id => connected_users_arr, :profile_id => profile_id).order('relation_id','is_name_id').select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
@@ -39,6 +41,7 @@ module SimilarsInitSearch
       return profile_id => profile_circle_hash
     end
 
+    # todo: перенести этот метод в Operational - для нескольких моделей
     # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
     # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
     def make_arrays_from_circle(circle_rows)
@@ -49,6 +52,7 @@ module SimilarsInitSearch
       return circle_array
     end
 
+    # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # ИСП. В НОВЫХ МЕТОДАХ СОРТИРОВКИ ПРОФИЛЕЙ ПО МОЩНОСТИ ПЕРЕСЕЧЕНИЯ
     # input: circle_arr
     # На выходе: profile_circle_hash = {'f1' => 58, 'f2' => 100, 'm1' => 59, 'b1' => 60, 'b2' => 61, 'w1' => 62 }
@@ -63,6 +67,15 @@ module SimilarsInitSearch
       return profile_circle_hash
     end
 
+    # todo: перенести этот метод в Operational - для нескольких моделей
+    # Наращивание массива значений Хаша для одного ключа
+    # Если ключ - новый, то формирование новой пары.
+    def growing_val_arr(hash, other_key, other_val )
+      hash.keys.include?(other_key) ? hash[other_key] << other_val : hash.merge!({other_key => [other_val]})
+      hash
+    end
+
+    # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # МЕТОД Получения Круга профиля в виде Хэша: { профиль => хэш круга }
     def make_profile_circle(profile_id, profile_circle_hash)
       profile_circle = {}
@@ -70,6 +83,7 @@ module SimilarsInitSearch
       return profile_circle
     end
 
+    # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     def get_row_data(one_row_hash)
       if !one_row_hash.empty?
         relation_val = one_row_hash.values_at('relation_id')[0]
@@ -79,6 +93,7 @@ module SimilarsInitSearch
       return relation_val, is_name_val, is_profile_val
     end
 
+    # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # No use
     def get_name_relation(relation_val)
       # todo: поменять наименования всех relations на русс.
@@ -188,28 +203,32 @@ module SimilarsInitSearch
       # return code_relation, name_relation
     end
 
+    # todo: уточнить необходимость и место исп-я
+    # todo: перенести этот метод в Operational - для нескольких моделей
     # No use
     # Получаем новое имя отношения в хэш круга
-    def get_new_elem_name(circle_keys_arr, name_relation)
-      name_qty = name_next_qty(circle_keys_arr, name_relation)
-      new_name = name_relation.concat(name_qty.to_s)
-      #logger.info "In get_new_elem_name: new_name = #{new_name} "
-      return new_name
-    end
+    #def get_new_elem_name(circle_keys_arr, name_relation)
+    #  name_qty = name_next_qty(circle_keys_arr, name_relation)
+    #  new_name = name_relation.concat(name_qty.to_s)
+    #  #logger.info "In get_new_elem_name: new_name = #{new_name} "
+    #  return new_name
+    #end
 
+    # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # No use
     # Получаем кол-во для нового имени отношения в хэш круга
     # длина имени отношения - 3 символа. можно изменить в: one_name_key[0, 3 ]
-    def name_next_qty(circle_keys_arr, name_relation)
-      name_qty = 0
-      circle_keys_arr.each do |one_name_key|
-        name_qty += 1 if one_name_key[0,3] == name_relation
-      end
-      name_qty += 1
-      return name_qty
-    end
+    #def name_next_qty(circle_keys_arr, name_relation)
+    #  name_qty = 0
+    #  circle_keys_arr.each do |one_name_key|
+    #    name_qty += 1 if one_name_key[0,3] == name_relation
+    #  end
+    #  name_qty += 1
+    #  return name_qty
+    #end
 
     # Служебный метод для отладки - для LOGGER
+    # todo: перенести этот метод в Operational - для нескольких моделей
     # Показывает массив в logger
     def show_in_logger(arr_to_log, string_to_add)
       row_no = 0  # DEBUGG_TO_LOGG
@@ -219,6 +238,7 @@ module SimilarsInitSearch
       end  # DEBUGG_TO_LOGG
     end
 
+    # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # Вычисление мощности общей части (пересечения) хэшей кругов профилей
     # т.е. по скольким отношениям они (профили) - совпадают
     def common_circle_power(common_hash)
@@ -365,7 +385,7 @@ module SimilarsInitSearch
                 common_hash:  common_hash
             }
 
-            ############ call of ProfileKey.module ############################################
+            ############ call of User.module ############################################
             unsimilar_sign, inter_relations = check_similars_exclusions(data_for_check)
             #############################################################################
 
@@ -475,6 +495,7 @@ module SimilarsInitSearch
 
     end
 
+    # todo: перенести этот метод в SimilarsHelper - для нескольких моделей
     # Формируем отображение для View Общих отношений 2-х профилей, кот-е Похожие
     def create_display_common(common_hash)
 
@@ -488,6 +509,7 @@ module SimilarsInitSearch
       return display_common_relations
     end
 
+    # todo: перенести этот метод в Operational - для нескольких моделей
     # Извлечение имени профиля
     def get_name(profile_id)
       #profile = Profile.find(profile_id)
@@ -497,11 +519,24 @@ module SimilarsInitSearch
 
     end
 
+    # todo: перенести этот метод в CommonViewHelper - для нескольких моделей
     # Склонение имени по падежу == padej
     def inflect_name(text_data_name, padej)
       text_data_name != "" ? inflected_name = YandexInflect.inflections(text_data_name)[padej]["__content__"] : inflected_name = ""
       inflected_name
     end
+
+    # todo: перенести этот метод в Operational - для нескольких моделей
+    # пересечение 2-х хэшей, у которых - значения = массивы
+    def intersection(first, other)
+      result = {}
+      first.reject { |k, v| !(other.include?(k)) }.each do |k, v|
+        intersect = other[k] & v
+        result.merge!({k => intersect}) if !intersect.blank?
+      end
+      result
+    end
+
 
 
   end

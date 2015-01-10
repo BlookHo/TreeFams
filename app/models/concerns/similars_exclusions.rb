@@ -1,6 +1,6 @@
 module SimilarsExclusions
   extend ActiveSupport::Concern
-  # in ProfileKey model
+  # in User model
 
   module ClassMethods
     ######################################################################
@@ -55,6 +55,17 @@ module SimilarsExclusions
       end
       #logger.info "*** In check_relations_exclusion 77: unsimilar_sign: #{unsimilar_sign}"
       unsimilar_sign  # передача значения признака (true/false)
+    end
+
+    # todo: перенести этот метод в Operational - для нескольких моделей
+    # пересечение 2-х хэшей, у которых - значения = массивы
+    def unintersection(first, other)
+      result = {}
+      first.reject { |k, v| (other.include?(k)) }.each do |k, v|
+        # intersect = other[k] & v
+        result.merge!({k => v}) #if !intersect.blank?
+      end
+      result
     end
 
 

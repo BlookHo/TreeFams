@@ -3,6 +3,7 @@ module SearchHelper
 
   ############################# NEW METHODS ############
 
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # "EXCLUDE Many_to_One DUPLICATES"
   # Extract duplicates hashes from input hash
   def duplicates_out(start_hash)
@@ -168,6 +169,7 @@ module SearchHelper
   end # End of method
 
 
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
   #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
@@ -184,6 +186,7 @@ module SearchHelper
   end
 
   # NO USE !!!
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # Метод суммы двух хэшей без уничтожения значений при совпадениях ключей
   # hash_one = {17=>27, 16=>28, 20=>29, 19=>30, 18=>24}
   # hash_two = {16=>28, 23=>35, 21=>34}
@@ -194,12 +197,14 @@ module SearchHelper
   end
 
   # NO USE !!!
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # Метод сортировки массива хэшей по нескольким ключам
   def sort_hash_array(hash_arr_to_sort)
     sorted_hash_arr = hash_arr_to_sort.sort_by {|h| [ h['name_id'],h['relation_id'],h['is_name_id'] ]}
     return sorted_hash_arr
   end
 
+  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Метод получения НЕ общей части 2-х БК профилей
   def get_circles_delta(first_bk, second_bk, common_circle_arr)
@@ -211,6 +216,7 @@ module SearchHelper
     return circles_delta
   end
 
+  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Взять Бл.круг одного профиля
   # получить массивы триад для дальнейшего сравнения
@@ -227,6 +233,7 @@ module SearchHelper
     return circle_arr, circle_profiles_arr, circle_is_profiles_arr #, circle_relations_arr
   end
 
+  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # NB !! ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ? - проверить действие order('user_id',??
   # МЕТОД Получения БК для любого одного профиля из дерева
@@ -245,6 +252,7 @@ module SearchHelper
     end
   end
 
+  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
   # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
@@ -268,6 +276,7 @@ module SearchHelper
   end
 
   # NO USE!!!!
+  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
   # МЕТОД Вявления дубликатов в Круге
   # NB !! Вставить проверку и действия ЕСЛИ В БК ЕСТЬ СОВЕРШЕННО
   # ОДИНАКОВЫЕ ЭЛ-ТЫ: ИМЯ - ОТНОШЕНИЕ - ИМЯ
@@ -289,6 +298,7 @@ module SearchHelper
   end
 
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
+  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
   # Метод сравнения 2-х БК профилей
   # этот метод требует развития - что делать, когда два БК не равны?
   # Означает ли это, что надо давать сразу отрицат-й ответ?.
@@ -354,6 +364,7 @@ module SearchHelper
   #                {"name_id"=>125, "relation_id"=>5, "is_name_id"=>130}]
   #
 
+  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # метод получения массива значений одного поля = key в массиве хэшей
   # без необходимости предварительной сортировки, кот-я может исказить рез-т/
@@ -391,6 +402,7 @@ module SearchHelper
 
 
   # NO USE !!!
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # метод получения массива значений одного поля = key в массиве хэшей
   # На входе:         bk_arr_w_profiles  = [
   #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
@@ -405,6 +417,7 @@ module SearchHelper
 
 
   # Служебный метод для отладки - для LOGGER
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # Показывает массив в logger
   def show_in_logger(arr_to_log, string_to_add)
     row_no = 0  # DEBUGG_TO_LOGG
@@ -415,6 +428,7 @@ module SearchHelper
   end
 
   # NO USE !!!
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # Автоматическое наполнение хэша сущностями и
   # количеством появлений каждой сущности.
   # @note GET /
@@ -435,6 +449,7 @@ module SearchHelper
   end
 
 
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # NEW SEARCH method
   # Автоматическое наполнение хэша сущностями и
   # количестpвом появлений каждой сущности.
@@ -472,6 +487,7 @@ module SearchHelper
   end
 
 
+  # todo: перенести этот метод в Tree Methods - для нескольких моделей
   # Used in Search & MainController
   # ИСПОЛЬЗУЕТСЯ В ПОИСКЕ И МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
   # Получение массива дерева соединенных Юзеров из Tree
@@ -483,6 +499,7 @@ module SearchHelper
 
 
   # NO USE !!!
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # Слияние массива Хэшей без потери значений { (key = user_id) => (value = profile_id) }
   # Получение упорядоченного Хэша: {user_id  -> [ profile_id, profile_id, profile_id ...]}
   # @note GET
@@ -501,6 +518,7 @@ module SearchHelper
   end
 
   # No USE
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # Преобразование Хэша хэшей в Хэш массивов вместо хэшей
   # На входе: Из: { user_id => { profile_id => [profile_id, profile_id ,..]}, user_id => { profile_id => [profile_id, profile_id ,..]}
   # На выходе в Хэш, где значения - массивы:
@@ -520,6 +538,7 @@ module SearchHelper
 
 
   # NO USE !!!
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # Подсчет количества найденных Профилей в массиве Хэшей
   # На входе: массив Хэшей профилей input_arr_hash
   # На выходе: amount_found Кол-во
@@ -532,6 +551,7 @@ module SearchHelper
   end
 
   # No USE
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # Подсчет количества найденных Юзеров среди найденных Профилей
   # @note GET
   # На входе: массив профилей all_profiles_arr: profile_id
