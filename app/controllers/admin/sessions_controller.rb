@@ -3,6 +3,7 @@ class Admin::SessionsController < Admin::AdminController
   skip_before_filter :logged?
 
   def new
+    redirect_to :admin_users if current_admin
   end
 
   def create

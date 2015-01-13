@@ -282,7 +282,7 @@ Weafam::Application.routes.draw do
     resources :subnames
 
 
-    root "names#index"
+    root "users#index"
   end
 
 
