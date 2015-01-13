@@ -2,3 +2,8 @@
   %h2
     Пользователи
     %small= User.count
+
+
+= paginate @users, :theme => 'admin'
+= render 'table'
+= paginate @users, :theme => 'admin'

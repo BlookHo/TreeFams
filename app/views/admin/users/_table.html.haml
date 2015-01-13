@@ -1,0 +1,15 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th #
+      %th Имя
+      %th Email
+      %th
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= user.id
+        %td= user.name
+        %td= user.email
+        %td
+          = link_to "Войти как #{user.email.split('@').first}@...", admin_user_login_as_user_path(user.id), data: {confirm: "Войти как #{user.name}?"}, method: :post

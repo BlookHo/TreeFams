@@ -203,7 +203,7 @@ Weafam::Application.routes.draw do
 
 
   # Debug path - Login as user
-  get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
+  # get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
 
 
   # Users Sessions Signup
@@ -259,7 +259,9 @@ Weafam::Application.routes.draw do
 
 
     resources :admins
-    resources :users
+    resources :users do
+      post 'login_as/:user_id', to: 'users#login_as', as: :login_as_user
+    end
 
     resources :resets, only: [:new, :create]
 

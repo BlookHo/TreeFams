@@ -5,10 +5,11 @@ class User < ActiveRecord::Base
   include Search
   include UserLock # вроде бы не используется
   include UserAccount
-  
+
 
 
   before_create :generate_access_token
+
 
   validates :email,
             :uniqueness => true,
@@ -26,6 +27,7 @@ class User < ActiveRecord::Base
   has_many :connection_requests, dependent: :destroy
 
   has_many :updates_feeds, dependent: :destroy
+
 
 
   def name
