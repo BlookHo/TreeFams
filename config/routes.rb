@@ -203,7 +203,7 @@ Weafam::Application.routes.draw do
 
 
   # Debug path - Login as user
-  # get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
+  get 'login_as_user/:user_id',             to: 'welcome#login_as_user',       as: :login_as_user
 
 
   # Users Sessions Signup

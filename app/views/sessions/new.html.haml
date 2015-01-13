@@ -13,5 +13,7 @@
         = submit_tag "Войти", :class => 'btn green'
 
 
--# .clear.top-32
--# = render 'users/login_list'
+- if Rails.env =~ /development/
+  .clear.top-32
+    %br
+    = render 'users/login_list'
