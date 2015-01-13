@@ -9,9 +9,12 @@ class MainController < ApplicationController
      redirect_to :root if !current_user
    end
 
+  def main_page
+
+  end
 
 # ГЛАВНЫЙ СТАРТОВЫЙ МЕТОД ПОИСКА совпадений по дереву Юзера
- def main_page
+ def gmain_page
 
     if current_user
 
