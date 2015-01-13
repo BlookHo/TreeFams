@@ -3,9 +3,7 @@ class User < ActiveRecord::Base
   # основной метод поиска
 
   include SimilarsInitSearch     # методы поиска стартовых пар похожих
-
   include SimilarsExclusions     # методы учета отношений исключений
-
   include SimilarsCompleteSearch # метод поиска похожих и объединения их
 
   include SimilarsHelper  # Исп-ся в Similars

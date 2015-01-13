@@ -143,10 +143,14 @@ class SearchSimilarsController < ApplicationController
     init_hash = { first_profile_connecting => second_profile_connecting}
     logger.info "*** In connect_similars 2:  init_hash = #{init_hash} "
 
+    # todo: check similars_complete_search, when init_hash has many profiles
+    # todo: also - to manipulate  buttons "Yes/No - to connect" in multiple rows in case many profiles
+
     ############ call of User.module ############################################
     profiles_to_rewrite, profiles_to_destroy = current_user.similars_complete_search(init_hash)
     #############################################################################
-
+    @profiles_to_rewrite = profiles_to_rewrite
+    @profiles_to_destroy = profiles_to_destroy
     logger.info "*** In connect_similars 3:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
 
   #   init_hash = {84=>99}

@@ -74,11 +74,21 @@
 
     = paginate @paged_similars_data
 
-  %h2 Пользователи - авторы дерева: #{@tree_info[:connected_users]}
+  #similars-list
+    -#- if !@similars_qty.blank?
+    -#  = render 'search_similars/similars_connecting'
+    .rewrite_arrays
+
+      -#,  :user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length
+      -#%h2 Основные похожие профили: #{@profiles_to_rewrite}
+      -#%h2 Профили для объединения с основными похожими: #{@profiles_to_destroy}
 
 
   %br
   = link_to 'К просмотру твоего дерева', home_path
+  %br
+  %br
+  %br
 
 
 
