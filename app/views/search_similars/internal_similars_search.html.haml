@@ -16,6 +16,8 @@
     %h2 Количество профилей в дереве: #{@tree_info[:tree_profiles_amount]}
     %h2 Полный массив профилей в дереве (с авторами):  #{@tree_info[:all_tree_profiles]}
     %h2 Полное количество профилей в дереве (с авторами): #{@tree_info[:all_tree_profiles_amount]}
+    -#%h2 Массив пар НЕПОХОЖИХ профилей в дереве:     #{@unsimilars}
+    -#%h2 Количество НЕПОХОЖИХ пар профилей в дереве: #{@unsimilars_qty}
   %br
   %br
   %br
@@ -45,6 +47,7 @@
         %th Общие отношения
         %th Мощность общности
         %th Общие из необщих
+        %th Объединить? (Ваше решение)
 
       - @paged_similars_data.each do |similars_data|
         %tr
@@ -63,13 +66,29 @@
           %td= similars_data[:common_relations]
           %td= similars_data[:common_power]
           %td= similars_data[:inter_relations]
+          %td
+            = link_to 'Да', connect_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :green]
+            -#%br
+            = link_to 'Нет', keep_disconnected_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :red]
 
 
     = paginate @paged_similars_data
 
+  #similars-list
+    -#- if !@similars_qty.blank?
+    -#  = render 'search_similars/similars_connecting'
+    .rewrite_arrays
+
+      -#,  :user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length
+      -#%h2 Основные похожие профили: #{@profiles_to_rewrite}
+      -#%h2 Профили для объединения с основными похожими: #{@profiles_to_destroy}
+
 
   %br
   = link_to 'К просмотру твоего дерева', home_path
+  %br
+  %br
+  %br
 
 
 

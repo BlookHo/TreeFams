@@ -1,0 +1,11 @@
+var firstProfileConnecting = "<%= params[:first_profile_id] %>";
+console.log(firstProfileConnecting);
+var secondProfileConnecting = "<%= params[:second_profile_id] %>";
+console.log(secondProfileConnecting);
+$("#similars-list").before("Стартовые пары похожих профилей:  ");
+$("#similars-list").before("firstProfileConnecting = " + firstProfileConnecting + '; ').before("secondProfileConnecting = " + secondProfileConnecting + '; ');
+
+$('#similars-list').append('Основные похожие профили: ').append("profiles_to_rewrite = ").append(' <%= @profiles_to_rewrite.inspect %> ');
+$('#similars-list').after(' <%= @profiles_to_destroy.inspect %> ').after("profiles_to_destroy = ").after('Профили для объединения с основными похожими: ');
+//$("#similars-list").remove();
+$('.rewrite_arrays').after(' <%= @profiles_to_destroy.inspect %> ').after("profiles_to_destroy = ").after('Профили для объединения с основными похожими: ');

@@ -1,5 +1,9 @@
 class ProfileKey < ActiveRecord::Base
   include ProfileKeysGeneration
+
+ # include SimilarsInitSearch # методы поиска стартовых пар похожих
+ # include SimilarsExclusions # методы учета отношений исключений
+
   include SearchHelper
 
   belongs_to :profile#, dependent: :destroy
@@ -14,6 +18,7 @@ class ProfileKey < ActiveRecord::Base
     [self.display_name.name, self.is_profile.last_name].join(' ')
   end
 
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # пересечение 2-х хэшей, у которых - значения = массивы
   def self.intersection(first, other)
     result = {}
@@ -24,6 +29,7 @@ class ProfileKey < ActiveRecord::Base
     result
   end
 
+  # todo: перенести этот метод в Operational - для нескольких моделей
   # пересечение 2-х хэшей, у которых - значения = массивы
   def self.unintersection(first, other)
     result = {}

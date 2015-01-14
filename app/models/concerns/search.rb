@@ -1,6 +1,6 @@
 module Search
   extend ActiveSupport::Concern
-  include SearchHelper
+#  include SearchHelper
 
   def start_search(certain_koeff)    # Запуск мягкого поиска для объединения
                                      # Значение certain_koeff - из вьюхи/
