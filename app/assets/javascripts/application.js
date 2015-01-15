@@ -26,3 +26,9 @@
 function jsdebug(objekt){
   $('#jsdebug').text( JSON.stringify(objekt) );
 }
+
+
+$(function(){
+  // alert('hello!');
+  //
+})

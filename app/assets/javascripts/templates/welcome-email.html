@@ -5,12 +5,12 @@
 <div ng-show="welcomeForm.email.$invalid" class="warning">
    Введите ваш действующий адрес
 </div>
-
+<!-- ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" -->
 <div class="control">
   <input ng-model="family.author.email"
          type="email"
          name="email"
-         ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/"
+         ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/"
          required
          autoFocus>
          {{error}}
