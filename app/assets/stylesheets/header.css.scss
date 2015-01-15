@@ -9,22 +9,22 @@
     color:#fff;
     font-size:1.6em;
     position:relative;
-    padding-left:55px;
+    // padding-left:55px;
     display:inline-block;
     text-decoration:none;
 
 
 
-    &:before{
-      left:0px;
-      top:8px;
-      position:absolute;
-      display:block;
-      content:'';
-      width:45px;
-      height:45px;
-      background:image-url('logo-tree.png') top left no-repeat;
-    }
+    // &:before{
+    //   left:0px;
+    //   top:8px;
+    //   position:absolute;
+    //   display:block;
+    //   content:'';
+    //   width:45px;
+    //   height:45px;
+    //   background:image-url('logo-tree.png') top left no-repeat;
+    // }
 
     &:hover{}
   }

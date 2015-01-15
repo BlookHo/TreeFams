@@ -194,9 +194,9 @@ var app = angular
     removeDataFormGraph(modelName);
     if (modelName == 'author'){
       $scope.resetFamily();
-      removeAllDataFormGraph();
+      // removeAllDataFormGraph();
     }else{
-      removeDataFormGraph(modelName);
+      // removeDataFormGraph(modelName);
     }
     eval('$scope.family.'+modelName+'={name: name};');
   };
@@ -206,7 +206,7 @@ var app = angular
   $scope.onSelectName = function(model, modelName){
     console.log("onSelectName "+ Date.now() );
     eval('$scope.family'+modelName+'= model;');
-    pushDataToGraph(modelName, model);
+    // pushDataToGraph(modelName, model);
   }
 
 
@@ -220,7 +220,7 @@ var app = angular
     eval("delete $scope.family."+modelName+"[index]['new']");
     eval("delete $scope.family."+modelName+"[index]['search_name_id']");
     eval("delete $scope.family."+modelName+"[index]['parent_name']");
-    removeMultipleDataFormGraph(modelName, index);
+    // removeMultipleDataFormGraph(modelName, index);
   }
 
 
@@ -238,7 +238,7 @@ var app = angular
   $scope.onMultipleSelectName = function(model, modelName, index){
     console.log("onMultipleSelectName "+ Date.now() );
     eval('$scope.family.'+modelName+'[index] = model;');
-    pushMultipleDataToGraph(modelName, model, index);
+    // pushMultipleDataToGraph(modelName, model, index);
   }
 
 
@@ -252,7 +252,7 @@ var app = angular
 
   $scope.removeMember = function(index, modelName) {
     console.log("removeMember "+ Date.now() );
-    removeMultipleDataFormGraph(modelName, index);
+    // removeMultipleDataFormGraph(modelName, index);
     eval('$scope.family.'+modelName+'.splice('+index+', 1);');
   };
 
@@ -295,7 +295,7 @@ var app = angular
     if ( $scope.isNameValid(modelName) ){
       // push only if name exist
       if (!$scope.isNameBlank(modelName)){
-        pushDataToGraph(modelName, eval('$scope.family.'+modelName+';') );
+        // pushDataToGraph(modelName, eval('$scope.family.'+modelName+';') );
       }
 
       $scope.goToNextStep();
@@ -314,7 +314,7 @@ var app = angular
         // If name selected from list
         if ( value.hasOwnProperty('name') && value.hasOwnProperty('sex_id') ){
           no_errors = true;
-          pushMultipleDataToGraph(modelName, value, key);
+          // pushMultipleDataToGraph(modelName, value, key);
           return true;
         }else{
           // Validate blank name
@@ -693,13 +693,32 @@ var app = angular
 
 
 // Directives
+// app.directive('autoFocus', function($timeout) {
+//   return {
+//     restrict: 'AC',
+//     link: function(_scope, _element) {
+//       $timeout(function(){
+//         _element[0].focus();
+//       }, 0);
+//     }
+//   };
+// });
+
+
 app.directive('autoFocus', function($timeout) {
   return {
-    restrict: 'AC',
-    link: function(_scope, _element) {
-      $timeout(function(){
-        _element[0].focus();
-      }, 0);
+    scope : {
+      trigger: '@autoFocus'
+    },
+    link: function(scope, element) {
+      scope.$watch('trigger', function(value) {
+        if (value === 'true') {
+          $timeout(function() {
+            console.log('giving focus to element', element[0].id);
+            element[0].focus();
+          });
+        }
+      });
     }
   };
 });
