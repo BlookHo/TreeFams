@@ -45,7 +45,7 @@
       %tr
         %th #
         %th Объединиться с:
-        %th Confirm
+        -#%th Confirm
         %th Статус
         %th Дата создания запроса
         %th Действия
@@ -53,7 +53,7 @@
         %tr
           %td= connection_request
           %td= User.find( data_hash.values_at(:request_to_user_id).flatten[0]).name
-          %td= data_hash.values_at(:confirm).flatten[0].inspect
+          -#%td= data_hash.values_at(:confirm).flatten[0].inspect
           %td= data_hash.values_at(:done).flatten[0] ? 'выполнен' : 'ожидает...'
           %td= data_hash.values_at(:created_at).flatten[0]
           %td= link_to 'Посмотреть запрос', show_one_request_path(connection_id: connection_request, with_user_id: data_hash.values_at(:request_to_user_id).flatten[0]),  class: :request
