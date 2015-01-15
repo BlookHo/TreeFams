@@ -2,10 +2,19 @@ var firstProfileConnecting = "<%= params[:first_profile_id] %>";
 console.log(firstProfileConnecting);
 var secondProfileConnecting = "<%= params[:second_profile_id] %>";
 console.log(secondProfileConnecting);
-$("#similars-list").before("Стартовые пары похожих профилей:  ");
-$("#similars-list").before("firstProfileConnecting = " + firstProfileConnecting + '; ').before("secondProfileConnecting = " + secondProfileConnecting + '; ');
 
-$('#similars-list').append('Основные похожие профили: ').append("profiles_to_rewrite = ").append(' <%= @profiles_to_rewrite.inspect %> ');
-$('#similars-list').after(' <%= @profiles_to_destroy.inspect %> ').after("profiles_to_destroy = ").after('Профили для объединения с основными похожими: ');
-//$("#similars-list").remove();
-$('.rewrite_arrays').after(' <%= @profiles_to_destroy.inspect %> ').after("profiles_to_destroy = ").after('Профили для объединения с основными похожими: ');
+
+$(".init-pair").before().append("Объединение \"Похожих\" профилей");
+$(".init-pair").empty().append("Стартовые пары \"Похожих\" профилей:  Первый профиль = " + firstProfileConnecting + ';'
+        + ' Второй профиль = ' + secondProfileConnecting + '; ');
+$('.rewrite_array').empty().append('Основные похожие профили (profiles_to_rewrite): ')
+        .append('<%= @profiles_to_rewrite.inspect %>'+ ';');
+$('.destroy_array').empty().append('Профили для объединения (profiles_to_destroy): ')
+        .append('<%=  @profiles_to_destroy.inspect %>'+ ';');
+
+//$(".yes_to_connect").on("click", "#connectSimilars", function(){
+//});
+
+
+
+$('.no_to_connect');

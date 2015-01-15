@@ -5,6 +5,7 @@ class ConnectUsersTreesController < ApplicationController
 
   layout 'application.new'
 
+  # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
   def connect_users(current_user_id, user_id)
 
     if current_user_id != user_id

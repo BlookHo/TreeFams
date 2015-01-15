@@ -214,6 +214,8 @@ Weafam::Application.routes.draw do
   # Users Sessions Signup
   ##################################################
   resources :users
+
+
   resources :sessions, except: :edit
   get  'login',      to:   "sessions#new",      as: :login
   get  'logout',     to:   "sessions#destroy",  as: :logout

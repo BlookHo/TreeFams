@@ -60,9 +60,9 @@ module SimilarsInitSearch
       profile_circle_hash = {}
       circle_arr.each do |one_row_hash|
         relation_val, is_name_val, is_profile_val = get_row_data(one_row_hash)
-        name_relation = get_name_relation(relation_val)[:code_relation]
+        code_relation = get_name_relation(relation_val)[:code_relation]
         # Наращиваем круг в виде хэша
-        profile_circle_hash = growing_val_arr(profile_circle_hash, name_relation, is_name_val)
+        profile_circle_hash = growing_val_arr(profile_circle_hash, code_relation, is_name_val)
       end
       return profile_circle_hash
     end
@@ -96,7 +96,6 @@ module SimilarsInitSearch
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # No use
     def get_name_relation(relation_val)
-      # todo: поменять наименования всех relations на русс.
       name_relation = ""
       code_relation = ""
       case relation_val
@@ -113,83 +112,83 @@ module SimilarsInitSearch
           code_relation = "Дочь" #"dau" # daughter
           name_relation = "Дочь" # daughter
         when 5
-          code_relation = "bro" # brother
-          name_relation = "брат" # brother
+          code_relation = "Брат" # brother
+          name_relation = "Брат" # brother
         when 6
-          code_relation = "sis" # sister
-          name_relation = "сестра" # sister
+          code_relation = "Сестра" # sister
+          name_relation = "Сестра" # sister
         when 7
-          code_relation = "hus" # husband
-          name_relation = "муж" # husband
+          code_relation = "Муж" # husband
+          name_relation = "Муж" # husband
         when 8
-          code_relation = "wif" # wife
-          name_relation = "жена" # wife
+          code_relation = "Жена" # wife
+          name_relation = "Жена" # wife
         when 91
           code_relation = "Дед-о" #"gff" # grand father father
-          name_relation = "дед" # grand father father
+          name_relation = "Дед" # grand father father
         when 92
           code_relation = "Дед-м" #"gfm" # grand father mother
-          name_relation = "дед" # grand father mother
+          name_relation = "Дед" # grand father mother
         when 101
           code_relation = "Бабка-о"  #"gmf" # grand mother father
-          name_relation = "бабка" # grand mother father
+          name_relation = "Бабка" # grand mother father
         when 102
           code_relation = "Бабка-м" #"gmm" # grand mother mother
-          name_relation = "бабка" # grand mother mother
+          name_relation = "Бабка" # grand mother mother
         when 111
-          code_relation = "gsf" # grand son father - внук
-          name_relation = "внук" # grand son father - внук
+          code_relation = "Внук-о" # grand son father - внук
+          name_relation = "Внук" # grand son father - внук
         when 112
-          code_relation = "gsm" #
-          name_relation = "внук" # grand son mother - внук
+          code_relation = "Внук-м" #
+          name_relation = "Внук" # grand son mother - внук
         when 121
-          code_relation = "gdf" #
-          name_relation = "внучка" # grand daughter father - внучка по отцу
+          code_relation = "Внучка-о" #
+          name_relation = "Внучка" # grand daughter father - внучка по отцу
         when 122
-          code_relation = "gdm" #
-          name_relation = "внучка" # grand daughter mother - внучка по матери
+          code_relation = "Внучка-м" #
+          name_relation = "Внучка" # grand daughter mother - внучка по матери
         when 13
-          code_relation = "hfl" #
-          name_relation = "свекор" # husband father-in-law - свекор
+          code_relation = "Свекор" #
+          name_relation = "Свекор" # husband father-in-law - свекор
         when 14
-          code_relation = "hml" #
+          code_relation = "Свекровь" #
           name_relation = "свекровь" # husband mother-in-law - свекровь
         when 15
-          code_relation = "wfl" #
-          name_relation = "тесть" # wife father-in-law - тесть
+          code_relation = "Тесть" #
+          name_relation = "Тесть" # wife father-in-law - тесть
         when 16
-          code_relation = "wml" #
-          name_relation = "теща" # wife mother-in-law - теща
+          code_relation = "Теща" #
+          name_relation = "Теща" # wife mother-in-law - теща
         when 17
-          code_relation = "dil" #
-          name_relation = "невестка" # daughter-in-law - невестка
+          code_relation = "Невестка" #
+          name_relation = "Невестка" # daughter-in-law - невестка
         when 18
-          code_relation = "sil" #
-          name_relation = "зять" # son-in-law - зять
+          code_relation = "Зять" #
+          name_relation = "Зять" # son-in-law - зять
         when 191
-          code_relation = "ufa" #
-          name_relation = "дядя" # uncle father - дядя по отцу
+          code_relation = "Дядя-о" #
+          name_relation = "Дядя" # uncle father - дядя по отцу
         when 192
-          code_relation = "umo" #
-          name_relation = "дядя" # uncle mother - дядя по матери
+          code_relation = "Дядя-м" #
+          name_relation = "Дядя" # uncle mother - дядя по матери
         when 201
-          code_relation = "afa" #
-          name_relation = "тетя" # aunt father - тетя по отцу
+          code_relation = "Тетя-о" #
+          name_relation = "Тетя" # aunt father - тетя по отцу
         when 202
-          code_relation = "amo" #
-          name_relation = "тетя" # aunt mother - тетя по матери
+          code_relation = "Тетя-м" #
+          name_relation = "Тетя" # aunt mother - тетя по матери
         when 211
-          code_relation = "nef" #
-          name_relation = "племянник" # nephew father - племянник по отцу
+          code_relation = "Племянник-о" #
+          name_relation = "Племянник" # nephew father - племянник по отцу
         when 212
-          code_relation = "nem" #
-          name_relation = "племянник" # nephew mother - племянник по матери
+          code_relation = "Племянник-м" #
+          name_relation = "Племянник" # nephew mother - племянник по матери
         when 221
-          code_relation = "nif" #
-          name_relation = "племянница" # niece father - племянница по отцу
+          code_relation = "Племянница-о" #
+          name_relation = "Племянница" # niece father - племянница по отцу
         when 222
-          code_relation = "nim" #
-          name_relation = "племянница" # niece father - племянница по матери
+          code_relation = "Племянница-м" #
+          name_relation = "Племянница" # niece father - племянница по матери
 
         else
           logger.info "ERROR: No relation_id in Circle "
@@ -197,10 +196,8 @@ module SimilarsInitSearch
 
       { code_relation: code_relation,
         name_relation: name_relation
-
       }
 
-      # return code_relation, name_relation
     end
 
     # todo: уточнить необходимость и место исп-я
@@ -251,49 +248,49 @@ module SimilarsInitSearch
     def compare_tree_circles(tree_info, tree_circles)
 
       # tree_circles =    # test 1 Алексей
-      {27=>{"Сын"=>[122], "wif"=>[449], "dil"=>[82], "gsf"=>[28]},
-       13=>{"Отец"=>[122], "Мама"=>[82], "Сын"=>[370, 465], "wif"=>[48], "wfl"=>[343], "wml"=>[82], "dil"=>[147], "Дед-о"=>[90], "Бабка-о"=>[449], "gdf"=>[446]},
-       11=>{"Отец"=>[28], "Мама"=>[48], "Дочь"=>[446], "bro"=>[465], "wif"=>[147], "wfl"=>[110], "wml"=>[97], "Дед-о"=>[122], "Дед-м"=>[343], "Бабка-о"=>[82], "Бабка-м"=>[82], "amo"=>[331]},
-       10=>{"Отец"=>[343], "Мама"=>[82], "sis"=>[48], "nem"=>[370, 465]},
+      {27=>{"Сын"=>[122], "Жена"=>[449], "Невестка"=>[82], "Внук"=>[28]},
+       13=>{"Отец"=>[122], "Мама"=>[82], "Сын"=>[370, 465], "Жена"=>[48], "Тесть"=>[343], "Теща"=>[82], "Невестка"=>[147], "Дед-о"=>[90], "Бабка-о"=>[449], "Внучка-о"=>[446]},
+       11=>{"Отец"=>[28], "Мама"=>[48], "Дочь"=>[446], "Брат"=>[465], "Жена"=>[147], "Тесть"=>[110], "Теща"=>[97], "Дед-о"=>[122], "Дед-м"=>[343], "Бабка-о"=>[82], "Бабка-м"=>[82], "Тетя-м"=>[331]},
+       10=>{"Отец"=>[343], "Мама"=>[82], "Сестра"=>[48], "Племянник-м"=>[370, 465]},
 
-       28=>{"Сын"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28],              "hml"=>[480], "Дочь"=>[3420]  ,"Отец"=>[343], "Мама"=>[82]  },   # from balda
+       28=>{"Сын"=>[122], "Муж"=>[90], "Невестка"=>[82], "Внук"=>[28],              "Свекровь"=>[480], "Дочь"=>[3420]  ,"Отец"=>[343], "Мама"=>[82]  },   # from balda
 
        ########################
-       35=>{"Сын"=>[122], "hus"=>[90], "dil"=>[82], "gsf"=>[28],         "hfl"=>[28,35], "hml"=>[490, 49], "Дочь"=>[340]  },  # from balda
+       35=>{"Сын"=>[122], "Муж"=>[90], "Невестка"=>[82], "Внук"=>[28],         "Свекор"=>[28,35], "Свекровь"=>[490, 49], "Дочь"=>[340]  },  # from balda
        ########################
 
-       61=>{"Отец"=>[110], "Мама"=>[97], "Дочь"=>[446], "hus"=>[370], "hfl"=>[28], "hml"=>[48]},
-       66=>{"Дочь"=>[147], "hus"=>[110], "sil"=>[370], "gdm"=>[446]},
+       61=>{"Отец"=>[110], "Мама"=>[97], "Дочь"=>[446], "Муж"=>[370], "Свекор"=>[28], "Свекровь"=>[48]},
+       66=>{"Дочь"=>[147], "Муж"=>[110], "Зять"=>[370], "Внучка-м"=>[446]},
 
-       9=>{"Дочь"=>[48, 331], "hus"=>[343], "sil"=>[28], "gsm"=>[370, 465]},
+       9=>{"Дочь"=>[48, 331], "Муж"=>[343], "Зять"=>[28], "Внук-м"=>[370, 465]},
 
-       65=>{"Дочь"=>[147], "wif"=>[97], "sil"=>[370], "gdm"=>[446]},
-       7=>{"Отец"=>[343], "Мама"=>[82], "Сын"=>[370, 465], "sis"=>[331], "hus"=>[28], "hfl"=>[122], "hml"=>[82], "dil"=>[147], "gdf"=>[446]},
+       65=>{"Дочь"=>[147], "Жена"=>[97], "Зять"=>[370], "Внучка-м"=>[446]},
+       7=>{"Отец"=>[343], "Мама"=>[82], "Сын"=>[370, 465], "Сестра"=>[331], "Муж"=>[28], "Свекор"=>[122], "Свекровь"=>[82], "Невестка"=>[147], "Внучка-о"=>[446]},
 
-       3=>{"Сын"=>[28], "hus"=>[122], "hfl"=>[90], "hml"=>[449], "dil"=>[48], "gsf"=>[370, 465]},
+       3=>{"Сын"=>[28], "Муж"=>[122], "Свекор"=>[90], "Свекровь"=>[449], "Невестка"=>[48], "Внук"=>[370, 465]},
 
-       12=>{"Отец"=>[28], "Мама"=>[48], "bro"=>[370], "Дед-о"=>[122], "Дед-м"=>[343], "Бабка-о"=>[82], "Бабка-м"=>[82], "amo"=>[331], "nif"=>[446]},
-       63=>{"Отец"=>[370], "Мама"=>[147], "Дед-о"=>[28], "Дед-м"=>[110], "Бабка-о"=>[48], "Бабка-м"=>[97], "ufa"=>[465]},
-       8=>{"Дочь"=>[48, 331], "wif"=>[82], "sil"=>[28], "gsm"=>[370, 465]},
-       2=>{"Отец"=>[90], "Мама"=>[449], "Сын"=>[28], "wif"=>[82], "dil"=>[48], "gsf"=>[370, 465]}}
+       12=>{"Отец"=>[28], "Мама"=>[48], "Брат"=>[370], "Дед-о"=>[122], "Дед-м"=>[343], "Бабка-о"=>[82], "Бабка-м"=>[82], "Тетя-м"=>[331], "Племянница-м"=>[446]},
+       63=>{"Отец"=>[370], "Мама"=>[147], "Дед-о"=>[28], "Дед-м"=>[110], "Бабка-о"=>[48], "Бабка-м"=>[97], "Дядя-о"=>[465]},
+       8=>{"Дочь"=>[48, 331], "Жена"=>[82], "Зять"=>[28], "Внук-м"=>[370, 465]},
+       2=>{"Отец"=>[90], "Мама"=>[449], "Сын"=>[28], "Жена"=>[82], "Невестка"=>[48], "Внук"=>[370, 465]}}
 
 
       #  tree_circles =      # from tree 8
-      {84=>{"Сын"=>[523], "wif"=>[528], "dil"=>[529], "gsf"=>[522, 524, 525], "gdf"=>[530, 531]},
-       81=>{"Отец"=>[523], "Мама"=>[529], "bro"=>[522, 524, 525], "sis"=>[530], "Дед-о"=>[526], "Бабка-о"=>[528]},
-       89=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[524, 525], "sis"=>[530, 532]},
-       79=>{"Отец"=>[523], "Мама"=>[529], "bro"=>[522, 525], "sis"=>[530, 531], "Дед-о"=>[526], "Бабка-о"=>[528]},
-       82=>{"Отец"=>[523], "Мама"=>[529], "bro"=>[522, 524, 525], "sis"=>[531], "Дед-о"=>[526], "Бабка-о"=>[528]},
-       88=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[524], "sis"=>[530, 531, 532]},
-       77=>{"Отец"=>[526], "Мама"=>[528], "Сын"=>[522, 524, 525], "Дочь"=>[530, 531], "wif"=>[529], "dil"=>[532]},
-       80=>{"Отец"=>[523], "Мама"=>[529], "bro"=>[522, 524], "sis"=>[530, 531], "Дед-о"=>[526], "Бабка-о"=>[528]},
-       85=>{"Сын"=>[523], "hus"=>[526], "dil"=>[529], "gsf"=>[522, 524, 525], "gdf"=>[530, 531]},
-       87=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[524, 525], "sis"=>[531, 532]},
-       92=>{"Сын"=>[524, 525], "Дочь"=>[530, 531, 532], "hus"=>[523], "sil"=>[522]},
-       86=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[525], "sis"=>[530, 531, 532]},
-       83=>{"Отец"=>[523], "Мама"=>[533], "bro"=>[524, 525], "sis"=>[530, 531], "hus"=>[522], "hfl"=>[523], "hml"=>[529]},
-       78=>{"Сын"=>[522, 524, 525], "Дочь"=>[530, 531], "hus"=>[523], "hfl"=>[526], "hml"=>[528], "dil"=>[532]},
-       91=>{"Сын"=>[524, 525], "Дочь"=>[530, 531, 532], "wif"=>[533], "sil"=>[522]}}
+      {84=>{"Сын"=>[523], "Жена"=>[528], "Невестка"=>[529], "Внук"=>[522, 524, 525], "Внучка-о"=>[530, 531]},
+       81=>{"Отец"=>[523], "Мама"=>[529], "Брат"=>[522, 524, 525], "Сестра"=>[530], "Дед-о"=>[526], "Бабка-о"=>[528]},
+       89=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[524, 525], "Сестра"=>[530, 532]},
+       79=>{"Отец"=>[523], "Мама"=>[529], "Брат"=>[522, 525], "Сестра"=>[530, 531], "Дед-о"=>[526], "Бабка-о"=>[528]},
+       82=>{"Отец"=>[523], "Мама"=>[529], "Брат"=>[522, 524, 525], "Сестра"=>[531], "Дед-о"=>[526], "Бабка-о"=>[528]},
+       88=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[524], "Сестра"=>[530, 531, 532]},
+       77=>{"Отец"=>[526], "Мама"=>[528], "Сын"=>[522, 524, 525], "Дочь"=>[530, 531], "Жена"=>[529], "Невестка"=>[532]},
+       80=>{"Отец"=>[523], "Мама"=>[529], "Брат"=>[522, 524], "Сестра"=>[530, 531], "Дед-о"=>[526], "Бабка-о"=>[528]},
+       85=>{"Сын"=>[523], "Муж"=>[526], "Невестка"=>[529], "Внук"=>[522, 524, 525], "Внучка-о"=>[530, 531]},
+       87=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[524, 525], "Сестра"=>[531, 532]},
+       92=>{"Сын"=>[524, 525], "Дочь"=>[530, 531, 532], "Муж"=>[523], "Зять"=>[522]},
+       86=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[525], "Сестра"=>[530, 531, 532]},
+       83=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[524, 525], "Сестра"=>[530, 531], "Муж"=>[522], "Свекор"=>[523], "Свекровь"=>[529]},
+       78=>{"Сын"=>[522, 524, 525], "Дочь"=>[530, 531], "Муж"=>[523], "Свекор"=>[526], "Свекровь"=>[528], "Невестка"=>[532]},
+       91=>{"Сын"=>[524, 525], "Дочь"=>[530, 531, 532], "Жена"=>[533], "Зять"=>[522]}}
 
       logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
       logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
@@ -368,7 +365,6 @@ module SimilarsInitSearch
         data_a_to_compare = [profiles[a_profile_id][:is_name_id], profiles[a_profile_id][:is_sex_id]]
         data_b_to_compare = [profiles[b_profile_id][:is_name_id], profiles[b_profile_id][:is_sex_id]]
 
-        #if profiles[a_profile_id] == profiles[b_profile_id]
         if data_a_to_compare == data_b_to_compare
           logger.info "*** In compare_tree_circles 71: data_a_to_compare: #{data_a_to_compare},  - data_b_to_compare: #{data_b_to_compare}"
           # сравниваемые хэши кругов профилей и определение их общей части кругов профилей
@@ -388,7 +384,7 @@ module SimilarsInitSearch
             ############ call of User.module ############################################
             unsimilar_sign, inter_relations = check_similars_exclusions(data_for_check)
             #############################################################################
-
+          #  unsimilar_sign = true
             # Проверка условия исключения похожести
             if unsimilar_sign #check_similars_exclusion(data_for_check)
 
@@ -405,11 +401,10 @@ module SimilarsInitSearch
               # Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та достоверности
 
               #############################################################
-              # todo: брать коэфф-т из таблицы WeafamSettings
-              #  certain_koeff_for_connect = get_certain_koeff #3 4  from appl.cntrler
+              certain_koeff_for_connect ||= WeafamSetting.first.certain_koeff
+             # certain_koeff_for_connect = 3
               #############################################################
-              certain_koeff_for_connect = 3
-              #############################################################
+
               if common_power >= certain_koeff_for_connect
                 common_data =
                     { first_profile_id:  a_profile_id,

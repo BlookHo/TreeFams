@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
 
   include SimilarsInitSearch     # методы поиска стартовых пар похожих
   include SimilarsExclusions     # методы учета отношений исключений
-  include SimilarsCompleteSearch # метод поиска похожих и объединения их
+  include SimilarsCompleteSearch # методы поиска похожих
+  include SimilarsConnection     # методы объединения похожих
 
   include SimilarsHelper  # Исп-ся в Similars
 
@@ -113,11 +114,27 @@ class User < ActiveRecord::Base
     users_names
   end
 
+
+
+
+
+  #########################################
+  # Методы запуска объединения похожих профилей - SIMILARS
+  #########################################
+
   # Объединяет похожие профили
-  def connecting_similars
+  def connecting_similars(similars_connection_data)
     msg_connection = "connecting_similars"
     logger.info "*** In User.connecting_similars: #{msg_connection} "
 
+    profiles_to_rewrite = similars_connection_data[:profiles_to_rewrite]
+    profiles_to_destroy = similars_connection_data[:profiles_to_destroy]
+
+    # методы соединения профилей = перезапись профилей в таблицах
+    self.connect_sims_in_tables(profiles_to_rewrite, profiles_to_destroy)
+
+    # Перезапись profile_data при объединении профилей
+    #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
 
   end
 
@@ -128,12 +145,7 @@ class User < ActiveRecord::Base
     msg_connection = "without_connecting_similars"
     logger.info "*** In User.without_connecting_similars: #{msg_connection} "
 
-
   end
-
-
-
-
 
 
 

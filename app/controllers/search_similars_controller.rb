@@ -135,7 +135,8 @@ class SearchSimilarsController < ApplicationController
   end
 
 
-  # Объединяет похожие профили
+  # Готовит данные для Объединения похожих профилей - similars_connection_data
+  # ПЕредает их в модель для непосредственного объединения
   def connect_similars
     first_profile_connecting = params[:first_profile_id].to_i
     second_profile_connecting = params[:second_profile_id].to_i
@@ -149,17 +150,17 @@ class SearchSimilarsController < ApplicationController
     ############ call of User.module ############################################
     profiles_to_rewrite, profiles_to_destroy = current_user.similars_complete_search(init_hash)
     #############################################################################
-    @profiles_to_rewrite = profiles_to_rewrite
-    @profiles_to_destroy = profiles_to_destroy
+    @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
+    @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
+
     logger.info "*** In connect_similars 3:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
 
-  #   init_hash = {84=>99}
-  # *** In connect_similars 3:
-  #  profiles_to_rewrite = [84, 77, 79, 80, 82, 81],
-  #  profiles_to_destroy = [99, 91, 86, 88, 87, 89]
+    similars_connection_data = {
+        profiles_to_rewrite: profiles_to_rewrite, #
+        profiles_to_destroy: profiles_to_destroy #
+    }
 
-
-    current_user.connecting_similars
+    current_user.connecting_similars(similars_connection_data)
 
   end
 

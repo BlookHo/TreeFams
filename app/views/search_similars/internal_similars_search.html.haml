@@ -67,22 +67,22 @@
           %td= similars_data[:common_power]
           %td= similars_data[:inter_relations]
           %td
-            = link_to 'Да', connect_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :green]
+            .yes_to_connect
+              = link_to 'Да', connect_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :green], id: 'connectSimilars'
             -#%br
-            = link_to 'Нет', keep_disconnected_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :red]
-
+            .no_to_connect
+              = link_to 'Нет', keep_disconnected_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :red], id: 'keepUnSimilars'
 
     = paginate @paged_similars_data
 
-  #similars-list
-    -#- if !@similars_qty.blank?
-    -#  = render 'search_similars/similars_connecting'
-    .rewrite_arrays
+  %h2 Объединение "Похожих" профилей
 
-      -#,  :user_talk_id => user_talk_id, :user_talk_arr => user_talk_arr, :one_dialoge_length => @one_dialoge_length
-      -#%h2 Основные похожие профили: #{@profiles_to_rewrite}
-      -#%h2 Профили для объединения с основными похожими: #{@profiles_to_destroy}
+  .init-pair
+  .rewrite_array
+  .destroy_array
 
+  -#- if !@similars_qty.blank?
+  -#  = render 'search_similars/similars_connecting'
 
   %br
   = link_to 'К просмотру твоего дерева', home_path
