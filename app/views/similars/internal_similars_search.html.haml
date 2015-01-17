@@ -76,13 +76,19 @@
     = paginate @paged_similars_data
 
   %h2 Объединение "Похожих" профилей
+  %br
+  %br
 
   .init-pair
   .rewrite_array
   .destroy_array
 
-  -#- if !@similars_qty.blank?
-  -#  = render 'search_similars/similars_connecting'
+  .after_connect
+    %h2
+
+  .arrays
+    %h2
+
 
   %br
   = link_to 'К просмотру твоего дерева', home_path
@@ -92,6 +98,15 @@
 
 
 
+
+  -#:javascript
+  -#  $(function(){
+  -#    //$('.arrays').append('profilesRewrite = ' + profilesRewrite);
+  -#    //if (current_question_index == 0){
+  -#    //  $('#showPreviousQuestion').hide();
+  -#    //}
+  -#
+  //  })
 
 
 

@@ -11,8 +11,8 @@ module SimilarsInitSearch
     def similars_init_search(tree_info)
       if !tree_info.empty?  # Исходные данные
         tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
-        #logger.info "In search_similars 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
-        #logger.info "In search_similars 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
+        #logger.info "In similars 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
+        #logger.info "In similars 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
         similars, unsimilars = compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
         return similars, unsimilars
       end
@@ -401,8 +401,8 @@ module SimilarsInitSearch
               # Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та достоверности
 
               #############################################################
-              certain_koeff_for_connect ||= WeafamSetting.first.certain_koeff
-             # certain_koeff_for_connect = 3
+             # certain_koeff_for_connect ||= WeafamSetting.first.certain_koeff
+              certain_koeff_for_connect = 3
               #############################################################
 
               if common_power >= certain_koeff_for_connect

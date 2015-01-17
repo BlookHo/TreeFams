@@ -54,8 +54,8 @@ class ProfileKey < ActiveRecord::Base
   def self.search_similars(tree_info)
     if !tree_info.empty?  # Исходные данные
       tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
-      #logger.info "In search_similars 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
-      #logger.info "In search_similars 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
+      #logger.info "In similars 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
+      #logger.info "In similars 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
       similars = compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
       return similars
     end

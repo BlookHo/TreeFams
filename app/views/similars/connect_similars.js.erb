@@ -1,0 +1,32 @@
+var firstProfileConnecting = "<%= params[:first_profile_id] %>";
+console.log('firstProfileConnecting = ' + firstProfileConnecting);
+var secondProfileConnecting = "<%= params[:second_profile_id] %>";
+console.log('secondProfileConnecting = ' + secondProfileConnecting);
+
+var profilesRewrite = '<%= @profiles_to_rewrite.inspect %>';
+console.log('profilesRewrite = ' + profilesRewrite);
+var profilesDestroy = '<%=  @profiles_to_destroy.inspect %>';
+console.log('profilesDestroy = ' + profilesDestroy);
+
+$(".init-pair h2").before().append("Объединение \"Похожих\" профилей");
+$(".init-pair").empty().append("Стартовые пары \"Похожих\" профилей:  Первый профиль = " + firstProfileConnecting + ';'
+        + ' Второй профиль = ' + secondProfileConnecting + '; ');
+$('.rewrite_array').empty().append('Основные похожие профили (profiles_to_rewrite): ')
+        .append(profilesRewrite + ';');
+$('.destroy_array').empty().append('Профили для объединения (profiles_to_destroy): ')
+        .append(profilesDestroy + ';');
+
+
+if(typeof profilesRewrite != "undefined" && profilesRewrite != null && profilesRewrite.length > 0){
+    console.log("Array profilesRewrite Not empty - sims cionnected!");
+    var textStr = '<br>' + 'Объединение похожих профилей - совершено.' +  '<br>' +
+            ' Теперь при необходимости можно разъединить объединенные похожие профили';
+//            +  '<br>' + profilesRewrite + ' и ' + profilesDestroy + '<br>';
+    $('.after_connect h2').empty().append(textStr);
+    $('.arrays').empty().html('<%= j render 'similars/disconnect_sims' -%>');
+
+}
+
+
+
+$('.no_to_connect');
