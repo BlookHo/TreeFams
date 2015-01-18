@@ -8,7 +8,10 @@ console.log('profilesRewrite = ' + profilesRewrite);
 var profilesDestroy = '<%=  @profiles_to_destroy.inspect %>';
 console.log('profilesDestroy = ' + profilesDestroy);
 
-var logConnection = 'Лог объединения профилей в таблицах: <%=  @log_connection.inspect %>';
+var logConnection = '( Лог объединения профилей в таблицах сформирован:'  +  '<br>' +
+        ' длина лога в табл. Tree = <%=  @log_connection_tree_size.inspect %> ,'  +
+        ' длина лога в табл. ProfileKey = <%=  @log_connection_profilekey_size.inspect %>  ).'  +  '<br>' ;
+//        + ' Содержание лога: '  +  '<br>' + '<%=  @log_connection.inspect %>';
 console.log('logConnection = ' + logConnection);
 
 

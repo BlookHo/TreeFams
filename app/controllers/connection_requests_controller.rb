@@ -210,7 +210,7 @@ class ConnectionRequestsController < ApplicationController
   #
   #  respond_to do |format|
   #    if @connection_request.save
-  #      format.html { redirect_to @connection_request, notice: 'Connection request was successfully created.' }
+  #      format.html { redirect_to @connection_request, notice: 'SimilarsConnection request was successfully created.' }
   #      format.json { render :show, status: :created, location: @connection_request }
   #    else
   #      format.html { render :new }
@@ -224,7 +224,7 @@ class ConnectionRequestsController < ApplicationController
   #def update
   #  respond_to do |format|
   #    if @connection_request.update(params[:id])
-  #      format.html { redirect_to @connection_request, notice: 'Connection request was successfully updated.' }
+  #      format.html { redirect_to @connection_request, notice: 'SimilarsConnection request was successfully updated.' }
   #      format.json { render :show, status: :ok, location: @connection_request }
   #    else
   #      format.html { render :edit }
@@ -238,7 +238,7 @@ class ConnectionRequestsController < ApplicationController
   #def destroy
   #  @connection_request.destroy
   #  respond_to do |format|
-  #    format.html { redirect_to connection_requests_url, notice: 'Connection request was successfully destroyed.' }
+  #    format.html { redirect_to connection_requests_url, notice: 'SimilarsConnection request was successfully destroyed.' }
   #    format.json { head :no_content }
   #  end
   #end

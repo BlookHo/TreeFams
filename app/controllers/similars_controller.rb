@@ -159,12 +159,13 @@ class SimilarsController < ApplicationController
                                 connection_id: 10  }  # порядковый номер connection - взять значение из последнего лога
 
     # Лог - это массив записей о параметрах всех совершенных объединениях дерева
-    # хранится - отдельно
+    # храниться должен отдельно
 
     ############ call of User.module Similars_connection ########################
-    #@log_connection = current_user.connecting_similars(similars_connection_data)
-    @log_connection = current_user.connect_tree(similars_connection_data)
+    @log_connection = current_user.similars_connect_tree(similars_connection_data)
     logger.info "*** In module Sims_Controller connect_similars: @log_connection = \n     #{@log_connection} "
+    @log_connection_tree_size = @log_connection[:log_tree].size unless @log_connection[:log_tree].blank?
+    @log_connection_profilekey_size = @log_connection[:log_profilekey].size unless @log_connection[:log_profilekey].blank?
 
   end
 

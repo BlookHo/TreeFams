@@ -1,21 +1,14 @@
-module Connection
+module SimilarsConnection
   extend ActiveSupport::Concern
 # in User model
 
-  def connect_tree(connection_data)
+  def similars_connect_tree(connection_data)
 
     connected_users_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
-
     connection_data[:connected_users_arr] = connected_users_arr
-    logger.info "*** In module Connection User connect_tree: connection_data = \n    #{connection_data} "
 
     # Перезапись profile_data при объединении профилей
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
-
-    #   # перезапись значений в полях одной таблицы
-    # [Tree, ProfileKey].each do |table_name|
-    #  update_table(update_data, table )
-    #end
 
     log_connection_tree       = update_table(connection_data, Tree)
     log_connection_profilekey = update_table(connection_data, ProfileKey)
@@ -27,71 +20,51 @@ module Connection
 
   # перезапись значений в полях одной таблицы
   def update_table(connection_data, table )
-
-    log_connection = {}
-
+    log_connection = []
     ["profile_id", "is_profile_id"].each do |table_field|
       table_update_data = { table: table, table_field: table_field}
-      logger.info "*** In module Connection update_table: table_update_data = \n     #{table_update_data} "
-
-     # log_connection = update_field(connection_data, table_update_data )
+      log_connection = update_field(connection_data, table_update_data , log_connection)
     end
-    logger.info "*** In module Connection update_table: log_connection = \n     #{log_connection} "
-
+    #logger.info "*** In module SimilarsConnection update_table: log_connection = \n     #{log_connection} "
     log_connection
   end
 
   # перезапись значений в одном поле одной таблицы
   # profiles_to_destroy[arr_ind] - один profile_id для замены
   # profiles_to_rewrite[arr_ind] - один profile_id, которым меняем
-  def update_field(update_data, table_update_data)
+  def update_field(connection_data, table_update_data, log_connection)
 
-    profiles_to_rewrite = update_data[:profiles_to_rewrite]
-    profiles_to_destroy = update_data[:profiles_to_destroy]
-    connected_users_arr = update_data[:connected_users_arr]
-    connection_id       = update_data[:connection_id]
+    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+    profiles_to_destroy = connection_data[:profiles_to_destroy]
+    connected_users_arr = connection_data[:connected_users_arr]
+    connection_id       = connection_data[:connection_id]
 
     table  = table_update_data[:table]
     table_field = table_update_data[:table_field]
 
-    profiles_to_rewrite = [39]  # connect
-    profiles_to_destroy = [75]
-
-    #profiles_to_rewrite = [75]  # disconnect
-    #profiles_to_destroy = [39]
-
-    connection_id +=
-    logger.info "*** In module Connection User update_field: profiles_to_rewrite = #{profiles_to_rewrite},
-                 profiles_to_rewrite = #{profiles_to_rewrite} ,  connection_id = #{connection_id} "
-
-    log_connection = {}
-
+    connection_id += 1
+    #logger.info "*** In module SimilarsConnection User update_field before for: profiles_to_rewrite = #{profiles_to_rewrite},
+    #             profiles_to_rewrite = #{profiles_to_rewrite} ,  connection_id = #{connection_id} "
     for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
       rows_to_update = table.where(:user_id => connected_users_arr).
                                   where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
-      logger.info "*** In module Connection User update_field before unless: rows_to_update.blank?
-                   = #{rows_to_update.blank?}"
       unless rows_to_update.blank?
         rows_to_update.each do |rewrite_row|
-          rewrite_row.update_column(:"#{table_field}", profiles_to_rewrite[arr_ind] )
-          # замена значения профиля в поле table_field, в таблице table_name
-          #logger.info "*** In module Connection User update_field unless:
-          #             profiles_to_rewrite[arr_ind] = #{profiles_to_rewrite[arr_ind]} ,
-          #             profiles_to_destroy[arr_ind] = #{profiles_to_destroy[arr_ind]} "
+
+  #        rewrite_row.update_column(:"#{table_field}", profiles_to_rewrite[arr_ind] )
 
           one_connection_data = { connected_at: connection_id,
-                                  #table_name: table,
                                   table_row_id: rewrite_row.id,
                                   table_field: table_field,
                                   profile_wrote: profiles_to_rewrite[arr_ind],
                                   profile_destroyed: profiles_to_destroy[arr_ind] }
-          log_connection.merge!(one_connection_data)
+          log_connection << one_connection_data
 
         end
+
       end
+
     end
-    logger.info "*** In module Connection User update_field unless:
-                       log_connection = #{log_connection} "
     log_connection
 
   end
@@ -108,7 +81,7 @@ module Connection
   def connect_sims_in_tables(connection_data)
 
 
-    self.connect_tree(connection_data)
+  #  self.connect_tree(connection_data)
 
 
 
