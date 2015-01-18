@@ -151,13 +151,20 @@ class SimilarsController < ApplicationController
     #############################################################################
     @profiles_to_rewrite = profiles_to_rewrite # TO_VIEW
     @profiles_to_destroy = profiles_to_destroy # TO_VIEW
-    logger.info "*** In connect_similars 3:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
+    logger.info "*** In connect_similars contrler 3:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
 
     similars_connection_data = {profiles_to_rewrite: profiles_to_rewrite, #
-                                profiles_to_destroy: profiles_to_destroy }
+                                profiles_to_destroy: profiles_to_destroy,
+                                current_user_id: current_user.id,
+                                connection_id: 10  }  # порядковый номер connection - взять значение из последнего лога
+
+    # Лог - это массив записей о параметрах всех совершенных объединениях дерева
+    # хранится - отдельно
 
     ############ call of User.module Similars_connection ########################
-    current_user.connecting_similars(similars_connection_data)
+    #@log_connection = current_user.connecting_similars(similars_connection_data)
+    @log_connection = current_user.connect_tree(similars_connection_data)
+    logger.info "*** In module Sims_Controller connect_similars: @log_connection = \n     #{@log_connection} "
 
   end
 

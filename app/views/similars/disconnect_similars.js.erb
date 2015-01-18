@@ -1,7 +1,7 @@
 var profilesRewrite = ' in js.disconnect:  <%= params[:profiles_rewrite_arr] %>';
-console.log(profilesRewrite);
+console.log('Disconnected ' + profilesRewrite);
 var profilesDestroy = " in js.disconnect: <%= params[:profile_destroy_arr] %>";
-console.log(profilesDestroy);
+console.log('Disconnected ' + profilesDestroy);
 
 
 var textStr = '<br>' + 'Разъединение похожих профилей - совершено.' +  '<br>'
@@ -12,5 +12,4 @@ $('.disconnect').empty();
 $(".init-pair").empty();
 $('.rewrite_array').empty();
 $('.destroy_array').empty();
-//$('.after_disconnect').append( '<br>');
 
