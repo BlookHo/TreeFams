@@ -10,8 +10,11 @@ console.log('profilesDestroy = ' + profilesDestroy);
 
 var logConnection = '( Лог объединения профилей в таблицах сформирован:'  +  '<br>' +
         ' длина лога в табл. Tree = <%=  @log_connection_tree_size.inspect %> ,'  +
-        ' длина лога в табл. ProfileKey = <%=  @log_connection_profilekey_size.inspect %>  ).'  +  '<br>' ;
-//        + ' Содержание лога: '  +  '<br>' + '<%=  @log_connection.inspect %>';
+        ' длина лога в табл. ProfileKey = <%=  @log_connection_profilekey_size.inspect %>  ).'  +  '<br>' +  '<br>'
+//        + ' Содержание лога: '  +  '<br>' + '<%=  @log_connection.inspect %>' +  '<br>' +  '<br>'
+        +  ' Содержание лога Tree:  '  +  '<br>' + '<%=  @log_connection[:log_tree].inspect %>' +  '<br>' +  '<br>'
+        +  ' Содержание лога ProfileKey:  '  +  '<br>' + '<%=  @log_connection[:log_profilekey].inspect %>' +  '<br>'
+        ;
 console.log('logConnection = ' + logConnection);
 
 

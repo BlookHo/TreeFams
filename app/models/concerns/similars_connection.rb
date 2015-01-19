@@ -1,7 +1,11 @@
 module SimilarsConnection
   extend ActiveSupport::Concern
-# in User model
+  # in User model
 
+  # Перезапись профилей в таблицах
+  # Формирование лога объединения - получение его log_id
+  # Запись лога в таблицу SimilarsLog под номером log_id
+  # .
   def similars_connect_tree(connection_data)
 
     connected_users_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
@@ -10,17 +14,22 @@ module SimilarsConnection
     # Перезапись profile_data при объединении профилей
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
 
-    log_connection_tree       = update_table(connection_data, Tree)
-    log_connection_profilekey = update_table(connection_data, ProfileKey)
+    log_connection_tree       = update_table(connection_data, Tree, 'Tree')
+    log_connection_profilekey = update_table(connection_data, ProfileKey, 'ProfileKey')
 
     { log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
+
+    # Запись лога в таблицу SimilarsLog под номером log_id
+    # Вернуть полученный log_id
 
   end
 
 
   # перезапись значений в полях одной таблицы
-  def update_table(connection_data, table )
+  def update_table(connection_data, table, table_name )
     log_connection = []
+    #logger.info "*** In module SimilarsConnection update_table: table_name = #{table_name},  "
+    connection_data[:table_name] = table_name
     ["profile_id", "is_profile_id"].each do |table_field|
       table_update_data = { table: table, table_field: table_field}
       log_connection = update_field(connection_data, table_update_data , log_connection)
@@ -34,6 +43,7 @@ module SimilarsConnection
   # profiles_to_rewrite[arr_ind] - один profile_id, которым меняем
   def update_field(connection_data, table_update_data, log_connection)
 
+    table_name          = connection_data[:table_name]
     profiles_to_rewrite = connection_data[:profiles_to_rewrite]
     profiles_to_destroy = connection_data[:profiles_to_destroy]
     connected_users_arr = connection_data[:connected_users_arr]
@@ -54,6 +64,7 @@ module SimilarsConnection
   #        rewrite_row.update_column(:"#{table_field}", profiles_to_rewrite[arr_ind] )
 
           one_connection_data = { connected_at: connection_id,
+                                  table_name: table_name,
                                   table_row_id: rewrite_row.id,
                                   table_field: table_field,
                                   profile_wrote: profiles_to_rewrite[arr_ind],

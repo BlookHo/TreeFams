@@ -162,10 +162,18 @@ class SimilarsController < ApplicationController
     # храниться должен отдельно
 
     ############ call of User.module Similars_connection ########################
+
     @log_connection = current_user.similars_connect_tree(similars_connection_data)
-    logger.info "*** In module Sims_Controller connect_similars: @log_connection = \n     #{@log_connection} "
+    logger.info "*** In  Similars_Controller connect_similars: @log_connection = \n     #{@log_connection} "
+    @log_connection_id = @log_connection[:log_tree][0][:connected_at]
+    logger.info "*** In  Similars_Controller connect_similars: @log_connection_id = #{@log_connection_id} "
     @log_connection_tree_size = @log_connection[:log_tree].size unless @log_connection[:log_tree].blank?
     @log_connection_profilekey_size = @log_connection[:log_profilekey].size unless @log_connection[:log_profilekey].blank?
+    @complete_log = @log_connection[:log_tree] + @log_connection[:log_profilekey]
+    logger.info "*** In  Similars_Controller connect_similars: @complete_log = \n     #{@complete_log} "
+    @complete_log_size = @complete_log.size unless @complete_log.blank?
+    logger.info "*** In  Similars_Controller connect_similars: @complete_log_size = #{@complete_log_size} "
+
 
   end
 
@@ -183,6 +191,10 @@ class SimilarsController < ApplicationController
   # Возвращает объединенные профили в состояние перед объединением
   # во всех таблицах
   def disconnect_similars
+
+    log_id = params[:log_connection_id]
+    logger.info "*** In disconnect_similars:  log_id = #{log_id}"
+
     profiles_to_rewrite = params[:profiles_rewrite_arr]
     profiles_to_destroy = params[:profile_destroy_arr]
     logger.info "*** In disconnect_similars:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
