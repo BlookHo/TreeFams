@@ -3,6 +3,7 @@
 
 = render 'path'
 = render 'search_results_button'
+= render 'zoom_range'
 
 #profile-context-menu{style:'display:none;'}
 
@@ -13,8 +14,13 @@
 = javascript_include_tag 'home-search'
 
 
+
 %script
   var access_token = '#{current_user.access_token}';
-  getCircles({ profile_id: #{current_user.profile_id}, token: access_token });
+  var current_user_profile_id = '#{current_user.profile_id}';
+  getCircles({ profile_id: current_user_profile_id, token: access_token });
   getSearchResults( showSearchResultsButton );
   $('#search-results-button').draggable({});
+
+
+= javascript_include_tag 'home-zoom-range'

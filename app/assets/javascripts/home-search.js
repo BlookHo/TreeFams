@@ -37,18 +37,11 @@ function getSearchResults(callback) {
 
 
 
-
-function goToConnetTrees(){
-
-}
-
-
-
 // Показать результаты поиска на большой синей кнопке
 showSearchResultsButton = function(search_results){
   $(search_btn).text('Найдено '+search_results.total_profiles+' родственников в '+search_results.total_trees+' деревьях');
   $(search_btn).addClass('animated tada');
-}
+};
 
 
 
@@ -59,16 +52,15 @@ updateSearchResultPaginator = function(search_results){
   checkNextSearchResult();
   checkPrevSearchResult();
   showSearchResulsAtIndex(current_search_result);
-
-}
+};
 
 
 showSearchResulsAtIndex = function(index){
   current_result = search_results.trees[index];
-  search_marked_profile_ids = current_result.profile_ids
-  current_search_result_profile = current_result.profile_ids[0]
-  getCircles({profile_id: current_search_result_profile, token: access_token, path_from_profile_id: current_search_result_profile})
-}
+  search_marked_profile_ids = current_result.profile_ids;
+  current_search_result_profile = current_result.profile_ids[0].
+  getCircles({profile_id: current_search_result_profile, token: access_token, path_from_profile_id: current_search_result_profile});
+};
 
 
 
@@ -78,29 +70,29 @@ checkNextSearchResult = function(){
   }else{
     $('#search_results_paginator a.next').addClass('disabled');
   }
-}
+};
 
 
 
-checkPrevSearchResult = function(){
-  if (current_search_result == 0 ){
+checkPrevSearchResult = function() {
+  if (current_search_result === 0) {
     $('#search_results_paginator a.prev').addClass('disabled');
   }else{
     $('#search_results_paginator a.prev').removeClass('disabled');
   }
-}
+};
 
 
 
 showPrevSearchResult = function(){
-  if (current_search_result != 0 ){
+  if (current_search_result !== 0 ){
     current_search_result  = current_search_result - 1;
     updateSearchResultPaginator(search_results);
   }else{
     return false;
     // alert("No previous result!");
   }
-}
+};
 
 
 

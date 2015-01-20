@@ -20,7 +20,7 @@ createSvg = function(){
            .attr("height", height)
            .attr('id', 'graph');
 
-}
+};
 
 
 resizeGraph = function(){
@@ -56,7 +56,7 @@ tick = function(){
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
-}
+};
 
 
 var drag;
@@ -122,8 +122,7 @@ start = function(){
 
   var gNode = node.enter()
                   .append("g")
-                  .attr("class", function(d) { return "node " + d.id; })
-                  // .classed('current', function(d){ return d.current_user_profile; })
+                  .attr("class", function(d) { return "node " + 'distance_' + d.distance; })
                   .on("dblclick", dblclick)
                   .call(drag);
 
@@ -132,7 +131,7 @@ start = function(){
   // Center node
   //////////////////////////////////////
   gNode.select(function(d){
-    if (d.distance == 0){
+    if (d.distance === 0){
 
 
         // Add center class to center node group
@@ -541,10 +540,10 @@ clearNodes = function(){
 
 
 
-
+// getCircles({ profile_id: current_user_profile_id, token: access_token });
 getCircles = function(params){
   clearNodes();
-  $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id } )
+  $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id, max_distance: params.max_distance } )
     .done(function( data ) {
         buildPath(data.path);
         current_circle_author = data.cirlce_author;
@@ -553,9 +552,11 @@ getCircles = function(params){
           pushNode(d);
         });
         start();
-
     });
-}
+};
+
+
+
 
 
 
