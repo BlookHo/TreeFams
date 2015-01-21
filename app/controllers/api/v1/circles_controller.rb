@@ -18,7 +18,9 @@ module Api
         circles = profile.circles(api_current_user, params[:max_distance].to_i)
         tree_owner_ids = profile.owner_user.get_connected_users
         tree_owner_profile_id = get_tree_owner_user(tree_owner_ids).profile_id
-        path = find_path(from_profile_id: tree_owner_profile_id, data: circles)
+        # Чтобы пути строились при зуме
+        # path = find_path(from_profile_id: tree_owner_profile_id, data: circles)
+        path = find_path(from_profile_id: tree_owner_profile_id, data: profile.circles(api_current_user, 10))
         circle_author = find_current_circle_author(path)
         respond_with circles: circles, path: path, tree_owner_ids: tree_owner_ids, cirlce_author: circle_author
       end

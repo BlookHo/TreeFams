@@ -9,7 +9,6 @@ var current_search_resuls_tree_owner_id;
 
 
 
-
 function getCurrentTreeUserId(){
   return search_results.trees[current_search_result].tree_id;
 }
@@ -24,11 +23,8 @@ function connectTrees(){
 
 // Получение результатов поиска и отображение на кнопке на домашней странице
 function getSearchResults(callback) {
-  $(search_btn).text('Идет поиск...');
-  $(search_btn).removeClass('animated tada');
   $.get( "/api/v1/search", { token: access_token } )
    .done(function( data ) {
-      // jsdebug(data);
       search_results = data;
       if (callback){ callback(search_results); }
     });
@@ -39,9 +35,21 @@ function getSearchResults(callback) {
 
 // Показать результаты поиска на большой синей кнопке
 showSearchResultsButton = function(search_results){
-  $(search_btn).text('Найдено '+search_results.total_profiles+' родственников в '+search_results.total_trees+' деревьях');
-  $(search_btn).addClass('animated tada');
+  if (search_results.total_profiles == 0){
+    $('#notify').fadeIn().addClass('animated tada');
+    $('#notify').on('click', function(){
+      $(this).fadeOut();
+    })
+  }else{
+    $(search_btn).show();
+    $(search_btn).text('Найдено '+search_results.total_profiles+' родственников в '+search_results.total_trees+' деревьях');
+    $(search_btn).addClass('animated tada');
+  }
+
+
 };
+
+
 
 
 
