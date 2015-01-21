@@ -11,7 +11,7 @@ var node, link, relation;
 var force, svg;
 
 var current_circle_author;
-
+var current_center_profile_id;
 
 createSvg = function(){
   svg = d3.select("#graph-wrapper")
@@ -65,7 +65,6 @@ var drag;
 
 
 start = function(){
-
 
 
   force = d3.layout.force()
@@ -127,6 +126,14 @@ start = function(){
                   .call(drag);
 
 
+  // Zoom
+  ///////////////////////////////////////
+  // gNode.select(function(d){
+  //   d3.select(this)
+  //     .attr("transform","scale(2)")
+  // })
+  // node.on("mouseover",function(){ d3.select(this).transition().attr("transform","scale(1.2)") });
+
 
   // Center node
   //////////////////////////////////////
@@ -136,7 +143,9 @@ start = function(){
 
         // Add center class to center node group
         d3.select(this)
-          .classed('center', true);
+          .classed('center', true)
+          .transition()
+          .attr("transform","scale(2)");
 
 
 
@@ -543,7 +552,9 @@ clearNodes = function(){
 // getCircles({ profile_id: current_user_profile_id, token: access_token });
 getCircles = function(params){
   clearNodes();
-  $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id, max_distance: params.max_distance } )
+  var max_distance = getCurrentDistance();
+  current_center_profile_id = params.profile_id;
+  $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id, max_distance: max_distance } )
     .done(function( data ) {
         buildPath(data.path);
         current_circle_author = data.cirlce_author;
@@ -554,8 +565,6 @@ getCircles = function(params){
         start();
     });
 };
-
-
 
 
 
