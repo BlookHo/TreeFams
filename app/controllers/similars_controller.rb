@@ -6,6 +6,8 @@ class SimilarsController < ApplicationController
   before_filter :logged_in?
 
   # todo: перенести этот метод в Operational - для нескольких моделей
+  #
+  # /
   # пересечение 2-х хэшей, у которых - значения = массивы
   def intersection(first, other)
     common_hash = {}
