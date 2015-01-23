@@ -11,9 +11,10 @@
 = javascript_include_tag 'path'
 = javascript_include_tag 'home'
 = javascript_include_tag 'home-search'
+= javascript_include_tag 'zoom'
 
 
 %script
   var access_token = '#{current_user.access_token}';
-  // var current_user_profile_id = #{current_user.profile_id};
+  var current_user_profile_id = #{current_user.profile_id};
   getSearchResults( updateSearchResultPaginator );

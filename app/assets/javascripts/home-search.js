@@ -7,8 +7,6 @@ var current_search_resuls_tree_owner_id;
 
 
 
-
-
 function getCurrentTreeUserId(){
   return search_results.trees[current_search_result].tree_id;
 }
@@ -66,7 +64,7 @@ updateSearchResultPaginator = function(search_results){
 showSearchResulsAtIndex = function(index){
   current_result = search_results.trees[index];
   search_marked_profile_ids = current_result.profile_ids;
-  current_search_result_profile = current_result.profile_ids[0].
+  current_search_result_profile = current_result.profile_ids[0];
   getCircles({profile_id: current_search_result_profile, token: access_token, path_from_profile_id: current_search_result_profile});
 };
 
