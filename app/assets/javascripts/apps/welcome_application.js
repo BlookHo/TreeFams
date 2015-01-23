@@ -191,7 +191,7 @@ var app = angular
 
   // Update model
   $scope.changeName = function(modelName, name){
-    removeDataFormGraph(modelName);
+    // removeDataFormGraph(modelName);
     if (modelName == 'author'){
       $scope.resetFamily();
       // removeAllDataFormGraph();
@@ -374,7 +374,15 @@ var app = angular
       if ( eval('$scope.family.'+modelName+'.hasOwnProperty("name");') ){
         return eval('$scope.family.'+modelName+'.name.length == 0;');
       }else{
-        return true;
+        // try grab raw input
+        var rawName = eval('$scope.family.'+modelName);
+        if (rawName.length == 0){
+          return true;
+        }else{
+          eval('$scope.family.'+modelName+'.name='+rawName);
+          return false;
+        }
+
       }
     }
   }
@@ -398,6 +406,22 @@ var app = angular
           eval('$scope.family.'+modelName+' = name_error;');
           return false;
         }
+
+        // alert( $scope.isNameBlank(modelName) );
+
+        // if name required and name is blank
+        // if ( $scope.stepIsRequired(modelName) && $scope.isNameBlank(modelName) ) {
+        //   alert("1 cath!");
+        //   var name_error = {name: "", error: "Нужно указать имя"};
+        //   eval('$scope.family.'+modelName+' = name_error;');
+        //   return false;
+        // }
+        //
+        // if ( $scope.stepIsRequired(modelName) && !!$scope.isNameBlank(modelName) ){
+        //   alert('2 Catch me!');
+        // }
+
+
 
 
         // if name NOT required and blank
