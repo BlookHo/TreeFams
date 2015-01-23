@@ -7,7 +7,7 @@ class ProfileData < ActiveRecord::Base
 
 
     has_attached_file :avatar,
-                      :styles => {:original => ["100%", :png], :medium => "300x300>", :thumb => "100x100>", :round_thumb => "100x100>" },
+                      :styles => {:original => ["100%", :png], :medium => "300x300>", :thumb => "100x100>", :round_thumb => "100x100#" },
                       :convert_options => {:round_thumb => Proc.new{self.convert_options}}
 
     validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
