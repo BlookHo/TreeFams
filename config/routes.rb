@@ -28,12 +28,14 @@ Weafam::Application.routes.draw do
 
   # search similars & connecting
   # SearchSimilars controller
-  match 'internal_similars_search' => 'search_similars#internal_similars_search', via: :get
-  get 'search_similars/index'
-  match 'connect_similars' => 'search_similars#connect_similars', via: :get
-  match 'keep_disconnected_similars' => 'search_similars#keep_disconnected_similars', via: :get
-  match 'connect_similars' => 'search_similars#connect_similars', via: :post
-  match 'keep_disconnected_similars' => 'search_similars#keep_disconnected_similars', via: :post
+  match 'internal_similars_search' => 'similars#internal_similars_search', via: :get
+  get 'similars/index'
+  match 'connect_similars' => 'similars#connect_similars', via: :get
+  match 'keep_disconnected_similars' => 'similars#keep_disconnected_similars', via: :get
+  match 'connect_similars' => 'similars#connect_similars', via: :post
+  match 'keep_disconnected_similars' => 'similars#keep_disconnected_similars', via: :post
+  match 'disconnect_similars' => 'similars#disconnect_similars', via: :get
+  match 'disconnect_similars' => 'similars#disconnect_similars', via: :post
 
   # messages controller
   resources :messages, except: [:update, :show, :destroy, :edit]
@@ -214,6 +216,8 @@ Weafam::Application.routes.draw do
   # Users Sessions Signup
   ##################################################
   resources :users
+
+
   resources :sessions, except: :edit
   get  'login',      to:   "sessions#new",      as: :login
   get  'logout',     to:   "sessions#destroy",  as: :logout

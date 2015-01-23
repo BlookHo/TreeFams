@@ -5,6 +5,7 @@ class ConnectUsersTreesController < ApplicationController
 
   layout 'application.new'
 
+  # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
   def connect_users(current_user_id, user_id)
 
     if current_user_id != user_id
@@ -13,7 +14,7 @@ class ConnectUsersTreesController < ApplicationController
       new_users_connection.with_user_id = user_id
       new_users_connection.save
     else
-      logger.info "ERROR: Connection of Users - INVALID! Current_user=#{current_user_id.inspect} EQUALS TO user_id=#{user_id.inspect}"
+      logger.info "ERROR: SimilarsConnection of Users - INVALID! Current_user=#{current_user_id.inspect} EQUALS TO user_id=#{user_id.inspect}"
     end
 
   end
@@ -371,10 +372,10 @@ class ConnectUsersTreesController < ApplicationController
 
     ######## Check users lock status and connect if all ok
     #if current_user.tree_is_locked? or connected_user.tree_is_locked?
-    #  logger.info "Connection locked"
+    #  logger.info "SimilarsConnection locked"
     #  redirect_to :back, :alert => "Дерево находится в процессе реорганизации, повторите попытку позже"
     #else
-    #  logger.info "Connection UNLOCK => GO ON! "
+    #  logger.info "SimilarsConnection UNLOCK => GO ON! "
     #  logger.info "current_user = #{current_user},  connected_user = #{connected_user} "
     #
     #  current_user.lock!
@@ -463,7 +464,7 @@ class ConnectUsersTreesController < ApplicationController
           if stop_by_arrs == false
             @stop_connection = false  # for view
             flash[:notice] = "Ваши деревья успешно объединены!"
-            logger.info "Connection - GO ON! Connection array(s) - CORRECT! stop_by_arrs = #{stop_by_arrs}, @stop_connection = #{@stop_connection}"
+            logger.info "SimilarsConnection - GO ON! SimilarsConnection array(s) - CORRECT! stop_by_arrs = #{stop_by_arrs}, @stop_connection = #{@stop_connection}"
             connection_message = "Деревья объединяются..."
 
             ##################################################################
@@ -487,7 +488,7 @@ class ConnectUsersTreesController < ApplicationController
           else
             @stop_connection = true  # for view
             flash[:alert] = "В данный момент нельзя объединить ваши деревья!"
-            logger.info "ERROR - STOP connection! Connection array(s) - INCORRECT! stop_by_arrs = #{stop_by_arrs}, "
+            logger.info "ERROR - STOP connection! SimilarsConnection array(s) - INCORRECT! stop_by_arrs = #{stop_by_arrs}, "
           end
 
         else
@@ -582,14 +583,14 @@ class ConnectUsersTreesController < ApplicationController
       if commons.blank?  # Нет пересечения commons=[]- общих профилей - Ок
 
         if profiles_to_rewrite.size == profiles_to_destroy.size
-          logger.info "Ok to connect. Connection array(s) - Equal. Size = #{profiles_to_rewrite.size}."
+          logger.info "Ok to connect. SimilarsConnection array(s) - Equal. Size = #{profiles_to_rewrite.size}."
 
           # Проверка найденных массивов перезаписи перед объединением - на повторы
           complete_dubles_hash = check_duplications(profiles_to_rewrite, profiles_to_destroy)
 
           if complete_dubles_hash.empty? # Если НЕТ дублирования в массивах
-            connection_message = "Ok to connect. НЕТ Дублирований in Connection array(s) "
-            logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).  complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
+            connection_message = "Ok to connect. НЕТ Дублирований in SimilarsConnection array(s) "
+            logger.info "Ok to connect. НЕТ Дублирований in SimilarsConnection array(s).  complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
           else
             connection_message = "ERROR: Объединение остановлено! ЕСТЬ дублирования в массивах:"
             logger.info "ERROR: STOP connection! ЕСТЬ дублирования в массивах: complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
@@ -611,7 +612,7 @@ class ConnectUsersTreesController < ApplicationController
 
     else
       connection_message = "Объединение остановлено, т.к. недостаточно отношений между профилями. (Массивы объединения - пустые)"
-      logger.info "ERROR: Connection array(s) - blank! connection_message = #{connection_message};."
+      logger.info "ERROR: SimilarsConnection array(s) - blank! connection_message = #{connection_message};."
       stop_by_arrs = true
     end
 

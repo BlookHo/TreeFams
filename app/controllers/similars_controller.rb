@@ -1,4 +1,4 @@
-class SearchSimilarsController < ApplicationController
+class SimilarsController < ApplicationController
   include SearchHelper
 
   layout 'application.new'
@@ -6,6 +6,8 @@ class SearchSimilarsController < ApplicationController
   before_filter :logged_in?
 
   # todo: перенести этот метод в Operational - для нескольких моделей
+  #
+  # /
   # пересечение 2-х хэшей, у которых - значения = массивы
   def intersection(first, other)
     common_hash = {}
@@ -135,11 +137,11 @@ class SearchSimilarsController < ApplicationController
   end
 
 
-  # Объединяет похожие профили
+  # Готовит данные для Объединения похожих профилей - similars_connection_data
+  # ПЕредает их в модель для непосредственного объединения
   def connect_similars
-    first_profile_connecting = params[:first_profile_id].to_i
+    first_profile_connecting  = params[:first_profile_id].to_i
     second_profile_connecting = params[:second_profile_id].to_i
-    logger.info "*** In connect_similars:  first_profile_connecting = #{first_profile_connecting},  second_profile_connecting = #{second_profile_connecting} "
     init_hash = { first_profile_connecting => second_profile_connecting}
     logger.info "*** In connect_similars 2:  init_hash = #{init_hash} "
 
@@ -149,17 +151,31 @@ class SearchSimilarsController < ApplicationController
     ############ call of User.module ############################################
     profiles_to_rewrite, profiles_to_destroy = current_user.similars_complete_search(init_hash)
     #############################################################################
-    @profiles_to_rewrite = profiles_to_rewrite
-    @profiles_to_destroy = profiles_to_destroy
-    logger.info "*** In connect_similars 3:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
+    @profiles_to_rewrite = profiles_to_rewrite # TO_VIEW
+    @profiles_to_destroy = profiles_to_destroy # TO_VIEW
+    logger.info "*** In connect_similars contrler 3:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
 
-  #   init_hash = {84=>99}
-  # *** In connect_similars 3:
-  #  profiles_to_rewrite = [84, 77, 79, 80, 82, 81],
-  #  profiles_to_destroy = [99, 91, 86, 88, 87, 89]
+    similars_connection_data = {profiles_to_rewrite: profiles_to_rewrite, #
+                                profiles_to_destroy: profiles_to_destroy,
+                                current_user_id: current_user.id,
+                                connection_id: 10  }  # порядковый номер connection - взять значение из последнего лога
 
+    # Лог - это массив записей о параметрах всех совершенных объединениях дерева
+    # храниться должен отдельно
 
-    current_user.connecting_similars
+    ############ call of User.module Similars_connection ########################
+
+    @log_connection = current_user.similars_connect_tree(similars_connection_data)
+    logger.info "*** In  Similars_Controller connect_similars: @log_connection = \n     #{@log_connection} "
+    @log_connection_id = @log_connection[:log_tree][0][:connected_at]
+    logger.info "*** In  Similars_Controller connect_similars: @log_connection_id = #{@log_connection_id} "
+    @log_connection_tree_size = @log_connection[:log_tree].size unless @log_connection[:log_tree].blank?
+    @log_connection_profilekey_size = @log_connection[:log_profilekey].size unless @log_connection[:log_profilekey].blank?
+    @complete_log = @log_connection[:log_tree] + @log_connection[:log_profilekey]
+    logger.info "*** In  Similars_Controller connect_similars: @complete_log = \n     #{@complete_log} "
+    @complete_log_size = @complete_log.size unless @complete_log.blank?
+    logger.info "*** In  Similars_Controller connect_similars: @complete_log_size = #{@complete_log_size} "
+
 
   end
 
@@ -170,10 +186,22 @@ class SearchSimilarsController < ApplicationController
     second_profile_connecting = params[:second_profile_id]
     logger.info "*** In keep_disconnected_similars:  first_profile_connecting = #{first_profile_connecting},  second_profile_connecting = #{second_profile_connecting} "
     ############ call of User.module ############################################
-    profiles_to_rewrite, profiles_to_destroy = current_user.similars_complete_search(init_hash)
-    #############################################################################
     current_user.without_connecting_similars
 
+  end
+
+  # Возвращает объединенные профили в состояние перед объединением
+  # во всех таблицах
+  def disconnect_similars
+
+    log_id = params[:log_connection_id]
+    logger.info "*** In disconnect_similars:  log_id = #{log_id}"
+
+    profiles_to_rewrite = params[:profiles_rewrite_arr]
+    profiles_to_destroy = params[:profile_destroy_arr]
+    logger.info "*** In disconnect_similars:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
+    ############ call of User.module Similars_disconnection #####################
+    current_user.disconnecting_similars(profiles_to_rewrite, profiles_to_destroy)
 
   end
 

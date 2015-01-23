@@ -30,3 +30,5 @@
 
 # Redis
 dump.rdb
+
+.idea/*

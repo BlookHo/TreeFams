@@ -6,11 +6,12 @@ module SimilarsExclusions
     ######################################################################
     # МЕТОДЫ ПРОВЕРКИ УСЛОВИЯ ИСКЛЮЧЕНИЯ ПОХОЖЕСТИ
     ######################################################################
-    # Стартовый Метод определения факта исключения похожести двух профилей.
+    # Метод определения факта исключения похожести двух профилей.
     # Независимо от мощноти общности их кругов
     # На основе проверки существования отношений исключения похожести
     # в необщих частях 2-х кругов.
     def check_similars_exclusions(data_for_check)
+      logger.info "*** In check_similars_exclusions 1: data_for_check: #{data_for_check}"
       uncommon_hash_a, uncommon_hash_b = get_uncommons(data_for_check[:a_profile_circle], data_for_check[:b_profile_circle], data_for_check[:common_hash])
       inter_relations = common_of_uncommons(uncommon_hash_a, uncommon_hash_b)
       sim_exlude_relations = [ "Отец", "Мама", "Дед-о", "Дед-м", "Бабка-о","Бабка-м"   ] # ++ "Отец",
@@ -39,7 +40,6 @@ module SimilarsExclusions
       #logger.info "*** In common_of_uncommons 76: inter_relations: #{inter_relations}"
       inter_relations
     end
-
     # check relations exclusion
     # Установка значения признака в завис-ти от того, существуют ли среди пересечения inter_relations необщих частей кругов
     # двух профилей а и б какие-либо из отношений, входящие в массив Отношений-Исключений = exlude_relations.
@@ -50,8 +50,8 @@ module SimilarsExclusions
       unsimilar_sign = true # Исх.знач-е
       inter_relations.each do |relation|
         unsimilar_sign = false if exlude_relations.include?(relation) # Значит - точно непохожие
-        #logger.info "*** In check_rels_ each 77-1: relation: #{relation}, exlude_relations.include?(relation) = #{exlude_relations.include?(relation)}, exlude_relations = #{exlude_relations} "
-        #logger.info "*** In check_relations_exclusion 77-2: unsimilar_sign: #{unsimilar_sign}"
+        logger.info "*** In check_rels_ each 77-1: relation: #{relation}, exlude_relations.include?(relation) = #{exlude_relations.include?(relation)}, exlude_relations = #{exlude_relations} "
+        logger.info "*** In check_relations_exclusion 77-2: unsimilar_sign: #{unsimilar_sign}"
       end
       #logger.info "*** In check_relations_exclusion 77: unsimilar_sign: #{unsimilar_sign}"
       unsimilar_sign  # передача значения признака (true/false)
