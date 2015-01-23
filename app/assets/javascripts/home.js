@@ -568,7 +568,6 @@ getCircles = function(params){
 
 
 
-
 showProfileContextMenu = function(params){
   $.get( "/profile/context-menu", params);
 }

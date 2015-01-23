@@ -16,7 +16,6 @@ function connectTrees(){
   // http://localhost:3000/make_connection_request?user_id_to_connect=tree_owner_id
   var tree_owner_id = getCurrentTreeUserId();
   window.location.href = '/make_connection_request?user_id_to_connect='+tree_owner_id;
-
 }
 
 // Получение результатов поиска и отображение на кнопке на домашней странице
@@ -34,9 +33,9 @@ function getSearchResults(callback) {
 // Показать результаты поиска на большой синей кнопке
 showSearchResultsButton = function(search_results){
   if (search_results.total_profiles == 0){
-    $('#notify').fadeIn().addClass('animated tada');
+    $('#notify').fadeIn().addClass('animated lightSpeedIn');
     $('#notify').on('click', function(){
-      $(this).fadeOut();
+      $(this).addClass('animated lightSpeedOut');
     })
   }else{
     $(search_btn).show();
