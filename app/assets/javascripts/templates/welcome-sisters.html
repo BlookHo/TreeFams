@@ -20,15 +20,14 @@
   <div class="control">
     <a ng-click="removeMember($index, 'sisters')" class="remove-field">удалить</a>
     <input type="text"
-    ng-model="family.sisters[$index].name"
-    ng-change="changeMemberName('sisters', $index, family.sisters[$index].name)"
-    typeahead-on-select="onMultipleSelectName($model, 'sisters', $index)"
-    placeholder="Начните вводить имя, например: Ольга"
-    typeahead="item as item.name for item in getNames($viewValue, 0)"
-    typeahead-editable="true"
-    typeahead-loading="loading..."
-    typeahead-template-url="customDropDownTemplate.html"
-    autoFocus >
+            ng-model="family.sisters[$index].name"
+            ng-change="changeMemberName('sisters', $index, family.sisters[$index].name)"
+            typeahead-on-select="onMultipleSelectName($model, 'sisters', $index)"
+            placeholder="Начните вводить имя, например: Ольга"
+            typeahead="item as item.name for item in getNames($viewValue, 0)"
+            typeahead-editable="true"
+            typeahead-loading="loading..."
+            typeahead-template-url="customDropDownTemplate.html">
   </div>
 
 </div>

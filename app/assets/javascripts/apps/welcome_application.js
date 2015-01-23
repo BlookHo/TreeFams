@@ -113,6 +113,7 @@ var app = angular
 .controller('welcomeApplicationController', function($scope, $http, $state) {
 
 
+
   // Start Drag form
   $('#start form').draggable({ handle: "#dragger" });
 
@@ -246,7 +247,9 @@ var app = angular
   // Add or remove member
   $scope.addMember = function(modelName) {
     console.log("addMember "+ Date.now() );
-    eval('$scope.family.'+modelName+'.push({name:""}) ')
+    eval('$scope.family.'+modelName+'.push({name:""}) ');
+    setTimeout(function(){$("input:text:visible:last").focus();}, 100);
+
   };
 
 
@@ -506,6 +509,10 @@ var app = angular
 
 
   // State validation with redirect
+  $scope.$on('$viewContentLoaded', function () {
+    $("input:text:visible:last").focus();
+  });
+
   /*
   $scope.$on('$viewContentLoaded', function () {
 
@@ -707,16 +714,12 @@ var app = angular
     });
   };
 
-
-
-
 });
 
 
 
 
 
-// Directives
 // app.directive('autoFocus', function($timeout) {
 //   return {
 //     restrict: 'AC',
@@ -727,22 +730,3 @@ var app = angular
 //     }
 //   };
 // });
-
-
-app.directive('autoFocus', function($timeout) {
-  return {
-    scope : {
-      trigger: '@autoFocus'
-    },
-    link: function(scope, element) {
-      scope.$watch('trigger', function(value) {
-        if (value === 'true') {
-          $timeout(function() {
-            console.log('giving focus to element', element[0].id);
-            element[0].focus();
-          });
-        }
-      });
-    }
-  };
-});

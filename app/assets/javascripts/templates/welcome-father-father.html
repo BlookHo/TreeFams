@@ -15,16 +15,15 @@
 
 <div class="control">
   <input type="text"
-  ng-model="family.father_father"
-  ng-change="changeName('father_father', family.father_father)"
-  ng-value="name"
-  typeahead-on-select="onSelectName($model, 'father_father')"
-  placeholder="Начните вводить имя, например: Владимир"
-  typeahead="item as item.name for item in getNames($viewValue, 1)"
-  typeahead-editable="true"
-  typeahead-loading="loading..."
-  typeahead-template-url="customDropDownTemplate.html"
-  autoFocus>
+          ng-model="family.father_father"
+          ng-change="changeName('father_father', family.father_father)"
+          ng-value="name"
+          typeahead-on-select="onSelectName($model, 'father_father')"
+          placeholder="Начните вводить имя, например: Владимир"
+          typeahead="item as item.name for item in getNames($viewValue, 1)"
+          typeahead-editable="true"
+          typeahead-loading="loading..."
+          typeahead-template-url="customDropDownTemplate.html">
 </div>
 <div class="actions">
   <a ui-sref="form.daughters" class="bttn silver right">Назад</a>
