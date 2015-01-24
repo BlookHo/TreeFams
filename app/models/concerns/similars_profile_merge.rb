@@ -47,8 +47,11 @@ module SimilarsProfileMerge
         # у этого юзера profile_id остается тем же
         # Если юзер есть у opposite_profile, котрый будет удален,
         # то линкуем юзера к новому профилю
-        if opposite_profile.user.present?
-          logger.info "Юзер  #{opposite_profile.user.id} будут перелинкован на профиль #{main_profile.id}"
+   #     if opposite_profile.user.present?
+        if main_profile.user.present?
+            logger.info "Юзер  #{main_profile.user.id} будут перелинкован на профиль #{main_profile.id}"
+          opposite_rewrite_user_row_id = main_profile.user.id
+          logger.info "In merge profile: opposite_rewrite_user_row_id =  #{opposite_rewrite_user_row_id}"
 
      # 1      opposite_profile.user.update_column(:profile_id, main_profile.id)
 
