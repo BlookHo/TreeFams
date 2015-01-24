@@ -19,12 +19,13 @@ module SimilarsConnection
     ## (уходят): profiles_to_destroy - найден в поиске
 
     # Первым параметром идут те профили, которые остаются
-    Profile.profiles_merge(connection_data[:profiles_to_rewrite], connection_data[:profiles_to_destroy])
+    log_connection_user_profile = Profile.profiles_merge(connection_data)
+    #[:profiles_to_rewrite], connection_data[:profiles_to_destroy])
 
     log_connection_tree       = update_table(connection_data, Tree, 'Tree')
     log_connection_profilekey = update_table(connection_data, ProfileKey, 'ProfileKey')
 
-    { log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
+    {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
 
     # Запись лога в таблицу SimilarsLog под номером log_id
     # Вернуть полученный log_id
@@ -59,12 +60,11 @@ module SimilarsConnection
     table  = table_update_data[:table]
     table_field = table_update_data[:table_field]
 
-    connection_id += 1
     #logger.info "*** In module SimilarsConnection User update_field before for: profiles_to_rewrite = #{profiles_to_rewrite},
     #             profiles_to_rewrite = #{profiles_to_rewrite} ,  connection_id = #{connection_id} "
     for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
       rows_to_update = table.where(:user_id => connected_users_arr).
-                                  where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
+                             where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
       unless rows_to_update.blank?
         rows_to_update.each do |rewrite_row|
 

@@ -155,10 +155,14 @@ class SimilarsController < ApplicationController
     @profiles_to_destroy = profiles_to_destroy # TO_VIEW
     logger.info "*** In connect_similars contrler 3:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
 
+    last_log_id = 10
+    # порядковый номер connection - взять значение из последнего лога
+    last_log_id += 1
+
     similars_connection_data = {profiles_to_rewrite: profiles_to_rewrite, #
                                 profiles_to_destroy: profiles_to_destroy,
                                 current_user_id: current_user.id,
-                                connection_id: 10  }  # порядковый номер connection - взять значение из последнего лога
+                                connection_id: last_log_id }
 
     # Лог - это массив записей о параметрах всех совершенных объединениях дерева
     # храниться должен отдельно
@@ -171,7 +175,7 @@ class SimilarsController < ApplicationController
     logger.info "*** In  Similars_Controller connect_similars: @log_connection_id = #{@log_connection_id} "
     @log_connection_tree_size = @log_connection[:log_tree].size unless @log_connection[:log_tree].blank?
     @log_connection_profilekey_size = @log_connection[:log_profilekey].size unless @log_connection[:log_profilekey].blank?
-    @complete_log = @log_connection[:log_tree] + @log_connection[:log_profilekey]
+    @complete_log = @log_connection[:log_user_profile] + @log_connection[:log_tree] + @log_connection[:log_profilekey]
     logger.info "*** In  Similars_Controller connect_similars: @complete_log = \n     #{@complete_log} "
     @complete_log_size = @complete_log.size unless @complete_log.blank?
     logger.info "*** In  Similars_Controller connect_similars: @complete_log_size = #{@complete_log_size} "
