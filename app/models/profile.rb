@@ -16,6 +16,7 @@ class Profile < ActiveRecord::Base
   include ProfileQuestions
   include ProfileMerge
   include ProfileApiCircles
+  include SimilarsProfileMerge
 
   has_one    :user
   has_one    :owner_user,

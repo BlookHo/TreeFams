@@ -14,6 +14,13 @@ module SimilarsConnection
     # Перезапись profile_data при объединении профилей
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
 
+    #########  перезапись profile_id's & update User
+    ## (остаются): profiles_to_rewrite - противоположные, найденным в поиске
+    ## (уходят): profiles_to_destroy - найден в поиске
+
+    # Первым параметром идут те профили, которые остаются
+    Profile.profiles_merge(connection_data[:profiles_to_rewrite], connection_data[:profiles_to_destroy])
+
     log_connection_tree       = update_table(connection_data, Tree, 'Tree')
     log_connection_profilekey = update_table(connection_data, ProfileKey, 'ProfileKey')
 
@@ -28,7 +35,7 @@ module SimilarsConnection
   # перезапись значений в полях одной таблицы
   def update_table(connection_data, table, table_name )
     log_connection = []
-    #logger.info "*** In module SimilarsConnection update_table: table_name = #{table_name},  "
+    logger.info "*** In module SimilarsConnection update_table: table_name = #{table_name},  "
     connection_data[:table_name] = table_name
     ["profile_id", "is_profile_id"].each do |table_field|
       table_update_data = { table: table, table_field: table_field}
