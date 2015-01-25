@@ -57,7 +57,7 @@ class SimilarsController < ApplicationController
 
 
 
-        @tree_info = get_tree_info(current_user)
+    @tree_info = get_tree_info(current_user)
     logger.info "In internal_similars_search 1: @tree_info = #{@tree_info} "  if !@tree_info.blank?
     logger.info "In internal_similars_search 1a: @tree_info.profiles.size = #{@tree_info[:profiles].size} "  if !@tree_info.blank?
     ############ call of User.module ############################################
@@ -67,6 +67,7 @@ class SimilarsController < ApplicationController
     @unsimilars = unsimilars
     @unsimilars_qty = unsimilars.size if !unsimilars.empty?
     @paged_similars_data = pages_of(similars, 10) # Пагинация - по 10 строк на стр.(?)
+    @current_user_id = current_user.id
 
   end
 
@@ -153,11 +154,14 @@ class SimilarsController < ApplicationController
     #############################################################################
     @profiles_to_rewrite = profiles_to_rewrite # TO_VIEW
     @profiles_to_destroy = profiles_to_destroy # TO_VIEW
-    logger.info "*** In connect_similars contrler 3:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
+    # logger.info "*** In connect_similars contrler 3:  profiles_to_rewrite = #{profiles_to_rewrite},
+    #  profiles_to_destroy = #{profiles_to_destroy} "
 
+    #############################################################################
     last_log_id = 10
     # порядковый номер connection - взять значение из последнего лога
     last_log_id += 1
+    #############################################################################
 
     similars_connection_data = {profiles_to_rewrite: profiles_to_rewrite, #
                                 profiles_to_destroy: profiles_to_destroy,
@@ -173,6 +177,7 @@ class SimilarsController < ApplicationController
     logger.info "*** In  Similars_Controller connect_similars: @log_connection = \n     #{@log_connection} "
     @log_connection_id = @log_connection[:log_tree][0][:connected_at]
     logger.info "*** In  Similars_Controller connect_similars: @log_connection_id = #{@log_connection_id} "
+    @log_user_profile_size = @log_connection[:log_user_profile].size unless @log_connection[:log_user_profile].blank?
     @log_connection_tree_size = @log_connection[:log_tree].size unless @log_connection[:log_tree].blank?
     @log_connection_profilekey_size = @log_connection[:log_profilekey].size unless @log_connection[:log_profilekey].blank?
     @complete_log = @log_connection[:log_user_profile] + @log_connection[:log_tree] + @log_connection[:log_profilekey]

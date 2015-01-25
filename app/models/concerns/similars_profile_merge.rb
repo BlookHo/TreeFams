@@ -13,7 +13,6 @@ module SimilarsProfileMerge
       profiles_to_rewrite = connection_data[:profiles_to_rewrite]
       profiles_to_destroy = connection_data[:profiles_to_destroy]
       # connected_users_arr = connection_data[:connected_users_arr]
-      connection_id       = connection_data[:connection_id]
       #logger.info "Starting merge profile: profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy}"
 
       log_profiles_connection = []
@@ -37,6 +36,7 @@ module SimilarsProfileMerge
 
           link_data = { main_profile: main_profile,
                         opposite_profile: opposite_profile,
+                        current_user_id: connection_data[:current_user_id],
                         connected_at: connection_data[:connection_id] }
           log_profiles_connection = make_user_profile_link(link_data)
 
@@ -64,44 +64,60 @@ module SimilarsProfileMerge
       log_profiles_connection = []
 
       main_profile = link_data[:main_profile]
+      current_user_id = link_data[:current_user_id]
       opposite_profile = link_data[:opposite_profile]
       connection_id = link_data[:connected_at]
 
       # 1 link #################################
   #    opposite_profile.user.update_column(:profile_id, main_profile.id)
+  #     name_of_table = User.table_name
+  #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect} "
+  #     name_of_table = Profile.table_name
+  #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect} "
+  #     model = name_of_table.classify.constantize
+  #     logger.info "*** In module SimilarsConnection update_table: model = #{model.inspect} "
 
       one_connection_data = { connected_at: connection_id,
-                              table_name: 'User',
+                              current_user_id: current_user_id,
+                              table_name: 'users',
                               table_row_id: opposite_profile.user.id,
-                              table_field: "profile_id",
-                              written: main_profile.id }
+                              table_field: 'profile_id',
+                              written: main_profile.id,
+                              deleted: opposite_profile.id }
+
       log_profiles_connection << one_connection_data
       logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
-      {:connected_at=>11, :table_name=>"User", :table_row_id=>5, :table_field=>"profile_id", :written=>52}
+      {:connected_at=>11, :table_name=>"User", :table_row_id=>5, :table_field=>"profile_id", :written=>52, :deleted=>34}
 
       # 2 link ##################################
   #    main_profile.update_column(:user_id, opposite_profile.user_id)
 
       one_connection_data = { connected_at: connection_id,
-                              table_name: 'Profile',
+                              current_user_id: current_user_id,
+                              table_name: 'profiles',
                               table_row_id: main_profile.id,
-                              table_field: "user_id",
-                              written: opposite_profile.user_id }
+                              table_field: 'user_id',
+                              written: opposite_profile.user_id,
+                              deleted: nil }
+
       log_profiles_connection << one_connection_data
       logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
-      {:connected_at=>11, :table_name=>"Profile", :table_row_id=>52, :table_field=>"user_id", :written=>5}
+      {:connected_at=>11, :table_name=>"Profile", :table_row_id=>52, :table_field=>"user_id", :written=>5, :deleted=>nil}
 
       # 3 link ###################################
   #     main_profile.update_column(:tree_id, opposite_profile.tree_id)
 
       one_connection_data = { connected_at: connection_id,
-                              table_name: 'Profile',
+                              current_user_id: current_user_id,
+                              table_name: 'profiles',
                               table_row_id: main_profile.id,
-                              table_field: "tree_id",
-                              written: opposite_profile.tree_id }
+                              table_field: 'tree_id',
+                              written: opposite_profile.tree_id,
+                              deleted: main_profile.tree_id }
+
       log_profiles_connection << one_connection_data
       logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
-      {:connected_at=>11, :table_name=>"Profile", :table_row_id=>52, :table_field=>"tree_id", :written=>5}
+      {:connected_at=>11, :table_name=>"Profile", :table_row_id=>52, :table_field=>"tree_id", :written=>5, :deleted=>4}
 
       # 4 link ###################################
   #    opposite_profile.update_column(:user_id, nil)
@@ -109,17 +125,19 @@ module SimilarsProfileMerge
       # Чтобы не было 2-х профилей с одинак. полем user_id/
 
       one_connection_data = { connected_at: connection_id,
-                              table_name: 'Profile',
+                              current_user_id: current_user_id,
+                              table_name: 'profiles',
                               table_row_id: opposite_profile.id,
-                              table_field: "user_id",
-                              written: nil }
+                              table_field: 'user_id',
+                              written: nil,
+                              deleted: opposite_profile.user_id }
+
       log_profiles_connection << one_connection_data
       logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
-      {:connected_at=>11, :table_name=>"Profile", :table_row_id=>34, :table_field=>"user_id", :written=>nil}
+      {:connected_at=>11, :table_name=>"Profile", :table_row_id=>34, :table_field=>"user_id", :written=>nil, :deleted=>5}
 
       log_profiles_connection
     end
-
 
 
 
