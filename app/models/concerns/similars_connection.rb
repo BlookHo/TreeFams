@@ -74,8 +74,8 @@ module SimilarsConnection
                                   table_name: table_name,
                                   table_row_id: rewrite_row.id,
                                   table_field: table_field,
-                                  profile_wrote: profiles_to_rewrite[arr_ind],
-                                  profile_destroyed: profiles_to_destroy[arr_ind] }
+                                  written: profiles_to_rewrite[arr_ind] }
+
           log_connection << one_connection_data
 
         end
