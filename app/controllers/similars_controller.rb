@@ -160,6 +160,7 @@ class SimilarsController < ApplicationController
     #############################################################################
     # SimilarsLog.delete_all
     # SimilarsLog.reset_pk_sequence
+    #############################################################################
 
     last_log_id = SimilarsLog.last.connected_at unless SimilarsLog.all.empty?
     logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
@@ -180,7 +181,7 @@ class SimilarsController < ApplicationController
 
     @log_connection = current_user.similars_connect_tree(similars_connection_data)
     logger.info "*** In  Similars_Controller connect_similars: @log_connection = \n     #{@log_connection} "
-    @log_connection_id = @log_connection[:log_tree][0][:connected_at]
+    @log_connection_id = @log_connection[:log_user_profile][0][:connected_at]
     logger.info "*** In  Similars_Controller connect_similars: @log_connection_id = #{@log_connection_id} "
     @log_user_profile_size = @log_connection[:log_user_profile].size unless @log_connection[:log_user_profile].blank?
     @log_connection_tree_size = @log_connection[:log_tree].size unless @log_connection[:log_tree].blank?
@@ -210,12 +211,12 @@ class SimilarsController < ApplicationController
 
     log_id = params[:log_connection_id]
     logger.info "*** In disconnect_similars:  log_id = #{log_id}"
+    @log_id = log_id.to_i
 
-    profiles_to_rewrite = params[:profiles_rewrite_arr]
-    profiles_to_destroy = params[:profile_destroy_arr]
-    logger.info "*** In disconnect_similars:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
+    # logger.info "*** In disconnect_similars:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
     ############ call of User.module Similars_disconnection #####################
-    current_user.disconnecting_similars(profiles_to_rewrite, profiles_to_destroy)
+    # current_user.disconnecting_similars(profiles_to_rewrite, profiles_to_destroy)
+    current_user.disconnect_sims_in_tables(log_id.to_i)
 
   end
 
