@@ -70,6 +70,7 @@ module SimilarsProfileMerge
 
       # 1 link #################################
   #    opposite_profile.user.update_column(:profile_id, main_profile.id)
+
   #     name_of_table = User.table_name
   #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect} "
   #     name_of_table = Profile.table_name
@@ -84,18 +85,7 @@ module SimilarsProfileMerge
                               field: 'profile_id',
                               written: main_profile.id,
                               overwritten: opposite_profile.id }
-
-      log_profiles_connection << one_connection_data
-      logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
-      {:connected_at=>11, :table_name=>"User", :table_row_id=>5, :table_field=>"profile_id", :written=>52, :deleted=>34}
-
-
-      new_log_profiles_connection = []
-
-      new_log_profiles_connection << SimilarsLog.new(one_connection_data)
-      logger.info "In make_user_profile_link: new_log_profiles_connection =  #{new_log_profiles_connection.inspect} "
-
-
+      log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
 
       # 2 link ##################################
   #    main_profile.update_column(:user_id, opposite_profile.user_id)
@@ -107,13 +97,7 @@ module SimilarsProfileMerge
                               field: 'user_id',
                               written: opposite_profile.user_id,
                               overwritten: nil }
-
-      log_profiles_connection << one_connection_data
-      logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
-      {:connected_at=>11, :table_name=>"Profile", :table_row_id=>52, :table_field=>"user_id", :written=>5, :deleted=>nil}
-
-      new_log_profiles_connection << SimilarsLog.new(one_connection_data)
-      new_log_profiles_connection.each(&:save)
+      log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
 
       # 3 link ###################################
   #     main_profile.update_column(:tree_id, opposite_profile.tree_id)
@@ -125,10 +109,7 @@ module SimilarsProfileMerge
                               field: 'tree_id',
                               written: opposite_profile.tree_id,
                               overwritten: main_profile.tree_id }
-
-      log_profiles_connection << one_connection_data
-      logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
-      {:connected_at=>11, :table_name=>"Profile", :table_row_id=>52, :table_field=>"tree_id", :written=>5, :deleted=>4}
+      log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
 
       # 4 link ###################################
   #    opposite_profile.update_column(:user_id, nil)
@@ -142,14 +123,18 @@ module SimilarsProfileMerge
                               field: 'user_id',
                               written: nil,
                               overwritten: opposite_profile.user_id }
-      log_profiles_connection << one_connection_data
-      logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
-      {:connected_at=>11, :table_name=>"Profile", :table_row_id=>34, :table_field=>"user_id", :written=>nil, :deleted=>5}
+      log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
 
-      log_profiles_connection
+    #  log_profiles_connection
     end
 
-
+    # Сохранение одного лога в табл.SimilarsLog
+    def store_one_log(log_user_profiles, one_connection_data)
+      log_user_profiles << SimilarsLog.new(one_connection_data)
+      logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
+      log_user_profiles
+    end
 
   end
+
 end

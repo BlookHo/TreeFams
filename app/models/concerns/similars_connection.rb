@@ -10,8 +10,6 @@ module SimilarsConnection
 
     connected_users_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
     connection_data[:connected_users_arr] = connected_users_arr
-    # logger.info "*^^^^** In similars_connect_tree : \n
-    #  connection_data[:current_user_id] = #{connection_data[:current_user_id]} "
 
     # Перезапись profile_data при объединении профилей
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
@@ -22,10 +20,10 @@ module SimilarsConnection
     log_connection_profilekey = update_table(connection_data, ProfileKey)
 
     common_log = {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
+    complete_log_arr = common_log[:log_user_profile] + common_log[:log_tree] + common_log[:log_profilekey]
 
-    store_log(common_log)
-    # Запись лога в таблицу SimilarsLog под номером log_id
-    # Вернуть полученный log_id
+    store_log(complete_log_arr)
+    # Запись массива лога в таблицу SimilarsLog под номером log_id
     common_log
   end
 
@@ -72,7 +70,7 @@ module SimilarsConnection
       unless rows_to_update.blank?
         rows_to_update.each do |rewrite_row|
 
-  #        rewrite_row.update_column(:"#{table_field}", profiles_to_rewrite[arr_ind] )
+  #       rewrite_row.update_column(:"#{table_field}", profiles_to_rewrite[arr_ind] )
 
           one_connection_data = { connected_at: connection_id,              # int
                                   current_user_id: current_user_id,        # int
@@ -82,7 +80,7 @@ module SimilarsConnection
                                   written: profiles_to_rewrite[arr_ind],        # int
                                   overwritten: profiles_to_destroy[arr_ind] }        # int
 
-          log_connection << one_connection_data
+          log_connection << SimilarsLog.new(one_connection_data)
 
         end
 
@@ -94,27 +92,12 @@ module SimilarsConnection
   end
 
 
+  # Сохранение массива логов в таблицу SimilarsLog
   #
-  #
-  # /
   def store_log(common_log)
 
-    # SimilarsLog.delete_all
-    # SimilarsLog.reset_pk_sequence
-    # first_log_row =
-    # SimilarsLog.create([])
-    # SimilarsLog.new(one_connection_data)
-    # connected_at: connection_id,
-    #     current_user_id: current_user_id,
-    #     table_name: 'profiles',
-    #     table_row: main_profile.id,
-    #     field: 'tree_id',
-    #     written: opposite_profile.tree_id,
-    #     overwritten: main_profile.tree_id }
-
     logger.info "*** In module SimilarsConnection User store_log: common_log = #{common_log}"
-    # common_log.each(&:save)
-
+    common_log.each(&:save)
 
   end
 

@@ -158,9 +158,14 @@ class SimilarsController < ApplicationController
     #  profiles_to_destroy = #{profiles_to_destroy} "
 
     #############################################################################
-    last_log_id = SimilarsLog.last.connected_at
+    # SimilarsLog.delete_all
+    # SimilarsLog.reset_pk_sequence
+
+    last_log_id = SimilarsLog.last.connected_at unless SimilarsLog.all.empty?
+    logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
     # порядковый номер connection - взять значение из последнего лога
-    last_log_id += 1
+    last_log_id == nil ? last_log_id = 1 : last_log_id += 1
+    logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
     #############################################################################
 
     similars_connection_data = {profiles_to_rewrite: profiles_to_rewrite, #
