@@ -21,11 +21,12 @@ module SimilarsConnection
     log_connection_tree       = update_table(connection_data, Tree)
     log_connection_profilekey = update_table(connection_data, ProfileKey)
 
-    {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
+    common_log = {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
 
+    store_log(common_log)
     # Запись лога в таблицу SimilarsLog под номером log_id
     # Вернуть полученный log_id
-
+    common_log
   end
 
 
@@ -76,10 +77,10 @@ module SimilarsConnection
           one_connection_data = { connected_at: connection_id,              # int
                                   current_user_id: current_user_id,        # int
                                   table_name: table_name,                  # string
-                                  table_row_id: rewrite_row.id,            # int
-                                  table_field: table_field,                 # string
+                                  table_row: rewrite_row.id,            # int
+                                  field: table_field,                 # string
                                   written: profiles_to_rewrite[arr_ind],        # int
-                                  deleted: profiles_to_destroy[arr_ind] }        # int
+                                  overwritten: profiles_to_destroy[arr_ind] }        # int
 
           log_connection << one_connection_data
 
@@ -91,6 +92,36 @@ module SimilarsConnection
     log_connection
 
   end
+
+
+  #
+  #
+  # /
+  def store_log(common_log)
+
+    # SimilarsLog.delete_all
+    # SimilarsLog.reset_pk_sequence
+    # first_log_row =
+    # SimilarsLog.create([])
+    # SimilarsLog.new(one_connection_data)
+    # connected_at: connection_id,
+    #     current_user_id: current_user_id,
+    #     table_name: 'profiles',
+    #     table_row: main_profile.id,
+    #     field: 'tree_id',
+    #     written: opposite_profile.tree_id,
+    #     overwritten: main_profile.tree_id }
+
+    logger.info "*** In module SimilarsConnection User store_log: common_log = #{common_log}"
+    # common_log.each(&:save)
+
+
+  end
+
+
+
+
+
 
 
   # Метод дла перезаписи профилей в таблицах

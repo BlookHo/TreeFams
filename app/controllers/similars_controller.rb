@@ -158,7 +158,7 @@ class SimilarsController < ApplicationController
     #  profiles_to_destroy = #{profiles_to_destroy} "
 
     #############################################################################
-    last_log_id = 10
+    last_log_id = SimilarsLog.last.connected_at
     # порядковый номер connection - взять значение из последнего лога
     last_log_id += 1
     #############################################################################

@@ -80,14 +80,22 @@ module SimilarsProfileMerge
       one_connection_data = { connected_at: connection_id,
                               current_user_id: current_user_id,
                               table_name: 'users',
-                              table_row_id: opposite_profile.user.id,
-                              table_field: 'profile_id',
+                              table_row: opposite_profile.user.id,
+                              field: 'profile_id',
                               written: main_profile.id,
-                              deleted: opposite_profile.id }
+                              overwritten: opposite_profile.id }
 
       log_profiles_connection << one_connection_data
       logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
       {:connected_at=>11, :table_name=>"User", :table_row_id=>5, :table_field=>"profile_id", :written=>52, :deleted=>34}
+
+
+      new_log_profiles_connection = []
+
+      new_log_profiles_connection << SimilarsLog.new(one_connection_data)
+      logger.info "In make_user_profile_link: new_log_profiles_connection =  #{new_log_profiles_connection.inspect} "
+
+
 
       # 2 link ##################################
   #    main_profile.update_column(:user_id, opposite_profile.user_id)
@@ -95,14 +103,17 @@ module SimilarsProfileMerge
       one_connection_data = { connected_at: connection_id,
                               current_user_id: current_user_id,
                               table_name: 'profiles',
-                              table_row_id: main_profile.id,
-                              table_field: 'user_id',
+                              table_row: main_profile.id,
+                              field: 'user_id',
                               written: opposite_profile.user_id,
-                              deleted: nil }
+                              overwritten: nil }
 
       log_profiles_connection << one_connection_data
       logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
       {:connected_at=>11, :table_name=>"Profile", :table_row_id=>52, :table_field=>"user_id", :written=>5, :deleted=>nil}
+
+      new_log_profiles_connection << SimilarsLog.new(one_connection_data)
+      new_log_profiles_connection.each(&:save)
 
       # 3 link ###################################
   #     main_profile.update_column(:tree_id, opposite_profile.tree_id)
@@ -110,10 +121,10 @@ module SimilarsProfileMerge
       one_connection_data = { connected_at: connection_id,
                               current_user_id: current_user_id,
                               table_name: 'profiles',
-                              table_row_id: main_profile.id,
-                              table_field: 'tree_id',
+                              table_row: main_profile.id,
+                              field: 'tree_id',
                               written: opposite_profile.tree_id,
-                              deleted: main_profile.tree_id }
+                              overwritten: main_profile.tree_id }
 
       log_profiles_connection << one_connection_data
       logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
@@ -127,11 +138,10 @@ module SimilarsProfileMerge
       one_connection_data = { connected_at: connection_id,
                               current_user_id: current_user_id,
                               table_name: 'profiles',
-                              table_row_id: opposite_profile.id,
-                              table_field: 'user_id',
+                              table_row: opposite_profile.id,
+                              field: 'user_id',
                               written: nil,
-                              deleted: opposite_profile.user_id }
-
+                              overwritten: opposite_profile.user_id }
       log_profiles_connection << one_connection_data
       logger.info "In make_user_profile_link: one_connection_data =  #{one_connection_data.inspect} "
       {:connected_at=>11, :table_name=>"Profile", :table_row_id=>34, :table_field=>"user_id", :written=>nil, :deleted=>5}
