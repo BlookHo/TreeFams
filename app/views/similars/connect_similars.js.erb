@@ -33,13 +33,10 @@ if(typeof profilesRewrite != "undefined" && profilesRewrite != null && profilesR
     console.log('sims connected again: logConnection = ' + logConnection);
 
     var textStr = '<br>' + 'Объединение похожих профилей - совершено.' +  '<br>' +
-            ' Теперь при необходимости можно разъединить объединенные похожие профили'  +  '<br>' +
-            logConnection;
+            ' Теперь при необходимости можно разъединить объединенные похожие профили'  +  '<br>' + logConnection;
 //            +  '<br>' + profilesRewrite + ' и ' + profilesDestroy + '<br>';
     $('.after_connect h2').empty().append(textStr);
-
     $('.arrays').empty().html('<%= j render 'similars/disconnect_sims' -%>');
-
 }
 
 

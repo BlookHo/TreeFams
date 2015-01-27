@@ -21,16 +21,24 @@
     -#%h2 Количество НЕПОХОЖИХ пар профилей в дереве: #{@unsimilars_qty}
   %br
   %br
+
+  - if @log_connection_id.blank?
+    .no_logs
+      %h1 Тест на "Похожие" ранее был пройден успешно. Логи объединения - отсутствуют.
+  - else
+    .have_logs
+      = render 'similars/disconnect_sims'
+  %br
   %br
 
 
-  %h1 Найденные пары "Похожих"
   - if @paged_similars_data.blank?
     %table
       %tr
         %td.left.grey.italic
-          "Похожих" - нет! И это - неплохо.. (@paged_similars_data = empty)
+          "Похожих" - нет! И это - неплохо...
   - else
+    %h1 Найденные пары "Похожих"
     %table
       %tr
         %th Первый профиль
@@ -76,7 +84,6 @@
 
     = paginate @paged_similars_data
 
-  %h2 Объединение "Похожих" профилей
   %br
   %br
 
