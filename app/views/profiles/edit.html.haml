@@ -1,6 +1,5 @@
 #profile
   = render 'profile_header'
-
   .content
     = form_for @profile_data, url: profile_path(@profile) do |f|
       = render 'form', f: f

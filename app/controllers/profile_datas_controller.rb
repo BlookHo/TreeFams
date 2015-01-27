@@ -20,11 +20,12 @@ class ProfileDatasController < ApplicationController
       return redirect_to :back, notice: "Вы не можете менять чужую информацию о родстеннике"
     end
     if @profile_data.update_attributes(profile_data_params)
-      redirect_to :back, notice: "Информация сохранена"
+      redirect_to profile_path(@profile_data.profile), notice: "Информация сохранена"
     else
       redirect_to :back, alert: "Ошибка при сохранении информации о родственнике"
     end
   end
+
 
 
   private
@@ -37,8 +38,18 @@ class ProfileDatasController < ApplicationController
       :birth_date,
       :country,
       :city,
-      :avatar
+      :avatar,
+      :avatar_original_w,
+      :avatar_original_h,
+      :avatar_box_w,
+      :avatar_crop_x,
+      :avatar_crop_y,
+      :avatar_crop_w,
+      :avatar_crop_h,
+      :avatar_aspect
     )
   end
+
+
 
 end

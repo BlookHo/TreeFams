@@ -5,6 +5,11 @@
 
   .header{
     .avatar{width:150px;height:150px;border-radius:75px;}
+    a.crop{
+      position:relative;
+      top:-135px;
+      color:blue;
+    }
 
     h1{
       margin-top:20px;

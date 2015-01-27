@@ -1,0 +1,9 @@
+.container#profile
+  .header
+    = form_for @current_user_profile_data, url: (@current_user_profile_data.new_record? ? profile_datas_path : profile_data_path(@current_user_profile_data)), html:{class: "wf-from"} do |f|
+      = f.hidden_field :profile_id
+      .field{style: "text-align:center;width:150px;height:150px;border-radius:75px;overflow:hidden;"}
+        = f.crop_preview :avatar, width: 150
+      .field{style: "text-align:center;"}
+        = f.cropbox :avatar, :width => 300
+      = f.submit 'Сохранить', class: 'bttn small green'

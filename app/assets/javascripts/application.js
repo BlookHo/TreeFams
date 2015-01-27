@@ -22,6 +22,11 @@
 //= require apps/welcome_application
 
 
+// Papercrop
+//= require jquery.jcrop
+//= require papercrop
+
+
 
 function jsdebug(objekt){
   $('#jsdebug').text( JSON.stringify(objekt) );

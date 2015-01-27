@@ -6,12 +6,17 @@ class ProfileData < ActiveRecord::Base
                 :class_name => User
 
 
+    # has_attached_file :avatar,
+    #                   :styles => {:original => ["100%", :png], :medium => "300x300>", :thumb => "100x100>", :round_thumb => "100x100#" },
+    #                   :convert_options => {:round_thumb => Proc.new{self.convert_options}}
+
     has_attached_file :avatar,
-                      :styles => {:original => ["100%", :png], :medium => "300x300>", :thumb => "100x100>", :round_thumb => "100x100#" },
+                      :styles => {:original => ["100%", :png], :medium => "300x300#", :thumb => "100x100#", :round_thumb => "100x100#"},
                       :convert_options => {:round_thumb => Proc.new{self.convert_options}}
 
-    validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+    crop_attached_file :avatar
 
+    validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
 
     def self.convert_options(px = 50)
       trans = ""
@@ -21,7 +26,6 @@ class ProfileData < ActiveRecord::Base
       trans << "\\( +clone -flop \\) -compose Multiply -composite "
       trans << "\\) -alpha off -compose CopyOpacity -composite "
     end
-
 
     def to_name
       self.profile.to_name

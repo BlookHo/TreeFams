@@ -161,6 +161,15 @@ class ProfilesController < ApplicationController
   end
 
 
+  def crop
+    profile_id = params[:id].blank? ? params[:profile_id] : params[:id]
+    @profile = Profile.where(id: profile_id).first
+    @profile_datas = @profile.profile_datas
+    @current_profile_data = find_current_profile_data
+    @current_user_profile_data = current_user_profile_data_for_profile
+  end
+
+
 
   private
 

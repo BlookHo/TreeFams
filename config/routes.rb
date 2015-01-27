@@ -183,6 +183,8 @@ Weafam::Application.routes.draw do
     get '/version/:profile_data_id', to: 'profiles#show', as: :profile_data_version
   end
 
+  get '/crop/avatar/:profile_id', to: 'profiles#crop', as: :crop_avatar
+
 
   # Profile Data
   ##################################################

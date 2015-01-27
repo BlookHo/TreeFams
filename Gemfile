@@ -46,6 +46,7 @@ gem 'hashie'
 
 
 gem "paperclip", "~> 4.2"
+gem "papercrop"
 
 # Yandex inflection
 gem "yandex_inflect", "~> 0.1.2"
