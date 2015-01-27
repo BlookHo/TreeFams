@@ -695,7 +695,6 @@ var app = angular
 
 
   $scope.submitData = function(){
-
     $scope.loading = true;
     $http({
       method : 'POST',
