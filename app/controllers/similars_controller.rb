@@ -225,12 +225,9 @@ class SimilarsController < ApplicationController
     ############ call of User.module Similars_disconnection #####################
     current_user.disconnect_sims_in_tables(log_id.to_i)
 
-    respond_to do |format|
-      # format.js { render(:update) { |page| page.redirect_to authentications_url } }
-      format.js { render :js => "window.location.href = '#{home_path}'" }
-    end
-
-
+    # respond_to do |format|
+    #   format.js { render :js => "window.location.href = '#{home_path}'" }
+    # end
 
   end
 
