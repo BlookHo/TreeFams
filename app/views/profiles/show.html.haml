@@ -1,7 +1,7 @@
 .container#profile
   .header
     = image_tag @current_profile_data.avatar_url(:medium), class: "avatar"
-    - if @current_profile_data.creator == current_user
+    - if @current_profile_data.creator == current_user && @current_profile_data.avatar.present?
       = link_to fa_icon('crop'), crop_avatar_path(@profile), class: "crop", title: "Обрезать фотографию"
 
     %h1
