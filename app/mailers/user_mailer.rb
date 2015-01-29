@@ -8,4 +8,12 @@ class UserMailer < ActionMailer::Base
     mail(to: @email, subject: 'Мы все - родня. Регистрация: данные для входа в ваш аккаунт.')
   end
 
+
+  def reset_password(user,  password)
+    @name = user.name
+    @email = user.email
+    @password = password
+    mail(to: @email, subject: 'Мы все - родня. Восстановление пароля.')
+  end
+
 end

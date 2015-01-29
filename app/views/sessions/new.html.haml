@@ -10,7 +10,8 @@
         .control
           = password_field_tag :password, nil, :class => 'form-control', :placeholder => 'Пароль'
       .footer
-        = submit_tag "Войти", :class => 'btn green'
+        = submit_tag "Войти", :class => 'btn green '
+        = link_to 'Забыли пароль?', reset_password_path, class: 'pull-right'
 
 
 -# if Rails.env =~ /development/

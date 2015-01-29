@@ -152,10 +152,14 @@ class User < ActiveRecord::Base
     logger.info "*** In User.disconnecting_similars:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
     # методы разсоединения профилей = обратная перезапись профилей в таблицах
     self.disconnect_sims_in_tables(profiles_to_rewrite, profiles_to_destroy)
-
-
   end
 
+
+  def reset_password
+    password = User.generate_password
+    self.update_attributes(password: password, password_confirmation: password)
+    UserMailer.reset_password(self, password).deliver
+  end
 
 
   private
@@ -167,6 +171,9 @@ class User < ActiveRecord::Base
   def self.generate_password
     '1111'
   end
+
+
+
 
 
 

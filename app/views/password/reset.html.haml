@@ -1,0 +1,10 @@
+.col_1_2
+  #welcome-form
+    = form_tag :reset_password do
+      .body
+        %h2 Забыли пароль?
+        .control
+          = text_field_tag :email, params[:email], :class => 'form-control', :placeholder => 'Ваш email'
+      .footer
+        = submit_tag "Отправить", :class => 'btn green '
+        = link_to 'Войти', login_path, class: 'pull-right'

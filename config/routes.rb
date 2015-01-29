@@ -192,6 +192,9 @@ Weafam::Application.routes.draw do
 
 
 
+  match '/passwrod/reset' => 'password#reset', via: [:get, :post], as: :reset_password
+
+
 
 
   # for Mailer

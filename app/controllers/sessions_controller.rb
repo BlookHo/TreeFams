@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     user = User.find_by_email(params[:email])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to :main_page
+      redirect_to :home
     else
       flash.now.alert = "Направильный email или пароль"
       render :new
