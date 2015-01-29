@@ -17,6 +17,7 @@
             - request_to = "Don't show" if one_requests_arr.values_at(:request_to_user_id).flatten[0] != current_user.id
             - if request_to != "Don't show"
               %h4 Ваше решение:
-              = link_to 'Да', connection_of_trees_path( connection_id: connection_request, user_id_to_connect: one_requests_arr.values_at(:request_from_user_id).flatten[0]), class: [:bttn, :green]
+              = link_to 'Да', connection_of_trees_path( connection_id: connection_request, user_id_to_connect: one_requests_arr.values_at(:request_from_user_id).flatten[0]), class: [:bttn, :green, :connect]
+
               &nbsp;
-              = link_to 'Нет', no_connect_path( connection_id: connection_request), class: [:bttn, :red]
+              = link_to 'Нет', no_connect_path( connection_id: connection_request), class: [:bttn, :red, :connect]

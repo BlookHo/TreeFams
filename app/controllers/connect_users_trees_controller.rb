@@ -335,6 +335,7 @@ class ConnectUsersTreesController < ApplicationController
   # 2. update в таблице User
   # 3. перезапись profile_id в полях "profile_id" и "is_profile_id"
   # в таблицах Tree & ProfileKey.
+
   def connection_of_trees
 
     current_user_id = current_user.id #

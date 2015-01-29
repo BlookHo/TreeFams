@@ -27,6 +27,8 @@
 //= require papercrop
 
 
+//= require connection
+
 
 function jsdebug(objekt){
   $('#jsdebug').text( JSON.stringify(objekt) );

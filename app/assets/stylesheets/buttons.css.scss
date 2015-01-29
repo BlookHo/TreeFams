@@ -56,11 +56,12 @@
       &:hover{ background-color:#4385f9; }
     }
 
-    &:disabled{
+    &:disabled, &.disabled{
       background-color:#bdc3c7;
       opacity:0.4;
       &:hover{ background-color:#bdc3c7; }
     }
+
 
 
 }
