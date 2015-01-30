@@ -130,6 +130,8 @@ class User < ActiveRecord::Base
 
     msg_connection = "without_connecting_similars"
     logger.info "*** In User.without_connecting_similars: #{msg_connection} "
+  end
+
 
   def reset_password
     password = User.generate_password
