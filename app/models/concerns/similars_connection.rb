@@ -16,7 +16,8 @@ module SimilarsConnection
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
 
     #########  перезапись profile_id's & update User
-    log_connection_user_profile = Profile.profiles_merge(connection_data)
+  log_connection_user_profile = Profile.profiles_merge(connection_data)
+    # log_connection_user_profile = []
     # todo:Раскоммитить 2 строки ниже и закоммитить 2 строки за ними  - для полной перезаписи логов и отладки
     log_connection_tree       = update_table(connection_data, Tree)
     log_connection_profilekey = update_table(connection_data, ProfileKey)
@@ -26,7 +27,7 @@ module SimilarsConnection
     common_log = {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
     complete_log_arr = common_log[:log_user_profile] + common_log[:log_tree] + common_log[:log_profilekey]
 
-    store_log(complete_log_arr)
+    store_log(complete_log_arr) if !complete_log_arr.blank?
     # Запись массива лога в таблицу SimilarsLog под номером log_id
     common_log
   end
@@ -99,6 +100,7 @@ module SimilarsConnection
   # Сохранение массива логов в таблицу SimilarsLog
   #
   def store_log(common_log)
+    logger.info "*** In module SimilarsConnection store_log "
     common_log.each(&:save)
   end
 

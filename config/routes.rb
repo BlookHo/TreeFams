@@ -36,6 +36,8 @@ Weafam::Application.routes.draw do
   match 'keep_disconnected_similars' => 'similars#keep_disconnected_similars', via: :post
   match 'disconnect_similars' => 'similars#disconnect_similars', via: :get
   match 'disconnect_similars' => 'similars#disconnect_similars', via: :post
+  match 'check_connected_similars' => 'similars#check_connected_similars', via: :get
+  match 'check_connected_similars' => 'similars#check_connected_similars', via: :post
 
   # messages controller
   resources :messages, except: [:update, :show, :destroy, :edit]

@@ -77,12 +77,13 @@
           %td= similars_data[:inter_relations]
           %td
             .yes_to_connect
-              = link_to 'Да', connect_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :green], id: 'connectSimilars'
+              = link_to 'Да', connect_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :green], id: 'connectSimilars', data:{disabled_with:"Wait"}
             -#%br
             .no_to_connect
               = link_to 'Нет', keep_disconnected_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :red], id: 'keepUnSimilars'
 
     = paginate @paged_similars_data
+
 
   %br
   %br

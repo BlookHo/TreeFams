@@ -232,6 +232,21 @@ class SimilarsController < ApplicationController
   end
 
 
+  # Контроль (тест) объединения профилей после объединения - по таблицах ProfileKey
+  #
+  def check_connected_similars
+
+    log_id = params[:log_connection_id]
+    logger.info "*** In check_connected_similars:  log_id = #{log_id}"
+    @log_id = log_id.to_i
+    profiles_to_rewrite  = params[:profiles_to_rewrite]#.to_i
+    profiles_to_destroy = params[:profiles_to_destroy]#.to_i
+    logger.info "*** In check_connected_similars:  profiles_to_rewrite = #{profiles_to_rewrite}"
+    logger.info "*** In check_connected_similars:  profiles_to_destroy = #{profiles_to_destroy}"
+
+
+
+  end
 
 
 

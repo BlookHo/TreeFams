@@ -1,4 +1,9 @@
 %br
+%br
+.check
+  %h1 Контроль корректности объединения.
+  = link_to 'Контроль', check_connected_similars_path( log_connection_id: @log_connection_id, profiles_to_rewrite: @profiles_to_rewrite, profiles_to_destroy: @profiles_to_destroy ), method: :post, remote: true, class: [:bttn, :green], id: 'checkConnectedSimilars'
+%br
 .disconnect
   %h1 "Похожие" ранее объединялись. Существуют логи объединения.
   %h2 Номер последнего Лога:  #{@log_connection_id}

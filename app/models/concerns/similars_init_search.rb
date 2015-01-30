@@ -11,8 +11,7 @@ module SimilarsInitSearch
     def similars_init_search(tree_info)
       if !tree_info.empty?  # Исходные данные
         tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
-        logger.info "In similars 1: tree_circles = #{tree_circles}" unless tree_circles.empty?
-        #logger.info "In similars 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
+        logger.info "In similars_init_search 1: tree_circles = #{tree_circles}" unless tree_circles.empty?
         similars, unsimilars = compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
         return similars, unsimilars
       end
@@ -20,7 +19,6 @@ module SimilarsInitSearch
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # Получаем круги для каждого профиля в дереве
-    #def self.get_tree_circles(tree_info)
     def get_tree_circles(tree_info)
       tree_circles = {}
       tree_info[:tree_is_profiles].each do |profile_id|
