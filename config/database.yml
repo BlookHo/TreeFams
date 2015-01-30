@@ -22,9 +22,11 @@ test:
   adapter: postgresql
   encoding: UTF8
   database: weafam_test
-  pool: 5
   username: weafam_admin
   password: gR0v1Ng3i
+  host: localhost
+  encoding: UTF8
+  pool: 5
   timeout: 5000
 
 production:

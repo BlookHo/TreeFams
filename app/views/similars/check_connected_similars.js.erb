@@ -1,0 +1,7 @@
+var logToDisconnect = '<%= @log_id.inspect %>';
+console.log('Контроль объединения похожих профилей.\n');
+console.log('logToDisconnect = ' + logToDisconnect);
+var profilesRewrite = ' in js.disconnect:  <%= params[:profiles_to_rewrite] %>';
+console.log('Disconnected ' + profilesRewrite);
+var profilesDestroy = " in js.disconnect: <%= params[:profiles_to_destroy] %>";
+console.log('Disconnected ' + profilesDestroy);

@@ -11,8 +11,7 @@ gem 'pg'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
-gem 'spring', group: :development
+gem 'coffee-rails', '~> 4.0.0'\
 
 gem 'jbuilder', '~> 2.0'
 gem 'haml-rails'
@@ -82,13 +81,46 @@ group :development do
 
   #gem 'reek'
 
+  # Automagically launches tests for changed files
+  gem 'guard'
+  gem 'guard-rspec', require: false
+
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
+  gem 'spring-commands-rspec'
+
 end
 
 gem 'activerecord-reset-pk-sequence'
 
 group :development, :test do
+  # Test framework
   gem 'rspec-rails'
+
+  # For active record imitation in tests
+  gem 'factory_girl_rails'
+end
+
+group :test do
+  # Rspec console formatting
+  gem 'fuubar'
+
+  # Features tests for Rspec
   gem 'capybara'
+
+  # Webkit driver for js feature tests
+  # $ brew install qt
+  # $ sudo apt-get install qt4-dev-tools libqt4-dev libqt4-core libqt4-gui
+  gem 'capybara-webkit'
+
+  # To open test pages when save_and_open_page method is called
+  gem 'launchy'
+
+  # Enables screenshots creation during tests
+  gem 'capybara-screenshot'
+
+  # Auto cleans test db after each test run
+  gem 'database_cleaner'
 end
 
 # Disable assets logging

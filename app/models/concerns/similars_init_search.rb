@@ -11,8 +11,7 @@ module SimilarsInitSearch
     def similars_init_search(tree_info)
       if !tree_info.empty?  # Исходные данные
         tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
-        #logger.info "In similars 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
-        #logger.info "In similars 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
+        logger.info "In similars_init_search 1: tree_circles = #{tree_circles}" unless tree_circles.empty?
         similars, unsimilars = compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
         return similars, unsimilars
       end
@@ -20,13 +19,12 @@ module SimilarsInitSearch
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # Получаем круги для каждого профиля в дереве
-    #def self.get_tree_circles(tree_info)
     def get_tree_circles(tree_info)
       tree_circles = {}
       tree_info[:tree_is_profiles].each do |profile_id|
         tree_circles.merge!( get_profile_circle(profile_id, tree_info[:connected_users]) ) # if !profile_circle_hash.empty?
       end
-      return tree_circles
+      tree_circles
     end
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
@@ -38,7 +36,7 @@ module SimilarsInitSearch
       #logger.info "In get_profile_circle2: circle_profiles_arr = #{circle_profiles_arr}" if !circle_profiles_arr.blank?
       profile_circle_hash = convert_circle_to_hash(circle_profiles_arr)
       #logger.info "In get_profile_circle3: profile_circle_hash = #{profile_circle_hash}" if !profile_circle_hash.empty?
-      return profile_id => profile_circle_hash
+      {profile_id => profile_circle_hash}
     end
 
     # todo: перенести этот метод в Operational - для нескольких моделей
@@ -49,7 +47,7 @@ module SimilarsInitSearch
       circle_rows.each do |row|
         circle_array << row.attributes.except('id','user_id','profile_id','created_at','updated_at')
       end
-      return circle_array
+      circle_array
     end
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
@@ -64,7 +62,7 @@ module SimilarsInitSearch
         # Наращиваем круг в виде хэша
         profile_circle_hash = growing_val_arr(profile_circle_hash, code_relation, is_name_val)
       end
-      return profile_circle_hash
+      profile_circle_hash
     end
 
     # todo: перенести этот метод в Operational - для нескольких моделей

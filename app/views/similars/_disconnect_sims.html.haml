@@ -1,21 +1,16 @@
-//:javascript
-//  $(function(){
-//    var
-//$('.arrays').append('profilesRewrite = ' + profilesRewrite);
-//if (current_question_index == 0){
-//  $('#showPreviousQuestion').hide();
-//}
-
-//  })
-
-
-
 %br
-
+%br
+.check
+  %h1 Контроль корректности объединения.
+  = link_to 'Контроль', check_connected_similars_path( log_connection_id: @log_connection_id, profiles_to_rewrite: @profiles_to_rewrite, profiles_to_destroy: @profiles_to_destroy ), method: :post, remote: true, class: [:bttn, :green], id: 'checkConnectedSimilars'
+%br
 .disconnect
-  %h2 Разъединение объединенных "Похожих" профилей
+  %h1 "Похожие" ранее объединялись. Существуют логи объединения.
+  %h2 Номер последнего Лога:  #{@log_connection_id}
+  %h2 Разъединение объединенных "Похожих" профилей по последнему логу
   %br
 
-  = link_to 'Разъединить', disconnect_similars_path( log_connection_id: @log_connection_id, profiles_rewrite_arr: @profiles_to_rewrite, profile_destroy_arr: @profiles_to_destroy), method: :post, remote: true, class: [:bttn, :blue], id: 'disConnectSimilars'
+  = link_to 'Разъединить', disconnect_similars_path( log_connection_id: @log_connection_id), method: :post, remote: true, class: [:bttn, :blue], id: 'disConnectSimilars'
 .after_disconnect
   %h2
+

@@ -28,12 +28,18 @@ module ProfileMerge
         # то линкуем юзера к новому профилю
         if opposite_profile.user.present?
           logger.info "Юзер  #{opposite_profile.user.id} будут перелинкован на профиль #{main_profile.id}"
-          opposite_profile.user.update_column(:profile_id, main_profile.id)
-          main_profile.update_column(:user_id, opposite_profile.user_id)
-          main_profile.update_column(:tree_id, opposite_profile.tree_id)
+
+         opposite_profile.user.update_column(:profile_id, main_profile.id)
+
+         main_profile.update_column(:user_id, opposite_profile.user_id)
+         main_profile.update_column(:tree_id, opposite_profile.tree_id)
           # кроме того здесь нужно писать прежний user_id в поле user_id Profiles для профиля юзера,
           # чей профиль будет удален
           # Зачем, если он будет удален?
+
+   # 4 Если не удаляем opposite_profile профили, то убрать из поля user_id прежний номер user_id - просто nil
+   # Чтобы не было 2-х профилей с одинак. полем user_id/
+
         end
         #logger.info "Профиля  #{opposite_profile.id} будет удален"
         ## Удаление opposite_profile

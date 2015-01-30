@@ -5,11 +5,14 @@ console.log('Disconnected ' + profilesDestroy);
 
 
 var textStr = '<br>' + 'Разъединение похожих профилей - совершено.' +  '<br>'
+var logToDisconnect = '<%= @log_id.inspect %>';
+console.log('logToDisconnect = ' + logToDisconnect);
 
-$('.after_connect h2').empty();
+//$('.after_connect h2').empty();
 $('.after_disconnect h2').append(textStr).fadeOut(2000);
 $('.disconnect').empty();
-$(".init-pair").empty();
-$('.rewrite_array').empty();
-$('.destroy_array').empty();
+//$(".init-pair").empty();
+//$('.rewrite_array').empty();
+//$('.destroy_array').empty();
 
+window.location.href = '<%= home_path %>'

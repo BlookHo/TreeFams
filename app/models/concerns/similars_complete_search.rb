@@ -54,7 +54,7 @@ module SimilarsCompleteSearch
           logger.info " РАЗНОСТЬ двух Кругов: delta = #{delta}"
 
           # Анализ результата сравнения двух Кругов
-          if !common_circle_arr.blank? # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
+          unless common_circle_arr.blank? # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
             new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
           else
             # @@@@@ NB !! Вставить проверку: Если Круги равны, И: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
@@ -81,7 +81,7 @@ module SimilarsCompleteSearch
         end
 
         # Наращивание финального хэша пар профилей для объединения, если есть чем наращивать
-        if !add_connection_hash.empty?
+        unless add_connection_hash.empty?
           add_to_hash(final_connection_hash, add_connection_hash)
           logger.info "@@@@@ final_connection_hash = #{final_connection_hash} "
         end

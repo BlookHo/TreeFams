@@ -10,6 +10,7 @@
         %td.left.grey.italic
           Данныx о текущем дереве - нет
   - else
+    %h2 На сайте - пользователь (current_user.id): #{@current_user_id}
     %h2 Пользователи - авторы дерева: #{@tree_info[:connected_users]}
     %h2 ID Профилей Пользователей - авторов дерева: #{@tree_info[:users_profiles_ids]}
     %h2 Массив профилей в дереве:     #{@tree_info[:tree_is_profiles]}
@@ -20,16 +21,24 @@
     -#%h2 Количество НЕПОХОЖИХ пар профилей в дереве: #{@unsimilars_qty}
   %br
   %br
+
+  - if @log_connection_id.blank?
+    .no_logs
+      %h1 Тест на "Похожие" ранее был пройден успешно. Логи объединения - отсутствуют.
+  - else
+    .have_logs
+      = render 'similars/disconnect_sims'
+  %br
   %br
 
 
-  %h1 Найденные пары "Похожих"
   - if @paged_similars_data.blank?
     %table
       %tr
         %td.left.grey.italic
-          "Похожих" - нет! И это - неплохо.. (@paged_similars_data = empty)
+          "Похожих" - нет! И это - неплохо...
   - else
+    %h1 Найденные пары "Похожих"
     %table
       %tr
         %th Первый профиль
@@ -68,14 +77,15 @@
           %td= similars_data[:inter_relations]
           %td
             .yes_to_connect
-              = link_to 'Да', connect_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :green], id: 'connectSimilars'
+              = link_to 'Да', connect_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :green], id: 'connectSimilars', data:{disabled_with:"Wait"}
             -#%br
             .no_to_connect
               = link_to 'Нет', keep_disconnected_similars_path( first_profile_id: similars_data[:first_profile_id], second_profile_id: similars_data[:second_profile_id]), method: :post, remote: true, class: [:bttn, :red], id: 'keepUnSimilars'
+    %h1 Объединить найденные пары "Похожих"? (Ваше решение)
 
     = paginate @paged_similars_data
 
-  %h2 Объединение "Похожих" профилей
+
   %br
   %br
 

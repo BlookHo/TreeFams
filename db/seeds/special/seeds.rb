@@ -22,3 +22,5 @@ Message.reset_pk_sequence
 ConnectionRequest.delete_all       #
 ConnectionRequest.reset_pk_sequence
 
+SimilarsLog.delete_all    #
+SimilarsLog.reset_pk_sequence
