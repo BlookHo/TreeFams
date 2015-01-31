@@ -62,13 +62,19 @@ class SimilarsController < ApplicationController
     ############ call of User.module ############################################
     similars, unsimilars = User.similars_init_search(@tree_info)
     #############################################################################
-    @similars_qty = similars.size if !similars.empty?
+
+    # Сохранение найденных пар похожих
+    SimilarsFound.store_similars(similars, current_user.id) unless similars.empty?
+
+    @similars = similars unless similars.empty?
+    @similars_qty = similars.size unless similars.empty?
     @unsimilars = unsimilars
-    @unsimilars_qty = unsimilars.size if !unsimilars.empty?
+    @unsimilars_qty = unsimilars.size unless unsimilars.empty?
     @paged_similars_data = pages_of(similars, 10) # Пагинация - по 10 строк на стр.
     @current_user_id = current_user.id
 
   end
+
 
   # Для текущего дерева - получение номера id лога для прогона разъединения Похожих,
   # ранее объединенных.
