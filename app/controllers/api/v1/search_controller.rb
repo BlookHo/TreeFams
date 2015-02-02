@@ -26,6 +26,10 @@ module Api
       end
 
 
+      def internal
+      end
+
+
       private
 
       def collect_search_results(search_data)
