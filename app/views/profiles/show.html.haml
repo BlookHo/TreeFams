@@ -1,8 +1,6 @@
 .container#profile
   .header
-    = image_tag @current_profile_data.avatar_url(:medium), class: "avatar"
-    - if @current_profile_data.creator == current_user && @current_profile_data.avatar.present?
-      = link_to fa_icon('crop'), crop_avatar_path(@profile), class: "crop", title: "Обрезать фотографию"
+    = image_tag @current_profile_data.avatar_url(:medium), class: "avatar", id: "profile_avatar_img"
 
     %h1
       = @profile.to_name
@@ -38,11 +36,13 @@
 
 
     #profile_data_form{style: 'display:none;'}
+      .field
+        = render 'profiles/uploader/avatar'
       = form_for @current_user_profile_data, url: (@current_user_profile_data.new_record? ? profile_datas_path : profile_data_path(@current_user_profile_data)), html:{class: "wf-from"} do |f|
         = f.hidden_field :profile_id
-        .field
-          = f.label 'Фотография'
-          = f.file_field :avatar
+        -# .field
+        -#   = f.label 'Фотография'
+        -#   = f.file_field :avatar
         .field
           = f.label 'Фамилия'
           = f.text_field :last_name
@@ -59,3 +59,14 @@
           = f.label 'Город'
           = f.text_field :city
         = f.submit 'Сохранить', class: 'bttn small green pull-right'
+
+
+%script
+  window.FileAPI = {debug: false, staticPath: '/js/jquery.fileapi/FileAPI/' /* path to *.swf */ };
+
+= javascript_include_tag 'libs/FileAPI/FileAPI.min.js'
+= javascript_include_tag 'libs/FileAPI/FileAPI.exif.js'
+= javascript_include_tag 'libs/FileAPI/jquery.fileapi.min.js'
+= javascript_include_tag 'libs/jCrop/jquery.Jcrop.min.js'
+= javascript_include_tag 'libs/theModal/jquery.the-modal.js'
+= javascript_include_tag 'libs/FileAPI/avatarUploader.js'
