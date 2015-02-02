@@ -8,7 +8,7 @@ class Tree < ActiveRecord::Base
   # т.к. у них (авторов) нет своих рядов в Tree
   def self.tree_amount(current_user)
     connected_users = current_user.get_connected_users
-    if !connected_users.blank?
+    unless connected_users.blank?
       profiles = Tree.where(user_id: connected_users).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct#.count
       tree_is_profiles = profiles.map {|p| p.is_profile_id }.uniq
       profiles_qty = tree_is_profiles.size #+ connected_users.size

@@ -29,55 +29,53 @@ class SimilarsController < ApplicationController
 
 
   # Запуск методов определения похожих профилей в текущем дереве
+  # sim_data = { log_connection_id: log_connection_id, #
+  #              similars: similars,       #
+  #              unsimilars: unsimilars  }
   def internal_similars_search
-
-    # TEST 1
-    # arr1 = [2, 1, 3, 5]
-    # arr2 = [2, 0, 4]
-    # inter = arr1 & arr2
-    # differ = arr1 || arr2
-    # differ1 = arr1 - arr2
-    # differ2 = arr2 - arr1
-    # resdif = differ1 + differ2
-    # resdif2 = (arr1 - arr2) + (arr2 - arr1)
-    #logger.info "&&& In int_sim_search 01: arr1 = #{arr1}, arr2 = #{arr2}, inter = #{inter}, differ = #{differ}"
-    #logger.info "&&& In int_sim_search 01: differ1 = #{differ1}, differ2 = #{differ2}, resdif = #{resdif}, resdif2 = #{resdif2}"
-
-    # TEST 2
-    # hash1 = {"son"=>[122, 121], "hus"=>[90], "dil"=>[82], "gsf"=>[28]    ,"fat"=>[110]           }
-    # hash2 = {"son"=>[122, 120], "hus"=>[90], "dil"=>[82], "gsf"=>[28]   ,"hfl"=>[28], "hml"=>[48]}  # from balda
-    # common_hash, uncommon_hash = intersection(hash1, hash2)
-    # logger.info "&&& In int_sim_search 021: common_hash = #{common_hash}"
-    # logger.info "&&& In int_sim_search 022: uncommon_hash = #{uncommon_hash} "
+    tree_info, sim_data = current_user.start_similars
+    @tree_info = tree_info  # To View
+    @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
+    view_tree_data(tree_info, sim_data) unless @tree_info.empty?
+  end
 
 
-    @tree_info = get_tree_info(current_user)
-    logger.info "In internal_similars_search 1:  @tree_info[:connected_users] = #{@tree_info[:connected_users]}, @tree_info = #{@tree_info},  "  if !@tree_info.blank?
-    logger.info "In internal_similars_search 1a: @tree_info.profiles.size = #{@tree_info[:profiles].size} "  if !@tree_info.blank?
+  # Отобр-е параметров дерева и sim_data во вьюхе
+  def view_tree_data(tree_info, sim_data)
 
-    # Последний id (максимальный) из существующих логов - :connected_at
-    @log_connection_id = current_tree_log_id(@tree_info[:connected_users])
-    #@log_connection_id = nil
-
-    ############ call of User.module ############################################
-    similars, unsimilars = User.similars_init_search(@tree_info)
-    #############################################################################
-
-    # Сохранение найденных пар похожих
-    SimilarsFound.store_similars(similars, current_user.id) unless similars.empty?
-
-    @similars = similars unless similars.empty?
-    @similars_qty = similars.size unless similars.empty?
-    @unsimilars = unsimilars
-    @unsimilars_qty = unsimilars.size unless unsimilars.empty?
-    @paged_similars_data = pages_of(similars, 10) # Пагинация - по 10 строк на стр.
+    @tree_info = tree_info
+    logger.info "In similars_contrler 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, @tree_info = #{tree_info},  "  if !tree_info.blank?
+    logger.info "In similars_contrler 1a: @tree_info.profiles.size = #{tree_info[:profiles].size} "  if !tree_info.blank?
+   # @log_connection_id = sim_data[:log_connection_id]
     @current_user_id = current_user.id
+
+    view_similars(sim_data) unless sim_data.empty?
+
+  end
+
+
+  # Отображение во вьюхе Похожих и - для них - непохожих, если есть
+  def view_similars(sim_data)
+
+    @sim_data = sim_data  #
+    logger.info "In similars_contrler 01:  @sim_data = #{@sim_data} "
+    @similars = sim_data[:similars]
+    @similars_qty = @similars.size unless sim_data[:similars].empty?
+    #################################################
+    @paged_similars_data = pages_of(@similars, 10) # Пагинация - по 10 строк на стр.
+    ################################################
+    unless sim_data[:unsimilars].empty?
+      @unsimilars = sim_data[:unsimilars]
+      @unsimilars_qty = @unsimilars.size
+    end
 
   end
 
 
   # Для текущего дерева - получение номера id лога для прогона разъединения Похожих,
   # ранее объединенных.
+  # Если такой лог есть, значит ранее были найдены похожие и они объединялись. Значит теперь их
+  # можно разъединять.
   # Последний id (максимальный) из существующих логов - :connected_at
   def current_tree_log_id(connected_users)
     # Сбор всех id логов, относящихся к текущему дереву
@@ -258,3 +256,22 @@ class SimilarsController < ApplicationController
 
 
 end
+
+# TEST 1
+# arr1 = [2, 1, 3, 5]
+# arr2 = [2, 0, 4]
+# inter = arr1 & arr2
+# differ = arr1 || arr2
+# differ1 = arr1 - arr2
+# differ2 = arr2 - arr1
+# resdif = differ1 + differ2
+# resdif2 = (arr1 - arr2) + (arr2 - arr1)
+#logger.info "&&& In int_sim_search 01: arr1 = #{arr1}, arr2 = #{arr2}, inter = #{inter}, differ = #{differ}"
+#logger.info "&&& In int_sim_search 01: differ1 = #{differ1}, differ2 = #{differ2}, resdif = #{resdif}, resdif2 = #{resdif2}"
+
+# TEST 2
+# hash1 = {"son"=>[122, 121], "hus"=>[90], "dil"=>[82], "gsf"=>[28]    ,"fat"=>[110]           }
+# hash2 = {"son"=>[122, 120], "hus"=>[90], "dil"=>[82], "gsf"=>[28]   ,"hfl"=>[28], "hml"=>[48]}  # from balda
+# common_hash, uncommon_hash = intersection(hash1, hash2)
+# logger.info "&&& In int_sim_search 021: common_hash = #{common_hash}"
+# logger.info "&&& In int_sim_search 022: uncommon_hash = #{uncommon_hash} "

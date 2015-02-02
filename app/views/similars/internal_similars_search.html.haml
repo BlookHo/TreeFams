@@ -10,6 +10,7 @@
         %td.left.grey.italic
           Данныx о текущем дереве - нет
   - else
+    %h2  @sim_data    #{@sim_data}
     %h2 На сайте - пользователь (current_user.id): #{@current_user_id}
     %h2 Пользователи - авторы дерева: #{@tree_info[:connected_users]}
     %h2 ID Профилей Пользователей - авторов дерева: #{@tree_info[:users_profiles_ids]}
@@ -17,7 +18,7 @@
     %h2 Количество профилей в дереве: #{@tree_info[:tree_profiles_amount]}
     %h2 Полный массив профилей в дереве (с авторами):  #{@tree_info[:all_tree_profiles]}
     %h2 Полное количество профилей в дереве (с авторами): #{@tree_info[:all_tree_profiles_amount]}
-    %h2 ПОХОЖИЕ профили в дереве:     #{@similars}
+    -#%h2 ПОХОЖИЕ профили в дереве:     #{@similars}
     -#%h2 Количество НЕПОХОЖИХ пар профилей в дереве: #{@unsimilars_qty}
   %br
   %br

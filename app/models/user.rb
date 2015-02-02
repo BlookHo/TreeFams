@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
-  include Search
-  # основной метод поиска
+  include Search   # основной метод поиска
 
+  include SimilarsStart          # запуск методов поиска стартовых пар похожих
   include SimilarsInitSearch     # методы поиска стартовых пар похожих
   include SimilarsExclusions     # методы учета отношений исключений
   include SimilarsCompleteSearch # методы поиска похожих
@@ -122,8 +122,6 @@ class User < ActiveRecord::Base
   #########################################
   # Методы похожих профилей - SIMILARS
   #########################################
-
-
   # Оставляет похожие профили без объединения
   # помечаем их как непохожие на будущее
   def without_connecting_similars

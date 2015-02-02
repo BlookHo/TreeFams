@@ -7,8 +7,22 @@ module Api
       def index
         certain_koeff = get_certain_koeff #3
         logger.info "== in index search api:  certain_koeff = #{certain_koeff}"
-        search_data = api_current_user.start_search(certain_koeff)
-        respond_with collect_search_results(search_data)
+
+        tree_info, sim_data = api_current_user.start_similars
+        logger.info "== in index search api:  api_current_user.id = #{api_current_user.id}"
+        logger.info "== in index search api:  sim_data = #{sim_data}"
+
+        if sim_data.empty?
+          search_data = api_current_user.start_search(certain_koeff)
+          respond_with collect_search_results(search_data)
+        else
+          # Здесь - переход на отображение рез-тов поиска Похожих: internal_similars_search.html
+          # ? redirect_to(internal_similars_search_path)
+
+        end
+
+        # search_data = api_current_user.start_search(certain_koeff)
+        # respond_with collect_search_results(search_data)
       end
 
 
