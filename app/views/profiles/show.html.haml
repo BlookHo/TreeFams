@@ -59,3 +59,11 @@
           = f.label 'Город'
           = f.text_field :city
         = f.submit 'Сохранить', class: 'bttn small green pull-right'
+
+
+%script
+  window.FileAPI = {debug: false, staticPath: '/js/jquery.fileapi/FileAPI/' /* path to *.swf */ };
+
+= javascript_include_tag 'libs/FileAPI/FileAPI.min.js'
+= javascript_include_tag 'libs/FileAPI/FileAPI.exif.js'
+= javascript_include_tag 'libs/FileAPI/jquery.fileapi.min.js'
