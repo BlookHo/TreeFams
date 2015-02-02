@@ -18,6 +18,21 @@ function connectTrees(){
   window.location.href = '/make_connection_request?user_id_to_connect='+tree_owner_id;
 }
 
+
+// http://localhost:3000/api/v1/search/iternal?token=f4bafd62610a75eee1dd28b6aeaebed5
+
+// Поиск похожих в собственом дереве, если результатов нет, запуск глобального поиска
+function startSearch(callback){
+  $.get( "/api/v1/search/iternal", { token: access_token } )
+  .done(function(data){
+    if( $.isEmptyObject(data) ){
+      getSearchResults( showSearchResultsButton );
+    }else{
+      window.location.href = '/internal_similars_search';
+    }
+  });
+}
+
 // Получение результатов поиска и отображение на кнопке на домашней странице
 function getSearchResults(callback) {
   $.get( "/api/v1/search", { token: access_token } )

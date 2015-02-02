@@ -260,6 +260,7 @@ Weafam::Application.routes.draw do
     namespace :v1 do
       get 'circles', to: 'circles#show'
       get 'search',  to: 'search#index'
+      get 'search/iternal',  to: 'search#iternal'
     end
   end
 
