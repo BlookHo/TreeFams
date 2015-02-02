@@ -185,6 +185,8 @@ Weafam::Application.routes.draw do
     get '/version/:profile_data_id', to: 'profiles#show', as: :profile_data_version
   end
 
+  match '/profiles/avatar', to: 'avatar#upload', as: :upload_avatar, via: [:get, :post]
+
   get '/crop/avatar/:profile_id', to: 'profiles#crop', as: :crop_avatar
 
 
