@@ -10,6 +10,8 @@ module SimilarsStart
   #              unsimilars: unsimilars  }
   def start_similars
 
+    # return {data: true}, {data: true}
+
     tree_info = get_tree_info(self)
     logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info},  "
 

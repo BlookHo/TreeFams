@@ -42,7 +42,7 @@ class SimilarsController < ApplicationController
     tree_info, sim_data = current_user.start_similars
     @tree_info = tree_info  # To View
     @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
-    view_tree_data(tree_info, sim_data) unless @tree_info.empty?
+      view_tree_data(tree_info, sim_data) unless @tree_info.empty?
   end
 
 
