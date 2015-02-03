@@ -30,6 +30,10 @@
 //= require connection
 
 
+//= require admin/bootstrap.min.js
+//= require admin/bootstrap-select.js
+
+
 function jsdebug(objekt){
   $('#jsdebug').text( JSON.stringify(objekt) );
 };

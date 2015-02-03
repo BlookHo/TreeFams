@@ -65,6 +65,10 @@ class Name < ActiveRecord::Base
   # Только женские
   scope :females, -> { where(sex_id: 0) }
 
+  scope :approved, -> { where(is_approved: true) }
+
+  scope :pending, -> { where(is_approved: false) }
+
 
   # Утвержденные админом
   # scope :approved, -> { where(is_approved: true) }

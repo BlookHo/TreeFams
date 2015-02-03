@@ -22,18 +22,6 @@
       %option{value: 0, selected: @name.sex_id == 0} Женский
 
 
-.form-group
-  = f.label :search_name_id, "search_name_id", class: "col-sm-2 control-label"
-  .col-sm-2
-    %input.form-control{type: :text, disabled: true, value: @name.search_name_id}
-
-
-.form-group
-  = f.label :is_approved, "Утверждено", class: "col-sm-2 control-label"
-  .col-sm-2
-    = f.check_box :is_approved
-
-
 %br
 %br
 .form-group

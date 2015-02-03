@@ -253,6 +253,8 @@ Weafam::Application.routes.draw do
   ##################################################
   # resources :names
   get '/names/find', to: "names#find", as: :find_name
+  # add new name (from user)
+  resources :names, only: [:new, :create]
 
 
 
@@ -285,7 +287,7 @@ Weafam::Application.routes.draw do
 
     resources :pending_users do
       get 'blocked',    to: 'pending_users#blocked',    as: :blocked, on: :collection
-      get 'approved',    to: 'pending_users#approved',  as: :approved, on: :collection
+      get 'approved',   to: 'pending_users#approved',  as: :approved, on: :collection
       get 'block',      to: 'pending_users#block',      as: :block
       get 'reset',      to: 'pending_users#reset',      as: :reset
       post 'approve',   to: 'pending_users#approve',    as: :approve
@@ -295,6 +297,7 @@ Weafam::Application.routes.draw do
     resources :names do
       get 'males',   to: "names#males",   on: :collection, as: :males
       get 'females', to: "names#females", on: :collection, as: :females
+      get 'pending', to: "names#pending", on: :collection, as: :pending
     end
 
     resources :subnames

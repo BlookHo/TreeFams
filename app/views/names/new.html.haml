@@ -1,0 +1,12 @@
+.container#messages
+  %h1 Добавить новое имя
+
+
+  = form_for @name, url: names_path, html:{role: :form, class: "form-horizontal"} do |f|
+    = render 'ui/errors', :objekt => @name
+    = render 'form', f: f
+
+
+= stylesheet_link_tag 'admin/bootstrap.min.css'
+= stylesheet_link_tag 'admin/bootstrap-theme.min.css'
+= stylesheet_link_tag 'admin/bootstrap-select.css'

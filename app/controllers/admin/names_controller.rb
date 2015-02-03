@@ -16,6 +16,13 @@ class Admin::NamesController < Admin::AdminController
   end
 
 
+  def pending
+    @names = Name.pending.page params[:page]
+    render template: 'admin/names/index'
+  end
+
+
+
   def edit
     @name = Name.find params[:id]
     @parent_names = Name.parent_names
@@ -65,7 +72,7 @@ class Admin::NamesController < Admin::AdminController
   private
 
   def name_params
-    params[:name].permit(:name, :parent_name_id, :sex_id)
+    params[:name].permit(:name, :parent_name_id, :sex_id, :is_approved)
   end
 
 end

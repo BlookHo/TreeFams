@@ -10,6 +10,8 @@
       .flash.alert= flash[:alert]
     - if flash[:warning]
       .flash.warning= flash[:warning]
+      - if @new_name
+        = link_to "Добавить новое имя", new_name_path(name: @new_name)
 
     - if @questions
       -#= @questions.inspect
@@ -99,7 +101,7 @@
       = hidden_field_tag :profile_name_id, @profile.display_name_id, id: :new_profile_name_id
     - else
       .row
-        = text_field_tag :profile_name, @profile.profile_name, placeholder: "Имя...", id: :new_profile_name
+        = text_field_tag :profile_name, @profile.profile_name || @new_name, placeholder: "Имя...", id: :new_profile_name
         = hidden_field_tag :profile_name_id, @profile.name_id, id: :new_profile_name_id
 
     - if !@questions

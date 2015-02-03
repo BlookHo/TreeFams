@@ -1,0 +1,8 @@
+- if objekt.errors.any?
+  .alert.alert-danger
+    %button.close{:type=>"button", :'data-dismiss'=>"alert"} &times;
+    %ol{:style=>'margin:0'}
+      - objekt.errors.each do |key, message|
+        %li
+          %span= key
+          = message
