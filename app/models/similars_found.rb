@@ -1,7 +1,42 @@
 class SimilarsFound < ActiveRecord::Base
 
 
-  # Сохранение найденных пар похожих
+
+  # Поиск в таблице ранее сохраненных (СТАРЫХ) найденных пар похожих
+  # и выявление НОВЫХ пар похожих
+  # /
+  def self.find_stored_similars(similars, current_user_id)
+
+    previous_similars, new_similars = [], []
+    previous_similars_couunt, new_similars_count = 0, 0
+
+    similars.each do |one_sim_pair|
+      first_profile_id = one_sim_pair[:first_profile_id]
+      second_profile_id = one_sim_pair[:second_profile_id]
+      found_sims = SimilarsFound.where(user_id: current_user_id)
+                       .where(" (first_profile_id = #{first_profile_id} and second_profile_id = #{second_profile_id})
+                         or (first_profile_id = #{second_profile_id} and second_profile_id = #{first_profile_id})")
+                       .pluck(:id)
+      # logger.info "In SimilarsStart 2a: first_profile_id = #{first_profile_id}, second_profile_id = #{second_profile_id} "
+      # logger.info "In SimilarsStart 2aa: current_user_id = #{current_user_id}, found_sims = #{found_sims} "
+
+      if found_sims.blank?
+        new_similars << one_sim_pair  # Новые найденные похожие
+        new_similars_count +=1
+      else
+        previous_similars << one_sim_pair  # Старые похожие (ранее найденные и записанные в SimilarsFound)
+        previous_similars_couunt +=1
+      end
+
+    end
+    # logger.info "In SimilarsStart 3: previous_similars = #{previous_similars}, previous_similars_couunt = #{previous_similars_couunt} "
+    # logger.info "In SimilarsStart 3: new_similars = #{new_similars}, new_similars_count = #{new_similars_count} "
+
+    return previous_similars, new_similars
+
+  end
+
+    # Сохранение найденных пар похожих
   def self.store_similars(similars, current_user_id)
 
     # [{:first_profile_id=>38, :first_relation_id=>"Жена", :name_first_relation_id=>"Петра", :first_name_id=>"Ольга", :first_sex_id=>"Ж",
@@ -29,7 +64,27 @@ class SimilarsFound < ActiveRecord::Base
   end
 
 
+  #
+  def self.clear_similars_found(connection_data)
 
+    logger.info "In SimilarsFound clear_similars_found: connection_data = #{connection_data} "
+    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+    profiles_to_destroy = connection_data[:profiles_to_destroy]
+    connected_users_arr = connection_data[:connected_users_arr]
+
+    found_sims = SimilarsFound.where(user_id: connected_users_arr)
+                     .where(" (first_profile_id = #{profiles_to_rewrite} and second_profile_id = #{profiles_to_destroy})
+                         or (first_profile_id = #{profiles_to_destroy} and second_profile_id = #{profiles_to_rewrite})")
+
+
+   # In SimilarsFound clear_similars_found: connection_data =
+     {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34], :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
+
+
+    logger.info "In SimilarsFound clear_similars_found: found_sims = #{found_sims} "
+
+
+  end
 
 
 end

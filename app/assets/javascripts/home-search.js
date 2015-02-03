@@ -28,7 +28,10 @@ function startSearch(callback){
     if( $.isEmptyObject(data) ){
       getSearchResults( showSearchResultsButton );
     }else{
-      window.location.href = '/internal_similars_search';
+      //window.location.href = '/internal_similars_search';
+        window.location.href = '/show_similars_data';
+
+
     }
   });
 }

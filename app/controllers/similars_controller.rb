@@ -33,11 +33,25 @@ class SimilarsController < ApplicationController
   #              similars: similars,       #
   #              unsimilars: unsimilars  }
   def internal_similars_search
+
+    #############################################################################
+    # SimilarsFound.delete_all
+    # SimilarsFound.reset_pk_sequence
+
+
     tree_info, sim_data = current_user.start_similars
     @tree_info = tree_info  # To View
     @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
     view_tree_data(tree_info, sim_data) unless @tree_info.empty?
   end
+
+
+  def show_similars_data
+
+
+
+  end
+
 
 
   # Отобр-е параметров дерева и sim_data во вьюхе

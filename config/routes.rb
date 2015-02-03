@@ -29,6 +29,8 @@ Weafam::Application.routes.draw do
   # search similars & connecting
   # SearchSimilars controller
   match 'internal_similars_search' => 'similars#internal_similars_search', via: :get
+  match 'show_similars_data' => 'similars#show_similars_data', via: :get
+  match 'show_similars_data' => 'similars#show_similars_data', via: :post
   get 'similars/index'
   match 'connect_similars' => 'similars#connect_similars', via: :get
   match 'keep_disconnected_similars' => 'similars#keep_disconnected_similars', via: :get

@@ -27,8 +27,12 @@ module SimilarsConnection
     common_log = {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
     complete_log_arr = common_log[:log_user_profile] + common_log[:log_tree] + common_log[:log_profilekey]
 
-    store_log(complete_log_arr) if !complete_log_arr.blank?
+    store_log(complete_log_arr) unless complete_log_arr.blank?
     # Запись массива лога в таблицу SimilarsLog под номером log_id
+
+    ### Удаление сохраненных ранее найденных пар похожих
+    SimilarsFound.clear_similars_found(connection_data)
+
     common_log
   end
 

@@ -4,7 +4,7 @@ module SimilarsStart
 
 
   # Запуск методов поиска Похожих в одном дереве - от current_user
-  # Возвращает данные о найденных Похожих и о дереве - в similars_contrler:
+  # Возвращает данные о найденных НОВЫХ Похожих и о дереве - в similars_contrler:
   # sim_data = { log_connection_id: log_connection_id, #
   #              similars: similars,       #
   #              unsimilars: unsimilars  }
@@ -12,23 +12,49 @@ module SimilarsStart
 
     tree_info = get_tree_info(self)
     logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info},  "
-    logger.info "In SimilarsStart 1a: @tree_info.profiles.size = #{tree_info[:profiles].size} "  unless tree_info.blank?
 
     # Последний id (максимальный) из существующих логов - :connected_at
     log_connection_id = current_tree_log_id(tree_info[:connected_users])
+    sim_data = {}
 
     ############ call of User.module # Запуск метода определения первых пар Похожих ###########################################
     similars, unsimilars = User.similars_init_search(tree_info)
     #############################################################################
-    sim_data = {}
     unless similars.empty?
-      ####################### Сохранение найденных пар похожих
-      SimilarsFound.store_similars(similars, self.id)
-      #############################################################################
-      sim_data = {   log_connection_id: log_connection_id, #
-                     similars: similars,        #
-                     unsimilars: unsimilars     }
+
+      previous_similars, new_similars = SimilarsFound.find_stored_similars(similars, self.id) #55 ) #self.id)
+
+      logger.info "In SimilarsStart 3a: previous_similars = #{previous_similars} "
+      #", previous_sims_found_count = #{previous_sims_found_count} "
+      logger.info "In SimilarsStart 3a: new_similars = #{new_similars} "
+      #", new_sims_found_count = #{new_sims_found_count} "
+
+      unless new_similars.blank?
+        logger.info "In SimilarsStart 3b: new_similars == []? #{new_similars == []} "
+        # Проверка найденных П. Если такие пары П - все СТАРЫЕ - уже есть среди сохраненных, new_similars.blank
+        # то данный тест пройден - Без П.
+        #  Тогда ничего не отображаем в кач-ве рез-та теста П - переходим к Поиску:  sim_data = {}
+
+        # Если найденные П - все НОВЫЕ - отс-ют среди ранее сохраненных, или часть НОВЫЕ и часть СТАРЫЕ,
+        #  то они все = рез-тат теста П.
+        # И их надо сохранить в таблице Найденных,
+        # показать в       window.location.href = '/internal_similars_search';
+        #  и разобраться Да\Нет
+
+        # Если Да - объединяем П, удаляем сохраненные ранее пары П из табл. Найденных
+        # Если Нет -
+        ####################### Сохранение найденных пар похожих
+        SimilarsFound.store_similars(similars, self.id)
+        #############################################################################
+        sim_data = {   log_connection_id: log_connection_id, #
+                       similars: similars,        #
+                       unsimilars: unsimilars     }
+        logger.info "In SimilarsStart 3b: sim_data = #{sim_data} "
+
+      end
+
     end
+    logger.info "In SimilarsStart 4: sim_data = #{sim_data} "
 
     return tree_info, sim_data
 
