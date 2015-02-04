@@ -85,7 +85,16 @@ class SimilarsFound < ActiveRecord::Base
   end
 
 
-  # Получение массива rows из таблицы SimilarsFound по номеру id row
+  # Очистка табл. от ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА, в случае когда они объединились
+  def self.clear_tree_similars(connected_users_arr)
+    logger.info "In SimilarsFound clear_tree_similars: connected_users_arr = #{connected_users_arr} "
+    found_sims = SimilarsFound.where(user_id: connected_users_arr).pluck(:id)
+    logger.info "In SimilarsFound clear_similars_found: found_sims = #{found_sims.inspect}"
+    found_deletion(restore_found(found_sims))
+  end
+
+
+    # Получение массива rows из таблицы SimilarsFound по номеру id row
   def self.restore_found(found_sims)
     SimilarsFound.where(id: found_sims)
   end

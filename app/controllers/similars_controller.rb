@@ -38,6 +38,17 @@ class SimilarsController < ApplicationController
     # SimilarsFound.delete_all
     # SimilarsFound.reset_pk_sequence
 
+    ### Удаление сохраненных ранее найденных пар похожих
+    # connection_data =
+    # {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34],
+    # :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
+    #  SimilarsFound.clear_similars_found(connection_data)
+    tree_info = current_user.get_tree_info(current_user)
+    logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}"
+    connected_users = current_user.get_connected_users
+    logger.info "In SimilarsStart 1:  connected_users = #{connected_users}"
+    SimilarsFound.clear_tree_similars(connected_users)
+
     tree_info, sim_data = current_user.start_similars
     @tree_info = tree_info  # To View
     @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
@@ -63,21 +74,17 @@ class SimilarsController < ApplicationController
 
   # Отобр-е параметров дерева и sim_data во вьюхе
   def view_tree_data(tree_info, sim_data)
-
     @tree_info = tree_info
     logger.info "In similars_contrler 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, @tree_info = #{tree_info},  "  if !tree_info.blank?
     logger.info "In similars_contrler 1a: @tree_info.profiles.size = #{tree_info[:profiles].size} "  if !tree_info.blank?
    # @log_connection_id = sim_data[:log_connection_id]
     @current_user_id = current_user.id
-
     view_similars(sim_data) unless sim_data.empty?
-
   end
 
 
   # Отображение во вьюхе Похожих и - для них - непохожих, если есть
   def view_similars(sim_data)
-
     @sim_data = sim_data  #
     logger.info "In similars_contrler 01:  @sim_data = #{@sim_data} "
     @similars = sim_data[:similars]
@@ -89,7 +96,6 @@ class SimilarsController < ApplicationController
       @unsimilars = sim_data[:unsimilars]
       @unsimilars_qty = @unsimilars.size
     end
-
   end
 
 

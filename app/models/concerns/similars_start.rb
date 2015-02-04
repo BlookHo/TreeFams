@@ -14,6 +14,8 @@ module SimilarsStart
     # connection_data = {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34], :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
     # SimilarsFound.clear_similars_found(connection_data)
 
+    sim_data = {}
+
     tree_info = get_tree_info(self)
     logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info},  "
 
