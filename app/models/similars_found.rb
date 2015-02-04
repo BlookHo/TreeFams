@@ -64,26 +64,35 @@ class SimilarsFound < ActiveRecord::Base
   end
 
 
-  #
+  # Очистка табл. от ранее сохраненных пар похожих, в случае когда они объединились
+  # connection_data =
+  # {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34],
+  # :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
   def self.clear_similars_found(connection_data)
-
     logger.info "In SimilarsFound clear_similars_found: connection_data = #{connection_data} "
     profiles_to_rewrite = connection_data[:profiles_to_rewrite]
     profiles_to_destroy = connection_data[:profiles_to_destroy]
     connected_users_arr = connection_data[:connected_users_arr]
+    found_sims1 = SimilarsFound.where(user_id: connected_users_arr)
+                      .where(first_profile_id: profiles_to_rewrite, second_profile_id: profiles_to_destroy)
+                      .pluck(:id)
+    found_sims2 = SimilarsFound.where(user_id: connected_users_arr)
+                      .where(first_profile_id: profiles_to_destroy, second_profile_id: profiles_to_rewrite)
+                      .pluck(:id)
+    found_sims = found_sims1 + found_sims2
+    logger.info "In SimilarsFound clear_similars_found: found_sims = #{found_sims.inspect}, found_sims1 = #{found_sims1.inspect}, found_sims2 = #{found_sims2.inspect} "
+    found_deletion(restore_found(found_sims1 + found_sims2))
+  end
 
-    found_sims = SimilarsFound.where(user_id: connected_users_arr)
-                     .where(" (first_profile_id = #{profiles_to_rewrite} and second_profile_id = #{profiles_to_destroy})
-                         or (first_profile_id = #{profiles_to_destroy} and second_profile_id = #{profiles_to_rewrite})")
 
+  # Получение массива rows из таблицы SimilarsFound по номеру id row
+  def self.restore_found(found_sims)
+    SimilarsFound.where(id: found_sims)
+  end
 
-   # In SimilarsFound clear_similars_found: connection_data =
-     {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34], :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
-
-
-    logger.info "In SimilarsFound clear_similars_found: found_sims = #{found_sims} "
-
-
+  # Удаление массива rows из таблицы SimilarsFound - после объединения похожих
+  def self.found_deletion(found_to_destroy)
+    found_to_destroy.map(&:destroy)
   end
 
 

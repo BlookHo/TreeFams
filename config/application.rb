@@ -90,6 +90,10 @@ module Weafam
     # config.cache_store = :redis_store, 'redis://localhost:6379/0/cache'
     # config.session_store :redis_store
 
+    # configure your logger
+    # config.logger = ActiveSupport::Logger.new('your_app.log')
+    # or
+    # config.logger = ActiveSupport::TaggedLogging.new(Logger.new('your_app.log'))
 
     # роуты для ошибок
     config.exceptions_app = self.routes

@@ -7,11 +7,11 @@ class HomeController < ApplicationController
   # All profiles in user's tree
   def index
     tree_info, sim_data = current_user.start_similars
-    if !sim_data.empty?
+    unless sim_data.empty?
       @tree_info = tree_info  # To View
       @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
       view_tree_data(tree_info, sim_data) unless @tree_info.empty?
-      render :template => 'similars/internal_similars_search'
+      render :template => 'similars/show_similars_data'
     end
   end
 
