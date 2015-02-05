@@ -268,16 +268,17 @@ module SimilarsInitSearch
         data_b_to_compare = [profiles[b_profile_id][:is_name_id], profiles[b_profile_id][:is_sex_id]]
 
         if data_a_to_compare == data_b_to_compare
-          logger.debug "*** compare hashes: data_a_to_compare (is_name, is_sex): #{data_a_to_compare},  - data_b_to_compare: #{data_b_to_compare}"
+          logger.info "*** compare hashes: data_a_to_compare (is_name, is_sex): #{data_a_to_compare},  - data_b_to_compare: #{data_b_to_compare}"
           # сравниваемые хэши кругов профилей и определение их общей части кругов профилей
           common_hash = intersection(tree_circles[a_profile_id], tree_circles[b_profile_id])
           logger.info "*** compare hashes: tree_circles[a_profile_id]: #{tree_circles[a_profile_id]}"
           logger.info "*** compare hashes: tree_circles[b_profile_id]: #{tree_circles[b_profile_id]}"
-          logger.debug "*** compare hashes: common_hash: #{common_hash}"
+          logger.info "*** compare hashes: common_hash: #{common_hash}"
           # logger.info "*** compare hashes: common_hash: #{common_hash}"
           # logger.warn "*** compare hashes: common_hash: #{common_hash}"
           # logger.error "*** compare hashes: common_hash: #{common_hash}"
           # logger.fatal "*** compare hashes: common_hash: #{common_hash}"
+          # logger.unknown "*** compare hashes: common_hash: #{common_hash}"
 
           if !common_hash.empty?
 

@@ -1,13 +1,19 @@
 %br
 %br
-.check
-  %h1 Контроль корректности объединения.
-  = link_to 'Контроль', check_connected_similars_path( log_connection_id: @log_connection_id, profiles_to_rewrite: @profiles_to_rewrite, profiles_to_destroy: @profiles_to_destroy ), method: :post, remote: true, class: [:bttn, :green], id: 'checkConnectedSimilars'
+-#.check
+-#  %h1 Контроль корректности объединения.
+-#  = link_to 'Контроль', check_connected_similars_path( log_connection_id: @log_connection_id, profiles_to_rewrite: @profiles_to_rewrite, profiles_to_destroy: @profiles_to_destroy ), method: :post, remote: true, class: [:bttn, :green], id: 'checkConnectedSimilars'
+-#
+-#= link_to 'К просмотру дерева', home_path, class: [:bttn, :green]
+-#%br
+-#%br
 %br
+
 .disconnect
-  %h1 "Похожие" ранее объединялись. Существуют логи объединения.
-  %h2 Номер последнего Лога:  #{@log_connection_id}
-  %h2 Разъединение объединенных "Похожих" профилей по последнему логу
+  %h1 Профили "похожих" родственников ранее объединялись.
+  -#Существуют логи объединения.
+  -#%h2 Номер последнего Лога:  #{@log_connection_id}
+  %h2 Разъединение объединенных ранее "похожих" профилей в предыдущее состояние
   %br
 
   = link_to 'Разъединить', disconnect_similars_path( log_connection_id: @log_connection_id), method: :post, remote: true, class: [:bttn, :blue], id: 'disConnectSimilars'

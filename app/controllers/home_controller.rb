@@ -6,10 +6,18 @@ class HomeController < ApplicationController
 
   # All profiles in user's tree
   def index
-    tree_info, sim_data = current_user.start_similars
-    unless sim_data.empty?
+    tree_info, sim_data, similars = current_user.start_similars
+    @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
+
+    if sim_data.empty?
+      # if similars.empty?
+        #flash[:notice] = "Успешное сообщение - /home/index"
+      # else
+        flash.now[:alert] = "Предупреждение: красное сообщение - /home/index" unless similars.empty?
+      # end
+    else
+      flash.now[:alert] = "Предупреждение: красное сообщение - /home/index"
       @tree_info = tree_info  # To View
-      @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
       view_tree_data(tree_info, sim_data) unless @tree_info.empty?
       render :template => 'similars/show_similars_data'
     end

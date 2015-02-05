@@ -16,9 +16,10 @@ module SimilarsConnection
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
 
     #########  перезапись profile_id's & update User
-  log_connection_user_profile = Profile.profiles_merge(connection_data)
+    log_connection_user_profile = Profile.profiles_merge(connection_data)
     # log_connection_user_profile = []
     # todo:Раскоммитить 2 строки ниже и закоммитить 2 строки за ними  - для полной перезаписи логов и отладки
+    #########  перезапись profile_id's в Tree и ProfileKey
     log_connection_tree       = update_table(connection_data, Tree)
     log_connection_profilekey = update_table(connection_data, ProfileKey)
     # log_connection_tree = []

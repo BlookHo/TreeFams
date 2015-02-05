@@ -29,9 +29,11 @@ module SimilarsStart
                               similars: similars,        #
                               unsimilars: unsimilars,
                               current_user_id: self.id    }
+
     sim_data = check_new_similars(check_similars_data) unless similars.empty?
+
     logger.info "In SimilarsStart 4: sim_data = #{sim_data} "
-    return tree_info, sim_data
+    return tree_info, sim_data, similars
 
   end
 

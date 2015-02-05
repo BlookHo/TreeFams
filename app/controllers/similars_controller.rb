@@ -50,21 +50,20 @@ class SimilarsController < ApplicationController
     SimilarsFound.clear_tree_similars(connected_users)
 
     tree_info, sim_data = current_user.start_similars
-    @tree_info = tree_info  # To View
     @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
-    view_tree_data(tree_info, sim_data) unless @tree_info.empty?
-  end
+    if sim_data.empty?
+      flash.now[:notice] = "Успешное сообщение - internal_similars_search"
+      #flash[:alert] = "Предупреждение: красное сообщение - /home/index" unless similars.empty?
+    else
+      flash.now[:alert] = "Предупреждение: красное сообщение - internal_similars_search"
 
-
-  def index # In HOME.controller
-    tree_info, sim_data = current_user.start_similars
-    unless sim_data.empty?
       @tree_info = tree_info  # To View
-      @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
       view_tree_data(tree_info, sim_data) unless @tree_info.empty?
-      render :template => 'similars/show_similars_data'
+
     end
+
   end
+
 
 
   def show_similars_data
@@ -164,6 +163,8 @@ class SimilarsController < ApplicationController
     logger.info "*** In  Similars_Controller connect_similars: @complete_log = \n     #{@complete_log} "
     @complete_log_size = @complete_log.size unless @complete_log.blank?
     logger.info "*** In  Similars_Controller connect_similars: @complete_log_size = #{@complete_log_size} "
+
+    flash[:notice] = "Успешное сообщение - internal_similars_search"
 
 
   end

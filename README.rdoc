@@ -26,3 +26,23 @@ Things you may want to cover:
 
 Please feel free to use a different markup language if you do not plan to run
 <tt>rake doc:app</tt>.
+
+##### RoR code Logger ############################################################
+
+COLORS - in /config/initializers/log_formatting.rb
+    SEVERITY_TO_TAG_MAP     = {'DEBUG'=>'sql', 'INFO'=>'inf', 'WARN'=>'hmm', 'ERROR'=>'wtf', 'FATAL'=>'omg', 'UNKNOWN'=>'???'}
+    SEVERITY_TO_COLOR_MAP   = {'DEBUG'=>'36', 'INFO'=>'32', 'WARN'=>'34', 'ERROR'=>'31', 'FATAL'=>'31', 'UNKNOWN'=>'33'}
+                                  #30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+     # background colors: 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+
+ logger.info "*** compare hashes: common_hash: #{common_hash}" == inf 32 green
+ logger.debug "*** compare hashes: common_hash: #{common_hash}" == sql 36 синий
+ logger.warn "*** compare hashes: common_hash: #{common_hash}" == hmm 34 голубой
+ logger.error "*** compare hashes: common_hash: #{common_hash}" == wtf 31 red
+ logger.fatal "*** compare hashes: common_hash: #{common_hash}" == omg 31 red
+ logger.unknown "*** compare hashes: common_hash: #{common_hash}" == '???' 33 empty
+
+############################
+
+
+
