@@ -1,5 +1,11 @@
 class SimilarsFound < ActiveRecord::Base
 
+  validates_presence_of :user_id, :first_profile_id, :second_profile_id, :message => "Должно присутствовать в SimilarsFound"
+  validates_numericality_of :user_id, :first_profile_id, :second_profile_id, :only_integer => true, :message => "ID автора сообщения или получателя сообщения должны быть целым числом в SimilarsFound"
+  validates_numericality_of :user_id, :first_profile_id, :second_profile_id, :greater_than => 0, :message => "ID автора сообщения или получателя сообщения должны быть больше 0 в SimilarsFound"
+  # validates :first_profile_id, uniqueness: true
+  # validates :first_profile_id, uniqueness: true
+
 
 
   # Поиск в таблице ранее сохраненных (СТАРЫХ) найденных пар похожих
