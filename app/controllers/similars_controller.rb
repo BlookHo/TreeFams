@@ -34,15 +34,11 @@ class SimilarsController < ApplicationController
   #              unsimilars: unsimilars  }
   def internal_similars_search
 
-    #############################################################################
+    ############################# DEBUG ################################################
     # SimilarsFound.delete_all
     # SimilarsFound.reset_pk_sequence
 
     ### Удаление сохраненных ранее найденных пар похожих
-    # connection_data =
-    # {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34],
-    # :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
-    #  SimilarsFound.clear_similars_found(connection_data)
     tree_info = current_user.get_tree_info(current_user)
     logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}"
     connected_users = current_user.get_connected_users
@@ -52,14 +48,11 @@ class SimilarsController < ApplicationController
     tree_info, sim_data = current_user.start_similars
     @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
     if sim_data.empty?
-      flash.now[:notice] = "Успешное сообщение - internal_similars_search"
-      #flash[:alert] = "Предупреждение: красное сообщение - /home/index" unless similars.empty?
+      flash.now[:notice] = "Успешное сообщение: В дереве - все Ок. - internal_similars_search"
     else
-      flash.now[:alert] = "Предупреждение: красное сообщение - internal_similars_search"
-
+      flash.now[:alert] = "Предупреждение: В дереве есть 'похожие' профили. Объединиться будет невозможно - internal_similars_search"
       @tree_info = tree_info  # To View
       view_tree_data(tree_info, sim_data) unless @tree_info.empty?
-
     end
 
   end

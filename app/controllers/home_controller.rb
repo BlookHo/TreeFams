@@ -11,12 +11,12 @@ class HomeController < ApplicationController
 
     if sim_data.empty?
       # if similars.empty?
-        #flash[:notice] = "Успешное сообщение - /home/index"
+        #flash[:notice] = "В дереве - все Ок. - /home/index"
       # else
-        flash.now[:alert] = "Предупреждение: красное сообщение - /home/index" unless similars.empty?
+        flash.now[:alert] = "Предупреждение: В дереве есть 'похожие' профили. Объединиться будет невозможно - /home/index" unless similars.empty?
       # end
     else
-      flash.now[:alert] = "Предупреждение: красное сообщение - /home/index"
+      flash.now[:alert] = "Предупреждение: В дереве есть 'похожие' профили. Объединиться будет невозможно - /home/index"
       @tree_info = tree_info  # To View
       view_tree_data(tree_info, sim_data) unless @tree_info.empty?
       render :template => 'similars/show_similars_data'
