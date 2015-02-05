@@ -8,7 +8,8 @@ console.log('profilesRewrite = ' + profilesRewrite);
 var profilesDestroy = '<%=  @profiles_to_destroy.inspect %>';
 console.log('profilesDestroy = ' + profilesDestroy);
 
-var logConnection = '( Лог объединения профилей в таблицах сформирован. Общая длина лога = <%=  @complete_log_size.inspect %>.'   +  '<br>' +
+var connectionInfo = 'Лог объединения профилей в таблицах сформирован';
+var logConnection = 'Общая длина лога = <%=  @complete_log_size.inspect %>.'   +  '<br>' +
         ' длина лога в табл. User & Profile = <%=  @log_user_profile_size.inspect %>,'  +
         ' длина лога в табл. Tree = <%=  @log_connection_tree_size.inspect %>,'  +
         ' длина лога в табл. ProfileKey = <%=  @log_connection_profilekey_size.inspect %>  ).'  +  '<br>' +  '<br>'
@@ -33,10 +34,15 @@ if(typeof profilesRewrite != "undefined" && profilesRewrite != null && profilesR
     console.log('sims connected again: logConnection = ' + logConnection);
 
     var textStr = '<br>' + 'Объединение похожих профилей - совершено.' +  '<br>' +
-            ' Теперь при необходимости можно разъединить объединенные похожие профили'  +  '<br>' + logConnection;
+            ' Теперь при необходимости можно разъединить объединенные похожие профили'  +  '<br>'
+            + connectionInfo
+//            +  '<br>' + logConnection;
 //            +  '<br>' + profilesRewrite + ' и ' + profilesDestroy + '<br>';
     $('.after_connect h2').empty().append(textStr);
-    $('.arrays').empty().html('<%= j render 'similars/disconnect_sims' -%>');
+//    $('.arrays').empty().html('<%= j render 'similars/disconnect_sims' -%>');
+    window.location.href = '<%= home_path %>'
+
+
 }
 
 

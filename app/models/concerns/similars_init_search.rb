@@ -9,7 +9,7 @@ module SimilarsInitSearch
     # 2. Сравниваем все круги - находим похожие профили
     # 3. Готовим данные для отображения
     def similars_init_search(tree_info)
-      if !tree_info.empty?  # Исходные данные
+      unless tree_info.empty?  # Исходные данные
         tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
         logger.info "In similars_init_search 1: tree_circles = #{tree_circles}" unless tree_circles.empty?
         similars, unsimilars = compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
@@ -83,7 +83,7 @@ module SimilarsInitSearch
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     def get_row_data(one_row_hash)
-      if !one_row_hash.empty?
+      unless one_row_hash.empty?
         relation_val = one_row_hash.values_at('relation_id')[0]
         is_profile_val = one_row_hash.values_at('is_profile_id')[0]
         is_name_val = one_row_hash.values_at('is_name_id')[0]
@@ -245,131 +245,40 @@ module SimilarsInitSearch
     # Сравниваем все круги на похожесть (совпадение)
     def compare_tree_circles(tree_info, tree_circles)
 
-      # tree_circles =    # test 1 Алексей
-      {27=>{"Сын"=>[122], "Жена"=>[449], "Невестка"=>[82], "Внук"=>[28]},
-       13=>{"Отец"=>[122], "Мама"=>[82], "Сын"=>[370, 465], "Жена"=>[48], "Тесть"=>[343], "Теща"=>[82], "Невестка"=>[147], "Дед-о"=>[90], "Бабка-о"=>[449], "Внучка-о"=>[446]},
-       11=>{"Отец"=>[28], "Мама"=>[48], "Дочь"=>[446], "Брат"=>[465], "Жена"=>[147], "Тесть"=>[110], "Теща"=>[97], "Дед-о"=>[122], "Дед-м"=>[343], "Бабка-о"=>[82], "Бабка-м"=>[82], "Тетя-м"=>[331]},
-       10=>{"Отец"=>[343], "Мама"=>[82], "Сестра"=>[48], "Племянник-м"=>[370, 465]},
-
-       28=>{"Сын"=>[122], "Муж"=>[90], "Невестка"=>[82], "Внук"=>[28],              "Свекровь"=>[480], "Дочь"=>[3420]  ,"Отец"=>[343], "Мама"=>[82]  },   # from balda
-
-       ########################
-       35=>{"Сын"=>[122], "Муж"=>[90], "Невестка"=>[82], "Внук"=>[28],         "Свекор"=>[28,35], "Свекровь"=>[490, 49], "Дочь"=>[340]  },  # from balda
-       ########################
-
-       61=>{"Отец"=>[110], "Мама"=>[97], "Дочь"=>[446], "Муж"=>[370], "Свекор"=>[28], "Свекровь"=>[48]},
-       66=>{"Дочь"=>[147], "Муж"=>[110], "Зять"=>[370], "Внучка-м"=>[446]},
-
-       9=>{"Дочь"=>[48, 331], "Муж"=>[343], "Зять"=>[28], "Внук-м"=>[370, 465]},
-
-       65=>{"Дочь"=>[147], "Жена"=>[97], "Зять"=>[370], "Внучка-м"=>[446]},
-       7=>{"Отец"=>[343], "Мама"=>[82], "Сын"=>[370, 465], "Сестра"=>[331], "Муж"=>[28], "Свекор"=>[122], "Свекровь"=>[82], "Невестка"=>[147], "Внучка-о"=>[446]},
-
-       3=>{"Сын"=>[28], "Муж"=>[122], "Свекор"=>[90], "Свекровь"=>[449], "Невестка"=>[48], "Внук"=>[370, 465]},
-
-       12=>{"Отец"=>[28], "Мама"=>[48], "Брат"=>[370], "Дед-о"=>[122], "Дед-м"=>[343], "Бабка-о"=>[82], "Бабка-м"=>[82], "Тетя-м"=>[331], "Племянница-м"=>[446]},
-       63=>{"Отец"=>[370], "Мама"=>[147], "Дед-о"=>[28], "Дед-м"=>[110], "Бабка-о"=>[48], "Бабка-м"=>[97], "Дядя-о"=>[465]},
-       8=>{"Дочь"=>[48, 331], "Жена"=>[82], "Зять"=>[28], "Внук-м"=>[370, 465]},
-       2=>{"Отец"=>[90], "Мама"=>[449], "Сын"=>[28], "Жена"=>[82], "Невестка"=>[48], "Внук"=>[370, 465]}}
-
-
-      #  tree_circles =      # from tree 8
-      {84=>{"Сын"=>[523], "Жена"=>[528], "Невестка"=>[529], "Внук"=>[522, 524, 525], "Внучка-о"=>[530, 531]},
-       81=>{"Отец"=>[523], "Мама"=>[529], "Брат"=>[522, 524, 525], "Сестра"=>[530], "Дед-о"=>[526], "Бабка-о"=>[528]},
-       89=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[524, 525], "Сестра"=>[530, 532]},
-       79=>{"Отец"=>[523], "Мама"=>[529], "Брат"=>[522, 525], "Сестра"=>[530, 531], "Дед-о"=>[526], "Бабка-о"=>[528]},
-       82=>{"Отец"=>[523], "Мама"=>[529], "Брат"=>[522, 524, 525], "Сестра"=>[531], "Дед-о"=>[526], "Бабка-о"=>[528]},
-       88=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[524], "Сестра"=>[530, 531, 532]},
-       77=>{"Отец"=>[526], "Мама"=>[528], "Сын"=>[522, 524, 525], "Дочь"=>[530, 531], "Жена"=>[529], "Невестка"=>[532]},
-       80=>{"Отец"=>[523], "Мама"=>[529], "Брат"=>[522, 524], "Сестра"=>[530, 531], "Дед-о"=>[526], "Бабка-о"=>[528]},
-       85=>{"Сын"=>[523], "Муж"=>[526], "Невестка"=>[529], "Внук"=>[522, 524, 525], "Внучка-о"=>[530, 531]},
-       87=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[524, 525], "Сестра"=>[531, 532]},
-       92=>{"Сын"=>[524, 525], "Дочь"=>[530, 531, 532], "Муж"=>[523], "Зять"=>[522]},
-       86=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[525], "Сестра"=>[530, 531, 532]},
-       83=>{"Отец"=>[523], "Мама"=>[533], "Брат"=>[524, 525], "Сестра"=>[530, 531], "Муж"=>[522], "Свекор"=>[523], "Свекровь"=>[529]},
-       78=>{"Сын"=>[522, 524, 525], "Дочь"=>[530, 531], "Муж"=>[523], "Свекор"=>[526], "Свекровь"=>[528], "Невестка"=>[532]},
-       91=>{"Сын"=>[524, 525], "Дочь"=>[530, 531, 532], "Жена"=>[533], "Зять"=>[522]}}
-
       logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
       logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
 
       profiles_arr = tree_info[:tree_is_profiles]
-      #  profiles_arr =
-      [27, 13, 11, 10, 28,  35,   61, 66, 9, 65, 7, 3, 12, 63, 8, 2] # from tree 1
-      #  profiles_arr =
-
-      [84, 81, 89, 79, 82, 88, 77, 80, 85, 87, 92, 86, 83, 78, 91]  # from tree 8
-
       logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
 
       profiles = tree_info[:profiles]     # from tree
-      #  profiles =   # test # from tree 1
-      {27=>{:is_name_id=>90, :is_sex_id=>1, :profile_id=>2, :relation_id=>1},
-       13=>{:is_name_id=>28, :is_sex_id=>1, :profile_id=>7, :relation_id=>7},
-       11=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>7, :relation_id=>3},
-       10=>{:is_name_id=>331, :is_sex_id=>0, :profile_id=>7, :relation_id=>6},
-       28=>{:is_name_id=>449, :is_sex_id=>0, :profile_id=>2, :relation_id=>2},
-
-       35=>{:is_name_id=>449, :is_sex_id=>0, :profile_id=>7, :relation_id=>3}, # from balda
-
-
-       61=>{:is_name_id=>147, :is_sex_id=>0, :profile_id=>11, :relation_id=>8},
-       66=>{:is_name_id=>97, :is_sex_id=>0, :profile_id=>61, :relation_id=>2},
-
-       9=>{:is_name_id=>82, :is_sex_id=>0, :profile_id=>7, :relation_id=>2},
-
-       65=>{:is_name_id=>110, :is_sex_id=>1, :profile_id=>61, :relation_id=>1},
-       7=>{:is_name_id=>48, :is_sex_id=>0, :profile_id=>13, :relation_id=>8},
-
-       3=>{:is_name_id=>82, :is_sex_id=>0, :profile_id=>13, :relation_id=>2},
-
-       12=>{:is_name_id=>465, :is_sex_id=>1, :profile_id=>7, :relation_id=>3},
-       63=>{:is_name_id=>446, :is_sex_id=>0, :profile_id=>11, :relation_id=>4},
-       8=>{:is_name_id=>343, :is_sex_id=>1, :profile_id=>7, :relation_id=>1},
-       2=>{:is_name_id=>122, :is_sex_id=>1, :profile_id=>13, :relation_id=>1}}
-
-
-      #  profiles =   # test # from tree 8
-      {84=>{:is_name_id=>526, :is_sex_id=>1, :profile_id=>77, :relation_id=>1},
-       81=>{:is_name_id=>531, :is_sex_id=>0, :profile_id=>76, :relation_id=>6},
-       89=>{:is_name_id=>531, :is_sex_id=>0, :profile_id=>83, :relation_id=>6},
-       79=>{:is_name_id=>524, :is_sex_id=>1, :profile_id=>76, :relation_id=>5},
-       82=>{:is_name_id=>530, :is_sex_id=>0, :profile_id=>76, :relation_id=>6},
-       88=>{:is_name_id=>525, :is_sex_id=>1, :profile_id=>83, :relation_id=>5},
-       77=>{:is_name_id=>523, :is_sex_id=>1, :profile_id=>76, :relation_id=>1},
-       80=>{:is_name_id=>525, :is_sex_id=>1, :profile_id=>76, :relation_id=>5},
-       85=>{:is_name_id=>528, :is_sex_id=>0, :profile_id=>77, :relation_id=>2},
-       87=>{:is_name_id=>530, :is_sex_id=>0, :profile_id=>83, :relation_id=>6},
-       92=>{:is_name_id=>533, :is_sex_id=>0, :profile_id=>83, :relation_id=>2},
-       86=>{:is_name_id=>524, :is_sex_id=>1, :profile_id=>83, :relation_id=>5},
-       83=>{:is_name_id=>532, :is_sex_id=>0, :profile_id=>76, :relation_id=>8},
-       78=>{:is_name_id=>529, :is_sex_id=>0, :profile_id=>76, :relation_id=>2},
-       91=>{:is_name_id=>523, :is_sex_id=>1, :profile_id=>83, :relation_id=>1}}
-
-
       logger.info "==== In compare_tree_circles 4: profiles = #{profiles}" if !profiles.blank?
-
 
       # Перебор по парам профилей (неповторяющимся) с целью выявления похожих профилей
       similars = [] # Похожие - РЕЗУЛЬТАТ
+      # todo: Разобраться - нужны ли unsimilars
       unsimilars = [] # НЕ Похожие - параллельный РЕЗУЛЬТАТ
 
-      c =0  # count different profiles pairs
+      c =0  # count different profiles pairs DEBUG
       IDArray.each_pair(profiles_arr) { |a_profile_id, b_profile_id|
         (
-        logger.info "In compare_tree_circles 6: one_profile_id: #{a_profile_id} - b_profile_id: #{b_profile_id}"
-        c = c + 1; logger.info " c = #{c} "
+        c = c + 1;logger.info "In compare_tree_circles ITERATION = #{c}: one_profile_id: #{a_profile_id} - b_profile_id: #{b_profile_id}"
 
         data_a_to_compare = [profiles[a_profile_id][:is_name_id], profiles[a_profile_id][:is_sex_id]]
         data_b_to_compare = [profiles[b_profile_id][:is_name_id], profiles[b_profile_id][:is_sex_id]]
 
         if data_a_to_compare == data_b_to_compare
-          logger.info "*** In compare_tree_circles 71: data_a_to_compare: #{data_a_to_compare},  - data_b_to_compare: #{data_b_to_compare}"
+          logger.info "*** compare hashes: data_a_to_compare (is_name, is_sex): #{data_a_to_compare},  - data_b_to_compare: #{data_b_to_compare}"
           # сравниваемые хэши кругов профилей и определение их общей части кругов профилей
           common_hash = intersection(tree_circles[a_profile_id], tree_circles[b_profile_id])
-          logger.info "*** In compare_tree_circles 72a: tree_circles[a_profile_id]: #{tree_circles[a_profile_id]}"
-          logger.info "*** In compare_tree_circles 72b: tree_circles[b_profile_id]: #{tree_circles[b_profile_id]}"
-          logger.info "*** In compare_tree_circles 72: common_hash: #{common_hash}"
+          logger.info "*** compare hashes: tree_circles[a_profile_id]: #{tree_circles[a_profile_id]}"
+          logger.info "*** compare hashes: tree_circles[b_profile_id]: #{tree_circles[b_profile_id]}"
+          logger.info "*** compare hashes: common_hash: #{common_hash}"
+          # logger.info "*** compare hashes: common_hash: #{common_hash}"
+          # logger.warn "*** compare hashes: common_hash: #{common_hash}"
+          # logger.error "*** compare hashes: common_hash: #{common_hash}"
+          # logger.fatal "*** compare hashes: common_hash: #{common_hash}"
+          # logger.unknown "*** compare hashes: common_hash: #{common_hash}"
 
           if !common_hash.empty?
 
@@ -399,8 +308,8 @@ module SimilarsInitSearch
               # Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та достоверности
 
               #############################################################
-             # certain_koeff_for_connect ||= WeafamSetting.first.certain_koeff
-              certain_koeff_for_connect = 3
+              certain_koeff_for_connect ||= WeafamSetting.first.certain_koeff
+             # certain_koeff_for_connect = 3
               #############################################################
 
               if common_power >= certain_koeff_for_connect

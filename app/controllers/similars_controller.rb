@@ -29,49 +29,79 @@ class SimilarsController < ApplicationController
 
 
   # Запуск методов определения похожих профилей в текущем дереве
+  # sim_data = { log_connection_id: log_connection_id, #
+  #              similars: similars,       #
+  #              unsimilars: unsimilars  }
   def internal_similars_search
 
-    # TEST 1
-    # arr1 = [2, 1, 3, 5]
-    # arr2 = [2, 0, 4]
-    # inter = arr1 & arr2
-    # differ = arr1 || arr2
-    # differ1 = arr1 - arr2
-    # differ2 = arr2 - arr1
-    # resdif = differ1 + differ2
-    # resdif2 = (arr1 - arr2) + (arr2 - arr1)
-    #logger.info "&&& In int_sim_search 01: arr1 = #{arr1}, arr2 = #{arr2}, inter = #{inter}, differ = #{differ}"
-    #logger.info "&&& In int_sim_search 01: differ1 = #{differ1}, differ2 = #{differ2}, resdif = #{resdif}, resdif2 = #{resdif2}"
-
-    # TEST 2
-    # hash1 = {"son"=>[122, 121], "hus"=>[90], "dil"=>[82], "gsf"=>[28]    ,"fat"=>[110]           }
-    # hash2 = {"son"=>[122, 120], "hus"=>[90], "dil"=>[82], "gsf"=>[28]   ,"hfl"=>[28], "hml"=>[48]}  # from balda
-    # common_hash, uncommon_hash = intersection(hash1, hash2)
-    # logger.info "&&& In int_sim_search 021: common_hash = #{common_hash}"
-    # logger.info "&&& In int_sim_search 022: uncommon_hash = #{uncommon_hash} "
-
-
-    @tree_info = get_tree_info(current_user)
-    logger.info "In internal_similars_search 1:  @tree_info[:connected_users] = #{@tree_info[:connected_users]}, @tree_info = #{@tree_info},  "  if !@tree_info.blank?
-    logger.info "In internal_similars_search 1a: @tree_info.profiles.size = #{@tree_info[:profiles].size} "  if !@tree_info.blank?
-
-    # Последний id (максимальный) из существующих логов - :connected_at
-    @log_connection_id = current_tree_log_id(@tree_info[:connected_users])
-    #@log_connection_id = nil
-
-    ############ call of User.module ############################################
-    similars, unsimilars = User.similars_init_search(@tree_info)
     #############################################################################
-    @similars_qty = similars.size if !similars.empty?
-    @unsimilars = unsimilars
-    @unsimilars_qty = unsimilars.size if !unsimilars.empty?
-    @paged_similars_data = pages_of(similars, 10) # Пагинация - по 10 строк на стр.
-    @current_user_id = current_user.id
+    # SimilarsFound.delete_all
+    # SimilarsFound.reset_pk_sequence
+
+    ### Удаление сохраненных ранее найденных пар похожих
+    # connection_data =
+    # {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34],
+    # :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
+    #  SimilarsFound.clear_similars_found(connection_data)
+    tree_info = current_user.get_tree_info(current_user)
+    logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}"
+    connected_users = current_user.get_connected_users
+    logger.info "In SimilarsStart 1:  connected_users = #{connected_users}"
+    SimilarsFound.clear_tree_similars(connected_users)
+
+    tree_info, sim_data = current_user.start_similars
+    @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
+    if sim_data.empty?
+      flash.now[:notice] = "Успешное сообщение - internal_similars_search"
+      #flash[:alert] = "Предупреждение: красное сообщение - /home/index" unless similars.empty?
+    else
+      flash.now[:alert] = "Предупреждение: красное сообщение - internal_similars_search"
+
+      @tree_info = tree_info  # To View
+      view_tree_data(tree_info, sim_data) unless @tree_info.empty?
+
+    end
 
   end
 
+
+
+  def show_similars_data
+  end
+
+
+
+  # Отобр-е параметров дерева и sim_data во вьюхе
+  def view_tree_data(tree_info, sim_data)
+    @tree_info = tree_info
+    logger.info "In similars_contrler 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, @tree_info = #{tree_info},  "  if !tree_info.blank?
+    logger.info "In similars_contrler 1a: @tree_info.profiles.size = #{tree_info[:profiles].size} "  if !tree_info.blank?
+   # @log_connection_id = sim_data[:log_connection_id]
+    @current_user_id = current_user.id
+    view_similars(sim_data) unless sim_data.empty?
+  end
+
+
+  # Отображение во вьюхе Похожих и - для них - непохожих, если есть
+  def view_similars(sim_data)
+    @sim_data = sim_data  #
+    logger.info "In similars_contrler 01:  @sim_data = #{@sim_data} "
+    @similars = sim_data[:similars]
+    @similars_qty = @similars.size unless sim_data[:similars].empty?
+    #################################################
+    @paged_similars_data = pages_of(@similars, 10) # Пагинация - по 10 строк на стр.
+    ################################################
+    unless sim_data[:unsimilars].empty?
+      @unsimilars = sim_data[:unsimilars]
+      @unsimilars_qty = @unsimilars.size
+    end
+  end
+
+
   # Для текущего дерева - получение номера id лога для прогона разъединения Похожих,
   # ранее объединенных.
+  # Если такой лог есть, значит ранее были найдены похожие и они объединялись. Значит теперь их
+  # можно разъединять.
   # Последний id (максимальный) из существующих логов - :connected_at
   def current_tree_log_id(connected_users)
     # Сбор всех id логов, относящихся к текущему дереву
@@ -80,71 +110,6 @@ class SimilarsController < ApplicationController
     log_connection_id = current_tree_logs_ids.max
     logger.info "In internal_similars_search 1b: log_connection_id = #{log_connection_id} " if !log_connection_id.blank?
     log_connection_id
-  end
-
-
-  # Кол-во профилей в дереве
-  # и другая инфа о дереве и профилях дерева
-  def get_tree_info(current_user)
-    tree_profiles_info = get_tree_profiles_info(current_user)
-    all_tree_profiles_info = get_all_tree_profiles_info(tree_profiles_info)
-
-    { current_user:  current_user,
-      users_profiles_ids: all_tree_profiles_info[:users_profiles_ids], # Массив users_profiles_ids в дереве (авторы)
-
-      tree_is_profiles: tree_profiles_info[:tree_is_profiles], # Массив профилей в дереве
-      tree_profiles_amount: tree_profiles_info[:tree_profiles_amount], # Количество профилей в дереве
-
-      all_tree_profiles: all_tree_profiles_info[:all_tree_profiles], # Весь Массив профилей в дереве (с авторами)
-      all_tree_profiles_amount: all_tree_profiles_info[:all_tree_profiles_amount], # Количество всего массива профилей в дереве (с авторами)
-
-      connected_users: tree_profiles_info[:connected_users],    # Пользователи - авторы дерева
-      profiles: collect_tree_profiles(tree_profiles_info[:author_tree_arr])   # Инфа о профилях в дереве
-    }
-  end
-
-
-  # Сбор данных обо всех профилях в дереве - для исп-я далее
-  def collect_tree_profiles(tree_arr)
-    profiles = {}
-    tree_arr.map {|p|
-      ( one_profile_data = { :is_name_id => p.is_name_id, :is_sex_id => p.is_sex_id , :profile_id => p.profile_id, :relation_id => p.relation_id}
-        profiles.merge!( p.is_profile_id => one_profile_data )  if !one_profile_data.empty?
-      ) }
-    profiles
-  end
-
-  # Сбор инфы о профилях дерева - без профилей авторов
-  def get_tree_profiles_info(current_user)
-
-    connected_users = current_user.get_connected_users
-    author_tree_arr = Tree.get_connected_tree(connected_users) # DISTINCT Массив объединенного дерева из Tree
-    profiles_qty, tree_is_profiles = Tree.tree_amount(current_user)
-
-    {   connected_users: connected_users,    # Пользователи - авторы дерева
-        author_tree_arr: author_tree_arr,    # Пользователи - авторы дерева
-        tree_profiles_amount: profiles_qty, # Количество профилей в дереве
-        tree_is_profiles: tree_is_profiles # Массив профилей в дереве
-    }
-
-  end
-
-  # Сбор полной инфы о профилях дерева - с профилями авторов
-  def get_all_tree_profiles_info(tree_profiles_info)
-
-    users_profiles_ids = []
-    tree_profiles_info[:connected_users].each do |user_id|
-      user_profile_id = User.find(user_id).profile_id
-      users_profiles_ids << user_profile_id
-    end
-    all_tree_profiles = (tree_profiles_info[:tree_is_profiles] + users_profiles_ids).uniq
-    all_tree_profiles_amount = all_tree_profiles.size if !all_tree_profiles.blank?
-
-    {   all_tree_profiles: all_tree_profiles,    # Весь Массив профилей в дереве (с авторами)
-        all_tree_profiles_amount: all_tree_profiles_amount,    # Количество всего массива профилей в дереве (с авторами)
-        users_profiles_ids: users_profiles_ids # Массив users_profiles_ids в дереве (авторы)
-    }
-
   end
 
 
@@ -199,6 +164,8 @@ class SimilarsController < ApplicationController
     @complete_log_size = @complete_log.size unless @complete_log.blank?
     logger.info "*** In  Similars_Controller connect_similars: @complete_log_size = #{@complete_log_size} "
 
+    flash[:notice] = "Успешное сообщение - internal_similars_search"
+
 
   end
 
@@ -252,3 +219,22 @@ class SimilarsController < ApplicationController
 
 
 end
+
+# TEST 1
+# arr1 = [2, 1, 3, 5]
+# arr2 = [2, 0, 4]
+# inter = arr1 & arr2
+# differ = arr1 || arr2
+# differ1 = arr1 - arr2
+# differ2 = arr2 - arr1
+# resdif = differ1 + differ2
+# resdif2 = (arr1 - arr2) + (arr2 - arr1)
+#logger.info "&&& In int_sim_search 01: arr1 = #{arr1}, arr2 = #{arr2}, inter = #{inter}, differ = #{differ}"
+#logger.info "&&& In int_sim_search 01: differ1 = #{differ1}, differ2 = #{differ2}, resdif = #{resdif}, resdif2 = #{resdif2}"
+
+# TEST 2
+# hash1 = {"son"=>[122, 121], "hus"=>[90], "dil"=>[82], "gsf"=>[28]    ,"fat"=>[110]           }
+# hash2 = {"son"=>[122, 120], "hus"=>[90], "dil"=>[82], "gsf"=>[28]   ,"hfl"=>[28], "hml"=>[48]}  # from balda
+# common_hash, uncommon_hash = intersection(hash1, hash2)
+# logger.info "&&& In int_sim_search 021: common_hash = #{common_hash}"
+# logger.info "&&& In int_sim_search 022: uncommon_hash = #{uncommon_hash} "

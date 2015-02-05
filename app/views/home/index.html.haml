@@ -21,5 +21,7 @@
   var access_token = '#{current_user.access_token}';
   var current_user_profile_id = '#{current_user.profile_id}';
   getCircles({ profile_id: current_user_profile_id, token: access_token });
+  // startSearch();
+  // run main search in callback of startSearch()
   getSearchResults( showSearchResultsButton );
   $('#search-results-button').draggable({});

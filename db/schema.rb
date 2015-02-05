@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150125165600) do
+ActiveRecord::Schema.define(version: 20150131085143) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,6 +123,14 @@ ActiveRecord::Schema.define(version: 20150125165600) do
     t.integer  "reverse_relation_id"
     t.string   "reverse_relation",      default: ""
     t.integer  "origin_profile_sex_id"
+  end
+
+  create_table "similars_founds", force: true do |t|
+    t.integer  "user_id",           null: false
+    t.integer  "first_profile_id",  null: false
+    t.integer  "second_profile_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "similars_logs", force: true do |t|
