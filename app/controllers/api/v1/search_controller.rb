@@ -4,7 +4,6 @@ module Api
 
       respond_to :json
 
-
       # Глобальный поиск
       def index
         certain_koeff = get_certain_koeff #3
@@ -15,32 +14,11 @@ module Api
 
 
       # Поиск похожих внутри одного дерева
-      # def iternal
-      #   certain_koeff = get_certain_koeff #3
-      #   tree_info, sim_data = api_current_user.start_similars
-      #   respond_with sim_data
-      # end
-
-
-      # def iternal
-      #   tree_info, sim_data = api_current_user.start_similars
-      #
-      #   if sim_data.empty?
-      #     certain_koeff = get_certain_koeff #3
-      #     logger.info "== in iternal search api IF :  certain_koeff = #{certain_koeff}"
-      #     search_data = api_current_user.start_search(certain_koeff)
-      #     respond_with collect_search_results(search_data)
-      #
-      #   else
-      #     logger.info "== in iternal search api ELSE :  sim_data = #{sim_data}"
-      #
-      #     respond_with sim_data
-      #
-      #   end
-      #
-      #
-      # end
-
+      def iternal
+        certain_koeff = get_certain_koeff #3
+        tree_info, sim_data = api_current_user.start_similars
+        respond_with sim_data
+      end
 
 
 

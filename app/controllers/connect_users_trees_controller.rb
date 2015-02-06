@@ -338,6 +338,14 @@ class ConnectUsersTreesController < ApplicationController
 
   def connection_of_trees
 
+    # Не заблокировано ли дерево пользователя
+    if current_user.tree_is_locked?
+      flash[:alert] = "Объединения в данный момент не возможно. Повторите попытку позже."
+      return redirect_to :back
+    else
+      current_user.lock!
+    end
+
     current_user_id = current_user.id #
     user_id = params[:user_id_to_connect] # From view
 
@@ -371,16 +379,6 @@ class ConnectUsersTreesController < ApplicationController
     logger.info "current_user.tree_is_locked? = #{current_user.tree_is_locked?}, connected_user.tree_is_locked? = #{connected_user.tree_is_locked?} "
     logger.info "@connection_id = #{@connection_id}"
 
-    ######## Check users lock status and connect if all ok
-    #if current_user.tree_is_locked? or connected_user.tree_is_locked?
-    #  logger.info "SimilarsConnection locked"
-    #  redirect_to :back, :alert => "Дерево находится в процессе реорганизации, повторите попытку позже"
-    #else
-    #  logger.info "SimilarsConnection UNLOCK => GO ON! "
-    #  logger.info "current_user = #{current_user},  connected_user = #{connected_user} "
-    #
-    #  current_user.lock!
-    #  connected_user.lock!
 
       who_connect_users_arr = current_user.get_connected_users
       @who_connect_users_arr = who_connect_users_arr # DEBUGG_TO_VIEW
@@ -506,15 +504,9 @@ class ConnectUsersTreesController < ApplicationController
       @stop_by_arrs = stop_by_arrs # DEBUGG_TO_VIEW
       @connection_message = connection_message # DEBUGG_TO_VIEW
 
- #   redirect_to yes_connect_path(yes_user_id: current_user.id, connection_id: connection_id) and return
 
-    ######## Afrer all unlock unlock user tree
-    #  current_user.unlock_tree!
-    #  connected_user.unlock_tree!
-    #
-    #end
-
-    #redirect_to home_path # ?
+      # unlock user
+      current_user.unlock_tree!
 
 
   end
