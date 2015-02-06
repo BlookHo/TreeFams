@@ -505,7 +505,7 @@ class ConnectUsersTreesController < ApplicationController
       @connection_message = connection_message # DEBUGG_TO_VIEW
 
 
-      # unlock user
+      # unlock tree
       current_user.unlock_tree!
 
 
