@@ -12,6 +12,7 @@ function getCurrentTreeUserId(){
 }
 
 
+
 function connectTrees(){
   // http://localhost:3000/make_connection_request?user_id_to_connect=tree_owner_id
   var tree_owner_id = getCurrentTreeUserId();
@@ -19,20 +20,22 @@ function connectTrees(){
 }
 
 
-// http://localhost:3000/api/v1/search/iternal?token=f4bafd62610a75eee1dd28b6aeaebed5
 
+// http://localhost:3000/api/v1/search/iternal?token=f4bafd62610a75eee1dd28b6aeaebed5
 // Поиск похожих в собственом дереве, если результатов нет, запуск глобального поиска
 function startSearch(callback){
   $.get( "/api/v1/search/iternal", { token: access_token } )
   .done(function(data){
+    //
     if( $.isEmptyObject(data) ){
       getSearchResults( showSearchResultsButton );
     }else{
-      //window.location.href = '/internal_similars_search?got_data = data';
-        window.location.href = '/show_similars_data';
+      // window.location.href = '/internal_similars_search
+      // window.location.href = '/show_similars_data';
     }
   });
 }
+
 
 // Получение результатов поиска и отображение на кнопке на домашней странице
 function getSearchResults(callback) {
@@ -58,10 +61,7 @@ showSearchResultsButton = function(search_results){
     $(search_btn).text('Найдено '+search_results.total_profiles+' родственников в '+search_results.total_trees+' деревьях');
     $(search_btn).addClass('animated tada');
   }
-
-
 };
-
 
 
 
@@ -111,7 +111,6 @@ showPrevSearchResult = function(){
     updateSearchResultPaginator(search_results);
   }else{
     return false;
-    // alert("No previous result!");
   }
 };
 
@@ -123,7 +122,6 @@ showNextSearchResult = function(){
     updateSearchResultPaginator(search_results);
   }else{
     return false;
-    // alert("No next result!");
   }
 }
 

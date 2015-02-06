@@ -1,23 +1,6 @@
 module UserLock
   extend ActiveSupport::Concern
 
-  # def can_proceed?
-  #   begin
-  #     self.reload
-  #     if self.tree_is_locked?
-  #       logger.info "User is locked - waiting to proceed..."
-  #       raise "user_is_locked"
-  #     else
-  #       self.lock!
-  #       return true
-  #     end
-  #   rescue
-  #     sleep 1
-  #     retry
-  #   end
-  # end
-
-
   # Установить блокировку юзера
   def lock!
     self.update_column(:is_locked, true)
