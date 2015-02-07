@@ -57,8 +57,8 @@ class SimilarsController < ApplicationController
         # :profiles=>{33=>{:is_name_id=>345, :is_sex_id=>0, :profile_id=>31, :relation_id=>2}, 38=>{:is_name_id=>354, :is_sex_id=>0, :profile_id=>34, :relation_id=>8}, 34=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>31, :relation_id=>5}, 42=>{:is_name_id=>354, :is_sex_id=>0, :profile_id=>35, :relation_id=>6}, 44=>{:is_name_id=>187, :is_sex_id=>0, :profile_id=>42, :relation_id=>2}, 36=>{:is_name_id=>343, :is_sex_id=>1, :profile_id=>32, :relation_id=>1}, 31=>{:is_name_id=>40, :is_sex_id=>1, :profile_id=>34, :relation_id=>5}, 41=>{:is_name_id=>351, :is_sex_id=>1, :profile_id=>35, :relation_id=>1}, 32=>{:is_name_id=>90, :is_sex_id=>1, :profile_id=>34, :relation_id=>1}, 43=>{:is_name_id=>187, :is_sex_id=>0, :profile_id=>40, :relation_id=>8}, 40=>{:is_name_id=>351, :is_sex_id=>1, :profile_id=>38, :relation_id=>1}, 52=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>42, :relation_id=>7}, 37=>{:is_name_id=>293, :is_sex_id=>0, :profile_id=>32, :relation_id=>2}, 39=>{:is_name_id=>173, :is_sex_id=>0, :profile_id=>38, :relation_id=>6}, 35=>{:is_name_id=>173, :is_sex_id=>0, :profile_id=>31, :relation_id=>8}}} (pid:3463)
         # sim_data = {:log_connection_id=>nil,
         #             :similars=>[{:first_profile_id=>38, :first_relation_id=>"Жена", :name_first_relation_id=>"Петра", :first_name_id=>"Ольга", :first_sex_id=>"Ж", :second_profile_id=>42, :second_relation_id=>"Сестра", :name_second_relation_id=>"Елены", :second_name_id=>"Ольга", :second_sex_id=>"Ж", :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]}, :common_power=>4, :inter_relations=>[]},
-        #                         {:first_profile_id=>41, :first_relation_id=>"Отец", :name_first_relation_id=>"Елены", :first_name_id=>"Олег", :first_sex_id=>"М", :second_profile_id=>40, :second_relation_id=>"Отец", :name_second_relation_id=>"Ольги", :second_name_id=>"Олег", :second_sex_id=>"М", :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]}, :common_power=>4, :inter_relations=>[]}],
-        #             :unsimilars=>[]}
+        #                         {:first_profile_id=>41, :first_relation_id=>"Отец", :name_first_relation_id=>"Елены", :first_name_id=>"Олег", :first_sex_id=>"М", :second_profile_id=>40, :second_relation_id=>"Отец", :name_second_relation_id=>"Ольги", :second_name_id=>"Олег", :second_sex_id=>"М", :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]}, :common_power=>4, :inter_relations=>[]}]
+        #             }
         #
         # similars = [{:first_profile_id=>38, :first_relation_id=>"Жена", :name_first_relation_id=>"Петра", :first_name_id=>"Ольга", :first_sex_id=>"Ж", :second_profile_id=>42, :second_relation_id=>"Сестра", :name_second_relation_id=>"Елены", :second_name_id=>"Ольга", :second_sex_id=>"Ж", :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]}, :common_power=>4, :inter_relations=>[]}, {:first_profile_id=>41, :first_relation_id=>"Отец", :name_first_relation_id=>"Елены", :first_name_id=>"Олег", :first_sex_id=>"М", :second_profile_id=>40, :second_relation_id=>"Отец", :name_second_relation_id=>"Ольги", :second_name_id=>"Олег", :second_sex_id=>"М", :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]}, :common_power=>4, :inter_relations=>[]}] (pid:3463)
 
@@ -107,11 +107,7 @@ class SimilarsController < ApplicationController
     @similars_qty = @similars.size unless sim_data[:similars].empty?
     #################################################
     @paged_similars_data = pages_of(@similars, 10) # Пагинация - по 10 строк на стр.
-    ################################################
-    unless sim_data[:unsimilars].empty?
-      @unsimilars = sim_data[:unsimilars]
-      @unsimilars_qty = @unsimilars.size
-    end
+
   end
 
 

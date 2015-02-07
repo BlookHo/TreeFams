@@ -10,40 +10,20 @@ class SimilarsFound < ActiveRecord::Base
   end
 
 
-
-
-  # Поиск в таблице ранее сохраненных (СТАРЫХ) найденных пар похожих
-  # и выявление НОВЫХ пар похожих
-  # /
-  def self.find_stored_similars(similars, current_user_id)
-
-    previous_similars, new_similars = [], []
-    previous_similars_couunt, new_similars_count = 0, 0
-
-    similars.each do |one_sim_pair|
-      first_profile_id = one_sim_pair[:first_profile_id]
-      second_profile_id = one_sim_pair[:second_profile_id]
-      found_sims = SimilarsFound.where(user_id: current_user_id)
+  # Поиск в таблице НОВЫХ пар похожих среди ранее сохраненных (СТАРЫХ) найденных пар похожих
+  # sims_profiles_pairs = [[38, 42], [41, 40]]
+  def self.find_stored_similars(sims_profiles_pairs, current_user_id)
+    new_similars = []
+    sims_profiles_pairs.each do |one_sim_pair|
+      first_profile_id = one_sim_pair[0]
+      second_profile_id = one_sim_pair[1]
+      found_sims = self.where(user_id: current_user_id)
                        .where(" (first_profile_id = #{first_profile_id} and second_profile_id = #{second_profile_id})
-                         or (first_profile_id = #{second_profile_id} and second_profile_id = #{first_profile_id})")
+                              or (first_profile_id = #{second_profile_id} and second_profile_id = #{first_profile_id})")
                        .pluck(:id)
-      # logger.info "In SimilarsStart 2a: first_profile_id = #{first_profile_id}, second_profile_id = #{second_profile_id} "
-      # logger.info "In SimilarsStart 2aa: current_user_id = #{current_user_id}, found_sims = #{found_sims} "
-
-      if found_sims.blank?
-        new_similars << one_sim_pair  # Новые найденные похожие
-        new_similars_count +=1
-      else
-        previous_similars << one_sim_pair  # Старые похожие (ранее найденные и записанные в SimilarsFound)
-        previous_similars_couunt +=1
-      end
-
+      new_similars << one_sim_pair if found_sims.blank? # Новые похожие - их еще нет в таблице SimilarsFound
     end
-    # logger.info "In SimilarsStart 3: previous_similars = #{previous_similars}, previous_similars_couunt = #{previous_similars_couunt} "
-    # logger.info "In SimilarsStart 3: new_similars = #{new_similars}, new_similars_count = #{new_similars_count} "
-
-    return previous_similars, new_similars
-
+    return new_similars
   end
 
     # Сохранение найденных пар похожих

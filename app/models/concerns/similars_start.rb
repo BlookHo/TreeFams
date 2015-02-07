@@ -23,11 +23,12 @@ module SimilarsStart
     log_connection_id = current_tree_log_id(tree_info[:connected_users])
 
     ###### Запуск User метода определения первых пар Похожих ##################
-    similars, unsimilars = User.similars_init_search(tree_info)
+    # similars, unsimilars = User.similars_init_search(tree_info)
+    similars = User.similars_init_search(tree_info)
     #############################################################################
     check_similars_data =  {  log_connection_id: log_connection_id, #
                               similars: similars,        #
-                              unsimilars: unsimilars,
+                              # unsimilars: unsimilars,
                               current_user_id: self.id    }
 
     sim_data = check_new_similars(check_similars_data) unless similars.empty?
@@ -44,22 +45,22 @@ module SimilarsStart
 
     sim_data = {}
     similars = check_similars_data[:similars]
-    unsimilars = check_similars_data[:unsimilars]
     current_user_id = check_similars_data[:current_user_id]
     log_connection_id = check_similars_data[:log_connection_id]
-    previous_similars, new_similars = SimilarsFound.find_stored_similars(similars, current_user_id) #55 ) #self.id)
-    # todo: Разобраться, нужны ли previous_similars?
-    logger.info "In SimilarsStart 3a: previous_similars = #{previous_similars} "
-    logger.info "In SimilarsStart 3a: new_similars = #{new_similars} "
+
+    sims_profiles_pairs = collect_sims_profiles_pairs(similars)
+    logger.info " In SimilarsStart After check_new_similars: sims_profiles_pairs = #{sims_profiles_pairs} "
+
+    new_similars = SimilarsFound.find_stored_similars(sims_profiles_pairs, current_user_id) #55 ) #self.id)
+    logger.info "NNNNN In SimilarsStart 3a: new_similars = #{new_similars} "
 
     # Проверка найденных П. Если такие пары П - все СТАРЫЕ - уже есть среди сохраненных, new_similars.blank
     # то данный тест пройден - Без П.
     #  Тогда ничего не отображаем в кач-ве рез-та теста П -
     # переходим к Поиску:  sim_data = {} - /home
     unless new_similars.blank?
-      # Если найденные П - все НОВЫЕ - отс-ют среди ранее сохраненных, или часть НОВЫЕ и часть СТАРЫЕ,
-      #  то они все = рез-тат теста П.
-      # И их надо сохранить в таблице Найденных,
+      # Если найденные П - НОВЫЕ - отс-ют среди ранее сохраненных, или часть НОВЫЕ,
+      #  то все similars = рез-тат теста П. И их надо сохранить в таблице SimilarsFound,
       # показать в render :template => 'similars/show_similars_data' и разобраться Да\Нет
       # Если Да - объединяем П, удаляем сохраненные ранее пары П из табл. Найденных
       # Если Нет - /home
@@ -67,12 +68,20 @@ module SimilarsStart
       ####################### Сохранение найденных пар похожих
       SimilarsFound.store_similars(similars, current_user_id)
       #############################################################################
-      sim_data = { log_connection_id: log_connection_id,
-                     similars: similars,        #
-                     unsimilars: unsimilars }
-    end
+      sim_data = { log_connection_id: log_connection_id, similars: similars }
 
+    end
     sim_data
+  end
+
+  # Сбор пар похожих профилей - для последующего сохранения в табл. SimilarsFound
+  def collect_sims_profiles_pairs(similars)
+    sims_profiles_pairs = []
+    similars.each do |one_sim_pair|
+      one_sims_profiles_pair = [one_sim_pair[:first_profile_id], one_sim_pair[:second_profile_id]]
+      sims_profiles_pairs <<  one_sims_profiles_pair
+    end
+    sims_profiles_pairs
   end
 
 

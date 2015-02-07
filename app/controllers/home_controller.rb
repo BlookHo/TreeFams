@@ -72,11 +72,6 @@ class HomeController < ApplicationController
     @similars_qty = @similars.size unless sim_data[:similars].empty?
     #################################################
     @paged_similars_data = pages_of(@similars, 10) # Пагинация - по 10 строк на стр.
-    ################################################
-    unless sim_data[:unsimilars].empty?
-      @unsimilars = sim_data[:unsimilars]
-      @unsimilars_qty = @unsimilars.size
-    end
 
   end
 

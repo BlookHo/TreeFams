@@ -12,9 +12,10 @@ module SimilarsInitSearch
       unless tree_info.empty?  # Исходные данные
         tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
         logger.info "In similars_init_search 1: tree_circles = #{tree_circles}" unless tree_circles.empty?
-        similars, unsimilars = compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
-        return similars, unsimilars
+        compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
+        # compare_tree_circles returns similars
       end
+
     end
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
@@ -78,7 +79,7 @@ module SimilarsInitSearch
     def make_profile_circle(profile_id, profile_circle_hash)
       profile_circle = {}
       profile_circle.merge!( profile_id => profile_circle_hash )  if !profile_circle_hash.empty?
-      return profile_circle
+      profile_circle
     end
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
@@ -192,9 +193,7 @@ module SimilarsInitSearch
           logger.info "ERROR: No relation_id in Circle "
       end
 
-      { code_relation: code_relation,
-        name_relation: name_relation
-      }
+      { code_relation: code_relation, name_relation: name_relation  }
 
     end
 
@@ -256,8 +255,6 @@ module SimilarsInitSearch
 
       # Перебор по парам профилей (неповторяющимся) с целью выявления похожих профилей
       similars = [] # Похожие - РЕЗУЛЬТАТ
-      # todo: Разобраться - нужны ли unsimilars
-      unsimilars = [] # НЕ Похожие - параллельный РЕЗУЛЬТАТ
 
       c =0  # count different profiles pairs DEBUG
       IDArray.each_pair(profiles_arr) { |a_profile_id, b_profile_id|
@@ -280,21 +277,17 @@ module SimilarsInitSearch
           # logger.fatal "*** compare hashes: common_hash: #{common_hash}"
           # logger.unknown "*** compare hashes: common_hash: #{common_hash}"
 
-          if !common_hash.empty?
+          unless common_hash.empty?
 
-            data_for_check = {
-                a_profile_circle:  tree_circles[a_profile_id],
-                b_profile_circle:  tree_circles[b_profile_id],
-                common_hash:  common_hash
-            }
+            data_for_check = { a_profile_circle:  tree_circles[a_profile_id],
+                               b_profile_circle:  tree_circles[b_profile_id],
+                               common_hash:  common_hash  }
 
             ############ call of User.module ############################################
             unsimilar_sign, inter_relations = check_similars_exclusions(data_for_check)
             #############################################################################
-          #  unsimilar_sign = true
             # Проверка условия исключения похожести
-            if unsimilar_sign #check_similars_exclusion(data_for_check)
-
+            if unsimilar_sign #
               # Если признак непохожести = true
               # значит эта пара профилей - точно НЕПОХОЖИЕ
               # по признаку - есть необщие отношения, которые не могут отличаться у одного и того же чела
@@ -323,37 +316,21 @@ module SimilarsInitSearch
                       inter_relations:  inter_relations
                     }
 
-                #profiles_pair = [a_profile_id, b_profile_id]
-                #if !unsimilars.include?(profiles_pair)
                 one_similars_pair = get_similars_data(common_data)
-                similars << one_similars_pair if !one_similars_pair.empty?  # Похожие - РЕЗУЛЬТАТ
-                #
-                #else
-                #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
-                #end
-
-                #else
-                #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
+                similars << one_similars_pair unless one_similars_pair.empty?  # Похожие - РЕЗУЛЬТАТ
               end
 
-              #else
-              #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
             end
 
-            #else
-            #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
           end
-
-          #else
-          #  unsimilars = collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
 
         end
         ) }
 
       logger.info "In compare_tree_circles 9: similars = #{similars}"
-      logger.info "In compare_tree_circles 10: similars.size = #{similars.size}" if !similars.empty?
+      logger.info "In compare_tree_circles 10: similars.size = #{similars.size}" unless similars.empty?
 
-      return similars, unsimilars
+      similars
     end
 
     # No use
