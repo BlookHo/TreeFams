@@ -38,9 +38,10 @@ class SimilarsController < ApplicationController
     # SimilarsFound.delete_all
     # SimilarsFound.reset_pk_sequence
 
-    ### Удаление сохраненных ранее найденных пар похожих
     tree_info = current_user.get_tree_info(current_user)
     logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}"
+
+    ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
     connected_users = current_user.get_connected_users
     logger.info "In SimilarsStart 1:  connected_users = #{connected_users}"
     SimilarsFound.clear_tree_similars(connected_users)

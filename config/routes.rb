@@ -1,6 +1,10 @@
 Weafam::Application.routes.draw do
 
 
+  resources :similars_founds, except: [:update, :show, :edit]
+
+  resources :relations
+
   resources :updates_events
 
   resources :updates_feeds, except: [:update, :show, :destroy, :new, :edit]
@@ -72,25 +76,6 @@ Weafam::Application.routes.draw do
   match 'delete_one_dialogue' => 'messages#delete_one_dialogue', via: :post
 
   match 'spam_dialoge' => 'messages#spam_dialoge', via: :get
-  #match 'spam_dialoge' => 'messages#spam_dialoge', via: :post
-
-  # get "new_profile/get_profile_params"
-  # get "new_profile/make_new_profile"
-  # get "new_profile/make_tree_row"
-  # get "new_profile/make_profilekeys_rows"
-  # get "graph_tree/show_graph_tree"
-  # get "graph_tree/edit"
-  # get "graph_tree/move"
-  # get "admin_methods/service_method_1"
-  # get "admin_methods/service_method_2"
-  # mount RailsAdmin::Engine => '/admin_gem', :as => 'rails_admin'
-
-
-  # admin_methods controller
-  # match 'service_method_1' => 'admin_methods#service_method_1', via: :get
-  # match 'service_method_1' => "admin_methods#service_method_1", via: :post
-  # match 'service_method_2' => 'admin_methods#service_method_2', via: :get
-  # match 'service_method_2' => "admin_methods#service_method_2", via: :post
 
 
   # pages controller
@@ -111,42 +96,6 @@ Weafam::Application.routes.draw do
   match 'match_approval' => 'main#match_approval', via: :get
   match 'add_new_profile' => 'new_profile#add_new_profile', via: [:get, :post]
 
-  # start controller
-  #####################
-  # match 'show_tree_table' => 'start#show_tree_table', via: :get
-  # match 'display_saved_tree' => 'start#display_saved_tree', via: :get
-  # match 'save_start_tables' => 'start#save_start_tables', via: :get
-
-  # start controller # "enters"
-  # match 'enter_myself' => 'start#enter_myself', via: :get
-  # match 'enter_father' => 'start#enter_father', via: :get
-  # match 'enter_mother' => 'start#enter_mother', via: :get
-  # match 'enter_brother' => 'start#enter_brother', via: :get
-  # match 'enter_sister' => 'start#enter_sister', via: :get
-  # match 'enter_son' => 'start#enter_son', via: :get
-  # match 'enter_daugther' => 'start#enter_daugther', via: :get
-  # match 'enter_husband' => 'start#enter_husband', via: :get
-  # match 'enter_wife' => 'start#enter_wife', via: :get
-  # match 'enter_final' => 'start#enter_final', via: :get
-
-  # start controller # "checks"
-  # match 'check_brothers' => 'start#check_brothers', via: :post
-  # match 'check_sisters' => 'start#check_sisters', via: :post
-  # match 'check_sons' => 'start#check_sons', via: :post
-  # match 'check_daugthers' => 'start#check_daugthers', via: :post
-  # match 'check_husband' => 'start#check_husband', via: :post
-  # match 'check_wife' => 'start#check_wife', via: :post
-
-  # start controller # "stores"
-  # match 'store_myself' => 'start#store_myself', via: :post
-  # match 'store_father' => 'start#store_father', via: :post
-  # match 'store_mother' => 'start#store_mother', via: :post
-  # match 'store_brother' => 'start#store_brother', via: :post
-  # match 'store_sister' => 'start#store_sister', via: :post
-  # match 'store_son' => 'start#store_son', via: :post
-  # match 'store_daugther' => 'start#store_daugther', via: :post
-  # match 'store_husband' => 'start#store_husband', via: :post
-  # match 'store_wife' => 'start#store_wife', via: :post
 
   # new_profile controller
   match 'make_new_profile' => 'new_profile#make_new_profile', via: :get
@@ -211,8 +160,6 @@ Weafam::Application.routes.draw do
   match 'invitation_email' => 'weafam_mailer#invitation_email', via: :post
 
 
-
-  resources :relations
 
 
 

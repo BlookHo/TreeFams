@@ -26,7 +26,7 @@ RSpec.describe SimilarsFound, :type => :model do
         end
 
         let(:bad_similars_found_2) {FactoryGirl.build(:similars_found, :ids_equal)}
-        it 'Does not save an invalid similars pair - equal IDs' do
+        it 'Does not save an invalid similars pair - equal Profile_IDs' do
           expect(bad_similars_found_2).to_not be_valid
         end
 
