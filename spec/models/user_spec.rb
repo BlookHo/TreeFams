@@ -7,23 +7,20 @@ describe User do
 
     @profile = Profile.new( user_id: @user_profile, profile_name: 45, relation_id: 2, display_name_id:  45)
     @profile.save
-
   end
 
-  describe 'validation' do
-    describe 'on create' do
-      context 'when valid user' do
+  describe '- validation' do
+    describe '- on create' do
+      context '- when valid user' do
         let(:user) {FactoryGirl.build(:user)}
-
-        it 'saves a valid user' do
+        it '- saves a valid user' do
           expect(user).to be_valid
         end
       end
 
-      context 'when invalid user' do
+      context '- when invalid user' do
         let(:user) {FactoryGirl.build(:user, :wrong_email)}
-
-        it 'does not save an invalid user' do
+        it '- does not save an invalid user' do
           # name = user.name
           # user.update_name
           # expect(name).to_not eq(user.name)

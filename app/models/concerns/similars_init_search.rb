@@ -242,6 +242,7 @@ module SimilarsInitSearch
     end
 
     # Сравниваем все круги на похожесть (совпадение)
+    # compare_tree_circles returns similars
     def compare_tree_circles(tree_info, tree_circles)
 
       logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?

@@ -50,10 +50,9 @@ module SimilarsStart
 
     sims_profiles_pairs = collect_sims_profiles_pairs(similars)
     logger.info " In SimilarsStart After check_new_similars: sims_profiles_pairs = #{sims_profiles_pairs} "
-
+    # sims_profiles_pairs = [[38, 42], [41, 40]]
     new_similars = SimilarsFound.find_stored_similars(sims_profiles_pairs, current_user_id) #55 ) #self.id)
     logger.info "NNNNN In SimilarsStart 3a: new_similars = #{new_similars} "
-
     # Проверка найденных П. Если такие пары П - все СТАРЫЕ - уже есть среди сохраненных, new_similars.blank
     # то данный тест пройден - Без П.
     #  Тогда ничего не отображаем в кач-ве рез-та теста П -
@@ -66,10 +65,9 @@ module SimilarsStart
       # Если Нет - /home
       logger.info "In SimilarsStart 3b: new_similars == []?: #{new_similars == []} "
       ####################### Сохранение найденных пар похожих
-      SimilarsFound.store_similars(similars, current_user_id)
+      SimilarsFound.store_similars(sims_profiles_pairs, current_user_id)
       #############################################################################
       sim_data = { log_connection_id: log_connection_id, similars: similars }
-
     end
     sim_data
   end
