@@ -35,16 +35,9 @@ class SimilarsFound < ActiveRecord::Base
     return new_similars
   end
 
-    # Сохранение найденных пар похожих
+  # Сохранение найденных пар похожих
   def self.store_similars(sims_profiles_pairs, current_user_id)
-
     sim_pairs = []
-    # similars.each do |one_sim_pair|
-    #   one_sim_pair_data = { user_id: current_user_id,                               # int
-    #                         first_profile_id: one_sim_pair[:first_profile_id],      # int
-    #                         second_profile_id: one_sim_pair[:second_profile_id] }   # int
-    #   sim_pairs<< self.new(one_sim_pair_data)
-    # end
     sims_profiles_pairs.each do |one_sim_pair|
       one_sim_pair_data = { user_id: current_user_id,                # int
                             first_profile_id: one_sim_pair[0],       # int
@@ -59,6 +52,7 @@ class SimilarsFound < ActiveRecord::Base
   # connection_data =
   # {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34],
   # :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
+  # from SimilarsConnection.rb#similars_connect_tree
   def self.clear_similars_found(connection_data)
     logger.info "In SimilarsFound clear_similars_found: connection_data = #{connection_data} "
     profiles_to_rewrite = connection_data[:profiles_to_rewrite]
@@ -77,6 +71,8 @@ class SimilarsFound < ActiveRecord::Base
 
 
   # Очистка табл. от ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА, в случае когда они объединились
+  # from similars_controller#internal_similars_search
+  # connected_users - input param
   def self.clear_tree_similars(connected_users_arr)
     logger.info "In SimilarsFound clear_tree_similars: connected_users_arr = #{connected_users_arr} "
     found_sims = SimilarsFound.where(user_id: connected_users_arr).pluck(:id)
