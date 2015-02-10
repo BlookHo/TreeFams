@@ -1,8 +1,8 @@
 /* Notifcations wrapper
 -------------------------------*/
 var Notification = (function(){
-  var types = {};
 
+  var types = {};
 
   types.alert = function(message){
     noty({
@@ -25,8 +25,8 @@ var Notification = (function(){
         theme: 'relax',
         type: 'success',
         animation: {
-            open: 'animated flipInX', // Animate.css class names
-            close: 'animated flipOutX', // Animate.css class names
+            open: 'animated flipInX',
+            close: 'animated flipOutX',
         }
     });
   };
@@ -39,8 +39,8 @@ var Notification = (function(){
         theme: 'relax',
         type: 'warning',
         animation: {
-            open: 'animated flipInX', // Animate.css class names
-            close: 'animated flipOutX', // Animate.css class names
+            open: 'animated flipInX',
+            close: 'animated flipOutX',
         }
     });
   };
@@ -53,8 +53,8 @@ var Notification = (function(){
         theme: 'relax',
         type: 'alert',
         animation: {
-            open: 'animated flipInX', // Animate.css class names
-            close: 'animated flipOutX', // Animate.css class names
+            open: 'animated flipInX',
+            close: 'animated flipOutX',
         }
     });
   };

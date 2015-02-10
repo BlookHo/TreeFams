@@ -5,6 +5,9 @@
         = link_to message[:message], message[:link]
         %a.close{href:'#', onclick: "$('.flash').slideUp();"}= fa_icon "close"
   - else
+    :javascript
+      Notification.#{type}("#{message}")
+
     .flash{class: type}
       .container
         = message

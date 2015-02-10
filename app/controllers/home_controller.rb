@@ -6,6 +6,7 @@ class HomeController < ApplicationController
 
   # All profiles in user's tree
   def index
+    flash.now[:warning] = "Alert message from server!"
     tree_info, sim_data, similars = current_user.start_similars
     @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
     unless similars.empty?  # т.е. есть похожие

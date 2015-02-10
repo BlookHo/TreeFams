@@ -305,11 +305,8 @@ Weafam::Application.routes.draw do
 
     resources :subnames
 
-
     root "users#index"
   end
-
-
 
 
 
