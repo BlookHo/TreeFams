@@ -47,7 +47,12 @@ FactoryGirl.define do
 
     trait :sims_pair_3 do
       first_profile_id 55   # 8 tree
-      second_profile_id 66  # 8 tree
+      second_profile_id 66  # 9 tree
+    end
+
+    trait :sims_pair_4 do
+      first_profile_id 77   # 8 tree
+      second_profile_id 88  # 9 tree
     end
 
   end

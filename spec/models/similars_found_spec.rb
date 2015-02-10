@@ -56,11 +56,24 @@ RSpec.describe SimilarsFound, :type => :model do
     # create users
     let(:user) {FactoryGirl.create(:user)}
     let(:other_user) {FactoryGirl.create(:other_user)}
+    let(:third_user) {FactoryGirl.create(:third_user)}
     let(:current_user_id) {user.id}
     let(:other_user_id) {other_user.id}
+    let(:third_user_id) {third_user.id}
+
+    let(:connected_users) {[current_user_id, other_user_id ]}
+    # let(:connected_users) {[5, 3 ]}
 
     # create parameters
     let(:sims_profiles_pairs) {[[38, 42], [41, 40]]}
+
+    # create model data
+    before do
+      FactoryGirl.create(:similars_found, :sims_pair_1, user_id: current_user_id)
+      FactoryGirl.create(:similars_found, :sims_pair_2, user_id: current_user_id)
+      FactoryGirl.create(:similars_found, :sims_pair_3, user_id: other_user_id)
+      FactoryGirl.create(:similars_found, :sims_pair_4, user_id: third_user_id)
+    end
 
     # from similars_start.rb#check_new_similars
     describe '* find_stored_similars *' do
@@ -71,12 +84,6 @@ RSpec.describe SimilarsFound, :type => :model do
       # let(:second_profile_id_2) {FactoryGirl.create(:profile_four)}  # id 40
       # let(:sims_profiles_pairs) {[[:first_profile_id_1, :second_profile_id_1], [:first_profile_id_2, :second_profile_id_2]]}
 
-      # create model data
-      before do
-        FactoryGirl.create(:similars_found, :sims_pair_1, user_id: current_user_id)
-        FactoryGirl.create(:similars_found, :sims_pair_2, user_id: current_user_id)
-        FactoryGirl.create(:similars_found, :sims_pair_3, user_id: other_user_id)
-      end
 
       context '- Return Good data: ' do
         # verify data type
@@ -165,7 +172,7 @@ RSpec.describe SimilarsFound, :type => :model do
             expect(second_row.user_id).to eq(user.id)
           end
           it '- first_profile_id - Ok' do
-            # puts "2 store_similars check: first_row.first_profile_id = #{first_row.first_profile_id.inspect} "
+            puts "2 store_similars check: second_row.first_profile_id = #{second_row.first_profile_id.inspect} "
             expect(second_row.first_profile_id).to eq(41) #
           end
           it '- second_profile_id - Ok' do
@@ -177,10 +184,15 @@ RSpec.describe SimilarsFound, :type => :model do
 
     # from similars_controller#internal_similars_search
     describe '* clear_tree_similars *' do
-      pending "making test clear_tree_similars method in #{__FILE__}"
-      # connected_users =>[5, 4] - input param
-
-
+      before do
+        SimilarsFound.clear_tree_similars(connected_users)
+      end
+      context '- clear tree similars' do
+        let(:rest_count) { SimilarsFound.all.count }
+        it '- after clear_tree_similars check count of rest rows' do
+          expect(rest_count).to eq(1)
+        end
+      end
     end
 
     # from SimilarsConnection.rb#similars_connect_tree
