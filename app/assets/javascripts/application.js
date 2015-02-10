@@ -26,6 +26,9 @@
 //= require jquery.jcrop
 //= require papercrop
 
+// Notifications
+//= require libs/jquery.noty.packaged.min.js
+//= require notifications.js
 
 //= require connection
 
