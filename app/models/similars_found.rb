@@ -4,7 +4,7 @@ class SimilarsFound < ActiveRecord::Base
   validates_presence_of :user_id, :first_profile_id, :second_profile_id, :message => "Должно присутствовать в SimilarsFound"
   validates_numericality_of :user_id, :first_profile_id, :second_profile_id, :only_integer => true, :message => "ID автора сообщения или получателя сообщения должны быть целым числом в SimilarsFound"
   validates_numericality_of :user_id, :first_profile_id, :second_profile_id, :greater_than => 0, :message => "ID автора сообщения или получателя сообщения должны быть больше 0 в SimilarsFound"
-  validate :two_fields_are_not_equal  # :first_profile_id, :second_profile_id
+  validate :two_fields_are_not_equal  # :first_profile_id  AND :second_profile_id
 
   # custom validation
   def two_fields_are_not_equal
@@ -12,6 +12,7 @@ class SimilarsFound < ActiveRecord::Base
   end
 
   scope :at_user_id, -> (current_user_id) { where(user_id: current_user_id) }
+  scope :one_side_profiles, -> (one_profiles_array, other_profiles_array) { where(first_profile_id: one_profiles_array, second_profile_id: other_profiles_array) }
   scope :sims_pair_exists, -> (first_profile_id, second_profile_id) {
                           where(" (first_profile_id = #{first_profile_id} and second_profile_id = #{second_profile_id})
                            or (first_profile_id = #{second_profile_id} and second_profile_id = #{first_profile_id})") }
@@ -28,7 +29,6 @@ class SimilarsFound < ActiveRecord::Base
       found_sims = SimilarsFound.at_user_id(current_user_id).
                        sims_pair_exists(first_profile_id, second_profile_id).pluck(:id)
       # puts "In SimilarsFound find_stored_similars: found_sims = #{found_sims} "
-      # logger.info "In SimilarsFound find_stored_similars: found_sims = #{found_sims} "
       # Если found_sims.blank?, значит эта пара - one_sim_pair - новыe похожиe профили
       new_similars << one_sim_pair if found_sims.blank? # их еще нет в таблице SimilarsFound
     end
@@ -36,6 +36,8 @@ class SimilarsFound < ActiveRecord::Base
   end
 
   # Сохранение найденных пар похожих
+  # from similars_start.rb#check_new_similars
+  # TESTED
   def self.store_similars(sims_profiles_pairs, current_user_id)
     sim_pairs = []
     sims_profiles_pairs.each do |one_sim_pair|
@@ -48,35 +50,35 @@ class SimilarsFound < ActiveRecord::Base
   end
 
 
-  # Очистка табл. от ранее сохраненных пар похожих, в случае когда они объединились
-  # connection_data =
-  # {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34],
-  # :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
+  # Очистка табл. от ранее сохраненных пар похожих, после того, как они объединились
   # from SimilarsConnection.rb#similars_connect_tree
-  def self.clear_similars_found(connection_data)
-    logger.info "In SimilarsFound clear_similars_found: connection_data = #{connection_data} "
-    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy = connection_data[:profiles_to_destroy]
-    connected_users_arr = connection_data[:connected_users_arr]
-    found_sims1 = SimilarsFound.where(user_id: connected_users_arr)
-                      .where(first_profile_id: profiles_to_rewrite, second_profile_id: profiles_to_destroy)
-                      .pluck(:id)
-    found_sims2 = SimilarsFound.where(user_id: connected_users_arr)
-                      .where(first_profile_id: profiles_to_destroy, second_profile_id: profiles_to_rewrite)
-                      .pluck(:id)
-    found_sims = found_sims1 + found_sims2
-    logger.info "In SimilarsFound clear_similars_found: found_sims = #{found_sims.inspect}, found_sims1 = #{found_sims1.inspect}, found_sims2 = #{found_sims2.inspect} "
+  # data_to_clear = {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34],
+  #  :connected_users_arr=>[5, 4]  }
+  # TESTED
+  def self.clear_similars_found(data_to_clear)
+    # logger.info "In SimilarsFound clear_similars_found: connection_data = #{data_to_clear} "
+    profiles_to_rewrite = data_to_clear[:profiles_to_rewrite]
+    profiles_to_destroy = data_to_clear[:profiles_to_destroy]
+    connected_users_arr = data_to_clear[:connected_users_arr]
+
+    found_sims1 = SimilarsFound.at_user_id(connected_users_arr)
+                      .one_side_profiles(profiles_to_rewrite, profiles_to_destroy).pluck(:id)
+    found_sims2 = SimilarsFound.at_user_id(connected_users_arr)
+                      .one_side_profiles(profiles_to_destroy, profiles_to_rewrite).pluck(:id)
+    # found_sims = found_sims1 + found_sims2
+    # logger.info "In SimilarsFound clear_similars_found: found_sims = #{found_sims.inspect}, found_sims1 = #{found_sims1.inspect}, found_sims2 = #{found_sims2.inspect} "
     found_deletion(restore_found(found_sims1 + found_sims2))
   end
 
 
   # Очистка табл. от ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА, в случае когда они объединились
   # from similars_controller#internal_similars_search
-  # connected_users - input param
+  # connected_users_arr - input param
+  # TESTED
   def self.clear_tree_similars(connected_users_arr)
-    logger.info "In SimilarsFound clear_tree_similars: connected_users_arr = #{connected_users_arr} "
-    found_sims = SimilarsFound.where(user_id: connected_users_arr).pluck(:id)
-    logger.info "In SimilarsFound clear_similars_found: found_sims = #{found_sims.inspect}"
+    # logger.info "In SimilarsFound clear_tree_similars: connected_users_arr = #{connected_users_arr} "
+    found_sims = SimilarsFound.at_user_id(connected_users_arr).pluck(:id)
+    # logger.info "In SimilarsFound clear_similars_found: found_sims = #{found_sims.inspect}"
     found_deletion(restore_found(found_sims))
   end
 

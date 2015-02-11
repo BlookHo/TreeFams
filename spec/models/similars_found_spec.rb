@@ -52,7 +52,7 @@ RSpec.describe SimilarsFound, :type => :model do
 
 
   describe '- Model methods' do
-    #  pending "making test All SimilarsFound methods in #{__FILE__}"
+
     # create users
     let(:user) {FactoryGirl.create(:user)}
     let(:other_user) {FactoryGirl.create(:other_user)}
@@ -60,9 +60,7 @@ RSpec.describe SimilarsFound, :type => :model do
     let(:current_user_id) {user.id}
     let(:other_user_id) {other_user.id}
     let(:third_user_id) {third_user.id}
-
     let(:connected_users) {[current_user_id, other_user_id ]}
-    # let(:connected_users) {[5, 3 ]}
 
     # create parameters
     let(:sims_profiles_pairs) {[[38, 42], [41, 40]]}
@@ -78,12 +76,6 @@ RSpec.describe SimilarsFound, :type => :model do
     # from similars_start.rb#check_new_similars
     describe '* find_stored_similars *' do
       # todo: Use nested Factories here
-      # let(:first_profile_id_1) {FactoryGirl.create(:profile_one)}   # id 38
-      # let(:second_profile_id_1) {FactoryGirl.create(:profile_two)}   # id 42
-      # let(:first_profile_id_2) {FactoryGirl.create(:profile_three)} # id 41
-      # let(:second_profile_id_2) {FactoryGirl.create(:profile_four)}  # id 40
-      # let(:sims_profiles_pairs) {[[:first_profile_id_1, :second_profile_id_1], [:first_profile_id_2, :second_profile_id_2]]}
-
 
       context '- Return Good data: ' do
         # verify data type
@@ -197,15 +189,27 @@ RSpec.describe SimilarsFound, :type => :model do
 
     # from SimilarsConnection.rb#similars_connect_tree
     describe '* clear_similars_found *' do
-      pending "making test clear_similars_found method in #{__FILE__}"
-      # connection_data- input param
-      # {:profiles_to_rewrite=>[41, 35, 42, 44, 52], :profiles_to_destroy=>[40, 39, 38, 43, 34],
-      # :current_user_id=>5, :connection_id=>8, :connected_users_arr=>[5, 4], :table_name=>"profile_keys"}
-
+      let(:data_to_clear) { {:profiles_to_rewrite => [41, 35, 42, 66], :profiles_to_destroy=>[40, 38, 38, 55],
+                             :connected_users_arr => connected_users } }
+      before do
+        # puts " start: connected_users_arr = #{data_to_clear[:connected_users_arr].inspect} "
+        # puts " start: connected_users = #{connected_users.inspect} "
+        # puts " clear_similars_found check: count = #{SimilarsFound.all.count.inspect} "
+        # puts " clear_similars_found check: 1 = #{SimilarsFound.first.inspect} "
+        # puts " clear_similars_found check: 4 = #{SimilarsFound.fourth.inspect} "
+        SimilarsFound.clear_similars_found(data_to_clear)
+      end
+      context '- after clear_similars_found' do
+        let(:rest_count) { SimilarsFound.all.count }
+        it '- check count of rest rows' do
+          expect(rest_count).to eq(1)
+        end
+      end
 
     end
 
   end
 
+  # pending "making test clear_similars_found method in #{__FILE__}"
 
 end
