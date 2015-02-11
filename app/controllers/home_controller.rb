@@ -16,10 +16,10 @@ class HomeController < ApplicationController
         message: "Предупреждение: В дереве есть 'похожие' профили. Объединиться будет невозможно",
         link: internal_similars_search_path
       }
-      flash.now[:link] = flash_obj unless similars.empty?
+      flash.now[:link] = flash_obj # unless similars.empty?
       unless sim_data.empty?  #  т.е. есть новые похожие - отлич. от ранее записанных
         @tree_info = tree_info  # To View
-        view_tree_data(tree_info, sim_data) unless @tree_info.empty?
+        view_tree_data(tree_info, sim_data) unless tree_info.empty?
         render :template => 'similars/show_similars_data' # показываем инфу о похожих
       end
     end
@@ -73,11 +73,6 @@ class HomeController < ApplicationController
     @similars_qty = @similars.size unless sim_data[:similars].empty?
     #################################################
     @paged_similars_data = pages_of(@similars, 10) # Пагинация - по 10 строк на стр.
-    ################################################
-    unless sim_data[:unsimilars].empty?
-      @unsimilars = sim_data[:unsimilars]
-      @unsimilars_qty = @unsimilars.size
-    end
 
   end
 

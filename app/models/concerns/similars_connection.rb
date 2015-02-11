@@ -5,13 +5,12 @@ module SimilarsConnection
   # Перезапись профилей в таблицах
   # Формирование лога объединения - получение его log_id
   # Запись лога в таблицу SimilarsLog под номером log_id
-  # .
   def similars_connect_tree(connection_data)
 
     connected_users_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
     connection_data[:connected_users_arr] = connected_users_arr
 
-    # todo: Организовать перезапись Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
+    # todo: Сделать логирование перезаписи Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
     # Перезапись profile_data при объединении профилей
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
 
@@ -28,11 +27,15 @@ module SimilarsConnection
     common_log = {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
     complete_log_arr = common_log[:log_user_profile] + common_log[:log_tree] + common_log[:log_profilekey]
 
-    store_log(complete_log_arr) unless complete_log_arr.blank?
     # Запись массива лога в таблицу SimilarsLog под номером log_id
+    store_log(complete_log_arr) unless complete_log_arr.blank?
+
+    data_to_clear = { profiles_to_rewrite: connection_data[:profiles_to_rewrite],
+                      profiles_to_destroy: connection_data[:profiles_to_destroy],
+                      connected_users_arr: connection_data[:connected_users_arr]   }
 
     ### Удаление сохраненных ранее найденных пар похожих
-    SimilarsFound.clear_similars_found(connection_data)
+    SimilarsFound.clear_similars_found(data_to_clear)
 
     common_log
   end

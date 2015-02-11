@@ -3,96 +3,213 @@ require 'rails_helper'
 RSpec.describe SimilarsFound, :type => :model do
   #pending "add some examples to (or delete) #{__FILE__}"
 
-  describe 'validation' do
-    describe 'on create' do
+  describe '- Validation' do
+    describe '- on create' do
 
-      context 'Valid similars pair' do
+      context '- valid similars pair' do
 
         let(:good_similars_found) {FactoryGirl.build(:similars_found)}
-        it 'Saves a valid similars pair' do
+        it '- Saves a valid similars pair' do
           expect(good_similars_found).to be_valid
         end
 
         let(:good_similars_found_2) {FactoryGirl.build(:similars_found, :big_IDs)}
-        it 'Saves a valid similars pair - big IDs' do
+        it '- Saves a valid similars pair - big IDs' do
           expect(good_similars_found_2).to be_valid
         end
       end
 
-      context 'Invalid similars pairs' do
+      context '- Invalid similars pairs' do
         let(:bad_similars_found_1) {FactoryGirl.build(:similars_found, :user_id_nil)}
-        it 'Does not save an invalid similars pair - user_id_nil' do
+        it '- Does not save an invalid similars pair - user_id_nil' do
           expect(bad_similars_found_1).to_not be_valid
         end
 
         let(:bad_similars_found_2) {FactoryGirl.build(:similars_found, :ids_equal)}
-        it 'Does not save an invalid similars pair - equal IDs' do
+        it '- Does not save an invalid similars pair - equal Profile_IDs' do
           expect(bad_similars_found_2).to_not be_valid
         end
 
         let(:bad_similars_found_3) {FactoryGirl.build(:similars_found, :one_id_less_zero)}
-        it 'Does not save an invalid similars pair - one_id_less_zero' do
+        it '- Does not save an invalid similars pair - one_id_less_zero' do
           expect(bad_similars_found_3).to_not be_valid
         end
 
         let(:bad_similars_found_4) {FactoryGirl.build(:similars_found, :other_id_less_zero)}
-        it 'Does not save an invalid similars pair - other_id_less_zero' do
+        it '- Does not save an invalid similars pair - other_id_less_zero' do
           expect(bad_similars_found_4).to_not be_valid
         end
 
         let(:bad_similars_found_5) {FactoryGirl.build(:similars_found, :one_id_Uninteger)}
-        it 'Does not save an invalid similars pair - one_id_Uninteger' do
+        it '- Does not save an invalid similars pair - one_id_Uninteger' do
           expect(bad_similars_found_5).to_not be_valid
         end
       end
-
-      # context 'Invalid similars pairs' do
-      #   let(:user) {FactoryGirl.build(:user, :wrong_id_less_zero)}
-      #
-      #   it 'does not save an invalid similars pair - equal IDs' do
-      #     # name = user.name
-      #     # user.update_name
-      #     # expect(name).to_not eq(user.name)
-      #     expect(user).to_not be_valid
-      #   end
-      # end
 
     end
 
   end
 
 
-  describe 'model methods' do
-    pending "making test SimilarsFound methods in #{__FILE__}"
-    # before(:all) do
-    #   @similars_found = SimilarsFound.new( email: "new@nn.nn", password: '1111', profile_id:  1)
-    #   @similars_found.save
-    #   @user_profile = @user.profile_id
-    # end
+  describe '- Model methods' do
 
-    # [{:first_profile_id=>38, :first_relation_id=>"Жена", :name_first_relation_id=>"Петра", :first_name_id=>"Ольга", :first_sex_id=>"Ж",
-    #   :second_profile_id=>42, :second_relation_id=>"Сестра", :name_second_relation_id=>"Елены", :second_name_id=>"Ольга", :second_sex_id=>"Ж",
-    #   :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]}, :common_power=>4, :inter_relations=>[]},
-    #  {:first_profile_id=>44, :first_relation_id=>"Мама", :name_first_relation_id=>"Ольги", :first_name_id=>"Жанна", :first_sex_id=>"Ж",
-    #   :second_profile_id=>43, :second_relation_id=>"Жена", :name_second_relation_id=>"Олега", :second_name_id=>"Жанна", :second_sex_id=>"Ж",
-    #   :common_relations=>{"Дочь"=>[173, 354], "Муж"=>[351]}, :common_power=>3, :inter_relations=>[]},
-    #  {:first_profile_id=>41, :first_relation_id=>"Отец", :name_first_relation_id=>"Елены", :first_name_id=>"Олег", :first_sex_id=>"М",
-    #   :second_profile_id=>40, :second_relation_id=>"Отец", :name_second_relation_id=>"Ольги", :second_name_id=>"Олег", :second_sex_id=>"М",
-    #   :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]},
-    #   :common_power=>4, :inter_relations=>[]},
-    #  {:first_profile_id=>39, :first_relation_id=>"Сестра", :name_first_relation_id=>"Ольги", :first_name_id=>"Елена", :first_sex_id=>"Ж",
-    #   :second_profile_id=>35, :second_relation_id=>"Жена", :name_second_relation_id=>"Андрея", :second_name_id=>"Елена", :second_sex_id=>"Ж",
-    #   :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[354]}, :common_power=>3, :inter_relations=>[]}]
+    # create users
+    let(:user) {FactoryGirl.create(:user)}
+    let(:other_user) {FactoryGirl.create(:other_user)}
+    let(:third_user) {FactoryGirl.create(:third_user)}
+    let(:current_user_id) {user.id}
+    let(:other_user_id) {other_user.id}
+    let(:third_user_id) {third_user.id}
+    let(:connected_users) {[current_user_id, other_user_id ]}
 
-    # describe 'find_stored_similars' do
-    #   similars =
-    #   current_user_id =
-    #   previous_similars, new_similars = SimilarsFound.find_stored_similars(similars, current_user_id)
-    #
-    #
-    # end
+    # create parameters
+    let(:sims_profiles_pairs) {[[38, 42], [41, 40]]}
+
+    # create model data
+    before do
+      FactoryGirl.create(:similars_found, :sims_pair_1, user_id: current_user_id)
+      FactoryGirl.create(:similars_found, :sims_pair_2, user_id: current_user_id)
+      FactoryGirl.create(:similars_found, :sims_pair_3, user_id: other_user_id)
+      FactoryGirl.create(:similars_found, :sims_pair_4, user_id: third_user_id)
+    end
+
+    # from similars_start.rb#check_new_similars
+    describe '* find_stored_similars *' do
+      # todo: Use nested Factories here
+
+      context '- Return Good data: ' do
+        # verify data type
+        context '- Return proper data type' do
+          it '- Found an Array' do
+            new_similars = SimilarsFound.find_stored_similars(sims_profiles_pairs, current_user_id)
+            # puts "In find_stored_similars:  sims_profiles_pairs = #{sims_profiles_pairs} "
+            # puts "In find_stored_similars:  new_similars = #{new_similars} "
+            expect(new_similars).to be_a_kind_of(Array)
+          end
+        end
+
+        # verify correctness new_similars
+        # 1 user - y, profile1 - y, prof2 - y : => old sim => new_sim = []
+        context '- Return correct new_similars' do
+          it '- 1 Find new_similars = [] when sims_profiles_pairs are old' do
+            new_similars = SimilarsFound.find_stored_similars(sims_profiles_pairs, current_user_id)
+            expect(new_similars).to eq([])
+          end
+        end
+        # 2 user - y, profile1 - n, prof2 - n : => new sim pairs - no records at all => all new sims_profiles_pairs
+        context '- Return correct new_similars' do
+          it '- 2 Find new_similars PAIRS when sims_profiles_pairs ARE new' do
+            new_similars = SimilarsFound.find_stored_similars(sims_profiles_pairs, other_user_id)
+            expect(new_similars).to eq([[38, 42],[41, 40]]) # all new similars
+          end
+        end
+        # 3 user - y, profile1 - y, prof2 - n : => new sim pair => new_sim = one new sims_profiles_pair
+        let(:sims_new_pair) {[[38, 42], [41, 400]]}
+        context '- Return correct new_similars' do
+          it '- 3 Find new_similars PAIR when sims_profiles_pair IS new' do
+            new_similars = SimilarsFound.find_stored_similars(sims_new_pair, current_user_id)
+            expect(new_similars).to eq([[41, 400]]) # only new similars
+          end
+        end
+        # 4 user - y, profile1 - n, prof2 - n : => all new sim pairs => all sims_profiles_pairs
+        let(:sims_all_new_pairs) {[[380, 42], [41, 400]]}
+        context '- Return correct new_similars' do
+          it '- 4 Find new_similars PAIRS when sims_profiles_pairs ARE new' do
+            new_similars = SimilarsFound.find_stored_similars(sims_all_new_pairs, current_user_id)
+            expect(new_similars).to eq([[380, 42],[41, 400]]) # all new similars
+          end
+        end
+      end
+    end
+
+    # from similars_start.rb#check_new_similars
+    describe '* store_similars *' do
+
+      context '- Store Good sims_pairs ' do
+        before do
+          SimilarsFound.delete_all
+          SimilarsFound.reset_pk_sequence
+          SimilarsFound.store_similars(sims_profiles_pairs, current_user_id)
+        end
+
+        context '- Check sims_profiles_pairs to be stored' do
+          it '- sims_profiles_pairs equals Ok - two pairs of profiles' do
+            expect(sims_profiles_pairs).to eq([[38, 42], [41, 40]]) #
+          end
+        end
+
+        context '- Check count rows stored' do
+          let(:count) { SimilarsFound.all.count }
+          it '- check count rows' do
+            expect(count).to eq(2)
+          end
+        end
+
+        context '- Check First row stored' do
+          let(:first_row) { SimilarsFound.first }
+          it '- user_id - Ok' do
+            expect(first_row.user_id).to eq(user.id)
+          end
+          it '- first_profile_id - Ok' do
+            expect(first_row.first_profile_id).to eq(38) #
+          end
+          it '- second_profile_id - Ok' do
+            expect(first_row.second_profile_id).to eq(42) #
+          end
+        end
+
+        context '- Check Second row stored' do
+          let(:second_row) { SimilarsFound.second }
+          it '- user_id - Ok' do
+            expect(second_row.user_id).to eq(user.id)
+          end
+          it '- first_profile_id - Ok' do
+            puts "2 store_similars check: second_row.first_profile_id = #{second_row.first_profile_id.inspect} "
+            expect(second_row.first_profile_id).to eq(41) #
+          end
+          it '- second_profile_id - Ok' do
+            expect(second_row.second_profile_id).to eq(40) #
+          end
+        end
+      end
+    end
+
+    # from similars_controller#internal_similars_search
+    describe '* clear_tree_similars *' do
+      before do
+        SimilarsFound.clear_tree_similars(connected_users)
+      end
+      context '- clear tree similars' do
+        let(:rest_count) { SimilarsFound.all.count }
+        it '- after clear_tree_similars check count of rest rows' do
+          expect(rest_count).to eq(1)
+        end
+      end
+    end
+
+    # from SimilarsConnection.rb#similars_connect_tree
+    describe '* clear_similars_found *' do
+      let(:data_to_clear) { {:profiles_to_rewrite => [41, 35, 42, 66], :profiles_to_destroy=>[40, 38, 38, 55],
+                             :connected_users_arr => connected_users } }
+      before do
+        # puts " start: connected_users_arr = #{data_to_clear[:connected_users_arr].inspect} "
+        # puts " start: connected_users = #{connected_users.inspect} "
+        # puts " clear_similars_found check: count = #{SimilarsFound.all.count.inspect} "
+        # puts " clear_similars_found check: 1 = #{SimilarsFound.first.inspect} "
+        # puts " clear_similars_found check: 4 = #{SimilarsFound.fourth.inspect} "
+        SimilarsFound.clear_similars_found(data_to_clear)
+      end
+      context '- after clear_similars_found' do
+        let(:rest_count) { SimilarsFound.all.count }
+        it '- check count of rest rows' do
+          expect(rest_count).to eq(1)
+        end
+      end
+
+    end
+
   end
 
-
+  # pending "making test clear_similars_found method in #{__FILE__}"
 
 end

@@ -36,10 +36,12 @@ module SimilarsExclusions
     def common_of_uncommons(uncommon_hash_a, uncommon_hash_b)
       relations_a = uncommon_hash_a.keys
       relations_b = uncommon_hash_b.keys
-      inter_relations = relations_a & relations_b
+      # inter_relations = relations_a & relations_b
+      relations_a & relations_b # return inter_relations
       #logger.info "*** In common_of_uncommons 76: inter_relations: #{inter_relations}"
-      inter_relations
+     # inter_relations
     end
+
     # check relations exclusion
     # Установка значения признака в завис-ти от того, существуют ли среди пересечения inter_relations необщих частей кругов
     # двух профилей а и б какие-либо из отношений, входящие в массив Отношений-Исключений = exlude_relations.
@@ -47,13 +49,12 @@ module SimilarsExclusions
     # Наличие таких отношений, которые тем не менее не совпали по именам, говорит о том, что эти 2 профиля -
     # разные люди. Следовательно, нет необходимости далее вычислять мощность общности общей части.
     def check_relations_exclusion(inter_relations, exlude_relations)
-      unsimilar_sign = true # Исх.знач-е
+      unsimilar_sign = true # Исх.знач-е - сначала считаем похожими
       inter_relations.each do |relation|
         unsimilar_sign = false if exlude_relations.include?(relation) # Значит - точно непохожие
-        logger.info "*** In check_rels_ each 77-1: relation: #{relation}, exlude_relations.include?(relation) = #{exlude_relations.include?(relation)}, exlude_relations = #{exlude_relations} "
-        logger.info "*** In check_relations_exclusion 77-2: unsimilar_sign: #{unsimilar_sign}"
+        # logger.info "*** In check_rels_ each 77-1: relation: #{relation}, exlude_relations.include?(relation) = #{exlude_relations.include?(relation)}, exlude_relations = #{exlude_relations} "
+        # logger.info "*** In check_relations_exclusion 77-2: unsimilar_sign: #{unsimilar_sign}"
       end
-      #logger.info "*** In check_relations_exclusion 77: unsimilar_sign: #{unsimilar_sign}"
       unsimilar_sign  # передача значения признака (true/false)
     end
 
