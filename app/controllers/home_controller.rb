@@ -40,13 +40,11 @@ class HomeController < ApplicationController
   # Для текущего дерева - получение номера id лога для прогона разъединения Похожих,
   # ранее объединенных.
   # Последний id (максимальный) из существующих логов - :connected_at
-  def current_tree_log_id(connected_users)
+   def current_tree_log_id(connected_users)
     # Сбор всех id логов, относящихся к текущему дереву
     current_tree_logs_ids = SimilarsLog.where(current_user_id: connected_users).pluck(:connected_at).uniq
-    logger.info "In SimilarsStart 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
-    log_connection_id = current_tree_logs_ids.max
-    logger.info "In SimilarsStart 1b: MAX log_connection_id = #{log_connection_id} " unless log_connection_id.blank?
-    log_connection_id
+    # logger.info "In SimilarsStart 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
+    current_tree_logs_ids.max
   end
 
 
