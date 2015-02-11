@@ -30,16 +30,8 @@ class SimilarsController < ApplicationController
 
   # Запуск методов определения похожих профилей в текущем дереве
   # sim_data = { log_connection_id: log_connection_id, #
-  #              similars: similars,       #
-  #              unsimilars: unsimilars  }
+  #              similars: similars  }
   def internal_similars_search
-
-    ############################# DEBUG ################################################
-    # SimilarsFound.delete_all
-    # SimilarsFound.reset_pk_sequence
-
-    tree_info = current_user.get_tree_info(current_user)
-    logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}"
 
     ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
     connected_users = current_user.get_connected_users
@@ -47,31 +39,50 @@ class SimilarsController < ApplicationController
     SimilarsFound.clear_tree_similars(connected_users)
 
     tree_info, sim_data, similars = current_user.start_similars
-        # tree_info = {:current_user=> <User id: 5, profile_id: 34, admin: false, rating: 0.0, created_at: "2015-01-24 09:46:18", updated_at: "2015-02-03 09:55:19", email: "petr_andr@pe.pe", encrypted_password: "", reset_password_token: nil, reset_password_sent_at: nil, remember_created_at: nil, sign_in_count: 0, current_sign_in_at: nil, last_sign_in_at: nil, current_sign_in_ip: nil, last_sign_in_ip: nil, password_digest: "$2a$10$mKB.q2fRANiQ6snAOrd9KeQ/ucoD5FXdHiAv.k9asJi...", is_locked: false, access_token: "6eefef787693ceb6ad916c1245865726">,
+        # tree_info = {:current_user=> <User id: 5, ....
         # :users_profiles_ids=>[34, 31],
         # :tree_is_profiles=>[33, 38, 34, 42, 44, 36, 31, 41, 32, 43, 40, 52, 37, 39, 35],
         # :tree_profiles_amount=>15,
         # :all_tree_profiles=>[33, 38, 34, 42, 44, 36, 31, 41, 32, 43, 40, 52, 37, 39, 35],
         # :all_tree_profiles_amount=>15,
         # :connected_users=>[5, 4],
-        # :profiles=>{33=>{:is_name_id=>345, :is_sex_id=>0, :profile_id=>31, :relation_id=>2}, 38=>{:is_name_id=>354, :is_sex_id=>0, :profile_id=>34, :relation_id=>8}, 34=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>31, :relation_id=>5}, 42=>{:is_name_id=>354, :is_sex_id=>0, :profile_id=>35, :relation_id=>6}, 44=>{:is_name_id=>187, :is_sex_id=>0, :profile_id=>42, :relation_id=>2}, 36=>{:is_name_id=>343, :is_sex_id=>1, :profile_id=>32, :relation_id=>1}, 31=>{:is_name_id=>40, :is_sex_id=>1, :profile_id=>34, :relation_id=>5}, 41=>{:is_name_id=>351, :is_sex_id=>1, :profile_id=>35, :relation_id=>1}, 32=>{:is_name_id=>90, :is_sex_id=>1, :profile_id=>34, :relation_id=>1}, 43=>{:is_name_id=>187, :is_sex_id=>0, :profile_id=>40, :relation_id=>8}, 40=>{:is_name_id=>351, :is_sex_id=>1, :profile_id=>38, :relation_id=>1}, 52=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>42, :relation_id=>7}, 37=>{:is_name_id=>293, :is_sex_id=>0, :profile_id=>32, :relation_id=>2}, 39=>{:is_name_id=>173, :is_sex_id=>0, :profile_id=>38, :relation_id=>6}, 35=>{:is_name_id=>173, :is_sex_id=>0, :profile_id=>31, :relation_id=>8}}} (pid:3463)
-        # sim_data = {:log_connection_id=>nil,
-        #             :similars=>[{:first_profile_id=>38, :first_relation_id=>"Жена", :name_first_relation_id=>"Петра", :first_name_id=>"Ольга", :first_sex_id=>"Ж", :second_profile_id=>42, :second_relation_id=>"Сестра", :name_second_relation_id=>"Елены", :second_name_id=>"Ольга", :second_sex_id=>"Ж", :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]}, :common_power=>4, :inter_relations=>[]},
-        #                         {:first_profile_id=>41, :first_relation_id=>"Отец", :name_first_relation_id=>"Елены", :first_name_id=>"Олег", :first_sex_id=>"М", :second_profile_id=>40, :second_relation_id=>"Отец", :name_second_relation_id=>"Ольги", :second_name_id=>"Олег", :second_sex_id=>"М", :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]}, :common_power=>4, :inter_relations=>[]}]
-        #             }
-        #
-        # similars = [{:first_profile_id=>38, :first_relation_id=>"Жена", :name_first_relation_id=>"Петра", :first_name_id=>"Ольга", :first_sex_id=>"Ж", :second_profile_id=>42, :second_relation_id=>"Сестра", :name_second_relation_id=>"Елены", :second_name_id=>"Ольга", :second_sex_id=>"Ж", :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]}, :common_power=>4, :inter_relations=>[]}, {:first_profile_id=>41, :first_relation_id=>"Отец", :name_first_relation_id=>"Елены", :first_name_id=>"Олег", :first_sex_id=>"М", :second_profile_id=>40, :second_relation_id=>"Отец", :name_second_relation_id=>"Ольги", :second_name_id=>"Олег", :second_sex_id=>"М", :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]}, :common_power=>4, :inter_relations=>[]}] (pid:3463)
+        # :profiles=>{33=>{:is_name_id=>345, :is_sex_id=>0, :profile_id=>31, :relation_id=>2},
+        # 38=>{:is_name_id=>354, :is_sex_id=>0, :profile_id=>34, :relation_id=>8},
+        # 34=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>31, :relation_id=>5},
+        # 42=>{:is_name_id=>354, :is_sex_id=>0, :profile_id=>35, :relation_id=>6},
+        # 44=>{:is_name_id=>187, :is_sex_id=>0, :profile_id=>42, :relation_id=>2},
+        # 36=>{:is_name_id=>343, :is_sex_id=>1, :profile_id=>32, :relation_id=>1},
+        # 31=>{:is_name_id=>40, :is_sex_id=>1, :profile_id=>34, :relation_id=>5},
+        # 41=>{:is_name_id=>351, :is_sex_id=>1, :profile_id=>35, :relation_id=>1},
+        # 32=>{:is_name_id=>90, :is_sex_id=>1, :profile_id=>34, :relation_id=>1},
+        # 43=>{:is_name_id=>187, :is_sex_id=>0, :profile_id=>40, :relation_id=>8},
+        # 40=>{:is_name_id=>351, :is_sex_id=>1, :profile_id=>38, :relation_id=>1},
+        # 52=>{:is_name_id=>370, :is_sex_id=>1, :profile_id=>42, :relation_id=>7},
+        # 37=>{:is_name_id=>293, :is_sex_id=>0, :profile_id=>32, :relation_id=>2},
+        # 39=>{:is_name_id=>173, :is_sex_id=>0, :profile_id=>38, :relation_id=>6},
+        # 35=>{:is_name_id=>173, :is_sex_id=>0, :profile_id=>31, :relation_id=>8}}}
 
-    logger.info "In SimilarsStart 2:  tree_info = #{tree_info}"
-    logger.info "In SimilarsStart 2:  sim_data = #{sim_data}"
-    logger.info "In SimilarsStart 2:  similars = #{similars}"
+        # sim_data = {
+        # :log_connection_id=>nil,
+        #   :similars=>[
+        # {:first_profile_id=>38, :first_relation_id=>"Жена", :name_first_relation_id=>"Петра", :first_name_id=>"Ольга", :first_sex_id=>"Ж",
+        # :second_profile_id=>42, :second_relation_id=>"Сестра", :name_second_relation_id=>"Елены", :second_name_id=>"Ольга", :second_sex_id=>"Ж",
+        # :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]},
+        # :common_power=>4, :inter_relations=>[]},
+        # {:first_profile_id=>41, :first_relation_id=>"Отец", :name_first_relation_id=>"Елены", :first_name_id=>"Олег", :first_sex_id=>"М",
+        # :second_profile_id=>40, :second_relation_id=>"Отец", :name_second_relation_id=>"Ольги", :second_name_id=>"Олег", :second_sex_id=>"М",
+        # :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]},
+        # :common_power=>4, :inter_relations=>[]}]
+        #             }
+
     @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
 
     if similars.empty?   # т.е. нет похожих
-      flash.now[:notice] = "Успешное сообщение: В дереве - все Ок. - internal_similars_search"
+      flash.now[:notice] = "Успешное сообщение: В дереве все Ок - 'похожих' профилей нет."
     else  # т.е. есть похожие
       unless sim_data.empty?  # т.е. есть инфа о похожих
-        flash.now[:alert] = "Предупреждение: В дереве есть 'похожие' профили. Объединиться будет невозможно - internal_similars_search"
+        flash.now[:warning] = "Warning from server! Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно..."
+        # flash.now[:alert]
         @tree_info = tree_info  # To View
         view_tree_data(tree_info, sim_data) unless @tree_info.empty?  # to internal_similars_search.html.haml
       end
@@ -85,7 +96,6 @@ class SimilarsController < ApplicationController
 
   def show_similars_data
   end
-
 
 
   # Отобр-е параметров дерева и sim_data во вьюхе

@@ -6,17 +6,17 @@ class HomeController < ApplicationController
 
   # All profiles in user's tree
   def index
-    flash.now[:warning] = "Alert message from server!"
+    # flash.now[:warning] = "Alert message from server!"
     tree_info, sim_data, similars = current_user.start_similars
     @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
     unless similars.empty?  # т.е. есть похожие
-      # flash.now[:alert] = "Предупреждение: В дереве есть 'похожие' профили. Объединиться будет невозможно - /home/index" unless similars.empty?
-      flash_obj = {
-        type: :alert,
-        message: "Предупреждение: В дереве есть 'похожие' профили. Объединиться будет невозможно",
-        link: internal_similars_search_path
-      }
-      flash.now[:link] = flash_obj # unless similars.empty?
+      # flash_obj = {
+      #   type: :alert,
+      #   message: "Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно",
+      #   link: internal_similars_search_path
+      # }
+      # flash.now[:link] = flash_obj # unless similars.empty?
+      flash.now[:warning] = "Warning from server! Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно..."
       unless sim_data.empty?  #  т.е. есть новые похожие - отлич. от ранее записанных
         @tree_info = tree_info  # To View
         view_tree_data(tree_info, sim_data) unless tree_info.empty?
