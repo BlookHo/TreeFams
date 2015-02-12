@@ -17,8 +17,8 @@ gem 'jbuilder', '~> 2.0'
 gem 'haml-rails'
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
+gem 'jquery-rails', '3.1.1'
+gem 'jquery-ui-rails', '4.2.1'
 
 # Angular templates in assets pipeline
 gem 'angular-rails-templates'
