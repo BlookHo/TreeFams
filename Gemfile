@@ -86,7 +86,7 @@ group :development do
   gem 'guard-rspec', require: false
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
+  # gem 'spring'
   gem 'spring-commands-rspec'
 
 end
@@ -129,8 +129,9 @@ gem 'quiet_assets', :group => :development
 # Use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.1.2'
 
-gem 'capistrano',     '2.15.5', group: :development
-gem 'rvm-capistrano', '1.5.1', group: :development
+
+gem 'capistrano',     '2.15.5', group: :development, :require => false
+gem 'rvm-capistrano', '1.5.1', group: :development, :require => false
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]

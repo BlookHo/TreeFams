@@ -446,7 +446,6 @@ DEPENDENCIES
   russian (~> 0.6.0)
   rvm-capistrano (= 1.5.1)
   sass-rails (~> 4.0.3)
-  spring
   spring-commands-rspec
   therubyracer
   twitter
