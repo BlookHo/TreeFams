@@ -1,7 +1,7 @@
 class WelcomeController < ApplicationController
 
   layout 'application.new'
-
+  layout 'landing', only: :index
 
   helper_method :current_step,
                 :current_author,
