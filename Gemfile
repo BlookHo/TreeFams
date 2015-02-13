@@ -97,6 +97,10 @@ group :development, :test do
   # Test framework
   gem 'rspec-rails'
 
+  gem 'rspec-support'
+  #, "~> 3.0"
+  # gem 'rspec-support', '~> 3.2.1'
+
   # For active record imitation in tests
   gem 'factory_girl_rails'
 end
