@@ -1,6 +1,7 @@
 # Модуль объединения (замещения) профилей при объединении деревьев
 module SimilarsProfileMerge
   extend ActiveSupport::Concern
+  # in Profile model
 
   module ClassMethods
 

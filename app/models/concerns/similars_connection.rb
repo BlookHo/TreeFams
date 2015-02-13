@@ -91,7 +91,7 @@ module SimilarsConnection
     # logger.info "*** In module SimilarsConnection update_table: table = #{table.inspect} "
 
     connection_data[:table_name] = table.table_name
-    ["profile_id", "is_profile_id"].each do |table_field|
+    ['profile_id', 'is_profile_id'].each do |table_field|
       table_update_data = { table: table, table_field: table_field}
       log_connection = update_field(connection_data, table_update_data , log_connection)
     end
