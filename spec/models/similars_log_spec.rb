@@ -25,34 +25,68 @@ RSpec.describe SimilarsLog, :type => :model do
         end
 
         let(:good_sims_table_users) {FactoryGirl.build(:similars_log, :table_users)}
-        it '- Saves a valid similars log - table = users, field = profile_id' do
+        it '- Saves a valid similars log - table = users, only field = profile_id' do
           expect(good_sims_table_users).to be_valid
         end
 
-        let(:good_sims_table_trees) {FactoryGirl.build(:similars_log, :table_tree_pr_key)}
-        it '- Saves a valid similars log - table = trees, field = is_profile_id' do
-          expect(good_sims_table_trees).to be_valid
+        let(:good_sims_table_trees_is_profile_id) {FactoryGirl.build(:similars_log, :table_tree_is_profile_id)}
+        it '- Saves a valid similars log - table = trees, one field = is_profile_id' do
+          expect(good_sims_table_trees_is_profile_id).to be_valid
         end
 
+        let(:good_sims_table_trees_profile_id) {FactoryGirl.build(:similars_log, :table_tree_profile_id)}
+        it '- Saves a valid similars log - table = trees, one field = profile_id' do
+          expect(good_sims_table_trees_profile_id).to be_valid
+        end
+
+        let(:good_sims_table_pr_key_is_profile_id) {FactoryGirl.build(:similars_log, :table_pr_key_is_profile_id)}
+        it '- Saves a valid similars log - table = profile_keys, one field = is_profile_id' do
+          expect(good_sims_table_pr_key_is_profile_id).to be_valid
+        end
+
+        let(:good_sims_table_pr_key_profile_id) {FactoryGirl.build(:similars_log, :table_pr_key_profile_id)}
+        it '- Saves a valid similars log - table = profile_keys, one field = profile_id' do
+          expect(good_sims_table_pr_key_profile_id).to be_valid
+        end
 
 
 
       end
       context '- invalid similars log' do
 
+        let(:bad_sims_written_equal_overwritten) {FactoryGirl.build(:similars_log, :bad_written_and_overwritten)}
+        it '- Dont save: - written_and_overwritten - equal' do
+          expect(bad_sims_written_equal_overwritten).to_not be_valid
+        end
+
         let(:bad_sims_written_nil_table) {FactoryGirl.build(:similars_log, :bad_written_nil_table)}
-        it '- Dont save valid similars log - written = nil: table = trees, user_id' do
+        it '- Dont save: - written = nil: table = trees, user_id' do
           expect(bad_sims_written_nil_table).to_not be_valid
         end
 
         let(:bad_sims_written_nil_field) {FactoryGirl.build(:similars_log, :bad_written_nil_field)}
-        it '- Dont save valid similars log - written = nil: profiles, field = profile_id' do
+        it '- Dont save: - written = nil: table = profiles, wrong field = profile_id' do
           expect(bad_sims_written_nil_field).to_not be_valid
         end
 
-        let(:bad_sims_table_wrong_field) {FactoryGirl.build(:similars_log, :bad_table_tree_and_field)}
-        it '- Dont save valid similars log - wrong_field for table tree' do
-          expect(bad_sims_table_wrong_field).to_not be_valid
+        let(:bad_sims_table_tree_wrong_field) {FactoryGirl.build(:similars_log, :bad_table_tree_and_field)}
+        it '- Dont save: - wrong_field for table tree' do
+          expect(bad_sims_table_tree_wrong_field).to_not be_valid
+        end
+
+        let(:bad_sims_table_pr_key_wrong_field) {FactoryGirl.build(:similars_log, :bad_table_pr_key_and_field)}
+        it '- Dont save: - wrong_field for table pr_key' do
+          expect(bad_sims_table_pr_key_wrong_field).to_not be_valid
+        end
+
+        let(:bad_sims_table_user_wrong_field) {FactoryGirl.build(:similars_log, :bad_table_user_and_field)}
+        it '- Dont save: - wrong_field for table user' do
+          expect(bad_sims_table_user_wrong_field).to_not be_valid
+        end
+
+        let(:bad_sims_table_profile_wrong_field) {FactoryGirl.build(:similars_log, :bad_table_profile_and_field)}
+        it '- Dont save: - wrong_field for table profile' do
+          expect(bad_sims_table_profile_wrong_field).to_not be_valid
         end
 
 
@@ -60,7 +94,18 @@ RSpec.describe SimilarsLog, :type => :model do
 
     end
 
-    # pending "making test clear_similars_found method in #{__FILE__}"
 
   end
+
+  describe '- Methods' do
+
+    context '- test current_tree_log_id' do
+
+      pending "making test current_tree_log_id method in #{__FILE__}"
+
+
+    end
+
+  end
+
 end
