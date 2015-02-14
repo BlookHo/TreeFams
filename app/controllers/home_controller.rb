@@ -8,7 +8,9 @@ class HomeController < ApplicationController
   def index
     # flash.now[:warning] = "Alert message from server!"
     tree_info, sim_data, similars = current_user.start_similars
-    @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
+    # todo: проверить: убрать запуск метода SimilarsLog.current_tree_log_id и взять @log_connection_id из sim_data
+    # для отображения в show_similars_data
+    @log_connection_id = SimilarsLog.current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
     unless similars.empty?  # т.е. есть похожие
       # flash_obj = {
       #   type: :alert,
@@ -37,15 +39,15 @@ class HomeController < ApplicationController
 
   private
 
-  # Для текущего дерева - получение номера id лога для прогона разъединения Похожих,
-  # ранее объединенных.
-  # Последний id (максимальный) из существующих логов - :connected_at
-   def current_tree_log_id(connected_users)
-    # Сбор всех id логов, относящихся к текущему дереву
-    current_tree_logs_ids = SimilarsLog.where(current_user_id: connected_users).pluck(:connected_at).uniq
-    # logger.info "In SimilarsStart 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
-    current_tree_logs_ids.max
-  end
+  # # Для текущего дерева - получение номера id лога для прогона разъединения Похожих,
+  # # ранее объединенных.
+  # # Последний id (максимальный) из существующих логов - :connected_at
+  #  def current_tree_log_id(connected_users)
+  #   # Сбор всех id логов, относящихся к текущему дереву
+  #   current_tree_logs_ids = SimilarsLog.where(current_user_id: connected_users).pluck(:connected_at).uniq
+  #   # logger.info "In SimilarsStart 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
+  #   current_tree_logs_ids.max
+  # end
 
 
   # Отобр-е параметров дерева и sim_data во вьюхе

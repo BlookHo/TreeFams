@@ -11,18 +11,14 @@ class SimilarsController < ApplicationController
   def intersection(first, other)
     common_hash = {}
     uncommon_hash = {}
-    # logger.info "intersection 01: first = #{first}"
-    # logger.info "intersection 01: other = #{other}"
     first.reject { |k, v| !(other.include?(k)) }.each do |k, v|
-      if !other.include?(k)
+      unless other.include?(k)
         uncommon_hash.merge!({k => other})
       end
       intersect = other[k] & v    # пересечение = общая часть массивов
       difference = (other[k] - v) + (v - other[k])  # разность = различие 2-х массивов
-      # logger.info "intersection 02: other[k] = #{other[k]}, v = #{v}, intersect = #{intersect}, difference = #{difference} "
-      common_hash.merge!({k => intersect}) if !intersect.blank?
-      uncommon_hash.merge!({k => difference}) if !difference.blank?
-      # logger.info "intersection 05: common_hash = #{common_hash}, uncommon_hash = #{uncommon_hash} "
+      common_hash.merge!({k => intersect}) unless intersect.blank?
+      uncommon_hash.merge!({k => difference}) unless difference.blank?
     end
     return common_hash, uncommon_hash
   end
@@ -75,7 +71,9 @@ class SimilarsController < ApplicationController
         # :common_power=>4, :inter_relations=>[]}]
         #             }
 
-    @log_connection_id = current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
+    @log_connection_id = SimilarsLog.current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
+    # to show similars connected in view
+    logger.info "LLLLL In similars_contrler:  @log_connection_id = #{@log_connection_id} " unless tree_info.empty?
 
     if similars.empty?   # т.е. нет похожих
       flash.now[:notice] = "Успешное сообщение: В дереве все Ок - 'похожих' профилей нет."
@@ -120,20 +118,6 @@ class SimilarsController < ApplicationController
 
   end
 
-
-  # Для текущего дерева - получение номера id лога для прогона разъединения Похожих,
-  # ранее объединенных.
-  # Если такой лог есть, значит ранее были найдены похожие и они объединялись. Значит теперь их
-  # можно разъединять.
-  # Последний id (максимальный) из существующих логов - :connected_at
-  def current_tree_log_id(connected_users)
-    # Сбор всех id логов, относящихся к текущему дереву
-    current_tree_logs_ids = SimilarsLog.where(current_user_id: connected_users).pluck(:connected_at).uniq
-    logger.info "In internal_similars_search 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " if !current_tree_logs_ids.blank?
-    log_connection_id = current_tree_logs_ids.max
-    logger.info "In internal_similars_search 1b: log_connection_id = #{log_connection_id} " if !log_connection_id.blank?
-    log_connection_id
-  end
 
 
   # Готовит данные для Объединения похожих профилей - similars_connection_data

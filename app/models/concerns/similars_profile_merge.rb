@@ -1,6 +1,7 @@
 # Модуль объединения (замещения) профилей при объединении деревьев
 module SimilarsProfileMerge
   extend ActiveSupport::Concern
+  # in Profile model
 
   module ClassMethods
 
@@ -9,7 +10,6 @@ module SimilarsProfileMerge
     # profiles_to_rewrite - массив профилей, которые остаются
     # profiles_to_destroy - массив профилей, которые удаляются, а их данные переносятся в opposite_profile_ids
     def profiles_merge(connection_data)
-      profiles_to_delete = []
       profiles_to_rewrite = connection_data[:profiles_to_rewrite]
       profiles_to_destroy = connection_data[:profiles_to_destroy]
       # connected_users_arr = connection_data[:connected_users_arr]

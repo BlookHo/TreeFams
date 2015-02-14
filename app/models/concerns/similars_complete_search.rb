@@ -2,7 +2,6 @@ module SimilarsCompleteSearch
   extend ActiveSupport::Concern
   # in User model
 
-  # NEW METHOD "HARD COMPLETE SEARCH"- TO DO
   # Input: start tree No, tree No to connect
   # сбор полного хэша достоверных пар профилей для объединения
   # Output:
