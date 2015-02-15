@@ -92,6 +92,62 @@ FactoryGirl.define do
       field            "profile_id" # should be "user_id" or "trees"
     end
 
+    # Model methods traits
+    #<SimilarsLog id: 754, connected_at: 25, current_user_id: 5, table_name: "users", table_row: 5, field: "profile_id", written: 52, overwritten: 34, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
+    trait :sims_log_1  do
+      # current_user_id  user.id
+      connected_at  40           #
+      table_name    "profile_keys"   #
+      table_row     55  #
+      field         "profile_id"  #
+      written       111  #
+      overwritten   222  #
+    end
+
+    trait :sims_log_2 do
+      # current_user_id  user.id
+      connected_at  40           #
+      table_name    "profile_keys"   #
+      table_row     66  #
+      field         "profile_id"  #
+      written       111  #
+      overwritten   222  #
+    end
+
+    trait :sims_log_3 do
+      # current_user_id  other_user.id
+      connected_at  41           #
+      table_name    "profile_keys"   #
+      table_row     77  #
+      field         "profile_id"  #
+      written       111  #
+      overwritten   222  #
+    end
+
+    trait :sims_log_4 do
+      # current_user_id  third_user.id
+      connected_at  42           #
+      table_name    "profile_keys"   #
+      table_row     88  #
+      field         "profile_id"  #
+      written       333  #
+      overwritten   444  #
+    end
+
+    trait :sims_log_5 do
+      # current_user_id  third_user.id
+      connected_at  42           #
+      table_name    "profile_keys"   #
+      table_row     99  #
+      field         "profile_id"  #
+      written       333  #
+      overwritten   444  #
+    end
+
+
+
+
+
   end
 
 end

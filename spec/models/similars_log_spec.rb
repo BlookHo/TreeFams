@@ -97,15 +97,81 @@ RSpec.describe SimilarsLog, :type => :model do
 
   end
 
-  describe '- Methods' do
+  describe '- Model methods' do
 
-    context '- test current_tree_log_id' do
+    # create users
+    let(:user) {FactoryGirl.create(:user)}
+    let(:other_user) {FactoryGirl.create(:other_user)}
+    let(:third_user) {FactoryGirl.create(:third_user)}
+    let(:four_user) {FactoryGirl.create(:four_user)}
 
-      pending "making test current_tree_log_id method in #{__FILE__}"
+    # create parameters
+    let(:current_user_id) {user.id}
+    let(:other_user_id) {other_user.id}
+    let(:third_user_id) {third_user.id}
+    let(:four_user_id) {four_user.id}
+
+    # let(:sims_profiles_pairs) {[[38, 42], [41, 40]]}
+
+    # create model data
+    before do
+      FactoryGirl.create(:similars_log, :sims_log_1, current_user_id: current_user_id)
+      FactoryGirl.create(:similars_log, :sims_log_2, current_user_id: current_user_id)
+      FactoryGirl.create(:similars_log, :sims_log_3, current_user_id: other_user_id)
+      FactoryGirl.create(:similars_log, :sims_log_4, current_user_id: third_user_id)
+      FactoryGirl.create(:similars_log, :sims_log_5, current_user_id: third_user_id)
+    end
+    #<SimilarsLog id: 754, connected_at: 25, current_user_id: 5, table_name: "users", table_row: 5, field: "profile_id", written: 52, overwritten: 34, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
+    #<SimilarsLog id: 755, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 52, field: "user_id", written: 5, overwritten: nil, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
+    #<SimilarsLog id: 756, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 52, field: "tree_id", written: 5, overwritten: 4, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
+    #<SimilarsLog id: 757, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 34, field: "user_id", written: nil, overwritten: 5, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">
+
+
+
+    # from similars_start.rb#start_similars
+    # from similars_controller.rb#internal_similars_search
+    # from home_controller.rb#index
+    describe '* current_tree_log_id *' do
+
+      context '- test log_connection_id' do
+        let(:connected_users) {[current_user_id, other_user_id ]}
+        let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
+        it '- return proper log_connection_id for [current_user_id, other_user_id ]' do
+          # log_connection_id = SimilarsLog.current_tree_log_id(connected_users)
+          puts "In current_tree_log_id:  connected_users = #{connected_users} "
+          puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
+          expect(log_connection_id).to eq(41)
+        end
+      end
+
+      context '- test log_connection_id' do
+        let(:connected_users) {[third_user_id]}
+        let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
+        it '- return proper log_connection_id for [third_user_id]' do
+          # log_connection_id = SimilarsLog.current_tree_log_id(connected_users)
+          puts "In current_tree_log_id:  connected_users = #{connected_users} "
+          puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
+          expect(log_connection_id).to eq(42)
+        end
+      end
+
+      context '- test log_connection_id' do
+        let(:connected_users) {[four_user_id]}
+        let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
+        it '- return proper log_connection_id = [] for [third_user_id]' do
+          # log_connection_id = SimilarsLog.current_tree_log_id(connected_users)
+          puts "In current_tree_log_id:  connected_users = #{connected_users} "
+          puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
+          expect(log_connection_id).to eq([])
+        end
+      end
+
+
 
 
     end
 
   end
+  # pending "making test current_tree_log_id method in #{__FILE__}"
 
 end

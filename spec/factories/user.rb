@@ -20,5 +20,12 @@ FactoryGirl.define do
     password '1111'
   end
 
+  factory :four_user, class: User do # 10 tree
+    profile_id 55
+    email "boris@bo.bo"
+    password '1111'
+  end
+
+
 
 end
