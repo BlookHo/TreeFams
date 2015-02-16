@@ -10,14 +10,15 @@ class SimilarsLog < ActiveRecord::Base
                             :message => "Должны быть целым числом в SimilarsLog"
   validates_numericality_of :connected_at, :current_user_id, :table_row, :overwritten, :greater_than => 0,
                             :message => "Должны быть больше 0 в SimilarsLog"
-  validate :sim_log_fields_are_not_equal  # :written AND :overwritten
+  validate :one_log_fields_are_not_equal  # :written AND :overwritten
   validates_inclusion_of :field, :in => ["profile_id"], :if => :table_users?
   validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
   validates_inclusion_of :field, :in => ["tree_id", "user_id"], :if => :table_profiles?
   validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
+  validates_uniqueness_of :table_row, scope: [:table_name, :field]
 
   # custom validations
-  def sim_log_fields_are_not_equal
+  def one_log_fields_are_not_equal
     self.errors.add(:similars_logs,
                     'Значения полей в одном ряду не должны быть равны в SimilarsLog.') if self.written == self.overwritten
   end
@@ -58,6 +59,12 @@ class SimilarsLog < ActiveRecord::Base
   end
 
 
+  # From SimilarsConnection-Module # similars_connect_tree
+  # Сохранение массива логов в таблицу SimilarsLog
+  def self.store_log(common_log)
+    logger.info "MMMMM *** In model SimilarsLog store_log "
+    common_log.each(&:save)
+  end
 
 
 

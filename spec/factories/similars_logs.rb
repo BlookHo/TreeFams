@@ -144,6 +144,38 @@ FactoryGirl.define do
       overwritten   444  #
     end
 
+    trait :sims_log_table_row_1 do
+      # #<SimilarsLog id: 3973, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 47, field: "profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+
+    #  current_user_id  user.id
+      connected_at  77           #
+      table_name    "profile_keys"   #
+      table_row     100  #
+      field         "profile_id"  #
+      written       333  #
+      overwritten   444  #
+    end
+
+    trait :sims_log_table_row_2 do
+    #  current_user_id  user.id
+      connected_at  77           #
+      table_name    "profile_keys"   #
+      table_row     100  #
+      field         "is_profile_id"  #
+      written       333  #
+      overwritten   444  #
+    end
+
+    trait :sims_log_table_row_3 do
+      #  current_user_id  user.id
+      connected_at  77           #
+      table_name    "profile_keys"   #
+      table_row     100  #
+      field         "profile_id"  #
+      written       333  #
+      overwritten   444  #
+    end
+
 
 
 

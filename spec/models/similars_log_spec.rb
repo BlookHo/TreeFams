@@ -94,7 +94,6 @@ RSpec.describe SimilarsLog, :type => :model do
 
     end
 
-
   end
 
   describe '- Model methods' do
@@ -126,8 +125,6 @@ RSpec.describe SimilarsLog, :type => :model do
     #<SimilarsLog id: 756, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 52, field: "tree_id", written: 5, overwritten: 4, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
     #<SimilarsLog id: 757, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 34, field: "user_id", written: nil, overwritten: 5, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">
 
-
-
     # from similars_start.rb#start_similars
     # from similars_controller.rb#internal_similars_search
     # from home_controller.rb#index
@@ -137,7 +134,6 @@ RSpec.describe SimilarsLog, :type => :model do
         let(:connected_users) {[current_user_id, other_user_id ]}
         let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
         it '- return proper log_connection_id for [current_user_id, other_user_id ]' do
-          # log_connection_id = SimilarsLog.current_tree_log_id(connected_users)
           puts "In current_tree_log_id:  connected_users = #{connected_users} "
           puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
           expect(log_connection_id).to eq(41)
@@ -148,7 +144,6 @@ RSpec.describe SimilarsLog, :type => :model do
         let(:connected_users) {[third_user_id]}
         let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
         it '- return proper log_connection_id for [third_user_id]' do
-          # log_connection_id = SimilarsLog.current_tree_log_id(connected_users)
           puts "In current_tree_log_id:  connected_users = #{connected_users} "
           puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
           expect(log_connection_id).to eq(42)
@@ -159,15 +154,41 @@ RSpec.describe SimilarsLog, :type => :model do
         let(:connected_users) {[four_user_id]}
         let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
         it '- return proper log_connection_id = [] for [third_user_id]' do
-          # log_connection_id = SimilarsLog.current_tree_log_id(connected_users)
           puts "In current_tree_log_id:  connected_users = #{connected_users} "
           puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
           expect(log_connection_id).to eq([])
         end
       end
 
+    end
 
+    describe '* store similars logs*' do
 
+        before do
+          SimilarsLog.delete_all
+          SimilarsLog.reset_pk_sequence
+          FactoryGirl.create(:similars_log, :sims_log_table_row_1, current_user_id: current_user_id)
+
+        end
+        let(:first_row) { SimilarsLog.first}
+
+        context '- Check table_row to be stored' do
+          let(:second_row) { FactoryGirl.build(:similars_log, :sims_log_table_row_2, current_user_id: current_user_id)}
+          it '- table_rows CAN BE equal for two specific rows' do
+            puts "first_row = #{first_row.inspect} "
+            puts "second_row = #{second_row.inspect} "
+            expect(second_row).to be_valid #
+          end
+        end
+
+        context '- Check table_row to be stored' do
+          let(:third_row) { FactoryGirl.build(:similars_log, :sims_log_table_row_3, current_user_id: current_user_id)}
+          it '- table_rows CAN NOT BE equal for two specific rows' do
+            puts "first_row = #{first_row.inspect} "
+            puts "third_row = #{third_row.inspect} "
+            expect(third_row).to_not be_valid #
+          end
+        end
 
     end
 

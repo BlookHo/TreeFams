@@ -15,8 +15,8 @@ module SimilarsConnection
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
 
     #########  перезапись profile_id's & update User
-    log_connection_user_profile = Profile.profiles_merge(connection_data)
-    # log_connection_user_profile = []
+    # log_connection_user_profile = Profile.profiles_merge(connection_data)
+    log_connection_user_profile = []
     # todo:Раскоммитить 2 строки ниже и закоммитить 2 строки за ними  - для полной перезаписи логов и отладки
     #########  перезапись profile_id's в Tree и ProfileKey
     log_connection_tree       = update_table(connection_data, Tree)
@@ -28,7 +28,7 @@ module SimilarsConnection
     complete_log_arr = common_log[:log_user_profile] + common_log[:log_tree] + common_log[:log_profilekey]
 
     # Запись массива лога в таблицу SimilarsLog под номером log_id
-    store_log(complete_log_arr) unless complete_log_arr.blank?
+    SimilarsLog.store_log(complete_log_arr) unless complete_log_arr.blank?
 
     data_to_clear = { profiles_to_rewrite: connection_data[:profiles_to_rewrite],
                       profiles_to_destroy: connection_data[:profiles_to_destroy],
@@ -120,9 +120,7 @@ module SimilarsConnection
         rows_to_update.each do |rewrite_row|
 
           # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-  #       rewrite_row.update_column(:"#{table_field}", profiles_to_rewrite[arr_ind] )
           rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
-
           one_connection_data = { connected_at: connection_id,              # int
                                   current_user_id: current_user_id,        # int
                                   table_name: table_name,                  # string
@@ -145,10 +143,10 @@ module SimilarsConnection
 
   # Сохранение массива логов в таблицу SimilarsLog
   #
-  def store_log(common_log)
-    logger.info "*** In module SimilarsConnection store_log "
-    common_log.each(&:save)
-  end
+  # def store_log(common_log)
+  #   logger.info "*** In module SimilarsConnection store_log "
+  #   common_log.each(&:save)
+  # end
 
 
 

@@ -22,7 +22,7 @@ module SimilarsProfileMerge
         main_profile     = Profile.find(profile_id)
         opposite_profile = Profile.find(profiles_to_destroy[index])
 
-        logger.info "Данный из профиля  #{opposite_profile.id} будут перенесены в профиль #{main_profile.id}"
+        logger.info "Данный из профиля  #{opposite_profile.id} будут перенесены в профиль #{main_profile.id}, т.к. профиль #{opposite_profile.id} - overwritten."
         # перенос profile_datas
         ######################################
         # todo: Организовать перезапись Profile_datas - или см. в файле SimilarsConnection.rb строки 15 ?
@@ -92,7 +92,6 @@ module SimilarsProfileMerge
       logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile = #{opposite_profile.inspect} "
       logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile.user = #{opposite_profile.user.inspect} "
       logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "
-     #     opposite_profile.user.update_column(:profile_id, main_profile.id)
       opposite_profile.user.update_attributes(:profile_id => main_profile.id, :updated_at => Time.now)
 
       # 2 link ##################################
@@ -106,7 +105,6 @@ module SimilarsProfileMerge
                               overwritten: nil }
       log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
       ######################################
-          # main_profile.update_column(:user_id, opposite_profile.user_id)
       main_profile.update_attributes(:user_id => opposite_profile.user_id, :updated_at => Time.now)
 
       # 3 link ###################################
@@ -119,11 +117,10 @@ module SimilarsProfileMerge
                               written: opposite_profile.tree_id,
                               overwritten: main_profile.tree_id }
 
-      # logger.info "*** In module SimilarsConnection make_user_profile_link: one_connection_data = #{one_connection_data.inspect} "
+      logger.info "*** In module SimilarsConnection make_user_profile_link: one_connection_data = #{one_connection_data.inspect} "
       log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
 
       ######################################
-          # main_profile.update_column(:tree_id, opposite_profile.tree_id) # in 52 to 4  -> 5 from 34
       main_profile.update_attributes(:tree_id => opposite_profile.tree_id, :updated_at => Time.now)
 
       # 4 link ###################################
@@ -139,9 +136,8 @@ module SimilarsProfileMerge
                               overwritten: opposite_profile.user_id }
       log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
       ######################################
-      opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
-   #   opposite_profile.update_attributes(:user_id => nil, :updated_at => Time.now)
-   #   opposite_profile.update(:user_id => nil)
+      logger.info "*** In module SimilarsConnection make_user_profile_link: one_connection_data = #{one_connection_data.inspect} "
+     opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
       logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile.user_id = #{opposite_profile.user_id.inspect} "
       logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "
 
