@@ -168,15 +168,13 @@ RSpec.describe SimilarsLog, :type => :model do
           SimilarsLog.delete_all
           SimilarsLog.reset_pk_sequence
           FactoryGirl.create(:similars_log, :sims_log_table_row_1, current_user_id: current_user_id)
-
         end
         let(:first_row) { SimilarsLog.first}
-
         context '- Check table_row to be stored' do
           let(:second_row) { FactoryGirl.build(:similars_log, :sims_log_table_row_2, current_user_id: current_user_id)}
           it '- table_rows CAN BE equal for two specific rows' do
-            puts "first_row = #{first_row.inspect} "
-            puts "second_row = #{second_row.inspect} "
+            puts "1. first_row = #{first_row.inspect} \n"
+            puts "2. second_row = #{second_row.inspect} "
             expect(second_row).to be_valid #
           end
         end
@@ -184,8 +182,8 @@ RSpec.describe SimilarsLog, :type => :model do
         context '- Check table_row to be stored' do
           let(:third_row) { FactoryGirl.build(:similars_log, :sims_log_table_row_3, current_user_id: current_user_id)}
           it '- table_rows CAN NOT BE equal for two specific rows' do
-            puts "first_row = #{first_row.inspect} "
-            puts "third_row = #{third_row.inspect} "
+            puts "1. first_row = #{first_row.inspect} \n"
+            puts "3. third_row = #{third_row.inspect} "
             expect(third_row).to_not be_valid #
           end
         end

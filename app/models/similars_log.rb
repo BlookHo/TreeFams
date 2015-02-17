@@ -15,7 +15,8 @@ class SimilarsLog < ActiveRecord::Base
   validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
   validates_inclusion_of :field, :in => ["tree_id", "user_id"], :if => :table_profiles?
   validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
-  validates_uniqueness_of :table_row, scope: [:table_name, :field]
+  validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
+                                                                    # - тогда поле table_row д.б.uniq
 
   # custom validations
   def one_log_fields_are_not_equal
