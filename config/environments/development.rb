@@ -67,4 +67,44 @@ Weafam::Application.configure do
   #config.assets.js_compressor = :uglify
   #config.assets.compile = false
 
+  # The notifier of Bullet is a wrap of uniform_notifier
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    # Bullet.growl = true
+    # Bullet.xmpp = { :account  => 'bullets_account@jabber.org',
+    #                 :password => 'bullets_password_for_jabber',
+    #                 :receiver => 'your_account@jabber.org',
+    #                 :show_online_status => true }
+    Bullet.rails_logger = true
+    # Bullet.bugsnag = true
+    # Bullet.airbrake = true
+    Bullet.add_footer = true
+    Bullet.stacktrace_includes = [ 'your_gem', 'your_middleware' ]
+  end
+  #   The code above will enable all seven of the Bullet notification systems:
+  #
+  #   Bullet.enable: enable Bullet gem, otherwise do nothing
+  #   Bullet.alert: pop up a JavaScript alert in the browser
+  #   Bullet.bullet_logger: log to the Bullet log file (Rails.root/log/bullet.log)
+  #   Bullet.rails_logger: add warnings directly to the Rails log
+  #   Bullet.bugsnag: add notifications to bugsnag
+  #   Bullet.airbrake: add notifications to airbrake
+  #   Bullet.console: log warnings to your browser's console.log (Safari/Webkit browsers or Firefox w/Firebug installed)
+  # Bullet.growl: pop up Growl warnings if your system has Growl installed. Requires a little bit of configuration
+  # Bullet.xmpp: send XMPP/Jabber notifications to the receiver indicated. Note that the code will currently not handle
+  #   the adding of contacts, so you will need to make both accounts indicated know each other manually before you will
+  #   receive any notifications. If you restart the development server frequently, the 'coming online' sound for
+  #   the Bullet account may start to annoy - in this case set :show_online_status to false; you will still get
+  #   notifications, but the Bullet account won't announce it's online status anymore.
+  # Bullet.raise: raise errors, useful for making your specs fail unless they have optimized queries
+  # Bullet.add_footer: adds the details in the bottom left corner of the page
+  # Bullet.stacktrace_includes: include paths with any of these substrings in the stack trace, even if they are
+  #   not in your main app
+
+  # Bullet log log/bullet.log
+
+
 end

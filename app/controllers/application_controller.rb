@@ -23,6 +23,7 @@ class ApplicationController < ActionController::Base
   def current_user
     begin
       @current_user ||= User.find(session[:user_id])
+      # puts "In current_user applic-n: current_user: #{@current_user} \n"
     rescue
       session[:user_id] = nil
     end
@@ -30,7 +31,9 @@ class ApplicationController < ActionController::Base
 
 
   def logged_in?
+    # puts "In logged_in? applic-n: before current_user: #{current_user} \n"
     access_denied if !current_user
+    # puts "In logged_in? applic-n: after current_user: #{current_user} \n"
   end
 
 

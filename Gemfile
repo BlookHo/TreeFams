@@ -1,7 +1,21 @@
 source 'https://rubygems.org'
-# ruby '2.1.0'
+# ruby '2.2.0'
+
+# w/bullet
+#gemspec
+
+
 
 gem 'rails', '4.1.4'
+
+# w/bullet
+gem 'activerecord-jdbcsqlite3-adapter', platforms: [:jruby]
+gem 'activerecord-import'
+gem 'coveralls', require: false
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+  gem 'rubinius-developer_tools'
+end
 
 # on mac os x fail:
 # gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/9.3/bin/pg_config
@@ -70,8 +84,6 @@ group :development do
   gem "better_errors"
   gem "binding_of_caller"
 
-  # Находит косяки в запросах к базе
-  gem "bullet"
 
   gem 'brakeman', :require => false
   gem 'flog'
@@ -92,6 +104,7 @@ group :development do
 end
 
 gem 'activerecord-reset-pk-sequence'
+
 
 group :development, :test do
   # Test framework
@@ -161,4 +174,12 @@ gem "omniauth-google-oauth2"
 gem "omniauth-vkontakte"
 gem 'vkontakte_api'
 
+# Middleware that displays speed badge for every html page. Designed to work both in production and in development.
+gem 'rack-mini-profiler'
+
+# Находит косяки в запросах к базе
+# help to kill N+1 queries and unused eager loading
+gem "bullet", :group => "development"
+
+gem "ruby-growl"
 #gem "squeel" - sql

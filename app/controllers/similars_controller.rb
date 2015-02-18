@@ -2,8 +2,10 @@ class SimilarsController < ApplicationController
   include SearchHelper
 
   layout 'application.new'
+  puts "In SimilarsController - START \n"
 
   before_filter :logged_in?
+  puts "In SimilarsController - AFTER LOGGED  \n"
 
   # todo: перенести этот метод в Operational - для нескольких моделей
   #
@@ -29,14 +31,17 @@ class SimilarsController < ApplicationController
   #              similars: similars  }
   def internal_similars_search
     ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
+    puts "In action internal_similars_search - START \n"
     connected_users = current_user.get_connected_users
+    puts "In action internal_similars_search - connected_users = #{connected_users} \n"
     logger.info "In SimilarsStart 1:  connected_users = #{connected_users}"
     SimilarsFound.clear_tree_similars(connected_users)
 
     tree_info, sim_data, similars = current_user.start_similars
     @log_connection_id = SimilarsLog.current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
     # to show similars connected in view
-    logger.info "LLLLL In similars_contrler:  @log_connection_id = #{@log_connection_id} " unless tree_info.empty?
+
+    puts "In action internal_similars_search - @log_connection_id = #{@log_connection_id} \n"
 
     if similars.empty?   # т.е. нет похожих
       flash.now[:notice] = "Успешное сообщение: В дереве все Ок - 'похожих' профилей нет."
@@ -48,6 +53,8 @@ class SimilarsController < ApplicationController
         view_tree_data(tree_info, sim_data) unless @tree_info.empty?  # to internal_similars_search.html.haml
       end
     end
+    puts "In action internal_similars_search - similars = #{similars} \n"
+    puts "In action internal_similars_search - sim_data = #{sim_data} \n"
 
   end
 

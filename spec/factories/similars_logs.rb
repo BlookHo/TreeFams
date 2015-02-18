@@ -25,6 +25,12 @@ FactoryGirl.define do
       field           "user_id"
     end
 
+    trait :overwritten_nil do   # корректная ситуация
+      table_name      "profiles" # overwritten = nil разрешено только в этой комбинации
+      overwritten      nil
+      field           "user_id"
+    end
+
     trait :table_users do   # корректная ситуация
       table_name      "users" # разрешена только эта комбинация: "users" + "profile_id"
       written          2222
@@ -91,6 +97,19 @@ FactoryGirl.define do
       written          2222
       field            "profile_id" # should be "user_id" or "trees"
     end
+
+    trait :bad_overwritten_nil_table do   # НЕкорректная ситуация
+      table_name       "trees"  # д.б. "profiles" при overwritten = nil
+      overwritten          nil
+      field            "user_id"
+    end
+
+    trait :bad_overwritten_nil_field do   # НЕкорректная ситуация for nil
+      table_name       "profiles"
+      overwritten          nil
+      field            "profile_id" # should be "user_id"
+    end
+
 
     # Model methods traits
     #<SimilarsLog id: 754, connected_at: 25, current_user_id: 5, table_name: "users", table_row: 5, field: "profile_id", written: 52, overwritten: 34, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,

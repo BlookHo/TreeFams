@@ -88,10 +88,12 @@ module SimilarsProfileMerge
                               overwritten: opposite_profile.id }
       log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
       ######################################
-           logger.info "###*** In module SimilarsConnection make_user_profile_link: main_profile.id = #{main_profile.id.inspect} "
-      logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile = #{opposite_profile.inspect} "
-      logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile.user = #{opposite_profile.user.inspect} "
-      logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "
+           logger.info "#* In module SimilarsConnection make_user_profile_link: main_profile.id = #{main_profile.id.inspect} "
+      logger.info "#* In module SimilarsConnection make_user_profile_link: opposite_profile = #{opposite_profile.inspect} "
+      logger.info "#* In module SimilarsConnection make_user_profile_link: opposite_profile.user = #{opposite_profile.user.inspect} "
+      logger.info "#* In module SimilarsConnection make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "
+
+      logger.info "# 1 ##*** In module SimilarsConnection log_profiles_connection: #{log_profiles_connection.inspect} "
       opposite_profile.user.update_attributes(:profile_id => main_profile.id, :updated_at => Time.now)
 
       # 2 link ##################################
@@ -104,8 +106,9 @@ module SimilarsProfileMerge
                               written: opposite_profile.user_id,
                               overwritten: nil }
       log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
+      logger.info "# 2 ##*** In module SimilarsConnection log_profiles_connection: #{log_profiles_connection.inspect} "
       ######################################
-      main_profile.update_attributes(:user_id => opposite_profile.user_id, :updated_at => Time.now)
+     main_profile.update_attributes(:user_id => opposite_profile.user_id, :updated_at => Time.now)
 
       # 3 link ###################################
 
@@ -119,9 +122,10 @@ module SimilarsProfileMerge
 
       logger.info "*** In module SimilarsConnection make_user_profile_link: one_connection_data = #{one_connection_data.inspect} "
       log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
+      logger.info "# 3 ##*** In module SimilarsConnection log_profiles_connection: #{log_profiles_connection.inspect} "
 
       ######################################
-      main_profile.update_attributes(:tree_id => opposite_profile.tree_id, :updated_at => Time.now)
+     main_profile.update_attributes(:tree_id => opposite_profile.tree_id, :updated_at => Time.now)
 
       # 4 link ###################################
       # Если не удаляем opposite_profile профили, то убрать из поля user_id прежний номер user_id - просто nil
@@ -137,14 +141,11 @@ module SimilarsProfileMerge
       log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
       ######################################
       logger.info "*** In module SimilarsConnection make_user_profile_link: one_connection_data = #{one_connection_data.inspect} "
-     opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
+    opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
       logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile.user_id = #{opposite_profile.user_id.inspect} "
       logger.info "###*** In module SimilarsConnection make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "
 
-      #<SimilarsLog id: 754, connected_at: 25, current_user_id: 5, table_name: "users", table_row: 5, field: "profile_id", written: 52, overwritten: 34, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
-      #<SimilarsLog id: 755, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 52, field: "user_id", written: 5, overwritten: nil, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
-      #<SimilarsLog id: 756, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 52, field: "tree_id", written: 5, overwritten: 4, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
-      #<SimilarsLog id: 757, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 34, field: "user_id", written: nil, overwritten: 5, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">
+      logger.info "# 4 ##*** In module SimilarsConnection log_profiles_connection: #{log_profiles_connection.inspect} "
 
       log_profiles_connection
     end

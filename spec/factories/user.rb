@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :user do                    # 5 tree
     admin false
+    profile_id 77
     email "petr_andr@pe.pe"
     password 'qwertyuiop'
     trait :wrong_email do

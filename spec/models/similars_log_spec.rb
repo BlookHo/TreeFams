@@ -9,44 +9,48 @@ RSpec.describe SimilarsLog, :type => :model do
       context '- valid similars log' do
 
         let(:good_sims_log) {FactoryGirl.build(:similars_log)}
-        it '- Saves a valid similars log' do
+        it '- 1 Saves a valid similars log' do
           expect(good_sims_log).to be_valid
         end
 
         let(:good_sims_log_big) {FactoryGirl.build(:similars_log, :big_IDs)}
-        it '- Saves a valid similars log - big IDs' do
-          # puts "In find_stored_similars:  sims_profiles_pairs = #{sims_profiles_pairs} "
+        it '- 2 Saves a valid similars log - big IDs' do
           expect(good_sims_log_big).to be_valid
         end
 
         let(:good_sims_written_nil) {FactoryGirl.build(:similars_log, :written_nil)}
-        it '- Saves a valid similars log - written = nil: profiles, user_id' do
+        it '- 3 Saves a valid similars log - written = nil: profiles, user_id' do
           expect(good_sims_written_nil).to be_valid
         end
 
         let(:good_sims_table_users) {FactoryGirl.build(:similars_log, :table_users)}
-        it '- Saves a valid similars log - table = users, only field = profile_id' do
+        it '- 4 Saves a valid similars log - table = users, only field = profile_id' do
           expect(good_sims_table_users).to be_valid
         end
 
         let(:good_sims_table_trees_is_profile_id) {FactoryGirl.build(:similars_log, :table_tree_is_profile_id)}
-        it '- Saves a valid similars log - table = trees, one field = is_profile_id' do
+        it '- 5 Saves a valid similars log - table = trees, one field = is_profile_id' do
           expect(good_sims_table_trees_is_profile_id).to be_valid
         end
 
         let(:good_sims_table_trees_profile_id) {FactoryGirl.build(:similars_log, :table_tree_profile_id)}
-        it '- Saves a valid similars log - table = trees, one field = profile_id' do
+        it '- 6 Saves a valid similars log - table = trees, one field = profile_id' do
           expect(good_sims_table_trees_profile_id).to be_valid
         end
 
         let(:good_sims_table_pr_key_is_profile_id) {FactoryGirl.build(:similars_log, :table_pr_key_is_profile_id)}
-        it '- Saves a valid similars log - table = profile_keys, one field = is_profile_id' do
+        it '- 7 Saves a valid similars log - table = profile_keys, one field = is_profile_id' do
           expect(good_sims_table_pr_key_is_profile_id).to be_valid
         end
 
         let(:good_sims_table_pr_key_profile_id) {FactoryGirl.build(:similars_log, :table_pr_key_profile_id)}
-        it '- Saves a valid similars log - table = profile_keys, one field = profile_id' do
+        it '- 8 Saves a valid similars log - table = profile_keys, one field = profile_id' do
           expect(good_sims_table_pr_key_profile_id).to be_valid
+        end
+
+        let(:good_sims_overwritten_nil) {FactoryGirl.build(:similars_log, :overwritten_nil)}
+        it '- 9 Saves a valid similars log - overwritten = nil: profiles, user_id' do
+          expect(good_sims_overwritten_nil).to be_valid
         end
 
 
@@ -55,38 +59,48 @@ RSpec.describe SimilarsLog, :type => :model do
       context '- invalid similars log' do
 
         let(:bad_sims_written_equal_overwritten) {FactoryGirl.build(:similars_log, :bad_written_and_overwritten)}
-        it '- Dont save: - written_and_overwritten - equal' do
+        it '- 1 Dont save: - written_and_overwritten - equal' do
           expect(bad_sims_written_equal_overwritten).to_not be_valid
         end
 
         let(:bad_sims_written_nil_table) {FactoryGirl.build(:similars_log, :bad_written_nil_table)}
-        it '- Dont save: - written = nil: table = trees, user_id' do
+        it '- 2 Dont save: - written = nil: table = trees, user_id' do
           expect(bad_sims_written_nil_table).to_not be_valid
         end
 
         let(:bad_sims_written_nil_field) {FactoryGirl.build(:similars_log, :bad_written_nil_field)}
-        it '- Dont save: - written = nil: table = profiles, wrong field = profile_id' do
+        it '- 3 Dont save: - written = nil: table = profiles, wrong field = profile_id' do
           expect(bad_sims_written_nil_field).to_not be_valid
         end
 
         let(:bad_sims_table_tree_wrong_field) {FactoryGirl.build(:similars_log, :bad_table_tree_and_field)}
-        it '- Dont save: - wrong_field for table tree' do
+        it '- 4 Dont save: - wrong_field for table tree' do
           expect(bad_sims_table_tree_wrong_field).to_not be_valid
         end
 
         let(:bad_sims_table_pr_key_wrong_field) {FactoryGirl.build(:similars_log, :bad_table_pr_key_and_field)}
-        it '- Dont save: - wrong_field for table pr_key' do
+        it '- 5 Dont save: - wrong_field for table pr_key' do
           expect(bad_sims_table_pr_key_wrong_field).to_not be_valid
         end
 
         let(:bad_sims_table_user_wrong_field) {FactoryGirl.build(:similars_log, :bad_table_user_and_field)}
-        it '- Dont save: - wrong_field for table user' do
+        it '- 6 Dont save: - wrong_field for table user' do
           expect(bad_sims_table_user_wrong_field).to_not be_valid
         end
 
         let(:bad_sims_table_profile_wrong_field) {FactoryGirl.build(:similars_log, :bad_table_profile_and_field)}
-        it '- Dont save: - wrong_field for table profile' do
+        it '- 7 Dont save: - wrong_field for table profile' do
           expect(bad_sims_table_profile_wrong_field).to_not be_valid
+        end
+
+        let(:bad_sims_overwritten_nil_table) {FactoryGirl.build(:similars_log, :bad_overwritten_nil_table)}
+        it '- 8 Dont save: - overwritten = nil: table = profiles, wrong field = profile_id' do
+          expect(bad_sims_overwritten_nil_table).to_not be_valid
+        end
+
+        let(:bad_sims_overwritten_nil_field) {FactoryGirl.build(:similars_log, :bad_overwritten_nil_field)}
+        it '- 9 Dont save: - overwritten = nil: table = profiles, wrong field = profile_id' do
+          expect(bad_sims_overwritten_nil_field).to_not be_valid
         end
 
 
