@@ -31,11 +31,11 @@ class SimilarsController < ApplicationController
   # sim_data = { log_connection_id: log_connection_id, #
   #              similars: similars  }
   def internal_similars_search
-    ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
     puts "In action internal_similars_search - START \n"
     connected_users = current_user.get_connected_users
-    puts "In action internal_similars_search - connected_users = #{connected_users} \n"
-    logger.info "In SimilarsStart 1:  connected_users = #{connected_users}"
+    # puts "In action internal_similars_search - connected_users = #{connected_users} \n"
+    # logger.info "In SimilarsStart 1:  connected_users = #{connected_users}"
+    ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
     SimilarsFound.clear_tree_similars(connected_users)
 
     tree_info, sim_data, similars = current_user.start_similars
@@ -60,33 +60,8 @@ class SimilarsController < ApplicationController
   end
 
 
-
   def show_similars_data
   end
-
-
-  # # Отобр-е параметров дерева и sim_data во вьюхе
-  # def view_tree_data(tree_info, sim_data)
-  #   @tree_info = tree_info
-  #   logger.info "In similars_contrler 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, @tree_info = #{tree_info},  "  if !tree_info.blank?
-  #   logger.info "In similars_contrler 1a: @tree_info.profiles.size = #{tree_info[:profiles].size} "  if !tree_info.blank?
-  #  # @log_connection_id = sim_data[:log_connection_id]
-  #   @current_user_id = current_user.id
-  #   view_similars(sim_data) unless sim_data.empty?
-  # end
-  #
-  #
-  # # Отображение во вьюхе Похожих и - для них - непохожих, если есть
-  # def view_similars(sim_data)
-  #   @sim_data = sim_data  #
-  #   logger.info "In similars_contrler 01:  @sim_data = #{@sim_data} "
-  #   @similars = sim_data[:similars]
-  #   @similars_qty = @similars.size unless sim_data[:similars].empty?
-  #   #################################################
-  #   @paged_similars_data = pages_of(@similars, 10) # Пагинация - по 10 строк на стр.
-  #
-  # end
-  #
 
 
   # Готовит данные для Объединения похожих профилей - similars_connection_data
@@ -98,7 +73,6 @@ class SimilarsController < ApplicationController
     logger.info "*** In connect_similars 2:  init_hash = #{init_hash} "
 
     # todo: check similars_complete_search, when init_hash has many profiles
-    # todo: also - to manipulate  buttons "Yes/No - to connect" in multiple rows in case many profiles
 
     ############ call of User.module ############################################
     profiles_to_rewrite, profiles_to_destroy = current_user.similars_complete_search(init_hash)
@@ -117,32 +91,17 @@ class SimilarsController < ApplicationController
     last_log_id == nil ? last_log_id = 1 : last_log_id += 1
     logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
     #############################################################################
-
     similars_connection_data = {profiles_to_rewrite: profiles_to_rewrite, #
                                 profiles_to_destroy: profiles_to_destroy,
                                 current_user_id: current_user.id,
                                 connection_id: last_log_id }
-
     # Лог - это массив записей о параметрах всех совершенных объединениях дерева
-    # храниться должен отдельно
-
-    ############ call of User.module Similars_connection ########################
-
-    @log_connection = current_user.similars_connect_tree(similars_connection_data)
-    logger.info "*** In  Similars_Controller connect_similars: @log_connection = \n     #{@log_connection} "
-    @log_connection_id = @log_connection[:log_user_profile][0][:connected_at] unless @log_connection[:log_user_profile].blank?
-    logger.info "*** In  Similars_Controller connect_similars: @log_connection_id = #{@log_connection_id} "
-    @log_user_profile_size = @log_connection[:log_user_profile].size unless @log_connection[:log_user_profile].blank?
-    @log_connection_tree_size = @log_connection[:log_tree].size unless @log_connection[:log_tree].blank?
-    @log_connection_profilekey_size = @log_connection[:log_profilekey].size unless @log_connection[:log_profilekey].blank?
-    @complete_log = @log_connection[:log_user_profile] + @log_connection[:log_tree] + @log_connection[:log_profilekey]
-    logger.info "*** In  Similars_Controller connect_similars: @complete_log = \n     #{@complete_log} "
-    @complete_log_size = @complete_log.size unless @complete_log.blank?
-    logger.info "*** In  Similars_Controller connect_similars: @complete_log_size = #{@complete_log_size} "
-
+    # call of User.module Similars_connection
+    log_connection = current_user.similars_connect_tree(similars_connection_data)
+    show_log_data(log_connection)
     flash[:notice] = "Успешное сообщение - internal_similars_search"
-
   end
+
 
   # Оставляет похожие профили без объединения
   # помечаем их как непохожие на будущее
