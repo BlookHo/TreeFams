@@ -148,8 +148,8 @@ RSpec.describe SimilarsLog, :type => :model do
         let(:connected_users) {[current_user_id, other_user_id ]}
         let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
         it '- return proper log_connection_id for [current_user_id, other_user_id ]' do
-          puts "In current_tree_log_id:  connected_users = #{connected_users} "
-          puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
+          # puts "In current_tree_log_id:  connected_users = #{connected_users} "
+          # puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
           expect(log_connection_id).to eq(41)
         end
       end
@@ -158,8 +158,8 @@ RSpec.describe SimilarsLog, :type => :model do
         let(:connected_users) {[third_user_id]}
         let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
         it '- return proper log_connection_id for [third_user_id]' do
-          puts "In current_tree_log_id:  connected_users = #{connected_users} "
-          puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
+          # puts "In current_tree_log_id:  connected_users = #{connected_users} "
+          # puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
           expect(log_connection_id).to eq(42)
         end
       end
@@ -168,8 +168,8 @@ RSpec.describe SimilarsLog, :type => :model do
         let(:connected_users) {[four_user_id]}
         let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
         it '- return proper log_connection_id = [] for [third_user_id]' do
-          puts "In current_tree_log_id:  connected_users = #{connected_users} "
-          puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
+          # puts "In current_tree_log_id:  connected_users = #{connected_users} "
+          # puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
           expect(log_connection_id).to eq([])
         end
       end
@@ -187,17 +187,17 @@ RSpec.describe SimilarsLog, :type => :model do
         context '- Check table_row to be stored' do
           let(:second_row) { FactoryGirl.build(:similars_log, :sims_log_table_row_2, current_user_id: current_user_id)}
           it '- table_rows CAN BE equal for two specific rows' do
-            puts "1. first_row = #{first_row.inspect} \n"
-            puts "2. second_row = #{second_row.inspect} "
-            expect(second_row).to be_valid #
+            # puts "1. first_row = #{first_row.inspect} \n"
+            # puts "2. second_row = #{second_row.inspect} "
+             expect(second_row).to be_valid #
           end
         end
 
         context '- Check table_row to be stored' do
           let(:third_row) { FactoryGirl.build(:similars_log, :sims_log_table_row_3, current_user_id: current_user_id)}
           it '- table_rows CAN NOT BE equal for two specific rows' do
-            puts "1. first_row = #{first_row.inspect} \n"
-            puts "3. third_row = #{third_row.inspect} "
+            # puts "1. first_row = #{first_row.inspect} \n"
+            # puts "3. third_row = #{third_row.inspect} "
             expect(third_row).to_not be_valid #
           end
         end
