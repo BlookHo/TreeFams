@@ -46,10 +46,6 @@ class User < ActiveRecord::Base
 
   # Получение массива соединенных Юзеров
   # для заданного "стартового" Юзера
-  #
- # scope :connected_users_ids, -> (connected_user) {where(user_id: connected_user.id).pluck(:with_user_id)}
- #  scope :connected_with_users_ids, -> (connected_user) {where(with_user_id: connected_user.id).pluck(:user_id)}
-
   def get_connected_users
     connected_users_arr = [self.id]
     first_users_arr = ConnectedUser.connected_users_ids(self)
@@ -141,12 +137,6 @@ class User < ActiveRecord::Base
   def self.generate_password
     '1111'
   end
-
-
-
-
-
-
 
 
 
