@@ -57,7 +57,6 @@ class User < ActiveRecord::Base
       first_users_arr = ConnectedUser.connected_with_users_ids(self)
     end
     one_connected_users_arr = first_users_arr
-    #todo: вынести в метод
     unless one_connected_users_arr.blank?
       connected_users_arr = get_growing_arr(connected_users_arr, one_connected_users_arr)
       one_connected_users_arr.each do |conn_arr_el|
