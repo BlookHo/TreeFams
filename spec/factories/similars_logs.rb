@@ -195,6 +195,17 @@ FactoryGirl.define do
       overwritten   444  #
     end
 
+    trait :sims_log_connection_id do
+      current_user_id  2
+      connected_at  77           #
+      table_name    "profile_keys"   #
+      table_row     100  #
+      field         "profile_id"  #
+      written       333  #
+      overwritten   444  #
+    end
+
+
 
 
 

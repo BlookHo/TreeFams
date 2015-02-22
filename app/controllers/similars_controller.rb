@@ -33,7 +33,8 @@ class SimilarsController < ApplicationController
   def internal_similars_search
     puts "In action internal_similars_search - START \n"
     connected_users = current_user.get_connected_users
-    # puts "In action internal_similars_search - connected_users = #{connected_users} \n"
+    @connected_users = connected_users
+    puts "In action internal_similars_search - after get_connected_users:  connected_users = #{connected_users} \n"
     # logger.info "In SimilarsStart 1:  connected_users = #{connected_users}"
     ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
     SimilarsFound.clear_tree_similars(connected_users)

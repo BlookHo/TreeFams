@@ -3,7 +3,7 @@ FactoryGirl.define do
 
     # 1
     user_id 55
-    with_user_id 2
+    with_user_id 5
     connected true
 
     # 2
@@ -15,21 +15,21 @@ FactoryGirl.define do
 
     # 3
     trait :connected_user_3 do
-      user_id 2
+      user_id 4
       with_user_id 66
       # connected true
     end
 
     # 4
     trait :connected_user_4 do
-      user_id 4
+      user_id 44
       with_user_id 5
       # connected true
     end
 
     # 5
     trait :connected_user_5 do
-      user_id 5
+      user_id 2
       with_user_id 1
       # connected true
     end
@@ -42,10 +42,14 @@ FactoryGirl.define do
     end
 
 
-
     trait :correct do
       user_id 1
       with_user_id 2
+    end
+
+    trait :correct_3_4 do
+      user_id 3
+      with_user_id 4
     end
 
     trait :user_id_nil do

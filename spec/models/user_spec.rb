@@ -1,17 +1,6 @@
 describe User do
 
 
-
-
-  # before do
-  #   @user = User.new( email: "new@nn.nn", password: '1111', profile_id:  1)
-  #   @user.save
-  #   @user_profile = @user.profile_id
-  #
-  #   @profile = Profile.new( user_id: @user_profile, profile_name: 45, relation_id: 2, display_name_id:  45)
-  #   @profile.save
-  # end
-
   describe '- validation' do
     before do
       @user = User.new( email: "new@nn.nn", password: '1111', profile_id:  1)
@@ -60,11 +49,6 @@ describe User do
         FactoryGirl.create(:connected_user, :connected_user_4)
         FactoryGirl.create(:connected_user, :connected_user_5)
         FactoryGirl.create(:connected_user, :connected_user_6)
-        # puts "before 1. connected_user = #{ConnectedUser.first.user_id} \n"
-        # puts "before 2. connected_user = #{ConnectedUser.find(2).user_id} \n"
-        # puts "before 3. connected_user = #{ConnectedUser.find(3).user_id} \n"
-        # puts "before 4. connected_user = #{ConnectedUser.find(4).user_id} \n"
-        # puts "before 5. connected_user = #{ConnectedUser.find(5).user_id} \n"
         # puts "before 6. connected_user = #{ConnectedUser.find(6).user_id} \n"
 
       end
@@ -74,44 +58,34 @@ describe User do
 
       context '- 1. after action: Check proper result of proper data type ' do
         it "- First Return proper Array Sorted result for current_user_id = 1" do
-          # puts " 1. After get_connected_users - current_user_id = #{current_user_id} \n"
-          # puts " 1. After get_connected_users - conn_users = #{connected_users} \n"
           expect(connected_users).to be_a_kind_of(Array)
-          expect(connected_users).to eq([1,4,5])
+          expect(connected_users).to eq([1,2])
         end
       end
 
       context '- 2. after action: Check proper result of proper data type ' do
         it "- Second Return proper Array Sorted result for current_user_id = 2" do
-          # puts " 2. After get_connected_users - current_user_id = #{current_user_id} \n"
-          # puts " 2. After get_connected_users - conn_users = #{connected_users} \n"
           expect(connected_users).to be_a_kind_of(Array)
-          expect(connected_users).to eq([2,3,55,66])
+          expect(connected_users).to eq([1,2])
         end
       end
 
       context '- 3. after action: Check proper result of proper data type ' do
         it "- Third Return proper Array Sorted result for current_user_id = 3" do
-          # puts " 3. After get_connected_users - current_user_id = #{current_user_id} \n"
-          # puts " 3. After get_connected_users - conn_users = #{connected_users} \n"
           expect(connected_users).to be_a_kind_of(Array)
-          expect(connected_users).to eq([2,3,55,66])
+          expect(connected_users).to eq([3,5,44,55])
         end
       end
 
       context '- 4. after action: Check proper result of proper data type ' do
         it "- Fourth Return proper Array Sorted result for current_user_id = 4" do
-          # puts " 4. After get_connected_users - current_user_id = #{current_user_id} \n"
-          # puts " 4. After get_connected_users - conn_users = #{connected_users} \n"
           expect(connected_users).to be_a_kind_of(Array)
-          expect(connected_users).to eq([1,4,5])
+          expect(connected_users).to eq([4,66])
         end
       end
 
       context '- 5. after action: Check proper result of proper data type ' do
         it "- Fifth Return UNproper Type result for current_user_id = 5" do
-          # puts " 5. After get_connected_users - current_user_id = #{current_user_id} \n"
-          # puts " 5. After get_connected_users - conn_users = #{connected_users} \n"
           expect(connected_users).to_not be_a_kind_of(Hash)
           expect(connected_users).to_not eq([1,5])
         end
@@ -119,8 +93,6 @@ describe User do
 
       context '- 6. after action: Check proper result of proper data type ' do
         it "- Sixth Return UNproper Array result for current_user_id = 6" do
-          # puts " 6. After get_connected_users - current_user_id = #{current_user_id} \n"
-          # puts " 6. After get_connected_users - conn_users = #{connected_users} \n"
           expect(connected_users).to be_a_kind_of(Array)
           expect(connected_users).to_not eq([1])
         end

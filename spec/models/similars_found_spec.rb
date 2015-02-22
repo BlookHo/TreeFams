@@ -71,6 +71,10 @@ RSpec.describe SimilarsFound, :type => :model do
       FactoryGirl.create(:similars_found, :sims_pair_2, user_id: current_user_id)
       FactoryGirl.create(:similars_found, :sims_pair_3, user_id: other_user_id)
       FactoryGirl.create(:similars_found, :sims_pair_4, user_id: third_user_id)
+      # puts "in similars_found = #{SimilarsFound.find(1).user_id} \n" # 1
+      # puts "in similars_found = #{SimilarsFound.find(2).user_id} \n" # 1
+      # puts "in similars_found = #{SimilarsFound.find(3).user_id} \n" # 2
+      # puts "in similars_found = #{SimilarsFound.find(4).user_id} \n" # 3
     end
 
     # from similars_start.rb#check_new_similars
