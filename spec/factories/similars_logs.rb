@@ -196,7 +196,7 @@ FactoryGirl.define do
     end
 
     trait :sims_log_connection_id do
-      current_user_id  2
+      current_user_id  7
       connected_at  77           #
       table_name    "profile_keys"   #
       table_row     100  #

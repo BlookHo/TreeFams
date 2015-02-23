@@ -33,7 +33,9 @@ class SimilarsController < ApplicationController
   def internal_similars_search
     puts "In action internal_similars_search - START \n"
     connected_users = current_user.get_connected_users
-    @connected_users = connected_users
+    # for RSpec
+      @connected_users = connected_users
+
     puts "In action internal_similars_search - after get_connected_users:  connected_users = #{connected_users} \n"
     # logger.info "In SimilarsStart 1:  connected_users = #{connected_users}"
     ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
@@ -43,7 +45,12 @@ class SimilarsController < ApplicationController
     @log_connection_id = SimilarsLog.current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
     # to show similars connected in view
 
+    # for RSpec
+     @tree_info = tree_info
+
     puts "In action internal_similars_search - @log_connection_id = #{@log_connection_id} \n"
+
+    @current_user_id = current_user.id  # for spec
 
     if similars.empty?   # т.е. нет похожих
       flash.now[:notice] = "Успешное сообщение: В дереве все Ок - 'похожих' профилей нет."
