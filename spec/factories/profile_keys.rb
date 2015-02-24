@@ -11,7 +11,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_2 do
-      # user_id         1
+      user_id         1
       profile_id      64
       name_id         90
       relation_id     3
@@ -19,7 +19,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_3 do
-      # user_id         1
+      user_id         1
       profile_id      63
       name_id         40
       relation_id     2
@@ -32,7 +32,7 @@ FactoryGirl.define do
     # 367;7;63;40;2;65;345;"2015-02-18 11:53:19.855804";"2015-02-18 11:53:19.855804";40;345
 
     trait :profile_key_w_sims_4 do
-      # user_id         1
+      user_id         1
       profile_id      65
       name_id         345
       relation_id     3
@@ -40,7 +40,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_5 do
-      # user_id         1
+      user_id         1
       profile_id      64
       name_id         90
       relation_id     8
@@ -48,7 +48,7 @@ FactoryGirl.define do
       is_name_id      345
     end
     trait :profile_key_w_sims_6 do
-      # user_id         1
+      user_id         1
       profile_id      65
       name_id         345
       relation_id     7
@@ -60,6 +60,7 @@ FactoryGirl.define do
     # 370;7;65;345;7;64;90;"2015-02-18 11:53:19.940046";"2015-02-18 11:53:19.940046";345;90
 
     trait :profile_key_w_sims_7 do
+      user_id         1
       profile_id      63
       name_id         40
       relation_id     5
@@ -67,6 +68,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_8 do
+      user_id         1
       profile_id      66
       name_id         370
       relation_id     5
@@ -74,6 +76,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_9 do
+      user_id         1
       profile_id      64
       name_id         90
       relation_id     3
@@ -85,6 +88,7 @@ FactoryGirl.define do
     # 373;7;64;90;3;66;370;"2015-02-18 11:53:20.113039";"2015-02-21 11:23:58.124145";90;370
 
     trait :profile_key_w_sims_10 do
+      user_id         1
       profile_id      66
       name_id         370
       relation_id     1
@@ -92,6 +96,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_11 do
+      user_id         1
       profile_id      65
       name_id         345
       relation_id     3
@@ -99,6 +104,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_12 do
+      user_id         1
       profile_id      66
       name_id         370
       relation_id     2
@@ -110,6 +116,7 @@ FactoryGirl.define do
     # 376;7;66;370;2;65;345;"2015-02-18 11:53:20.176538";"2015-02-21 11:23:56.964928";370;345
 
     trait :profile_key_w_sims_13 do
+      user_id         1
       profile_id      63
       name_id         40
       relation_id     8
@@ -117,6 +124,7 @@ FactoryGirl.define do
       is_name_id      173
     end
     trait :profile_key_w_sims_14 do
+      user_id         1
       profile_id      67
       name_id         173
       relation_id     7
@@ -124,6 +132,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_15 do
+      user_id         1
       profile_id      64
       name_id         90
       relation_id     17
@@ -135,6 +144,7 @@ FactoryGirl.define do
     # 379;7;64;90;17;67;173;"2015-02-18 11:53:20.360991";"2015-02-18 11:53:20.360991";90;173
 
     trait :profile_key_w_sims_16 do
+      user_id         1
       profile_id      67
       name_id         173
       relation_id     13
@@ -142,6 +152,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_17 do
+      user_id         1
       profile_id      65
       name_id         345
       relation_id     17
@@ -149,6 +160,7 @@ FactoryGirl.define do
       is_name_id      173
     end
     trait :profile_key_w_sims_18 do
+      user_id         1
       profile_id      67
       name_id         173
       relation_id     14
@@ -160,6 +172,7 @@ FactoryGirl.define do
     # 382;7;67;173;14;65;345;"2015-02-18 11:53:20.431637";"2015-02-18 11:53:20.431637";173;345
 
     trait :profile_key_w_sims_19 do
+      user_id         1
       profile_id      64
       name_id         90
       relation_id     1
@@ -167,6 +180,7 @@ FactoryGirl.define do
       is_name_id      343
     end
     trait :profile_key_w_sims_20 do
+      user_id         1
       profile_id      68
       name_id         343
       relation_id     3
@@ -174,6 +188,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_21 do
+      user_id         1
       profile_id      63
       name_id         40
       relation_id     91
@@ -185,6 +200,7 @@ FactoryGirl.define do
     # 385;7;63;40;91;68;343;"2015-02-18 11:53:20.620471";"2015-02-18 11:53:20.620471";40;343
 
     trait :profile_key_w_sims_22 do
+      user_id         1
       profile_id      68
       name_id         343
       relation_id     111
@@ -192,6 +208,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_23 do
+      user_id         1
       profile_id      66
       name_id         370
       relation_id     91
@@ -199,6 +216,7 @@ FactoryGirl.define do
       is_name_id      343
     end
     trait :profile_key_w_sims_24 do
+      user_id         1
       profile_id      68
       name_id         343
       relation_id     111
@@ -210,6 +228,7 @@ FactoryGirl.define do
     # 388;7;68;343;111;66;370;"2015-02-18 11:53:20.698218";"2015-02-21 11:23:58.186214";343;370
 
     trait :profile_key_w_sims_25 do
+      user_id         1
       profile_id      65
       name_id         345
       relation_id     13
@@ -217,6 +236,7 @@ FactoryGirl.define do
       is_name_id      343
     end
     trait :profile_key_w_sims_26 do
+      user_id         1
       profile_id      68
       name_id         343
       relation_id     17
@@ -224,6 +244,7 @@ FactoryGirl.define do
       is_name_id      345
     end
     trait :profile_key_w_sims_27 do
+      user_id         1
       profile_id      64
       name_id         90
       relation_id     2
@@ -235,6 +256,7 @@ FactoryGirl.define do
     # 391;7;64;90;2;69;293;"2015-02-18 11:53:20.900634";"2015-02-18 11:53:20.900634";90;293
 
     trait :profile_key_w_sims_28 do
+      user_id         1
       profile_id      69
       name_id         293
       relation_id     3
@@ -242,6 +264,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_29 do
+      user_id         1
       profile_id      68
       name_id         343
       relation_id     8
@@ -249,6 +272,7 @@ FactoryGirl.define do
       is_name_id      293
     end
     trait :profile_key_w_sims_30 do
+      user_id         1
       profile_id      69
       name_id         293
       relation_id     7
@@ -260,6 +284,7 @@ FactoryGirl.define do
     # 394;7;69;293;7;68;343;"2015-02-18 11:53:20.964022";"2015-02-18 11:53:20.964022";293;343
 
     trait :profile_key_w_sims_31 do
+      user_id         1
       profile_id      63
       name_id         40
       relation_id     101
@@ -267,6 +292,7 @@ FactoryGirl.define do
       is_name_id      293
     end
     trait :profile_key_w_sims_32 do
+      user_id         1
       profile_id      69
       name_id         293
       relation_id     111
@@ -274,6 +300,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_33 do
+      user_id         1
       profile_id      66
       name_id         370
       relation_id     101
@@ -285,6 +312,7 @@ FactoryGirl.define do
     # 397;7;66;370;101;69;293;"2015-02-18 11:53:21.039386";"2015-02-21 11:23:57.368448";370;293
 
     trait :profile_key_w_sims_34 do
+      user_id         1
       profile_id      69
       name_id         293
       relation_id     111
@@ -292,6 +320,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_35 do
+      user_id         1
       profile_id      65
       name_id         345
       relation_id     14
@@ -299,6 +328,7 @@ FactoryGirl.define do
       is_name_id      293
     end
     trait :profile_key_w_sims_36 do
+      user_id         1
       profile_id      69
       name_id         293
       relation_id     17
@@ -310,6 +340,7 @@ FactoryGirl.define do
     # 400;7;69;293;17;65;345;"2015-02-18 11:53:21.123641";"2015-02-18 11:53:21.123641";293;345
 
     trait :profile_key_w_sims_37 do
+      user_id         1
       profile_id      66
       name_id         370
       relation_id     8
@@ -317,6 +348,7 @@ FactoryGirl.define do
       is_name_id      354
     end
     trait :profile_key_w_sims_38 do
+      user_id         1
       profile_id      70
       name_id         354
       relation_id     7
@@ -324,6 +356,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_39 do
+      user_id         1
       profile_id      64
       name_id         90
       relation_id     17
@@ -335,6 +368,7 @@ FactoryGirl.define do
     # 403;7;64;90;17;70;354;"2015-02-18 11:55:30.991727";"2015-02-21 11:23:57.547495";90;354
 
     trait :profile_key_w_sims_40 do
+      user_id         1
       profile_id      70
       name_id         354
       relation_id     13
@@ -342,6 +376,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_41 do
+      user_id         1
       profile_id      65
       name_id         345
       relation_id     17
@@ -349,6 +384,7 @@ FactoryGirl.define do
       is_name_id      354
     end
     trait :profile_key_w_sims_42 do
+      user_id         1
       profile_id      70
       name_id         354
       relation_id     14
@@ -368,6 +404,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_44 do
+      user_id         2
       profile_id      64
       name_id         90
       relation_id     3
@@ -375,6 +412,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_45 do
+      user_id         2
       profile_id      66
       name_id         370
       relation_id     2
@@ -386,7 +424,7 @@ FactoryGirl.define do
     # 409;8;66;370;2;65;345;"2015-02-18 11:57:30.480003";"2015-02-21 11:23:57.095578";370;345
 
     trait :profile_key_w_sims_46 do
-    # user_id         2
+      user_id         2
       profile_id      65
       name_id         345
       relation_id     3
@@ -394,6 +432,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_47 do
+      user_id         2
       profile_id      64
       name_id         90
       relation_id     8
@@ -401,6 +440,7 @@ FactoryGirl.define do
       is_name_id      345
     end
     trait :profile_key_w_sims_48 do
+      user_id         2
       profile_id      65
       name_id         345
       relation_id     7
@@ -412,7 +452,7 @@ FactoryGirl.define do
     # 412;8;65;345;7;64;90;"2015-02-18 11:57:30.554548";"2015-02-18 11:59:35.762875";345;90
 
     trait :profile_key_w_sims_49 do
-    # user_id         2
+      user_id         2
       profile_id      66
       name_id         370
       relation_id     5
@@ -420,6 +460,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_50 do
+      user_id         2
       profile_id      63
       name_id         40
       relation_id     5
@@ -427,6 +468,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_51 do
+      user_id         2
       profile_id      64
       name_id         90
       relation_id     3
@@ -438,7 +480,7 @@ FactoryGirl.define do
     # 415;8;64;90;3;63;40;"2015-02-18 11:57:30.74355";"2015-02-18 11:59:36.295437";90;40
 
     trait :profile_key_w_sims_52 do
-   #  user_id         2
+      user_id         2
       profile_id      63
       name_id         40
       relation_id     1
@@ -446,6 +488,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_53 do
+      user_id         2
       profile_id      65
       name_id         345
       relation_id     3
@@ -453,6 +496,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_54 do
+      user_id         2
       profile_id      63
       name_id         40
       relation_id     2
@@ -464,7 +508,7 @@ FactoryGirl.define do
     # 418;8;63;40;2;65;345;"2015-02-18 11:57:30.811266";"2015-02-18 11:59:35.934465";40;345
 
     trait :profile_key_w_sims_55 do
-    # user_id         2
+      user_id         2
       profile_id      66
       name_id         370
       relation_id     8
@@ -472,6 +516,7 @@ FactoryGirl.define do
       is_name_id      354
     end
     trait :profile_key_w_sims_56 do
+      user_id         2
       profile_id      70
       name_id         354
       relation_id     7
@@ -479,6 +524,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_57 do
+      user_id         2
       profile_id      64
       name_id         90
       relation_id     17
@@ -490,7 +536,7 @@ FactoryGirl.define do
     # 421;8;64;90;17;70;354;"2015-02-18 11:57:30.992366";"2015-02-21 11:23:57.690997";90;354
 
     trait :profile_key_w_sims_58 do
-    # user_id         2
+      user_id         2
       profile_id      70
       name_id         354
       relation_id     13
@@ -498,6 +544,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_59 do
+      user_id         2
       profile_id      65
       name_id         345
       relation_id     17
@@ -505,6 +552,7 @@ FactoryGirl.define do
       is_name_id      354
     end
     trait :profile_key_w_sims_60 do
+      user_id         2
       profile_id      70
       name_id         354
       relation_id     14
@@ -516,7 +564,7 @@ FactoryGirl.define do
     # 424;8;70;354;14;65;345;"2015-02-18 11:57:31.163686";"2015-02-21 11:23:56.639689";354;345
 
     trait :profile_key_w_sims_61 do
-     #user_id         2
+      user_id         2
       profile_id      64
       name_id         90
       relation_id     1
@@ -524,6 +572,7 @@ FactoryGirl.define do
       is_name_id      343
     end
     trait :profile_key_w_sims_62 do
+      user_id         2
       profile_id      68
       name_id         343
       relation_id     3
@@ -531,6 +580,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_63 do
+      user_id         2
       profile_id      66
       name_id         370
       relation_id     91
@@ -542,7 +592,7 @@ FactoryGirl.define do
     # 427;8;66;370;91;68;343;"2015-02-18 11:57:31.38663";"2015-02-21 11:23:57.125138";370;343
 
     trait :profile_key_w_sims_64 do
-    # user_id         2
+      user_id         2
       profile_id      68
       name_id         343
       relation_id     111
@@ -550,6 +600,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_65 do
+      user_id         2
       profile_id      63
       name_id         40
       relation_id     91
@@ -557,6 +608,7 @@ FactoryGirl.define do
       is_name_id      343
     end
     trait :profile_key_w_sims_66 do
+      user_id         2
       profile_id      68
       name_id         343
       relation_id     111
@@ -568,7 +620,7 @@ FactoryGirl.define do
     # 430;8;68;343;111;63;40;"2015-02-18 11:57:31.463893";"2015-02-18 11:59:36.346099";343;40
 
     trait :profile_key_w_sims_67 do
-    # user_id         2
+      user_id         2
       profile_id      65
       name_id         345
       relation_id     13
@@ -576,6 +628,7 @@ FactoryGirl.define do
       is_name_id      343
     end
     trait :profile_key_w_sims_68 do
+      user_id         2
       profile_id      68
       name_id         343
       relation_id     17
@@ -583,6 +636,7 @@ FactoryGirl.define do
       is_name_id      345
     end
     trait :profile_key_w_sims_69 do
+      user_id         2
       profile_id      64
       name_id         90
       relation_id     2
@@ -594,7 +648,7 @@ FactoryGirl.define do
     # 433;8;64;90;2;69;293;"2015-02-18 11:57:31.663118";"2015-02-18 11:59:35.623609";90;293
 
     trait :profile_key_w_sims_70 do
-    # user_id         2
+      user_id         2
       profile_id      69
       name_id         293
       relation_id     3
@@ -602,6 +656,7 @@ FactoryGirl.define do
       is_name_id      90
     end
     trait :profile_key_w_sims_71 do
+      user_id         2
       profile_id      68
       name_id         343
       relation_id     8
@@ -609,6 +664,7 @@ FactoryGirl.define do
       is_name_id      293
     end
     trait :profile_key_w_sims_72 do
+      user_id         2
       profile_id      69
       name_id         293
       relation_id     7
@@ -620,7 +676,7 @@ FactoryGirl.define do
     # 436;8;69;293;7;68;343;"2015-02-18 11:57:31.746264";"2015-02-18 11:59:36.24496";293;343
 
     trait :profile_key_w_sims_73 do
-     #user_id         2
+      user_id         2
       profile_id      66
       name_id         370
       relation_id     101
@@ -628,6 +684,7 @@ FactoryGirl.define do
       is_name_id      293
     end
     trait :profile_key_w_sims_74 do
+      user_id         2
       profile_id      69
       name_id         293
       relation_id     111
@@ -635,6 +692,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_75 do
+      user_id         2
       profile_id      63
       name_id         40
       relation_id     101
@@ -646,7 +704,7 @@ FactoryGirl.define do
     # 439;8;63;40;101;69;293;"2015-02-18 11:57:31.83225";"2015-02-18 11:59:35.697173";40;293
 
     trait :profile_key_w_sims_76 do
-    # user_id         2
+      user_id         2
       profile_id      69
       name_id         293
       relation_id     111
@@ -654,6 +712,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_77 do
+      user_id         2
       profile_id      65
       name_id         345
       relation_id     14
@@ -661,6 +720,7 @@ FactoryGirl.define do
       is_name_id      293
     end
     trait :profile_key_w_sims_78 do
+      user_id         2
       profile_id      69
       name_id         293
       relation_id     17
@@ -680,6 +740,7 @@ FactoryGirl.define do
       is_name_id      173
     end
     trait :profile_key_w_sims_80 do
+      user_id         1
       profile_id      78
       name_id         173
       relation_id     6
@@ -687,6 +748,7 @@ FactoryGirl.define do
       is_name_id      354
     end
     trait :profile_key_w_sims_81 do
+      user_id         1
       profile_id      70
       name_id         354
       relation_id     1
@@ -698,6 +760,7 @@ FactoryGirl.define do
     # 445;7;70;354;1;79;351;"2015-02-18 12:53:34.040206";"2015-02-21 11:23:57.934518";354;351
 
     trait :profile_key_w_sims_82 do
+      user_id         1
       profile_id      79
       name_id         351
       relation_id     4
@@ -705,6 +768,7 @@ FactoryGirl.define do
       is_name_id      354
     end
     trait :profile_key_w_sims_83 do
+      user_id         1
       profile_id      78
       name_id         173
       relation_id     1
@@ -712,6 +776,7 @@ FactoryGirl.define do
       is_name_id      351
     end
     trait :profile_key_w_sims_84 do
+      user_id         1
       profile_id      79
       name_id         351
       relation_id     4
@@ -723,6 +788,7 @@ FactoryGirl.define do
     # 448;7;79;351;4;78;173;"2015-02-18 12:53:34.124876";"2015-02-21 11:23:58.093571";351;173
 
     trait :profile_key_w_sims_85 do
+      user_id         1
       profile_id      66
       name_id         370
       relation_id     15
@@ -730,6 +796,7 @@ FactoryGirl.define do
       is_name_id      351
     end
     trait :profile_key_w_sims_86 do
+      user_id         1
       profile_id      79
       name_id         351
       relation_id     18
@@ -737,6 +804,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_87 do
+      user_id         1
       profile_id      79
       name_id         351
       relation_id     8
@@ -748,6 +816,7 @@ FactoryGirl.define do
     # 451;7;79;351;8;80;187;"2015-02-18 12:56:08.904901";"2015-02-21 11:23:57.965341";351;187
 
     trait :profile_key_w_sims_88 do
+      user_id         1
       profile_id      80
       name_id         187
       relation_id     7
@@ -755,6 +824,7 @@ FactoryGirl.define do
       is_name_id      351
     end
     trait :profile_key_w_sims_89 do
+      user_id         1
       profile_id      70
       name_id         354
       relation_id     2
@@ -762,6 +832,7 @@ FactoryGirl.define do
       is_name_id      187
     end
     trait :profile_key_w_sims_90 do
+      user_id         1
       profile_id      80
       name_id         187
       relation_id     4
@@ -773,6 +844,7 @@ FactoryGirl.define do
     # 454;7;80;187;4;70;354;"2015-02-18 12:56:08.974606";"2015-02-21 11:23:57.797229";187;354
 
     trait :profile_key_w_sims_91 do
+      user_id         1
       profile_id      78
       name_id         173
       relation_id     2
@@ -780,6 +852,7 @@ FactoryGirl.define do
       is_name_id      187
     end
     trait :profile_key_w_sims_92 do
+      user_id         1
       profile_id      80
       name_id         187
       relation_id     4
@@ -787,6 +860,7 @@ FactoryGirl.define do
       is_name_id      173
     end
     trait :profile_key_w_sims_93 do
+      user_id         1
       profile_id      67
       name_id         173
       relation_id     6
@@ -798,6 +872,7 @@ FactoryGirl.define do
     # 457;7;67;173;6;81;354;"2015-02-18 12:57:04.688556";"2015-02-18 12:57:04.688556";173;354
 
     trait :profile_key_w_sims_94 do
+      user_id         1
       profile_id      81
       name_id         354
       relation_id     6
@@ -805,6 +880,7 @@ FactoryGirl.define do
       is_name_id      173
     end
     trait :profile_key_w_sims_95 do
+      user_id         1
       profile_id      67
       name_id         173
       relation_id     1
@@ -812,6 +888,7 @@ FactoryGirl.define do
       is_name_id      351
     end
     trait :profile_key_w_sims_96 do
+      user_id         1
       profile_id      82
       name_id         351
       relation_id     4
@@ -823,6 +900,7 @@ FactoryGirl.define do
     # 460;7;82;351;4;67;173;"2015-02-18 12:58:04.990838";"2015-02-18 12:58:04.990838";351;173
 
     trait :profile_key_w_sims_97 do
+      user_id         1
       profile_id      81
       name_id         354
       relation_id     1
@@ -830,6 +908,7 @@ FactoryGirl.define do
       is_name_id      351
     end
     trait :profile_key_w_sims_98 do
+      user_id         1
       profile_id      82
       name_id         351
       relation_id     4
@@ -837,6 +916,7 @@ FactoryGirl.define do
       is_name_id      354
     end
     trait :profile_key_w_sims_99 do
+      user_id         1
       profile_id      63
       name_id         40
       relation_id     15
@@ -848,6 +928,7 @@ FactoryGirl.define do
     # 463;7;63;40;15;82;351;"2015-02-18 12:58:05.054748";"2015-02-18 12:58:05.054748";40;351
 
     trait :profile_key_w_sims_100 do
+      user_id         1
       profile_id      82
       name_id         351
       relation_id     18
@@ -855,6 +936,7 @@ FactoryGirl.define do
       is_name_id      40
     end
     trait :profile_key_w_sims_101 do
+      user_id         1
       profile_id      81
       name_id         354
       relation_id     2
@@ -862,6 +944,7 @@ FactoryGirl.define do
       is_name_id      187
     end
     trait :profile_key_w_sims_102 do
+      user_id         1
       profile_id      83
       name_id         187
       relation_id     4
@@ -873,6 +956,7 @@ FactoryGirl.define do
     # 466;7;83;187;4;81;354;"2015-02-18 13:02:25.427422";"2015-02-18 13:02:25.427422";187;354
 
     trait :profile_key_w_sims_103 do
+      user_id         1
       profile_id      82
       name_id         351
       relation_id     8
@@ -880,6 +964,7 @@ FactoryGirl.define do
       is_name_id      187
     end
     trait :profile_key_w_sims_104 do
+      user_id         1
       profile_id      83
       name_id         187
       relation_id     7
@@ -887,6 +972,7 @@ FactoryGirl.define do
       is_name_id      351
     end
     trait :profile_key_w_sims_105 do
+      user_id         1
       profile_id      67
       name_id         173
       relation_id     2
@@ -898,6 +984,7 @@ FactoryGirl.define do
     # 469;7;67;173;2;83;187;"2015-02-18 13:02:25.498877";"2015-02-18 13:02:25.498877";173;187
 
     trait :profile_key_w_sims_106 do
+      user_id         1
       profile_id      83
       name_id         187
       relation_id     4
@@ -905,6 +992,7 @@ FactoryGirl.define do
       is_name_id      173
     end
     trait :profile_key_w_sims_107 do
+      user_id         1
       profile_id      81
       name_id         354
       relation_id     7
@@ -912,6 +1000,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_108 do
+      user_id         1
       profile_id      84
       name_id         370
       relation_id     8
@@ -923,6 +1012,7 @@ FactoryGirl.define do
     # 472;7;84;370;8;81;354;"2015-02-18 13:05:00.047736";"2015-02-18 13:05:00.047736";370;354
 
     trait :profile_key_w_sims_109 do
+      user_id         1
       profile_id      82
       name_id         351
       relation_id     18
@@ -930,6 +1020,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_110 do
+      user_id         1
       profile_id      84
       name_id         370
       relation_id     15
@@ -937,6 +1028,7 @@ FactoryGirl.define do
       is_name_id      351
     end
     trait :profile_key_w_sims_111 do
+      user_id         1
       profile_id      83
       name_id         187
       relation_id     18
@@ -944,6 +1036,7 @@ FactoryGirl.define do
       is_name_id      370
     end
     trait :profile_key_w_sims_112 do
+      user_id         1
       profile_id      84
       name_id         370
       relation_id     16

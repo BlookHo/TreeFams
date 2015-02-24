@@ -52,6 +52,14 @@ describe SimilarsController, :type => :controller , similars: true do
       FactoryGirl.create(:tree, :tree1_with_sims_18)        #
       FactoryGirl.create(:tree, :tree1_with_sims_19)        #
       FactoryGirl.create(:tree, :tree1_with_sims_20)        #
+      puts "before All: Tree.find(1).user_id = #{Tree.find(1).user_id.inspect} \n"  # id = 64
+      puts "before All: Tree.find(2).name_id = #{Tree.find(2).name_id.inspect} \n"  # id = 64
+      puts "before All: Tree.find(3).user_id = #{Tree.find(3).user_id.inspect} \n"  # id = 64
+      puts "before All: Tree.find(20).user_id = #{Tree.find(20).user_id.inspect} \n"  # id = 64
+      puts "before All: Tree.find(1).profile_id = #{Tree.find(1).profile_id.inspect} \n"  # id = 64
+      puts "before All: Tree.find(2).profile_id = #{Tree.find(2).profile_id.inspect} \n"  # id = 64
+      puts "before All: Tree.find(3).profile_id = #{Tree.find(3).profile_id.inspect} \n"  # id = 64
+      puts "before All: Tree.find(20).profile_id = #{Tree.find(20).profile_id.inspect} \n"  # id = 64
       puts "before All: Tree.last.is_profile_id = #{Tree.last.is_profile_id} \n"  # is_profile_id = 84
       puts "before All: Tree.count = #{Tree.all.count} \n" # 20
 
@@ -71,6 +79,10 @@ describe SimilarsController, :type => :controller , similars: true do
       FactoryGirl.create(:profile, :profile_82)        #
       FactoryGirl.create(:profile, :profile_83)        #
       FactoryGirl.create(:profile, :profile_84)        #
+      puts "before All: Profile.find(66).name_id = #{Profile.find(66).name_id.inspect} \n"  # id = 64
+      puts "before All: Profile.find(67).name_id = #{Profile.find(67).name_id.inspect} \n"  # id = 64
+      puts "before All: Profile.find(66).user_id = #{Profile.find(66).user_id.inspect} \n"  # id = 64
+      puts "before All: Profile.find(67).user_id = #{Profile.find(67).user_id.inspect} \n"  # id = 64
       puts "before All: Profile.last.id = #{Profile.last.id} \n"  # id = 64
       puts "before All: Profile.last.name_id = #{Profile.last.name_id} \n"  # name_id = 90
       puts "before All: Profile.count = #{Profile.all.count} \n" # 2
@@ -188,9 +200,20 @@ describe SimilarsController, :type => :controller , similars: true do
       FactoryGirl.create(:profile_key, :profile_key_w_sims_110)        #
       FactoryGirl.create(:profile_key, :profile_key_w_sims_111)        #
       FactoryGirl.create(:profile_key, :profile_key_w_sims_112)        #
+      puts "before All: ProfileKey.find(79).user_id = #{ProfileKey.find(78).user_id} \n"  # id = 64
+      puts "before All: ProfileKey.find(80).user_id = #{ProfileKey.find(79).user_id} \n"  # id = 64
       puts "before All: ProfileKey.last.id = #{ProfileKey.last.id} \n"  # id = 64
+      puts "before All: ProfileKey.last.user_id = #{ProfileKey.last.user_id} \n"  # user_id = 1
       puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
       puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
+
+      #Weafam_Settings
+      FactoryGirl.create(:weafam_setting)        #
+      puts "before All: WeafamSetting.first.certain_koeff = #{WeafamSetting.first.certain_koeff} \n"  # id = 64
+
+      #Name
+      FactoryGirl.create(:name)        # 173 - Елена, 354 - Ольга, 351 - Олег, 370 - Петр
+      puts "before All: Name.first.certain_koeff = #{Name.first.certain_koeff} \n"  # id = 64
 
     }
 
@@ -261,7 +284,7 @@ describe SimilarsController, :type => :controller , similars: true do
       it '- currentuser_id - Ok' do
         get :internal_similars_search
         first_row = SimilarsFound.first #find_stored_similars(sims_profiles_pairs, current_user_id)
-        expect(assigns(:similars)).to eq({})
+        expect(assigns(:similars)).to eq({})  # []
         # expect(first_row.user_id).to eq(currentuser_id)
         puts "In check row stored :  first_row = #{first_row.inspect} \n"
       end

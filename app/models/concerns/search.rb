@@ -143,7 +143,11 @@ module Search
   def get_found_profiles(profiles_hash, relation_row, connected_users, profile_id_searched)
     logger.info "=== IN get_found_profiles "
     found_profiles_hash = Hash.new  #
-    relation_match_arr = ProfileKey.where.not(user_id: connected_users).where(:name_id => relation_row.name_id, :relation_id => relation_row.relation_id, :is_name_id => relation_row.is_name_id).order('user_id','relation_id','is_name_id').select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+    relation_match_arr = ProfileKey.where.not(user_id: connected_users)
+                             .where(:name_id => relation_row.name_id, :relation_id => relation_row.relation_id, :is_name_id => relation_row.is_name_id)
+                             .order('user_id','relation_id','is_name_id')
+                             .select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
+                             .distinct
     if !relation_match_arr.blank?
       show_in_logger(relation_match_arr, "=== результат" )  # DEBUGG_TO_LOGG
       relation_match_arr.each do |tree_row|
