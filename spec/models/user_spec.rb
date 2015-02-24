@@ -1,6 +1,9 @@
 describe User do
 
 
+
+
+
   describe '- validation' do
     before do
       @user = User.new( email: "new@nn.nn", password: '1111', profile_id:  1)

@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  factory :user do                    # 5 tree
+  factory :user do          # For 2 connected trees test - 1st. Tree = 1
     admin false
-    profile_id 77
+    profile_id 63
     email "petr_andr@pe.pe"
     password 'qwertyuiop'
 
@@ -9,9 +9,10 @@ FactoryGirl.define do
       email "petr_and"
     end
 
-    trait :user_2 do
-      profile_id 222
-      email "mail_2@pe.pe"
+    trait :user_2 do        # For 2 connected trees test - 2nd. Tree = 2
+      profile_id 66
+      email "andrey@an.an"
+      password '11111'
     end
 
     trait :user_3 do
@@ -28,19 +29,19 @@ FactoryGirl.define do
 
   end
 
-  factory :other_user, class: User do # 4 tree
+  factory :other_user, class: User do #
     profile_id 31
-    email "andrey@an.an"
+    email "mail_2@pe.pe"
     password '1111'
   end
 
-  factory :third_user, class: User do # 8 tree
+  factory :third_user, class: User do #
     profile_id 44
     email "olga@ol.ol"
     password '1111'
   end
 
-  factory :four_user, class: User do # 10 tree
+  factory :four_user, class: User do #
     profile_id 55
     email "boris@bo.bo"
     password '1111'
