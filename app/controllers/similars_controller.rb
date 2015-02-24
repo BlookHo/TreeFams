@@ -47,6 +47,7 @@ class SimilarsController < ApplicationController
 
     # for RSpec
      @tree_info = tree_info
+    @similars = similars
 
     puts "In action internal_similars_search - @log_connection_id = #{@log_connection_id} \n"
 

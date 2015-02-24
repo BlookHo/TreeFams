@@ -1,4 +1,5 @@
 FactoryGirl.define do
+
   factory :profile_one, class: Profile do
     user_id nil
     name_id 354 # Ольга
