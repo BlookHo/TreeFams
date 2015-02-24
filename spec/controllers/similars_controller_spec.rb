@@ -132,7 +132,7 @@ describe SimilarsController, :type => :controller , similars: true do
     context '- Check SimilarsFound count rows' do
       let(:sims_count) { SimilarsFound.all.count }
       it '- stored 2 rows - Ok' do
-        expect(sims_count).to eq(2)
+        expect(sims_count).to eq(0)
       end
     end
 
