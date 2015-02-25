@@ -10,13 +10,18 @@ module SimilarsConnection
     connected_users_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
     connection_data[:connected_users_arr] = connected_users_arr
 
+    # tree_info = get_tree_info(self)
+    # logger.info "CCCCC In similars_connect_tree : tree_info[:tree_is_profiles] = #{tree_info[:tree_is_profiles]}, @tree_info[:connected_users] = #{tree_info[:connected_users]}"#", tree_info = #{tree_info},  "
+
+
+
     # todo: Сделать логирование перезаписи Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
     # Перезапись profile_data при объединении профилей
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
 
     #########  перезапись profile_id's & update User
-    log_connection_user_profile = Profile.profiles_merge(connection_data)
-    # log_connection_user_profile = []
+     log_connection_user_profile = Profile.profiles_merge(connection_data)
+  #  log_connection_user_profile = []
     # todo:Раскоммитить 2 строки ниже и закоммитить 2 строки за ними  - для полной перезаписи логов и отладки
     #########  перезапись profile_id's в Tree и ProfileKey
     log_connection_tree       = update_table(connection_data, Tree)
@@ -28,7 +33,7 @@ module SimilarsConnection
     complete_log_arr = common_log[:log_user_profile] + common_log[:log_tree] + common_log[:log_profilekey]
 
     # Запись массива лога в таблицу SimilarsLog под номером log_id
-    store_log(complete_log_arr) unless complete_log_arr.blank?
+    SimilarsLog.store_log(complete_log_arr) unless complete_log_arr.blank?
 
     data_to_clear = { profiles_to_rewrite: connection_data[:profiles_to_rewrite],
                       profiles_to_destroy: connection_data[:profiles_to_destroy],
@@ -36,9 +41,49 @@ module SimilarsConnection
 
     ### Удаление сохраненных ранее найденных пар похожих
     SimilarsFound.clear_similars_found(data_to_clear)
+    logger.info "# CONN ##*** In module SimilarsConnection common_log: #{common_log.inspect} "
 
     common_log
   end
+  # {:log_user_profile=>[],
+  #  :log_tree=>[#<SimilarsLog id: 3972, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 40, field: "profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+       # #<SimilarsLog id: 3973, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 47, field: "profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+       # #<SimilarsLog id: 3974, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 38, field: "profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+       # #<SimilarsLog id: 3975, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 37, field: "profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+       # #<SimilarsLog id: 3976, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 38, field: "is_profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+       # #<SimilarsLog id: 3977, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 37, field: "is_profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+       # #<SimilarsLog id: 3978, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 40, field: "is_profile_id", written: 43, overwritten: 44, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+       # #<SimilarsLog id: 3979, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 31, field: "is_profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+       # #<SimilarsLog id: 3980, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 47, field: "is_profile_id", written: 34, overwritten: 52, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">
+       # ],
+       # :log_profilekey=>[#<SimilarsLog id: 3981, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 246, field: "profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3982, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 253, field: "profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3983, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 244, field: "profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3984, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 295, field: "profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3985, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 245, field: "profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3986, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 242, field: "profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3987, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 240, field: "profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3988, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 297, field: "profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3989, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 255, field: "profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3990, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 256, field: "profile_id", written: 43, overwritten: 44, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3991, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 258, field: "profile_id", written: 43, overwritten: 44, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3992, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 299, field: "profile_id", written: 43, overwritten: 44, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3993, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 254, field: "profile_id", written: 43, overwritten: 44, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3994, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 204, field: "profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3995, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 243, field: "profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3996, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 206, field: "profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3997, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 202, field: "profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3998, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 239, field: "profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 3999, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 257, field: "profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 4000, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 296, field: "profile_id", written: 34, overwritten: 52, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 4001, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 300, field: "profile_id", written: 34, overwritten: 52, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 4002, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 298, field: "profile_id", written: 34, overwritten: 52, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+           # #<SimilarsLog id: 4003, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 243, field: "is_profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+   # #<SimilarsLog id: 4004, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 245, field: "is_profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+   # #<SimilarsLog id: 4005, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 296, field: "is_profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
+   # #<SimilarsLog id: 4006, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 254, field: "is_profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4007, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 239, field: "is_profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4008, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 246, field: "is_profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4009, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 241, field: "is_profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4010, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 256, field: "is_profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4011, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 298, field: "is_profile_id", written: 40, overwritten: 41, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4012, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 300, field: "is_profile_id", written: 43, overwritten: 44, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4013, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 253, field: "is_profile_id", written: 43, overwritten: 44, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4014, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 255, field: "is_profile_id", written: 43, overwritten: 44, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4015, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 257, field: "is_profile_id", written: 43, overwritten: 44, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4016, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 203, field: "is_profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4017, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 205, field: "is_profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4018, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 201, field: "is_profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4019, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 258, field: "is_profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4020, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 240, field: "is_profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">, #<SimilarsLog id: 4021, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 244, field: "is_profile_id", written: 39, overwritten: 35, created_at: "2015-02-12 10:55:32", updated_at: "2015-02-12 10:55:32">, #<SimilarsLog id: 4022, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 299, field: "is_profile_id", written: 34, overwritten: 52, created_at: "2015-02-12 10:55:32", updated_at: "2015-02-12 10:55:32">, #<SimilarsLog id: 4023, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 297, field: "is_profile_id", written: 34, overwritten: 52, created_at: "2015-02-12 10:55:32", updated_at: "2015-02-12 10:55:32">, #<SimilarsLog id: 4024, connected_at: 5, current_user_id: 5, table_name: "profile_keys", table_row: 295, field: "is_profile_id", written: 34, overwritten: 52, created_at: "2015-02-12 10:55:32", updated_at: "2015-02-12 10:55:32">]
+   #         }
+
 
 
   # перезапись значений в полях одной таблицы
@@ -53,7 +98,7 @@ module SimilarsConnection
     # logger.info "*** In module SimilarsConnection update_table: table = #{table.inspect} "
 
     connection_data[:table_name] = table.table_name
-    ["profile_id", "is_profile_id"].each do |table_field|
+    ['profile_id', 'is_profile_id'].each do |table_field|
       table_update_data = { table: table, table_field: table_field}
       log_connection = update_field(connection_data, table_update_data , log_connection)
     end
@@ -82,9 +127,7 @@ module SimilarsConnection
         rows_to_update.each do |rewrite_row|
 
           # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-  #       rewrite_row.update_column(:"#{table_field}", profiles_to_rewrite[arr_ind] )
           rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
-
           one_connection_data = { connected_at: connection_id,              # int
                                   current_user_id: current_user_id,        # int
                                   table_name: table_name,                  # string
@@ -103,15 +146,6 @@ module SimilarsConnection
     log_connection
 
   end
-
-
-  # Сохранение массива логов в таблицу SimilarsLog
-  #
-  def store_log(common_log)
-    logger.info "*** In module SimilarsConnection store_log "
-    common_log.each(&:save)
-  end
-
 
 
 

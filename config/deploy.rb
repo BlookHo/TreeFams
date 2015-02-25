@@ -1,3 +1,7 @@
+set :rails_root, "#{File.dirname(__FILE__)}/.."
+# require "#{rails_root}/vendor/plugins/thinking-sphinx/lib/
+# thinking_sphinx/deploy/capistrano"
+
 require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
 

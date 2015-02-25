@@ -11,7 +11,7 @@ module SimilarsInitSearch
     def similars_init_search(tree_info)
       unless tree_info.empty?  # Исходные данные
         tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
-        logger.info "In similars_init_search 1: tree_circles = #{tree_circles}" unless tree_circles.empty?
+        logger.info "In similars_init_search 11111: tree_circles = #{tree_circles}" unless tree_circles.empty?
         compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
         # compare_tree_circles returns similars
       end
@@ -31,7 +31,9 @@ module SimilarsInitSearch
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # Получаем один круг для одного профиля в дереве
     def get_profile_circle(profile_id, connected_users_arr)
-      profile_circle = ProfileKey.where(:user_id => connected_users_arr, :profile_id => profile_id).order('relation_id','is_name_id').select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
+      profile_circle = ProfileKey.where(:user_id => connected_users_arr, :profile_id => profile_id)
+                           .order('relation_id','is_name_id')
+                           .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
       #logger.info "In get_profile_circle1: profile_circle.size = #{profile_circle.size}" if !profile_circle.blank?
       circle_profiles_arr = make_arrays_from_circle(profile_circle)  # Ok
       #logger.info "In get_profile_circle2: circle_profiles_arr = #{circle_profiles_arr}" if !circle_profiles_arr.blank?

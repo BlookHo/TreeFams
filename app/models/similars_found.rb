@@ -4,10 +4,10 @@ class SimilarsFound < ActiveRecord::Base
   validates_presence_of :user_id, :first_profile_id, :second_profile_id, :message => "Должно присутствовать в SimilarsFound"
   validates_numericality_of :user_id, :first_profile_id, :second_profile_id, :only_integer => true, :message => "ID автора сообщения или получателя сообщения должны быть целым числом в SimilarsFound"
   validates_numericality_of :user_id, :first_profile_id, :second_profile_id, :greater_than => 0, :message => "ID автора сообщения или получателя сообщения должны быть больше 0 в SimilarsFound"
-  validate :two_fields_are_not_equal  # :first_profile_id  AND :second_profile_id
+  validate :sim_found_fields_are_not_equal  # :first_profile_id  AND :second_profile_id
 
   # custom validation
-  def two_fields_are_not_equal
+  def sim_found_fields_are_not_equal
     self.errors.add(:similars_founds, 'Профили в одном ряду не должны быть равны в SimilarsFound.') if self.first_profile_id == self.second_profile_id
   end
 

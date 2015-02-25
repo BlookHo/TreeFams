@@ -32,7 +32,6 @@
 
 //= require connection
 
-
 //= require admin/bootstrap.min.js
 //= require admin/bootstrap-select.js
 

@@ -1,7 +1,14 @@
 source 'https://rubygems.org'
-# ruby '2.2.0'
 
 gem 'rails', '4.1.4'
+
+gem 'activerecord-jdbcsqlite3-adapter', platforms: [:jruby]
+gem 'activerecord-import'
+gem 'coveralls', require: false
+platforms :rbx do
+  gem 'rubysl', '~> 2.0'
+  gem 'rubinius-developer_tools'
+end
 
 # on mac os x fail:
 # gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/9.3/bin/pg_config
@@ -70,8 +77,6 @@ group :development do
   gem "better_errors"
   gem "binding_of_caller"
 
-  # Находит косяки в запросах к базе
-  gem "bullet"
 
   gem 'brakeman', :require => false
   gem 'flog'
@@ -86,12 +91,13 @@ group :development do
   gem 'guard-rspec', require: false
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
+  # gem 'spring'
   gem 'spring-commands-rspec'
 
 end
 
 gem 'activerecord-reset-pk-sequence'
+
 
 group :development, :test do
   # Test framework
@@ -131,6 +137,7 @@ gem 'quiet_assets', :group => :development
 # Use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.1.2'
 
+
 gem 'capistrano',     '2.15.5', group: :development, require: false
 gem 'rvm-capistrano', '1.5.1', group: :development, require: false
 
@@ -158,4 +165,12 @@ gem "omniauth-google-oauth2"
 gem "omniauth-vkontakte"
 gem 'vkontakte_api'
 
+# Middleware that displays speed badge for every html page. Designed to work both in production and in development.
+gem 'rack-mini-profiler'
+
+# Находит косяки в запросах к базе
+# help to kill N+1 queries and unused eager loading
+gem "bullet", :group => "development"
+
+gem "ruby-growl"
 #gem "squeel" - sql

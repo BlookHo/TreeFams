@@ -16,7 +16,9 @@ module SimilarsStart
     logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info},  "
 
     # Последний id (максимальный) из существующих логов - :connected_at
-    log_connection_id = current_tree_log_id(tree_info[:connected_users])
+    # log_connection_id = current_tree_log_id(tree_info[:connected_users])
+    log_connection_id = SimilarsLog.current_tree_log_id(tree_info[:connected_users])
+    logger.info "SSSSSS In similars_contrler:  log_connection_id = #{log_connection_id} " # if !tree_info.blank?
 
     ###### Запуск User метода определения первых пар Похожих ##################
     similars = User.similars_init_search(tree_info)
@@ -43,10 +45,8 @@ module SimilarsStart
     log_connection_id = check_similars_data[:log_connection_id]
 
     sims_profiles_pairs = collect_sims_profiles_pairs(similars)
-    # logger.info " In SimilarsStart After check_new_similars: sims_profiles_pairs = #{sims_profiles_pairs} "
     # sims_profiles_pairs = [[38, 42], [41, 40]]
     new_similars = SimilarsFound.find_stored_similars(sims_profiles_pairs, current_user_id) #55 ) #self.id)
-    # logger.info "NNNNN In SimilarsStart 3a: new_similars = #{new_similars} "
     # Проверка найденных П. Если такие пары П - все СТАРЫЕ - уже есть среди сохраненных, new_similars.blank
     # то данный тест пройден - Без П.
     #  Тогда ничего не отображаем в кач-ве рез-та теста П -
@@ -57,7 +57,6 @@ module SimilarsStart
       # показать в render :template => 'similars/show_similars_data' и разобраться Да\Нет
       # Если Да - объединяем П, удаляем сохраненные ранее пары П из табл. Найденных
       # Если Нет - /home
-      # logger.info "In SimilarsStart 3b: new_similars == []?: #{new_similars == []} "
       ####################### Сохранение найденных пар похожих
       SimilarsFound.store_similars(sims_profiles_pairs, current_user_id)
       #############################################################################
@@ -74,17 +73,6 @@ module SimilarsStart
       sims_profiles_pairs <<  one_sims_profiles_pair
     end
     sims_profiles_pairs
-  end
-
-
-  # Для текущего дерева - получение номера id лога для прогона разъединения Похожих,
-  # ранее объединенных.
-  # Последний id (максимальный) из существующих логов - :connected_at
-  def current_tree_log_id(connected_users)
-    # Сбор всех id логов, относящихся к текущему дереву
-    current_tree_logs_ids = SimilarsLog.where(current_user_id: connected_users).pluck(:connected_at).uniq
-    # logger.info "In SimilarsStart 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
-    current_tree_logs_ids.max
   end
 
 

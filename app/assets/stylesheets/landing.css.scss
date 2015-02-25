@@ -1,0 +1,73 @@
+/*
+ *= require reset
+*/
+
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&subset=latin,cyrillic-ext);
+
+html {
+  background: image-url("weAllearth.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='.weAllearth.jpg', sizingMethod='scale');
+  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='weAllearth.jpg', sizingMethod='scale')";
+}
+
+
+body{
+  font-family: 'Ubuntu', sans-serif;
+  margin-right:10%;
+}
+
+
+h1{
+  font-size:70px;
+  font-weight:700;
+  color:#fff;
+  opacity:.9;
+  margin-bottom:24px;
+  letter-spacing: -2px;
+}
+
+h2{
+  font-size:28px;
+  font-weigth:300px;
+  color:#fff;
+  margin-bottom:48px;
+  letter-spacing: -1px;
+}
+
+.container{
+  margin-left:20%;
+  margin-top:10%;
+}
+
+a{
+  font-size:16px;
+  display:inline-block;
+  float:left;
+  color:#fff;
+  cursor:pointer;
+
+  &:hover{text-decoration:none;}
+}
+
+.btn{
+  padding-left:40px;
+  padding-right:40px;
+  height:56px;
+  line-height:52px;
+  border:2px solid #fff;
+}
+
+.sbtn{
+  border-radius:28px;
+  text-decoration:none;
+  background-color:rgba(0,0,0,.4);
+  &:hover{
+    box-shadow:0 0 12px #b411f5;
+  }
+}
+
+.lbtn{border:none;margin-left:40px;}

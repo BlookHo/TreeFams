@@ -556,6 +556,7 @@ getCircles = function(params){
   current_center_profile_id = params.profile_id;
   $.get( "/api/v1/circles", { profile_id: params.profile_id, token: access_token, path_from_profile_id: params.path_from_profile_id, max_distance: max_distance } )
     .done(function( data ) {
+          console.log("Graph: data recieved at:"+ Date.now());
         buildPath(data.path);
         current_circle_author = data.cirlce_author;
         // jsdebug(data);
@@ -563,6 +564,7 @@ getCircles = function(params){
           pushNode(d);
         });
         start();
+          console.log("Graph: after start"+ Date.now());
     });
 };
 

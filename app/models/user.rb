@@ -46,41 +46,32 @@ class User < ActiveRecord::Base
 
   # Получение массива соединенных Юзеров
   # для заданного "стартового" Юзера
-  #
   def get_connected_users
-    #todo:
-    # connected_users_arr = [self.id]
-    connected_users_arr = []
-    connected_users_arr << self.id
-    #first_users_arr = ConnectedUser.where(user_id: self.id).pluck(:with_user_id)
+    connected_users_arr = [self.id]
     first_users_arr = ConnectedUser.connected_users_ids(self)
     if first_users_arr.blank?
-      first_users_arr = ConnectedUser.where(with_user_id: self.id).pluck(:user_id)
+      first_users_arr = ConnectedUser.connected_with_users_ids(self)
     end
     one_connected_users_arr = first_users_arr
-    #todo: unless вместо if!
-    #todo: вынести в метод
-    if !one_connected_users_arr.blank?
-
-      connected_users_arr << one_connected_users_arr
-      connected_users_arr.flatten!.uniq! unless connected_users_arr.blank?
-
+    unless one_connected_users_arr.blank?
+      connected_users_arr = get_growing_arr(connected_users_arr, one_connected_users_arr)
       one_connected_users_arr.each do |conn_arr_el|
         next_connected_users_arr = ConnectedUser.where("(user_id = #{conn_arr_el} or with_user_id = #{conn_arr_el})").pluck(:user_id, :with_user_id)
         unless next_connected_users_arr.blank?
-
-          one_connected_users_arr << next_connected_users_arr
-          one_connected_users_arr.flatten!.uniq! if !one_connected_users_arr.blank?
-
-          connected_users_arr << next_connected_users_arr
-          connected_users_arr.flatten!.uniq! if !connected_users_arr.blank?
-
+          one_connected_users_arr = get_growing_arr(one_connected_users_arr, next_connected_users_arr)
+          connected_users_arr = get_growing_arr(connected_users_arr, next_connected_users_arr)
         end
       end
     end
-    connected_users_arr
+    connected_users_arr.sort
   end
 
+  # Наращивает массив и упорядочивает его
+  def get_growing_arr(growing_arr, one_next_arr)
+    growing_arr << one_next_arr
+    growing_arr.flatten!.uniq! unless growing_arr.blank?
+    growing_arr
+  end
 
 
   def generate_access_token
@@ -125,7 +116,6 @@ class User < ActiveRecord::Base
   # Оставляет похожие профили без объединения
   # помечаем их как непохожие на будущее
   def without_connecting_similars
-
     msg_connection = "without_connecting_similars"
     logger.info "*** In User.without_connecting_similars: #{msg_connection} "
   end
@@ -147,12 +137,6 @@ class User < ActiveRecord::Base
   def self.generate_password
     '1111'
   end
-
-
-
-
-
-
 
 
 

@@ -1,15 +1,19 @@
 describe User do
 
-  before(:all) do
-    @user = User.new( email: "new@nn.nn", password: '1111', profile_id:  1)
-    @user.save
-    @user_profile = @user.profile_id
 
-    @profile = Profile.new( user_id: @user_profile, profile_name: 45, relation_id: 2, display_name_id:  45)
-    @profile.save
-  end
+
+
 
   describe '- validation' do
+    before do
+      @user = User.new( email: "new@nn.nn", password: '1111', profile_id:  1)
+      @user.save
+      @user_profile = @user.profile_id
+
+      @profile = Profile.new( user_id: @user_profile, profile_name: 45, relation_id: 2, display_name_id:  45)
+      @profile.save
+    end
+
     describe '- on create' do
       context '- when valid user' do
         let(:user) {FactoryGirl.build(:user)}
@@ -29,7 +33,88 @@ describe User do
       end
     end
 
+    after do
+      User.delete_all
+      User.reset_pk_sequence
+    end
+
   end
+
+  describe '- Check methods in User model' do
+    describe '- Check method get_connected_users' do
+
+      before do
+        ConnectedUser.delete_all
+        ConnectedUser.reset_pk_sequence
+        FactoryGirl.create(:connected_user, )
+        FactoryGirl.create(:connected_user, :connected_user_2)
+        FactoryGirl.create(:connected_user, :connected_user_3)
+        FactoryGirl.create(:connected_user, :connected_user_4)
+        FactoryGirl.create(:connected_user, :connected_user_5)
+        FactoryGirl.create(:connected_user, :connected_user_6)
+        # puts "before 6. connected_user = #{ConnectedUser.find(6).user_id} \n"
+
+      end
+      let(:current_user) { create(:user) }
+      let(:current_user_id) { current_user.id }
+      let(:connected_users) { current_user.get_connected_users }
+
+      context '- 1. after action: Check proper result of proper data type ' do
+        it "- First Return proper Array Sorted result for current_user_id = 1" do
+          expect(connected_users).to be_a_kind_of(Array)
+          expect(connected_users).to eq([1,2])
+        end
+      end
+
+      context '- 2. after action: Check proper result of proper data type ' do
+        it "- Second Return proper Array Sorted result for current_user_id = 2" do
+          expect(connected_users).to be_a_kind_of(Array)
+          expect(connected_users).to eq([1,2])
+        end
+      end
+
+      context '- 3. after action: Check proper result of proper data type ' do
+        it "- Third Return proper Array Sorted result for current_user_id = 3" do
+          expect(connected_users).to be_a_kind_of(Array)
+          expect(connected_users).to eq([3,5,44,55])
+        end
+      end
+
+      context '- 4. after action: Check proper result of proper data type ' do
+        it "- Fourth Return proper Array Sorted result for current_user_id = 4" do
+          expect(connected_users).to be_a_kind_of(Array)
+          expect(connected_users).to eq([4,66])
+        end
+      end
+
+      context '- 5. after action: Check proper result of proper data type ' do
+        it "- Fifth Return UNproper Type result for current_user_id = 5" do
+          expect(connected_users).to_not be_a_kind_of(Hash)
+          expect(connected_users).to_not eq([1,5])
+        end
+      end
+
+      context '- 6. after action: Check proper result of proper data type ' do
+        it "- Sixth Return UNproper Array result for current_user_id = 6" do
+          expect(connected_users).to be_a_kind_of(Array)
+          expect(connected_users).to_not eq([1])
+        end
+      end
+
+      context '- 7. after action: Check proper result of proper data type ' do
+        it "- Seventh Return proper Array not_[] result for current_user_id = 7" do
+          # puts " 7. After get_connected_users - current_user_id = #{current_user_id} \n"
+          # puts " 7. After get_connected_users - conn_users = #{connected_users} \n"
+          expect(connected_users).to be_a_kind_of(Array)
+          expect(connected_users).to_not eq([])
+        end
+      end
+
+    end
+
+  end
+
+
 
   # describe 'on update' do
   #   context 'valid update profile_id field in user' do

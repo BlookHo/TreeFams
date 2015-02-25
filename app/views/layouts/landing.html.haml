@@ -1,0 +1,9 @@
+!!!
+%html
+  %head
+    %title Мы все &mdash; родня
+    %meta{name: "viewport", content: "initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width" }/
+    = stylesheet_link_tag    "landing", media: "all"
+    = csrf_meta_tags
+  %body
+    = yield
