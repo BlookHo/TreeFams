@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-# ruby '2.1.0'
+# ruby '2.2.0'
 
 gem 'rails', '4.1.4'
 
@@ -96,11 +96,9 @@ gem 'activerecord-reset-pk-sequence'
 group :development, :test do
   # Test framework
   gem 'rspec-rails'
-
   gem 'rspec-support'
   #, "~> 3.0"
   # gem 'rspec-support', '~> 3.2.1'
-
   # For active record imitation in tests
   gem 'factory_girl_rails'
 end
@@ -133,8 +131,8 @@ gem 'quiet_assets', :group => :development
 # Use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.1.2'
 
-gem 'capistrano',     '2.15.5', group: :development
-gem 'rvm-capistrano', '1.5.1', group: :development
+gem 'capistrano',     '2.15.5', group: :development, require: false
+gem 'rvm-capistrano', '1.5.1', group: :development, require: false
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
