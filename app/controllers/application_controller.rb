@@ -14,10 +14,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :logged_id?
 
 
-  before_filter do
-    Member if Rails.env =~ /development/
-  end
-
 
 
   def current_user
