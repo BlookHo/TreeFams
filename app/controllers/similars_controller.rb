@@ -31,40 +31,36 @@ class SimilarsController < ApplicationController
   # sim_data = { log_connection_id: log_connection_id, #
   #              similars: similars  }
   def internal_similars_search
-    puts "In action internal_similars_search - START \n"
+    # puts "In action internal_similars_search - START \n"
     connected_users = current_user.get_connected_users
-    # for RSpec
-      @connected_users = connected_users
 
-    puts "In action internal_similars_search - after get_connected_users:  connected_users = #{connected_users} \n"
-    # logger.info "In SimilarsStart 1:  connected_users = #{connected_users}"
     ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
     SimilarsFound.clear_tree_similars(connected_users)
 
-    tree_info, sim_data, similars = current_user.start_similars
-    @log_connection_id = SimilarsLog.current_tree_log_id(tree_info[:connected_users]) unless tree_info.empty?
+    tree_info, new_sims, similars = current_user.start_similars
+
     # to show similars connected in view
-
     # for RSpec
-     @tree_info = tree_info
+    @tree_info = tree_info
+    @new_sims = new_sims
     @similars = similars
-
-    puts "In action internal_similars_search - @log_connection_id = #{@log_connection_id} \n"
-
-    @current_user_id = current_user.id  # for spec
-
+    @connected_users = connected_users
+    @current_user_id = current_user.id
+    @log_connection_id = SimilarsLog.current_tree_log_id(connected_users) unless connected_users.empty?
+    # puts "In action internal_similars_search : @log_connection_id = #{@log_connection_id},
+    #          tree_info[:connected_users] = #{tree_info[:connected_users]}, connected_users = #{connected_users} \n"
     if similars.empty?   # т.е. нет похожих
       flash.now[:notice] = "Успешное сообщение: В дереве все Ок - 'похожих' профилей нет."
     else  # т.е. есть похожие
-      unless sim_data.empty?  # т.е. есть инфа о похожих
+      unless new_sims=="" #.empty?  # т.е. есть инфа о похожих
         flash.now[:warning] = "Warning from server! Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно..."
         # flash.now[:alert]
         @tree_info = tree_info  # To View
-        view_tree_data(tree_info, sim_data) unless @tree_info.empty?  # to internal_similars_search.html.haml
+        view_tree_similars(tree_info, similars) unless @tree_info.empty?  # to internal_similars_search.html.haml
       end
     end
-    puts "In action internal_similars_search - similars = #{similars} \n"
-    puts "In action internal_similars_search - sim_data = #{sim_data} \n"
+    # puts "In action internal_similars_search - sim_data = #{new_sims} \n"
+    # puts "In action internal_similars_search - similars = #{similars} \n"
 
   end
 
@@ -88,11 +84,6 @@ class SimilarsController < ApplicationController
     #############################################################################
     @profiles_to_rewrite = profiles_to_rewrite # TO_VIEW
     @profiles_to_destroy = profiles_to_destroy # TO_VIEW
-
-    #############################################################################
-    # SimilarsLog.delete_all
-    # SimilarsLog.reset_pk_sequence
-    #############################################################################
 
     last_log_id = SimilarsLog.last.connected_at unless SimilarsLog.all.empty?
     logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"

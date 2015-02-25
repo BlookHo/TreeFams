@@ -148,7 +148,7 @@ RSpec.describe SimilarsLog, :type => :model do
         let(:connected_users) {[current_user_id, other_user_id ]}
         let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
         it '- return proper log_connection_id for [current_user_id, other_user_id ]' do
-          # puts "In current_tree_log_id:  connected_users = #{connected_users} "
+          # puts "In current_tree_log_id:  current_user_id = #{current_user_id} "
           # puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
           expect(log_connection_id).to eq(41)
         end

@@ -67,12 +67,13 @@ class SimilarsLog < ActiveRecord::Base
   # можно разъединять.
   # Последний id (максимальный) из существующих логов - :connected_at
   def self.current_tree_log_id(connected_users)
+    # puts "In Model action current_tree_log_id : connected_users = #{connected_users} \n"
     log_connection_id = []
     # Сбор всех id логов, относящихся к текущему дереву
     current_tree_logs_ids = self.where(current_user_id: connected_users).pluck(:connected_at).uniq
-    logger.info "In internal_similars_search 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " if !current_tree_logs_ids.blank?
+    logger.info "In internal_similars_search 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
     log_connection_id = current_tree_logs_ids.max unless current_tree_logs_ids.blank?
-    logger.info "In internal_similars_search 1b: log_connection_id = #{log_connection_id} " if !log_connection_id.blank?
+    logger.info "In internal_similars_search 1b: log_connection_id = #{log_connection_id} " unless log_connection_id.blank?
     log_connection_id
   end
 
