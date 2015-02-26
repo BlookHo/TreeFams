@@ -1,6 +1,5 @@
 describe SimilarsController, :type => :controller , similars: true do
 
-  describe 'GET #internal_similars_search' do
 
     let(:current_user) { create(:user) }   # User = 1. Tree = 1. profile_id = 63
     let(:currentuser_id) {current_user.id}
@@ -214,7 +213,9 @@ describe SimilarsController, :type => :controller , similars: true do
       # SimilarsFound.reset_pk_sequence
     }
 
-    context '- before action - check connected_users' do
+  describe 'CHECK SimilarsController methods' do
+
+    context '- before actions - check connected_users' do
       let(:connected_users) { current_user.get_connected_users }
       it "- Return proper connected_users Array result for current_user_id = 1" do
         # puts "1 1 In check connected_users :  connected_users = #{connected_users} \n"
@@ -226,104 +227,202 @@ describe SimilarsController, :type => :controller , similars: true do
       end
     end
 
-    context '- after action - check render_template & response status' do
-      subject { get :internal_similars_search
-      # puts "In subject after action - currentuser_id = #{currentuser_id} \n"      # 1
-      # puts "In subject - current_user.profile_id = #{current_user.profile_id} \n" # 63
-      }
-      it "- render_template internal_similars_search" do
-        puts "In render_template :  currentuser_id = #{currentuser_id} \n"
-        expect(subject).to render_template :internal_similars_search
+     describe 'GET #internal_similars_search' do
+
+      context '- after action <internal_similars_search> - check render_template & response status' do
+        subject { get :internal_similars_search
+        # puts "In subject after action - currentuser_id = #{currentuser_id} \n"      # 1
+        # puts "In subject - current_user.profile_id = #{current_user.profile_id} \n" # 63
+        }
+        it "- render_template internal_similars_search" do
+          puts "In render_template :  currentuser_id = #{currentuser_id} \n"
+          expect(subject).to render_template :internal_similars_search
+        end
+        it '- responds with 200' do
+          puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
+          expect(response.status).to eq(200)
+        end
+         it '- no responds with 401' do
+          puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
+          expect(response.status).to_not eq(401)
+        end
       end
-      it 'responds with 200' do
-        puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
-        expect(response.status).to eq(200)
+
+      context '- In action <internal_similars_search> - check instances  ' do
+        it "- got values: log_connection_id, connected_users, current_user_id" do
+          get :internal_similars_search
+          puts "In check instances :  currentuser_id = #{currentuser_id} \n"  # 1
+          # puts "In check instances :  current_user.profile_id = #{current_user.profile_id} \n" # 63
+          expect(assigns(:log_connection_id)).to eq([])
+          expect(assigns(:connected_users)).to eq([1,2])
+          expect(assigns(:current_user_id)).to eq(1)
+        end
       end
-      it 'no responds with 401' do
-        puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
-        expect(response.status).to_not eq(401)
+
+      context '- After action <internal_similars_search>: check results got' do
+        before {get :internal_similars_search}
+
+        it '- tree_info: tree_is_profiles, tree_profiles_amount - Ok' do
+          puts "In check results: tree_info \n"
+          expect(assigns(:tree_info)).to include(:tree_is_profiles => [81, 70, 63, 83, 66, 64, 79, 68, 78, 65, 80, 69, 82, 67, 84])
+          expect(assigns(:tree_info)).to include(:tree_profiles_amount => 15)
+          expect(assigns(:tree_info)).to include(:users_profiles_ids=>[63, 66])
+        end
+
+        it '- new_sims - Ok' do
+          expect(assigns(:new_sims)).to eq("New sims")
+          puts "In check results: new_sims \n"
+        end
+
+        it '- log_connection_id - Ok' do
+          puts "In check results: log_connection_id \n"
+          expect(assigns(:log_connection_id)).to eq([])
+        end
+
+        it '- similars - Ok' do
+          puts "In check results: similars \n"
+          expect(assigns(:similars)).to eq( [
+            {:first_profile_id=>81, :first_name_id=>"Ольга", :first_relation_id=>"Сестра", :name_first_relation_id=>"Елены",
+             :first_sex_id=>"Ж", :second_profile_id=>70, :second_name_id=>"Ольга", :second_relation_id=>"Жена",
+             :name_second_relation_id=>"Петра", :second_sex_id=>"Ж",
+             :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]},
+             :common_power=>4, :inter_relations=>[]},
+            {:first_profile_id=>79, :first_name_id=>"Олег", :first_relation_id=>"Отец", :name_first_relation_id=>"Ольги",
+             :first_sex_id=>"М", :second_profile_id=>82, :second_name_id=>"Олег", :second_relation_id=>"Отец",
+             :name_second_relation_id=>"Елены", :second_sex_id=>"М",
+             :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]},
+             :common_power=>4, :inter_relations=>[]}] )
+        end
+
+        it '- stored 2 rows of good sims pairs - Ok' do
+          sims_count =  SimilarsFound.all.count
+          puts "In check SimilarsFound count rows:  sims_count = #{sims_count.inspect} \n"
+          expect(sims_count).to eq(2) # got 2 rows of similars
+          first_row = SimilarsFound.first #find_stored_similars(sims_profiles_pairs, current_user_id)
+          expect(first_row.first_profile_id).to eq(81) #
+          expect(first_row.second_profile_id).to eq(70) #
+          puts "In check SimilarsFound count rows:  first_row.second_profile_id = #{first_row.second_profile_id.inspect} \n"
+          second_row = SimilarsFound.second #find_stored_similars(sims_profiles_pairs, current_user_id)
+          expect(second_row.first_profile_id).to eq(79) #
+          expect(second_row.second_profile_id).to eq(82) #
+          puts "In check SimilarsFound count rows:  second_row.second_profile_id = #{second_row.second_profile_id.inspect} \n"
+        end
+
       end
+
+     end
+
+    describe 'GET #connect_similars' do
+
+      let(:first_init_profile) {81}
+      let(:second_init_profile) {70}
+      let(:similars_count) {SimilarsFound.all.count}
+      let(:first_row) {SimilarsFound.first}
+      # let(:first_row_second_profile) {first_row.second_profile_id}
+
+      context '- After action <connect_similars>: check render_template & response status' do
+        before  { get :internal_similars_search }
+        subject { get :connect_similars,
+                       first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+                       :format => 'js'        }
+        it "- <connect_similars> respond content_type" do
+          puts "In responds with = text/html' \n"
+          expect(response.content_type).to eq("text/html")
+        end
+        it "- render_template <connect_similars>" do
+          puts "In responds render_template: 'similars/connect_similars' \n"
+          expect(subject).to render_template 'similars/connect_similars'
+        end
+        it '- responds with 200' do
+          puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
+          expect(response.status).to eq(200)
+        end
+        it '- no responds with 401' do
+          puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
+          expect(response.status).to_not eq(401)
+        end
+      end
+
+      context '- After action <connect_similars>: check instances ' do
+        before { get :internal_similars_search
+          puts "In connect_similars SimilarsFound count rows:  similars_count = #{similars_count.inspect} \n"
+          # puts "In connect_similars SimilarsFound count rows:  first_row2.second_profile_id = #{first_row2.second_profile_id.inspect} \n"
+                 get :connect_similars,
+                     first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+                     :format => 'js' }
+        it "- got values: init_hash" do
+          # puts "In check connect_similars:  first_init_profile = #{first_init_profile.inspect} \n"
+          # puts "In check connect_similars:  second_init_profile = #{second_init_profile.inspect} \n"
+          # puts "In check instances :  init_hash \n"
+          # puts "In check instances :  currentuser_id = #{currentuser_id} \n"
+          # puts "In connect_similars SimilarsFound count rows:  sims_count2 = #{sims_count2.inspect} \n"
+          # puts "In connect_similars SimilarsFound count rows:  first_row2.second_profile_id = #{first_row2.second_profile_id.inspect} \n"
+          expect(assigns(:init_hash)).to eq( {81=>70, 82=>79, 83=>80, 67=>78, 84=>66} )
+        end
+
+        it "- got values: profiles_to_rewrite, profiles_to_destroy" do
+          puts "In check instances:  profiles_to_rewrite, profiles_to_destroy \n"
+          expect(assigns(:profiles_to_rewrite)).to eq( [81, 82, 83, 67, 84] )
+          expect(assigns(:profiles_to_destroy)).to eq( [70, 79, 80, 78, 66] )
+        end
+
+
+      end
+
+      context '- Before action <connect_similars>: check SimilarsFound ' do
+        before {  get :internal_similars_search
+                  puts "In connect_similars SimilarsFound count rows:  similars_count = #{similars_count.inspect} \n" }
+                  # get :connect_similars,
+                  #     first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+                  #     :format => 'js' }
+        # let(:similars_pairs_count) { SimilarsFound.all.count }
+        it '- SimilarsFound got 2 rows - Ok' do
+          similars_pairs_count =  SimilarsFound.all.count
+          # first_row2 =  SimilarsFound.first
+          puts "In check SimilarsFound count rows:  similars_pairs_count = #{similars_pairs_count.inspect} \n"
+          # puts "In check SimilarsFound count rows:  similars_count = #{similars_count.inspect} \n"
+          expect(similars_pairs_count).to eq(2) # got 2 rows of similars
+          # puts "In check SimilarsFound count rows:  first_row2 = #{first_row2.inspect} \n"
+          # expect(first_row2.second_profile_id).to eq(70) # got 2 rows of similars
+        end
+        it '- SimilarsFound got similars pairs - Ok' do
+          first_row2 =  SimilarsFound.first
+          # puts "In check SimilarsFound count rows:  similars_pairs_count = #{similars_pairs_count.inspect} \n"
+          # puts "In check SimilarsFound count rows:  first_row = #{first_row.inspect} \n"
+          puts "In check SimilarsFound count rows:  first_row2 = #{first_row2.inspect} \n"
+          expect(first_row2.second_profile_id).to eq(70) # got 2 rows of similars
+        end
+
+      end
+
+      context '- After action <connect_similars>: check SimilarsLog ' do
+        before {  get :internal_similars_search
+                  # puts "In connect_similars SimilarsFound count rows:  sims_count2 = #{sims_count2.inspect} \n"
+                  # puts "In connect_similars SimilarsFound count rows:  first_row2.second_profile_id = #{first_row2.second_profile_id.inspect} \n"
+                  get :connect_similars,
+                      first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+                      :format => 'js' }
+        it '- SimilarsLog got rows - Ok' do
+          logs_count =  SimilarsLog.all.count
+          puts "In check SimilarsLog count rows:  logs_count = #{logs_count.inspect} \n"
+          expect(logs_count).to eq(82) # got 2 rows of similars
+        end
+      end
+
+      # describe 'Check methods in #internal_similars_search' do
+      #   let(:connected_users) { current_user.get_connected_users }  # [1, 2]
+      #     context '- after action: get connected_users ' do
+      #       puts "*** Check result of method get_connected_users \n"
+      #       it "- receive connected_users for current_user" do
+      #         puts "in  Check: ConnectedUser.count = #{ConnectedUser.all.count} \n" # 6
+      #         puts "1 After get_connected_users - current_user_id = #{current_user_id} \n" # current_user_id = 1
+      #         puts "1 After get_connected_users - connected_users = #{connected_users} \n" # connected_users = [1, 2]
+      #         expect(connected_users).to eq([4,66])
+      #     end
+      #   end
+      # end
+
     end
-
-    context '- In action - check instances  ' do
-      it "- got values: log_connection_id, connected_users, current_user_id" do
-        get :internal_similars_search
-        puts "In check instances :  currentuser_id = #{currentuser_id} \n"  # 1
-        # puts "In check instances :  current_user.profile_id = #{current_user.profile_id} \n" # 63
-        expect(assigns(:log_connection_id)).to eq([])
-        expect(assigns(:connected_users)).to eq([1,2])
-        expect(assigns(:current_user_id)).to eq(1)
-      end
-    end
-
-    context '- After action: check results got' do
-      before {get :internal_similars_search}
-
-      it '- tree_info: tree_is_profiles, tree_profiles_amount - Ok' do
-        puts "In check results: tree_info \n"
-        expect(assigns(:tree_info)).to include(:tree_is_profiles => [81, 70, 63, 83, 66, 64, 79, 68, 78, 65, 80, 69, 82, 67, 84])
-        expect(assigns(:tree_info)).to include(:tree_profiles_amount => 15)
-        expect(assigns(:tree_info)).to include(:users_profiles_ids=>[63, 66])
-      end
-
-      it '- new_sims - Ok' do
-        expect(assigns(:new_sims)).to eq("New sims")
-        puts "In check results: new_sims \n"
-      end
-
-      it '- log_connection_id - Ok' do
-        puts "In check results: log_connection_id \n"
-        expect(assigns(:log_connection_id)).to eq([])
-      end
-
-      it '- similars - Ok' do
-        puts "In check results: similars \n"
-        expect(assigns(:similars)).to eq( [
-          {:first_profile_id=>81, :first_name_id=>"Ольга", :first_relation_id=>"Сестра", :name_first_relation_id=>"Елены",
-           :first_sex_id=>"Ж", :second_profile_id=>70, :second_name_id=>"Ольга", :second_relation_id=>"Жена",
-           :name_second_relation_id=>"Петра", :second_sex_id=>"Ж",
-           :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]},
-           :common_power=>4, :inter_relations=>[]},
-          {:first_profile_id=>79, :first_name_id=>"Олег", :first_relation_id=>"Отец", :name_first_relation_id=>"Ольги",
-           :first_sex_id=>"М", :second_profile_id=>82, :second_name_id=>"Олег", :second_relation_id=>"Отец",
-           :name_second_relation_id=>"Елены", :second_sex_id=>"М",
-           :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]},
-           :common_power=>4, :inter_relations=>[]}] )
-      end
-
-      it '- stored 2 rows of good sims pairs - Ok' do
-        sims_count =  SimilarsFound.all.count
-        puts "In check SimilarsFound count rows:  sims_count = #{sims_count.inspect} \n"
-        expect(sims_count).to eq(2) # got 2 rows of similars
-        first_row = SimilarsFound.first #find_stored_similars(sims_profiles_pairs, current_user_id)
-        expect(first_row.first_profile_id).to eq(81) #
-        expect(first_row.second_profile_id).to eq(70) #
-        puts "In check SimilarsFound count rows:  first_row.second_profile_id = #{first_row.second_profile_id.inspect} \n"
-        second_row = SimilarsFound.second #find_stored_similars(sims_profiles_pairs, current_user_id)
-        expect(second_row.first_profile_id).to eq(79) #
-        expect(second_row.second_profile_id).to eq(82) #
-        puts "In check SimilarsFound count rows:  second_row.second_profile_id = #{second_row.second_profile_id.inspect} \n"
-      end
-
-    end
-
-
-
-
-    # describe 'Check methods in #internal_similars_search' do
-    #   let(:connected_users) { current_user.get_connected_users }  # [1, 2]
-    #     context '- after action: get connected_users ' do
-    #       puts "*** Check result of method get_connected_users \n"
-    #       it "- receive connected_users for current_user" do
-    #         puts "in  Check: ConnectedUser.count = #{ConnectedUser.all.count} \n" # 6
-    #         puts "1 After get_connected_users - current_user_id = #{current_user_id} \n" # current_user_id = 1
-    #         puts "1 After get_connected_users - connected_users = #{connected_users} \n" # connected_users = [1, 2]
-    #         expect(connected_users).to eq([4,66])
-    #     end
-    #   end
-    # end
-
-
 
   end
 
