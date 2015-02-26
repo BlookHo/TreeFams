@@ -1,22 +1,27 @@
-#zoom{
+#zoom-wrapper{
   position:absolute;
   bottom:100px;
-  right:50px;
+  right:150px;
+}
+#zoom{
+  position:absolute;
+  top:20px;
+  left:0;
 
 
-  &:before{
-    content:'1';
-  }
-
-  &:after{
-    content:'10';
-  }
-
-  &:before,
-  &:after{
-    font-weight:600;
-    color:grey;
-  }
+  // &:before{
+  //   content:'1';
+  // }
+  //
+  // &:after{
+  //   content:'10';
+  // }
+  //
+  // &:before,
+  // &:after{
+  //   font-weight:600;
+  //   color:grey;
+  // }
 
   input[type=range]{
     -webkit-appearance: none;

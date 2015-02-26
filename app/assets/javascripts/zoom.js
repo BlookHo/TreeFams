@@ -3,20 +3,22 @@ var getCurrentDistance = function(){
   var distance;
   var zoom =  $('#zoom-range').val();
 
-  if (zoom == 1){
-    console.log('Zoome graph!');
-    $('#graph-wrapper').addClass('zoomed');
-    distance = 1;
-  }else if (zoom == 2){
-    $('#graph-wrapper').removeClass('zoomed');
-    distance = 2;
-  }else if (zoom == 3){
-    $('#graph-wrapper').removeClass('zoomed');
-    distance = 5;
-  }else{
-    $('#graph-wrapper').removeClass('zoomed');
-    distance = 10
-  }
+  // if (zoom == 1){
+  //   $('#graph-wrapper').addClass('zoomed');
+  //   distance = 1;
+  // }else if (zoom == 2){
+  //   $('#graph-wrapper').removeClass('zoomed');
+  //   distance = 2;
+  // }else if (zoom == 3){
+  //   $('#graph-wrapper').removeClass('zoomed');
+  //   distance = 5;
+  // }else{
+  //   $('#graph-wrapper').removeClass('zoomed');
+  //   distance = 10
+  // }
+
+  distance = zoom;
+  $('#zoom-distnace').text("Current Graph Distance: "+ distance );
   return distance;
 }
 
