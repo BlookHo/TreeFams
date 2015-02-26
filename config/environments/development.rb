@@ -70,9 +70,9 @@ Weafam::Application.configure do
   # The notifier of Bullet is a wrap of uniform_notifier
   config.after_initialize do
     Bullet.enable = true
-    Bullet.alert = true
-    Bullet.bullet_logger = true
-    Bullet.console = true
+    Bullet.alert = false
+    Bullet.bullet_logger = false
+    Bullet.console = false
     # Bullet.growl = true
     # Bullet.xmpp = { :account  => 'bullets_account@jabber.org',
     #                 :password => 'bullets_password_for_jabber',
@@ -81,8 +81,8 @@ Weafam::Application.configure do
     Bullet.rails_logger = true
     # Bullet.bugsnag = true
     # Bullet.airbrake = true
-    Bullet.add_footer = true
-    Bullet.stacktrace_includes = [ 'your_gem', 'your_middleware' ]
+    Bullet.add_footer = false
+    # Bullet.stacktrace_includes = [ 'your_gem', 'your_middleware' ]
   end
   #   The code above will enable all seven of the Bullet notification systems:
   #

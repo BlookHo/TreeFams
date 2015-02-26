@@ -69,7 +69,8 @@ class Profile < ActiveRecord::Base
 
 
   def avatars
-    ProfileData.where(profile_id: self.id).where.not(avatar_file_name: nil)
+    # ProfileData.where(profile_id: self.id).where.not(avatar_file_name: nil)
+    self.profile_datas.where.not(avatar_file_name: nil)
   end
 
 

@@ -15,19 +15,26 @@ module Api
 
       def show
         profile = Profile.find(params[:profile_id])
-
         max_distance = params[:max_distance]
 
-        logger.info "============ Run CIRCLES WITH DISTANCE: #{params[:max_distance]}"
-
         results_circles = profile.circles(api_current_user, max_distance)
+
         tree_owner_ids = profile.owner_user.get_connected_users
         tree_owner_profile_id = get_tree_owner_user(tree_owner_ids).profile_id
-        # Чтобы пути строились при зуме
-        # path = find_path(from_profile_id: tree_owner_profile_id, data: circles)
-        path = find_path(from_profile_id: tree_owner_profile_id, data: profile.circles(api_current_user, 10))
+
+        # Если автор в центре, то путь к нему собирется из его круга (пути нет, собственно)
+        if (profile.id == current_user.profile_id)
+          path = find_path(from_profile_id: tree_owner_profile_id, data: results_circles)
+        else
+          path = find_path(from_profile_id: tree_owner_profile_id, data: profile.circles(api_current_user, 10))
+        end
+
         circle_author = find_current_circle_author(path)
-        respond_with circles: results_circles, path: path, tree_owner_ids: tree_owner_ids, cirlce_author: circle_author
+
+        respond_with circles: results_circles,
+                     path: path,
+                     tree_owner_ids: tree_owner_ids,
+                     cirlce_author: circle_author
       end
 
 

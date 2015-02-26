@@ -143,16 +143,26 @@ class Relation < ActiveRecord::Base
 
 
   def self.name_by_id(relation_id)
-    case relation_id
-      when 1 then 'отец'
-      when 2 then 'мать'
-      when 3 then 'сын'
-      when 4 then 'дочь'
-      when 5 then 'брат'
-      when 6 then 'сестра'
-      when 7 then 'муж'
-      when 8 then 'жена'
-    end
+    # case relation_id
+    #   when 1 then 'отец'
+    #   when 2 then 'мать'
+    #   when 3 then 'сын'
+    #   when 4 then 'дочь'
+    #   when 5 then 'брат'
+    #   when 6 then 'сестра'
+    #   when 7 then 'муж'
+    #   when 8 then 'жена'
+    # end
+
+    # More faster
+    return 'отец'   if (relation_id == 1)
+    return 'мать'   if (relation_id == 2)
+    return 'сын'    if (relation_id == 3)
+    return 'дочь'   if (relation_id == 4)
+    return 'брат'   if (relation_id == 5)
+    return 'сестра' if (relation_id == 6)
+    return 'муж'    if (relation_id == 7)
+    return 'жена'   if (relation_id == 8)
   end
 
 
@@ -189,6 +199,65 @@ class Relation < ActiveRecord::Base
       end
     end
   end
+
+
+
+  # Возвращает обратное отношение по прямому отношению + имя, из котрого берется пол
+  # Примерно: он отец для Алексей => вернет сын
+  # Примерно: он отец для Аллы => вернет дочь
+  def self.reverse_by_name_sex_id(sex_id: sex_id, relation_id: relation_id)
+    # к мужским именам
+    # он отец для Серегея
+    # if sex_id == 1
+    #   case relation_id
+    #     when 1 then 3
+    #     when 2 then 3
+    #     when 3 then 1
+    #     when 4 then 1
+    #     when 5 then 5
+    #     when 6 then 5
+    #     when 7 then 7
+    #     when 8 then 7
+    #   end
+    # к женским именам
+    # он отец для Натальи
+    # else
+    #   case relation_id
+    #     when 1 then 4
+    #     when 2 then 4
+    #     when 3 then 2
+    #     when 4 then 2
+    #     when 5 then 6
+    #     when 6 then 6
+    #     when 7 then 8
+    #     when 8 then 8
+    #   end
+    # end
+
+
+    # Faster
+    if (sex_id == 1)
+      return 3 if (relation_id == 1)
+      return 3 if (relation_id == 2)
+      return 1 if (relation_id == 3)
+      return 1 if (relation_id == 4)
+      return 5 if (relation_id == 5)
+      return 5 if (relation_id == 6)
+      return 7 if (relation_id == 7)
+      return 7 if (relation_id == 8)
+    end
+    if (sex_id == 0)
+      return 4 if (relation_id == 1)
+      return 4 if (relation_id == 2)
+      return 2 if (relation_id == 3)
+      return 2 if (relation_id == 4)
+      return 6 if (relation_id == 5)
+      return 6 if (relation_id == 6)
+      return 8 if (relation_id == 7)
+      return 8 if (relation_id == 8)
+    end
+  end
+
 
 
   # Возвращает sex_id добавляемого отношения
