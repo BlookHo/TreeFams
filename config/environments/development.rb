@@ -78,7 +78,7 @@ Weafam::Application.configure do
     #                 :password => 'bullets_password_for_jabber',
     #                 :receiver => 'your_account@jabber.org',
     #                 :show_online_status => true }
-    Bullet.rails_logger = true
+    Bullet.rails_logger = false
     # Bullet.bugsnag = true
     # Bullet.airbrake = true
     Bullet.add_footer = false
