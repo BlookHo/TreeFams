@@ -7,7 +7,6 @@ module ProfileApiCircles
     @results = []
     @except_ids = []
 
-
     logger.info "==============START circles================="
     logger.info "==============current_distance: #{@current_distance}"
     logger.info "==============max_distance: #{@max_distance}"
@@ -90,13 +89,13 @@ module ProfileApiCircles
   # Collect nesetd profile circles while mas_distance less then current_distance
   def collect_circles(circle: circle, current_user: current_user)
     return if @current_distance >= @max_distance
-    @current_distance += 1
     circle.each do |key|
       current_circle = get_circle(profile_id: key.is_profile_id)
       @except_ids << current_circle.map {|r| r.is_profile_id }.push(key.is_profile_id)
       @results << circle_to_hash(circle: current_circle, target: key.is_profile_id, current_user: current_user, distance: @current_distance)
       collect_circles(circle: current_circle, current_user: current_user) if current_circle.size > 0
     end
+    @current_distance += 1
   end
 
 
