@@ -22,7 +22,7 @@ module Api
         tree_owner_ids = profile.owner_user.get_connected_users
         tree_owner_profile_id = get_tree_owner_user(tree_owner_ids).profile_id
 
-        # Если автор в центре, то путь к нему собирется из его круга (пути нет, собственно)
+        # Если автор в центре, то путь к нему собирется из его просчитанного круга
         if (profile.id == current_user.profile_id)
           path = find_path(from_profile_id: tree_owner_profile_id, data: results_circles)
         else
