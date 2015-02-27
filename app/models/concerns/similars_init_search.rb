@@ -350,20 +350,17 @@ module SimilarsInitSearch
       one_similars_pair = {}
 
       one_similars_pair.merge!(:first_profile_id => common_data[:first_profile_id])
-      one_similars_pair.merge!(:first_relation_id => get_name_relation(common_data[:profile_a_data][:relation_id])[:name_relation] ) #common_data[:profile_a_data][:relation_id])
-
-      one_similars_pair.merge!(:name_first_relation_id => inflect_name(get_name(common_data[:profile_a_data][:profile_id]), 1))
-      #    one_similars_pair.merge!(:name_first_relation_id => ProfileKey.inflect_name(get_name(common_data[:profile_a_data][:profile_id]), 1))
       one_similars_pair.merge!(:first_name_id => get_name(common_data[:first_profile_id]))
+      one_similars_pair.merge!(:first_relation_id => get_name_relation(common_data[:profile_a_data][:relation_id])[:name_relation] ) #common_data[:profile_a_data][:relation_id])
+      one_similars_pair.merge!(:name_first_relation_id => inflect_name(get_name(common_data[:profile_a_data][:profile_id]), 1))
 
       common_data[:profile_a_data][:is_sex_id] == 1 ? sex_a = 'М' : sex_a = 'Ж'
       one_similars_pair.merge!(:first_sex_id => sex_a)
 
       one_similars_pair.merge!(:second_profile_id => common_data[:second_profile_id])
-      one_similars_pair.merge!(:second_relation_id => get_name_relation(common_data[:profile_b_data][:relation_id])[:name_relation] ) #
-
-      one_similars_pair.merge!(:name_second_relation_id => inflect_name(get_name(common_data[:profile_b_data][:profile_id]), 1))
       one_similars_pair.merge!(:second_name_id => get_name(common_data[:second_profile_id]))
+      one_similars_pair.merge!(:second_relation_id => get_name_relation(common_data[:profile_b_data][:relation_id])[:name_relation] ) #
+      one_similars_pair.merge!(:name_second_relation_id => inflect_name(get_name(common_data[:profile_b_data][:profile_id]), 1))
 
       common_data[:profile_b_data][:is_sex_id] == 1 ? sex_b = 'М' : sex_b = 'Ж'
       one_similars_pair.merge!(:second_sex_id => sex_b)

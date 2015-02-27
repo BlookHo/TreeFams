@@ -76,6 +76,7 @@ class SimilarsFound < ActiveRecord::Base
   # connected_users_arr - input param
   # TESTED
   def self.clear_tree_similars(connected_users_arr)
+    # puts "In Model action clear_tree_similars : connected_users_arr = #{connected_users_arr} \n"
     # logger.info "In SimilarsFound clear_tree_similars: connected_users_arr = #{connected_users_arr} "
     found_sims = SimilarsFound.at_user_id(connected_users_arr).pluck(:id)
     # logger.info "In SimilarsFound clear_similars_found: found_sims = #{found_sims.inspect}"

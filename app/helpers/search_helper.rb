@@ -242,7 +242,9 @@ module SearchHelper
   def get_one_profile_circle(profile_id, user_id)
     connected_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля .where('relation_id <= 8')
     if !connected_users_arr.blank?
-      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id).order('user_id','relation_id','is_name_id' ) #.select(:user_id, :name_id, :relation_id, :is_name_id).distinct
+      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id)
+                                 .order('user_id','relation_id','is_name_id' )
+                                  #.select(:user_id, :name_id, :relation_id, :is_name_id).distinct
       if !found_profile_circle.blank?
         return found_profile_circle # Найден БК
       else
@@ -252,6 +254,15 @@ module SearchHelper
       logger.info "Error in get_one_profile_BK. Нет такого Юзера = #{user_id} или не найдены его connected_users_arr = #{connected_users_arr.inspect}"
     end
   end
+
+  # from profile_api_circles
+  # def get_circle(user_ids: user_ids, profile_id: profile_id, except_ids: [])
+  #   ProfileKey.where(user_id: user_ids, profile_id: profile_id)
+  #       .where("relation_id < ?", 9)
+  #       .where.not(is_profile_id: @except_ids)
+  #       .order('relation_id')
+  #       .includes(:name).to_a.uniq(&:is_profile_id)
+  # end
 
   # todo: перенести этот метод в CirclesMethods - для нескольких моделей
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"

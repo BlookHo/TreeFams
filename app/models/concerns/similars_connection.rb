@@ -13,8 +13,6 @@ module SimilarsConnection
     # tree_info = get_tree_info(self)
     # logger.info "CCCCC In similars_connect_tree : tree_info[:tree_is_profiles] = #{tree_info[:tree_is_profiles]}, @tree_info[:connected_users] = #{tree_info[:connected_users]}"#", tree_info = #{tree_info},  "
 
-
-
     # todo: Сделать логирование перезаписи Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
     # Перезапись profile_data при объединении профилей
     #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)

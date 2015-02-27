@@ -55,7 +55,7 @@ RSpec.describe SimilarsFound, :type => :model do
 
     # create users
     let(:user) {FactoryGirl.create(:user)}
-    let(:other_user) {FactoryGirl.create(:other_user)}
+    let(:other_user) {FactoryGirl.create(:user, :user_2)}
     let(:third_user) {FactoryGirl.create(:third_user)}
     let(:current_user_id) {user.id}
     let(:other_user_id) {other_user.id}
@@ -63,7 +63,7 @@ RSpec.describe SimilarsFound, :type => :model do
     let(:connected_users) {[current_user_id, other_user_id ]}
 
     # create parameters
-    let(:sims_profiles_pairs) {[[38, 42], [41, 40]]}
+    let(:sims_profiles_pairs) {[[81, 70],[79, 82]]}
 
     # create model data
     before do
@@ -71,11 +71,13 @@ RSpec.describe SimilarsFound, :type => :model do
       FactoryGirl.create(:similars_found, :sims_pair_2, user_id: current_user_id)
       FactoryGirl.create(:similars_found, :sims_pair_3, user_id: other_user_id)
       FactoryGirl.create(:similars_found, :sims_pair_4, user_id: third_user_id)
-      # puts "in similars_found = #{SimilarsFound.find(1).user_id} \n" # 1
-      # puts "in similars_found = #{SimilarsFound.find(2).user_id} \n" # 1
-      # puts "in similars_found = #{SimilarsFound.find(3).user_id} \n" # 2
-      # puts "in similars_found = #{SimilarsFound.find(4).user_id} \n" # 3
+      # puts " before  SimilarsFound: SimilarsFound.first.user_id = #{SimilarsFound.first.user_id.inspect} "
     end
+
+    # after {
+    #   SimilarsFound.delete_all
+    #   SimilarsFound.reset_pk_sequence
+    #  }
 
     # from similars_start.rb#check_new_similars
     describe '* find_stored_similars *' do
@@ -104,23 +106,23 @@ RSpec.describe SimilarsFound, :type => :model do
         context '- Return correct new_similars' do
           it '- 2 Find new_similars PAIRS when sims_profiles_pairs ARE new' do
             new_similars = SimilarsFound.find_stored_similars(sims_profiles_pairs, other_user_id)
-            expect(new_similars).to eq([[38, 42],[41, 40]]) # all new similars
+            expect(new_similars).to eq([[81, 70],[79, 82]]) # all new similars
           end
         end
         # 3 user - y, profile1 - y, prof2 - n : => new sim pair => new_sim = one new sims_profiles_pair
-        let(:sims_new_pair) {[[38, 42], [41, 400]]}
+        let(:sims_new_pair) {[[81, 70],[79,  400]]}
         context '- Return correct new_similars' do
           it '- 3 Find new_similars PAIR when sims_profiles_pair IS new' do
             new_similars = SimilarsFound.find_stored_similars(sims_new_pair, current_user_id)
-            expect(new_similars).to eq([[41, 400]]) # only new similars
+            expect(new_similars).to eq([[79, 400]]) # only new similars
           end
         end
         # 4 user - y, profile1 - n, prof2 - n : => all new sim pairs => all sims_profiles_pairs
-        let(:sims_all_new_pairs) {[[380, 42], [41, 400]]}
+        let(:sims_all_new_pairs) {[[380, 70], [79, 400]]}
         context '- Return correct new_similars' do
           it '- 4 Find new_similars PAIRS when sims_profiles_pairs ARE new' do
             new_similars = SimilarsFound.find_stored_similars(sims_all_new_pairs, current_user_id)
-            expect(new_similars).to eq([[380, 42],[41, 400]]) # all new similars
+            expect(new_similars).to eq([[380, 70],[79, 400]]) # all new similars
           end
         end
       end
@@ -138,7 +140,7 @@ RSpec.describe SimilarsFound, :type => :model do
 
         context '- Check sims_profiles_pairs to be stored' do
           it '- sims_profiles_pairs equals Ok - two pairs of profiles' do
-            expect(sims_profiles_pairs).to eq([[38, 42], [41, 40]]) #
+            expect(sims_profiles_pairs).to eq([[81, 70],[79, 82]]) #
           end
         end
 
@@ -155,10 +157,10 @@ RSpec.describe SimilarsFound, :type => :model do
             expect(first_row.user_id).to eq(user.id)
           end
           it '- first_profile_id - Ok' do
-            expect(first_row.first_profile_id).to eq(38) #
+            expect(first_row.first_profile_id).to eq(81) #
           end
           it '- second_profile_id - Ok' do
-            expect(first_row.second_profile_id).to eq(42) #
+            expect(first_row.second_profile_id).to eq(70) #
           end
         end
 
@@ -168,11 +170,11 @@ RSpec.describe SimilarsFound, :type => :model do
             expect(second_row.user_id).to eq(user.id)
           end
           it '- first_profile_id - Ok' do
-            puts "2 store_similars check: second_row.first_profile_id = #{second_row.first_profile_id.inspect} "
-            expect(second_row.first_profile_id).to eq(41) #
+            # puts "2 store_similars check: second_row.first_profile_id = #{second_row.first_profile_id.inspect} "
+            expect(second_row.first_profile_id).to eq(79) #
           end
           it '- second_profile_id - Ok' do
-            expect(second_row.second_profile_id).to eq(40) #
+            expect(second_row.second_profile_id).to eq(82) #
           end
         end
       end
@@ -181,7 +183,13 @@ RSpec.describe SimilarsFound, :type => :model do
     # from similars_controller#internal_similars_search
     describe '* clear_tree_similars *' do
       before do
+        # puts " clear_tree_similars check: SimilarsFound.first.user_id = #{SimilarsFound.first.user_id.inspect} "
+        # puts " clear_tree_similars check: SimilarsFound.first.first_profile_id = #{SimilarsFound.first.first_profile_id.inspect} "
         SimilarsFound.clear_tree_similars(connected_users)
+        # puts " clear_tree_similars check: connected_users = #{connected_users.inspect} "
+        # puts " clear_tree_similars check: current_user_id = #{current_user_id.inspect} "
+        # puts " clear_tree_similars check: other_user_id = #{other_user_id.inspect} "
+
       end
       context '- clear tree similars' do
         let(:rest_count) { SimilarsFound.all.count }
@@ -193,7 +201,7 @@ RSpec.describe SimilarsFound, :type => :model do
 
     # from SimilarsConnection.rb#similars_connect_tree
     describe '* clear_similars_found *' do
-      let(:data_to_clear) { {:profiles_to_rewrite => [41, 35, 42, 66], :profiles_to_destroy=>[40, 38, 38, 55],
+      let(:data_to_clear) { {:profiles_to_rewrite => [79, 35, 70, 66], :profiles_to_destroy=>[82, 81, 98, 55],
                              :connected_users_arr => connected_users } }
       before do
         # puts " start: connected_users_arr = #{data_to_clear[:connected_users_arr].inspect} "

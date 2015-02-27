@@ -1,24 +1,14 @@
 module SimilarsHelper
 
   # Отобр-е параметров дерева и sim_data во вьюхе
-  def view_tree_data(tree_info, sim_data)
+  def view_tree_similars(tree_info, similars)
     @tree_info = tree_info
-    logger.info "In SimilarsHelper 1: view_tree_data  @tree_info[:connected_users] = #{tree_info[:connected_users]}, @tree_info = #{tree_info},  "  unless tree_info.blank?
-    logger.info "In SimilarsHelper 1a: view_tree_data @tree_info.profiles.size = #{tree_info[:profiles].size} "  unless tree_info.blank?
+     # logger.info "In SimilarsHelper 1a: view_tree_data @tree_info.profiles.size = #{tree_info[:profiles].size} "  unless tree_info.blank?
     @current_user_id = current_user.id
-    view_similars(sim_data) unless sim_data.empty?
-  end
-
-
-  # Отображение во вьюхе Похожих и - для них - непохожих, если есть
-  def view_similars(sim_data)
-    @sim_data = sim_data  #
-    logger.info "In SimilarsHelper view_similars:  @sim_data = #{@sim_data} "
-    @similars = sim_data[:similars]
-    @similars_qty = @similars.size unless sim_data[:similars].empty?
+    @similars = similars
+    @similars_qty = @similars.size unless similars.empty?
     @paged_similars_data = pages_of(@similars, 10) # Пагинация - по 10 строк на стр.
   end
-
 
   # Отображение логов объединения похожих в вьюхе
   def show_log_data(log_connection)
