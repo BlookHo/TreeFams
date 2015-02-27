@@ -1,16 +1,18 @@
 module ProfileApiCircles
   extend ActiveSupport::Concern
 
+
+  def logus(title, obj)
+    logger.info "==#{title}======================================="
+    logger.info "==#{obj}========================================="
+    logger.info "================================================="
+  end
+
   def circles(current_user, max_distance)
     @max_distance = max_distance.to_i
     @current_distance = 1
     @results = []
     @except_ids = [[self.id]]
-
-    logger.info "==============START circles================="
-    logger.info "==============current_distance: #{@current_distance}"
-    logger.info "==============max_distance: #{@max_distance}"
-    logger.info "=============================="
 
     @user_ids = User.find(self.tree_id).get_connected_users
 
@@ -18,21 +20,13 @@ module ProfileApiCircles
     center_node = center_node(current_user)
 
     # First circle (for center profile)
-
-    logger.info "==============START with profile id #{self.id}================="
-
     first_circle = get_circle(profile_id: self.id)
     @results << circle_to_hash(circle: first_circle, target: self.id, current_user: current_user)
-    # @except_ids << first_circle.map {|r| r.is_profile_id }
-    # @except_ids << first_circle.map {|r| r.profile_id }
 
+    # Manualy increment first step
     @current_distance += 1
 
-    logger.info "==============except_ids================="
-    logger.info "==============#{@except_ids}================="
-    logger.info "==============#{@except_ids.flatten.uniq}================="
-
-    # Other cirlces by distance
+    # collect another cirlces by distance
     collect_circles(circle: first_circle, current_user: current_user)
 
     # Push center node at top of results (grpah starts from first node)
@@ -42,22 +36,27 @@ module ProfileApiCircles
 
 
   # Collect nesetd profile circles while mas_distance less then current_distance
-  def collect_circles(circle: circle, current_user: current_user)
-    return if @current_distance >= @max_distance
+  def collect_circles(circle: circle, current_user: current_user, locale_distance: nil )
+
+    return if @current_distance > @max_distance
 
     circle.each do |key|
       current_circle = get_circle(profile_id: key.is_profile_id)
-      @except_ids << current_circle.map {|r| r.is_profile_id }
-      @results << circle_to_hash(circle: current_circle, target: key.is_profile_id, current_user: current_user)
-      collect_circles(circle: current_circle, current_user: current_user) if current_circle.size > 0
+
+      distance = locale_distance.nil? ? @current_distance : locale_distance
+
+      @results << circle_to_hash(circle: current_circle, target: key.is_profile_id, current_user: current_user, distance: distance)
+
+      if current_circle.size > 0
+        collect_circles(circle: current_circle, current_user: current_user, locale_distance: distance + 1)
+      end
     end
-    @current_distance += 1
+    @current_distance += 1 if locale_distance.nil?
   end
 
 
   # Get circles data for profile
   def get_circle(profile_id: profile_id)
-
     pks = ProfileKey.where(user_id: @user_ids)
                     .where(profile_id: profile_id)
                     .where('relation_id < 9')
@@ -65,18 +64,8 @@ module ProfileApiCircles
                     .order('relation_id')
                     .includes(:name, :display_name, :is_profile, :relation)
                     .select(:profile_id, :is_profile_id, :relation_id, :name_id, :is_name_id, :is_display_name_id).distinct
-
-
-    logger.info "=========ProfileKey pks for #{profile_id}============"
-    logger.info pks.inspect
-    logger.info "=========ProfileKey pks for #{profile_id}============"
-
-
     @except_ids << pks.map {|r| r.is_profile_id }
-
     return pks
-
-
   end
 
 
@@ -102,7 +91,7 @@ module ProfileApiCircles
 
 
   # Format profiles in cirlces for graph
-  def circle_to_hash(circle: circle, target: nil, current_user: current_user)
+  def circle_to_hash(circle: circle, target: nil, current_user: current_user, distance: distance)
     results = []
     circle.each do |key|
       is_rel = Relation.reverse_by_name_sex_id(sex_id: key.name.sex_id, relation_id: key.relation_id)
@@ -116,7 +105,7 @@ module ProfileApiCircles
         is_relation: Relation.name_by_id(is_rel),
         is_relation_id: is_rel,
         target: target.nil? ? self.id : target,
-        distance: @current_distance,
+        distance: distance || @current_distance,
         current_user_profile: current_user.try(:profile_id) == key.is_profile_id,
         avatar: key.is_profile.avatar_path(:round_thumb),
         user_id: (key.is_profile.user_id ? key.is_profile.user_id : false)
@@ -124,8 +113,6 @@ module ProfileApiCircles
     end
     return results
   end
-
-
 
 
 
