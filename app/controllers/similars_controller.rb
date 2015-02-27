@@ -47,8 +47,6 @@ class SimilarsController < ApplicationController
     @connected_users = connected_users
     @current_user_id = current_user.id
     @log_connection_id = SimilarsLog.current_tree_log_id(connected_users) unless connected_users.empty?
-    # puts "In action internal_similars_search : @log_connection_id = #{@log_connection_id},
-    #          tree_info[:connected_users] = #{tree_info[:connected_users]}, connected_users = #{connected_users} \n"
     if similars.empty?   # т.е. нет похожих
       flash.now[:notice] = "Успешное сообщение: В дереве все Ок - 'похожих' профилей нет."
     else  # т.е. есть похожие
@@ -78,8 +76,8 @@ class SimilarsController < ApplicationController
     second_profile_connecting = params[:second_profile_id].to_i
     init_hash = { first_profile_connecting => second_profile_connecting}
     logger.info "*** In connect_similars 2:  init_hash = #{init_hash} "
-    puts "In action connect_similars:  first_profile_connecting = #{first_profile_connecting.inspect} \n"
-    puts "In action connect_similars:  init_hash = #{init_hash.inspect} \n"
+    # puts "In action connect_similars:  first_profile_connecting = #{first_profile_connecting.inspect} \n"
+    # puts "In action connect_similars:  init_hash = #{init_hash.inspect} \n"
 
     # for RSpec & TO_VIEW
 
