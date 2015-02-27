@@ -350,7 +350,6 @@ describe SimilarsController, :type => :controller , similars: true do
 
       context '- After action <connect_similars>: check instances ' do
         before { get :internal_similars_search
-                 puts "In connect_similars SimilarsFound count rows:  similars_count = #{similars_count.inspect} \n"
                  get :connect_similars,
                      first_profile_id: first_init_profile, second_profile_id: second_init_profile,
                      :format => 'js' }
@@ -369,7 +368,7 @@ describe SimilarsController, :type => :controller , similars: true do
       context '- Before action <connect_similars>: check SimilarsFound ' do
         before {  get :internal_similars_search
                   puts "In connect_similars SimilarsFound count rows:  similars_count = #{similars_count.inspect} \n" }
-         it '- SimilarsFound got 2 rows - Ok' do
+        it '- SimilarsFound got 2 rows - Ok' do
           similars_pairs_count =  SimilarsFound.all.count
           puts "In check SimilarsFound count rows:  similars_pairs_count = #{similars_pairs_count.inspect} \n"
           expect(similars_pairs_count).to eq(2) # got 2 rows of similars
@@ -386,16 +385,82 @@ describe SimilarsController, :type => :controller , similars: true do
                   get :connect_similars,
                       first_profile_id: first_init_profile, second_profile_id: second_init_profile,
                       :format => 'js' }
-        it '- SimilarsLog got rows - Ok' do
+        it '- SimilarsLog got rows count - Ok' do
           logs_count =  SimilarsLog.all.count
-          puts "In check SimilarsLog count rows:  logs_count = #{logs_count.inspect} \n"
-          expect(logs_count).to eq(82) # got 2 rows of similars
+          puts "In check SimilarsLog count rows: logs_count = #{logs_count.inspect} \n"
+          expect(logs_count).to eq(82) # got 82 rows of similars connecting logs
+        end
+
+        it '- log connected_at in SimilarsLog - Ok' do
+          connected_at =  SimilarsLog.last.connected_at
+          current_user_logged =  SimilarsLog.last.current_user_id
+          puts "In check log connected_at in SimilarsLog:  connected_at = #{connected_at.inspect} \n"
+          expect(connected_at).to eq(1) # got log connected_at of connected similars
+          puts "In check log connected_at in SimilarsLog:  current_user_logged = #{current_user_logged.inspect} \n"
+          expect(current_user_logged).to eq(1) # got log current_user_id of connected similars
         end
       end
 
     end
 
-    describe 'GET #connect_similars' do
+    describe 'GET #disconnect_similars' do
+      let(:first_init_profile) {81}
+      let(:second_init_profile) {70}
+      let(:log_connection_id) {1}
+
+      context '- After action <disconnect_similars>: check render_template & response status' do
+        before { get :internal_similars_search
+                 get :connect_similars,
+                     first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+                     :format => 'js' }
+        subject { get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js' }
+        it "- <disconnect_similars> respond content_type" do
+          puts "In responds with = text/html' \n"
+          expect(response.content_type).to eq("text/html")
+        end
+        it "- render_template <disconnect_similars>" do
+          puts "In responds render_template: 'similars/disconnect_similars' \n"
+          expect(subject).to render_template 'similars/disconnect_similars'
+        end
+        it '- responds <disconnect_similars> with 200' do
+          puts "In responds with 200: currentuser_id = #{currentuser_id} \n"
+          expect(response.status).to eq(200)
+        end
+        it '- no responds <disconnect_similars> with 401' do
+          puts "In no responds with 401: currentuser_id = #{currentuser_id} \n"
+          expect(response.status).to_not eq(401)
+        end
+      end
+
+      context '- After action <disconnect_similars>: check instances ' do
+        before { get :internal_similars_search
+                 get :connect_similars,
+                     first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+                     :format => 'js'
+                 get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'}
+        it "- got values: @log_id" do
+          puts "In check instances : log_id \n"
+          expect(assigns(:log_id)).to eq( 1 )
+        end
+      end
+
+      context '- After action <disconnect_similars>: check SimilarsLog ' do
+        before { get :internal_similars_search
+                 get :connect_similars,
+                     first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+                     :format => 'js'
+                 get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'}
+        it '- SimilarsLog rows deleted - got count = 0 - Ok' do
+          logs_count =  SimilarsLog.all.count
+          puts "In check SimilarsLog count rows: logs_count = #{logs_count.inspect} \n"
+          expect(logs_count).to eq(0) # after deleting - got 0 rows of similars connecting logs
+        end
+      end
+
+
+
+
+
 
 
 
@@ -408,47 +473,3 @@ describe SimilarsController, :type => :controller , similars: true do
 
 end
 
-
-#
-#
-# context '- after action - render/redirection ' do
-#   it "- render_template internal_similars_search" do
-#     puts "In render_template :  current_user_id = #{current_user_id} \n"
-#     puts "In render_template :  current_user.profile_id = #{current_user.profile_id} \n"
-#     expect(subject).to render_template :internal_similars_search
-#   end
-# end
-#
-# context '- after action - check response status' do
-#   it 'responds with 200' do
-#     get :internal_similars_search
-#     puts "In responds with 200:  current_user_id = #{current_user_id} \n"
-#     expect(response.status).to eq(200)
-#   end
-# end
-#
-# context '- after action - responds with 200 Ok status ' do
-#   it 'no responds with 401' do
-#     puts "In no responds with 401:  current_user_id = #{current_user_id} \n"
-#     expect(response.status).to_not eq(401)
-#   end
-# end
-
-
-# context '- in action: get tree_info & similars & sim_data ' do
-#   it "- receive similars & sim_data in internal_similars_search" do
-#     expect(tree_info).to render_template :internal_similars_search
-#
-#   end
-
-#   it "- receive similars & sim_data in internal_similars_search" do
-#     expect(sim_data).to render_template :internal_similars_search
-#
-#   end
-
-#   it "- receive similars & sim_data in internal_similars_search" do
-#     expect(similars).to render_template :internal_similars_search
-#
-#   end
-
-# end
