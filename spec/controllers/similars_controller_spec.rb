@@ -230,10 +230,7 @@ describe SimilarsController, :type => :controller , similars: true do
      describe 'GET #internal_similars_search' do
 
       context '- after action <internal_similars_search> - check render_template & response status' do
-        subject { get :internal_similars_search
-        # puts "In subject after action - currentuser_id = #{currentuser_id} \n"      # 1
-        # puts "In subject - current_user.profile_id = #{current_user.profile_id} \n" # 63
-        }
+        subject { get :internal_similars_search }
         it "- render_template internal_similars_search" do
           puts "In render_template :  currentuser_id = #{currentuser_id} \n"
           expect(subject).to render_template :internal_similars_search
@@ -252,7 +249,6 @@ describe SimilarsController, :type => :controller , similars: true do
         it "- got values: log_connection_id, connected_users, current_user_id" do
           get :internal_similars_search
           puts "In check instances :  currentuser_id = #{currentuser_id} \n"  # 1
-          # puts "In check instances :  current_user.profile_id = #{current_user.profile_id} \n" # 63
           expect(assigns(:log_connection_id)).to eq([])
           expect(assigns(:connected_users)).to eq([1,2])
           expect(assigns(:current_user_id)).to eq(1)
@@ -293,24 +289,23 @@ describe SimilarsController, :type => :controller , similars: true do
              :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]},
              :common_power=>4, :inter_relations=>[]}] )
         end
+      end
 
+      context '- After action <internal_similars_search>: check SimilarsFound' do
         it '- in SimilarsFound stored 2 rows of good sims pairs & first row - Ok' do
+          get :internal_similars_search
           sims_count =  SimilarsFound.all.count
           puts "In check SimilarsFound count rows: rows sims_count = #{sims_count.inspect} \n"
           expect(sims_count).to eq(2) # got 2 rows of similars
-        end
-
-        it '- First row stored in SimilarsFound of good sims pair - Ok' do
           first_row = SimilarsFound.first
           expect(first_row.first_profile_id).to eq(81)
           expect(first_row.second_profile_id).to eq(70)
+          puts "In check SimilarsFound rows:  first_row = #{first_row.inspect} \n"
           puts "In check SimilarsFound rows:  first_row.second_profile_id = #{first_row.second_profile_id.inspect} \n"
-        end
-
-        it '- Second row stored in SimilarsFound of good sims pair - Ok' do
           second_row = SimilarsFound.second
           expect(second_row.first_profile_id).to eq(79)
           expect(second_row.second_profile_id).to eq(82)
+          puts "In check SimilarsFound rows:  second_row = #{second_row.inspect} \n"
           puts "In check SimilarsFound rows:  second_row.second_profile_id = #{second_row.second_profile_id.inspect} \n"
         end
 
@@ -322,8 +317,6 @@ describe SimilarsController, :type => :controller , similars: true do
 
       let(:first_init_profile) {81}
       let(:second_init_profile) {70}
-      let(:similars_count) {SimilarsFound.all.count}
-      let(:first_row) {SimilarsFound.first}
 
       context '- After action <connect_similars>: check render_template & response status' do
         before  { get :internal_similars_search }
@@ -365,20 +358,21 @@ describe SimilarsController, :type => :controller , similars: true do
         end
       end
 
-      context '- Before action <connect_similars>: check SimilarsFound ' do
-        before {  get :internal_similars_search
-                  puts "In connect_similars SimilarsFound count rows:  similars_count = #{similars_count.inspect} \n" }
-        it '- SimilarsFound got 2 rows - Ok' do
-          similars_pairs_count =  SimilarsFound.all.count
-          puts "In check SimilarsFound count rows:  similars_pairs_count = #{similars_pairs_count.inspect} \n"
-          expect(similars_pairs_count).to eq(2) # got 2 rows of similars
-        end
-        it '- SimilarsFound got similars pairs - Ok' do
-          first_row2 =  SimilarsFound.first
-          puts "In check SimilarsFound count rows:  first_row2 = #{first_row2.inspect} \n"
-          expect(first_row2.second_profile_id).to eq(70) # got 2 rows of similars
-        end
-      end
+      # context '- Before action <connect_similars>: check SimilarsFound ' do
+      #   before {  get :internal_similars_search }
+      #   it '- SimilarsFound got 2 rows - Ok' do
+      #     similars_pairs_count =  SimilarsFound.all.count
+      #     puts "In check SimilarsFound count rows:  similars_pairs_count = #{similars_pairs_count.inspect} \n"
+      #     expect(similars_pairs_count).to eq(2) # got 2 rows of similars
+      #   end
+      #   it '- SimilarsFound got similars pairs - Ok' do
+      #     first_row2 =  SimilarsFound.first
+      #     puts "In check SimilarsFound count rows:  first_row2 = #{first_row2.inspect} \n"
+      #     first_row2_profile = first_row2.first_profile_id
+      #     puts "In check SimilarsFound similars pair:  first_row2_profile = #{first_row2_profile.inspect} \n"
+      #     expect(first_row2_profile).to eq(81) # or 70) # got row of similars
+      #   end
+      # end
 
       context '- After action <connect_similars>: check SimilarsLog ' do
         before {  get :internal_similars_search
@@ -399,10 +393,18 @@ describe SimilarsController, :type => :controller , similars: true do
           puts "In check log connected_at in SimilarsLog:  current_user_logged = #{current_user_logged.inspect} \n"
           expect(current_user_logged).to eq(1) # got log current_user_id of connected similars
         end
+      end
 
+      context '- After action <connect_similars>: check SimilarsLog count' do
         it '- SimilarsFound got 2 rows - Ok' do
+          SimilarsFound.delete_all
+          SimilarsFound.reset_pk_sequence
+          get :internal_similars_search
+          get :connect_similars,
+              first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+              :format => 'js'
           similars_pairs_count =  SimilarsFound.all.count
-          puts "In check SimilarsFound count rows:  similars_pairs_count = #{similars_pairs_count.inspect} \n"
+          puts "After action <connect_similars> check SimilarsFound:  similars_pairs_count = #{similars_pairs_count.inspect} \n"
           expect(similars_pairs_count).to eq(0) # got 2 rows of similars
         end
       end
@@ -438,52 +440,57 @@ describe SimilarsController, :type => :controller , similars: true do
         end
       end
 
-      context '- After action <disconnect_similars>: check instances ' do
-        before { get :internal_similars_search
-                 get :connect_similars,
-                     first_profile_id: first_init_profile, second_profile_id: second_init_profile,
-                     :format => 'js'
-                 get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'}
-        it "- got values: @log_id" do
-          puts "In check instances : log_id \n"
-          expect(assigns(:log_id)).to eq( 1 )
+      context '- After action <disconnect_similars>: check SimilarsLog ' do
+        it '- SimilarsLog rows deleted - got rows count = 0 - Ok' do
+          get :internal_similars_search
+          get :connect_similars,
+              first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+              :format => 'js'
+          get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'
+          logs_count =  SimilarsLog.all.count
+          puts "After <disconnect_similars> check SimilarsLog: logs_count = #{logs_count.inspect} \n"
+          expect(logs_count).to eq(0) # after deleting - got 0 rows of similars connecting logs
         end
       end
 
-      context '- After action <disconnect_similars>: check SimilarsLog ' do
-        before { get :internal_similars_search
-                 get :connect_similars,
-                     first_profile_id: first_init_profile, second_profile_id: second_init_profile,
-                     :format => 'js'
-                 get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'}
-        it '- SimilarsLog rows deleted - got count = 0 - Ok' do
-          logs_count =  SimilarsLog.all.count
-          puts "In check SimilarsLog count rows: logs_count = #{logs_count.inspect} \n"
-          expect(logs_count).to eq(0) # after deleting - got 0 rows of similars connecting logs
-        end
+      context '- After action <disconnect_similars>: check SimilarsFound ' do
         it '- SimilarsFound got 2 sims rows - Ok' do
+          SimilarsFound.delete_all
+          SimilarsFound.reset_pk_sequence
+          get :internal_similars_search
+          get :connect_similars,
+              first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+              :format => 'js'
+          get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'
           sims_pairs_count =  SimilarsFound.all.count
-          puts "In check SimilarsFound count rows:  sims_pairs_count = #{sims_pairs_count.inspect} \n"
+          puts "After <disconnect_similars> check SimilarsFound:  sims_pairs_count = #{sims_pairs_count.inspect} \n"
           expect(sims_pairs_count).to eq(2) # got 2 rows of similars
-          first_row3 =  SimilarsFound.first
-          first_row3_profile = first_row3.first_profile_id
-          puts "In check SimilarsFound similars pair:  first_row3 = #{first_row3.inspect} \n"
-          puts "In check SimilarsFound similars pair:  first_row3_profile = #{first_row3_profile.inspect} \n"
-          expect(first_row3_profile).to eq(81) # got pair of similars
-          second_row3 =  SimilarsFound.second
-          second_row3_profile = second_row3.first_profile_id
-          puts "In check SimilarsFound similars pair:  second_row3 = #{second_row3.inspect} \n"
-          puts "In check SimilarsFound similars pair:  second_row3_profile = #{second_row3_profile.inspect} \n"
-          expect(second_row3_profile).to eq(79) # got pair of similars
+          first_row3 = SimilarsFound.first
+          puts "After <disconnect_similars> check SimilarsFound sims pair: first_row3 = #{first_row3.inspect} \n"
+          first_row_profile1 = first_row3.first_profile_id
+          first_row_profile2 = first_row3.second_profile_id
+          sim_pair1 = [first_row_profile1, first_row_profile2].sort
+          expect(sim_pair1).to eq([70, 81]) # got pair of similars
+          puts "After <disconnect_similars> check SimilarsFound: sim_pair1 = #{sim_pair1.inspect} \n"
+
+          second_row3 = SimilarsFound.second
+          second_row_profile1 = second_row3.first_profile_id
+          second_row_profile2 = second_row3.second_profile_id
+          puts "After <disconnect_similars> check SimilarsFound sims pair: second_row3 = #{second_row3.inspect} \n"
+          sim_pair2 = [second_row_profile1, second_row_profile2].sort
+          puts "After <disconnect_similars> check SimilarsFound sims pair:  sim_pair2 = #{sim_pair2.inspect} \n"
+          expect(sim_pair2).to eq([79, 82]) # got pair of similars
+
         end
         # псоле дисконнект СимФоунд д. иметь похожие в себе!
-        #     849;8;81;70 or 70:81
-        #     850;8;79;82 or 82:79
-       end
+        #   849;8;81;70 or 70:81
+        #   850;8;79;82 or 82:79
+      end
+
 
 
   # пометить те ряды, кот-е меняются при объед/разъед (см. в Логах - row_number)
-      # их и надо тестировать на корректность изменений туда-сюда
+  # их и надо тестировать на корректность изменений туда-сюда
 
 
 
