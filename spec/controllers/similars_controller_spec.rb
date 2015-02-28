@@ -454,7 +454,8 @@ describe SimilarsController, :type => :controller , similars: true do
       end
 
       context '- After action <disconnect_similars>: check SimilarsFound ' do
-        it '- SimilarsFound got 2 sims rows - Ok' do
+        # после disconnect_similars SimilarsFound д. иметь похожие пары: 1) 81;70 or 70:81  2) 79;82 or 82:79
+        before {
           SimilarsFound.delete_all
           SimilarsFound.reset_pk_sequence
           get :internal_similars_search
@@ -462,29 +463,30 @@ describe SimilarsController, :type => :controller , similars: true do
               first_profile_id: first_init_profile, second_profile_id: second_init_profile,
               :format => 'js'
           get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'
-          sims_pairs_count =  SimilarsFound.all.count
+        }
+        it '- SimilarsFound got 2 sims rows - Ok' do
+           sims_pairs_count =  SimilarsFound.all.count
           puts "After <disconnect_similars> check SimilarsFound:  sims_pairs_count = #{sims_pairs_count.inspect} \n"
           expect(sims_pairs_count).to eq(2) # got 2 rows of similars
+        end
+        it '- SimilarsFound got good sims 1st pair - Ok' do
           first_row3 = SimilarsFound.first
           puts "After <disconnect_similars> check SimilarsFound sims pair: first_row3 = #{first_row3.inspect} \n"
           first_row_profile1 = first_row3.first_profile_id
           first_row_profile2 = first_row3.second_profile_id
           sim_pair1 = [first_row_profile1, first_row_profile2].sort
-          expect(sim_pair1).to eq([70, 81]) # got pair of similars
+          expect(sim_pair1).to eq([70, 81]) # got 1st pair of similars
           puts "After <disconnect_similars> check SimilarsFound: sim_pair1 = #{sim_pair1.inspect} \n"
-
+        end
+        it '- SimilarsFound got good sims 2nd pair - Ok' do
           second_row3 = SimilarsFound.second
+          puts "After <disconnect_similars> check SimilarsFound sims pair: second_row3 = #{second_row3.inspect} \n"
           second_row_profile1 = second_row3.first_profile_id
           second_row_profile2 = second_row3.second_profile_id
-          puts "After <disconnect_similars> check SimilarsFound sims pair: second_row3 = #{second_row3.inspect} \n"
           sim_pair2 = [second_row_profile1, second_row_profile2].sort
-          puts "After <disconnect_similars> check SimilarsFound sims pair:  sim_pair2 = #{sim_pair2.inspect} \n"
-          expect(sim_pair2).to eq([79, 82]) # got pair of similars
-
+          expect(sim_pair2).to eq([79, 82]) # got 2nd pair of similars
+          puts "After <disconnect_similars> check SimilarsFound sims pair: sim_pair2 = #{sim_pair2.inspect} \n"
         end
-        # псоле дисконнект СимФоунд д. иметь похожие в себе!
-        #   849;8;81;70 or 70:81
-        #   850;8;79;82 or 82:79
       end
 
 
