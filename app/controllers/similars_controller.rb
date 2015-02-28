@@ -132,6 +132,7 @@ class SimilarsController < ApplicationController
     # logger.info "*** In disconnect_similars:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
     ############ call of User.module Similars_disconnection #####################
     current_user.disconnect_sims_in_tables(log_id.to_i)
+    tree_info, new_sims, similars = current_user.start_similars
   end
 
 

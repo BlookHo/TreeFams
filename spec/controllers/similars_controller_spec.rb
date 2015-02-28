@@ -209,8 +209,8 @@ describe SimilarsController, :type => :controller , similars: true do
       WeafamSetting.reset_pk_sequence
       Name.delete_all
       Name.reset_pk_sequence
-      # SimilarsFound.delete_all
-      # SimilarsFound.reset_pk_sequence
+      SimilarsFound.delete_all
+      SimilarsFound.reset_pk_sequence
     }
 
   describe 'CHECK SimilarsController methods' do
@@ -399,6 +399,12 @@ describe SimilarsController, :type => :controller , similars: true do
           puts "In check log connected_at in SimilarsLog:  current_user_logged = #{current_user_logged.inspect} \n"
           expect(current_user_logged).to eq(1) # got log current_user_id of connected similars
         end
+
+        it '- SimilarsFound got 2 rows - Ok' do
+          similars_pairs_count =  SimilarsFound.all.count
+          puts "In check SimilarsFound count rows:  similars_pairs_count = #{similars_pairs_count.inspect} \n"
+          expect(similars_pairs_count).to eq(0) # got 2 rows of similars
+        end
       end
 
     end
@@ -455,12 +461,26 @@ describe SimilarsController, :type => :controller , similars: true do
           puts "In check SimilarsLog count rows: logs_count = #{logs_count.inspect} \n"
           expect(logs_count).to eq(0) # after deleting - got 0 rows of similars connecting logs
         end
-      end
+        it '- SimilarsFound got 2 sims rows - Ok' do
+          sims_pairs_count =  SimilarsFound.all.count
+          puts "In check SimilarsFound count rows:  sims_pairs_count = #{sims_pairs_count.inspect} \n"
+          expect(sims_pairs_count).to eq(2) # got 2 rows of similars
+          first_row3 =  SimilarsFound.first
+          first_row3_profile = first_row3.first_profile_id
+          puts "In check SimilarsFound similars pair:  first_row3 = #{first_row3.inspect} \n"
+          puts "In check SimilarsFound similars pair:  first_row3_profile = #{first_row3_profile.inspect} \n"
+          expect(first_row3_profile).to eq(81) # got pair of similars
+          second_row3 =  SimilarsFound.second
+          second_row3_profile = second_row3.first_profile_id
+          puts "In check SimilarsFound similars pair:  second_row3 = #{second_row3.inspect} \n"
+          puts "In check SimilarsFound similars pair:  second_row3_profile = #{second_row3_profile.inspect} \n"
+          expect(second_row3_profile).to eq(79) # got pair of similars
+        end
+        # псоле дисконнект СимФоунд д. иметь похожие в себе!
+        #     849;8;81;70 or 70:81
+        #     850;8;79;82 or 82:79
+       end
 
-
-  # псоле дисконнект СимФоунд д. иметь похожие в себе!
-  #     849;8;81;70
-  #     850;8;79;82
 
   # пометить те ряды, кот-е меняются при объед/разъед (см. в Логах - row_number)
       # их и надо тестировать на корректность изменений туда-сюда
