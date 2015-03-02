@@ -367,7 +367,19 @@ describe SimilarsController, :type => :controller , similars: true do
                        #{user_2_before_profile_id.inspect} \n"
           expect(user_2_before_profile_id).to eq(66) # profile_id of user2 - before connection
         end
-       end
+      end
+
+      context '- Before action <connect_similars>: check SimilarsLog for Tree' do
+        let(:connected_users) { current_user.get_connected_users }
+        let(:table_name) { Tree.table_name }
+
+        it '- before action <connect_similars> got Empty array of [rows_ids] from Tree logs - Ok' do
+          rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name).pluck(:table_row)
+          puts "before 1 action <connect_similars> check in Tree: table_name = #{table_name.inspect} \n"
+          puts "before 1 action <connect_similars> check in Tree: rows_ids = #{rows_ids.inspect} \n"
+          expect(rows_ids).to eq([]) # got rows_ids array for Tree logs before connection
+        end
+      end
 
       context '- After action <connect_similars>: check SimilarsLog ' do
         before {  get :internal_similars_search
@@ -420,8 +432,8 @@ describe SimilarsController, :type => :controller , similars: true do
           user_1_profile =  User.find(currentuser_id).profile_id
           puts "After action <connect_similars> check in User: user_1_profile = #{user_1_profile.inspect} \n"
           expect(user_1_profile).to eq(63) # got profile_id of user_1
-          puts "After action: User.find(connected_users[1]).profile_id =
-                         #{User.find(connected_users[1]).profile_id} \n" # profile_id = 84
+          # puts "After action: User.find(connected_users[1]).profile_id =
+          #                #{User.find(connected_users[1]).profile_id} \n" # profile_id = 84
           user_2_profile =  User.find(connected_users[1]).profile_id
           puts "After action <connect_similars> check in User: user_2_profile = #{user_2_profile.inspect} \n"
           expect(user_2_profile).to eq(84) # got profile_id of user_2 = 84
@@ -430,40 +442,90 @@ describe SimilarsController, :type => :controller , similars: true do
 
       context '- After action <connect_similars>: check Profile' do
         let(:connected_users) { current_user.get_connected_users }
-        it '- in User one row changed - Ok' do
-
+        it '- in Profile - before profiles rows changed - Ok' do
           user_2 = User.find(connected_users[1])
-          puts "before 1 action <connect_similars> check in User: before_profile_user
-                        = #{user_2.profile_id.inspect} \n"
-          expect(user_2.profile_id).to eq(66) # got profile_id for 2nd user in User before connection
+          puts "before 1 action <connect_similars> check User: before_profile_user = #{user_2.profile_id.inspect} \n"
+          expect(user_2.profile_id).to eq(66) # got profile_id for 2nd user in User before connection = 66
 
           before_profile_new_user = Profile.find(user_2.profile_id).user_id
-          puts "before 2 action <connect_similars> check in Profile: before_profile_new_user
-                        = #{before_profile_new_user.inspect} \n"
-          expect(before_profile_new_user).to eq(2) # got user_id for 2nd user profile in Profiles before connection
+          puts "before 2 action <connect_similars> check Profile: before_profile_new_user = #{before_profile_new_user.inspect} \n"
+          expect(before_profile_new_user).to eq(2) # got user_id for 2nd user profile in Profiles before connection = 2
+        end
 
+        it '- in Profile - After profiles rows changed - Ok' do
           get :internal_similars_search
           get :connect_similars,
               first_profile_id: first_init_profile, second_profile_id: second_init_profile,
               :format => 'js'
 
           profiles_users_count =  Profile.where(user_id: connected_users).count
-          puts "After 1 action <connect_similars> check in Profile: profiles_users_count =
-                         #{profiles_users_count.inspect} \n"
+          puts "After 1 action <connect_similars> check Profile: profiles_users_count = #{profiles_users_count.inspect} \n"
           expect(profiles_users_count).to eq(2) # got 2 rows of users in Profiles
 
           user_2 = User.find(connected_users[1])
-          puts "After 2 action <connect_similars> check in User: after_profile_user
-                        = #{user_2.profile_id.inspect} \n"
-          expect(user_2.profile_id).to eq(84) # got profile_id for 2nd user in User after connection
+          puts "After 2 action <connect_similars> check in User: after_profile_user = #{user_2.profile_id.inspect} \n"
+          expect(user_2.profile_id).to eq(84) # got profile_id for 2nd user in User after connection = 84
 
           profile_new_user = Profile.find(user_2.profile_id).user_id
           puts "After 3 action <connect_similars> check in Profile: profile_new_user = #{profile_new_user.inspect} \n"
-          expect(profile_new_user).to eq(2) # got new user_id for 2nd user profile in Profiles after connection
+          expect(profile_new_user).to eq(2) # got new user_id for 2nd user profile in Profiles after connection = 2
         end
       end
 
-      
+      context '- After action <connect_similars>: check Tree' do
+        let(:connected_users) { current_user.get_connected_users }
+        let(:table_name) { Tree.table_name }
+        let(:field_name_profile) { "profile_id" }
+        let(:field_name_is_profile) { "is_profile_id" }
+
+        before { get :internal_similars_search
+                 get :connect_similars,
+                  first_profile_id: first_init_profile, second_profile_id: second_init_profile, :format => 'js' }
+
+        it '- in Tree - check SimilarsLog rows changed for "profile_id" field - Ok' do
+          profile_rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name,
+                                               field: field_name_profile)
+                                               .pluck(:table_row).sort
+          puts "after 1 action <connect_similars> check in Tree: profile_rows_ids = #{profile_rows_ids.inspect} \n"
+          expect(profile_rows_ids).to eq([7, 8, 9, 10, 11, 14, 15, 16]) # got rows_ids array for Tree logs before connection
+        end
+
+        it '- in Tree - check fields changed for "profile_id" in proper rows to proper values - Ok' do
+          profile_rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name,
+                                               field: field_name_profile)
+                                               .pluck(:table_row).sort
+          profile_values_written = []
+          profile_rows_ids.each do |row|
+            profile_values_written << Tree.find(row).profile_id
+          end
+          puts "after 2 action <connect_similars> check in Tree: profile_values_written = #{profile_values_written.inspect} \n"
+          expect(profile_values_written).to eq([84, 84, 84, 84, 84, 81, 81, 82]) # got proper values array in fields changed
+          # for "profile_id" in Tree after connection
+        end
+
+        it '- in Tree - check SimilarsLog rows changed for "IS_profile_id" field - Ok' do
+          is_profile_rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name,
+                                                  field: field_name_is_profile)
+                                                  .pluck(:table_row).sort
+          puts "after 1 action <connect_similars> check in Tree: is_profile_rows_ids = #{is_profile_rows_ids.inspect} \n"
+          expect(is_profile_rows_ids).to eq([3, 7, 11, 14, 15, 16]) # got rows_ids array for Tree logs before connection
+        end
+
+        it '- in Tree - check fields changed for "profile_id" in proper rows to proper values - Ok' do
+          is_profile_rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name,
+                                                  field: field_name_is_profile)
+                                                  .pluck(:table_row).sort
+          is_profile_values_written = []
+          is_profile_rows_ids.each do |row|
+            is_profile_values_written << Tree.find(row).is_profile_id
+          end
+          puts "after 2 action <connect_similars> check in Tree: is_profile_values_written = #{is_profile_values_written.inspect} \n"
+          expect(is_profile_values_written).to eq([84, 81, 81, 67, 82, 83]) # got proper values array in fields changed
+          # for "is_profile_id" in Tree after connection
+        end
+
+      end
+
     end
 
     describe 'GET #disconnect_similars' do
