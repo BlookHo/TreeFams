@@ -50,3 +50,22 @@ FactoryGirl.define do
 
 
 end
+
+# After Connected
+#
+# 1;17
+# 2;11
+# 3;22
+# 6;53
+# 7;63
+# 8;84
+#
+
+# After DisConnected
+#
+# 1;17;FALSE
+# 2;11;FALSE
+# 3;22;FALSE
+# 6;53;FALSE
+# 7;63;FALSE
+# 8;66;FALSE
