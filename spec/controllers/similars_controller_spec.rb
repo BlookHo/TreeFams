@@ -12,6 +12,7 @@ describe SimilarsController, :type => :controller , similars: true do
 
       FactoryGirl.create(:user, :user_2)  # User = 2. Tree = 2. profile_id = 66
       puts "before All: User.last.id = #{User.last.id} \n" # id = 2
+      puts "before All: User.find(2).profile_id = #{User.find(2).profile_id} \n" # id = 2
 
       FactoryGirl.create(:connected_user, :correct)      # 1  2
       FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
@@ -358,21 +359,15 @@ describe SimilarsController, :type => :controller , similars: true do
         end
       end
 
-      # context '- Before action <connect_similars>: check SimilarsFound ' do
-      #   before {  get :internal_similars_search }
-      #   it '- SimilarsFound got 2 rows - Ok' do
-      #     similars_pairs_count =  SimilarsFound.all.count
-      #     puts "In check SimilarsFound count rows:  similars_pairs_count = #{similars_pairs_count.inspect} \n"
-      #     expect(similars_pairs_count).to eq(2) # got 2 rows of similars
-      #   end
-      #   it '- SimilarsFound got similars pairs - Ok' do
-      #     first_row2 =  SimilarsFound.first
-      #     puts "In check SimilarsFound count rows:  first_row2 = #{first_row2.inspect} \n"
-      #     first_row2_profile = first_row2.first_profile_id
-      #     puts "In check SimilarsFound similars pair:  first_row2_profile = #{first_row2_profile.inspect} \n"
-      #     expect(first_row2_profile).to eq(81) # or 70) # got row of similars
-      #   end
-      # end
+      context '- Before action <connect_similars>: check User ' do
+        let(:connected_users) { current_user.get_connected_users }
+        it '- in User_2 profile_id before changed - Ok' do
+          user_2_before_profile_id = User.find(connected_users[1]).profile_id
+          puts "before action <connect_similars> check in User: user_2_before_profile_id =
+                       #{user_2_before_profile_id.inspect} \n"
+          expect(user_2_before_profile_id).to eq(66) # profile_id of user2 - before connection
+        end
+       end
 
       context '- After action <connect_similars>: check SimilarsLog ' do
         before {  get :internal_similars_search
@@ -381,7 +376,7 @@ describe SimilarsController, :type => :controller , similars: true do
                       :format => 'js' }
         it '- SimilarsLog got rows count - Ok' do
           logs_count =  SimilarsLog.all.count
-          puts "In check SimilarsLog count rows: logs_count = #{logs_count.inspect} \n"
+          puts "After action <connect_similars> check SimilarsLog count rows: logs_count = #{logs_count.inspect} \n"
           expect(logs_count).to eq(82) # got 82 rows of similars connecting logs
         end
 
@@ -395,7 +390,7 @@ describe SimilarsController, :type => :controller , similars: true do
         end
       end
 
-      context '- After action <connect_similars>: check SimilarsLog count' do
+      context '- After action <connect_similars>: check SimilarsFound ' do
         it '- SimilarsFound got 2 rows - Ok' do
           SimilarsFound.delete_all
           SimilarsFound.reset_pk_sequence
@@ -409,6 +404,66 @@ describe SimilarsController, :type => :controller , similars: true do
         end
       end
 
+      context '- After action <connect_similars>: check User' do
+        let(:user_2) {User.find(2)}
+        let(:connected_users) { current_user.get_connected_users }
+        it '- in User one row changed - Ok' do
+          puts "before User one row changed: current_user.profile_id = #{current_user.profile_id} \n"
+          puts "before User two row changed: user_2.id = #{user_2.id} \n"
+          expect(user_2.profile_id).to eq(66) # got 2 rows of similars
+          get :internal_similars_search
+          get :connect_similars,
+              first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+              :format => 'js'
+          users_count =  User.all.count
+          puts "After action <connect_similars> check in User: users_count = #{users_count.inspect} \n"
+          user_1_profile =  User.find(currentuser_id).profile_id
+          puts "After action <connect_similars> check in User: user_1_profile = #{user_1_profile.inspect} \n"
+          expect(user_1_profile).to eq(63) # got profile_id of user_1
+          puts "After action: User.find(connected_users[1]).profile_id =
+                         #{User.find(connected_users[1]).profile_id} \n" # profile_id = 84
+          user_2_profile =  User.find(connected_users[1]).profile_id
+          puts "After action <connect_similars> check in User: user_2_profile = #{user_2_profile.inspect} \n"
+          expect(user_2_profile).to eq(84) # got profile_id of user_2 = 84
+        end
+      end
+
+      context '- After action <connect_similars>: check Profile' do
+        let(:connected_users) { current_user.get_connected_users }
+        it '- in User one row changed - Ok' do
+
+          user_2 = User.find(connected_users[1])
+          puts "before 1 action <connect_similars> check in User: before_profile_user
+                        = #{user_2.profile_id.inspect} \n"
+          expect(user_2.profile_id).to eq(66) # got profile_id for 2nd user in User before connection
+
+          before_profile_new_user = Profile.find(user_2.profile_id).user_id
+          puts "before 2 action <connect_similars> check in Profile: before_profile_new_user
+                        = #{before_profile_new_user.inspect} \n"
+          expect(before_profile_new_user).to eq(2) # got user_id for 2nd user profile in Profiles before connection
+
+          get :internal_similars_search
+          get :connect_similars,
+              first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+              :format => 'js'
+
+          profiles_users_count =  Profile.where(user_id: connected_users).count
+          puts "After 1 action <connect_similars> check in Profile: profiles_users_count =
+                         #{profiles_users_count.inspect} \n"
+          expect(profiles_users_count).to eq(2) # got 2 rows of users in Profiles
+
+          user_2 = User.find(connected_users[1])
+          puts "After 2 action <connect_similars> check in User: after_profile_user
+                        = #{user_2.profile_id.inspect} \n"
+          expect(user_2.profile_id).to eq(84) # got profile_id for 2nd user in User after connection
+
+          profile_new_user = Profile.find(user_2.profile_id).user_id
+          puts "After 3 action <connect_similars> check in Profile: profile_new_user = #{profile_new_user.inspect} \n"
+          expect(profile_new_user).to eq(2) # got new user_id for 2nd user profile in Profiles after connection
+        end
+      end
+
+      
     end
 
     describe 'GET #disconnect_similars' do
