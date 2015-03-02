@@ -381,6 +381,18 @@ describe SimilarsController, :type => :controller , similars: true do
         end
       end
 
+      context '- Before action <connect_similars>: check SimilarsLog for ProfileKey' do
+        let(:connected_users) { current_user.get_connected_users }
+        let(:table_name) { ProfileKey.table_name }
+
+        it '- before action <connect_similars> got Empty array of [rows_ids] from ProfileKey logs - Ok' do
+          rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name).pluck(:table_row)
+          puts "before 1 action <connect_similars> check in ProfileKey: table_name = #{table_name.inspect} \n"
+          puts "before 1 action <connect_similars> check in ProfileKey: rows_ids = #{rows_ids.inspect} \n"
+          expect(rows_ids).to eq([]) # got rows_ids array for ProfileKey logs before connection
+        end
+      end
+
       context '- After action <connect_similars>: check SimilarsLog ' do
         before {  get :internal_similars_search
                   get :connect_similars,
@@ -522,6 +534,69 @@ describe SimilarsController, :type => :controller , similars: true do
           puts "after 2 action <connect_similars> check in Tree: is_profile_values_written = #{is_profile_values_written.inspect} \n"
           expect(is_profile_values_written).to eq([84, 81, 81, 67, 82, 83]) # got proper values array in fields changed
           # for "is_profile_id" in Tree after connection
+        end
+
+      end
+
+      context '- After action <connect_similars>: check ProfileKey' do
+        let(:connected_users) { current_user.get_connected_users }
+        let(:table_name) { ProfileKey.table_name }
+        let(:field_name_profile) { "profile_id" }
+        let(:field_name_is_profile) { "is_profile_id" }
+
+        before { get :internal_similars_search
+        get :connect_similars,
+            first_profile_id: first_init_profile, second_profile_id: second_init_profile, :format => 'js' }
+
+        it '- in ProfileKey - check SimilarsLog rows changed for "profile_id" field - Ok' do
+          profile_rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name,
+                                               field: field_name_profile)
+                                 .pluck(:table_row).sort
+          puts "after 1 action <connect_similars> check in ProfileKey: profile_rows_ids = #{profile_rows_ids.inspect} \n"
+          expect(profile_rows_ids).to eq([8, 10, 12, 23, 33, 37, 38, 40, 42, 43, 45, 49, 55, 56, 58, 60, 63, 73, 79,
+                                          80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92])
+                                          # got rows_ids array for ProfileKey logs before connection
+        end
+
+        it '- in ProfileKey - check fields changed for "profile_id" in proper rows to proper values - Ok' do
+          profile_rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name,
+                                               field: field_name_profile)
+                                 .pluck(:table_row).sort
+          profile_values_written = []
+          profile_rows_ids.each do |row|
+            profile_values_written << ProfileKey.find(row).profile_id
+          end
+          puts "after 2 action <connect_similars> check in ProfileKey: profile_values_written = #{profile_values_written.inspect} \n"
+          expect(profile_values_written).to eq([84, 84, 84, 84, 84, 84, 81, 81, 81, 84, 84, 84, 84, 81, 81, 81, 84,
+                                                84, 81, 67, 81, 82, 67, 82, 84, 82, 82, 83, 81, 83, 67, 83])
+                                                # got proper values array in fields changed
+          # for "profile_id" in ProfileKey after connection
+        end
+
+        it '- in ProfileKey - check SimilarsLog rows changed for "IS_profile_id" field - Ok' do
+          is_profile_rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name,
+                                                  field: field_name_is_profile)
+                                    .pluck(:table_row).sort
+          puts "after 1 action <connect_similars> check in ProfileKey: is_profile_rows_ids = #{is_profile_rows_ids.inspect} \n"
+          expect(is_profile_rows_ids).to eq([7, 9, 11, 24, 34, 37, 38, 39, 41, 44, 46, 50, 55, 56, 57, 59, 64, 74,
+                                             79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92])
+                                             # got rows_ids array for ProfileKey logs before connection
+        end
+
+        it '- in ProfileKey - check fields changed for "profile_id" in proper rows to proper values - Ok' do
+          is_profile_rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name,
+                                                  field: field_name_is_profile)
+                                    .pluck(:table_row).sort
+          is_profile_values_written = []
+          is_profile_rows_ids.each do |row|
+            is_profile_values_written << ProfileKey.find(row).is_profile_id
+          end
+          puts "after 2 action <connect_similars> check in ProfileKey: is_profile_values_written =
+                                       #{is_profile_values_written.inspect} \n"
+          expect(is_profile_values_written).to eq([84, 84, 84, 84, 84, 81, 84, 81, 81, 84, 84, 84, 81, 84, 81, 81,
+                                                   84, 84, 67, 81, 82, 81, 82, 67, 82, 84, 83, 82, 83, 81, 83, 67])
+                                                    # got proper values array in fields changed
+          # for "is_profile_id" in ProfileKey after connection
         end
 
       end
