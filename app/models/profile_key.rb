@@ -1,10 +1,68 @@
 class ProfileKey < ActiveRecord::Base
   include ProfileKeysGeneration
-
- # include SimilarsInitSearch # методы поиска стартовых пар похожих
- # include SimilarsExclusions # методы учета отношений исключений
-
   include SearchHelper
+
+  #
+  # t.integer :user_id
+  # t.integer :profile_id
+  # t.integer :name_id
+  # t.integer :relation_id
+  # t.integer :is_profile_id
+  # t.integer :is_name_id
+
+  # validates_presence_of :connected_at, :current_user_id, :table_name, :table_row, :field,
+  #                       :message => "Должно присутствовать в SimilarsLog"
+  #
+  # validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
+  # validates_numericality_of :written, :overwritten,:greater_than => 0, :unless => :writtens_can_be_nil?
+  # validates_numericality_of :written, :overwritten, :only_integer => true, :unless => :writtens_can_be_nil?
+  # validate :written_fields_are_not_equal, :unless => :writtens_can_be_equal? # :written AND :overwritten
+  #
+  # validates_numericality_of :connected_at, :current_user_id, :table_row, :only_integer => true,
+  #                           :message => "Должны быть целым числом в SimilarsLog"
+  # validates_numericality_of :connected_at, :current_user_id, :table_row, :greater_than => 0,
+  #                           :message => "Должны быть больше 0 в SimilarsLog"
+  #
+  # validates_inclusion_of :field, :in => ["profile_id"], :if => :table_users?
+  # validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
+  # validates_inclusion_of :field, :in => ["tree_id", "user_id"], :if => :table_profiles?
+  # validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
+  # validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
+  # - тогда поле table_row д.б.uniq
+
+  # custom validations
+  # def written_fields_are_not_equal
+  #   self.errors.add(:similars_logs,
+  #                   'Значения полей в одном ряду не должны быть равны в SimilarsLog.') if self.written == self.overwritten
+  # end
+  #
+  # def writtens_can_be_equal?
+  #   self.table_name == "profiles" && self.field == "tree_id"
+  # end
+  #
+  # def writtens_can_be_nil?
+    # puts "In SimilarsLog valid:  table_name = #{self.table_name}, written = #{self.written}, field = #{self.field} "
+    # puts "In SimilarsLog valid:  table_name? = #{self.table_name == "profiles"} "
+    # puts "In SimilarsLog valid:  table_name && field? = #{self.table_name == "profiles" && self.field == "user_id"} "
+  #   self.table_name == "profiles" && self.field == "user_id"
+  # end
+  #
+  # def table_users?
+  #   self.table_name == "users"
+  # end
+  #
+  # def table_trees_pr_keys?
+  #   self.table_name == "trees" || self.table_name == "profile_keys"
+  # end
+  #
+  # def table_profiles?
+  #   self.table_name == "profiles"
+  # end
+  #
+  # def field_tree?
+  #   self.field == "tree_id"
+  # end
+
 
   belongs_to :profile#, dependent: :destroy
   belongs_to :is_profile, foreign_key: :is_profile_id, class_name: Profile
