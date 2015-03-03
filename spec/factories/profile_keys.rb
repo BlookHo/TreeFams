@@ -1,7 +1,64 @@
 FactoryGirl.define do
 
-  factory :profile_key do          # For 2 connected trees test [1, 2]
+  factory :profile_key do
 
+    # validation
+
+    trait :profile_key_good do
+      user_id         1
+      profile_id      63
+      name_id         40
+      relation_id     1
+      is_profile_id   64
+      is_name_id      90
+    end
+    trait :big_IDs do
+      user_id         100000000
+      profile_id      6333333333
+      name_id         4044
+      relation_id     111
+      is_profile_id   6466666666
+      is_name_id      9099
+    end
+    trait :user_less_zero do
+      user_id         -2
+     end
+    trait :profile_id_less_zero do
+      user_id           2
+      profile_id        -6
+    end
+    trait :name_id_less_zero do
+      profile_id        6
+      name_id           -4044
+    end
+    trait :relation_id_less_zero do
+      name_id           404
+      relation_id       -111
+    end
+    trait :is_profile_id_equ_zero do
+      relation_id       110
+      is_profile_id   0
+    end
+    trait :is_name_id_equ_zero do
+      is_profile_id     1110
+      is_name_id      0
+    end
+    trait :relation_wrong do
+      relation_id       9
+      is_name_id      1100
+    end
+    trait :profiles_wrong_equal do
+      profile_id        6777
+      relation_id       91
+      is_profile_id     6777
+    end
+    trait :profile_non_integer do
+      profile_id        6.777
+      is_profile_id     6777
+    end
+
+
+    # For 1 tree test WITH SIMILARS. Tree connected of [1, 2]
     trait :profile_key_w_sims_1 do       # For 2 connected trees test - 1st. Tree = 1. User = 1. Profile = 63
       user_id         1
       profile_id      63
