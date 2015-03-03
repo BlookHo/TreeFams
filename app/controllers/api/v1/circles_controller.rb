@@ -13,7 +13,7 @@ module Api
       # ответ в формате json
       # {circles:[], path:[]}
 
-      def show
+      def index
         profile = Profile.find(params[:profile_id])
         max_distance = params[:max_distance]
 

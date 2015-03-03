@@ -1,6 +1,18 @@
 Weafam::Application.routes.draw do
 
 
+  # API
+  ##################################################
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      get  'auth',   to: 'sessions#index'
+      get  'circles', to: 'circles#index'
+      get  'search',  to: 'search#index'
+      get  'search/iternal',  to: 'search#iternal'
+    end
+  end
+
+
   resources :similars_founds, except: [:update, :show, :edit]
 
   resources :relations
@@ -205,17 +217,6 @@ Weafam::Application.routes.draw do
   # add new name (from user)
   resources :names, only: [:new, :create]
 
-
-
-  # API
-  ##################################################
-  namespace :api, defaults: {format: 'json'} do
-    namespace :v1 do
-      get 'circles', to: 'circles#show'
-      get 'search',  to: 'search#index'
-      get 'search/iternal',  to: 'search#iternal'
-    end
-  end
 
 
 

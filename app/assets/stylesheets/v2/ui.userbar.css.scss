@@ -23,9 +23,10 @@
     width:50px;
     height:50px;
     text-indent:-10000px;
+    opacity:1;
   }
 
-  li a:hover{opacity:0.3;}
+  li a:hover{opacity:0.5;}
 
   li a.handshakes{
     background:image-url("ui.userbar.handshake.icon.svg") center center no-repeat;
@@ -45,6 +46,10 @@
   li a.news{
     background:image-url("ui.userbar.news.icon.svg") center center no-repeat;
     background-size: 22px;
+  }
+
+  li a.active{
+    opacity:0.5;
   }
 }
 
