@@ -2,14 +2,6 @@ class ProfileKey < ActiveRecord::Base
   include ProfileKeysGeneration
   include SearchHelper
 
-  #
-  # t.integer :user_id
-  # t.integer :profile_id
-  # t.integer :name_id
-  # t.integer :relation_id
-  # t.integer :is_profile_id
-  # t.integer :is_name_id
-
   validates_presence_of :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id,
                         :message => "Должно присутствовать в ProfileKey"
   validates_numericality_of :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id,
@@ -38,6 +30,8 @@ class ProfileKey < ActiveRecord::Base
   belongs_to :relation, primary_key: :relation_id
 
   has_many :profile_datas, through: :profile
+
+  # todo: set index to model: user_id, profile_id
 
 
   def full_name

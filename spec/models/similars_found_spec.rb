@@ -10,6 +10,7 @@ RSpec.describe SimilarsFound, :type => :model do
 
         let(:good_similars_found) {FactoryGirl.build(:similars_found)}
         it '- Saves a valid similars pair' do
+          puts " Model SimilarsFound validation "
           expect(good_similars_found).to be_valid
         end
 

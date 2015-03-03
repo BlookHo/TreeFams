@@ -18,6 +18,7 @@ describe User do
       context '- when valid user' do
         let(:user) {FactoryGirl.build(:user)}
         it '- saves a valid user' do
+          puts " Model User validation "
           expect(user).to be_valid
         end
       end

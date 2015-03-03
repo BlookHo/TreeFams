@@ -4,6 +4,7 @@ describe Profile do
       context '- valid profiles' do
         let(:first_profile) {FactoryGirl.build(:profile_one)}  # id 38
         it '- saves a valid profile_one' do
+          puts " Model Profile validation "
           expect(first_profile).to be_valid
         end
 
