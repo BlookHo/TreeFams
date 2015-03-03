@@ -51,7 +51,7 @@ module ProfileApiCircles
         collect_circles(circle: current_circle, current_user: current_user, locale_distance: distance + 1)
       end
     end
-    @current_distance += 1 if locale_distance.nil?
+    @current_distance += 1 if locale_distance.nil? # если locale_distance  nil = значит мы не в основном цикле
   end
 
 
