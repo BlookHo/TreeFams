@@ -55,10 +55,9 @@ Weafam::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   # SpeedUp js / css compiling in development
-  config.assets.debug = true
   config.assets.js_compressor = false
   # Expands the lines which load the assets
-  config.assets.debug = true
+  config.assets.debug = false
 
   # Do not compress assets
   #config.assets.compress = false

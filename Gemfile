@@ -156,17 +156,17 @@ group :console do
 end
 
 
-gem 'omniauth'
-gem 'omniauth-facebook'
-gem 'fb_graph'
-gem 'omniauth-twitter'
-gem 'twitter'#, :git => 'https://github.com/sferik/twitter.git'
-gem "omniauth-google-oauth2"
-gem "omniauth-vkontakte"
-gem 'vkontakte_api'
+# gem 'omniauth'
+# gem 'omniauth-facebook'
+# gem 'fb_graph'
+# gem 'omniauth-twitter'
+# gem 'twitter'#, :git => 'https://github.com/sferik/twitter.git'
+# gem "omniauth-google-oauth2"
+# gem "omniauth-vkontakte"
+# gem 'vkontakte_api'
 
 # Middleware that displays speed badge for every html page. Designed to work both in production and in development.
-gem 'rack-mini-profiler'
+# gem 'rack-mini-profiler'
 
 # Находит косяки в запросах к базе
 # help to kill N+1 queries and unused eager loading

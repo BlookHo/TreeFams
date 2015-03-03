@@ -1,7 +1,7 @@
 class HomeController < ApplicationController
+  layout 'application.v2'
 
   before_filter :logged_in?
-  layout 'application.new'
   include SimilarsHelper
 
 
@@ -20,6 +20,7 @@ class HomeController < ApplicationController
       end
     end
   end
+
 
 
   def show

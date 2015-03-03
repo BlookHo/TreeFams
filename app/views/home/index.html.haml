@@ -1,27 +1,8 @@
--# home index page
-#graph-wrapper
+- content_for :userbar do
+  = render 'ui/userbar'
 
-= render 'path'
-= render 'search_results_button'
-= render 'zoom_range'
-= render 'notification'
+- content_for :leftbar do
+  = render 'ui/leftbar'
 
-#profile-context-menu{style:'display:none;'}
-
-#jsdebug
-
-= javascript_include_tag 'path'
-= javascript_include_tag 'home'
-= javascript_include_tag 'home-search'
-= javascript_include_tag 'zoom'
-
-
-%script
-  // var currentZoom = getCurrentZoom();
-  var access_token = '#{current_user.access_token}';
-  var current_user_profile_id = '#{current_user.profile_id}';
-  getCircles({ profile_id: current_user_profile_id, token: access_token });
-  // startSearch();
-  // run main search in callback of startSearch()
-  getSearchResults( showSearchResultsButton );
-  $('#search-results-button').draggable({});
+- content_for :rightbar do
+  = render 'ui/rightbar'

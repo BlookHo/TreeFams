@@ -1,0 +1,14 @@
+#userbar
+  = image_tag current_user.profile.avatar_path(:thumb), class: [:avatar, :medium]
+
+  %ul.main-nav
+    %li
+      = link_to 'Рукопожатия', '#', class: [:handshakes]
+      %span.badge 2
+    %li
+      = link_to 'Поиск', '#', class: [:search]
+    %li
+      = link_to 'Сообщения', '#', class: [:messages]
+      %span.badge 21
+    %li
+      = link_to 'Новости', '#', class: [:news]

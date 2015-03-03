@@ -1,0 +1,64 @@
+#userbar{
+  width:80px;
+  height:100%;
+  padding:15px;
+  background-color:$dark-blue-color;
+  color:#fff;
+  text-align:center;
+  float:left;
+}
+
+
+#userbar ul.main-nav{
+  margin-top:50px;
+
+  li{
+    margin-bottom:20px;
+    position:relative;
+    display:block;
+  }
+
+  li a{
+    display:block;
+    width:50px;
+    height:50px;
+    text-indent:-10000px;
+  }
+
+  li a:hover{opacity:0.3;}
+
+  li a.handshakes{
+    background:image-url("ui.userbar.handshake.icon.svg") center center no-repeat;
+    background-size: 28px;
+  }
+
+  li a.search{
+    background:image-url("ui.usernav.search.icon.svg") center center no-repeat;
+    background-size: 24px;
+  }
+
+  li a.messages{
+    background:image-url("ui.userbar.messages.icon.svg") center center no-repeat;
+    background-size: 24px;
+  }
+
+  li a.news{
+    background:image-url("ui.userbar.news.icon.svg") center center no-repeat;
+    background-size: 22px;
+  }
+}
+
+
+
+#userbar .badge{
+  display:block;
+  position:absolute;
+  background-color:$red-color;
+  top:0px;
+  right:0px;
+  font-size:11px;
+  height:24px;
+  line-height:24px;
+  min-width:24px;
+  border-radius:12px;
+}
