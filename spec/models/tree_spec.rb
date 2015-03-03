@@ -64,12 +64,19 @@ RSpec.describe Tree, :type => :model do
         it '- 9 Dont save: - bad_profile_non_integer - == 6.77 ' do
           expect(bad_profile_non_integer).to_not be_valid
         end
+
+        let(:bad_is_sex_wrong) {FactoryGirl.build(:tree, :is_sex_wrong)}
+        it '- 10 Dont save: - bad_profile_non_integer - == 6 ' do
+
+          expect(bad_is_sex_wrong).to_not be_valid
+        end
       end
 
     end
   end
 
-  describe '- Model methods' do
+  describe '- Model Tree methods' do
+
     # create parameters
     # let(:current_user_id) {user.id}
     # let(:other_user_id) {other_user.id}
@@ -83,7 +90,31 @@ RSpec.describe Tree, :type => :model do
       # FactoryGirl.create(:tree, :sims_log_5, current_user_id: third_user_id)
     end
 
-    describe '* get_connected_tree *' do
+    describe '#tree_amount *' do
+
+      context '- get profiles_qty' do
+        # let(:connected_users) {[current_user_id, other_user_id ]}
+        # let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
+        # it '- return proper log_connection_id for [current_user_id, other_user_id ]' do
+        #   # puts "In current_tree_log_id:  current_user_id = #{current_user_id} "
+        #   # puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
+        #   expect(log_connection_id).to eq(41)
+        # end
+      end
+
+      context '- get tree_is_profiles' do
+        # let(:connected_users) {[current_user_id, other_user_id ]}
+        # let(:log_connection_id) { SimilarsLog.current_tree_log_id(connected_users) }
+        # it '- return proper log_connection_id for [current_user_id, other_user_id ]' do
+        #   # puts "In current_tree_log_id:  current_user_id = #{current_user_id} "
+        #   # puts "In current_tree_log_id:  log_connection_id = #{log_connection_id} "
+        #   expect(log_connection_id).to eq(41)
+        # end
+      end
+
+    end
+
+    describe '#get_connected_tree *' do
 
       context '- get tree arr' do
         # let(:connected_users) {[current_user_id, other_user_id ]}

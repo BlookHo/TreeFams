@@ -1,5 +1,12 @@
 FactoryGirl.define do
-  factory :tree do
+  factory :tree, class: Tree  do
+    user_id         1
+    profile_id      63
+    name_id         40
+    relation_id     1
+    is_sex_id       1
+    is_profile_id   64
+    is_name_id      90
 
     # validation
 
@@ -8,6 +15,7 @@ FactoryGirl.define do
       profile_id      63
       name_id         40
       relation_id     1
+      is_sex_id       1
       is_profile_id   64
       is_name_id      90
     end
@@ -16,17 +24,30 @@ FactoryGirl.define do
       profile_id      6333333333
       name_id         4044
       relation_id     111
+      is_sex_id       0
       is_profile_id   6466666666
       is_name_id      9099
     end
     trait :user_less_zero do
       user_id         -2
+      # profile_id      63
+      # name_id         40
+      # relation_id     1
+      # is_sex_id       1
+      # is_profile_id   64
+      # is_name_id      90
     end
     trait :profile_id_less_zero do
       user_id           2
       profile_id        -6
+      # name_id         40
+      # relation_id     1
+      # is_sex_id       1
+      # is_profile_id   64
+      # is_name_id      90
     end
     trait :name_id_less_zero do
+      # user_id           2
       profile_id        6
       name_id           -4044
     end
@@ -54,6 +75,10 @@ FactoryGirl.define do
     trait :profile_non_integer do
       profile_id        6.777
       is_profile_id     6777
+    end
+    trait :is_sex_wrong do
+      profile_id        8888
+      is_sex_id         2
     end
 
 

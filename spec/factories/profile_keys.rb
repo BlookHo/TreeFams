@@ -1,6 +1,12 @@
 FactoryGirl.define do
 
   factory :profile_key do
+    user_id         1
+    profile_id      63
+    name_id         40
+    relation_id     1
+    is_profile_id   64
+    is_name_id      90
 
     # validation
 
