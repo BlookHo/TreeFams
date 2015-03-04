@@ -1,6 +1,6 @@
 FactoryGirl.define do
 
-  factory :profile_key do
+  factory :profile_key, class: ProfileKey do
     user_id         1
     profile_id      63
     name_id         40
@@ -10,14 +10,14 @@ FactoryGirl.define do
 
     # validation
 
-    trait :profile_key_good do
-      user_id         1
-      profile_id      63
-      name_id         40
-      relation_id     1
-      is_profile_id   64
-      is_name_id      90
-    end
+    # trait :profile_key_good do
+    #   user_id         1
+    #   profile_id      63
+    #   name_id         40
+    #   relation_id     1
+    #   is_profile_id   64
+    #   is_name_id      90
+    # end
     trait :big_IDs do
       user_id         100000000
       profile_id      6333333333

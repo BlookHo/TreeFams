@@ -7,7 +7,7 @@ RSpec.describe ProfileKey, :type => :model do
     describe '- on create' do
 
       context '- valid profile_key' do
-        let(:profilekey_row) {FactoryGirl.build(:profile_key, :profile_key_good)}  #
+        let(:profilekey_row) {FactoryGirl.build(:profile_key)}  #
         it '- saves a valid profilekey_row' do
           puts " Model ProfileKey validation "
           expect(profilekey_row).to be_valid
