@@ -9,7 +9,6 @@ class SimilarsController < ApplicationController
   # puts "In SimilarsController - AFTER LOGGED  \n"
 
   # todo: перенести этот метод в Operational - для нескольких моделей
-  #
   # пересечение 2-х хэшей, у которых - значения = массивы
   def intersection(first, other)
     common_hash = {}
@@ -28,25 +27,23 @@ class SimilarsController < ApplicationController
 
 
   # Запуск методов определения похожих профилей в текущем дереве
-  # sim_data = { log_connection_id: log_connection_id, #
-  #              similars: similars  }
   def internal_similars_search
     # puts "In action internal_similars_search - START \n"
     connected_users = current_user.get_connected_users
 
     ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
     SimilarsFound.clear_tree_similars(connected_users)
+    #################
+    tree_info, new_sims, similars = current_user.start_similars # search similars
 
-    tree_info, new_sims, similars = current_user.start_similars
-
-    # to show similars connected in view
-    # for RSpec
+    # to show similars connected in view & for RSpec
     @tree_info = tree_info
     @new_sims = new_sims
     @similars = similars
     @connected_users = connected_users
     @current_user_id = current_user.id
     @log_connection_id = SimilarsLog.current_tree_log_id(connected_users) unless connected_users.empty?
+
     if similars.empty?   # т.е. нет похожих
       flash.now[:notice] = "Успешное сообщение: В дереве все Ок - 'похожих' профилей нет."
     else  # т.е. есть похожие
@@ -57,12 +54,9 @@ class SimilarsController < ApplicationController
         view_tree_similars(tree_info, similars) unless @tree_info.empty?  # to internal_similars_search.html.haml
       end
     end
-    # puts "In action internal_similars_search - sim_data = #{new_sims} \n"
-    # puts "In action internal_similars_search - similars = #{similars} \n"
-
   end
 
-
+  # to show after home_controller#index
   def show_similars_data
   end
 
@@ -71,7 +65,7 @@ class SimilarsController < ApplicationController
   # ПЕредает их в модель для непосредственного объединения
   # Лог - это массив записей о параметрах всех совершенных объединениях дерева
   def connect_similars
-    puts "In action connect_similars - START \n"
+    # puts "In action connect_similars - START \n"
     first_profile_connecting  = params[:first_profile_id].to_i
     second_profile_connecting = params[:second_profile_id].to_i
     init_hash = { first_profile_connecting => second_profile_connecting}
@@ -79,18 +73,16 @@ class SimilarsController < ApplicationController
     # puts "In action connect_similars:  first_profile_connecting = #{first_profile_connecting.inspect} \n"
     # puts "In action connect_similars:  init_hash = #{init_hash.inspect} \n"
 
-    # for RSpec & TO_VIEW
-
     # todo: check similars_complete_search, when init_hash has many profiles
     #################################################
     profiles_to_rewrite, profiles_to_destroy = current_user.similars_complete_search(init_hash)
     #################################################
 
     last_log_id = SimilarsLog.last.connected_at unless SimilarsLog.all.empty?
-    logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
+    # logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
     # порядковый номер connection - взять значение из последнего лога
     last_log_id == nil ? last_log_id = 1 : last_log_id += 1
-    logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
+    # logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
 
     # for RSpec & TO_VIEW
     @init_hash = init_hash
@@ -110,49 +102,31 @@ class SimilarsController < ApplicationController
   end
 
 
-  # Оставляет похожие профили без объединения
-  # помечаем их как непохожие на будущее
-  def keep_disconnected_similars
-    first_profile_connecting = params[:first_profile_id]
-    second_profile_connecting = params[:second_profile_id]
-    logger.info "*** In keep_disconnected_similars:  first_profile_connecting = #{first_profile_connecting},  second_profile_connecting = #{second_profile_connecting} "
-    ############ call of User.module ############################################
-    current_user.without_connecting_similars
-
-  end
-
   # Возвращает объединенные профили в состояние перед объединением
   # во всех таблицах
   def disconnect_similars
     log_id = params[:log_connection_id]
-    logger.info "*** In disconnect_similars:  log_id = #{log_id}"
     # for RSpec & TO_VIEW
     @log_id = log_id.to_i
 
-    # logger.info "*** In disconnect_similars:  profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy} "
     ############ call of User.module Similars_disconnection #####################
     current_user.disconnect_sims_in_tables(log_id.to_i)
-    tree_info, new_sims, similars = current_user.start_similars
+    # tree_info, new_sims, similars =
+    current_user.start_similars # to restore similars found
   end
 
 
   # Контроль (тест) объединения профилей после объединения - по таблицах ProfileKey
-  #
+  # todo: have to be done - use after connection, before store in tables
   def check_connected_similars
-
     log_id = params[:log_connection_id]
-    logger.info "*** In check_connected_similars:  log_id = #{log_id}"
+    # logger.info "*** In check_connected_similars:  log_id = #{log_id}"
     @log_id = log_id.to_i
     profiles_to_rewrite  = params[:profiles_to_rewrite]#.to_i
     profiles_to_destroy = params[:profiles_to_destroy]#.to_i
     logger.info "*** In check_connected_similars:  profiles_to_rewrite = #{profiles_to_rewrite}"
     logger.info "*** In check_connected_similars:  profiles_to_destroy = #{profiles_to_destroy}"
-
-
-
   end
-
-
 
 
 end

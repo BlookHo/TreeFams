@@ -32,7 +32,7 @@ class Tree < ActiveRecord::Base
     connected_users = current_user.get_connected_users
     unless connected_users.blank?
       profiles = Tree.where(user_id: connected_users).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
-      tree_is_profiles = profiles.map {|p| p.is_profile_id }.uniq
+      tree_is_profiles = profiles.map {|p| p.is_profile_id }.uniq.sort
       profiles_qty = tree_is_profiles.size #+ connected_users.size
 
       return profiles_qty, tree_is_profiles

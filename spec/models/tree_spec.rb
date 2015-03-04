@@ -7,12 +7,11 @@ RSpec.describe Tree, :type => :model do
     describe '- on create' do
 
       context '- valid tree_row' do
-        let(:tree_row) {FactoryGirl.build(:tree, :tree_key_good)}
+        let(:tree_row) {FactoryGirl.build(:tree)}
         it '- saves a valid tree_row' do
           puts " Model Tree validation "
           expect(tree_row).to be_valid
         end
-
         let(:good_tree_row_big) {FactoryGirl.build(:tree, :big_IDs)}
         it '- 2 Saves a valid tree_row - big IDs' do
           expect(good_tree_row_big).to be_valid

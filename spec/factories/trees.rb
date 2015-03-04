@@ -10,15 +10,15 @@ FactoryGirl.define do
 
     # validation
 
-    trait :tree_key_good do
-      user_id         1
-      profile_id      63
-      name_id         40
-      relation_id     1
-      is_sex_id       1
-      is_profile_id   64
-      is_name_id      90
-    end
+    # trait :tree_key_good do
+    #   user_id         1
+    #   profile_id      63
+    #   name_id         40
+    #   relation_id     1
+    #   is_sex_id       1
+    #   is_profile_id   64
+    #   is_name_id      90
+    # end
     trait :big_IDs do
       user_id         100000000
       profile_id      6333333333
@@ -30,24 +30,12 @@ FactoryGirl.define do
     end
     trait :user_less_zero do
       user_id         -2
-      # profile_id      63
-      # name_id         40
-      # relation_id     1
-      # is_sex_id       1
-      # is_profile_id   64
-      # is_name_id      90
     end
     trait :profile_id_less_zero do
       user_id           2
       profile_id        -6
-      # name_id         40
-      # relation_id     1
-      # is_sex_id       1
-      # is_profile_id   64
-      # is_name_id      90
     end
     trait :name_id_less_zero do
-      # user_id           2
       profile_id        6
       name_id           -4044
     end
@@ -80,10 +68,6 @@ FactoryGirl.define do
       profile_id        8888
       is_sex_id         2
     end
-
-
-
-
 
 
     # Connected tree users [1, 2] with similars
