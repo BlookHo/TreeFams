@@ -2,6 +2,8 @@
 module ProfileKeysGeneration
   extend ActiveSupport::Concern
 
+  # ProfileKey
+
   module ClassMethods
 
     # Сохранение нового ряда для добавленного профиля в таблице Tree.

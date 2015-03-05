@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150304103905) do
+ActiveRecord::Schema.define(version: 20150305085109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,9 @@ ActiveRecord::Schema.define(version: 20150304103905) do
     t.integer  "search_name_id"
   end
 
+  add_index "names", ["name"], name: "index_names_on_name", using: :btree
+  add_index "names", ["only_male"], name: "index_names_on_only_male", using: :btree
+
   create_table "pending_users", force: true do |t|
     t.integer  "status",       default: 0
     t.text     "data"
@@ -111,6 +114,9 @@ ActiveRecord::Schema.define(version: 20150304103905) do
     t.integer  "is_display_name_id"
   end
 
+  add_index "profile_keys", ["profile_id"], name: "index_profile_keys_on_profile_id", using: :btree
+  add_index "profile_keys", ["user_id"], name: "index_profile_keys_on_user_id", using: :btree
+
   create_table "profiles", force: true do |t|
     t.integer  "user_id"
     t.datetime "created_at"
@@ -120,6 +126,8 @@ ActiveRecord::Schema.define(version: 20150304103905) do
     t.integer  "tree_id"
     t.integer  "display_name_id"
   end
+
+  add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "relations", force: true do |t|
     t.string   "relation"
@@ -140,6 +148,8 @@ ActiveRecord::Schema.define(version: 20150304103905) do
     t.datetime "updated_at"
   end
 
+  add_index "similars_founds", ["user_id"], name: "index_similars_founds_on_user_id", using: :btree
+
   create_table "similars_logs", force: true do |t|
     t.integer  "connected_at"
     t.integer  "current_user_id"
@@ -151,6 +161,8 @@ ActiveRecord::Schema.define(version: 20150304103905) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "similars_logs", ["current_user_id"], name: "index_similars_logs_on_current_user_id", using: :btree
 
   create_table "trees", force: true do |t|
     t.integer  "user_id"
@@ -165,6 +177,9 @@ ActiveRecord::Schema.define(version: 20150304103905) do
     t.integer  "display_name_id"
     t.integer  "is_display_name_id"
   end
+
+  add_index "trees", ["profile_id"], name: "index_trees_on_profile_id", using: :btree
+  add_index "trees", ["user_id"], name: "index_trees_on_user_id", using: :btree
 
   create_table "updates_events", force: true do |t|
     t.string   "name"
@@ -205,6 +220,7 @@ ActiveRecord::Schema.define(version: 20150304103905) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["profile_id"], name: "index_users_on_profile_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "weafam_settings", force: true do |t|
