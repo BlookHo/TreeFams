@@ -51,7 +51,7 @@ FactoryGirl.define do
 
 end
 
-# After Connected
+# After Connected Similars
 #
 # 1;17
 # 2;11
@@ -61,7 +61,7 @@ end
 # 8;84
 #
 
-# After DisConnected
+# After DisConnected Similars
 #
 # 1;17;FALSE
 # 2;11;FALSE
@@ -69,3 +69,8 @@ end
 # 6;53;FALSE
 # 7;63;FALSE
 # 8;66;FALSE
+
+# Before Add new Profile
+# 9;85;FALSE;0
+# 10;93;FALSE;0
+

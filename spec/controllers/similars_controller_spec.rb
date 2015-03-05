@@ -330,7 +330,7 @@ describe SimilarsController, :type => :controller , similars: true do
 
       end
 
-     end
+    end
 
     describe 'GET #connect_similars' do
 
