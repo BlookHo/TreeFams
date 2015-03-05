@@ -1350,71 +1350,496 @@ FactoryGirl.define do
     # 476;7;84;370;16;83;187
 
 
-    trait :profile_key_add_1 do
-      user_id         100000000
-      profile_id      6333333333
-      name_id         4044
-      relation_id     111
-      is_profile_id   6466666666
-      is_name_id      9099
-    end
 
     # Before Add new Profile
     # tree #9 Petr
 
+    trait :profile_key9_add_1 do
+      user_id         9
+      profile_id      85
+      name_id         370
+      relation_id     1
+      is_profile_id   86
+      is_name_id      28
+    end
+    trait :profile_key9_add_2 do
+      user_id         9
+      profile_id      86
+      name_id         28
+      relation_id     3
+      is_profile_id   85
+      is_name_id      370
+    end
+    trait :profile_key9_add_3 do
+      user_id         9
+      profile_id      85
+      name_id         370
+      relation_id     2
+      is_profile_id   87
+      is_name_id      48
+    end
     # 477;9;85;370;1;86;28
     # 478;9;86;28;3;85;370
     # 479;9;85;370;2;87;48
+
+    trait :profile_key9_add_4 do
+      user_id         9
+      profile_id      87
+      name_id         48
+      relation_id     3
+      is_profile_id   85
+      is_name_id      370
+    end
+    trait :profile_key9_add_5 do
+      user_id         9
+      profile_id      86
+      name_id         28
+      relation_id     8
+      is_profile_id   87
+      is_name_id      48
+    end
+    trait :profile_key9_add_6 do
+      user_id         9
+      profile_id      87
+      name_id         48
+      relation_id     7
+      is_profile_id   86
+      is_name_id      28
+    end
     # 480;9;87;48;3;85;370
     # 481;9;86;28;8;87;48
     # 482;9;87;48;7;86;28
+
+    trait :profile_key9_add_7 do # before``
+      user_id         9
+      profile_id      85
+      name_id         370
+      relation_id     5
+      is_profile_id   88
+      is_name_id      465
+    end
+    trait :profile_key9_add_8 do # before
+      user_id         9
+      profile_id      88
+      name_id         465
+      relation_id     5
+      is_profile_id   85
+      is_name_id      370
+    end
+    trait :profile_key9_add_9 do
+      user_id         9
+      profile_id      86
+      name_id         28
+      relation_id     3
+      is_profile_id   88
+      is_name_id      465
+    end
     # 483;9;85;370;5;88;465
     # 484;9;88;465;5;85;370
     # 485;9;86;28;3;88;465
+
+    trait :profile_key9_add_10 do
+      user_id         9
+      profile_id      88
+      name_id         465
+      relation_id     1
+      is_profile_id   86
+      is_name_id      28
+    end
+    trait :profile_key9_add_11 do
+      user_id         9
+      profile_id      87
+      name_id         48
+      relation_id     3
+      is_profile_id   88
+      is_name_id      465
+    end
+    trait :profile_key9_add_12 do
+      user_id         9
+      profile_id      88
+      name_id         465
+      relation_id     2
+      is_profile_id   87
+      is_name_id      48
+    end
     # 486;9;88;465;1;86;28
     # 487;9;87;48;3;88;465
     # 488;9;88;465;2;87;48
+
+    trait :profile_key9_add_13 do # before
+      user_id         9
+      profile_id      85
+      name_id         370
+      relation_id     6
+      is_profile_id   89
+      is_name_id      345
+    end
+    trait :profile_key9_add_14 do # before
+      user_id         9
+      profile_id      89
+      name_id         345
+      relation_id     5
+      is_profile_id   85
+      is_name_id      370
+    end
+    trait :profile_key9_add_15 do
+      user_id         9
+      profile_id      86
+      name_id         28
+      relation_id     4
+      is_profile_id   89
+      is_name_id      345
+    end
     # 489;9;85;370;6;89;345
     # 490;9;89;345;5;85;370
     # 491;9;86;28;4;89;345
+
+    trait :profile_key9_add_16 do
+      user_id         9
+      profile_id      89
+      name_id         345
+      relation_id     1
+      is_profile_id   86
+      is_name_id      28
+    end
+    trait :profile_key9_add_17 do
+      user_id         9
+      profile_id      87
+      name_id         48
+      relation_id     4
+      is_profile_id   89
+      is_name_id      345
+    end
+    trait :profile_key9_add_18 do
+      user_id         9
+      profile_id      89
+      name_id         345
+      relation_id     2
+      is_profile_id   87
+      is_name_id      48
+    end
     # 492;9;89;345;1;86;28
     # 493;9;87;48;4;89;345
     # 494;9;89;345;2;87;48
+
+    trait :profile_key9_add_19 do # before
+      user_id         9
+      profile_id      88
+      name_id         465
+      relation_id     6
+      is_profile_id   89
+      is_name_id      345
+    end
+    trait :profile_key9_add_20 do # before
+      user_id         9
+      profile_id      89
+      name_id         345
+      relation_id     5
+      is_profile_id   88
+      is_name_id      465
+    end
+    trait :profile_key9_add_21 do # before
+      user_id         9
+      profile_id      85
+      name_id         370
+      relation_id     3
+      is_profile_id   90
+      is_name_id      343
+    end
     # 495;9;88;465;6;89;345
     # 496;9;89;345;5;88;465
     # 497;9;85;370;3;90;343
+
+    trait :profile_key9_add_22 do # before
+      user_id         9
+      profile_id      90
+      name_id         343
+      relation_id     1
+      is_profile_id   85
+      is_name_id      370
+    end
+    trait :profile_key9_add_23 do
+      user_id         9
+      profile_id      86
+      name_id         28
+      relation_id     111
+      is_profile_id   90
+      is_name_id      343
+    end
+    trait :profile_key9_add_24 do
+      user_id         9
+      profile_id      90
+      name_id         343
+      relation_id     91
+      is_profile_id   86
+      is_name_id      28
+    end
     # 498;9;90;343;1;85;370
     # 499;9;86;28;111;90;343
     # 500;9;90;343;91;86;28
+
+    trait :profile_key9_add_25 do
+      user_id         9
+      profile_id      87
+      name_id         48
+      relation_id     111
+      is_profile_id   90
+      is_name_id      343
+    end
+    trait :profile_key9_add_26 do
+      user_id         9
+      profile_id      90
+      name_id         343
+      relation_id     101
+      is_profile_id   87
+      is_name_id      48
+    end
+    trait :profile_key9_add_27 do # before
+      user_id         9
+      profile_id      88
+      name_id         465
+      relation_id     211
+      is_profile_id   90
+      is_name_id      343
+    end
     # 501;9;87;48;111;90;343
     # 502;9;90;343;101;87;48
     # 503;9;88;465;211;90;343
+
+    trait :profile_key9_add_28 do # before
+      user_id         9
+      profile_id      90
+      name_id         343
+      relation_id     191
+      is_profile_id   88
+      is_name_id      465
+    end
+    trait :profile_key9_add_29 do # before
+      user_id         9
+      profile_id      89
+      name_id         345
+      relation_id     211
+      is_profile_id   90
+      is_name_id      343
+    end
+    trait :profile_key9_add_30 do # before
+      user_id         9
+      profile_id      90
+      name_id         343
+      relation_id     201
+      is_profile_id   89
+      is_name_id      345
+    end
     # 504;9;90;343;191;88;465
     # 505;9;89;345;211;90;343
     # 506;9;90;343;201;89;345
+
+    trait :profile_key9_add_31 do # before
+      user_id         9
+      profile_id      85
+      name_id         370
+      relation_id     4
+      is_profile_id   91
+      is_name_id      446
+    end
+    trait :profile_key9_add_32 do # before
+      user_id         9
+      profile_id      91
+      name_id         446
+      relation_id     1
+      is_profile_id   85
+      is_name_id      370
+    end
+    trait :profile_key9_add_33 do # before
+      user_id         9
+      profile_id      90
+      name_id         343
+      relation_id     6
+      is_profile_id   91
+      is_name_id      446
+    end
     # 507;9;85;370;4;91;446
     # 508;9;91;446;1;85;370
     # 509;9;90;343;6;91;446
+
+    trait :profile_key9_add_34 do # before
+      user_id         9
+      profile_id      91
+      name_id         446
+      relation_id     5
+      is_profile_id   90
+      is_name_id      343
+    end
+    trait :profile_key9_add_35 do
+      user_id         9
+      profile_id      86
+      name_id         28
+      relation_id     121
+      is_profile_id   91
+      is_name_id      446
+    end
+    trait :profile_key9_add_36 do
+      user_id         9
+      profile_id      91
+      name_id         446
+      relation_id     91
+      is_profile_id   86
+      is_name_id      28
+    end
     # 510;9;91;446;5;90;343
     # 511;9;86;28;121;91;446
     # 512;9;91;446;91;86;28
+
+    trait :profile_key9_add_37 do
+      user_id         9
+      profile_id      87
+      name_id         48
+      relation_id     121
+      is_profile_id   91
+      is_name_id      446
+    end
+    trait :profile_key9_add_38 do
+      user_id         9
+      profile_id      91
+      name_id         446
+      relation_id     101
+      is_profile_id   87
+      is_name_id      48
+    end
+    trait :profile_key9_add_39 do # before
+      user_id         9
+      profile_id      88
+      name_id         465
+      relation_id     221
+      is_profile_id   91
+      is_name_id      446
+    end
     # 513;9;87;48;121;91;446
     # 514;9;91;446;101;87;48
     # 515;9;88;465;221;91;446
+
+    trait :profile_key9_add_40 do # before
+      user_id         9
+      profile_id      91
+      name_id         446
+      relation_id     191
+      is_profile_id   88
+      is_name_id      465
+    end
+    trait :profile_key9_add_41 do # before
+      user_id         9
+      profile_id      89
+      name_id         345
+      relation_id     221
+      is_profile_id   91
+      is_name_id      446
+    end
+    trait :profile_key9_add_42 do # before
+      user_id         9
+      profile_id      91
+      name_id         446
+      relation_id     201
+      is_profile_id   89
+      is_name_id      345
+    end
     # 516;9;91;446;191;88;465
     # 517;9;89;345;221;91;446
     # 518;9;91;446;201;89;345
+
+    trait :profile_key9_add_43 do
+      user_id         9
+      profile_id      85
+      name_id         370
+      relation_id     8
+      is_profile_id   92
+      is_name_id      147
+    end
+    trait :profile_key9_add_44 do
+      user_id         9
+      profile_id      92
+      name_id         147
+      relation_id     7
+      is_profile_id   85
+      is_name_id      370
+    end
+    trait :profile_key9_add_45 do
+      user_id         9
+      profile_id      90
+      name_id         343
+      relation_id     2
+      is_profile_id   92
+      is_name_id      147
+    end
     # 519;9;85;370;8;92;147
     # 520;9;92;147;7;85;370
     # 521;9;90;343;2;92;147
+
+    trait :profile_key9_add_46 do
+      user_id         9
+      profile_id      92
+      name_id         147
+      relation_id     3
+      is_profile_id   90
+      is_name_id      343
+    end
+    trait :profile_key9_add_47 do
+      user_id         9
+      profile_id      91
+      name_id         446
+      relation_id     2
+      is_profile_id   92
+      is_name_id      147
+    end
+    trait :profile_key9_add_48 do
+      user_id         9
+      profile_id      92
+      name_id         147
+      relation_id     4
+      is_profile_id   91
+      is_name_id      446
+    end
     # 522;9;92;147;3;90;343
     # 523;9;91;446;2;92;147
     # 524;9;92;147;4;91;446
+
+    trait :profile_key9_add_49 do
+      user_id         9
+      profile_id      86
+      name_id         28
+      relation_id     17
+      is_profile_id   92
+      is_name_id      147
+    end
+    trait :profile_key9_add_50 do
+      user_id         9
+      profile_id      92
+      name_id         147
+      relation_id     13
+      is_profile_id   86
+      is_name_id      28
+    end
+    trait :profile_key9_add_51 do
+      user_id         9
+      profile_id      87
+      name_id         48
+      relation_id     17
+      is_profile_id   92
+      is_name_id      147
+    end
+    trait :profile_key9_add_52 do
+      user_id         9
+      profile_id      92
+      name_id         147
+      relation_id     14
+      is_profile_id   87
+      is_name_id      48
+    end
     # 525;9;86;28;17;92;147
     # 526;9;92;147;13;86;28
     # 527;9;87;48;17;92;147
     # 528;9;92;147;14;87;48
     #
+
 
     # Before Add new Profile
     # tree #10 Darja

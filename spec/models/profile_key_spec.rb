@@ -71,7 +71,7 @@ RSpec.describe ProfileKey, :type => :model do
 
   describe '- CHECK ProfileKey Model methods' do
     # create parameters
-    let(:current_user) { create(:user) }   # User = 1. Tree = 1. profile_id = 63
+    let(:current_user) { create(:user_9) }   # User = 9. Tree = 9. profile_id = 85
     let(:currentuser_id) {current_user.id}
 
 
@@ -83,178 +83,116 @@ RSpec.describe ProfileKey, :type => :model do
       # puts "1 before All: currentuser_id = #{currentuser_id} \n" # currentuser_id = 1
       # puts "before All: current_user.profile_id = #{current_user.profile_id} \n"
 
-      FactoryGirl.create(:user, :user_2)  # User = 2. Tree = 2. profile_id = 66
+      FactoryGirl.create(:user, :user_10)  # User = 10. Tree = 10. profile_id = 93
 
       # puts "before All: User.last.id = #{User.last.id} \n" # id = 2
       # puts "before All: User.find(2).profile_id = #{User.find(2).profile_id} \n" # id = 2
 
-      FactoryGirl.create(:connected_user, :correct)      # 1  2
-      FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
+      # FactoryGirl.create(:connected_user, :correct)      # 1  2
+      # FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
       # puts "before All: ConnectedUser.count = #{ConnectedUser.all.count} \n" # 2 rows
 
       # Tree
-      FactoryGirl.create(:tree, :tree1_with_sims_1)
-      FactoryGirl.create(:tree, :tree1_with_sims_2)
-      FactoryGirl.create(:tree, :tree1_with_sims_3)
-      FactoryGirl.create(:tree, :tree1_with_sims_4)
-      FactoryGirl.create(:tree, :tree1_with_sims_5)
-      FactoryGirl.create(:tree, :tree1_with_sims_6)
-      FactoryGirl.create(:tree, :tree1_with_sims_7)
-      FactoryGirl.create(:tree, :tree1_with_sims_8)
-      FactoryGirl.create(:tree, :tree1_with_sims_9)
-      FactoryGirl.create(:tree, :tree1_with_sims_10)
-      FactoryGirl.create(:tree, :tree1_with_sims_11)
-      FactoryGirl.create(:tree, :tree1_with_sims_12)
-      FactoryGirl.create(:tree, :tree1_with_sims_13)
-      FactoryGirl.create(:tree, :tree1_with_sims_14)
-      FactoryGirl.create(:tree, :tree1_with_sims_15)
-      FactoryGirl.create(:tree, :tree1_with_sims_16)
-      FactoryGirl.create(:tree, :tree1_with_sims_17)
-      FactoryGirl.create(:tree, :tree1_with_sims_18)
-      FactoryGirl.create(:tree, :tree1_with_sims_19)
-      FactoryGirl.create(:tree, :tree1_with_sims_20)
-      # puts "before All: Tree.find(20).profile_id = #{Tree.find(20).profile_id.inspect} \n"  # id = 64
-      # puts "before All: Tree.last.is_profile_id = #{Tree.last.is_profile_id} \n"  # is_profile_id = 84
-      # puts "before All: Tree.count = #{Tree.all.count} \n" # 20
+      FactoryGirl.create(:tree, :add_tree9_1)
+      FactoryGirl.create(:tree, :add_tree9_2)
+      FactoryGirl.create(:tree, :add_tree9_3) # before
+      FactoryGirl.create(:tree, :add_tree9_4) # before
+      FactoryGirl.create(:tree, :add_tree9_5) # before
+      FactoryGirl.create(:tree, :add_tree9_6) # before
+      FactoryGirl.create(:tree, :add_tree9_7)
+
+      FactoryGirl.create(:tree, :add_tree10_1)
+      FactoryGirl.create(:tree, :add_tree10_2)
+      FactoryGirl.create(:tree, :add_tree10_3) # before
+      FactoryGirl.create(:tree, :add_tree10_4) # before
+      FactoryGirl.create(:tree, :add_tree10_5) # before
+      FactoryGirl.create(:tree, :add_tree10_6) # before
+      FactoryGirl.create(:tree, :add_tree10_7)
+      puts "before All: Tree.find(20).profile_id = #{Tree.find(20).profile_id.inspect} \n"  # id = 64
+      puts "before All: Tree.last.is_profile_id = #{Tree.last.is_profile_id} \n"  # is_profile_id = 84
+      puts "before All: Tree.count = #{Tree.all.count} \n" # 20
 
       # Profile
-      FactoryGirl.create(:profile, :profile_63)
-      FactoryGirl.create(:profile, :profile_64)
-      FactoryGirl.create(:profile, :profile_65)
-      FactoryGirl.create(:profile, :profile_66)
-      FactoryGirl.create(:profile, :profile_67)
-      FactoryGirl.create(:profile, :profile_68)
-      FactoryGirl.create(:profile, :profile_69)
-      FactoryGirl.create(:profile, :profile_70)
-      FactoryGirl.create(:profile, :profile_78)
-      FactoryGirl.create(:profile, :profile_79)
-      FactoryGirl.create(:profile, :profile_80)
-      FactoryGirl.create(:profile, :profile_81)
-      FactoryGirl.create(:profile, :profile_82)
-      FactoryGirl.create(:profile, :profile_83)
-      FactoryGirl.create(:profile, :profile_84)
-      # puts "before All: Profile.last.id = #{Profile.last.id} \n"  # id = 64
-      # puts "before All: Profile.last.name_id = #{Profile.last.name_id} \n"  # name_id = 90
-      # puts "before All: Profile.count = #{Profile.all.count} \n" # 2
+      FactoryGirl.create(:profile, :add_profile_85) # user_9  # before
+      FactoryGirl.create(:profile, :add_profile_86)
+      FactoryGirl.create(:profile, :add_profile_87)
+      FactoryGirl.create(:profile, :add_profile_88) # before
+      FactoryGirl.create(:profile, :add_profile_89) # before
+      FactoryGirl.create(:profile, :add_profile_90) # before
+      FactoryGirl.create(:profile, :add_profile_91) # before
+      FactoryGirl.create(:profile, :add_profile_92)
+
+      FactoryGirl.create(:profile, :add_profile_93) # user_10 # before
+      FactoryGirl.create(:profile, :add_profile_94)
+      FactoryGirl.create(:profile, :add_profile_95)
+      FactoryGirl.create(:profile, :add_profile_96) # before
+      FactoryGirl.create(:profile, :add_profile_97) # before
+      FactoryGirl.create(:profile, :add_profile_98) # before
+      FactoryGirl.create(:profile, :add_profile_99) # before
+      FactoryGirl.create(:profile, :add_profile_100)
+      puts "before All: Profile.last.id = #{Profile.last.id} \n"  # id = 64
+      puts "before All: Profile.last.name_id = #{Profile.last.name_id} \n"  # name_id = 90
+      puts "before All: Profile.count = #{Profile.all.count} \n" # 2
 
       #Profile_Key
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_1)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_2)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_3)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_4)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_5)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_6)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_7)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_8)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_9)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_10)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_11)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_12)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_13)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_14)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_15)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_16)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_17)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_18)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_19)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_20)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_21)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_22)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_23)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_24)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_25)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_26)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_27)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_28)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_29)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_30)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_31)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_32)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_33)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_34)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_35)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_36)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_37)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_38)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_39)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_40)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_41)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_42)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_43)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_44)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_45)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_46)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_47)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_48)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_49)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_50)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_51)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_52)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_53)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_54)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_55)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_56)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_57)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_58)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_59)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_60)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_61)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_62)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_63)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_64)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_65)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_66)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_67)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_68)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_69)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_70)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_71)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_72)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_73)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_74)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_75)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_76)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_77)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_78)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_79)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_80)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_81)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_82)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_83)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_84)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_85)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_86)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_87)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_88)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_89)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_90)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_91)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_92)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_93)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_94)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_95)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_96)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_97)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_98)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_99)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_100)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_101)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_102)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_103)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_104)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_105)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_106)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_107)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_108)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_109)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_110)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_111)
-      FactoryGirl.create(:profile_key, :profile_key_w_sims_112)
-      # puts "before All: ProfileKey.last.user_id = #{ProfileKey.last.user_id} \n"  # user_id = 1
-      # puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
-      # puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
+      # Before Add new Profile  -  tree #9 Petr
+      FactoryGirl.create(:profile_key, :profile_key9_add_1)
+      FactoryGirl.create(:profile_key, :profile_key9_add_2)
+      FactoryGirl.create(:profile_key, :profile_key9_add_3)
+      FactoryGirl.create(:profile_key, :profile_key9_add_4)
+      FactoryGirl.create(:profile_key, :profile_key9_add_5)
+      FactoryGirl.create(:profile_key, :profile_key9_add_6)
+      FactoryGirl.create(:profile_key, :profile_key9_add_7) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_8) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_9)
+      FactoryGirl.create(:profile_key, :profile_key9_add_10)
+      FactoryGirl.create(:profile_key, :profile_key9_add_11)
+      FactoryGirl.create(:profile_key, :profile_key9_add_12)
+      FactoryGirl.create(:profile_key, :profile_key9_add_13) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_14) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_15)
+      FactoryGirl.create(:profile_key, :profile_key9_add_16)
+      FactoryGirl.create(:profile_key, :profile_key9_add_17)
+      FactoryGirl.create(:profile_key, :profile_key9_add_18)
+      FactoryGirl.create(:profile_key, :profile_key9_add_19) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_20) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_21) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_22) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_23)
+      FactoryGirl.create(:profile_key, :profile_key9_add_24)
+      FactoryGirl.create(:profile_key, :profile_key9_add_25)
+      FactoryGirl.create(:profile_key, :profile_key9_add_26)
+      FactoryGirl.create(:profile_key, :profile_key9_add_27) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_28) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_29) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_30) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_31) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_32) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_33) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_34) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_35)
+      FactoryGirl.create(:profile_key, :profile_key9_add_36)
+      FactoryGirl.create(:profile_key, :profile_key9_add_37)
+      FactoryGirl.create(:profile_key, :profile_key9_add_38)
+      FactoryGirl.create(:profile_key, :profile_key9_add_39) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_40) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_41) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_42) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_43)
+      FactoryGirl.create(:profile_key, :profile_key9_add_44)
+      FactoryGirl.create(:profile_key, :profile_key9_add_45)
+      FactoryGirl.create(:profile_key, :profile_key9_add_46)
+      FactoryGirl.create(:profile_key, :profile_key9_add_47)
+      FactoryGirl.create(:profile_key, :profile_key9_add_48)
+      FactoryGirl.create(:profile_key, :profile_key9_add_49)
+      FactoryGirl.create(:profile_key, :profile_key9_add_50)
+      FactoryGirl.create(:profile_key, :profile_key9_add_51)
+      FactoryGirl.create(:profile_key, :profile_key9_add_52)
+      puts "before All: ProfileKey.last.user_id = #{ProfileKey.last.user_id} \n"  # user_id = 1
+      puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
+      puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
 
-      #Name
+      #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
       FactoryGirl.create(:name, :name_48)    # Анна
       FactoryGirl.create(:name, :name_147)   # Дарья
@@ -265,7 +203,7 @@ RSpec.describe ProfileKey, :type => :model do
       FactoryGirl.create(:name, :name_419)   # Семен
       FactoryGirl.create(:name, :name_446)   # Таисия
       FactoryGirl.create(:name, :name_465)   # Федор
-       # puts "before All: Name.first.name = #{Name.first.name} \n"  # Алексей
+      puts "before All: Name.first.name = #{Name.first.name} \n"  # Алексей
 
     }
 
@@ -289,19 +227,19 @@ RSpec.describe ProfileKey, :type => :model do
     }
 
 
-    context '- before actions - check connected_users' do
-      let(:connected_users) { current_user.get_connected_users }
-      it "- Return proper connected_users Array result for current_user_id = 1" do
-        puts "Check ProfileKey Model methods \n"
-        puts "Before All - data created \n"  #
-        # puts "1 1 In check connected_users :  connected_users = #{connected_users} \n"
-        expect(connected_users).to be_a_kind_of(Array)
-      end
-      it "- Return proper connected_users Array result for current_user_id = 1" do
-        # puts "1 2 In check connected_users :  connected_users = #{connected_users} \n"
-        expect(connected_users).to eq([1,2])
-      end
-    end
+    # context '- before actions - check connected_users' do
+    #   let(:connected_users) { current_user.get_connected_users }
+    #   it "- Return proper connected_users Array result for current_user_id = 1" do
+    #     puts "Check ProfileKey Model methods \n"
+    #     puts "Before All - data created \n"  #
+    #     # puts "1 1 In check connected_users :  connected_users = #{connected_users} \n"
+    #     expect(connected_users).to be_a_kind_of(Array)
+    #   end
+    #   it "- Return proper connected_users Array result for current_user_id = 1" do
+    #     # puts "1 2 In check connected_users :  connected_users = #{connected_users} \n"
+    #     expect(connected_users).to eq([1,2])
+    #   end
+    # end
 
     # from home_controller.rb#index
     describe 'GET #add_new_profile *' do
