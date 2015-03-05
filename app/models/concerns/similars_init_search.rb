@@ -95,7 +95,6 @@ module SimilarsInitSearch
     end
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
-    # No use
     def get_name_relation(relation_val)
       name_relation = ""
       code_relation = ""

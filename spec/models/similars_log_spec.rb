@@ -10,6 +10,7 @@ RSpec.describe SimilarsLog, :type => :model do
 
         let(:good_sims_log) {FactoryGirl.build(:similars_log)}
         it '- 1 Saves a valid similars log' do
+          puts " Model SimilarsLog validation "
           expect(good_sims_log).to be_valid
         end
 

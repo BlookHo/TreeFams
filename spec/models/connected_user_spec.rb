@@ -8,6 +8,7 @@ RSpec.describe ConnectedUser, :type => :model do
       context '- valid connected_users' do
         let(:good_connected_users) {FactoryGirl.build(:connected_user, :correct)}
         it '- 1. Saves a valid good_connected_users pair' do
+          puts " Model ConnectedUser validation "
           expect(good_connected_users).to be_valid
         end
 
