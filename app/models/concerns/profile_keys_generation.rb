@@ -20,6 +20,14 @@ module ProfileKeysGeneration
                         exclusions_hash: nil,
                         tree_ids: tree_ids) # [trees connected] типа [126, 127]
 
+      puts "============ In add_new_profile ==================DDDDDDDD"
+      puts "base_sex_id = #{base_sex_id}"
+      puts "new_profile = #{new_profile}"
+      puts "base_profile.id = #{base_profile.id}"
+      puts "new_relation_id = #{new_relation_id}"
+      puts "exclusions_hash = #{exclusions_hash}, tree_ids = #{tree_ids},"
+      puts "base_profile.tree_id #{base_profile.tree_id}"
+
       logger.info "============ In add_new_profile ==================DDDDDDDD"
       logger.info "base_sex_id = #{base_sex_id}"
       logger.info "new_profile = #{new_profile}"

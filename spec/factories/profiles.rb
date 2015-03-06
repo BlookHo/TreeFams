@@ -6,6 +6,27 @@ FactoryGirl.define do
     sex_id  0
     tree_id  5
     display_name_id  354
+
+    trait :big_IDs do
+      id 644444
+      user_id   2222222
+      name_id   90000
+      sex_id    1
+      tree_id   111111
+    end
+
+    trait :without_user_id do
+      id 644
+      user_id   nil
+      name_id   900
+      sex_id    1
+      tree_id   111
+    end
+
+
+
+
+
   end
 
   factory :profile_two, class: Profile do
@@ -197,7 +218,9 @@ FactoryGirl.define do
     # 83;;"2015-02-18 13:02:25.277551";"2015-02-18 13:02:25.277551";187;0;7
     # 84;;"2015-02-18 13:04:59.909606";"2015-02-27 09:52:29.138577";370;1;7
 
+  end
 
+  factory :add_profile, class: Profile do          # For 2 connected trees test [1, 2]
 
 
     # Before Add new Profile

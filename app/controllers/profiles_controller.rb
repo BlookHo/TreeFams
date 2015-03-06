@@ -34,7 +34,6 @@ class ProfilesController < ApplicationController
   end
 
 
-
   def create
     # Профиль, к которому добавляем (на котором вызвали меню +)
     @base_profile = Profile.find(params[:base_profile_id])

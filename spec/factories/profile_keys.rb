@@ -19,11 +19,11 @@ FactoryGirl.define do
     #   is_name_id      90
     # end
     trait :big_IDs do
-      user_id         100000000
-      profile_id      6333333333
+      user_id         1000000
+      profile_id      6333333
       name_id         4044
       relation_id     111
-      is_profile_id   6466666666
+      is_profile_id   6466666
       is_name_id      9099
     end
     trait :user_less_zero do
