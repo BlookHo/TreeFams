@@ -25,6 +25,26 @@ FactoryGirl.define do
       email "mail_4@pe.pe"
     end
 
+    trait :user_5 do
+      profile_id 555
+      email "mail_5@pe.pe"
+    end
+
+    trait :user_6 do
+      profile_id 666
+      email "mail_6@pe.pe"
+    end
+
+    trait :user_7 do
+      profile_id 777
+      email "mail_7@pe.pe"
+    end
+
+    trait :user_8 do
+      profile_id 888
+      email "mail_8@pe.pe"
+    end
+
     trait :user_9 do              # before
       profile_id 85
       email "add_petr@pe.pe"

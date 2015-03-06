@@ -32,7 +32,7 @@ FactoryGirl.define do
     display_name_id  351
   end
 
-  factory :profile do          # For 2 connected trees test [1, 2]
+  factory :profile, class: Profile do          # For 2 connected trees test [1, 2]
 
     trait :profile_63 do        # For 2 connected trees test - 1st. Tree = 1. User = 1.
       id 63

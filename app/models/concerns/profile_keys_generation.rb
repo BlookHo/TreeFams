@@ -6,6 +6,58 @@ module ProfileKeysGeneration
 
   module ClassMethods
 
+
+    # Добавление нового профиля для любого профиля дерева
+    # Запись во все таблицы
+    # @note GET /
+    # @param admin_page [Integer] опциональный номер страницы
+    # @see News
+    # exclusions_hash - по умоланию nil
+    # или же, в него передается hash, уточняющий нестандартные свзяи {profile_id => boolean} / {"143" => '0'}
+    # профили в exclusions_hash с значение 0/false исключаются из генерации связей
+    def add_new_profile(base_sex_id, base_profile,
+                        new_profile, new_relation_id,
+                        exclusions_hash: nil,
+                        tree_ids: tree_ids) # [trees connected] типа [126, 127]
+
+      logger.info "============ In add_new_profile ==================DDDDDDDD"
+      logger.info "base_sex_id = #{base_sex_id}"
+      logger.info "new_profile = #{new_profile}"
+      logger.info "base_profile.id = #{base_profile.id}"
+      logger.info "new_relation_id = #{new_relation_id}"
+      logger.info "exclusions_hash = #{exclusions_hash}, tree_ids = #{tree_ids},"
+      logger.info "base_profile.tree_id #{base_profile.tree_id}"
+      # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый
+
+      get_bk_relative_names(tree_ids, base_profile.id, exclusions_hash)   # Получить от Алексея
+      # сбор circles
+
+      @profile_id = base_profile.id # DEBUGG_TO_VIEW
+      @display_name_id = base_profile.display_name_id # DEBUGG_TO_VIEW
+      @sex_id = base_profile.sex_id # DEBUGG_TO_VIEW
+      @name_id = base_profile.name_id # DEBUGG_TO_VIEW
+      @new_relation_id = new_relation_id # DEBUGG_TO_VIEW
+      @new_profile_id = new_profile.id # DEBUGG_TO_VIEW
+      @new_profile_name_id = new_profile.name_id # DEBUGG_TO_VIEW
+      @new_profile_is_display_name_id = new_profile.display_name_id # DEBUGG_TO_VIEW
+      @new_profile_sex = new_profile.sex_id # DEBUGG_TO_VIEW
+
+      add_row_to_tree = save_new_tree_row(base_profile, new_relation_id, new_profile)
+      # add_row_to_tree - это рабочий массив с данными для формирования рядов в таблице ProfileKey.
+
+      # в поле tree_id записать для нового профиля, в каком дереве профиль создали
+
+      @add_row_to_tree = add_row_to_tree # DEBUGG_TO_VIEW
+      logger.info "add_row_to_tree = #{add_row_to_tree} "
+      logger.info "Before: make_profilekeys_rows:: base_profile.tree_id = #{base_profile.tree_id}, tree_ids = #{tree_ids} "
+      make_profilekeys_rows(base_sex_id,
+                            base_profile.tree_id,
+                            add_row_to_tree)
+
+      logger.info "======= add_new_profile = END ================"
+    end
+
+
     # Сохранение нового ряда для добавленного профиля в таблице Tree.
     # @note GET /
     # @param admin_page [Integer] опциональный номер страницы
@@ -488,55 +540,6 @@ module ProfileKeysGeneration
     end
 
 
-    # Добавление нового профиля для любого профиля дерева
-    # Запись во все таблицы
-    # @note GET /
-    # @param admin_page [Integer] опциональный номер страницы
-    # @see News
-    # exclusions_hash - по умоланию nil
-    # или же, в него передается hash, уточняющий нестандартные свзяи {profile_id => boolean} / {"143" => '0'}
-    # профили в exclusions_hash с значение 0/false исключаются из генерации связей
-    def add_new_profile(base_sex_id, base_profile,
-                        new_profile, new_relation_id,
-                        exclusions_hash: nil,
-                        tree_ids: tree_ids) # [trees connected] типа [126, 127]
-
-      logger.info "============ In add_new_profile ==================DDDDDDDD"
-      logger.info "base_sex_id = #{base_sex_id}"
-      logger.info "new_profile = #{new_profile}"
-      logger.info "base_profile.id = #{base_profile.id}"
-      logger.info "new_relation_id = #{new_relation_id}"
-      logger.info "exclusions_hash = #{exclusions_hash}, tree_ids = #{tree_ids},"
-      logger.info "base_profile.tree_id #{base_profile.tree_id}"
-      # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый
-
-      get_bk_relative_names(tree_ids, base_profile.id, exclusions_hash)   # Получить от Алексея
-      # сбор circles
-
-      @profile_id = base_profile.id # DEBUGG_TO_VIEW
-      @display_name_id = base_profile.display_name_id # DEBUGG_TO_VIEW
-      @sex_id = base_profile.sex_id # DEBUGG_TO_VIEW
-      @name_id = base_profile.name_id # DEBUGG_TO_VIEW
-      @new_relation_id = new_relation_id # DEBUGG_TO_VIEW
-      @new_profile_id = new_profile.id # DEBUGG_TO_VIEW
-      @new_profile_name_id = new_profile.name_id # DEBUGG_TO_VIEW
-      @new_profile_is_display_name_id = new_profile.display_name_id # DEBUGG_TO_VIEW
-      @new_profile_sex = new_profile.sex_id # DEBUGG_TO_VIEW
-
-      add_row_to_tree = save_new_tree_row(base_profile, new_relation_id, new_profile)
-      # add_row_to_tree - это рабочий массив с данными для формирования рядов в таблице ProfileKey.
-
-      # в поле tree_id записать для нового профиля, в каком дереве профиль создали
-
-      @add_row_to_tree = add_row_to_tree # DEBUGG_TO_VIEW
-      logger.info "add_row_to_tree = #{add_row_to_tree} "
-      logger.info "Before: make_profilekeys_rows:: base_profile.tree_id = #{base_profile.tree_id}, tree_ids = #{tree_ids} "
-      make_profilekeys_rows(base_sex_id,
-                            base_profile.tree_id,
-                            add_row_to_tree)
-
-      logger.info "======= add_new_profile = END ================"
-    end
 
   end
 
