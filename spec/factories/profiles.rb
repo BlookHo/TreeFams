@@ -74,7 +74,7 @@ FactoryGirl.define do
 
     trait :profile_65 do
       id 65
-      user_id   nil
+      # user_id   nil
       name_id   345
       sex_id    0
       tree_id   1
@@ -91,14 +91,14 @@ FactoryGirl.define do
 
     trait :profile_67 do
       id 67
-      user_id   nil
+       user_id   nil
       name_id   173
       sex_id    0
       tree_id   1
     end
     trait :profile_68 do
       id 68
-      user_id   nil
+      # user_id   nil
       name_id   343
       sex_id    1
       tree_id   1
@@ -108,14 +108,14 @@ FactoryGirl.define do
 
     trait :profile_69 do
       id 69
-      user_id   nil
+      # user_id   nil
       name_id   293
       sex_id    0
       tree_id   1
     end
     trait :profile_70 do
       id 70
-      user_id   nil
+      # user_id   nil
       name_id   354
       sex_id    0
       tree_id   1
@@ -125,14 +125,14 @@ FactoryGirl.define do
 
     trait :profile_78 do
       id 78
-      user_id   nil
+      # user_id   nil
       name_id   173
       sex_id    0
       tree_id   1
     end
     trait :profile_79 do
       id 79
-      user_id   nil
+      # user_id   nil
       name_id   351
       sex_id    1
       tree_id   1
@@ -142,14 +142,14 @@ FactoryGirl.define do
 
     trait :profile_80 do
       id 80
-      user_id   nil
+      # user_id   nil
       name_id   187
       sex_id    0
       tree_id   1
     end
     trait :profile_81 do
       id 81
-      user_id   nil
+      # user_id   nil
       name_id   354
       sex_id    0
       tree_id   1
@@ -159,21 +159,21 @@ FactoryGirl.define do
 
     trait :profile_82 do
       id 82
-      user_id   nil
+      # user_id   nil
       name_id   351
       sex_id    1
       tree_id   1
     end
     trait :profile_83 do
       id 83
-      user_id   nil
+      # user_id   nil
       name_id   187
       sex_id    0
       tree_id   1
     end
     trait :profile_84 do
       id 84
-      user_id   nil
+      # user_id   nil
       name_id   370
       sex_id    1
       tree_id   1

@@ -86,7 +86,7 @@ RSpec.describe ProfileKey, :type => :model do
       FactoryGirl.create(:name, :name_419)   # Семен
       FactoryGirl.create(:name, :name_446)   # Таисия
       FactoryGirl.create(:name, :name_465)   # Федор
-      puts "before All: Name.first.name = #{Name.first.name} \n"  # Алексей
+      # puts "before All: Name.first.name = #{Name.first.name} \n"  # Алексей
 
       # User
       FactoryGirl.create(:user)  # User = 1. Tree = 1. profile_id = 63
@@ -99,13 +99,13 @@ RSpec.describe ProfileKey, :type => :model do
       FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
       # FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 9 . profile_id = 85
       # FactoryGirl.create(:user, :user_10 )  # User = 10. Tree = 10. profile_id = 93
-      puts "before All: User.first = #{User.first.id} \n" # id = 10
+      # puts "before All: User.first = #{User.first.id} \n" # id = 10
       puts "before All: User.last.id = #{User.last.id} \n" # id = 10
 
       # ConnectedUser
       FactoryGirl.create(:connected_user, :correct)      # 1  2
       FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
-      puts "before All: ConnectedUser.count = #{ConnectedUser.all.count} \n" # 2 rows
+      # puts "before All: ConnectedUser.count = #{ConnectedUser.all.count} \n" # 2 rows
 
       # Profile
       FactoryGirl.create(:add_profile, :add_profile_85)   # 85
@@ -131,10 +131,11 @@ RSpec.describe ProfileKey, :type => :model do
       # puts "before All: base_profile_85.tree_id = #{base_profile_85.tree_id} \n"  # id =
       # puts "before All: Profile.find(89).sex_id = #{Profile.find(89).sex_id} \n"  # id =
       # puts "before All: Profile.first.id = #{Profile.first.id} \n"  # id =
-      puts "before All: Profile.last.id = #{Profile.last.id} \n"  # id =
-      puts "before All: Profile.last.name_id = #{Profile.last.name_id} \n"  # name_id = 90
-      puts "before All: Profile.last.sex_id = #{Profile.last.sex_id} \n"  # name_id = 90
-      puts "before All: Profile.count = #{Profile.all.count} \n" # 2
+
+      # puts "before All: Profile.last.id = #{Profile.last.id} \n"  # id =
+      # puts "before All: Profile.last.name_id = #{Profile.last.name_id} \n"  # name_id = 90
+      # puts "before All: Profile.last.sex_id = #{Profile.last.sex_id} \n"  # name_id = 90
+      # puts "before All: Profile.count = #{Profile.all.count} \n" # 2
 
       # Tree
       # FactoryGirl.create(:tree, :add_tree9_1)   # 86
@@ -412,27 +413,27 @@ RSpec.describe ProfileKey, :type => :model do
            end
 
           context '- After action <add_new_profile>: check running' do
-            # let(:data_to_add) { {:profiles_to_rewrite => [79, 35, 70, 66], :profiles_to_destroy=>[82, 81, 98, 55],
-            #                        :connected_users_arr => connected_users } }
+            let(:data_to_add) { {:profiles_to_rewrite => [79, 35, 70, 66], :profiles_to_destroy=>[82, 81, 98, 55],
+                                   :connected_users_arr => connected_users } }
 
-            # before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_86, new_relation_id )#,
-            #     # exclusions_hash, tree_ids )
-            # }
+            before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_86, new_relation_id )#,
+                # exclusions_hash, tree_ids )
+            }
 
-            # let(:base_profile) {Profile.find(85)}
-            # let(:base_sex_id) {base_profile.sex_id}
-            # let(:new_profile_86) { create(:add_profile, :add_profile_86) }  # User = nil. Tree = 9. profile_id = 86
-            # # name_id   370   sex_id    1
-            # let(:new_relation_id) {1}
-            # let(:exclusions_hash) {{}}
-            # let(:tree_ids) {connected_users}
+            let(:base_profile) {Profile.find(85)}
+            let(:base_sex_id) {base_profile.sex_id}
+            let(:new_profile_86) { create(:add_profile, :add_profile_86) }  # User = nil. Tree = 9. profile_id = 86
+            # name_id   370   sex_id    1
+            let(:new_relation_id) {1}
+            let(:exclusions_hash) {{}}
+            let(:tree_ids) {connected_users}
 
-            # it '- check inctances: tree_is_profiles, tree_profiles_amount - Ok' do
-            #   puts "In check results: tree_info \n"
-            #   expect(assigns(:profile_id)).to eq(85) #
-            #   # expect(assigns(:tree_info)).to include(:tree_profiles_amount => 15)
-            #   # expect(assigns(:tree_info)).to include(:users_profiles_ids=>[63, 66])
-            # end
+            it '- check inctances: tree_is_profiles, tree_profiles_amount - Ok' do
+              puts "In check results: tree_info \n"
+              expect(assigns(:profile_id)).to eq(85) #
+              # expect(assigns(:tree_info)).to include(:tree_profiles_amount => 15)
+              # expect(assigns(:tree_info)).to include(:users_profiles_ids=>[63, 66])
+            end
 
             # it '- new_sims - Ok' do
             #   expect(assigns(:new_sims)).to eq("New sims")
