@@ -70,6 +70,9 @@ module SimilarsProfileMerge
       connection_id = link_data[:connected_at]
       logger.info "*** In module SimilarsConnection start make_user_profile_link: link_data = #{link_data.inspect} "
 
+      # for RSpec
+      @main_profile_id = main_profile.id
+
       # 1 link #################################
 
   #     name_of_table = User.table_name

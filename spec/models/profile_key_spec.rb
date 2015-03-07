@@ -415,9 +415,9 @@ RSpec.describe ProfileKey, :type => :model do
             # let(:data_to_add) { {:profiles_to_rewrite => [79, 35, 70, 66], :profiles_to_destroy=>[82, 81, 98, 55],
             #                        :connected_users_arr => connected_users } }
 
-            before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_86, new_relation_id )#,
-                # exclusions_hash, tree_ids )
-            }
+            # before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_86, new_relation_id )#,
+            #     # exclusions_hash, tree_ids )
+            # }
 
             # let(:base_profile) {Profile.find(85)}
             # let(:base_sex_id) {base_profile.sex_id}
@@ -427,12 +427,12 @@ RSpec.describe ProfileKey, :type => :model do
             # let(:exclusions_hash) {{}}
             # let(:tree_ids) {connected_users}
 
-            it '- check inctances: tree_is_profiles, tree_profiles_amount - Ok' do
-              puts "In check results: tree_info \n"
-              expect(assigns(:profile_id)).to eq(85) #
-              # expect(assigns(:tree_info)).to include(:tree_profiles_amount => 15)
-              # expect(assigns(:tree_info)).to include(:users_profiles_ids=>[63, 66])
-            end
+            # it '- check inctances: tree_is_profiles, tree_profiles_amount - Ok' do
+            #   puts "In check results: tree_info \n"
+            #   expect(assigns(:profile_id)).to eq(85) #
+            #   # expect(assigns(:tree_info)).to include(:tree_profiles_amount => 15)
+            #   # expect(assigns(:tree_info)).to include(:users_profiles_ids=>[63, 66])
+            # end
 
             # it '- new_sims - Ok' do
             #   expect(assigns(:new_sims)).to eq("New sims")

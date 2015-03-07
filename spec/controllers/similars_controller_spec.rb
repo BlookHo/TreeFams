@@ -3,6 +3,7 @@ describe SimilarsController, :type => :controller , similars: true do
 
     let(:current_user) { create(:user) }   # User = 1. Tree = 1. profile_id = 63
     let(:currentuser_id) {current_user.id}
+    let(:user_2) { create(:user, :user_2) } # User = 2. Tree = 2. profile_id = 66
 
     before {
       allow(controller).to receive(:logged_in?)
@@ -10,9 +11,10 @@ describe SimilarsController, :type => :controller , similars: true do
       # puts "1 before All: currentuser_id = #{currentuser_id} \n" # currentuser_id = 1
       # puts "before All: current_user.profile_id = #{current_user.profile_id} \n"
 
-      FactoryGirl.create(:user, :user_2)  # User = 2. Tree = 2. profile_id = 66
+      # FactoryGirl.create(:user, :user_2)  # User = 2. Tree = 2. profile_id = 66
       # puts "before All: User.last.id = #{User.last.id} \n" # id = 2
       # puts "before All: User.find(2).profile_id = #{User.find(2).profile_id} \n" # id = 2
+      puts "before All: user_2.profile_id = #{user_2.profile_id} \n" # id = 2   profile_id = 66
 
       FactoryGirl.create(:connected_user, :correct)      # 1  2
       FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
@@ -59,6 +61,11 @@ describe SimilarsController, :type => :controller , similars: true do
       FactoryGirl.create(:profile, :profile_82)
       FactoryGirl.create(:profile, :profile_83)
       FactoryGirl.create(:profile, :profile_84)
+      # puts "before All: Profile.find(63).user_id = #{Profile.find(63).user_id.inspect} \n"  # id = 63
+      # puts "before All: Profile.find(63).name_id = #{Profile.find(63).name_id.inspect} \n"  # id = 63
+      # puts "before All: Profile.find(66).user_id = #{Profile.find(66).user_id.inspect} \n"  # id = 66
+      # puts "before All: Profile.find(84).user_id = #{Profile.find(84).user_id.inspect} \n"  # id = 63
+      # puts "before All: Profile.find(66).name_id = #{Profile.find(66).name_id.inspect} \n"  # id = 66
       # puts "before All: Profile.last.id = #{Profile.last.id} \n"  # id = 64
       # puts "before All: Profile.last.name_id = #{Profile.last.name_id} \n"  # name_id = 90
       # puts "before All: Profile.count = #{Profile.all.count} \n" # 2
@@ -215,9 +222,10 @@ describe SimilarsController, :type => :controller , similars: true do
     }
 
   describe 'CHECK SimilarsController methods' do
+    let(:connected_users) { current_user.get_connected_users }
 
     context '- before actions - check connected_users' do
-      let(:connected_users) { current_user.get_connected_users }
+      # let(:connected_users) { current_user.get_connected_users }
       it "- Return proper connected_users Array result for current_user_id = 1" do
         puts "Check SimilarsController \n"
         puts "Before All - data created \n"  #
@@ -336,6 +344,7 @@ describe SimilarsController, :type => :controller , similars: true do
 
       let(:first_init_profile) {81}
       let(:second_init_profile) {70}
+      let(:log_connection_id) {1}
 
       context '- After action <connect_similars>: check render_template & response status' do
         before  { get :internal_similars_search }
@@ -366,8 +375,9 @@ describe SimilarsController, :type => :controller , similars: true do
                  get :connect_similars,
                      first_profile_id: first_init_profile, second_profile_id: second_init_profile,
                      :format => 'js' }
+        after { get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js' }
         it "- got values: init_hash" do
-          # puts "In check instances :  init_hash \n"
+          puts "In check instances :  init_hash \n"
           expect(assigns(:init_hash)).to eq( {81=>70, 82=>79, 83=>80, 67=>78, 84=>66} )
         end
 
@@ -379,7 +389,7 @@ describe SimilarsController, :type => :controller , similars: true do
       end
 
       context '- Before action <connect_similars>: check User ' do
-        let(:connected_users) { current_user.get_connected_users }
+        # let(:connected_users) { current_user.get_connected_users }
         it '- in User_2 profile_id before changed - Ok' do
           user_2_before_profile_id = User.find(connected_users[1]).profile_id
           # puts "before action <connect_similars> check in User: user_2_before_profile_id =
@@ -389,7 +399,7 @@ describe SimilarsController, :type => :controller , similars: true do
       end
 
       context '- Before action <connect_similars>: check SimilarsLog for Tree' do
-        let(:connected_users) { current_user.get_connected_users }
+        # let(:connected_users) { current_user.get_connected_users }
         let(:table_name) { Tree.table_name }
 
         it '- before action <connect_similars> got Empty array of [rows_ids] from Tree logs - Ok' do
@@ -402,7 +412,7 @@ describe SimilarsController, :type => :controller , similars: true do
       end
 
       context '- Before action <connect_similars>: check SimilarsLog for ProfileKey' do
-        let(:connected_users) { current_user.get_connected_users }
+        # let(:connected_users) { current_user.get_connected_users }
         let(:table_name) { ProfileKey.table_name }
 
         it '- before action <connect_similars> got Empty array of [rows_ids] from ProfileKey logs - Ok' do
@@ -418,6 +428,7 @@ describe SimilarsController, :type => :controller , similars: true do
                   get :connect_similars,
                       first_profile_id: first_init_profile, second_profile_id: second_init_profile,
                       :format => 'js' }
+        after { get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js' }
         it '- SimilarsLog got rows count - Ok' do
           logs_count =  SimilarsLog.all.count
           # puts "After action <connect_similars> check SimilarsLog count rows: logs_count = #{logs_count.inspect} \n"
@@ -450,13 +461,21 @@ describe SimilarsController, :type => :controller , similars: true do
       end
 
       context '- After action <connect_similars>: check User' do
-        let(:user_2) {User.find(2)}
-        let(:connected_users) { current_user.get_connected_users }
+        # let(:user_2) {User.find(2)}
+        # let(:connected_users) { current_user.get_connected_users }
         it '- in User one row changed - Ok' do
-          # puts "before User one row changed: current_user.profile_id = #{current_user.profile_id} \n"
-          # puts "before User two row changed: user_2.id = #{user_2.id} \n"
           puts "After #connect_similars check User \n"
+          puts "before User one row changed: current_user.id = #{current_user.id} \n"
+          puts "before User two row changed: current_user.profile_id = #{current_user.profile_id} \n"
+          puts "before User two row changed: user_2.id = #{user_2.id} \n"
+          puts "before User two row changed: user_2.profile_id = #{user_2.profile_id} \n"
           expect(user_2.profile_id).to eq(66) # got 2 rows of similars
+          puts "before in User : Profile.find(63).user_id = #{Profile.find(63).user_id.inspect} \n"  # id = 63
+          puts "before in User : Profile.find(63).name_id = #{Profile.find(63).name_id.inspect} \n"  # id = 63
+          puts "before in User : Profile.find(66).user_id = #{Profile.find(66).user_id.inspect} \n"  # id = 66
+          puts "before in User : Profile.find(66).name_id = #{Profile.find(66).name_id.inspect} \n"  # id = 66
+          puts "before in User : Profile.find(84).user_id = #{Profile.find(84).user_id.inspect} \n"  # id = 66
+          puts "before in User : Profile.find(84).name_id = #{Profile.find(84).name_id.inspect} \n"  # id = 66
           get :internal_similars_search
           get :connect_similars,
               first_profile_id: first_init_profile, second_profile_id: second_init_profile,
@@ -468,14 +487,27 @@ describe SimilarsController, :type => :controller , similars: true do
           expect(user_1_profile).to eq(63) # got profile_id of user_1
           # puts "After action: User.find(connected_users[1]).profile_id =
           #                #{User.find(connected_users[1]).profile_id} \n" # profile_id = 84
-          user_2_profile =  User.find(connected_users[1]).profile_id
-          # puts "After action <connect_similars> check in User: user_2_profile = #{user_2_profile.inspect} \n"
+          puts "After User one row changed: current_user.id = #{current_user.id} \n"
+          puts "After User two row changed: current_user.profile_id = #{current_user.profile_id} \n"
+          puts "After User two row changed: user_2.id = #{user_2.id} \n"
+          puts "After User two row changed: user_2.profile_id = #{user_2.profile_id} \n"
+          puts "in User After: Profile.find(63).user_id = #{Profile.find(63).user_id.inspect} \n"  # id = 63
+          puts "in User After: Profile.find(63).name_id = #{Profile.find(63).name_id.inspect} \n"  # id = 63
+          puts "in User After: Profile.find(66).user_id = #{Profile.find(66).user_id.inspect} \n"  # id = 66
+          puts "in User After: Profile.find(66).name_id = #{Profile.find(66).name_id.inspect} \n"  # id = 66
+          puts "in User After: Profile.find(84).user_id = #{Profile.find(84).user_id.inspect} \n"  # id = 66
+          puts "in User After: Profile.find(84).name_id = #{Profile.find(84).name_id.inspect} \n"  # id = 66
+          # user_2_profile =  User.find(connected_users[1]).profile_id
+          user_2_profile =  user_2.profile_id
+          puts "After action <connect_similars> check in User: user_2_profile = #{user_2_profile.inspect} \n"
           expect(user_2_profile).to eq(84) # got profile_id of user_2 = 84
+          get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'
+
         end
       end
 
       context '- After action <connect_similars>: check Profile' do
-        let(:connected_users) { current_user.get_connected_users }
+        # let(:connected_users) { current_user.get_connected_users }
         it '- in Profile - before profiles rows changed - Ok' do
           user_2 = User.find(connected_users[1])
           puts "After #connect_similars check Profile \n"
@@ -488,13 +520,34 @@ describe SimilarsController, :type => :controller , similars: true do
         end
 
         it '- in Profile - After profiles rows changed - Ok' do
+          puts "in Profile Before "
+          puts "in Profile After: Profile.find(63).user_id = #{Profile.find(63).user_id.inspect} \n"  # id = 63
+          puts "in Profile After: Profile.find(63).name_id = #{Profile.find(63).name_id.inspect} \n"  # id = 63
+          puts "in Profile After: Profile.find(66).user_id = #{Profile.find(66).user_id.inspect} \n"  # id = 66
+          puts "in Profile After: Profile.find(66).name_id = #{Profile.find(66).name_id.inspect} \n"  # id = 66
+          puts "in Profile After: Profile.find(84).user_id = #{Profile.find(84).user_id.inspect} \n"  # id = 66
+          puts "in Profile After: Profile.find(84).name_id = #{Profile.find(84).name_id.inspect} \n"  # id = 66
+          puts "in Profile After: first_init_profile = #{first_init_profile.inspect} \n"  # id =
+          puts "in Profile After: second_init_profile = #{second_init_profile.inspect} \n"  # id =
+
           get :internal_similars_search
           get :connect_similars,
               first_profile_id: first_init_profile, second_profile_id: second_init_profile,
               :format => 'js'
 
+          puts "in Profile After "
+
+          puts "in Profile After: Profile.find(63).user_id = #{Profile.find(63).user_id.inspect} \n"  # id = 63
+          puts "in Profile After: Profile.find(63).name_id = #{Profile.find(63).name_id.inspect} \n"  # id = 63
+          puts "in Profile After: Profile.find(66).user_id = #{Profile.find(66).user_id.inspect} \n"  # id = 66
+          puts "in Profile After: Profile.find(66).name_id = #{Profile.find(66).name_id.inspect} \n"  # id = 66
+          puts "in Profile After: Profile.find(84).user_id = #{Profile.find(84).user_id.inspect} \n"  # id = 66
+          puts "in Profile After: Profile.find(84).name_id = #{Profile.find(84).name_id.inspect} \n"  # id = 66
+
+
           profiles_users_count =  Profile.where(user_id: connected_users).count
           # puts "After 1 action <connect_similars> check Profile: profiles_users_count = #{profiles_users_count.inspect} \n"
+          puts "After 1 action <connect_similars> check Profile: connected_users = #{connected_users.inspect} \n"
           expect(profiles_users_count).to eq(2) # got 2 rows of users in Profiles
 
           user_2 = User.find(connected_users[1])
@@ -504,11 +557,14 @@ describe SimilarsController, :type => :controller , similars: true do
           profile_new_user = Profile.find(user_2.profile_id).user_id
           # puts "After 3 action <connect_similars> check in Profile: profile_new_user = #{profile_new_user.inspect} \n"
           expect(profile_new_user).to eq(2) # got new user_id for 2nd user profile in Profiles after connection = 2
+
+          get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'
+
         end
       end
 
       context '- After action <connect_similars>: check Tree' do
-        let(:connected_users) { current_user.get_connected_users }
+        # let(:connected_users) { current_user.get_connected_users }
         let(:table_name) { Tree.table_name }
         let(:field_name_profile) { "profile_id" }
         let(:field_name_is_profile) { "is_profile_id" }
@@ -563,7 +619,7 @@ describe SimilarsController, :type => :controller , similars: true do
       end
 
       context '- After action <connect_similars>: check ProfileKey' do
-        let(:connected_users) { current_user.get_connected_users }
+        # let(:connected_users) { current_user.get_connected_users }
         let(:table_name) { ProfileKey.table_name }
         let(:field_name_profile) { "profile_id" }
         let(:field_name_is_profile) { "is_profile_id" }
