@@ -73,6 +73,7 @@ class ProfilesController < ApplicationController
           connected_users:     current_user.get_connected_users
       }
 
+
       questions_hash = current_user.profile.make_questions(make_questions_data)
       @questions = create_questions_from_hash(questions_hash)
 

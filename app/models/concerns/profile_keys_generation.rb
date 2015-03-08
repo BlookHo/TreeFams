@@ -18,7 +18,8 @@ module ProfileKeysGeneration
     def add_new_profile(base_sex_id, base_profile,
                         new_profile, new_relation_id,
                         exclusions_hash: nil,
-                        tree_ids: tree_ids) # [trees connected] типа [126, 127]
+                        tree_ids: tree_ids)
+                        # tree_ids: tree_ids) # [trees connected] типа [126, 127]
 
       puts "============ In add_new_profile ==================DDDDDDDD"
       puts "base_sex_id = #{base_sex_id}"
@@ -27,6 +28,7 @@ module ProfileKeysGeneration
       puts "new_relation_id = #{new_relation_id}"
       puts "exclusions_hash = #{exclusions_hash}, tree_ids = #{tree_ids},"
       puts "base_profile.tree_id #{base_profile.tree_id}"
+      puts " tree_ids = #{tree_ids.inspect}"
 
       logger.info "============ In add_new_profile ==================DDDDDDDD"
       logger.info "base_sex_id = #{base_sex_id}"
@@ -54,10 +56,12 @@ module ProfileKeysGeneration
       # add_row_to_tree - это рабочий массив с данными для формирования рядов в таблице ProfileKey.
 
       # в поле tree_id записать для нового профиля, в каком дереве профиль создали
+      puts "add_row_to_tree #{add_row_to_tree.inspect}"
 
       @add_row_to_tree = add_row_to_tree # DEBUGG_TO_VIEW
       logger.info "add_row_to_tree = #{add_row_to_tree} "
       logger.info "Before: make_profilekeys_rows:: base_profile.tree_id = #{base_profile.tree_id}, tree_ids = #{tree_ids} "
+
       make_profilekeys_rows(base_sex_id,
                             base_profile.tree_id,
                             add_row_to_tree)
@@ -110,7 +114,6 @@ module ProfileKeysGeneration
   #########################
         new_tree.save
   #########################
-
         add_row_to_tree = [ #author_user.id, # Главный автор= юзер на сайте -- не иcп-ся
                  base_profile_id, base_sex_id, base_name_id, base_display_name_id, # 0, 1, 2, 3
                  new_relation_id.to_i,                                             # 4,
@@ -118,7 +121,7 @@ module ProfileKeysGeneration
                            ]
       logger.info "== In save_new_tree_row: add_row_to_tree = #{add_row_to_tree}  ============"
 
-      return add_row_to_tree
+      add_row_to_tree
      end
 
      # Добавление нового ряда в таблицу ProfileKey
@@ -158,6 +161,7 @@ module ProfileKeysGeneration
 
       @one_profile_key_arr = one_profile_key_arr   # DEBUGG_TO_VIEW
       logger.info "== In add_new_ProfileKey_row:: one_profile_key_arr = #{one_profile_key_arr}, base_profile_tree_id = #{base_profile_tree_id}   ============"
+      puts "*** In add_new_ProfileKey_row: one_profile_key_arr = \n #{one_profile_key_arr.inspect}"
 
     end
 
@@ -191,7 +195,7 @@ module ProfileKeysGeneration
     # @note GET /
     # @see News
     def fill_relation_rows(base_profile_tree_id, relation_name_hash, sex_id, relation_id, add_relation_data ) # new_profile_id, new_profile_name_id, display_name_id, new_prf_disp_name_id)
-      if !relation_name_hash.blank?
+      unless relation_name_hash.blank?
         # Если существуют члены БК с родством relation_name_hash к Профилю,
         # к кот. добавляем Новый_Профиль
 
@@ -204,7 +208,7 @@ module ProfileKeysGeneration
         @fathers_profiles_arr = profiles_arr   # DEBUGG_TO_VIEW
         names_arr = relation_name_hash.values  # name_id array
         @fathers_names_arr = names_arr   # DEBUGG_TO_VIEW
-        if !names_arr.blank?
+        unless names_arr.blank?
           for arr_ind in 0 .. names_arr.length - 1
 
             # извлечение полей display_name_id для обоих профилей
@@ -219,6 +223,7 @@ module ProfileKeysGeneration
             current_reverse_relation_id = Relation.where(:relation_id => relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
 
             # запись c обратным отношением
+            # puts "== In fill_relation_rows:: current_reverse_relation_id = #{current_reverse_relation_id}, relation_id = #{relation_id} , sex_id = #{sex_id}  ============"
             logger.info "== In fill_relation_rows:: current_reverse_relation_id = #{current_reverse_relation_id}, relation_id = #{relation_id} , sex_id = #{sex_id}  ============"
             add_new_ProfileKey_row(base_profile_tree_id, new_profile_id, new_profile_name_id, is_disp_name_id, current_reverse_relation_id, profiles_arr[arr_ind], names_arr[arr_ind], disp_name_id)
             @profile_key_arr_added << @one_profile_key_arr   # DEBUGG_TO_VIEW
@@ -243,6 +248,8 @@ module ProfileKeysGeneration
       fill_relation_rows(base_profile_tree_id, @mothers_hash, 0, 7, add_relation_data ) #new_profile_id, new_profile_name_id, display_name_id, new_prf_display_name_id)
       fill_relation_rows(base_profile_tree_id, @brothers_hash, 1, 1, add_relation_data ) #new_profile_id, new_profile_name_id, display_name_id, new_prf_display_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @sisters_hash, 0, 1, add_relation_data ) #new_profile_id, new_profile_name_id, display_name_id, new_prf_display_name_id)  ### NonStandard
+
+      # puts "== In add_father_to_ProfileKeys:: base_sex_id = #{base_sex_id.inspect}"
 
       logger.info "== In add_father_to_ProfileKeys:: base_sex_id = #{base_sex_id.inspect}"
 
@@ -505,17 +512,27 @@ module ProfileKeysGeneration
     # @see News
     def get_bk_relative_names(tree_ids, base_profile_id, exclusions_hash)
 
+      # puts "============ In get_bk_relative_names ================= DDDDDDDD"
+      # puts " in get_bk_relative_names: tree_ids = #{tree_ids.inspect}"
       logger.info "============ In get_bk_relative_names ================= DDDDDDDD"
       logger.info "tree_ids = #{tree_ids}, base_profile_id = #{base_profile_id}, exclusions_hash = #{exclusions_hash},"
 
       @fathers_hash = Profile.find(base_profile_id).fathers_hash(tree_ids)
+      puts "== @fathers_hash = #{@fathers_hash}"
       @mothers_hash = Profile.find(base_profile_id).mothers_hash(tree_ids)
+      puts "== @mothers_hash = #{@mothers_hash}"
       @brothers_hash = Profile.find(base_profile_id).brothers_hash(tree_ids)
+      puts "== @brothers_hash = #{@brothers_hash}"
       @sisters_hash = Profile.find(base_profile_id).sisters_hash(tree_ids)
+      puts "== @sisters_hash = #{@sisters_hash}"
       @wives_hash = Profile.find(base_profile_id).wives_hash(tree_ids)
+      puts "== @wives_hash = #{@wives_hash}"
       @husbands_hash = Profile.find(base_profile_id).husbands_hash(tree_ids)
+      puts "== @husbands_hash = #{@husbands_hash}"
       @sons_hash = Profile.find(base_profile_id).sons_hash(tree_ids)
+      puts "== @sons_hash = #{@sons_hash}"
       @daughters_hash = Profile.find(base_profile_id).daughters_hash(tree_ids)
+      puts "== @daughters_hash = #{@daughters_hash}"
 
       if exclusions_hash
         @fathers_hash = proceed_exclusions_profile(@fathers_hash, exclusions_hash)
@@ -544,7 +561,7 @@ module ProfileKeysGeneration
             members_hash.delete_if {|k, v| k.to_i == key.to_i && val.to_i == 0.to_i}
           end
       end
-      return members_hash
+      members_hash
     end
 
 

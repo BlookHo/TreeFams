@@ -135,6 +135,8 @@ class Profile < ActiveRecord::Base
   def mothers_hash(user_id)
     hash = {}
     mothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
+    puts " in Profile model: user_id = #{user_id.inspect}"
+    puts " in Profile model: mothers_hash = #{hash.inspect}"
     return hash
   end
 
