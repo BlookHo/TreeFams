@@ -21,14 +21,14 @@ module ProfileKeysGeneration
                         tree_ids: tree_ids)
                         # tree_ids: tree_ids) # [trees connected] типа [126, 127]
 
-      puts "============ In add_new_profile ==================DDDDDDDD"
-      puts "base_sex_id = #{base_sex_id}"
-      puts "new_profile = #{new_profile}"
-      puts "base_profile.id = #{base_profile.id}"
-      puts "new_relation_id = #{new_relation_id}"
-      puts "exclusions_hash = #{exclusions_hash}, tree_ids = #{tree_ids},"
-      puts "base_profile.tree_id #{base_profile.tree_id}"
-      puts " tree_ids = #{tree_ids.inspect}"
+      # puts "============ In add_new_profile ==================DDDDDDDD"
+      # puts "base_sex_id = #{base_sex_id}"
+      # puts "new_profile = #{new_profile}"
+      # puts "base_profile.id = #{base_profile.id}"
+      # puts "new_relation_id = #{new_relation_id}"
+      # puts "exclusions_hash = #{exclusions_hash}, tree_ids = #{tree_ids},"
+      # puts "base_profile.tree_id #{base_profile.tree_id}"
+      # puts " tree_ids = #{tree_ids.inspect}"
 
       logger.info "============ In add_new_profile ==================DDDDDDDD"
       logger.info "base_sex_id = #{base_sex_id}"
@@ -56,7 +56,7 @@ module ProfileKeysGeneration
       # add_row_to_tree - это рабочий массив с данными для формирования рядов в таблице ProfileKey.
 
       # в поле tree_id записать для нового профиля, в каком дереве профиль создали
-      puts "add_row_to_tree #{add_row_to_tree.inspect}"
+      # puts "add_row_to_tree #{add_row_to_tree.inspect}"
 
       @add_row_to_tree = add_row_to_tree # DEBUGG_TO_VIEW
       logger.info "add_row_to_tree = #{add_row_to_tree} "
@@ -161,7 +161,7 @@ module ProfileKeysGeneration
 
       @one_profile_key_arr = one_profile_key_arr   # DEBUGG_TO_VIEW
       logger.info "== In add_new_ProfileKey_row:: one_profile_key_arr = #{one_profile_key_arr}, base_profile_tree_id = #{base_profile_tree_id}   ============"
-      puts "*** In add_new_ProfileKey_row: one_profile_key_arr = \n #{one_profile_key_arr.inspect}"
+      # puts "*** In add_new_ProfileKey_row: one_profile_key_arr = \n #{one_profile_key_arr.inspect}"
 
     end
 
@@ -518,21 +518,21 @@ module ProfileKeysGeneration
       logger.info "tree_ids = #{tree_ids}, base_profile_id = #{base_profile_id}, exclusions_hash = #{exclusions_hash},"
 
       @fathers_hash = Profile.find(base_profile_id).fathers_hash(tree_ids)
-      puts "== @fathers_hash = #{@fathers_hash}"
+      # puts "== @fathers_hash = #{@fathers_hash}"
       @mothers_hash = Profile.find(base_profile_id).mothers_hash(tree_ids)
-      puts "== @mothers_hash = #{@mothers_hash}"
+      # puts "== @mothers_hash = #{@mothers_hash}"
       @brothers_hash = Profile.find(base_profile_id).brothers_hash(tree_ids)
-      puts "== @brothers_hash = #{@brothers_hash}"
+      # puts "== @brothers_hash = #{@brothers_hash}"
       @sisters_hash = Profile.find(base_profile_id).sisters_hash(tree_ids)
-      puts "== @sisters_hash = #{@sisters_hash}"
+      # puts "== @sisters_hash = #{@sisters_hash}"
       @wives_hash = Profile.find(base_profile_id).wives_hash(tree_ids)
-      puts "== @wives_hash = #{@wives_hash}"
+      # puts "== @wives_hash = #{@wives_hash}"
       @husbands_hash = Profile.find(base_profile_id).husbands_hash(tree_ids)
-      puts "== @husbands_hash = #{@husbands_hash}"
+      # puts "== @husbands_hash = #{@husbands_hash}"
       @sons_hash = Profile.find(base_profile_id).sons_hash(tree_ids)
-      puts "== @sons_hash = #{@sons_hash}"
+      # puts "== @sons_hash = #{@sons_hash}"
       @daughters_hash = Profile.find(base_profile_id).daughters_hash(tree_ids)
-      puts "== @daughters_hash = #{@daughters_hash}"
+      # puts "== @daughters_hash = #{@daughters_hash}"
 
       if exclusions_hash
         @fathers_hash = proceed_exclusions_profile(@fathers_hash, exclusions_hash)

@@ -179,6 +179,7 @@ RSpec.describe ProfileKey, :type => :model do
       # FactoryGirl.create(:profile, :add_profile_98) # before
       # FactoryGirl.create(:profile, :add_profile_99) # before
       # FactoryGirl.create(:profile, :add_profile_100)
+
       # puts "before All: base_profile_85.id = #{base_profile_85.id} \n"  # id =
       # puts "before All: base_profile_85.user_id = #{base_profile_85.user_id} \n"  # id =
       # puts "before All: base_profile_85.name_id = #{base_profile_85.name_id} \n"  # id =
@@ -520,10 +521,11 @@ RSpec.describe ProfileKey, :type => :model do
             it '- check all relations generated in ProfileKey rows - Ok' do
               all_relations =  ProfileKey.all.pluck(:relation_id)
               puts "After ADD Father Check ProfileKey \n"
-              puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
+              # puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
               expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
                                            2, 3, 3, 2, 4, 2, 111, 101, 121, 101, 8, 7, 2, 3, 2, 4, 17, 14, 1, 3, 7, 8,
                                            1, 3, 1, 4, 91, 111, 91, 121, 13, 17]) # got 52 relations of ProfileKey
+              puts "In check ProfileKey: all_relations = #{all_relations.size} \n"# unless all_relations_w_fa.blank?
               expect(all_relations.size).to eq(52)
             end
 
@@ -738,10 +740,11 @@ RSpec.describe ProfileKey, :type => :model do
             it '- check all relations generated in ProfileKey rows - Ok' do
               all_relations =  ProfileKey.all.pluck(:relation_id)
               puts "After ADD Mother Check ProfileKey \n"
-              puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
+              # puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
               expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
                                            1, 3, 3, 1, 4, 1, 111, 91, 121, 91, 8, 7, 2, 3, 2, 4, 17, 13, 2, 3, 8, 7, 2,
                                            3, 2, 4, 101, 111, 101, 121, 14, 17]) # got 52 relations of ProfileKey
+              puts "In check ProfileKey: all_relations_w_mo = #{all_relations.size} \n"
               expect(all_relations.size).to eq(52)
             end
 
@@ -948,11 +951,12 @@ RSpec.describe ProfileKey, :type => :model do
             it '- check all relations generated in ProfileKey rows - Ok' do
               all_relations =  ProfileKey.all.pluck(:relation_id)
               # puts "After ADD Son Check ProfileKey \n"
-              puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
+              # puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
               expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
                                            1, 3, 2, 3, 8, 7, 3, 1, 3, 2, 4, 1, 4, 2, 111, 91, 111, 101, 121, 91, 121,
                                            101, 8, 7, 2, 3, 2, 4, 17, 13, 17, 14, 3, 1, 3, 2, 5, 5, 5, 6, 111, 91, 111,
                                            101, 211, 191, 211, 201]) # got 52 relations of ProfileKey
+              puts "In check ProfileKey: all_relations = #{all_relations.size} \n"
               expect(all_relations.size).to eq(68)
             end
 
@@ -1160,11 +1164,12 @@ RSpec.describe ProfileKey, :type => :model do
             it '- check all relations generated in ProfileKey rows - Ok' do
               all_relations =  ProfileKey.all.pluck(:relation_id)
               # puts "After ADD Daughter Check ProfileKey \n"
-              puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
+              # puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
               expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
                                            1, 3, 2, 3, 8, 7, 3, 1, 3, 2, 4, 1, 4, 2, 111, 91, 111, 101, 121, 91, 121,
                                            101, 8, 7, 2, 3, 2, 4, 17, 13, 17, 14, 4, 1, 4, 2, 6, 5, 6, 6, 121, 91, 121,
                                            101, 221, 191, 221, 201]) # got 52 relations of ProfileKey
+              puts "In check ProfileKey: all_relations = #{all_relations.size} \n"
               expect(all_relations.size).to eq(68)
             end
 
@@ -1372,11 +1377,12 @@ RSpec.describe ProfileKey, :type => :model do
             it '- check all relations generated in ProfileKey rows - Ok' do
               all_relations =  ProfileKey.all.pluck(:relation_id)
               # puts "After ADD Brother Check ProfileKey \n"
-              puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
+              # puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
               expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
                                            1, 3, 2, 3, 8, 7, 3, 1, 3, 2, 4, 1, 4, 2, 111, 91, 111, 101, 121, 91, 121,
                                            101, 8, 7, 2, 3, 2, 4, 17, 13, 17, 14, 5, 5, 3, 1, 3, 2, 5, 5, 5, 6, 191,
                                            211, 191, 221]) # got 66 relations of ProfileKey
+              puts "In check ProfileKey: all_relations = #{all_relations.size} \n"
               expect(all_relations.size).to eq(66)
             end
 
@@ -1585,11 +1591,12 @@ RSpec.describe ProfileKey, :type => :model do
             it '- check all relations generated in ProfileKey rows - Ok' do
               all_relations =  ProfileKey.all.pluck(:relation_id)
               # puts "After ADD Sister Check ProfileKey \n"
-              puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
+              # puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
               expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
                                            1, 3, 2, 3, 8, 7, 3, 1, 3, 2, 4, 1, 4, 2, 111, 91, 111, 101, 121, 91, 121,
                                            101, 8, 7, 2, 3, 2, 4, 17, 13, 17, 14, 6, 5, 4, 1, 4, 2, 6, 5, 6, 6, 201,
                                            211, 201, 221]) # got 66 relations of ProfileKey
+              puts "In check ProfileKey: all_relations = #{all_relations.size} \n"
               expect(all_relations.size).to eq(66)
             end
 
@@ -1802,10 +1809,11 @@ RSpec.describe ProfileKey, :type => :model do
             it '- check all relations generated in ProfileKey rows - Ok' do
               all_relations =  ProfileKey.all.pluck(:relation_id)
               puts "After ADD Wife Check ProfileKey \n"
-              puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
+              # puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
               expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
                                            1, 3, 2, 3, 8, 7, 3, 1, 3, 2, 4, 1, 4, 2, 111, 91, 111, 101, 121, 91, 121,
                                            101, 8, 7, 2, 3, 2, 4, 17, 13, 17, 14]) # got 52 relations of ProfileKey
+              puts "In check ProfileKey: all_relations = #{all_relations.size} \n"
               expect(all_relations.size).to eq(52)
             end
 
