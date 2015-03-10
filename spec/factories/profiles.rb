@@ -365,14 +365,14 @@ FactoryGirl.define do
       user_id   nil
       name_id   419
       sex_id    1
-      tree_id   10 # ?
+      tree_id   9 #
     end
     trait :add_profile_102 do  # Светлана
       id 102
       user_id   nil
       name_id   412
       sex_id    0
-      tree_id   10  # ?
+      tree_id   9  #
     end
 
 
