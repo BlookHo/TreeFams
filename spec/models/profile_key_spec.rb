@@ -386,7 +386,7 @@ RSpec.describe ProfileKey, :type => :model do
           }
 
           context '- before action <add_new_profile> - check created data' do
-            puts "Before action - data created \n"  #
+            puts "Before action Add Father- data created \n"  #
             it "- Return proper connected_users Array result for current_user_id = 1" do
               expect(connected_users).to eq([9])
             end
@@ -396,7 +396,7 @@ RSpec.describe ProfileKey, :type => :model do
           let(:base_sex_id) {base_profile.sex_id}
           let(:new_profile_86) { create(:add_profile, :add_profile_86) } # User = nil. Tree = 9. profile_id = 86
                                                                          # name_id   370   sex_id    1
-          let(:new_relation_id) {1}
+          let(:new_relation_id) {1} # Father
           let(:exclusions_hash) {{}}
           let(:tree_ids) {connected_users}
 
@@ -467,7 +467,7 @@ RSpec.describe ProfileKey, :type => :model do
             # ADD Father
             let(:new_profile_86) { create(:add_profile, :add_profile_86) }  # User = nil. Tree = 9. profile_id = 86
             # name_id   370   sex_id    1
-            let(:new_relation_id) {1}
+            let(:new_relation_id) {1} # Father
             let(:exclusions_hash_empty) {{}}
             let(:tree_ids_conn) {connected_users}
 
@@ -527,125 +527,235 @@ RSpec.describe ProfileKey, :type => :model do
               expect(all_relations.size).to eq(52)
             end
 
-            # let(:similars_got) { assigns(:similars) }
-            # let(:similars_first_pair) { similars_got[0] }
-            # let(:similars_second_pair) { similars_got[1] }
-            # it '- similars_first_pair - Ok' do
-            #   # puts "In check results: similars_got = #{similars_first_pair} \n"
-            #   first_pair_profile_ids = [similars_first_pair[:first_profile_id], similars_first_pair[:second_profile_id]].sort
-            #   expect(first_pair_profile_ids).to eq([70, 81])
-            #   # puts "In check results: first_pair_profile_ids = #{first_pair_profile_ids} \n"
-            # end
-
+            it '- check new Profile rows - Ok' do
+              profiles_count =  Profile.all.count
+              puts "After ADD Father Check Profile \n"
+              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
+              expect(profiles_count).to eq(8) # got 8 rows of Profile
+            end
           end
-
-          context '- After action <internal_similars_search>: check SimilarsFound' do
-            # it '- in SimilarsFound stored 2 rows of good sims pairs & first row - Ok' do
-            #   get :internal_similars_search
-            #   sims_count =  SimilarsFound.all.count
-            #   puts "Check #internal_similars_search check SimilarsFound\n"
-            #   # puts "In check SimilarsFound count rows: rows sims_count = #{sims_count.inspect} \n"
-            #   expect(sims_count).to eq(2) # got 2 rows of similars
-            #   first_row = SimilarsFound.first
-            #   first_pair_profile_ids = [first_row.first_profile_id, first_row.second_profile_id].sort
-            #   expect(first_pair_profile_ids).to eq([70, 81])
-            #   # puts "In check SimilarsFound rows:  first_row = #{first_row.inspect} \n"
-            #   # puts "In check SimilarsFound rows:  first_row.second_profile_id = #{first_row.second_profile_id.inspect} \n"
-            #   second_row = SimilarsFound.second
-            #   second_pair_profile_ids = [second_row.first_profile_id, second_row.second_profile_id].sort
-            #   expect(second_pair_profile_ids).to eq([79, 82])
-            #   # puts "In check SimilarsFound rows:  second_row = #{second_row.inspect} \n"
-            #   # puts "In check SimilarsFound rows:  second_row.second_profile_id = #{second_row.second_profile_id.inspect} \n"
-            # end
-          end
-
         end
 
         describe '- Added Mother - ' do
+          before {
+            # Tree
+            FactoryGirl.create(:tree, :add_tree9_1)   # 86
+            FactoryGirl.create(:tree, :add_tree9_7)   # 92
 
-          context '- after action <internal_similars_search> - check render_template & response status' do
-            # subject { get :internal_similars_search }
-            # it "- render_template internal_similars_search" do
-            #   puts "Check #internal_similars_search\n"
-            #   # puts "In render_template :  currentuser_id = #{currentuser_id} \n"
-            #   expect(subject).to render_template :internal_similars_search
-            # end
-            # it '- responds with 200' do
-            #   # puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
-            #   expect(response.status).to eq(200)
-            # end
-            # it '- no responds with 401' do
-            #   # puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
-            #   expect(response.status).to_not eq(401)
-            # end
+            # Profile
+            FactoryGirl.create(:add_profile, :add_profile_86)   # 86
+            FactoryGirl.create(:add_profile, :add_profile_92)   # 92
+
+            #Profile_Key
+            # Before Add new Profile  -  tree #9 Petr
+            FactoryGirl.create(:profile_key, :profile_key9_add_1)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_2)   # 86
+            # FactoryGirl.create(:profile_key, :profile_key9_add_3)   # 87
+            # FactoryGirl.create(:profile_key, :profile_key9_add_4)   # 87
+            # FactoryGirl.create(:profile_key, :profile_key9_add_5)   # 86, 87
+            # FactoryGirl.create(:profile_key, :profile_key9_add_6)   # 86, 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_9)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_10)   # 86
+            # FactoryGirl.create(:profile_key, :profile_key9_add_11)   # 87
+            # FactoryGirl.create(:profile_key, :profile_key9_add_12)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_15)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_16)   # 86
+            # FactoryGirl.create(:profile_key, :profile_key9_add_17)   # 87
+            # FactoryGirl.create(:profile_key, :profile_key9_add_18)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 86
+            # FactoryGirl.create(:profile_key, :profile_key9_add_25)   # 87
+            # FactoryGirl.create(:profile_key, :profile_key9_add_26)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_35)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_36)   # 86
+            # FactoryGirl.create(:profile_key, :profile_key9_add_37)   # 87
+            # FactoryGirl.create(:profile_key, :profile_key9_add_38)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_43)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_44)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_45)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_46)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_47)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_48)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_49)   # 92 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
+            # FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
+            # FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
+
+          }
+
+          after {
+            User.delete_all
+            User.reset_pk_sequence
+            ConnectedUser.delete_all
+            ConnectedUser.reset_pk_sequence
+            Tree.delete_all
+            Tree.reset_pk_sequence
+            Profile.delete_all
+            Profile.reset_pk_sequence
+            ProfileKey.delete_all
+            ProfileKey.reset_pk_sequence
+            # WeafamSetting.delete_all
+            # WeafamSetting.reset_pk_sequence
+            Name.delete_all
+            Name.reset_pk_sequence
+            Relation.delete_all
+            Relation.reset_pk_sequence
+          }
+
+          context '- before action <add_new_profile> - check created data' do
+            puts "Before action Add Mother- data created \n"  #
+            it "- Return proper connected_users Array result for current_user_id = 1" do
+              expect(connected_users).to eq([9])
+            end
           end
 
-          context '- In action <internal_similars_search> - check instances  ' do
-            # it "- got values: log_connection_id, connected_users, current_user_id" do
-            #   get :internal_similars_search
-            #   # puts "In check instances :  currentuser_id = #{currentuser_id} \n"  # 1
-            #   expect(assigns(:log_connection_id)).to eq([])
-            #   expect(assigns(:connected_users)).to eq([1,2])
-            #   expect(assigns(:current_user_id)).to eq(1)
-            # end
+          let(:base_profile) {Profile.find(85)}
+          let(:base_sex_id) {base_profile.sex_id}
+          let(:new_profile_87) { create(:add_profile, :add_profile_87) } # User = nil. Tree = 9. profile_id = 87
+          # name_id   370   sex_id    1
+          let(:new_relation_id) {2} # Mother
+          let(:exclusions_hash) {{}}
+          let(:tree_ids) {connected_users}
+
+          context '- before action <add_new_profile> - check input params values ' do
+            it "- check: base_profile" do
+              expect(base_profile.id).to eq(85)
+            end
+            it "- check: base_sex_id" do
+              # puts "check base_sex_id: = #{base_sex_id} \n"  # 1
+              expect(base_sex_id).to eq(1)
+            end
+            it "- check: base_profile" do
+              # puts "check base_profile.id: = #{base_profile.id} \n"  # ActiveRecord
+              expect(base_profile).to be_valid
+            end
+            it "- check: new_profile_87" do
+              # puts "check new_profile_87.id: = #{new_profile_87.id} \n"  # ActiveRecord
+              expect(new_profile_87).to be_valid
+            end
+            it "- check: new_relation_id" do
+              # puts "check new_relation_id: = #{new_relation_id} \n"  # 1
+              expect(new_relation_id).to eq(2)
+            end
+            it "- check: exclusions_hash" do
+              # puts "check exclusions_hash: = #{exclusions_hash} \n"  # 1
+              expect(exclusions_hash).to eq({})
+            end
+            it "- check: tree_ids" do
+              # puts "check tree_ids: = #{tree_ids} \n"  # 1
+              expect(tree_ids).to eq([9])
+            end
+            it '- Tree check have rows count before - Ok' do
+              trees_count =  Tree.all.count
+              # puts "before action: trees_count = #{trees_count.inspect} \n"
+              expect(trees_count).to eq(6) # got 6 rows of Tree
+            end
+            it '- Profile check have rows count & ids before - Ok' do
+              profiles_count =  Profile.all.count
+              puts "before action: profiles_count = #{profiles_count.inspect} \n"
+              expect(profiles_count).to eq(7) # count of Profile
+              profiles_ids =  Profile.all.pluck(:id)
+              puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
+              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 86, 92]) # ids of Profiles
+              # puts "before All: base_profile.id = #{base_profile.id} \n"  # id = 85
+              # puts "before All: base_profile.user_id = #{base_profile.user_id} \n"  # id = 9
+            end
+            it '- ProfileKey check have rows count & ids before - Ok' do
+              profile_keys_count =  ProfileKey.all.count
+              puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
+              expect(profile_keys_count).to eq(38) # count of Profile
+              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
+              expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+                                              20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+                                              37, 38]) # ids of ProfileKeys
+              # puts "before All: base_profile.id = #{base_profile.id} \n"  # id = 85
+              # puts "before All: base_profile.user_id = #{base_profile.user_id} \n"  # id = 9
+            end
           end
 
-          context '- After action <internal_similars_search>: check results got' do
-            # before {get :internal_similars_search}
-            #
-            # it '- tree_info: tree_is_profiles, tree_profiles_amount - Ok' do
-            #   # puts "In check results: tree_info \n"
-            #   expect(assigns(:tree_info)).to include(:tree_is_profiles => [63, 64, 65, 66, 67, 68, 69, 70, 78, 79, 80, 81, 82, 83, 84])
-            #   expect(assigns(:tree_info)).to include(:tree_profiles_amount => 15)
-            #   expect(assigns(:tree_info)).to include(:users_profiles_ids=>[63, 66])
-            # end
-            #
-            # it '- new_sims - Ok' do
-            #   expect(assigns(:new_sims)).to eq("New sims")
-            #   # puts "In check results: new_sims \n"
-            # end
-            #
-            # it '- log_connection_id - Ok' do
-            #   # puts "In check results: log_connection_id \n"
-            #   expect(assigns(:log_connection_id)).to eq([])
-            # end
-            #
-            # let(:similars_got) { assigns(:similars) }
-            # let(:similars_first_pair) { similars_got[0] }
-            # let(:similars_second_pair) { similars_got[1] }
-            # it '- similars_first_pair - Ok' do
-            #   # puts "In check results: similars_got = #{similars_first_pair} \n"
-            #   first_pair_profile_ids = [similars_first_pair[:first_profile_id], similars_first_pair[:second_profile_id]].sort
-            #   expect(first_pair_profile_ids).to eq([70, 81])
-            #   # puts "In check results: first_pair_profile_ids = #{first_pair_profile_ids} \n"
-            # end
+          context '- After Added Mother - action <add_new_profile>:' do
+            before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_87, new_relation_id,
+                                                 exclusions_hash: exclusions_hash_empty, tree_ids: tree_ids_conn ) }
 
+            let(:base_profile) {Profile.find(85)}
+            let(:base_sex_id) {base_profile.sex_id}
+            # ADD Father
+            let(:new_profile_87) { create(:add_profile, :add_profile_87) }  # User = nil. Tree = 9. profile_id = 87
+            # name_id   48   sex_id    0
+            let(:new_relation_id) {2} # Mother
+            let(:exclusions_hash_empty) {{}}
+            let(:tree_ids_conn) {connected_users}
+
+            it '- check new Tree row - Ok' do
+              puts "After ADD Mother Check Tree \n"
+              # puts "In Check Tree: connected_users = #{connected_users}\n"
+              # puts "In Check Tree: tree_ids = #{tree_ids}\n"
+              # [85, 1, 370, nil, 1, 87, 48, nil]
+              new_tree_row = Tree.last
+              tree_row_id = new_tree_row.id
+              puts "In check results: tree_row_id = #{tree_row_id} \n"
+              expect(tree_row_id).to eq(7) #
+
+              new_user_id = new_tree_row.user_id
+              puts "In check results: new_user_id = #{new_user_id} \n"
+              expect(new_user_id).to eq(9) #
+
+              new_profile_id = new_tree_row.profile_id
+              puts "In check results: new_profile_id = #{new_profile_id} \n"
+              expect(new_profile_id).to eq(85) #
+
+              new_name_id = new_tree_row.name_id
+              puts "In check results: new_name_id = #{new_name_id} \n"
+              expect(new_name_id).to eq(370) #
+
+              new_relation_id = new_tree_row.relation_id
+              puts "In check results: new_relation_id = #{new_relation_id} \n"
+              expect(new_relation_id).to eq(2) #
+
+              new_is_profile_id = new_tree_row.is_profile_id
+              puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
+              expect(new_is_profile_id).to eq(87) #
+
+              new_is_name_id = new_tree_row.is_name_id
+              puts "In check results: new_is_name_id = #{new_is_name_id} \n"
+              expect(new_is_name_id).to eq(48) #
+
+              new_is_sex_id = new_tree_row.is_sex_id
+              puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              expect(new_is_sex_id).to eq(0) #
+            end
+
+            it '- check new ProfileKey rows - Ok' do
+              profilekeys_count =  ProfileKey.all.count
+              puts "After ADD Mother Check ProfileKey \n"
+              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
+              expect(profilekeys_count).to eq(52) # got 52 rows of ProfileKey
+            end
+
+            it '- check all relations generated in ProfileKey rows - Ok' do
+              all_relations =  ProfileKey.all.pluck(:relation_id)
+              puts "After ADD Mother Check ProfileKey \n"
+              puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
+              expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
+                                           1, 3, 3, 1, 4, 1, 111, 91, 121, 91, 8, 7, 2, 3, 2, 4, 17, 13, 2, 3, 8, 7, 2,
+                                           3, 2, 4, 101, 111, 101, 121, 14, 17]) # got 52 relations of ProfileKey
+              expect(all_relations.size).to eq(52)
+            end
+
+            it '- check new Profile rows - Ok' do
+              profiles_count =  Profile.all.count
+              puts "After ADD Mother Check Profile \n"
+              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
+              expect(profiles_count).to eq(8) # got 8 rows of Profile
+            end
           end
-
-          context '- After action <internal_similars_search>: check SimilarsFound' do
-            # it '- in SimilarsFound stored 2 rows of good sims pairs & first row - Ok' do
-            #   get :internal_similars_search
-            #   sims_count =  SimilarsFound.all.count
-            #   puts "Check #internal_similars_search check SimilarsFound\n"
-            #   # puts "In check SimilarsFound count rows: rows sims_count = #{sims_count.inspect} \n"
-            #   expect(sims_count).to eq(2) # got 2 rows of similars
-            #   first_row = SimilarsFound.first
-            #   first_pair_profile_ids = [first_row.first_profile_id, first_row.second_profile_id].sort
-            #   expect(first_pair_profile_ids).to eq([70, 81])
-            #   # puts "In check SimilarsFound rows:  first_row = #{first_row.inspect} \n"
-            #   # puts "In check SimilarsFound rows:  first_row.second_profile_id = #{first_row.second_profile_id.inspect} \n"
-            #   second_row = SimilarsFound.second
-            #   second_pair_profile_ids = [second_row.first_profile_id, second_row.second_profile_id].sort
-            #   expect(second_pair_profile_ids).to eq([79, 82])
-            #   # puts "In check SimilarsFound rows:  second_row = #{second_row.inspect} \n"
-            #   # puts "In check SimilarsFound rows:  second_row.second_profile_id = #{second_row.second_profile_id.inspect} \n"
-            # end
-          end
-
         end
 
         describe '- Added Son - ' do
 
+
+          
         end
 
         describe '- Added Daughter - ' do
