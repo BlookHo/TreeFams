@@ -403,6 +403,7 @@ RSpec.describe ProfileKey, :type => :model do
 
           context '- before action <add_new_profile> - check input params values ' do
             it "- check: base_profile" do
+              puts "Check Add Father \n"  # 1
               expect(base_profile.id).to eq(85)
             end
             it "- check: base_sex_id" do
@@ -432,7 +433,7 @@ RSpec.describe ProfileKey, :type => :model do
             it '- Tree check have rows count before - Ok' do
               trees_count =  Tree.all.count
               # puts "before action: trees_count = #{trees_count.inspect} \n"
-              expect(trees_count).to eq(6) # got 82 rows of Tree
+              expect(trees_count).to eq(6) # got 6 rows of Tree
             end
             it '- Profile check have rows count & ids before - Ok' do
               profiles_count =  Profile.all.count
@@ -465,7 +466,6 @@ RSpec.describe ProfileKey, :type => :model do
 
             let(:base_profile) {Profile.find(85)}
             let(:base_sex_id) {base_profile.sex_id}
-            # ADD Father
             let(:new_profile_86) { create(:add_profile, :add_profile_86) }  # User = nil. Tree = 9. profile_id = 86
             # name_id   370   sex_id    1
             let(:new_relation_id) {1} # Father
@@ -479,35 +479,35 @@ RSpec.describe ProfileKey, :type => :model do
               # [85, 1, 370, nil, 1, 86, 28, nil]
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
-              puts "In check results: tree_row_id = #{tree_row_id} \n"
+              # puts "In check results: tree_row_id = #{tree_row_id} \n"
               expect(tree_row_id).to eq(7) #
 
               new_user_id = new_tree_row.user_id
-              puts "In check results: new_user_id = #{new_user_id} \n"
+              # puts "In check results: new_user_id = #{new_user_id} \n"
               expect(new_user_id).to eq(9) #
 
               new_profile_id = new_tree_row.profile_id
-              puts "In check results: new_profile_id = #{new_profile_id} \n"
+              # puts "In check results: new_profile_id = #{new_profile_id} \n"
               expect(new_profile_id).to eq(85) #
 
               new_name_id = new_tree_row.name_id
-              puts "In check results: new_name_id = #{new_name_id} \n"
+              # puts "In check results: new_name_id = #{new_name_id} \n"
               expect(new_name_id).to eq(370) #
 
               new_relation_id = new_tree_row.relation_id
-              puts "In check results: new_relation_id = #{new_relation_id} \n"
+              # puts "In check results: new_relation_id = #{new_relation_id} \n"
               expect(new_relation_id).to eq(1) #
 
               new_is_profile_id = new_tree_row.is_profile_id
-              puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
+              # puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
               expect(new_is_profile_id).to eq(86) #
 
               new_is_name_id = new_tree_row.is_name_id
-              puts "In check results: new_is_name_id = #{new_is_name_id} \n"
+              # puts "In check results: new_is_name_id = #{new_is_name_id} \n"
               expect(new_is_name_id).to eq(28) #
 
               new_is_sex_id = new_tree_row.is_sex_id
-              puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
               expect(new_is_sex_id).to eq(1) #
             end
 
@@ -623,6 +623,7 @@ RSpec.describe ProfileKey, :type => :model do
 
           context '- before action <add_new_profile> - check input params values ' do
             it "- check: base_profile" do
+              puts "Check Add Mother \n"  # 2
               expect(base_profile.id).to eq(85)
             end
             it "- check: base_sex_id" do
@@ -684,7 +685,6 @@ RSpec.describe ProfileKey, :type => :model do
 
             let(:base_profile) {Profile.find(85)}
             let(:base_sex_id) {base_profile.sex_id}
-            # ADD Father
             let(:new_profile_87) { create(:add_profile, :add_profile_87) }  # User = nil. Tree = 9. profile_id = 87
             # name_id   48   sex_id    0
             let(:new_relation_id) {2} # Mother
@@ -695,38 +695,37 @@ RSpec.describe ProfileKey, :type => :model do
               puts "After ADD Mother Check Tree \n"
               # puts "In Check Tree: connected_users = #{connected_users}\n"
               # puts "In Check Tree: tree_ids = #{tree_ids}\n"
-              # [85, 1, 370, nil, 1, 87, 48, nil]
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
-              puts "In check results: tree_row_id = #{tree_row_id} \n"
+              # puts "In check results: tree_row_id = #{tree_row_id} \n"
               expect(tree_row_id).to eq(7) #
 
               new_user_id = new_tree_row.user_id
-              puts "In check results: new_user_id = #{new_user_id} \n"
+              # puts "In check results: new_user_id = #{new_user_id} \n"
               expect(new_user_id).to eq(9) #
 
               new_profile_id = new_tree_row.profile_id
-              puts "In check results: new_profile_id = #{new_profile_id} \n"
+              # puts "In check results: new_profile_id = #{new_profile_id} \n"
               expect(new_profile_id).to eq(85) #
 
               new_name_id = new_tree_row.name_id
-              puts "In check results: new_name_id = #{new_name_id} \n"
+              # puts "In check results: new_name_id = #{new_name_id} \n"
               expect(new_name_id).to eq(370) #
 
               new_relation_id = new_tree_row.relation_id
-              puts "In check results: new_relation_id = #{new_relation_id} \n"
+              # puts "In check results: new_relation_id = #{new_relation_id} \n"
               expect(new_relation_id).to eq(2) #
 
               new_is_profile_id = new_tree_row.is_profile_id
-              puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
+              # puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
               expect(new_is_profile_id).to eq(87) #
 
               new_is_name_id = new_tree_row.is_name_id
-              puts "In check results: new_is_name_id = #{new_is_name_id} \n"
+              # puts "In check results: new_is_name_id = #{new_is_name_id} \n"
               expect(new_is_name_id).to eq(48) #
 
               new_is_sex_id = new_tree_row.is_sex_id
-              puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
               expect(new_is_sex_id).to eq(0) #
             end
 
@@ -737,6 +736,14 @@ RSpec.describe ProfileKey, :type => :model do
               expect(profilekeys_count).to eq(52) # got 52 rows of ProfileKey
             end
 
+            it '- check all users generated in ProfileKey rows - Ok' do
+              all_users =  ProfileKey.all.pluck(:user_id).uniq
+              puts "After ADD Mother Check ProfileKey \n"
+              expect(all_users).to eq([9]) # got the same user_id for all rows of ProfileKey
+              puts "In check ProfileKey: the same all_users = #{all_users} \n"
+              expect(all_users.size).to eq(1)
+            end
+
             it '- check all relations generated in ProfileKey rows - Ok' do
               all_relations =  ProfileKey.all.pluck(:relation_id)
               puts "After ADD Mother Check ProfileKey \n"
@@ -744,7 +751,7 @@ RSpec.describe ProfileKey, :type => :model do
               expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
                                            1, 3, 3, 1, 4, 1, 111, 91, 121, 91, 8, 7, 2, 3, 2, 4, 17, 13, 2, 3, 8, 7, 2,
                                            3, 2, 4, 101, 111, 101, 121, 14, 17]) # got 52 relations of ProfileKey
-              puts "In check ProfileKey: all_relations_w_mo = #{all_relations.size} \n"
+              puts "In check ProfileKey: all_relations = #{all_relations.size} \n"
               expect(all_relations.size).to eq(52)
             end
 
@@ -840,6 +847,7 @@ RSpec.describe ProfileKey, :type => :model do
 
           context '- before action <add_new_profile> - check input params values ' do
             it "- check: base_profile" do
+              puts "Check Add Son \n"  # 3
               expect(base_profile.id).to eq(85)
             end
             it "- check: base_sex_id" do
@@ -909,35 +917,35 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "In Check Tree: tree_ids = #{tree_ids}\n"
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
-              puts "In check results: tree_row_id = #{tree_row_id} \n"
+              # puts "In check results: tree_row_id = #{tree_row_id} \n"
               expect(tree_row_id).to eq(8) #
 
               new_user_id = new_tree_row.user_id
-              puts "In check results: new_user_id = #{new_user_id} \n"
+              # puts "In check results: new_user_id = #{new_user_id} \n"
               expect(new_user_id).to eq(9) #
 
               new_profile_id = new_tree_row.profile_id
-              puts "In check results: new_profile_id = #{new_profile_id} \n"
+              # puts "In check results: new_profile_id = #{new_profile_id} \n"
               expect(new_profile_id).to eq(85) #
 
               new_name_id = new_tree_row.name_id
-              puts "In check results: new_name_id = #{new_name_id} \n"
+              # puts "In check results: new_name_id = #{new_name_id} \n"
               expect(new_name_id).to eq(370) #
 
               new_relation_id = new_tree_row.relation_id
-              puts "In check results: new_relation_id = #{new_relation_id} \n"
+              # puts "In check results: new_relation_id = #{new_relation_id} \n"
               expect(new_relation_id).to eq(3) #
 
               new_is_profile_id = new_tree_row.is_profile_id
-              puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
+              # puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
               expect(new_is_profile_id).to eq(101) #
 
               new_is_name_id = new_tree_row.is_name_id
-              puts "In check results: new_is_name_id = #{new_is_name_id} \n"
+              # puts "In check results: new_is_name_id = #{new_is_name_id} \n"
               expect(new_is_name_id).to eq(419) #
 
               new_is_sex_id = new_tree_row.is_sex_id
-              puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
               expect(new_is_sex_id).to eq(1) #
             end
 
@@ -946,6 +954,18 @@ RSpec.describe ProfileKey, :type => :model do
               puts "After ADD Son Check ProfileKey \n"
               puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
               expect(profilekeys_count).to eq(68) # got 68 rows of ProfileKey
+            end
+
+            it '- check all profile_ids generated in ProfileKey rows - Ok' do
+              all_profile_ids =  ProfileKey.all.pluck(:profile_id)
+              puts "After ADD Son Check ProfileKey \n"
+              expect(all_profile_ids).to eq([85, 88, 85, 89, 88, 89, 85, 90, 88, 90, 89, 90, 85, 91, 90, 91, 88, 91,
+                                             89, 91, 85, 86, 85, 87, 86, 87, 86, 88, 87, 88, 86, 89, 87, 89, 86, 90,
+                                             87, 90, 86, 91, 87, 91, 85, 92, 90, 92, 91, 92, 86, 92, 87, 92, 85, 101,
+                                             92, 101, 90, 101, 91, 101, 86, 101, 87, 101, 88, 101, 89, 101])
+                                             # got on user_id for all rows of ProfileKey
+              puts "In check ProfileKey: all_profile_ids = #{all_profile_ids.size} \n"
+              expect(all_profile_ids.size).to eq(68)
             end
 
             it '- check all relations generated in ProfileKey rows - Ok' do
@@ -963,6 +983,231 @@ RSpec.describe ProfileKey, :type => :model do
             it '- check new Profile rows - Ok' do
               profiles_count =  Profile.all.count
               puts "After ADD Son Check Profile \n"
+              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
+              expect(profiles_count).to eq(9) # got 9 rows of Profile
+            end
+          end
+        end
+
+        describe '- Added Son_to_Author - ' do
+          before {
+            # Tree
+            FactoryGirl.create(:tree, :add_tree9_1)   # 86
+            FactoryGirl.create(:tree, :add_tree9_2)   # 87
+            FactoryGirl.create(:tree, :add_tree9_7)   # 92
+
+            # Profile
+            FactoryGirl.create(:add_profile, :add_profile_86)   # 86
+            FactoryGirl.create(:add_profile, :add_profile_87)   # 87
+            FactoryGirl.create(:add_profile, :add_profile_92)   # 92
+
+            #Profile_Key
+            # Before Add new Profile  -  tree #9 Petr
+            FactoryGirl.create(:profile_key, :profile_key9_add_1)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_2)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_3)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_4)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_5)   # 86, 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_6)   # 86, 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_9)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_10)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_11)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_12)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_15)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_16)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_17)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_18)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_25)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_26)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_35)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_36)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_37)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_38)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_43)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_44)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_45)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_46)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_47)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_48)   # 92
+            FactoryGirl.create(:profile_key, :profile_key9_add_49)   # 92 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
+
+          }
+
+          after {
+            User.delete_all
+            User.reset_pk_sequence
+            ConnectedUser.delete_all
+            ConnectedUser.reset_pk_sequence
+            Tree.delete_all
+            Tree.reset_pk_sequence
+            Profile.delete_all
+            Profile.reset_pk_sequence
+            ProfileKey.delete_all
+            ProfileKey.reset_pk_sequence
+            Name.delete_all
+            Name.reset_pk_sequence
+            Relation.delete_all
+            Relation.reset_pk_sequence
+          }
+
+          context '- before action <add_new_profile> - check created data' do
+            puts "Before action Add Son_to_Author- data created \n"  #
+            it "- Return proper connected_users Array result for current_user_id = 1" do
+              expect(connected_users).to eq([9])
+            end
+          end
+
+          let(:base_profile) {Profile.find(85)}
+          let(:base_sex_id) {base_profile.sex_id}
+          let(:new_profile_101) { create(:add_profile, :add_profile_101) } # User = nil. Tree = 9. profile_id = 101
+          # name_id   419   sex_id    1
+          let(:new_relation_id) {3} # Son_to_Author Семен
+          let(:exclusions_hash) {{"92" => '0'}}
+          let(:tree_ids) {connected_users}
+
+          context '- before action <add_new_profile> - check input params values ' do
+            it "- check: base_profile" do
+              puts "Check Add Son_to_Author \n"  # 3
+              expect(base_profile.id).to eq(85)
+            end
+            it "- check: base_sex_id" do
+              # puts "check base_sex_id: = #{base_sex_id} \n"  # 1
+              expect(base_sex_id).to eq(1)
+            end
+            it "- check: base_profile" do
+              # puts "check base_profile.id: = #{base_profile.id} \n"  # ActiveRecord
+              expect(base_profile).to be_valid
+            end
+            it "- check: new_profile_101" do
+              # puts "check new_profile_101.id: = #{new_profile_101.id} \n"  # ActiveRecord
+              expect(new_profile_101).to be_valid
+            end
+            it "- check: new_relation_id" do
+              # puts "check new_relation_id: = #{new_relation_id} \n"  # 1
+              expect(new_relation_id).to eq(3)
+            end
+            it "- check: exclusions_hash" do
+              puts "check exclusions_hash: = #{exclusions_hash} \n"  # 1
+              expect(exclusions_hash).to eq({"92" => '0'})
+            end
+            it "- check: tree_ids" do
+              # puts "check tree_ids: = #{tree_ids} \n"  # 1
+              expect(tree_ids).to eq([9])
+            end
+            it '- Tree check have rows count before - Ok' do
+              trees_count =  Tree.all.count
+              # puts "before action: trees_count = #{trees_count.inspect} \n"
+              expect(trees_count).to eq(7) # got 7 rows of Tree - before
+            end
+            it '- Profile check have rows count & ids before - Ok' do
+              profiles_count =  Profile.all.count
+              puts "before action: profiles_count = #{profiles_count.inspect} \n"
+              expect(profiles_count).to eq(8) # count of Profile
+              profiles_ids =  Profile.all.pluck(:id)
+              puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
+              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 86, 87, 92]) # ids of Profiles
+            end
+            it '- ProfileKey check have rows count & ids before - Ok' do
+              profile_keys_count =  ProfileKey.all.count
+              puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
+              expect(profile_keys_count).to eq(52) # count of ProfileKey
+              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
+              expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                                              21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+                                              39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52]) # ids of ProfileKeys
+            end
+          end
+
+          context '- After Added Son_to_Author - action <add_new_profile>:' do
+            before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_101, new_relation_id,
+                                                 exclusions_hash: exclusions_hash_exist, tree_ids: tree_ids_conn ) }
+            let(:base_profile) {Profile.find(85)}
+            let(:base_sex_id) {base_profile.sex_id}
+            # ADD Son_to_Author
+            let(:new_profile_101) { create(:add_profile, :add_profile_101) }  # User = nil. Tree = 9. profile_id = 87
+            # name_id   419   sex_id    1
+            let(:new_relation_id) {3} # Son_to_Author  Семен
+            let(:exclusions_hash_exist) {{"92" => '0'}} # Добавляемый Сын - не явл. сыном Жены
+            let(:tree_ids_conn) {connected_users}
+
+            it '- check new Tree row - Ok' do
+              puts "After ADD Son_to_Author Check Tree \n"
+              # puts "In Check Tree: connected_users = #{connected_users}\n"
+              # puts "In Check Tree: tree_ids = #{tree_ids}\n"
+              new_tree_row = Tree.last
+              tree_row_id = new_tree_row.id
+              # puts "In check results: tree_row_id = #{tree_row_id} \n"
+              expect(tree_row_id).to eq(8) #
+
+              new_user_id = new_tree_row.user_id
+              # puts "In check results: new_user_id = #{new_user_id} \n"
+              expect(new_user_id).to eq(9) #
+
+              new_profile_id = new_tree_row.profile_id
+              # puts "In check results: new_profile_id = #{new_profile_id} \n"
+              expect(new_profile_id).to eq(85) #
+
+              new_name_id = new_tree_row.name_id
+              # puts "In check results: new_name_id = #{new_name_id} \n"
+              expect(new_name_id).to eq(370) #
+
+              new_relation_id = new_tree_row.relation_id
+              # puts "In check results: new_relation_id = #{new_relation_id} \n"
+              expect(new_relation_id).to eq(3) #
+
+              new_is_profile_id = new_tree_row.is_profile_id
+              # puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
+              expect(new_is_profile_id).to eq(101) #
+
+              new_is_name_id = new_tree_row.is_name_id
+              # puts "In check results: new_is_name_id = #{new_is_name_id} \n"
+              expect(new_is_name_id).to eq(419) #
+
+              new_is_sex_id = new_tree_row.is_sex_id
+              # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              expect(new_is_sex_id).to eq(1) #
+            end
+
+            it '- check new ProfileKey rows - Ok' do
+              profilekeys_count =  ProfileKey.all.count
+              puts "After ADD Son_to_Author Check ProfileKey \n"
+              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
+              expect(profilekeys_count).to eq(66) # got 68 rows of ProfileKey
+            end
+
+            it '- check all profile_ids generated in ProfileKey rows - Ok' do
+              all_profile_ids =  ProfileKey.all.pluck(:profile_id)
+              puts "After ADD Son_to_Author Check ProfileKey \n"
+              expect(all_profile_ids).to eq([85, 88, 85, 89, 88, 89, 85, 90, 88, 90, 89, 90, 85, 91, 90, 91, 88, 91, 89,
+                                             91, 85, 86, 85, 87, 86, 87, 86, 88, 87, 88, 86, 89, 87, 89, 86, 90, 87, 90,
+                                             86, 91, 87, 91, 85, 92, 90, 92, 91, 92, 86, 92, 87, 92, 85, 101, 90, 101,
+                                             91, 101, 86, 101, 87, 101, 88, 101, 89, 101])
+              # got all_profile_ids for all rows of ProfileKey
+              puts "In check ProfileKey: all_profile_ids = #{all_profile_ids.size} \n"
+              expect(all_profile_ids.size).to eq(66)
+            end
+
+            it '- check all relations generated in ProfileKey rows - Ok' do
+              all_relations =  ProfileKey.all.pluck(:relation_id)
+              # puts "After ADD Son_to_Author Check ProfileKey \n"
+              # puts "In check ProfileKey: all_relations = #{all_relations.inspect} \n"
+              expect(all_relations).to eq([5, 5, 6, 5, 6, 5, 3, 1, 211, 191, 211, 201, 4, 1, 6, 5, 221, 191, 221, 201,
+                                           1, 3, 2, 3, 8, 7, 3, 1, 3, 2, 4, 1, 4, 2, 111, 91, 111, 101, 121, 91, 121,
+                                           101, 8, 7, 2, 3, 2, 4, 17, 13, 17, 14, 3, 1, 5, 5, 5, 6, 111, 91, 111, 101,
+                                           211, 191, 211, 201]) # got 66 relations of ProfileKey
+              puts "In check ProfileKey: all_relations = #{all_relations.size} \n"
+              expect(all_relations.size).to eq(66)
+            end
+
+            it '- check new Profile rows - Ok' do
+              profiles_count =  Profile.all.count
+              puts "After ADD Son_to_Author Check Profile \n"
               puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
               expect(profiles_count).to eq(9) # got 9 rows of Profile
             end
@@ -1053,6 +1298,7 @@ RSpec.describe ProfileKey, :type => :model do
 
           context '- before action <add_new_profile> - check input params values ' do
             it "- check: base_profile" do
+              puts "Check Add Daughter \n"  # 4
               expect(base_profile.id).to eq(85)
             end
             it "- check: base_sex_id" do
@@ -1122,35 +1368,35 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "In Check Tree: tree_ids = #{tree_ids}\n"
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
-              puts "In check results: tree_row_id = #{tree_row_id} \n"
+              # puts "In check results: tree_row_id = #{tree_row_id} \n"
               expect(tree_row_id).to eq(8) #
 
               new_user_id = new_tree_row.user_id
-              puts "In check results: new_user_id = #{new_user_id} \n"
+              # puts "In check results: new_user_id = #{new_user_id} \n"
               expect(new_user_id).to eq(9) #
 
               new_profile_id = new_tree_row.profile_id
-              puts "In check results: new_profile_id = #{new_profile_id} \n"
+              # puts "In check results: new_profile_id = #{new_profile_id} \n"
               expect(new_profile_id).to eq(85) #
 
               new_name_id = new_tree_row.name_id
-              puts "In check results: new_name_id = #{new_name_id} \n"
+              # puts "In check results: new_name_id = #{new_name_id} \n"
               expect(new_name_id).to eq(370) #
 
               new_relation_id = new_tree_row.relation_id
-              puts "In check results: new_relation_id = #{new_relation_id} \n"
+              # puts "In check results: new_relation_id = #{new_relation_id} \n"
               expect(new_relation_id).to eq(4) #
 
               new_is_profile_id = new_tree_row.is_profile_id
-              puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
+              # puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
               expect(new_is_profile_id).to eq(102) #
 
               new_is_name_id = new_tree_row.is_name_id
-              puts "In check results: new_is_name_id = #{new_is_name_id} \n"
+              # puts "In check results: new_is_name_id = #{new_is_name_id} \n"
               expect(new_is_name_id).to eq(412) #
 
               new_is_sex_id = new_tree_row.is_sex_id
-              puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
               expect(new_is_sex_id).to eq(0) #
             end
 
@@ -1159,6 +1405,19 @@ RSpec.describe ProfileKey, :type => :model do
               puts "After ADD Daughter Check ProfileKey \n"
               puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
               expect(profilekeys_count).to eq(68) # got 68 rows of ProfileKey
+            end
+
+            it '- check all name_ids generated in ProfileKey rows - Ok' do
+              all_name_ids =  ProfileKey.all.pluck(:name_id)
+              puts "After ADD Daughter Check ProfileKey \n"
+              expect(all_name_ids).to eq([370, 465, 370, 345, 465, 345, 370, 343, 465, 343, 345, 343, 370, 446, 343,
+                                          446, 465, 446, 345, 446, 370, 28, 370, 48, 28, 48, 28, 465, 48, 465, 28, 345,
+                                          48, 345, 28, 343, 48, 343, 28, 446, 48, 446, 370, 147, 343, 147, 446, 147,
+                                          28, 147, 48, 147, 370, 412, 147, 412, 343, 412, 446, 412, 28, 412, 48, 412,
+                                          465, 412, 345, 412])
+              # got all_name_ids for all rows of ProfileKey
+              puts "In check ProfileKey: all_name_ids = #{all_name_ids.size} \n"
+              expect(all_name_ids.size).to eq(68)
             end
 
             it '- check all relations generated in ProfileKey rows - Ok' do
@@ -1266,6 +1525,7 @@ RSpec.describe ProfileKey, :type => :model do
 
           context '- before action <add_new_profile> - check input params values ' do
             it "- check: base_profile" do
+              puts "Check Add Brother \n"  # 5
               expect(base_profile.id).to eq(85)
             end
             it "- check: base_sex_id" do
@@ -1335,35 +1595,35 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "In Check Tree: tree_ids = #{tree_ids}\n"
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
-              puts "In check results: tree_row_id = #{tree_row_id} \n"
+              # puts "In check results: tree_row_id = #{tree_row_id} \n"
               expect(tree_row_id).to eq(8) #
 
               new_user_id = new_tree_row.user_id
-              puts "In check results: new_user_id = #{new_user_id} \n"
+              # puts "In check results: new_user_id = #{new_user_id} \n"
               expect(new_user_id).to eq(9) #
 
               new_profile_id = new_tree_row.profile_id
-              puts "In check results: new_profile_id = #{new_profile_id} \n"
+              # puts "In check results: new_profile_id = #{new_profile_id} \n"
               expect(new_profile_id).to eq(85) #
 
               new_name_id = new_tree_row.name_id
-              puts "In check results: new_name_id = #{new_name_id} \n"
+              # puts "In check results: new_name_id = #{new_name_id} \n"
               expect(new_name_id).to eq(370) #
 
               new_relation_id = new_tree_row.relation_id
-              puts "In check results: new_relation_id = #{new_relation_id} \n"
+              # puts "In check results: new_relation_id = #{new_relation_id} \n"
               expect(new_relation_id).to eq(5) #
 
               new_is_profile_id = new_tree_row.is_profile_id
-              puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
+              # puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
               expect(new_is_profile_id).to eq(101) #
 
               new_is_name_id = new_tree_row.is_name_id
-              puts "In check results: new_is_name_id = #{new_is_name_id} \n"
+              # puts "In check results: new_is_name_id = #{new_is_name_id} \n"
               expect(new_is_name_id).to eq(419) #
 
               new_is_sex_id = new_tree_row.is_sex_id
-              puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
               expect(new_is_sex_id).to eq(1) #
             end
 
@@ -1372,6 +1632,18 @@ RSpec.describe ProfileKey, :type => :model do
               puts "After ADD Brother Check ProfileKey \n"
               puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
               expect(profilekeys_count).to eq(66) # got 66 rows of ProfileKey
+            end
+
+            it '- check all is_profile_id generated in ProfileKey rows - Ok' do
+              all_is_profile_ids =  ProfileKey.all.pluck(:is_profile_id)
+              puts "After ADD Brother Check ProfileKey \n"
+              expect(all_is_profile_ids).to eq([88, 85, 89, 85, 89, 88, 90, 85, 90, 88, 90, 89, 91, 85, 91, 90, 91, 88,
+                                                91, 89, 86, 85, 87, 85, 87, 86, 88, 86, 88, 87, 89, 86, 89, 87, 90, 86,
+                                                90, 87, 91, 86, 91, 87, 92, 85, 92, 90, 92, 91, 92, 86, 92, 87, 101, 85,
+                                                101, 86, 101, 87, 101, 88, 101, 89, 101, 90, 101, 91])
+              # got all_is_profile_ids for all rows of ProfileKey
+              puts "In check ProfileKey: all_is_profile_ids = #{all_is_profile_ids.size} \n"
+              expect(all_is_profile_ids.size).to eq(66)
             end
 
             it '- check all relations generated in ProfileKey rows - Ok' do
@@ -1480,6 +1752,7 @@ RSpec.describe ProfileKey, :type => :model do
 
           context '- before action <add_new_profile> - check input params values ' do
             it "- check: base_profile" do
+              puts "Check Add Sister \n"  # 6
               expect(base_profile.id).to eq(85)
             end
             it "- check: base_sex_id" do
@@ -1549,35 +1822,35 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "In Check Tree: tree_ids = #{tree_ids}\n"
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
-              puts "In check results: tree_row_id = #{tree_row_id} \n"
+              # puts "In check results: tree_row_id = #{tree_row_id} \n"
               expect(tree_row_id).to eq(8) #
 
               new_user_id = new_tree_row.user_id
-              puts "In check results: new_user_id = #{new_user_id} \n"
+              # puts "In check results: new_user_id = #{new_user_id} \n"
               expect(new_user_id).to eq(9) #
 
               new_profile_id = new_tree_row.profile_id
-              puts "In check results: new_profile_id = #{new_profile_id} \n"
+              # puts "In check results: new_profile_id = #{new_profile_id} \n"
               expect(new_profile_id).to eq(85) #
 
               new_name_id = new_tree_row.name_id
-              puts "In check results: new_name_id = #{new_name_id} \n"
+              # puts "In check results: new_name_id = #{new_name_id} \n"
               expect(new_name_id).to eq(370) #
 
               new_relation_id = new_tree_row.relation_id
-              puts "In check results: new_relation_id = #{new_relation_id} \n"
+              # puts "In check results: new_relation_id = #{new_relation_id} \n"
               expect(new_relation_id).to eq(6) #
 
               new_is_profile_id = new_tree_row.is_profile_id
-              puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
+              # puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
               expect(new_is_profile_id).to eq(102) #
 
               new_is_name_id = new_tree_row.is_name_id
-              puts "In check results: new_is_name_id = #{new_is_name_id} \n"
+              # puts "In check results: new_is_name_id = #{new_is_name_id} \n"
               expect(new_is_name_id).to eq(412) #
 
               new_is_sex_id = new_tree_row.is_sex_id
-              puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
               expect(new_is_sex_id).to eq(0) #
             end
 
@@ -1586,6 +1859,19 @@ RSpec.describe ProfileKey, :type => :model do
               puts "After ADD Sister Check ProfileKey \n"
               puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
               expect(profilekeys_count).to eq(66) # got 66 rows of ProfileKey
+            end
+
+            it '- check all is_name_ids generated in ProfileKey rows - Ok' do
+              all_is_name_ids =  ProfileKey.all.pluck(:is_name_id)
+              puts "After ADD Sister Check ProfileKey \n"
+              expect(all_is_name_ids).to eq([465, 370, 345, 370, 345, 465, 343, 370, 343, 465, 343, 345, 446, 370, 446,
+                                             343, 446, 465, 446, 345, 28, 370, 48, 370, 48, 28, 465, 28, 465, 48, 345,
+                                             28, 345, 48, 343, 28, 343, 48, 446, 28, 446, 48, 147, 370, 147, 343, 147,
+                                             446, 147, 28, 147, 48, 412, 370, 412, 28, 412, 48, 412, 465, 412, 345,
+                                             412, 343, 412, 446])
+              # got all_is_name_ids for all rows of ProfileKey
+              puts "In check ProfileKey: all_is_name_ids = #{all_is_name_ids.size} \n"
+              expect(all_is_name_ids.size).to eq(66)
             end
 
             it '- check all relations generated in ProfileKey rows - Ok' do
@@ -1693,6 +1979,7 @@ RSpec.describe ProfileKey, :type => :model do
 
           context '- before action <add_new_profile> - check input params values ' do
             it "- check: base_profile" do
+              puts "Check Add Wife \n"  # 8
               expect(base_profile.id).to eq(85)
             end
             it "- check: base_sex_id" do
@@ -1767,35 +2054,35 @@ RSpec.describe ProfileKey, :type => :model do
               # [85, 1, 370, nil, 1, 86, 28, nil]
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
-              puts "In check results: tree_row_id = #{tree_row_id} \n"
+              # puts "In check results: tree_row_id = #{tree_row_id} \n"
               expect(tree_row_id).to eq(7) #
 
               new_user_id = new_tree_row.user_id
-              puts "In check results: new_user_id = #{new_user_id} \n"
+              # puts "In check results: new_user_id = #{new_user_id} \n"
               expect(new_user_id).to eq(9) #
 
               new_profile_id = new_tree_row.profile_id
-              puts "In check results: new_profile_id = #{new_profile_id} \n"
+              # puts "In check results: new_profile_id = #{new_profile_id} \n"
               expect(new_profile_id).to eq(85) #
 
               new_name_id = new_tree_row.name_id
-              puts "In check results: new_name_id = #{new_name_id} \n"
+              # puts "In check results: new_name_id = #{new_name_id} \n"
               expect(new_name_id).to eq(370) #
 
               new_relation_id = new_tree_row.relation_id
-              puts "In check results: new_relation_id = #{new_relation_id} \n"
+              # puts "In check results: new_relation_id = #{new_relation_id} \n"
               expect(new_relation_id).to eq(8) #
 
               new_is_profile_id = new_tree_row.is_profile_id
-              puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
+              # puts "In check results: new_is_profile_id = #{new_is_profile_id} \n"
               expect(new_is_profile_id).to eq(92) #
 
               new_is_name_id = new_tree_row.is_name_id
-              puts "In check results: new_is_name_id = #{new_is_name_id} \n"
+              # puts "In check results: new_is_name_id = #{new_is_name_id} \n"
               expect(new_is_name_id).to eq(147) #
 
               new_is_sex_id = new_tree_row.is_sex_id
-              puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
               expect(new_is_sex_id).to eq(0) #
             end
 
