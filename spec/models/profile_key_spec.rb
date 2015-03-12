@@ -449,7 +449,7 @@ RSpec.describe ProfileKey, :type => :model do
               profile_keys_count =  ProfileKey.all.count
               puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
               expect(profile_keys_count).to eq(38) # count of Profile
-              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
               # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
               expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
                                              20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
@@ -669,7 +669,7 @@ RSpec.describe ProfileKey, :type => :model do
               profile_keys_count =  ProfileKey.all.count
               puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
               expect(profile_keys_count).to eq(38) # count of Profile
-              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
               # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
               expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
                                               20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
@@ -891,7 +891,7 @@ RSpec.describe ProfileKey, :type => :model do
               profile_keys_count =  ProfileKey.all.count
               puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
               expect(profile_keys_count).to eq(52) # count of ProfileKey
-              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
               # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
               expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
                                               21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
@@ -957,12 +957,16 @@ RSpec.describe ProfileKey, :type => :model do
             end
 
             it '- check all profile_ids generated in ProfileKey rows - Ok' do
-              all_profile_ids =  ProfileKey.all.pluck(:profile_id)
+              all_profile_ids =  ProfileKey.all.pluck(:profile_id).sort
               puts "After ADD Son Check ProfileKey \n"
-              expect(all_profile_ids).to eq([85, 88, 85, 89, 88, 89, 85, 90, 88, 90, 89, 90, 85, 91, 90, 91, 88, 91,
-                                             89, 91, 85, 86, 85, 87, 86, 87, 86, 88, 87, 88, 86, 89, 87, 89, 86, 90,
-                                             87, 90, 86, 91, 87, 91, 85, 92, 90, 92, 91, 92, 86, 92, 87, 92, 85, 101,
-                                             92, 101, 90, 101, 91, 101, 86, 101, 87, 101, 88, 101, 89, 101])
+              # expect(all_profile_ids).to eq([85, 88, 85, 89, 88, 89, 85, 90, 88, 90, 89, 90, 85, 91, 90, 91, 88, 91,
+              #                                89, 91, 85, 86, 85, 87, 86, 87, 86, 88, 87, 88, 86, 89, 87, 89, 86, 90,
+              #                                87, 90, 86, 91, 87, 91, 85, 92, 90, 92, 91, 92, 86, 92, 87, 92, 85, 101,
+              #                                92, 101, 90, 101, 91, 101, 86, 101, 87, 101, 88, 101, 89, 101])
+              expect(all_profile_ids).to eq([85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87,
+                                             87, 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89, 89,
+                                             90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91, 92, 92, 92,
+                                             92, 92, 92, 101, 101, 101, 101, 101, 101, 101, 101])
                                              # got on user_id for all rows of ProfileKey
               puts "In check ProfileKey: all_profile_ids = #{all_profile_ids.size} \n"
               expect(all_profile_ids.size).to eq(68)
@@ -1116,7 +1120,7 @@ RSpec.describe ProfileKey, :type => :model do
               profile_keys_count =  ProfileKey.all.count
               puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
               expect(profile_keys_count).to eq(52) # count of ProfileKey
-              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
               # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
               expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
                                               21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
@@ -1182,12 +1186,16 @@ RSpec.describe ProfileKey, :type => :model do
             end
 
             it '- check all profile_ids generated in ProfileKey rows - Ok' do
-              all_profile_ids =  ProfileKey.all.pluck(:profile_id)
+              all_profile_ids =  ProfileKey.all.pluck(:profile_id).sort
               puts "After ADD Son_to_Author Check ProfileKey \n"
-              expect(all_profile_ids).to eq([85, 88, 85, 89, 88, 89, 85, 90, 88, 90, 89, 90, 85, 91, 90, 91, 88, 91, 89,
-                                             91, 85, 86, 85, 87, 86, 87, 86, 88, 87, 88, 86, 89, 87, 89, 86, 90, 87, 90,
-                                             86, 91, 87, 91, 85, 92, 90, 92, 91, 92, 86, 92, 87, 92, 85, 101, 90, 101,
-                                             91, 101, 86, 101, 87, 101, 88, 101, 89, 101])
+              expect(all_profile_ids).to eq([85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87,
+                                             87, 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89, 89,
+                                             90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91, 92, 92, 92,
+                                             92, 92, 101, 101, 101, 101, 101, 101, 101])
+              # expect(all_profile_ids).to eq([85, 88, 85, 89, 88, 89, 85, 90, 88, 90, 89, 90, 85, 91, 90, 91, 88, 91, 89,
+              #                                91, 85, 86, 85, 87, 86, 87, 86, 88, 87, 88, 86, 89, 87, 89, 86, 90, 87, 90,
+              #                                86, 91, 87, 91, 85, 92, 90, 92, 91, 92, 86, 92, 87, 92, 85, 101, 90, 101,
+              #                                91, 101, 86, 101, 87, 101, 88, 101, 89, 101])
               # got all_profile_ids for all rows of ProfileKey
               puts "In check ProfileKey: all_profile_ids = #{all_profile_ids.size} \n"
               expect(all_profile_ids.size).to eq(66)
@@ -1342,7 +1350,7 @@ RSpec.describe ProfileKey, :type => :model do
               profile_keys_count =  ProfileKey.all.count
               puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
               expect(profile_keys_count).to eq(52) # count of ProfileKey
-              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
               # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
               expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
                                               21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
@@ -1408,13 +1416,18 @@ RSpec.describe ProfileKey, :type => :model do
             end
 
             it '- check all name_ids generated in ProfileKey rows - Ok' do
-              all_name_ids =  ProfileKey.all.pluck(:name_id)
+              all_name_ids =  ProfileKey.all.pluck(:name_id).sort
               puts "After ADD Daughter Check ProfileKey \n"
-              expect(all_name_ids).to eq([370, 465, 370, 345, 465, 345, 370, 343, 465, 343, 345, 343, 370, 446, 343,
-                                          446, 465, 446, 345, 446, 370, 28, 370, 48, 28, 48, 28, 465, 48, 465, 28, 345,
-                                          48, 345, 28, 343, 48, 343, 28, 446, 48, 446, 370, 147, 343, 147, 446, 147,
-                                          28, 147, 48, 147, 370, 412, 147, 412, 343, 412, 446, 412, 28, 412, 48, 412,
-                                          465, 412, 345, 412])
+              # expect(all_name_ids).to eq([370, 465, 370, 345, 465, 345, 370, 343, 465, 343, 345, 343, 370, 446, 343,
+              #                             446, 465, 446, 345, 446, 370, 28, 370, 48, 28, 48, 28, 465, 48, 465, 28, 345,
+              #                             48, 345, 28, 343, 48, 343, 28, 446, 48, 446, 370, 147, 343, 147, 446, 147,
+              #                             28, 147, 48, 147, 370, 412, 147, 412, 343, 412, 446, 412, 28, 412, 48, 412,
+              #                             465, 412, 345, 412])
+              expect(all_name_ids).to eq([28, 28, 28, 28, 28, 28, 28, 28, 48, 48, 48, 48, 48, 48, 48, 48, 147, 147, 147,
+                                          147, 147, 147, 343, 343, 343, 343, 343, 343, 343, 343, 345, 345, 345, 345,
+                                          345, 345, 345, 370, 370, 370, 370, 370, 370, 370, 370, 412, 412, 412, 412,
+                                          412, 412, 412, 412, 446, 446, 446, 446, 446, 446, 446, 446, 465, 465, 465,
+                                          465, 465, 465, 465])
               # got all_name_ids for all rows of ProfileKey
               puts "In check ProfileKey: all_name_ids = #{all_name_ids.size} \n"
               expect(all_name_ids.size).to eq(68)
@@ -1569,7 +1582,7 @@ RSpec.describe ProfileKey, :type => :model do
               profile_keys_count =  ProfileKey.all.count
               puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
               expect(profile_keys_count).to eq(52) # count of ProfileKey
-              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
               # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
               expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
                                               21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
@@ -1635,12 +1648,16 @@ RSpec.describe ProfileKey, :type => :model do
             end
 
             it '- check all is_profile_id generated in ProfileKey rows - Ok' do
-              all_is_profile_ids =  ProfileKey.all.pluck(:is_profile_id)
+              all_is_profile_ids =  ProfileKey.all.pluck(:is_profile_id).sort
               puts "After ADD Brother Check ProfileKey \n"
-              expect(all_is_profile_ids).to eq([88, 85, 89, 85, 89, 88, 90, 85, 90, 88, 90, 89, 91, 85, 91, 90, 91, 88,
-                                                91, 89, 86, 85, 87, 85, 87, 86, 88, 86, 88, 87, 89, 86, 89, 87, 90, 86,
-                                                90, 87, 91, 86, 91, 87, 92, 85, 92, 90, 92, 91, 92, 86, 92, 87, 101, 85,
-                                                101, 86, 101, 87, 101, 88, 101, 89, 101, 90, 101, 91])
+              # expect(all_is_profile_ids).to eq([88, 85, 89, 85, 89, 88, 90, 85, 90, 88, 90, 89, 91, 85, 91, 90, 91, 88,
+              #                                   91, 89, 86, 85, 87, 85, 87, 86, 88, 86, 88, 87, 89, 86, 89, 87, 90, 86,
+              #                                   90, 87, 91, 86, 91, 87, 92, 85, 92, 90, 92, 91, 92, 86, 92, 87, 101, 85,
+              #                                   101, 86, 101, 87, 101, 88, 101, 89, 101, 90, 101, 91])
+              expect(all_is_profile_ids).to eq([85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87,
+                                                87, 87, 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89,
+                                                89, 89, 90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91,
+                                                92, 92, 92, 92, 92, 101, 101, 101, 101, 101, 101, 101])
               # got all_is_profile_ids for all rows of ProfileKey
               puts "In check ProfileKey: all_is_profile_ids = #{all_is_profile_ids.size} \n"
               expect(all_is_profile_ids.size).to eq(66)
@@ -1796,7 +1813,7 @@ RSpec.describe ProfileKey, :type => :model do
               profile_keys_count =  ProfileKey.all.count
               puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
               expect(profile_keys_count).to eq(52) # count of ProfileKey
-              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
               # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
               expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
                                               21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
@@ -1862,13 +1879,18 @@ RSpec.describe ProfileKey, :type => :model do
             end
 
             it '- check all is_name_ids generated in ProfileKey rows - Ok' do
-              all_is_name_ids =  ProfileKey.all.pluck(:is_name_id)
+              all_is_name_ids =  ProfileKey.all.pluck(:is_name_id).sort
               puts "After ADD Sister Check ProfileKey \n"
-              expect(all_is_name_ids).to eq([465, 370, 345, 370, 345, 465, 343, 370, 343, 465, 343, 345, 446, 370, 446,
-                                             343, 446, 465, 446, 345, 28, 370, 48, 370, 48, 28, 465, 28, 465, 48, 345,
-                                             28, 345, 48, 343, 28, 343, 48, 446, 28, 446, 48, 147, 370, 147, 343, 147,
-                                             446, 147, 28, 147, 48, 412, 370, 412, 28, 412, 48, 412, 465, 412, 345,
-                                             412, 343, 412, 446])
+              # expect(all_is_name_ids).to eq([465, 370, 345, 370, 345, 465, 343, 370, 343, 465, 343, 345, 446, 370, 446,
+              #                                343, 446, 465, 446, 345, 28, 370, 48, 370, 48, 28, 465, 28, 465, 48, 345,
+              #                                28, 345, 48, 343, 28, 343, 48, 446, 28, 446, 48, 147, 370, 147, 343, 147,
+              #                                446, 147, 28, 147, 48, 412, 370, 412, 28, 412, 48, 412, 465, 412, 345,
+              #                                412, 343, 412, 446])
+              expect(all_is_name_ids).to eq([28, 28, 28, 28, 28, 28, 28, 28, 48, 48, 48, 48, 48, 48, 48, 48, 147, 147,
+                                             147, 147, 147, 343, 343, 343, 343, 343, 343, 343, 343, 345, 345, 345, 345,
+                                             345, 345, 345, 370, 370, 370, 370, 370, 370, 370, 370, 412, 412, 412, 412,
+                                             412, 412, 412, 446, 446, 446, 446, 446, 446, 446, 446, 465, 465, 465, 465,
+                                             465, 465, 465])
               # got all_is_name_ids for all rows of ProfileKey
               puts "In check ProfileKey: all_is_name_ids = #{all_is_name_ids.size} \n"
               expect(all_is_name_ids.size).to eq(66)
@@ -2025,7 +2047,7 @@ RSpec.describe ProfileKey, :type => :model do
               profile_keys_count =  ProfileKey.all.count
               puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
               expect(profile_keys_count).to eq(42) # count of Profile
-              profile_keys_ids =  ProfileKey.all.pluck(:id)
+              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
               # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
               expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
                                               22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
