@@ -118,6 +118,7 @@ class SimilarsController < ApplicationController
 
   # Контроль (тест) объединения профилей после объединения - по таблицах ProfileKey
   # todo: have to be done - use after connection, before store in tables
+  #
   def check_connected_similars
     log_id = params[:log_connection_id]
     # logger.info "*** In check_connected_similars:  log_id = #{log_id}"

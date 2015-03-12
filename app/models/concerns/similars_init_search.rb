@@ -11,11 +11,10 @@ module SimilarsInitSearch
     def similars_init_search(tree_info)
       unless tree_info.empty?  # Исходные данные
         tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
-        logger.info "In similars_init_search 11111: tree_circles = #{tree_circles}" unless tree_circles.empty?
+        # logger.info "In similars_init_search 11111: tree_circles = #{tree_circles}" unless tree_circles.empty?
         compare_tree_circles(tree_info, tree_circles) # Сравниваем все круги на похожесть (совпадение)
         # compare_tree_circles returns similars
       end
-
     end
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
@@ -23,7 +22,7 @@ module SimilarsInitSearch
     def get_tree_circles(tree_info)
       tree_circles = {}
       tree_info[:tree_is_profiles].each do |profile_id|
-        tree_circles.merge!( get_profile_circle(profile_id, tree_info[:connected_users]) ) # if !profile_circle_hash.empty?
+        tree_circles.merge!( get_profile_circle(profile_id, tree_info[:connected_users]) ) #
       end
       tree_circles
     end
@@ -60,7 +59,8 @@ module SimilarsInitSearch
     def convert_circle_to_hash(circle_arr)
       profile_circle_hash = {}
       circle_arr.each do |one_row_hash|
-        relation_val, is_name_val, is_profile_val = get_row_data(one_row_hash)
+        # relation_val, is_name_val, is_profile_val = get_row_data(one_row_hash)
+        relation_val, is_name_val = get_row_data(one_row_hash)
         code_relation = get_name_relation(relation_val)[:code_relation]
         # Наращиваем круг в виде хэша
         profile_circle_hash = growing_val_arr(profile_circle_hash, code_relation, is_name_val)
@@ -80,7 +80,7 @@ module SimilarsInitSearch
     # МЕТОД Получения Круга профиля в виде Хэша: { профиль => хэш круга }
     def make_profile_circle(profile_id, profile_circle_hash)
       profile_circle = {}
-      profile_circle.merge!( profile_id => profile_circle_hash )  if !profile_circle_hash.empty?
+      profile_circle.merge!( profile_id => profile_circle_hash ) unless profile_circle_hash.empty?
       profile_circle
     end
 
@@ -88,10 +88,10 @@ module SimilarsInitSearch
     def get_row_data(one_row_hash)
       unless one_row_hash.empty?
         relation_val = one_row_hash.values_at('relation_id')[0]
-        is_profile_val = one_row_hash.values_at('is_profile_id')[0]
+        # is_profile_val = one_row_hash.values_at('is_profile_id')[0]
         is_name_val = one_row_hash.values_at('is_name_id')[0]
       end
-      return relation_val, is_name_val, is_profile_val
+      return relation_val, is_name_val #, is_profile_val
     end
 
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
@@ -191,7 +191,8 @@ module SimilarsInitSearch
           name_relation = "Племянница" # niece father - племянница по матери
 
         else
-          logger.info "ERROR: No relation_id in Circle "
+          # logger.info "ERROR: No relation_id in Circle "
+          flash.now[:alert] = "Alert from server! В круге профиля - отсутствует <relation_val>. "
       end
 
       { code_relation: code_relation, name_relation: name_relation  }
@@ -246,14 +247,14 @@ module SimilarsInitSearch
     # compare_tree_circles returns similars
     def compare_tree_circles(tree_info, tree_circles)
 
-      logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
-      logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
+      # logger.info "In compare_tree_circles 1: tree_circles = #{tree_circles}" if !tree_circles.empty?
+      # logger.info "In compare_tree_circles 2: tree_circles.size = #{tree_circles.size}" if !tree_circles.empty?
 
       profiles_arr = tree_info[:tree_is_profiles]
-      logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
+      # logger.info "In compare_tree_circles 3: profiles_arr = #{profiles_arr}" if !profiles_arr.blank?
 
       profiles = tree_info[:profiles]     # from tree
-      logger.info "==== In compare_tree_circles 4: profiles = #{profiles}" if !profiles.blank?
+      # logger.info "==== In compare_tree_circles 4: profiles = #{profiles}" if !profiles.blank?
 
       # Перебор по парам профилей (неповторяющимся) с целью выявления похожих профилей
       similars = [] # Похожие - РЕЗУЛЬТАТ
@@ -338,7 +339,7 @@ module SimilarsInitSearch
     # No use
     def self.collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
       unsimilars << [a_profile_id, b_profile_id]
-      logger.info "In compare_tree_circles 8: unsimilars = #{unsimilars}"
+      # logger.info "In compare_tree_circles 8: unsimilars = #{unsimilars}"
       unsimilars
     end
 
@@ -410,7 +411,7 @@ module SimilarsInitSearch
       result = {}
       first.reject { |k, v| !(other.include?(k)) }.each do |k, v|
         intersect = other[k] & v
-        result.merge!({k => intersect}) if !intersect.blank?
+        result.merge!({k => intersect}) unless intersect.blank?
       end
       result
     end

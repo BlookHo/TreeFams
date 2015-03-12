@@ -13,7 +13,7 @@ RSpec.describe LogType, :type => :model do
         end
       end
 
-      context '- invalid log_type_number' do
+      context '- invalid log_type_row' do
         let(:bad_type_number) {FactoryGirl.build(:log_type, :type_uncorrect)}
         it '- 1 Dont save: - bad_type_number - less 0' do
           expect(bad_type_number).to_not be_valid

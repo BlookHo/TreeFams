@@ -251,7 +251,7 @@ describe SimilarsController, :type => :controller , similars: true do
           # puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
           expect(response.status).to eq(200)
         end
-         it '- no responds with 401' do
+        it '- no responds with 401' do
           # puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
           expect(response.status).to_not eq(401)
         end

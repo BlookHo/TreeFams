@@ -1,12 +1,37 @@
 # encoding: utf-8
 
-LogType.delete_all
-LogType.reset_pk_sequence
-LogType.create([
+CommonLog.delete_all
+CommonLog.reset_pk_sequence
+CommonLog.create([
 
-{type_number: 1, table_name: 'adds_logs'},
-{type_number: 2, table_name: 'deletions_logs'},
-{type_number: 3, table_name: 'similars_logs'},
-{type_number: 4, table_name: 'connections_logs'}
 
-               ])
+{user_id: 1, log_type: 1, log_id: 1, profile_id: 1},
+{user_id: 2, log_type: 1, log_id: 1, profile_id: 1},
+{user_id: 3, log_type: 2, log_id: 1, profile_id: 1},
+{user_id: 1, log_type: 1, log_id: 2, profile_id: 1},
+{user_id: 2, log_type: 1, log_id: 2, profile_id: 1},
+{user_id: 3, log_type: 1, log_id: 1, profile_id: 1},
+{user_id: 1, log_type: 2, log_id: 1, profile_id: 1},
+{user_id: 2, log_type: 1, log_id: 3, profile_id: 1},
+{user_id: 3, log_type: 1, log_id: 1, profile_id: 1},
+{user_id: 1, log_type: 1, log_id: 3, profile_id: 1},
+{user_id: 2, log_type: 1, log_id: 4, profile_id: 1},
+{user_id: 1, log_type: 2, log_id: 2, profile_id: 1},
+{user_id: 3, log_type: 2, log_id: 1, profile_id: 1},
+{user_id: 1, log_type: 1, log_id: 4, profile_id: 1},
+{user_id: 2, log_type: 2, log_id: 1, profile_id: 1},
+{user_id: 3, log_type: 1, log_id: 1, profile_id: 1},
+{user_id: 1, log_type: 3, log_id: 1, profile_id: 1},
+{user_id: 2, log_type: 1, log_id: 5, profile_id: 1},
+{user_id: 3, log_type: 1, log_id: 1, profile_id: 1},
+{user_id: 1, log_type: 4, log_id: 1, profile_id: 1},
+{user_id: 1, log_type: 2, log_id: 3, profile_id: 1},
+{user_id: 2, log_type: 4, log_id: 1, profile_id: 1},
+{user_id: 1, log_type: 1, log_id: 5, profile_id: 1},
+{user_id: 2, log_type: 2, log_id: 2, profile_id: 1},
+{user_id: 1, log_type: 1, log_id: 6, profile_id: 1},
+{user_id: 1, log_type: 1, log_id: 7, profile_id: 1},
+{user_id: 3, log_type: 3, log_id: 1, profile_id: 4},
+{user_id: 4, log_type: 1, log_id: 1, profile_id: 1}
+
+                 ])

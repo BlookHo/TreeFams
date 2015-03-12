@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :common_log do
+  factory :common_log, class: CommonLog  do
     user_id 1
     log_type 1
     log_id 1

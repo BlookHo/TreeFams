@@ -39,7 +39,7 @@ module SimilarsConnection
 
     ### Удаление сохраненных ранее найденных пар похожих
     SimilarsFound.clear_similars_found(data_to_clear)
-    logger.info "# CONN ##*** In module SimilarsConnection common_log: #{common_log.inspect} "
+    logger.info "# CONN ##*** In module SimilarsConnection common_logs: #{common_log.inspect} "
 
     common_log
   end

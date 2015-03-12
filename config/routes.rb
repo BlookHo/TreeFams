@@ -45,6 +45,18 @@ Weafam::Application.routes.draw do
   match 'check_connected_similars' => 'similars#check_connected_similars', via: :get
   match 'check_connected_similars' => 'similars#check_connected_similars', via: :post
 
+  # CommonLog controller
+  resources :common_logs, except: [:update, :new, :edit]
+
+  get 'common_logs/index'
+  # match 'connect_similars' => 'similars#connect_similars', via: :get
+  get 'common_logs/create'
+  get 'common_logs/show'
+  get 'common_logs/destroy'
+
+
+
+
   # messages controller
   resources :messages, except: [:update, :show, :destroy, :edit]
 

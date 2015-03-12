@@ -8,6 +8,10 @@
     %ul
       - if current_user
 
+        %li= link_to raw("<i class='fa fa-gears'></i> Проверка дерева"), common_logs_path, :class => "ttip", title: "Просмотр истории дерева пользователя сайта"
+
+
+
         - if !@similars_qty.blank? && @similars_qty > 0
           %li= link_to raw("<i class='fa fa-gears'></i> Проверка дерева <span>#{@similars_qty}</span>"), internal_similars_search_path, :class => "ttip", title: "Есть похожие! Запуск теста на наличие похожих профилей в дереве пользователя сайта"
         - else
