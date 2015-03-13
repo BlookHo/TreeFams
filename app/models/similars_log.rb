@@ -71,18 +71,18 @@ class SimilarsLog < ActiveRecord::Base
     log_connection_id = []
     # Сбор всех id логов, относящихся к текущему дереву
     current_tree_logs_ids = self.where(current_user_id: connected_users).pluck(:connected_at).uniq
-    logger.info "In internal_similars_search 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
+    # logger.info "In internal_similars_search 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
     log_connection_id = current_tree_logs_ids.max unless current_tree_logs_ids.blank?
-    logger.info "In internal_similars_search 1b: log_connection_id = #{log_connection_id} " unless log_connection_id.blank?
+    # logger.info "In internal_similars_search 1b: log_connection_id = #{log_connection_id} " unless log_connection_id.blank?
     log_connection_id
   end
 
 
   # From SimilarsConnection-Module # similars_connect_tree
   # Сохранение массива логов в таблицу SimilarsLog
-  def self.store_log(common_log)
-    logger.info "MMMMM *** In model SimilarsLog store_log "
-    common_log.each(&:save)
+  def self.store_log(similars_common_log)
+    # logger.info "MMMMM *** In model SimilarsLog store_log "
+    similars_common_log.each(&:save)
   end
 
 

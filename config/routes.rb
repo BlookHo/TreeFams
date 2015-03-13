@@ -46,12 +46,12 @@ Weafam::Application.routes.draw do
   match 'check_connected_similars' => 'similars#check_connected_similars', via: :post
 
   # CommonLog controller
-  resources :common_logs, except: [:update, :new, :edit]
+  resources :common_logs, except: [:update, :new, :edit, :show]
 
   get 'common_logs/index'
   # match 'connect_similars' => 'similars#connect_similars', via: :get
   get 'common_logs/create'
-  get 'common_logs/show'
+  # get 'common_logs/show'
   get 'common_logs/destroy'
 
 
@@ -131,15 +131,6 @@ Weafam::Application.routes.draw do
   get "connect_users_trees/connect_profiles_keys"
 
 
-
-
-
-  # resources :profiles, except: [:index, :edit]
-  # resources :profiles, except: [:index, :edit] do
-      # get 'show-dropdowm-menu', to: 'profiles#show_dropdown_menu', as: :show_dropdown
-      # get 'show-context-menu', to: 'profiles#show_context_menu', as: :show_context_menu
-      # get '/edit/data', to: 'profiles#edit', as: :edit_data
-  # end
 
   get 'profile/context-menu', to: 'profiles#context_menu', as: :profile_context_menu
 

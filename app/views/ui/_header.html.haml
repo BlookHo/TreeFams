@@ -8,14 +8,14 @@
     %ul
       - if current_user
 
-        %li= link_to raw("<i class='fa fa-gears'></i> Проверка дерева"), common_logs_path, :class => "ttip", title: "Просмотр истории дерева пользователя сайта"
+        %li= link_to raw("<i class='fa fa-book'></i> История дерева"), common_logs_path, :class => "ttip", title: "Просмотр истории твоего дерева"
 
 
 
         - if !@similars_qty.blank? && @similars_qty > 0
-          %li= link_to raw("<i class='fa fa-gears'></i> Проверка дерева <span>#{@similars_qty}</span>"), internal_similars_search_path, :class => "ttip", title: "Есть похожие! Запуск теста на наличие похожих профилей в дереве пользователя сайта"
+          %li= link_to raw("<i class='fa fa-gears'></i> Тест <span>#{@similars_qty}</span>"), internal_similars_search_path, :class => "ttip", title: "Есть похожие! Запуск теста на наличие похожих профилей в твоем дереве"
         - else
-          %li= link_to raw("<i class='fa fa-gears'></i> Проверка дерева"), internal_similars_search_path, :class => "ttip", title: "Запуск теста на наличие похожих профилей в дереве пользователя сайта"
+          %li= link_to raw("<i class='fa fa-gears'></i> Тест "), internal_similars_search_path, :class => "ttip", title: "Запуск теста на наличие похожих профилей в твоем дереве"
 
         -# = count_new_requests
         -# - if @new_requests_count.blank? || @new_requests_count == 0
