@@ -5,26 +5,24 @@ class Profile < ActiveRecord::Base
                 :relation_id,
                 :answers_hash
 
-
   # аттрибуты для контекстного меню
   attr_accessor :allow_add_relation,
                 :allow_destroy,
                 :allow_invite,
                 :allow_conversation
 
-
   include ProfileQuestions
   include ProfileMerge
   include ProfileApiCircles
   include SimilarsProfileMerge
 
-  validates_presence_of :name_id, :sex_id, :tree_id, #:display_name_id,
+  validates_presence_of :name_id, :tree_id, #:display_name_id, :sex_id,
                         :message => "Должно присутствовать в Profile"
   validates_numericality_of  :name_id, :tree_id, #:display_name_id,
                             :greater_than => 0, :message => "Должны быть больше 0 в Profile"
-  validates_numericality_of  :name_id, :sex_id, :tree_id, #:display_name_id,
+  validates_numericality_of  :name_id,  :tree_id, #:display_name_id, :sex_id,
                             :only_integer => true,  :message => "Должны быть целым числом в Profile"
-  validates_inclusion_of :sex_id, :in => [1,0], :message => "Должны быть [1,0] в Profile"
+  # validates_inclusion_of :sex_id, :in => [1,0], :message => "Должны быть [1,0] в Profile"
   validates_presence_of :user_id, :allow_nil => true
   validates_numericality_of  :user_id, :greater_than => 0, :only_integer => true, :allow_nil => true,
                              :message => "Должно быть целым числом больше 0 в Profile"
@@ -35,20 +33,16 @@ class Profile < ActiveRecord::Base
               foreign_key: :id,
               class_name: User
 
-
   belongs_to :name
   belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key: :display_name_id
   has_many   :trees
 
-
   has_many   :profile_datas#, dependent: :destroy - не удаляются, но переписываются
   accepts_nested_attributes_for :profile_datas
-
 
   before_save do
     self.sex_id = name.try(:sex_id)
   end
-
 
   def to_name
     name.try(:name).try(:mb_chars).try(:capitalize)
@@ -62,29 +56,23 @@ class Profile < ActiveRecord::Base
     profile_datas.try(:first).try(:middle_name)
   end
 
-
   def full_name
     [self.display_name.name, self.last_name].join(' ')
     # self.to_name
   end
 
-
   def icon_path
     self.name.sex_id == 1 ? '/assets/man.svg' : '/assets/woman.svg'
   end
-
 
   def avatar_path(size)
     avatars.empty? ? icon_path : avatars.first.avatar_url(size)
   end
 
-
   def avatars
     # ProfileData.where(profile_id: self.id).where.not(avatar_file_name: nil)
     self.profile_datas.where.not(avatar_file_name: nil)
   end
-
-
 
 
   # Эксперименты по выводу кругов в объедененных деревьях

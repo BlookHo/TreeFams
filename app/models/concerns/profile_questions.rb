@@ -56,23 +56,23 @@ module ProfileQuestions
       end
     end
 
-    logger.info " @author_hash = #{@author_hash}  "
-    logger.info "=====@fathers_hash========"
-    logger.info @fathers_hash
-    logger.info "=====@mothers_hash========"
-    logger.info @mothers_hash
-    logger.info "=====@brothers_hash========"
-    logger.info @brothers_hash
-    logger.info "=====@sisters_hash========"
-    logger.info @sisters_hash
-    logger.info "=====@wives_hash========"
-    logger.info @wives_hash
-    logger.info "=====@husbands_hash========"
-    logger.info @husbands_hash
-    logger.info "=====@sons_hash========"
-    logger.info @sons_hash
-    logger.info "=====@daughters_hash========"
-    logger.info @daughters_hash
+    # logger.info " @author_hash = #{@author_hash}  "
+    # logger.info "=====@fathers_hash========"
+    # logger.info @fathers_hash
+    # logger.info "=====@mothers_hash========"
+    # logger.info @mothers_hash
+    # logger.info "=====@brothers_hash========"
+    # logger.info @brothers_hash
+    # logger.info "=====@sisters_hash========"
+    # logger.info @sisters_hash
+    # logger.info "=====@wives_hash========"
+    # logger.info @wives_hash
+    # logger.info "=====@husbands_hash========"
+    # logger.info @husbands_hash
+    # logger.info "=====@sons_hash========"
+    # logger.info @sons_hash
+    # logger.info "=====@daughters_hash========"
+    # logger.info @daughters_hash
 
     @relation_add_to = relation_add_to
     @profile_id = profile_id
@@ -94,10 +94,10 @@ module ProfileQuestions
         logger.info "ERROR in make_questions! отношение - неизвестно: relation_add_to = #{relation_add_to} "
         nil
     end
-    logger.info "== after case: relation_add_to = #{relation_add_to} "
+    # logger.info "== after case: relation_add_to = #{relation_add_to} "
     logger.info "== after  - make_questions: @non_standard_questions_hash = #{@non_standard_questions_hash} "
 
-    return @non_standard_questions_hash
+    @non_standard_questions_hash
   end
 
 
@@ -507,10 +507,10 @@ module ProfileQuestions
       else
         relation_name = ""
     end
-    logger.info "== in ask_brother_sister_questions: @fathers_hash = #{@fathers_hash} "
-    logger.info "== in ask_brother_sister_questions: @brothers_hash = #{@brothers_hash} "
-    logger.info "== in ask_brother_sister_questions: @sisters_hash = #{@sisters_hash} "
-    logger.info "== in ask_brother_sister_questions: relation_name = #{relation_name} "
+    # logger.info "== in ask_brother_sister_questions: @fathers_hash = #{@fathers_hash} "
+    # logger.info "== in ask_brother_sister_questions: @brothers_hash = #{@brothers_hash} "
+    # logger.info "== in ask_brother_sister_questions: @sisters_hash = #{@sisters_hash} "
+    # logger.info "== in ask_brother_sister_questions: relation_name = #{relation_name} "
 
     return relation_name
   end

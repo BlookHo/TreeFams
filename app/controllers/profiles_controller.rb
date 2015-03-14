@@ -51,17 +51,16 @@ class ProfilesController < ApplicationController
     @profile = Profile.new(profile_params)  # Новый добавляемый профиль
     # @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
     @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
+    # logger.info "In Profile controller: create   @profile.tree_id = #{@profile.tree_id} "
 
     # Имя
     @name = Name.where(id: params[:profile_name_id]).first
-
 
     if @name
 
       @profile.name_id = @name.search_name_id
       @profile.display_name_id = @name.id
       @profile.profile_name = @name.name
-
 
       make_questions_data = {
           current_user_id:     current_user.id,
@@ -73,11 +72,13 @@ class ProfilesController < ApplicationController
           connected_users:     current_user.get_connected_users
       }
 
-
       questions_hash = current_user.profile.make_questions(make_questions_data)
+      # logger.info "In Profile controller: create   questions_hash = #{questions_hash} "
+
       @questions = create_questions_from_hash(questions_hash)
 
       @profile.answers_hash = params[:answers]
+      # logger.info "In Profile controller: create   questions_valid?(questions_hash) = #{questions_valid?(questions_hash)} "
 
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
@@ -102,7 +103,7 @@ class ProfilesController < ApplicationController
 
       # Ask relations questions
       else
-        flash.now[:alert] = "Уточняющие вопросы"
+        flash.now[:alert] = "Нет доп.вопросов ИЛИ не создан Профиль "
         render :new
       end
     # No name
@@ -185,6 +186,7 @@ class ProfilesController < ApplicationController
   def questions_valid?(questions_hash)
     # return true if questions_hash.blank?
     return true if questions_hash.empty?
+    # или одинак. размеры массива вопросов и хэша
     questions_hash.try(:size) == params[:answers].try(:size)
   end
 

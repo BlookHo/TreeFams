@@ -1,0 +1,19 @@
+var rollbackDate = "<%= params[:rollback_date] %>";
+console.log('rollbackDate = ' + rollbackDate);
+if(typeof rollbackDate != "undefined" && rollbackDate != null && rollbackDate.length > 0){
+    console.log("Date of RollBack Add Logs - chosen!");
+//    console.log('sims connected again: logConnection = ' + logConnection);
+
+    var textStr = '<br>' + 'Объединение похожих профилей - совершено.' +  '<br>' +
+            ' Теперь при необходимости можно разъединить объединенные похожие профили'  +  '<br>';
+//            + connectionInfo
+//            +  '<br>' + logConnection;
+//            +  '<br>' + profilesRewrite + ' и ' + profilesDestroy + '<br>';
+    $('.array').before().empty().append(textStr);
+    $('.array').empty().html('<%= j render 'common_logs/rollback_adds' -%>');
+    console.log("After render 'common_logs/rollback_adds' ");
+//    window.location.href = '<%= home_path %>'
+
+
+}
+

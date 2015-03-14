@@ -19,10 +19,25 @@ module ProfileKeysGeneration
 
       # Получит хэши имен ближнего круга
       # вокруг базового профиля с учетом хэша исключений - от нестандартных ответов.
-      get_bk_relative_names(tree_ids, base_profile.id, exclusions_hash)
+
+    get_bk_relative_names(tree_ids, base_profile.id, exclusions_hash)
 
       # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый
-      make_profilekeys_rows(base_sex_id, base_profile.tree_id, save_new_tree_row(base_profile, new_relation_id, new_profile))
+
+    make_profilekeys_rows(base_sex_id, base_profile.tree_id, save_new_tree_row(base_profile, new_relation_id, new_profile))
+
+      # logger.info "In add_new_profile: Before create_add_log"
+      current_log_type = 1  # Тип = добавление нового профиля
+      new_log_number = CommonLog.new_add_log_id(base_profile.tree_id, current_log_type)
+      # logger.info "In add_new_profile: Before common_log_data   new_log_number = #{new_log_number}"
+
+      common_log_data = { user_id: base_profile.tree_id, log_type: current_log_type,
+                          log_id:  new_log_number, profile_id: new_profile.id }
+
+      # logger.info "In add_new_profile: Before create_add_log   common_log_data = #{common_log_data}"
+      # common_log_data = {:user_id=>2, :log_type=>1, :log_id=>7, :profile_id=>113}
+      CommonLog.create_common_log(common_log_data)
+
     end
 
 
