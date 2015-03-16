@@ -1,0 +1,21 @@
+var commonLogId = "<%= params[:common_log_id].to_i %>";
+console.log(commonLogId);
+
+//var $currentRow = $("tr[data-message-id=" + commonLogId + "]");
+var commonLogType = ' <%= @common_log_type %> ';
+console.log(" commonLogType = " + commonLogType );
+var commonLogDate = ' <%= @log_date_to_show %> ';
+console.log(" commonLogDate = " + commonLogDate );
+
+
+var textStrin = "Выбран лог: " + commonLogId  + "; На дату: " + commonLogDate + "; Тип лога: " + commonLogType + ';<br>';
+
+console.log("In mark_rollback.js: params[:common_log_id] = " + "<%= params[:common_log_id].to_i.inspect %>" + textStrin);
+
+$('.point h2').before().empty().append(textStrin);
+
+$('.log_id').after().html('<%= j render 'common_logs/rollback_adds' -%>');
+
+//$currentRow.find(".rollback").html(' <%= @common_log_id_selected.inspect %> ');
+
+

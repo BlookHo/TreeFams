@@ -12,9 +12,9 @@ class CommonLog < ActiveRecord::Base
 
   # Collect One type of Common_logs for current_user_id
   def self.get_tree_add_logs(current_user_id, log_type)
-    logger.info "In CommonLog model: collect_common_logs: connected_users = #{current_user_id} "
-    common_logs_data = CommonLog.where(user_id: current_user_id, log_type: log_type)
-    logger.info "In CommonLog model: collect_common_logs: common_logs_data = #{common_logs_data} "
+    # logger.info "In CommonLog model: collect_common_logs: connected_users = #{current_user_id} "
+    common_logs_data = CommonLog.where(user_id: current_user_id, log_type: log_type).order("created_at DESC")
+    # logger.info "In CommonLog model: collect_common_logs: common_logs_data = #{common_logs_data} "
     common_logs_data
   end
 
@@ -37,7 +37,6 @@ class CommonLog < ActiveRecord::Base
         common_log.log_type   = common_log_data[:log_type]
         common_log.log_id     = common_log_data[:log_id]
         common_log.profile_id = common_log_data[:profile_id]
-      # logger.info "In CommonLog model: create_common_log: common_log = #{common_log} "
       if common_log.save
         logger.info "In CommonLog model: create_common_log: good save "
       else
@@ -63,6 +62,43 @@ class CommonLog < ActiveRecord::Base
   #   logger.info "In CommonLog model: collect_common_logs: common_logs_data = #{common_logs_data} "
   #   common_logs_data
   # end
+
+
+  # Получение списка profile_id - по выбранным ранее логам (по id)
+  # На входе - rollback_id - граница rollback для удаления
+  # Для заданных current_user_id, log_type
+  def self.profiles_for_rollback(rollback_id, rollback_date, current_user_id, log_type)
+    logger.info "In CommonLog model: profiles_for_rollback: rollback_id = #{rollback_id}, rollback_date = #{rollback_date} "
+    profiles_arr = CommonLog.where(user_id: current_user_id, log_type: log_type)
+                       .where("id >= ?", rollback_id)    # .where("created_at > #{rollback_date}")
+                       .order("created_at DESC").pluck(:profile_id)
+    profiles_arr
+  end
+
+
+  # Удаление записей содержащих profile_id из всех таблиц - по выбранным ранее логам (по дате)
+  # В основе - массив профилей для удаления
+  def self.rollback_destroy(current_user, log_type, profiles_arr)
+    logger.info "In CommonLog model: rollback_destroy: profiles_arr = #{profiles_arr} "
+    profiles_arr.each do |profile_id|
+      @profile = Profile.where(id: profile_id).first
+      # logger.info "In CommonLog model: rollback_destroy: @profile = #{@profile} "
+      if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
+        @error = "Вы можете удалить только последнего родственника в цепочке"
+      elsif @profile.user.present?
+        @error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
+      elsif @profile.user_id == current_user.id
+        @error = "Вы не можете удалить свой профиль"
+      else
+        ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
+        Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
+        ProfileData.where(profile_id: @profile.id).map(&:destroy)
+        CommonLog.where(user_id: current_user.id, log_type: log_type, profile_id: @profile.id).map(&:destroy)
+        @profile.destroy
+        # logger.info "In CommonLog model: rollback_destroy: After destroy "
+      end
+    end
+  end
 
 
 

@@ -1,19 +1,34 @@
+var rollbackId = "<%= params[:rollback_id] %>";
 var rollbackDate = "<%= params[:rollback_date] %>";
+console.log('rollbackId = ' + rollbackId);
 console.log('rollbackDate = ' + rollbackDate);
 if(typeof rollbackDate != "undefined" && rollbackDate != null && rollbackDate.length > 0){
-    console.log("Date of RollBack Add Logs - chosen!");
-//    console.log('sims connected again: logConnection = ' + logConnection);
-
-    var textStr = '<br>' + 'Объединение похожих профилей - совершено.' +  '<br>' +
-            ' Теперь при необходимости можно разъединить объединенные похожие профили'  +  '<br>';
-//            + connectionInfo
-//            +  '<br>' + logConnection;
-//            +  '<br>' + profilesRewrite + ' и ' + profilesDestroy + '<br>';
-    $('.array').before().empty().append(textStr);
-    $('.array').empty().html('<%= j render 'common_logs/rollback_adds' -%>');
-    console.log("After render 'common_logs/rollback_adds' ");
-//    window.location.href = '<%= home_path %>'
+    console.log("After RollBack Add Logs - chosen");
+    var textStr = '<br>' + 'Возврат дерева в состояние на выбранную дату = ' + rollbackDate + ' - совершен!'
+            + '<br>' + '<br>';
+    $('.log_id').empty();
+    //$('.point h2').empty();
+    $('.point h2').empty().before().append(textStr).fadeOut(3000);
+    setTimeout("window.location.href='<%= home_path %>';",2000);
 
 
 }
+
+
+
+$("#table tr").click(function(){
+//$(".rollback").click(function(){
+    console.log('In function');
+
+    $(this).addClass('selected').siblings().removeClass('selected');
+    var value=$(this).find('td:first').html();
+    alert(value);
+    console.log('value = ' + value);
+
+});
+
+$('.ok').on('click', function(e){
+    alert($("#table tr.selected td:first").html());
+});
+
 

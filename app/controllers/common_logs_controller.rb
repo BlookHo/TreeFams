@@ -10,7 +10,7 @@ class CommonLogsController < ApplicationController
     # get & show tree data
     # tree_info = CommonLog.collect_tree_info(current_user)
     tree_info = Tree.get_tree_info(current_user)
-    logger.info "In CommonLog: tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info} "
+    # logger.info "In CommonLog: tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info} "
 
     # to show similars connected in view & for RSpec
     @tree_info = tree_info
@@ -21,26 +21,40 @@ class CommonLogsController < ApplicationController
     # get & show one tree add_profiles common_logs
     log_type = 1
     tree_add_logs = CommonLog.get_tree_add_logs(current_user.id, log_type)
-    logger.info "In CommonLog controller: tree_add_logs = #{tree_add_logs} "
 
     # get & show connected tree all types common_logs
-    # common_logs_data = CommonLog.collect_common_logs(tree_info[:connected_users])
-    # logger.info "In CommonLog controller: common_logs_data = #{common_logs_data} "
-
     view_common_logs_data(tree_add_logs) unless tree_add_logs.empty?  # to index.html.haml
   end
 
   # Add Logs
   # Возврат дерева - откат на выбранную дату
   def rollback_add_logs
-    rollback_date  = params[:rollback_date]#.to_i
-    logger.info "In CommonLog controller: rollback_add_logs      rollback_date = #{rollback_date} "
-
-    flash.now[:notice] = "Возврат дерева в состояние на выбранную дату. rollback_date = #{rollback_date} "
-
-
+    rollback_date  = params[:rollback_date]
+    rollback_id  = params[:rollback_id]
+    logger.info "In CommonLog controller: rollback_add_logs      rollback_id = #{rollback_id},  rollback_date = #{rollback_date} "
+    log_type = 1
+    profiles_arr = CommonLog.profiles_for_rollback(rollback_id, rollback_date, current_user.id, log_type)
+    CommonLog.rollback_destroy(current_user, log_type, profiles_arr)
+    logger.info "In CommonLog controller: rollback_add_logs After rollback_destroy "
+    # flash.now[:warning] = "Возврат дерева в состояние на выбранную дату. rollback_date = #{rollback_date} "
   end
 
+
+  # Пометка сообщения как Важного (important_message) и обратно - в Неважное
+  # @param data [params[:message_id]] ID помеченного как важного сообщения - из view
+  def mark_rollback
+    unless params[:common_log_id].blank?
+      @common_log_id = params[:common_log_id].to_i
+      flash[:notice] = "Изменена пометка mark_rollback"
+      @common_log_type = CommonLog.find(params[:common_log_id].to_i).log_type
+      @common_log_date = CommonLog.find(params[:common_log_id].to_i).created_at#.strftime("%F")
+      @log_date_to_show = @common_log_date.strftime("%F")
+    end
+    respond_to do |format|
+      format.html
+      format.js { render 'common_logs/mark_rollback' }
+    end
+  end
 
   # def new
   #   one_common_log = CommonLog.new

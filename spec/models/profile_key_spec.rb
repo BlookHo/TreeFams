@@ -439,9 +439,10 @@ RSpec.describe ProfileKey, :type => :model do
               profiles_count =  Profile.all.count
               puts "before action: profiles_count = #{profiles_count.inspect} \n"
               expect(profiles_count).to eq(7) # count of Profile
-              profiles_ids =  Profile.all.pluck(:id)
+              profiles_ids =  Profile.all.pluck(:id).sort
               puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
-              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 87, 92]) # ids of Profiles
+              expect(profiles_ids).to eq([85, 87, 88, 89, 90, 91, 92])
+              # ids of Profiles
               # puts "before All: base_profile.id = #{base_profile.id} \n"  # id = 85
               # puts "before All: base_profile.user_id = #{base_profile.user_id} \n"  # id = 9
             end
@@ -659,9 +660,9 @@ RSpec.describe ProfileKey, :type => :model do
               profiles_count =  Profile.all.count
               puts "before action: profiles_count = #{profiles_count.inspect} \n"
               expect(profiles_count).to eq(7) # count of Profile
-              profiles_ids =  Profile.all.pluck(:id)
+              profiles_ids =  Profile.all.pluck(:id).sort
               puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
-              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 86, 92]) # ids of Profiles
+              expect(profiles_ids).to eq([85, 86, 88, 89, 90, 91, 92]) # ids of Profiles
               # puts "before All: base_profile.id = #{base_profile.id} \n"  # id = 85
               # puts "before All: base_profile.user_id = #{base_profile.user_id} \n"  # id = 9
             end
@@ -883,9 +884,9 @@ RSpec.describe ProfileKey, :type => :model do
               profiles_count =  Profile.all.count
               puts "before action: profiles_count = #{profiles_count.inspect} \n"
               expect(profiles_count).to eq(8) # count of Profile
-              profiles_ids =  Profile.all.pluck(:id)
+              profiles_ids =  Profile.all.pluck(:id).sort
               puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
-              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 86, 87, 92]) # ids of Profiles
+              expect(profiles_ids).to eq([85, 86, 87, 88, 89, 90, 91, 92]) # ids of Profiles
             end
             it '- ProfileKey check have rows count & ids before - Ok' do
               profile_keys_count =  ProfileKey.all.count
@@ -1112,9 +1113,9 @@ RSpec.describe ProfileKey, :type => :model do
               profiles_count =  Profile.all.count
               puts "before action: profiles_count = #{profiles_count.inspect} \n"
               expect(profiles_count).to eq(8) # count of Profile
-              profiles_ids =  Profile.all.pluck(:id)
+              profiles_ids =  Profile.all.pluck(:id).sort
               puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
-              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 86, 87, 92]) # ids of Profiles
+              expect(profiles_ids).to eq([85, 86, 87, 88, 89, 90, 91, 92]) # ids of Profiles
             end
             it '- ProfileKey check have rows count & ids before - Ok' do
               profile_keys_count =  ProfileKey.all.count
@@ -1342,9 +1343,9 @@ RSpec.describe ProfileKey, :type => :model do
               profiles_count =  Profile.all.count
               puts "before action: profiles_count = #{profiles_count.inspect} \n"
               expect(profiles_count).to eq(8) # count of Profile
-              profiles_ids =  Profile.all.pluck(:id)
+              profiles_ids =  Profile.all.pluck(:id).sort
               puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
-              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 86, 87, 92]) # ids of Profiles
+              expect(profiles_ids).to eq([85, 86, 87, 88, 89, 90, 91, 92]) # ids of Profiles
             end
             it '- ProfileKey check have rows count & ids before - Ok' do
               profile_keys_count =  ProfileKey.all.count
@@ -1574,9 +1575,9 @@ RSpec.describe ProfileKey, :type => :model do
               profiles_count =  Profile.all.count
               puts "before action: profiles_count = #{profiles_count.inspect} \n"
               expect(profiles_count).to eq(8) # count of Profile
-              profiles_ids =  Profile.all.pluck(:id)
+              profiles_ids =  Profile.all.pluck(:id).sort
               puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
-              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 86, 87, 92]) # ids of Profiles
+              expect(profiles_ids).to eq([85, 86, 87, 88, 89, 90, 91, 92]) # ids of Profiles
             end
             it '- ProfileKey check have rows count & ids before - Ok' do
               profile_keys_count =  ProfileKey.all.count
@@ -1805,9 +1806,9 @@ RSpec.describe ProfileKey, :type => :model do
               profiles_count =  Profile.all.count
               puts "before action: profiles_count = #{profiles_count.inspect} \n"
               expect(profiles_count).to eq(8) # count of Profile
-              profiles_ids =  Profile.all.pluck(:id)
+              profiles_ids =  Profile.all.pluck(:id).sort
               puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
-              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 86, 87, 92]) # ids of Profiles
+              expect(profiles_ids).to eq([85, 86, 87, 88, 89, 90, 91, 92]) # ids of Profiles
             end
             it '- ProfileKey check have rows count & ids before - Ok' do
               profile_keys_count =  ProfileKey.all.count
@@ -2037,9 +2038,9 @@ RSpec.describe ProfileKey, :type => :model do
               profiles_count =  Profile.all.count
               puts "before action: profiles_count = #{profiles_count.inspect} \n"
               expect(profiles_count).to eq(7) # count of Profile
-              profiles_ids =  Profile.all.pluck(:id)
+              profiles_ids =  Profile.all.pluck(:id).sort
               puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
-              expect(profiles_ids).to eq([85, 88, 89, 90, 91, 87, 86]) # ids of Profiles
+              expect(profiles_ids).to eq([85, 86, 87, 88, 89, 90, 91]) # ids of Profiles
               # puts "before All: base_profile.id = #{base_profile.id} \n"  # id = 85
               # puts "before All: base_profile.user_id = #{base_profile.user_id} \n"  # id = 9
             end

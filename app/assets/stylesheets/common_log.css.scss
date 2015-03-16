@@ -4,6 +4,12 @@
 #common_log{
   margin-top:40px;
 
+  td {border: 1px #DDD solid; padding: 5px; cursor: pointer;}
+
+  .selected {
+    background-color: brown;
+    color: #FFF;
+  }
 
   h1{
     font-size:24px;
