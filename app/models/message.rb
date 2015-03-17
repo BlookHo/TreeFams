@@ -12,7 +12,7 @@ class Message < ActiveRecord::Base
 
   # Найти всех контрагентов current_user по сообщениям
   # Исп-ся при отображении сообщений
-  # @param data [current_user] текущий юзер - logged_in
+  # @param current_user [ActiveRecord] текущий юзер - logged_in
   def self.find_agents(current_user)
     agents_senders = self.where(receiver_id: current_user.id, receiver_deleted: false).pluck(:sender_id).uniq
     agents_receivers = self.where(sender_id: current_user.id, sender_deleted: false).pluck(:receiver_id).uniq
@@ -21,7 +21,7 @@ class Message < ActiveRecord::Base
 
   # Формирование выходного массива
   # для отображения сообщений в вьюхе
-  # @param data [current_user] текущий юзер - logged_in
+  # @param current_user [ActiveRecord] текущий юзер - logged_in
   def self.view_messages_data(agents_talks, current_user)
     talks_and_messages = []
     agents_talks.each do |user_id|
@@ -32,7 +32,7 @@ class Message < ActiveRecord::Base
 
   # Получаем массив сообщений для одного юзера
   # чтение всех сообщений получателем при открывании диалога
-  # @param data [current_user] текущий юзер - logged_in
+  # @param current_user [ActiveRecord] текущий юзер - logged_in
   def self.get_user_messages(user_id, current_user)
     user_dialoge = {}
     user_messages = []
@@ -68,7 +68,7 @@ class Message < ActiveRecord::Base
   # чтение всех сообщений получателем при открывании диалога
   # Если текущий юзер явл-ся получателем
   # используется для управления отображения сообщений
-  # @param data [current_user] текущий юзер - logged_in
+  # @param current_user [ActiveRecord] текущий юзер - logged_in
   def read_one_message(message, current_user)
     message.read = true if !message.read && message.receiver_id == current_user.id
     message.save
@@ -78,8 +78,8 @@ class Message < ActiveRecord::Base
   end
 
   # Пометка сообщения как Важного (important_message) и обратно - в Неважное
-  # @param data [message_id] ID выбранного для Пометка сообщения как Важного и обратно - из view
-  # @param data [current_user] текущий юзер - logged_in
+  # @param message_id [Integer] ID выбранного для Пометка сообщения как Важного и обратно - из view
+  # @param current_user [ActiveRecord] текущий юзер - logged_in
   def self.important_message(message_id, current_user)
 
     # todo: Ввести вместо поля .important - 2 поля receiver_important и sender_important .
@@ -97,7 +97,7 @@ class Message < ActiveRecord::Base
   end
 
   # Удаление одного диалога - всех взаимных сообщений с Юзером = user_talk_id
-  # @param data [current_user] текущий юзер - logged_in
+  # @param current_user [ActiveRecord] текущий юзер - logged_in
   def self.delete_one_dialogue(user_dialogue, current_user) #, choosed_message_id)
 
     one_user_talk =  Message.where("(receiver_id = #{current_user.id} and receiver_deleted = #{false} and sender_id = #{user_dialogue}) or (sender_id = #{current_user.id} and sender_deleted = #{false} and receiver_id = #{user_dialogue})")
@@ -109,8 +109,8 @@ class Message < ActiveRecord::Base
   end
 
   # Удаление одного сообщения
-  # @param data [message_id] ID выбранного для удаления сообщения - из view
-  # @param data [current_user] текущий юзер - logged_in
+  # @param one_message [Integer] ID выбранного для удаления сообщения - из view
+  # @param current_user [ActiveRecord] текущий юзер - logged_in
   def delete_one_message(one_message, current_user) #, choosed_message_id)
 
     #one_message = Message.find(message_id)

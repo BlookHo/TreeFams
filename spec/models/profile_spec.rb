@@ -1,7 +1,5 @@
 require 'rails_helper'
 
-# describe Profile do
-
 RSpec.describe Profile, :type => :model do
 
   describe '- validation' do
@@ -42,19 +40,27 @@ RSpec.describe Profile, :type => :model do
       before {
         #Name - for profile = 85
         FactoryGirl.create(:name, :name_370)   # Петр
-        puts "before All in Profile valid-s: Name.first.name = #{Name.first.name} \n"  # Алексей
       }
       let(:base_profile_85) { create(:add_profile, :add_profile_85) }  # User = 9. Tree = 9. profile_id = 85
 
       context '- check profile creation' do
         it 'creation profile - Ok' do
-          puts "before All: base_profile_85.id = #{base_profile_85.id} \n"  # id =
+          puts "before All in Profile valid-s: Name.first.name = #{Name.first.name} \n"  # Петр
+          puts "before All: base_profile_85.id = #{base_profile_85.id} \n"  # id = 85
           expect(base_profile_85).to be_valid
         end
       end
+    end
+  end
+
+  describe '- Model methods' do
+    describe '- #' do
+
 
 
     end
-
   end
+
+
+
 end

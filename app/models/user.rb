@@ -81,8 +81,8 @@ class User < ActiveRecord::Base
   end
 
   # Извлечение имени юзера и склонение его по падежу
-  # @param data [receiver_id] id юзера - получателя сообщения
-  # @param data [padej] падеж
+  # @param user_id [Integer] id юзера - получателя сообщения
+  # @param padej [Integer] падеж
   def self.show_user_name(user_id, padej)
     user = User.find(user_id)
     user_name = user.get_user_name # Определение имени юзера

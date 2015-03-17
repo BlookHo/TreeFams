@@ -26,22 +26,24 @@ class CommonLogsController < ApplicationController
     view_common_logs_data(tree_add_logs) unless tree_add_logs.empty?  # to index.html.haml
   end
 
-  # Add Logs
-  # Возврат дерева - откат на выбранную дату
+  # @note Add Logs
+  # @note Возврат дерева - откат на выбранную дату
+  # @param params[:rollback_date]
+  # @param params[:rollback_id]
   def rollback_add_logs
-    rollback_date  = params[:rollback_date]
-    rollback_id  = params[:rollback_id]
+    rollback_date = params[:rollback_date]
+    rollback_id   = params[:rollback_id]
     logger.info "In CommonLog controller: rollback_add_logs      rollback_id = #{rollback_id},  rollback_date = #{rollback_date} "
     log_type = 1
     profiles_arr = CommonLog.profiles_for_rollback(rollback_id, rollback_date, current_user.id, log_type)
-    CommonLog.rollback_destroy(current_user, log_type, profiles_arr)
+    CommonLog.rollback_add(current_user, log_type, profiles_arr)
     logger.info "In CommonLog controller: rollback_add_logs After rollback_destroy "
     # flash.now[:warning] = "Возврат дерева в состояние на выбранную дату. rollback_date = #{rollback_date} "
   end
 
 
-  # Пометка сообщения как Важного (important_message) и обратно - в Неважное
-  # @param data [params[:message_id]] ID помеченного как важного сообщения - из view
+  # @note Пометка сообщения как Важного (important_message) и обратно - в Неважное
+  # @param params[:common_log_id]  ID помеченного как важного сообщения - из view
   def mark_rollback
     unless params[:common_log_id].blank?
       @common_log_id = params[:common_log_id].to_i

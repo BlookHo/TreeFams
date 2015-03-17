@@ -18,7 +18,10 @@ class CommonLog < ActiveRecord::Base
     common_logs_data
   end
 
-  # Определение нового порядкового номера ADD лога на основе уже существующих логов
+  # @note Определение нового порядкового номера ADD лога на основе уже существующих логов
+  # @param tree_owner [Integer]
+  # @param current_log_type [Integer]
+  # @return last_log_id [Integer]
   def self.new_add_log_id(tree_owner, current_log_type)
     logs_numbers = self.where(user_id: tree_owner, log_type: current_log_type).pluck(:log_id).uniq
     # logger.info "In CommonLog model: get_add_log_id: logs_numbers = #{logs_numbers} "
@@ -28,9 +31,11 @@ class CommonLog < ActiveRecord::Base
     last_log_id
   end
 
-  # Создание записи одного Общего Лога
-  # common_log_data =  { user_id: connected_user.id, log_type: current_log_type,
-  #                      log_id:  new_log_number, profile_id: new_profile.id }
+  # @note Создание AR записи одного Общего Лога in model CommonLog
+  # @param common_log_data [Hash] { user_id: connected_user.id, log_type: current_log_type,
+  #                                log_id:  new_log_number, profile_id: new_profile.id }
+  # @return [Boolean] выполнение метода = true
+  # @see CommonLog
   def self.create_common_log(common_log_data)
       common_log = self.new
         common_log.user_id    = common_log_data[:user_id]
@@ -64,9 +69,15 @@ class CommonLog < ActiveRecord::Base
   # end
 
 
-  # Получение списка profile_id - по выбранным ранее логам (по id)
-  # На входе - rollback_id - граница rollback для удаления
-  # Для заданных current_user_id, log_type
+  # @note Получение списка profile_id - по выбранным ранее логам (по id)
+  #   На входе - rollback_id - граница rollback для удаления
+  #   Для заданных current_user_id, log_type
+  # @param rollback_id [Integer]
+  #   rollback_date [Datetime]
+  #   current_user_id [Integer]
+  #   log_type [Integer]
+  # @return profiles_arr [Array]
+  # @see CommonLog
   def self.profiles_for_rollback(rollback_id, rollback_date, current_user_id, log_type)
     logger.info "In CommonLog model: profiles_for_rollback: rollback_id = #{rollback_id}, rollback_date = #{rollback_date} "
     profiles_arr = CommonLog.where(user_id: current_user_id, log_type: log_type)
@@ -76,13 +87,14 @@ class CommonLog < ActiveRecord::Base
   end
 
 
-  # Удаление записей содержащих profile_id из всех таблиц - по выбранным ранее логам (по дате)
+  # @note Rollback_add == Destroy
+  #   Удаление записей содержащих profile_id из таблиц - по выбранным ранее логам (по дате)
   # В основе - массив профилей для удаления
-  def self.rollback_destroy(current_user, log_type, profiles_arr)
-    logger.info "In CommonLog model: rollback_destroy: profiles_arr = #{profiles_arr} "
+  def self.rollback_add(current_user, log_type, profiles_arr)
+    logger.info "In CommonLog model: rollback_add: profiles_arr = #{profiles_arr} "
     profiles_arr.each do |profile_id|
       @profile = Profile.where(id: profile_id).first
-      # logger.info "In CommonLog model: rollback_destroy: @profile = #{@profile} "
+      # logger.info "In CommonLog model: rollback_add: @profile = #{@profile} "
       if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
         @error = "Вы можете удалить только последнего родственника в цепочке"
       elsif @profile.user.present?
@@ -94,11 +106,38 @@ class CommonLog < ActiveRecord::Base
         Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
         ProfileData.where(profile_id: @profile.id).map(&:destroy)
         CommonLog.where(user_id: current_user.id, log_type: log_type, profile_id: @profile.id).map(&:destroy)
-        @profile.destroy
-        # logger.info "In CommonLog model: rollback_destroy: After destroy "
+
+      #  @profile.destroy # Не удаляем профили, чтобы иметь возм-ть повторить создание удаленных пррофилей
+
+        # Create delete common log для данного профиля
+        # параметры:
+        # common_log.user_id    = @profile.tree_id]
+        # common_log.log_type   = 2 # delete
+        # common_log.log_id     = ?? # new_add_log_id
+        # common_log.profile_id = @profile.id
+
+      # common_log.relation_id = @relation_id # доп.поле в CommonLog
+      # common_log.new_profile_id = @new_profile.id # доп.поле в CommonLog
+      # common_log.new_sex_id = @new_profile.sex_id # доп.поле в CommonLog
+      # common_log.new_name_id = @new_profile.name_id # доп.поле в CommonLog
+      # common_log.new_disp_name_id = @new_profile.display_name_id # доп.поле в CommonLog
+
+
+      # logger.info "In CommonLog model: rollback_add: After destroy "
       end
     end
   end
+
+  # @note Rollback_destroy == Add
+  #   Удаление записей содержащих profile_id из таблиц - по выбранным ранее логам (по дате)
+  # В основе - массив профилей для удаления
+  def self.rollback_destroy(current_user, log_type, profiles_arr)
+    logger.info "In CommonLog model: rollback_destroy: profiles_arr = #{profiles_arr} "
+
+    # logger.info "In CommonLog model: rollback_add: After add "
+
+  end
+
 
 
 
