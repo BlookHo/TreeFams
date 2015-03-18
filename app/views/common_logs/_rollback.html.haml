@@ -1,0 +1,9 @@
+%br
+%h1 Вернуть назад историю дерева к выбранной дате: #{@log_date_to_show}? (Ваше решение)
+-#= link_to 'Да, вернуть дерево в состояние на выбранную дату', rollback_add_logs_path(rollback_id: @common_log_id, rollback_date: @common_log_date), method: :post, remote: true, class: [:bttn, :red]
+= link_to 'Да, вернуть дерево в состояние на выбранную дату', rollback_logs_path(rollback_id: @common_log_id, rollback_date: @common_log_date), method: :post, remote: true, class: [:bttn, :red]
+= link_to 'Нет - к просмотру дерева', home_path, class: [:bttn, :green]
+%br
+%br
+%br
+

@@ -51,7 +51,8 @@ class ProfilesController < ApplicationController
     @profile = Profile.new(profile_params)  # Новый добавляемый профиль
     # @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
     @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
-    # logger.info "In Profile controller: create   @profile.tree_id = #{@profile.tree_id} "
+    logger.info "In Profile controller: create  @profile.tree_id = #{@profile.tree_id} "
+    logger.info "In Profile controller: create  @profile.relation_id = #{@profile.relation_id} "
 
     # Имя
     @name = Name.where(id: params[:profile_name_id]).first
@@ -83,10 +84,31 @@ class ProfilesController < ApplicationController
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
 
+        logger.info "In Profile controller: create AFTER SAVE  @profile.id = #{@profile.id} "
+        logger.info "In Profile controller: create AFTER SAVE  @profile.relation_id = #{@profile.relation_id} "
+
+
         ProfileKey.add_new_profile(@base_sex_id, @base_profile,
             @profile, @profile.relation_id,
             exclusions_hash: @profile.answers_hash,
             tree_ids: current_user.get_connected_users)
+
+
+        # logger.info "In add_new_profile: Before create_add_log"
+        current_log_type = 1  #  # add: rollback == delete. Тип = добавление нового профиля при rollback
+        new_log_number = CommonLog.new_log_id(@base_profile.tree_id, current_log_type)
+        # logger.info "In add_new_profile: Before common_log_data   new_log_number = #{new_log_number}"
+        common_log_data = { user_id: @base_profile.tree_id, log_type: current_log_type,
+                            log_id:  new_log_number, profile_id: @profile.id,
+                            base_profile_id: @base_profile.id,
+                            new_relation_id: @profile.relation_id }
+        logger.info "In Profile controller: Before create_common_log   @profile.relation_id = #{@profile.relation_id},
+                                                        @base_profile.id = #{@base_profile.id}          "
+        CommonLog.create_common_log(common_log_data)
+
+
+
+
 
         ##########  UPDATES FEEDS - № 4  ####################
         UpdatesFeed.create(user_id: current_user.id, update_id: 4, agent_user_id: current_user.id, agent_profile_id: @profile.id, read: false)
@@ -138,9 +160,49 @@ class ProfilesController < ApplicationController
      @error = "Вы не можете удалить свой профиль"
     else
        ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
+
+       tree_row = Tree.where(is_profile_id: params[:id])
+       new_relation_id = tree_row[0].relation_id
+       logger.info "In Profiles_contr destroy: Before delete Tree  new_relation_id = #{new_relation_id} "
+       # Профиль, к которому добавляем (на котором вызвали меню +)
+       base_profile = Profile.find(tree_row[0].profile_id)  #
+       logger.info "In Profiles_contr destroy: Before delete Tree  base_profile.id = #{base_profile.id} "
+
+
        Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
+       # todo: не удалять ProfileData?
        ProfileData.where(profile_id: @profile.id).map(&:destroy)
-       @profile.destroy
+       # @profile.destroy # Не удаляем профили, чтобы иметь возм-ть повторить создание удаленных профилей
+
+       logger.info "In Profiles_contr destroy: Before create_add_log"
+       current_log_type = 2  #  # delete : rollback == add. Тип = удаление нового профиля при rollback
+       new_log_number = CommonLog.new_log_id(base_profile.tree_id, current_log_type)
+       logger.info "In add_new_profile: Before common_log_data   new_log_number = #{new_log_number}"
+
+       common_log_data = { user_id: base_profile.tree_id, log_type: current_log_type, # ok
+                           log_id:  new_log_number, profile_id: params[:id],    # ok
+           base_profile_id: base_profile.id,
+           new_relation_id: new_relation_id,
+       # base_sex_id: base_profile.sex_id
+
+       }
+
+       logger.info "In add_new_profile: Before create_add_log   common_log_data = #{common_log_data}"
+       # common_log_data = {:user_id=>2, :log_type=>1, :log_id=>7, :profile_id=>113}
+       # common_log_data = { user_id: base_profile.tree_id,
+       #                     log_type: 2,  # delete: rollback == add
+       #                     log_type: 1,  # add: rollback == delete
+       #                     profile_id: base_profile.id,
+       #                     relation_id: relation_id, # where?
+       #                     new_profile_id: new_profile.id,
+       #                     new_sex_id: new_profile.sex_id,
+       #                     new_name_id: new_profile.name_id,
+       #                     new_disp_name_id: new_profile.display_name_id,
+       #
+       #                     log_id:  new_log_number, profile_id: new_profile.id }
+       CommonLog.create_common_log(common_log_data)
+
+
     end
     respond_to do |format|
       format.js
@@ -151,7 +213,7 @@ class ProfilesController < ApplicationController
 
 
 
-
+  # Старый метод - не исп-ся!!!
   def show_dropdown_menu
     @author_profile_id = params[:author_profile_id]
     @profile = Profile.find(params[:profile_id])

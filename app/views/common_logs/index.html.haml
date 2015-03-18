@@ -37,7 +37,8 @@
         %th Дата
         %th Автор дерева
         %th Тип лога
-        %th Объект лога
+        %th Профиль лога
+        %th Имя профиля
         %th Номер лога
         %th
         %th
@@ -51,6 +52,7 @@
           %td= common_logs_data.user_id
           %td= common_logs_data.log_type  #
           %td= common_logs_data.profile_id #
+          %td= Name.find(Profile.find(common_logs_data.profile_id).name_id).name #
           %td= common_logs_data.log_id
           %td= @text_to_js
           -#%td= 'Klik'
