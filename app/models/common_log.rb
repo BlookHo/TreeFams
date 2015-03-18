@@ -49,8 +49,8 @@ class CommonLog < ActiveRecord::Base
         logger.info "In CommonLog model: create_common_log: good save "
       else
         # todo: дает undefined method for flash?
-        flash.now[:alert] = "Ошибка при создании CommonLog"
-        # logger.info "In CommonLog model: create_common_log: BAD save "
+        # flash.now[:alert] = "Ошибка при создании CommonLog"
+        logger.info "In CommonLog model: Ошибка при создании CommonLog"
       end
   end
 
@@ -76,38 +76,45 @@ class CommonLog < ActiveRecord::Base
   # @note Rollback_add == Destroy
   #   Удаление записей содержащих profile_id из таблиц - по выбранным ранее логам (по дате)
   # В основе - массив профилей для удаления
-  def self.rollback_add_one_profile(current_user, log_type, profile_id)
-    logger.info "In CommonLog model: rollback_add_one_profile: profile_id = #{profile_id} "
-    # profiles_arr.each do |profile_id|
-      @profile = Profile.find(profile_id)
-      # logger.info "In CommonLog model: rollback_add: @profile = #{@profile} "
-      if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
-        @error = "Вы можете удалить только последнего родственника в цепочке"
-      elsif @profile.user.present?
-        @error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
-      elsif @profile.user_id == current_user.id
-        @error = "Вы не можете удалить свой профиль"
-      else
-        ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
-        Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
+  #     add_log_data = { current_user: current_user, log_type: 1, profile_id: profile_id }
+  def self.rollback_add_one_profile(add_log_data )
 
-        # todo: не удалять ProfileData?
-        ProfileData.where(profile_id: @profile.id).map(&:destroy)
+    current_user = add_log_data[:current_user]
+    log_type     = add_log_data[:log_type]
+    profile_id   = add_log_data[:profile_id]
+    # logger.info "In CommonLog model: rollback_add_one_profile: add_log_data = #{add_log_data} "
+    @profile = Profile.find(profile_id)
+    if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
+      @error = "Вы можете удалить только последнего родственника в цепочке"
+    elsif @profile.user.present?
+      @error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
+    elsif @profile.user_id == current_user.id
+      @error = "Вы не можете удалить свой профиль"
+    else
+      ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
+      Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
 
-        CommonLog.where(user_id: current_user.id, log_type: log_type, profile_id: @profile.id).map(&:destroy)
+      # todo: не удалять ProfileData?
+      ProfileData.where(profile_id: @profile.id).map(&:destroy)
 
-        # todo: В дальнейшем надо будет чистить от не используемых профилей - но аккуратно
-        # @profile.destroy # Не удаляем профили, чтобы иметь возм-ть повторить создание удаленных профилей
+      CommonLog.where(user_id: current_user.id, log_type: log_type, profile_id: @profile.id).map(&:destroy)
 
-      end
+      # todo: В дальнейшем надо будет чистить от не используемых профилей - но аккуратно
+      # @profile.destroy # Не удаляем профили, чтобы иметь возм-ть повторить создание удаленных профилей
+    end
   end
 
 
   # @note Rollback_destroy == Add
   #   Удаление записей содержащих profile_id из таблиц - по выбранным ранее логам (по дате)
   # В основе - массив профилей для удаления
-  def self.rollback_destroy_one_profile(current_user, log_type, profile_id, base_profile_id, relation_id)
+  def self.rollback_destroy_one_profile(destroy_log_data) #current_user, log_type, profile_id, base_profile_id, relation_id)
 
+    current_user      = destroy_log_data[:current_user]
+    log_type          = destroy_log_data[:log_type]
+    profile_id        = destroy_log_data[:profile_id]
+    base_profile_id   = destroy_log_data[:base_profile_id]
+    relation_id       = destroy_log_data[:relation_id]
     # Профиль, к которому добавляем (на котором вызвали меню +)
     @base_profile = Profile.find(base_profile_id)  # FOR add_new_profile
 
@@ -123,6 +130,7 @@ class CommonLog < ActiveRecord::Base
     ProfileKey.add_new_profile(@base_sex_id, @base_profile, @profile, relation_id,
                                      exclusions_hash: @profile.answers_hash,
                                      tree_ids: current_user.get_connected_users)
+
     CommonLog.where(user_id: current_user.id, log_type: log_type, profile_id: profile_id).map(&:destroy)
   end
 
