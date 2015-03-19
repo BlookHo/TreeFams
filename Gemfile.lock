@@ -74,6 +74,8 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-ng (0.0.4)
+      awesome_print (>= 1.2.0)
     capybara-screenshot (1.0.5)
       capybara (>= 1.0, < 3)
       colored
@@ -649,6 +651,7 @@ DEPENDENCIES
   bullet
   capistrano (= 2.15.5)
   capybara
+  capybara-ng
   capybara-screenshot
   capybara-webkit
   coffee-rails (~> 4.0.0)

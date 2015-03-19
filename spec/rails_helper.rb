@@ -26,6 +26,8 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   Capybara.javascript_driver = :webkit
+  # Capybara.default_wait_time = 2000
+  config.include Angular::DSL
 
   Capybara::Screenshot.webkit_options = { width: 1280, height: 1000 }
   # Keep only the screenshots generated from the last failing test suite

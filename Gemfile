@@ -115,6 +115,7 @@ group :test do
 
   # Features tests for Rspec
   gem 'capybara'
+  gem 'capybara-ng'
 
   # Webkit driver for js feature tests
   # $ brew install qt
