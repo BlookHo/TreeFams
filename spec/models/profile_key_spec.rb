@@ -1810,16 +1810,17 @@ RSpec.describe ProfileKey, :type => :model do
               puts "before action: profiles_ids = #{profiles_ids.inspect} \n"
               expect(profiles_ids).to eq([85, 86, 87, 88, 89, 90, 91, 92]) # ids of Profiles
             end
-            it '- ProfileKey check have rows count & ids before - Ok' do
-              profile_keys_count =  ProfileKey.all.count
-              puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
-              expect(profile_keys_count).to eq(52) # count of ProfileKey
-              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
-              # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
-              expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-                                              21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
-                                              39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52]) # ids of ProfileKeys
+
+            describe '- check ProfileKey count values' do
+              let(:rows_qty) {52}
+              let(:rows_ids_arr) {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                                   21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+                                   39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52]}
+              it_behaves_like :successful_profile_keys_ids
+
             end
+
+
           end
 
           context '- After Added Sister - action <add_new_profile>:' do
@@ -2044,15 +2045,13 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "before All: base_profile.id = #{base_profile.id} \n"  # id = 85
               # puts "before All: base_profile.user_id = #{base_profile.user_id} \n"  # id = 9
             end
-            it '- ProfileKey check have rows count & ids before - Ok' do
-              profile_keys_count =  ProfileKey.all.count
-              puts "before action: profile_keys_count = #{profile_keys_count.inspect} \n"
-              expect(profile_keys_count).to eq(42) # count of Profile
-              profile_keys_ids =  ProfileKey.all.pluck(:id).sort
-              # puts "before action: profile_keys_ids = #{profile_keys_ids.inspect} \n"
-              expect(profile_keys_ids).to eq([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-                                              22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
-                                              40, 41, 42]) # ids of ProfileKeys
+
+            describe '- check ProfileKey count values' do
+              let(:rows_qty) {42}
+              let(:rows_ids_arr) {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+                                   22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,
+                                   40, 41, 42]}
+              it_behaves_like :successful_profile_keys_ids
             end
 
           end

@@ -52,4 +52,10 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
+
+  # Filtes needed tests(add :focus to run them, add :disable to disable them)
+  config.filter_run :focus
+  config.run_all_when_everything_filtered = true
+
+  config.filter_run_excluding disabled: true
 end
