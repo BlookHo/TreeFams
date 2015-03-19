@@ -51,8 +51,8 @@ class ProfilesController < ApplicationController
     @profile = Profile.new(profile_params)  # Новый добавляемый профиль
     # @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
     @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
-    logger.info "In Profile controller: create  @profile.tree_id = #{@profile.tree_id} "
-    logger.info "In Profile controller: create  @profile.relation_id = #{@profile.relation_id} "
+    # logger.info "In Profile controller: create  @profile.tree_id = #{@profile.tree_id} "
+    # logger.info "In Profile controller: create  @profile.relation_id = #{@profile.relation_id} "
 
     # Имя
     @name = Name.where(id: params[:profile_name_id]).first
@@ -74,19 +74,11 @@ class ProfilesController < ApplicationController
       }
 
       questions_hash = current_user.profile.make_questions(make_questions_data)
-      # logger.info "In Profile controller: create   questions_hash = #{questions_hash} "
-
       @questions = create_questions_from_hash(questions_hash)
-
       @profile.answers_hash = params[:answers]
-      # logger.info "In Profile controller: create   questions_valid?(questions_hash) = #{questions_valid?(questions_hash)} "
 
       # Validate for relation questions
       if questions_valid?(questions_hash) and @profile.save
-
-        logger.info "In Profile controller: create AFTER SAVE  @profile.id = #{@profile.id} "
-        logger.info "In Profile controller: create AFTER SAVE  @profile.relation_id = #{@profile.relation_id} "
-
 
         ProfileKey.add_new_profile(@base_sex_id, @base_profile,
             @profile, @profile.relation_id,
