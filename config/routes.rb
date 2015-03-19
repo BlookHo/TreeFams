@@ -53,8 +53,8 @@ Weafam::Application.routes.draw do
   get 'common_logs/create'
   # get 'common_logs/show'
   get 'common_logs/destroy'
-  match 'rollback_add_logs' => 'common_logs#rollback_add_logs', via: :post
-  # match 'rollback_add_logs' => 'common_logs#rollback_add_logs', via: :get
+  match 'rollback_logs' => 'common_logs#rollback_logs', via: :post
+  match 'rollback_logs' => 'common_logs#rollback_logs', via: :get
   match 'mark_rollback' => 'common_logs#mark_rollback', via: :post
   match 'mark_rollback' => 'common_logs#mark_rollback', via: :get
 

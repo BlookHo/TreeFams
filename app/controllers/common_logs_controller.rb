@@ -19,35 +19,20 @@ class CommonLogsController < ApplicationController
     view_tree_data(tree_info) unless tree_info.empty?  # to index.html.haml
 
     # get & show one tree add_profiles common_logs
-    log_type = 1
-    tree_add_logs = CommonLog.get_tree_add_logs(current_user.id, log_type)
+    # log_type = 1
+    tree_add_logs = CommonLog.get_tree_add_logs(tree_info[:connected_users]) #, log_type)
 
     # get & show connected tree all types common_logs
     view_common_logs_data(tree_add_logs) unless tree_add_logs.empty?  # to index.html.haml
   end
 
-  # @note Add Logs
-  # @note Возврат дерева - откат на выбранную дату
-  # @param params[:rollback_date]
-  # @param params[:rollback_id]
-  def rollback_add_logs
-    rollback_date = params[:rollback_date]
-    rollback_id   = params[:rollback_id]
-    logger.info "In CommonLog controller: rollback_add_logs      rollback_id = #{rollback_id},  rollback_date = #{rollback_date} "
-    log_type = 1
-    profiles_arr = CommonLog.profiles_for_rollback(rollback_id, rollback_date, current_user.id, log_type)
-    CommonLog.rollback_add(current_user, log_type, profiles_arr)
-    logger.info "In CommonLog controller: rollback_add_logs After rollback_destroy "
-    # flash.now[:warning] = "Возврат дерева в состояние на выбранную дату. rollback_date = #{rollback_date} "
-  end
 
-
-  # @note Пометка сообщения как Важного (important_message) и обратно - в Неважное
-  # @param params[:common_log_id]  ID помеченного как важного сообщения - из view
+  # @note Пометка Common_log - граница отката дерева
+  # @param params[:common_log_id]  ID помеченного Common_log - из view
   def mark_rollback
     unless params[:common_log_id].blank?
       @common_log_id = params[:common_log_id].to_i
-      flash[:notice] = "Изменена пометка mark_rollback"
+      # flash[:notice] = "Изменена пометка mark_rollback"
       @common_log_type = CommonLog.find(params[:common_log_id].to_i).log_type
       @common_log_date = CommonLog.find(params[:common_log_id].to_i).created_at#.strftime("%F")
       @log_date_to_show = @common_log_date.strftime("%F")
@@ -58,46 +43,95 @@ class CommonLogsController < ApplicationController
     end
   end
 
-  # def new
-  #   one_common_log = CommonLog.new
-  #   one_common_log.user_id = common_log_data[:user_id]
-  #   one_common_log.log_type = common_log_data[:log_type]
-  #   one_common_log.log_id = common_log_data[:log_id]
-  #   one_common_log.profile_id = common_log_data[:profile_id]
-  #
-  # end
-  #
-  #
-  # def create
-  #   one_common_log = CommonLog.new(params[:common_log])
-  #   # one_common_log.sender_id = current_user.id
-  #   if one_common_log.save
-  #     flash.now[:notice] = "Cообщение отправлено"
-  #   else
-  #     flash.now[:alert] = "Ошибка при отправке сообщения"
-  #     # render :new
-  #   end
 
-    # connected_users = common_log_data[:user_id]#.get_connected_users
-    # logger.info "In CommonLog model: create_common_log: connected_users = #{connected_users} "
-    # # connected_users = 2
-    #
-    #
-    # one_common_log = self.new
-    # common_log.user_id = common_log_data[:user_id]
-    # common_log.log_type = common_log_data[:log_type]
-    # common_log.log_id = common_log_data[:log_id]
-    # common_log.profile_id = common_log_data[:profile_id]
-    # logger.info "In CommonLog model: create_common_log: common_log = #{common_log} "
-    #
-    # if common_log.save
-    #   logger.info "In CommonLog model: create_common_log: good save "
-    # else
-    #   flash.now[:alert] = "Ошибка при создании CommonLog"
-    #   logger.info "In CommonLog model: create_common_log: BAD save "
-    # end
 
-  # end
+  # todo: All types of rollback
+  # @note Возврат дерева - откат на выбранную дату
+  # вставить этот метод в вызов в _rollback_adds
+  # поменять название /
+  # @param params[:rollback_date]
+  # @param params[:rollback_id]
+  def rollback_logs
+    rollback_date = params[:rollback_date]
+    rollback_id   = params[:rollback_id]
+    logger.info "In CommonLog controller: rollback_logs      rollback_id = #{rollback_id},  rollback_date = #{rollback_date} "
+    common_logs_arr = CommonLog.where(user_id: current_user.id)
+                       .where("id >= ?", rollback_id)    # .where("created_at > #{rollback_date}")
+                       .order("created_at DESC")
+    common_logs_arr.each do |common_log|
+      case common_log.log_type
+        when 1 #  Добавление профиля
+          logger.info "In CommonLog controller: rollback_logs:   common_log.log_type = #{common_log.log_type}, common_log.id = #{common_log.id} "
+          rollback_add_profile(common_log.id)
+        when 2 #  Удаление профиля
+          rollback_delete_profile(common_log.id)
+        when 3 #  Объединение похожих профилей в одном дереве
+          rollback_similars_profiles(common_log.id)
+        when 4 #  Объединение деревьев
+          rollback_connection_trees(common_log.id)
+        else
+          @error = "Тип лога - не определен! common_log.log_type = #{common_log.log_type} "
+      end
+    end
+
+    logger.info "In CommonLog controller: After All rollback_logs: Возврат дерева в состояние на выбранную дату.
+                     rollback_date = #{rollback_date}"
+    # flash.now[:info] = "Возврат дерева в состояние на выбранную дату. rollback_date = #{rollback_date} "
+  end
+
+
+  # @note Возврат Add Logs
+  # @note Возврат дерева - откат на выбранную дату
+  # @param params[:rollback_date]
+  # @param params[:rollback_id]
+  def rollback_add_profile(common_log_id)
+    profile_id = CommonLog.find(common_log_id).profile_id
+    add_log_data = { current_user: current_user,
+                     log_type:     1,
+                     profile_id:   profile_id }
+
+    CommonLog.rollback_add_one_profile(add_log_data)
+  end
+
+  # @note Возврат delete Logs
+  # @note Возврат дерева - откат на выбранную дату
+  # @param params[:rollback_date]
+  # @param params[:rollback_id]
+  def rollback_delete_profile(common_log_id)
+    one_common_log = CommonLog.find(common_log_id)
+    destroy_log_data = {current_user:     current_user,
+                        log_type:         2,
+                        profile_id:       one_common_log.profile_id,
+                        base_profile_id:  one_common_log.base_profile_id,
+                        relation_id:      one_common_log.relation_id }
+
+    CommonLog.rollback_destroy_one_profile(destroy_log_data)
+    # logger.info "In CommonLog controller: rollback_delete_profile для common_log_id = #{common_log_id},
+    #                                destroy_log_data = #{destroy_log_data} "
+  end
+
+
+  # @note Add Logs
+  # @note Возврат дерева - откат на выбранную дату
+  # @param params[:rollback_date]
+  # @param params[:rollback_id]
+  def rollback_similars_profiles(common_log_id)
+
+    logger.info "In CommonLog controller: rollback_similars_profiles для common_log_id = #{common_log_id} "
+
+  end
+
+  # @note Add Logs
+  # @note Возврат дерева - откат на выбранную дату
+  # @param params[:rollback_date]
+  # @param params[:rollback_id]
+  def rollback_connection_trees(common_log_id)
+
+    logger.info "In CommonLog controller: rollback_connection_trees для common_log_id = #{common_log_id} "
+
+  end
+
+
 
 
 end
