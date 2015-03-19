@@ -225,6 +225,15 @@ Weafam::Application.routes.draw do
   end
 
 
+  # Meteor
+  ##################################################
+  namespace :meteor, defaults: {format: 'json'} do
+    namespace :v1 do
+      get :login, to: 'login#login'
+    end
+  end
+
+
 
   # Admin
   ##################################################
