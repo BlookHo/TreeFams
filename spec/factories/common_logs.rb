@@ -3,7 +3,9 @@ FactoryGirl.define do
     user_id 1
     log_type 1
     log_id 1
-    profile_id 1
+    profile_id 2
+    base_profile_id 1
+    relation_id 3
 
     # validation
     trait :uncorrect_type do
