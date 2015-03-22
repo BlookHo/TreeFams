@@ -8,6 +8,9 @@ class CommonLog < ActiveRecord::Base
   validates_numericality_of  :user_id, :log_type, :log_id, :profile_id, :base_profile_id, :relation_id,
                              :only_integer => true, :message => "Должны быть целым числом в CommonLog"
   validates_inclusion_of     :log_type, :in => [1,2,3,4], :message => "Должны быть [1,2,3,4] в CommonLog"
+  validates_inclusion_of     :relation_id, :in => [1,2,3,4,5,6,7,8,91,92,101,102,111,112,121,122,13,14,15,16,17,18,191,
+                                                   192,201,202,211,212,221,222],
+                             :message => "Должны быть целым числом из заданного множества в CommonLog"
 
 
   # Collect One type of Common_logs for current_user_id
