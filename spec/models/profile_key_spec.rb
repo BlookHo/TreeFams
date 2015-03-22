@@ -1118,7 +1118,7 @@ RSpec.describe ProfileKey, :type => :model do
               it_behaves_like :successful_profile_keys_rows_count
             end
 
-            describe '- check all relations generated in ProfileKey rows - Ok' do
+            describe '- check all profile_ids generated in ProfileKey rows - Ok' do
               let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87,
                                        87, 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89, 89,
                                        90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91, 92, 92, 92,
