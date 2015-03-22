@@ -427,16 +427,16 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "check tree_ids: = #{tree_ids} \n"  # 1
               expect(tree_ids).to eq([9])
             end
-            it '- Tree check have rows count before - Ok' do
-              trees_count =  Tree.all.count
-              # puts "before action: trees_count = #{trees_count.inspect} \n"
-              expect(trees_count).to eq(6) # got 6 rows of Tree
+
+            describe '- check Tree have rows count before - Ok' do
+              let(:rows_qty) {6}
+              it_behaves_like :successful_tree_rows_count
             end
 
             describe '- Profile check have rows count & ids before - Ok' do
               let(:rows_qty) {7}
               let(:rows_ids_arr) {[85, 87, 88, 89, 90, 91, 92]}
-              it_behaves_like :successful_profiles_ids
+              it_behaves_like :successful_profiles_count_and_ids
             end
 
             describe '- check ProfileKey count & ids values before - Ok' do
@@ -496,11 +496,9 @@ RSpec.describe ProfileKey, :type => :model do
               expect(new_is_sex_id).to eq(1) #
             end
 
-            it '- check new ProfileKey rows - Ok' do
-              profilekeys_count =  ProfileKey.all.count
-              puts "After ADD Father Check ProfileKey \n"
-              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
-              expect(profilekeys_count).to eq(52) # got 52 rows of ProfileKey
+            describe '- check new ProfileKey rows - Ok' do
+              let(:rows_qty) {52}
+              it_behaves_like :successful_profile_keys_rows_count
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do
@@ -511,11 +509,9 @@ RSpec.describe ProfileKey, :type => :model do
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
-            it '- check new Profile rows - Ok' do
-              profiles_count =  Profile.all.count
-              puts "After ADD Father Check Profile \n"
-              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
-              expect(profiles_count).to eq(8) # got 8 rows of Profile
+            describe '- check new Profile rows - Ok' do
+              let(:rows_qty) {8}
+              it_behaves_like :successful_profiles_rows_count
             end
           end
         end
@@ -632,16 +628,16 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "check tree_ids: = #{tree_ids} \n"  # 1
               expect(tree_ids).to eq([9])
             end
-            it '- Tree check have rows count before - Ok' do
-              trees_count =  Tree.all.count
-              # puts "before action: trees_count = #{trees_count.inspect} \n"
-              expect(trees_count).to eq(6) # got 6 rows of Tree
+
+            describe '- check Tree have rows count before - Ok' do
+              let(:rows_qty) {6}
+              it_behaves_like :successful_tree_rows_count
             end
 
             describe '- Profile check have rows count & ids before - Ok' do
               let(:rows_qty) {7}
               let(:rows_ids_arr) {[85, 86, 88, 89, 90, 91, 92]}
-              it_behaves_like :successful_profiles_ids
+              it_behaves_like :successful_profiles_count_and_ids
             end
 
             describe '- check ProfileKey count & ids values before - Ok' do
@@ -667,8 +663,6 @@ RSpec.describe ProfileKey, :type => :model do
 
             it '- check new Tree row - Ok' do
               puts "After ADD Mother Check Tree \n"
-              # puts "In Check Tree: connected_users = #{connected_users}\n"
-              # puts "In Check Tree: tree_ids = #{tree_ids}\n"
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
               # puts "In check results: tree_row_id = #{tree_row_id} \n"
@@ -703,11 +697,9 @@ RSpec.describe ProfileKey, :type => :model do
               expect(new_is_sex_id).to eq(0) #
             end
 
-            it '- check new ProfileKey rows - Ok' do
-              profilekeys_count =  ProfileKey.all.count
-              puts "After ADD Mother Check ProfileKey \n"
-              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
-              expect(profilekeys_count).to eq(52) # got 52 rows of ProfileKey
+            describe '- check new ProfileKey rows - Ok' do
+              let(:rows_qty) {52}
+              it_behaves_like :successful_profile_keys_rows_count
             end
 
             it '- check all users generated in ProfileKey rows - Ok' do
@@ -726,11 +718,9 @@ RSpec.describe ProfileKey, :type => :model do
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
-            it '- check new Profile rows - Ok' do
-              profiles_count =  Profile.all.count
-              puts "After ADD Mother Check Profile \n"
-              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
-              expect(profiles_count).to eq(8) # got 8 rows of Profile
+            describe '- check new Profile rows - Ok' do
+              let(:rows_qty) {8}
+              it_behaves_like :successful_profiles_rows_count
             end
           end
         end
@@ -781,7 +771,6 @@ RSpec.describe ProfileKey, :type => :model do
             FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
             FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
             FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
-
           }
 
           after {
@@ -845,16 +834,16 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "check tree_ids: = #{tree_ids} \n"  # 1
               expect(tree_ids).to eq([9])
             end
-            it '- Tree check have rows count before - Ok' do
-              trees_count =  Tree.all.count
-              # puts "before action: trees_count = #{trees_count.inspect} \n"
-              expect(trees_count).to eq(7) # got 7 rows of Tree - before
+
+            describe '- check Tree have rows count before - Ok' do
+              let(:rows_qty) {7}
+              it_behaves_like :successful_tree_rows_count
             end
 
-             describe '- Profile check have rows count & ids before - Ok' do
+            describe '- Profile check have rows count & ids before - Ok' do
               let(:rows_qty) {8}
               let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91, 92]}
-              it_behaves_like :successful_profiles_ids
+              it_behaves_like :successful_profiles_count_and_ids
             end
 
             describe '- check ProfileKey count & ids values before - Ok' do
@@ -864,7 +853,6 @@ RSpec.describe ProfileKey, :type => :model do
                                    39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52]}
               it_behaves_like :successful_profile_keys_ids
             end
-
           end
 
           context '- After Added Son - action <add_new_profile>:' do
@@ -881,8 +869,6 @@ RSpec.describe ProfileKey, :type => :model do
 
             it '- check new Tree row - Ok' do
               puts "After ADD Son Check Tree \n"
-              # puts "In Check Tree: connected_users = #{connected_users}\n"
-              # puts "In Check Tree: tree_ids = #{tree_ids}\n"
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
               # puts "In check results: tree_row_id = #{tree_row_id} \n"
@@ -917,11 +903,9 @@ RSpec.describe ProfileKey, :type => :model do
               expect(new_is_sex_id).to eq(1) #
             end
 
-            it '- check new ProfileKey rows - Ok' do
-              profilekeys_count =  ProfileKey.all.count
-              puts "After ADD Son Check ProfileKey \n"
-              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
-              expect(profilekeys_count).to eq(68) # got 68 rows of ProfileKey
+            describe '- check new ProfileKey rows - Ok' do
+              let(:rows_qty) {68}
+              it_behaves_like :successful_profile_keys_rows_count
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
@@ -942,11 +926,9 @@ RSpec.describe ProfileKey, :type => :model do
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
-            it '- check new Profile rows - Ok' do
-              profiles_count =  Profile.all.count
-              puts "After ADD Son Check Profile \n"
-              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
-              expect(profiles_count).to eq(9) # got 9 rows of Profile
+            describe '- check new Profile rows - Ok' do
+              let(:rows_qty) {9}
+              it_behaves_like :successful_profiles_rows_count
             end
           end
         end
@@ -997,7 +979,6 @@ RSpec.describe ProfileKey, :type => :model do
             FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
             FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
             FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
-
           }
 
           after {
@@ -1058,19 +1039,19 @@ RSpec.describe ProfileKey, :type => :model do
               expect(exclusions_hash).to eq({"92" => '0'})
             end
             it "- check: tree_ids" do
-              # puts "check tree_ids: = #{tree_ids} \n"  # 1
+              # puts "check tree_ids: = #{tree_ids} \n"  # 1 , focus: true
               expect(tree_ids).to eq([9])
             end
-            it '- Tree check have rows count before - Ok' do
-              trees_count =  Tree.all.count
-              # puts "before action: trees_count = #{trees_count.inspect} \n"
-              expect(trees_count).to eq(7) # got 7 rows of Tree - before
+
+            describe '- check Tree have rows count before - Ok' do
+              let(:rows_qty) {7}
+              it_behaves_like :successful_tree_rows_count
             end
 
             describe '- Profile check have rows count & ids before - Ok' do
               let(:rows_qty) {8}
               let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91, 92]}
-              it_behaves_like :successful_profiles_ids
+              it_behaves_like :successful_profiles_count_and_ids
             end
 
             describe '- check ProfileKey count & ids values before - Ok' do
@@ -1128,14 +1109,13 @@ RSpec.describe ProfileKey, :type => :model do
 
               new_is_sex_id = new_tree_row.is_sex_id
               # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              puts "After ADD Son_to_Author Check ProfileKey \n"
               expect(new_is_sex_id).to eq(1) #
             end
 
-            it '- check new ProfileKey rows - Ok' do
-              profilekeys_count =  ProfileKey.all.count
-              puts "After ADD Son_to_Author Check ProfileKey \n"
-              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
-              expect(profilekeys_count).to eq(66) # got 68 rows of ProfileKey
+            describe '- check new ProfileKey rows - Ok' do
+              let(:rows_qty) {66}
+              it_behaves_like :successful_profile_keys_rows_count
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do
@@ -1156,11 +1136,9 @@ RSpec.describe ProfileKey, :type => :model do
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
-            it '- check new Profile rows - Ok' do
-              profiles_count =  Profile.all.count
-              puts "After ADD Son_to_Author Check Profile \n"
-              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
-              expect(profiles_count).to eq(9) # got 9 rows of Profile
+            describe '- check new Profile rows - Ok' do
+              let(:rows_qty) {9}
+              it_behaves_like :successful_profiles_rows_count
             end
           end
         end
@@ -1212,7 +1190,6 @@ RSpec.describe ProfileKey, :type => :model do
             FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
             FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
             FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
-
           }
 
           after {
@@ -1276,16 +1253,16 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "check tree_ids: = #{tree_ids} \n"  # 1
               expect(tree_ids).to eq([9])
             end
-            it '- Tree check have rows count before - Ok' do
-              trees_count =  Tree.all.count
-              # puts "before action: trees_count = #{trees_count.inspect} \n"
-              expect(trees_count).to eq(7) # got 7 rows of Tree - before
+
+            describe '- check Tree have rows count before - Ok' do
+              let(:rows_qty) {7}
+              it_behaves_like :successful_tree_rows_count
             end
 
             describe '- Profile check have rows count & ids before - Ok' do
               let(:rows_qty) {8}
               let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91, 92]}
-              it_behaves_like :successful_profiles_ids
+              it_behaves_like :successful_profiles_count_and_ids
             end
 
             describe '- check ProfileKey count & ids values before - Ok' do
@@ -1295,7 +1272,6 @@ RSpec.describe ProfileKey, :type => :model do
                                    39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52]}
               it_behaves_like :successful_profile_keys_ids
             end
-
 
           end
 
@@ -1313,8 +1289,6 @@ RSpec.describe ProfileKey, :type => :model do
 
             it '- check new Tree row - Ok' do
               puts "After ADD Daughter Check Tree \n"
-              # puts "In Check Tree: connected_users = #{connected_users}\n"
-              # puts "In Check Tree: tree_ids = #{tree_ids}\n"
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
               # puts "In check results: tree_row_id = #{tree_row_id} \n"
@@ -1349,11 +1323,9 @@ RSpec.describe ProfileKey, :type => :model do
               expect(new_is_sex_id).to eq(0) #
             end
 
-            it '- check new ProfileKey rows - Ok' do
-              profilekeys_count =  ProfileKey.all.count
-              puts "After ADD Daughter Check ProfileKey \n"
-              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
-              expect(profilekeys_count).to eq(68) # got 68 rows of ProfileKey
+            describe '- check new ProfileKey rows - Ok' do
+              let(:rows_qty) {68}
+              it_behaves_like :successful_profile_keys_rows_count
             end
 
             it '- check all name_ids generated in ProfileKey rows - Ok' do
@@ -1378,15 +1350,12 @@ RSpec.describe ProfileKey, :type => :model do
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
-            it '- check new Profile rows - Ok' do
-              profiles_count =  Profile.all.count
-              puts "After ADD Daughter Check Profile \n"
-              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
-              expect(profiles_count).to eq(9) # got 9 rows of Profile
+            describe '- check new Profile rows - Ok' do
+              let(:rows_qty) {9}
+              it_behaves_like :successful_profiles_rows_count
             end
           end
         end
-
 
         describe '- Added Brother - ' do
           before {
@@ -1434,7 +1403,6 @@ RSpec.describe ProfileKey, :type => :model do
             FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
             FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
             FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
-
           }
 
           after {
@@ -1498,16 +1466,16 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "check tree_ids: = #{tree_ids} \n"  # 1
               expect(tree_ids).to eq([9])
             end
-            it '- Tree check have rows count before - Ok' do
-              trees_count =  Tree.all.count
-              # puts "before action: trees_count = #{trees_count.inspect} \n"
-              expect(trees_count).to eq(7) # got 7 rows of Tree - before
+
+            describe '- check Tree have rows count before - Ok' do
+              let(:rows_qty) {7}
+              it_behaves_like :successful_tree_rows_count
             end
 
             describe '- Profile check have rows count & ids before - Ok' do
               let(:rows_qty) {8}
               let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91, 92]}
-              it_behaves_like :successful_profiles_ids
+              it_behaves_like :successful_profiles_count_and_ids
             end
 
             describe '- check ProfileKey count & ids values before - Ok' do
@@ -1570,11 +1538,9 @@ RSpec.describe ProfileKey, :type => :model do
               expect(new_is_sex_id).to eq(1) #
             end
 
-            it '- check new ProfileKey rows - Ok' do
-              profilekeys_count =  ProfileKey.all.count
-              puts "After ADD Brother Check ProfileKey \n"
-              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
-              expect(profilekeys_count).to eq(66) # got 66 rows of ProfileKey
+            describe '- check new ProfileKey rows - Ok' do
+              let(:rows_qty) {66}
+              it_behaves_like :successful_profile_keys_rows_count
             end
 
             it '- check all is_profile_id generated in ProfileKey rows - Ok' do
@@ -1598,11 +1564,9 @@ RSpec.describe ProfileKey, :type => :model do
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
-            it '- check new Profile rows - Ok' do
-              profiles_count =  Profile.all.count
-              puts "After ADD Brother Check Profile \n"
-              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
-              expect(profiles_count).to eq(9) # got 9 rows of Profile
+            describe '- check new Profile rows - Ok' do
+              let(:rows_qty) {9}
+              it_behaves_like :successful_profiles_rows_count
             end
           end
 
@@ -1654,7 +1618,6 @@ RSpec.describe ProfileKey, :type => :model do
             FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
             FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
             FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
-
           }
 
           after {
@@ -1718,16 +1681,16 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "check tree_ids: = #{tree_ids} \n"  # 1
               expect(tree_ids).to eq([9])
             end
-            it '- Tree check have rows count before - Ok' do
-              trees_count =  Tree.all.count
-              # puts "before action: trees_count = #{trees_count.inspect} \n"
-              expect(trees_count).to eq(7) # got 7 rows of Tree - before
+
+            describe '- check Tree have rows count before - Ok' do
+              let(:rows_qty) {7}
+              it_behaves_like :successful_tree_rows_count
             end
 
             describe '- Profile check have rows count & ids before - Ok' do
               let(:rows_qty) {8}
               let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91, 92]}
-              it_behaves_like :successful_profiles_ids
+              it_behaves_like :successful_profiles_count_and_ids
             end
 
             describe '- check ProfileKey count & ids values' do   # , focus: true
@@ -1754,8 +1717,6 @@ RSpec.describe ProfileKey, :type => :model do
 
             it '- check new Tree row - Ok' do
               puts "After ADD Sister Check Tree \n"
-              # puts "In Check Tree: connected_users = #{connected_users}\n"
-              # puts "In Check Tree: tree_ids = #{tree_ids}\n"
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
               # puts "In check results: tree_row_id = #{tree_row_id} \n"
@@ -1790,13 +1751,10 @@ RSpec.describe ProfileKey, :type => :model do
               expect(new_is_sex_id).to eq(0) #
             end
 
-            it '- check new ProfileKey rows - Ok' do
-              profilekeys_count =  ProfileKey.all.count
-              puts "After ADD Sister Check ProfileKey \n"
-              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
-              expect(profilekeys_count).to eq(66) # got 66 rows of ProfileKey
+            describe '- check new ProfileKey rows - Ok' do
+              let(:rows_qty) {66}
+              it_behaves_like :successful_profile_keys_rows_count
             end
-
             it '- check all is_name_ids generated in ProfileKey rows - Ok' do
               all_is_name_ids =  ProfileKey.all.pluck(:is_name_id).sort
               puts "After ADD Sister Check ProfileKey \n"
@@ -1819,11 +1777,9 @@ RSpec.describe ProfileKey, :type => :model do
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
-            it '- check new Profile rows - Ok' do
-              profiles_count =  Profile.all.count
-              puts "After ADD Sister Check Profile \n"
-              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
-              expect(profiles_count).to eq(9) # got 9 rows of Profile
+            describe '- check new Profile rows - Ok' do
+              let(:rows_qty) {9}
+              it_behaves_like :successful_profiles_rows_count
             end
           end
 
@@ -1873,7 +1829,6 @@ RSpec.describe ProfileKey, :type => :model do
             # # FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
             # FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
             # FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
-
           }
 
           after {
@@ -1939,16 +1894,15 @@ RSpec.describe ProfileKey, :type => :model do
               # puts "check tree_ids: = #{tree_ids} \n"  #
               expect(tree_ids).to eq([9])
             end
-            it '- Tree check have rows count before - Ok' do
-              trees_count =  Tree.all.count
-              # puts "before action: trees_count = #{trees_count.inspect} \n"
-              expect(trees_count).to eq(6) # got 82 rows of Tree
+            describe '- check Tree have rows count before - Ok' do
+              let(:rows_qty) {6}
+              it_behaves_like :successful_tree_rows_count
             end
 
             describe '- Profile check have rows count & ids before - Ok' do
               let(:rows_qty) {7}
               let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91]}
-              it_behaves_like :successful_profiles_ids
+              it_behaves_like :successful_profiles_count_and_ids
             end
 
             describe '- check ProfileKey count & ids values' do
@@ -1976,8 +1930,6 @@ RSpec.describe ProfileKey, :type => :model do
 
             it '- check new Tree row - Ok' do
               puts "After ADD Wife Check Tree \n"
-              # puts "In Check Tree: connected_users = #{connected_users}\n"
-              # puts "In Check Tree: tree_ids = #{tree_ids}\n"
               # [85, 1, 370, nil, 1, 86, 28, nil]
               new_tree_row = Tree.last
               tree_row_id = new_tree_row.id
@@ -2010,14 +1962,13 @@ RSpec.describe ProfileKey, :type => :model do
 
               new_is_sex_id = new_tree_row.is_sex_id
               # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
+              puts "After ADD Wife Check ProfileKey \n"
               expect(new_is_sex_id).to eq(0) #
             end
 
-            it '- check new ProfileKey rows - Ok' do
-              profilekeys_count =  ProfileKey.all.count
-              puts "After ADD Wife Check ProfileKey \n"
-              puts "In check ProfileKey: profilekeys_count = #{profilekeys_count.inspect} \n"
-              expect(profilekeys_count).to eq(52) # got 52 rows of ProfileKey
+            describe '- check new ProfileKey rows - Ok' do
+              let(:rows_qty) {52}
+              it_behaves_like :successful_profile_keys_rows_count
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do
@@ -2028,11 +1979,9 @@ RSpec.describe ProfileKey, :type => :model do
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
-            it '- check new Profile rows - Ok' do
-              profiles_count =  Profile.all.count
-              puts "After ADD Wife Check Profile \n"
-              puts "In check Profile: profiles_count = #{profiles_count.inspect} \n"
-              expect(profiles_count).to eq(8) # got 8 rows of Profile
+            describe '- check new Profile rows - Ok' do
+              let(:rows_qty) {8}
+              it_behaves_like :successful_profiles_rows_count
             end
           end
 

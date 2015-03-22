@@ -176,7 +176,7 @@ RSpec.describe CommonLog, type: :model do
       FactoryGirl.create(:tree, :add_tree9_6) # before # 91
       FactoryGirl.create(:tree, :add_tree9_7)   # 92
       FactoryGirl.create(:tree, :add_tree9_172)   # 172
-      FactoryGirl.create(:tree, :add_tree9_173)   # 173
+      FactoryGirl.create(:tree, :add_tree9_173)   # 173 # - add_log 173
 
       #Profile_Key
       # Before Add new Profile  -  tree #9 Petr
@@ -243,19 +243,19 @@ RSpec.describe CommonLog, type: :model do
 
       FactoryGirl.create(:profile_key, :profile_key9_87_172_59)    # 87_172
       FactoryGirl.create(:profile_key, :profile_key9_172_87_60)    # 172_87
-      FactoryGirl.create(:profile_key, :profile_key9_86_173_61)    # 86_173
+      FactoryGirl.create(:profile_key, :profile_key9_86_173_61)    # 86_173 # - add_log 173
 
-      FactoryGirl.create(:profile_key, :profile_key9_173_86_62)    # 173 86
-      FactoryGirl.create(:profile_key, :profile_key9_172_173_63)   # 172 173
-      FactoryGirl.create(:profile_key, :profile_key9_173_172_64)   # 173_172
+      FactoryGirl.create(:profile_key, :profile_key9_173_86_62)    # 173 86 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_172_173_63)   # 172 173 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_173_172_64)   # 173_172 # - add_log 173
 
-      FactoryGirl.create(:profile_key, :profile_key9_88_173_65)    # 88_173
-      FactoryGirl.create(:profile_key, :profile_key9_173_88_66)   # 173_88
-      FactoryGirl.create(:profile_key, :profile_key9_85_173_67)   # 85_173
+      FactoryGirl.create(:profile_key, :profile_key9_88_173_65)    # 88_173 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_173_88_66)   # 173_88 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_85_173_67)   # 85_173 # - add_log 173
 
-      FactoryGirl.create(:profile_key, :profile_key9_173_85_68)    # 173_85
-      FactoryGirl.create(:profile_key, :profile_key9_87_173_69)   # 87_173
-      FactoryGirl.create(:profile_key, :profile_key9_173_87_70)   # 173_87
+      FactoryGirl.create(:profile_key, :profile_key9_173_85_68)    # 173_85 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_87_173_69)   # 87_173 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_173_87_70)   # 173_87 # - add_log 173
 
       # puts "before All: ProfileKey.last.user_id = #{ProfileKey.last.user_id} \n"  # user_id = 1
       # puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
@@ -305,81 +305,141 @@ RSpec.describe CommonLog, type: :model do
       end
     end
     context '- before actions - check tables values ' do
-      it '- check Tree have rows count before - Ok' do
-        puts "Before All - Check tables created \n"  #
-        trees_count =  Tree.all.count
-        # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(trees_count).to eq(7) # got 7 rows of Tree
+      describe '- check Tree have rows count before - Ok' do
+        let(:rows_qty) {7}
+        it_behaves_like :successful_tree_rows_count
       end
-      it '- check ProfileKey have rows count before - Ok' do
-        profile_keys_count =  ProfileKey.all.count
-        # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(profile_keys_count).to eq(46) # got 46 rows of ProfileKey
+
+      describe '- check ProfileKey have rows count before - Ok' do
+        let(:rows_qty) {46}
+        it_behaves_like :successful_profile_keys_rows_count
       end
-      it '- check CommonLog have rows count before - Ok' do
-        common_logs_count =  CommonLog.all.count
-        # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(common_logs_count).to eq(4) # got 4 rows of CommonLog
+
+      describe '- check CommonLog have rows count before - Ok' do
+        let(:rows_qty) {4}
+        it_behaves_like :successful_common_logs_rows_count
       end
       it '- check CommonLog 1st row before - Ok' do
         common_log_first =  CommonLog.first
         # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(common_log_first.profile_id).to eq(89) # got 4 rows of CommonLog
-        expect(common_log_first.id).to eq(1) # got 4 rows of CommonLog
+        expect(common_log_first.profile_id).to eq(89)
+        expect(common_log_first.id).to eq(1)
       end
       it '- check CommonLog 2nd row before - Ok' do
         common_log_second =  CommonLog.second
         # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(common_log_second.profile_id).to eq(90) # got 4 rows of CommonLog
-        expect(common_log_second.id).to eq(2) # got 4 rows of CommonLog
+        expect(common_log_second.profile_id).to eq(90)
+        expect(common_log_second.id).to eq(2)
       end
       it '- check CommonLog 3rd row before - Ok' do
         common_log_third =  CommonLog.third
         # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(common_log_third.profile_id).to eq(172) # got 4 rows of CommonLog
-        expect(common_log_third.id).to eq(3) # got 4 rows of CommonLog
+        expect(common_log_third.profile_id).to eq(172)
+        expect(common_log_third.id).to eq(3)
       end
       it '- check CommonLog 4th row before - Ok' do
         common_log_forth =  CommonLog.find(4)
         # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(common_log_forth.profile_id).to eq(173) # got 4 rows of CommonLog
-        expect(common_log_forth.id).to eq(4) # got 4 rows of CommonLog
+        expect(common_log_forth.profile_id).to eq(173)
+        expect(common_log_forth.id).to eq(4)
       end
-
     end
 
-    # from common_logs_controller.rb#rollback_logs#rollback_add_profile#rollback_add_one_profile
-    describe ' Check action <rollback_add_one_profile>  log_id >= 3:', focus: true do
+    # from common_logs_controller.rb#rollback_logs#rollback_add_profile#rollback_add_one_profile , focus: true
+    describe ' Check action <rollback_add_one_profile> :' do
 
-      let(:add_log_data) { {:current_user => current_user_9, :log_type => 1,
-                                           :profile_id => 173 } }
-      before { CommonLog.rollback_add_one_profile(add_log_data ) }
-      it '- check CommonLog }2nd row before - Ok' do
-        # puts "Check action <rollback_add_one_profile> : yes = #{yes.inspect} \n"
-        common_logs_count =  CommonLog.all.count
-        puts "Check action <rollback_add_one_profile> : common_logs_count = #{common_logs_count.inspect} \n"
-        expect(common_logs_count).to eq(3) # got 4 rows of CommonLog
-      end
-      it '- check CommonLog 1st row before - Ok' do
-        common_log_first =  CommonLog.first
-        # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(common_log_first.profile_id).to eq(89) # got 4 rows of CommonLog
-        expect(common_log_first.id).to eq(1) # got 4 rows of CommonLog
-      end
-      it '- check CommonLog 2nd row before - Ok' do
-        common_log_second =  CommonLog.second
-        # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(common_log_second.profile_id).to eq(90) # got 4 rows of CommonLog
-        expect(common_log_second.id).to eq(2) # got 4 rows of CommonLog
-      end
-      it '- check CommonLog 3rd row before - Ok' do
-        common_log_third =  CommonLog.third
-        # puts "before action: trees_count = #{trees_count.inspect} \n"
-        expect(common_log_third.profile_id).to eq(172) # got 4 rows of CommonLog
-        expect(common_log_third.id).to eq(3) # got 4 rows of CommonLog
+      context '- rollback add profile = 173 - check tables values ' do
+
+        let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 173 } }
+        before { CommonLog.rollback_add_one_profile(add_log_data ) }
+
+        describe '- check CommonLog have rows count - Ok' do
+          let(:rows_qty) {3}
+          it_behaves_like :successful_common_logs_rows_count
+        end
+        it '- check CommonLog 1st row - Ok' do
+          common_log_first =  CommonLog.first
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_first.profile_id).to eq(89)
+          expect(common_log_first.id).to eq(1)
+        end
+        it '- check CommonLog 2nd row - Ok' do
+          common_log_second =  CommonLog.second
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_second.profile_id).to eq(90)
+          expect(common_log_second.id).to eq(2)
+        end
+        it '- check CommonLog 3rd row - Ok' do
+          common_log_third =  CommonLog.third
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_third.profile_id).to eq(172)
+          expect(common_log_third.id).to eq(3)
+        end
+
+        describe '- check Tree have rows count - Ok' do
+          let(:rows_qty) {6}
+          it_behaves_like :successful_tree_rows_count
+        end
+
+        describe '- check ProfileKey have rows count - Ok' do
+          let(:rows_qty) {36}
+          it_behaves_like :successful_profile_keys_rows_count
+        end
+
+        describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
+          let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 13, 14, 17, 17, 17,
+                                    91, 91, 91, 101, 111, 111, 121, 121, 191, 221]}
+          let(:relations_arr_size) {36}
+          it_behaves_like :successful_profile_keys_relation_ids
+        end
+
       end
 
+      context '- rollback add profile = 172 - check tables values ' do
 
+        let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 172 } }
+        before { CommonLog.rollback_add_one_profile(add_log_data ) }
+
+        describe '- check CommonLog have rows count - Ok' do
+          let(:rows_qty) {3}
+          it_behaves_like :successful_common_logs_rows_count
+        end
+        it '- check CommonLog 1st row - Ok' do
+          common_log_first =  CommonLog.first
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_first.profile_id).to eq(89) # got profile_id
+          expect(common_log_first.id).to eq(1) # got id rows of CommonLog
+        end
+        it '- check CommonLog 2nd row - Ok' do
+          common_log_second =  CommonLog.second
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_second.profile_id).to eq(90)
+          expect(common_log_second.id).to eq(2)
+        end
+        it '- check CommonLog 3rd row - Ok' do
+          common_log_third =  CommonLog.third
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_third.profile_id).to eq(173)
+          expect(common_log_third.id).to eq(4)
+        end
+
+        describe '- check Tree have rows count - Ok' do
+          let(:rows_qty) {6}
+          it_behaves_like :successful_tree_rows_count
+        end
+
+        describe '- check ProfileKey have rows count - Ok' do
+          let(:rows_qty) {36}
+          it_behaves_like :successful_profile_keys_rows_count
+        end
+
+        describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
+          let(:relations_ids_arr) {[1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 14, 14, 17, 17, 17,
+                                    91, 101, 101, 101, 111, 111, 121, 121, 191, 221]}
+          let(:relations_arr_size) {36}
+          it_behaves_like :successful_profile_keys_relation_ids
+        end
+      end
 
     end
 

@@ -1,4 +1,4 @@
-shared_examples :successful_profiles_ids do
+shared_examples :successful_profiles_count_and_ids do
   it '- Profile check have rows count & ids before - Ok' do
     profiles_count =  Profile.all.count
     puts "before action: profiles_count = #{profiles_count.inspect} \n"
