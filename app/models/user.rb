@@ -48,9 +48,9 @@ class User < ActiveRecord::Base
   # для заданного "стартового" Юзера
   def get_connected_users
     connected_users_arr = [self.id]
-    first_users_arr = ConnectedUser.connected_users_ids(self)
+    first_users_arr = ConnectedUser.connected_users_ids(self).uniq
     if first_users_arr.blank?
-      first_users_arr = ConnectedUser.connected_with_users_ids(self)
+      first_users_arr = ConnectedUser.connected_with_users_ids(self).uniq
     end
     one_connected_users_arr = first_users_arr
     unless one_connected_users_arr.blank?

@@ -2,43 +2,40 @@ FactoryGirl.define do
   factory :connected_user, class: ConnectedUser do #
 
     # 1
-    user_id 55
-    with_user_id 5
-    connected true
+    user_id               9
+    with_user_id          10
+    connected             true
+    connection_id         5
+    rewrite_profile_id    85
+    overwrite_profile_id  101
 
     # 2
     trait :connected_user_2 do
       user_id 3
-      # with_user_id 2
-      # connected true
     end
 
     # 3
     trait :connected_user_3 do
       user_id 4
       with_user_id 66
-      # connected true
     end
 
     # 4
     trait :connected_user_4 do
       user_id 44
       with_user_id 5
-      # connected true
     end
 
     # 5
     trait :connected_user_5 do
       user_id 2
       with_user_id 1
-      # connected true
     end
 
     # 6
     trait :connected_user_6 do
       user_id 10
       with_user_id 11
-      # connected true
     end
 
 
@@ -78,6 +75,13 @@ FactoryGirl.define do
     trait :one_id_Uninteger do
       user_id 10003
       with_user_id 3.5
+    end
+
+    trait :bad_profiles_fields_eual do
+      # user_id 10003
+      with_user_id 35
+      rewrite_profile_id    85
+      overwrite_profile_id  85
     end
 
   end

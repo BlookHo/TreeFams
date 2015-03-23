@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150318104741) do
+ActiveRecord::Schema.define(version: 20150323101654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,9 +38,12 @@ ActiveRecord::Schema.define(version: 20150318104741) do
   create_table "connected_users", force: true do |t|
     t.integer  "user_id"
     t.integer  "with_user_id"
-    t.boolean  "connected",    default: false
+    t.boolean  "connected",            default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "connection_id"
+    t.integer  "rewrite_profile_id"
+    t.integer  "overwrite_profile_id"
   end
 
   create_table "connection_requests", force: true do |t|

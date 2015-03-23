@@ -45,6 +45,14 @@ RSpec.describe ConnectedUser, :type => :model do
         end
       end
 
+      context '- invalid connected_users rows' do
+
+        let(:bad_profiles_fields_are_equal) {FactoryGirl.build(:connected_user, :bad_profiles_fields_eual)}
+        it '- 1 Dont save: - bad_profiles_fields - equal' do
+          expect(bad_profiles_fields_are_equal).to_not be_valid
+        end
+
+      end
     end
 
   end

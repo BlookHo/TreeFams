@@ -451,11 +451,18 @@ class ConnectUsersTreesController < ApplicationController
           @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
 
           connection_data = {
-              who_connect: who_connect_users_arr, #
-              with_whom_connect: with_whom_connect_users_arr, #
-              profiles_to_rewrite: profiles_to_rewrite, #
-              profiles_to_destroy: profiles_to_destroy #
+              who_connect:          who_connect_users_arr, #
+              with_whom_connect:    with_whom_connect_users_arr, #
+              profiles_to_rewrite:  profiles_to_rewrite, #
+              profiles_to_destroy:  profiles_to_destroy, #
+              current_user_id:      current_user_id, #
+              user_id:              user_id ,#
+              connection_id:        @connection_id #
           }
+
+          # [1 2] c [3]
+          # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
+          # @profiles_to_destroy: [22, 29, 27, 25, 28, 23, 24, 26]
 
           ######## Контроль корректности массивов перед объединением
           stop_by_arrs = false
@@ -468,21 +475,23 @@ class ConnectUsersTreesController < ApplicationController
 
             ##################################################################
             ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
-            connection_in_tables(connection_data, current_user_id, user_id)
+            # connection_in_tables(connection_data, current_user_id, user_id, @connection_id)
+            connection_in_tables(connection_data) #, current_user_id, user_id, @connection_id)
             ##################################################################
-            ##### Update connection requests - to yes connect
-             yes_to_request(@connection_id)
-            ##################################################################
-            # Make DONE all connected requests
-            # - update all requests - with users, connected with current_user
-             after_conn_update_requests  # From Helper
-            ##############################################
+            # ##### Update connection requests - to yes connect
+            #  yes_to_request(@connection_id)
+            # ##################################################################
+            # # Make DONE all connected requests
+            # # - update all requests - with users, connected with current_user
+            #  after_conn_update_requests  # From Helper
+            # ##############################################
+            #
+            # ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
+            # logger.info "== in connection_of_trees UPDATES :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
+            # UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
+            # UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
+            # ###############################################
 
-            ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
-            logger.info "== in connection_of_trees UPDATES :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
-            UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
-            UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
-            ###############################################
 
           else
             @stop_connection = true  # for view
@@ -533,27 +542,35 @@ class ConnectUsersTreesController < ApplicationController
 
   # Центральный метод соединения деревьев = перезапись профилей в таблицах
   # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-  def connection_in_tables(connection_data, current_user_id, user_id)
+  def connection_in_tables(connection_data) #, current_user_id, user_id, connection_id)
+    # def connection_in_tables(connection_data, current_user_id, user_id, connection_id)
 
-    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy = connection_data[:profiles_to_destroy]
-    who_connect         = connection_data[:who_connect]
-    with_whom_connect   = connection_data[:with_whom_connect]
+    # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+    # profiles_to_destroy = connection_data[:profiles_to_destroy]
+    # who_connect         = connection_data[:who_connect]
+    # with_whom_connect   = connection_data[:with_whom_connect]
 
+    # [1 2] c [3]
+    # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
+    # @profiles_to_destroy: [22, 29, 27, 25, 28, 23, 24, 26]
+    # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
     ###################################################################
     ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-                            connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect, with_whom_connect)
+ #                           connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect, with_whom_connect)
     ####################################################################
     ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-                            connect_users(current_user_id.to_i, user_id.to_i)
+  #                          connect_users(current_user_id.to_i, user_id.to_i)
+
+    ConnectedUser.connect_users(connection_data) #, current_user_id, user_id, connection_id)
+
     ##################################################################
     ######## Перезапись profile_id при объединении деревьев
-               UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
+ #              UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
     ##################################################################
 
 
     ######## Перезапись profile_data при объединении деревьев
-    ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
+#    ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
     ##################################################################
 
   end

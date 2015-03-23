@@ -77,7 +77,7 @@ describe User do
       context '- 3. after action: Check proper result of proper data type ' do
         it "- Third Return proper Array Sorted result for current_user_id = 3" do
           expect(connected_users).to be_a_kind_of(Array)
-          expect(connected_users).to eq([3,5,44,55])
+          expect(connected_users).to eq([3,9,10,11])
         end
       end
 
