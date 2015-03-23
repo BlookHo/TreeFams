@@ -14,7 +14,7 @@ class CommonLog < ActiveRecord::Base
 
 
   # Collect One type of Common_logs for current_user_id
-  def self.get_tree_add_logs(connected_users) #, log_type)
+  def self.get_tree_all_logs(connected_users) #, log_type)
     # logger.info "In CommonLog model: collect_common_logs: connected_users = #{current_user_id} "
     # common_logs_data = CommonLog.where(user_id: current_user_id, log_type: log_type).order("created_at DESC")
     common_logs_data = CommonLog.where(user_id: connected_users).order("created_at DESC")

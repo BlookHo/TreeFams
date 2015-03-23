@@ -8,7 +8,6 @@ class CommonLogsController < ApplicationController
   # Show All types of Common_logs for connected_users
   def index
     # get & show tree data
-    # tree_info = CommonLog.collect_tree_info(current_user)
     tree_info = Tree.get_tree_info(current_user)
     # logger.info "In CommonLog: tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info} "
 
@@ -18,12 +17,11 @@ class CommonLogsController < ApplicationController
     @current_user_id = current_user.id
     view_tree_data(tree_info) unless tree_info.empty?  # to index.html.haml
 
-    # get & show one tree add_profiles common_logs
-    # log_type = 1
-    tree_add_logs = CommonLog.get_tree_add_logs(tree_info[:connected_users]) #, log_type)
+    # get one tree all types common_logs
+    tree_all_logs = CommonLog.get_tree_all_logs(tree_info[:connected_users])
 
-    # get & show connected tree all types common_logs
-    view_common_logs_data(tree_add_logs) unless tree_add_logs.empty?  # to index.html.haml
+    # show connected tree all types common_logs
+    view_common_logs(tree_all_logs) unless tree_all_logs.empty?  # to index.html.haml
   end
 
 
@@ -42,7 +40,6 @@ class CommonLogsController < ApplicationController
       format.js { render 'common_logs/mark_rollback' }
     end
   end
-
 
 
   # todo: All types of rollback
