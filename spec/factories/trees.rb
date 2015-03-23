@@ -316,7 +316,7 @@ FactoryGirl.define do
 
 
     # Before Add new Profile
-    trait :add_tree9_1 do  # user_9
+    trait :add_tree9_1 do  # user_9 # 86
       user_id         9
       profile_id      85
       relation_id     1
@@ -325,7 +325,7 @@ FactoryGirl.define do
       is_name_id      28
       is_sex_id       1
     end
-    trait :add_tree9_2 do
+    trait :add_tree9_2 do # 87
       user_id         9
       profile_id      85
       relation_id     2
@@ -334,7 +334,7 @@ FactoryGirl.define do
       is_name_id      48
       is_sex_id       0
     end
-    trait :add_tree9_3 do # before
+    trait :add_tree9_3 do # before # 88
       user_id         9
       profile_id      85
       relation_id     5
@@ -348,7 +348,7 @@ FactoryGirl.define do
 # 79;9;85;5;"2015-03-05 17:52:18.334334";"2015-03-05 17:52:18.334334";370;88;465;1
 
 
-    trait :add_tree9_4 do # before
+    trait :add_tree9_4 do # before # 89
       user_id         9
       profile_id      85
       relation_id     6
@@ -357,7 +357,7 @@ FactoryGirl.define do
       is_name_id      345
       is_sex_id       0
     end
-    trait :add_tree9_5 do # before
+    trait :add_tree9_5 do # before # 90
       user_id         9
       profile_id      85
       relation_id     3
@@ -366,7 +366,7 @@ FactoryGirl.define do
       is_name_id      343
       is_sex_id       1
     end
-    trait :add_tree9_6 do # before
+    trait :add_tree9_6 do # before  # 91
       user_id         9
       profile_id      85
       relation_id     4
@@ -379,7 +379,7 @@ FactoryGirl.define do
 # 81;9;85;3;"2015-03-05 17:52:18.944942";"2015-03-05 17:52:18.944942";370;90;343;1
 # 82;9;85;4;"2015-03-05 17:52:19.319636";"2015-03-05 17:52:19.319636";370;91;446;0
 
-    trait :add_tree9_7 do
+    trait :add_tree9_7 do  # 92
       user_id         9
       profile_id      85
       relation_id     8
@@ -389,6 +389,33 @@ FactoryGirl.define do
       is_sex_id       0
     end
 # 83;9;85;8;"2015-03-05 17:52:19.772189";"2015-03-05 17:52:19.772189";370;92;147;0
+
+    # For Common_Logs Tree 9
+    # 77;9;85;1;"2015-03-05 17:52:17.773019";"2015-03-05 17:52:17.773019";370;86;28;1;370;28
+    # 78;9;85;2;"2015-03-05 17:52:18.060618";"2015-03-05 17:52:18.060618";370;87;48;0;370;48
+    # 79;9;85;5;"2015-03-05 17:52:18.334334";"2015-03-05 17:52:18.334334";370;88;465;1;370;465
+    # 82;9;85;4;"2015-03-05 17:52:19.319636";"2015-03-05 17:52:19.319636";370;91;446;0;370;446
+    # 83;9;85;8;"2015-03-05 17:52:19.772189";"2015-03-05 17:52:19.772189";370;92;147;0;370;147
+    trait :add_tree9_172 do  # 172
+      user_id         9
+      profile_id      86
+      relation_id     1
+      name_id         28
+      is_profile_id   172
+      is_name_id      122
+      is_sex_id       1
+    end
+    trait :add_tree9_173 do  # 173
+      user_id         9
+      profile_id      86
+      relation_id     2
+      name_id         28
+      is_profile_id   173
+      is_name_id      82
+      is_sex_id       0
+    end
+    # 145;9;86;1;"2015-03-21 14:18:28.282098";"2015-03-21 14:18:28.282098";28;172;122;1;28;122
+    # 146;9;86;2;"2015-03-21 14:18:44.302104";"2015-03-21 14:18:44.302104";28;173;82;0;28;82
 
 
     trait :add_tree10_1 do # user_9

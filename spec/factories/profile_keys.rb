@@ -1354,7 +1354,7 @@ FactoryGirl.define do
     # Before Add new Profile
     # tree #9 Petr
 
-    trait :profile_key9_add_1 do   # 86
+    trait :profile_key9_add_1 do   # 85 86
       user_id         9
       profile_id      85
       name_id         370
@@ -1362,7 +1362,7 @@ FactoryGirl.define do
       is_profile_id   86
       is_name_id      28
     end
-    trait :profile_key9_add_2 do   # 86
+    trait :profile_key9_add_2 do   # 86 85
       user_id         9
       profile_id      86
       name_id         28
@@ -1370,7 +1370,7 @@ FactoryGirl.define do
       is_profile_id   85
       is_name_id      370
     end
-    trait :profile_key9_add_3 do   # 87
+    trait :profile_key9_add_3 do   # 85 87
       user_id         9
       profile_id      85
       name_id         370
@@ -1382,7 +1382,7 @@ FactoryGirl.define do
     # 478;9;86;28;3;85;370
     # 479;9;85;370;2;87;48
 
-    trait :profile_key9_add_4 do   # 87
+    trait :profile_key9_add_4 do   # 87 85
       user_id         9
       profile_id      87
       name_id         48
@@ -1410,7 +1410,7 @@ FactoryGirl.define do
     # 481;9;86;28;8;87;48
     # 482;9;87;48;7;86;28
 
-    trait :profile_key9_add_7 do # before``
+    trait :profile_key9_add_7 do # before # 85 88
       user_id         9
       profile_id      85
       name_id         370
@@ -1418,7 +1418,7 @@ FactoryGirl.define do
       is_profile_id   88
       is_name_id      465
     end
-    trait :profile_key9_add_8 do # before
+    trait :profile_key9_add_8 do # before # 88 85
       user_id         9
       profile_id      88
       name_id         465
@@ -1426,7 +1426,7 @@ FactoryGirl.define do
       is_profile_id   85
       is_name_id      370
     end
-    trait :profile_key9_add_9 do   # 86
+    trait :profile_key9_add_9 do   # 86 88
       user_id         9
       profile_id      86
       name_id         28
@@ -1438,7 +1438,7 @@ FactoryGirl.define do
     # 484;9;88;465;5;85;370
     # 485;9;86;28;3;88;465
 
-    trait :profile_key9_add_10 do   # 86
+    trait :profile_key9_add_10 do   # 88 86
       user_id         9
       profile_id      88
       name_id         465
@@ -1446,7 +1446,7 @@ FactoryGirl.define do
       is_profile_id   86
       is_name_id      28
     end
-    trait :profile_key9_add_11 do   # 87
+    trait :profile_key9_add_11 do   # 87 88
       user_id         9
       profile_id      87
       name_id         48
@@ -1454,7 +1454,7 @@ FactoryGirl.define do
       is_profile_id   88
       is_name_id      465
     end
-    trait :profile_key9_add_12 do   # 87
+    trait :profile_key9_add_12 do   # 88 87
       user_id         9
       profile_id      88
       name_id         465
@@ -1466,7 +1466,7 @@ FactoryGirl.define do
     # 487;9;87;48;3;88;465
     # 488;9;88;465;2;87;48
 
-    trait :profile_key9_add_13 do # before
+    trait :profile_key9_add_13 do # before # 85 89
       user_id         9
       profile_id      85
       name_id         370
@@ -1474,7 +1474,7 @@ FactoryGirl.define do
       is_profile_id   89
       is_name_id      345
     end
-    trait :profile_key9_add_14 do # before
+    trait :profile_key9_add_14 do # before  # 89 85
       user_id         9
       profile_id      89
       name_id         345
@@ -1482,7 +1482,7 @@ FactoryGirl.define do
       is_profile_id   85
       is_name_id      370
     end
-    trait :profile_key9_add_15 do   # 86
+    trait :profile_key9_add_15 do   # 86 89
       user_id         9
       profile_id      86
       name_id         28
@@ -1494,7 +1494,7 @@ FactoryGirl.define do
     # 490;9;89;345;5;85;370
     # 491;9;86;28;4;89;345
 
-    trait :profile_key9_add_16 do   # 86
+    trait :profile_key9_add_16 do   # 89 86
       user_id         9
       profile_id      89
       name_id         345
@@ -1502,7 +1502,7 @@ FactoryGirl.define do
       is_profile_id   86
       is_name_id      28
     end
-    trait :profile_key9_add_17 do   # 87
+    trait :profile_key9_add_17 do   # 87 89
       user_id         9
       profile_id      87
       name_id         48
@@ -1510,7 +1510,7 @@ FactoryGirl.define do
       is_profile_id   89
       is_name_id      345
     end
-    trait :profile_key9_add_18 do   # 87
+    trait :profile_key9_add_18 do   # 89 87
       user_id         9
       profile_id      89
       name_id         345
@@ -1522,7 +1522,7 @@ FactoryGirl.define do
     # 493;9;87;48;4;89;345
     # 494;9;89;345;2;87;48
 
-    trait :profile_key9_add_19 do # before
+    trait :profile_key9_add_19 do # before# 88 89
       user_id         9
       profile_id      88
       name_id         465
@@ -1530,7 +1530,7 @@ FactoryGirl.define do
       is_profile_id   89
       is_name_id      345
     end
-    trait :profile_key9_add_20 do # before
+    trait :profile_key9_add_20 do # before# 89 88
       user_id         9
       profile_id      89
       name_id         345
@@ -1538,7 +1538,7 @@ FactoryGirl.define do
       is_profile_id   88
       is_name_id      465
     end
-    trait :profile_key9_add_21 do # before
+    trait :profile_key9_add_21 do # before # 85 90
       user_id         9
       profile_id      85
       name_id         370
@@ -1550,7 +1550,7 @@ FactoryGirl.define do
     # 496;9;89;345;5;88;465
     # 497;9;85;370;3;90;343
 
-    trait :profile_key9_add_22 do # before
+    trait :profile_key9_add_22 do # before# 90 85
       user_id         9
       profile_id      90
       name_id         343
@@ -1558,7 +1558,7 @@ FactoryGirl.define do
       is_profile_id   85
       is_name_id      370
     end
-    trait :profile_key9_add_23 do   # 86
+    trait :profile_key9_add_23 do   # 86 90
       user_id         9
       profile_id      86
       name_id         28
@@ -1566,7 +1566,7 @@ FactoryGirl.define do
       is_profile_id   90
       is_name_id      343
     end
-    trait :profile_key9_add_24 do   # 86
+    trait :profile_key9_add_24 do   # 90 86
       user_id         9
       profile_id      90
       name_id         343
@@ -1578,7 +1578,7 @@ FactoryGirl.define do
     # 499;9;86;28;111;90;343
     # 500;9;90;343;91;86;28
 
-    trait :profile_key9_add_25 do   # 87
+    trait :profile_key9_add_25 do   # 87 90
       user_id         9
       profile_id      87
       name_id         48
@@ -1586,7 +1586,7 @@ FactoryGirl.define do
       is_profile_id   90
       is_name_id      343
     end
-    trait :profile_key9_add_26 do   # 87
+    trait :profile_key9_add_26 do   # 90 87
       user_id         9
       profile_id      90
       name_id         343
@@ -1594,7 +1594,7 @@ FactoryGirl.define do
       is_profile_id   87
       is_name_id      48
     end
-    trait :profile_key9_add_27 do # before
+    trait :profile_key9_add_27 do # before # 88 90
       user_id         9
       profile_id      88
       name_id         465
@@ -1606,7 +1606,7 @@ FactoryGirl.define do
     # 502;9;90;343;101;87;48
     # 503;9;88;465;211;90;343
 
-    trait :profile_key9_add_28 do # before
+    trait :profile_key9_add_28 do # before # 90 88
       user_id         9
       profile_id      90
       name_id         343
@@ -1614,7 +1614,7 @@ FactoryGirl.define do
       is_profile_id   88
       is_name_id      465
     end
-    trait :profile_key9_add_29 do # before
+    trait :profile_key9_add_29 do # before # 89 90
       user_id         9
       profile_id      89
       name_id         345
@@ -1622,7 +1622,7 @@ FactoryGirl.define do
       is_profile_id   90
       is_name_id      343
     end
-    trait :profile_key9_add_30 do # before
+    trait :profile_key9_add_30 do # before# 90 89
       user_id         9
       profile_id      90
       name_id         343
@@ -1634,7 +1634,7 @@ FactoryGirl.define do
     # 505;9;89;345;211;90;343
     # 506;9;90;343;201;89;345
 
-    trait :profile_key9_add_31 do # before
+    trait :profile_key9_add_31 do # before # 85 91
       user_id         9
       profile_id      85
       name_id         370
@@ -1642,7 +1642,7 @@ FactoryGirl.define do
       is_profile_id   91
       is_name_id      446
     end
-    trait :profile_key9_add_32 do # before
+    trait :profile_key9_add_32 do # before # 91 85
       user_id         9
       profile_id      91
       name_id         446
@@ -1650,7 +1650,7 @@ FactoryGirl.define do
       is_profile_id   85
       is_name_id      370
     end
-    trait :profile_key9_add_33 do # before
+    trait :profile_key9_add_33 do # before # 90 91
       user_id         9
       profile_id      90
       name_id         343
@@ -1662,7 +1662,7 @@ FactoryGirl.define do
     # 508;9;91;446;1;85;370
     # 509;9;90;343;6;91;446
 
-    trait :profile_key9_add_34 do # before
+    trait :profile_key9_add_34 do # before # 91 90
       user_id         9
       profile_id      91
       name_id         446
@@ -1670,7 +1670,7 @@ FactoryGirl.define do
       is_profile_id   90
       is_name_id      343
     end
-    trait :profile_key9_add_35 do   # 86
+    trait :profile_key9_add_35 do   # 86 91
       user_id         9
       profile_id      86
       name_id         28
@@ -1678,7 +1678,7 @@ FactoryGirl.define do
       is_profile_id   91
       is_name_id      446
     end
-    trait :profile_key9_add_36 do   # 86
+    trait :profile_key9_add_36 do   # 91 86
       user_id         9
       profile_id      91
       name_id         446
@@ -1690,7 +1690,7 @@ FactoryGirl.define do
     # 511;9;86;28;121;91;446
     # 512;9;91;446;91;86;28
 
-    trait :profile_key9_add_37 do   # 87
+    trait :profile_key9_add_37 do   # 87 91
       user_id         9
       profile_id      87
       name_id         48
@@ -1698,7 +1698,7 @@ FactoryGirl.define do
       is_profile_id   91
       is_name_id      446
     end
-    trait :profile_key9_add_38 do   # 87
+    trait :profile_key9_add_38 do   # 91 87
       user_id         9
       profile_id      91
       name_id         446
@@ -1706,7 +1706,7 @@ FactoryGirl.define do
       is_profile_id   87
       is_name_id      48
     end
-    trait :profile_key9_add_39 do # before
+    trait :profile_key9_add_39 do # before # 88 91
       user_id         9
       profile_id      88
       name_id         465
@@ -1718,7 +1718,7 @@ FactoryGirl.define do
     # 514;9;91;446;101;87;48
     # 515;9;88;465;221;91;446
 
-    trait :profile_key9_add_40 do # before
+    trait :profile_key9_add_40 do # before # 91 88
       user_id         9
       profile_id      91
       name_id         446
@@ -1726,7 +1726,7 @@ FactoryGirl.define do
       is_profile_id   88
       is_name_id      465
     end
-    trait :profile_key9_add_41 do # before
+    trait :profile_key9_add_41 do # before # 89 91
       user_id         9
       profile_id      89
       name_id         345
@@ -1734,7 +1734,7 @@ FactoryGirl.define do
       is_profile_id   91
       is_name_id      446
     end
-    trait :profile_key9_add_42 do # before
+    trait :profile_key9_add_42 do # before # 91 89
       user_id         9
       profile_id      91
       name_id         446
@@ -1746,7 +1746,7 @@ FactoryGirl.define do
     # 517;9;89;345;221;91;446
     # 518;9;91;446;201;89;345
 
-    trait :profile_key9_add_43 do   # 92
+    trait :profile_key9_add_43 do   # 85 92
       user_id         9
       profile_id      85
       name_id         370
@@ -1754,7 +1754,7 @@ FactoryGirl.define do
       is_profile_id   92
       is_name_id      147
     end
-    trait :profile_key9_add_44 do   # 92
+    trait :profile_key9_add_44 do   # 92 85
       user_id         9
       profile_id      92
       name_id         147
@@ -1762,7 +1762,7 @@ FactoryGirl.define do
       is_profile_id   85
       is_name_id      370
     end
-    trait :profile_key9_add_45 do   # 92
+    trait :profile_key9_add_45 do   # 90 92
       user_id         9
       profile_id      90
       name_id         343
@@ -1774,7 +1774,7 @@ FactoryGirl.define do
     # 520;9;92;147;7;85;370
     # 521;9;90;343;2;92;147
 
-    trait :profile_key9_add_46 do   # 92
+    trait :profile_key9_add_46 do   # 92 90
       user_id         9
       profile_id      92
       name_id         147
@@ -1782,7 +1782,7 @@ FactoryGirl.define do
       is_profile_id   90
       is_name_id      343
     end
-    trait :profile_key9_add_47 do   # 92
+    trait :profile_key9_add_47 do   # 91 92
       user_id         9
       profile_id      91
       name_id         446
@@ -1790,7 +1790,7 @@ FactoryGirl.define do
       is_profile_id   92
       is_name_id      147
     end
-    trait :profile_key9_add_48 do   # 92
+    trait :profile_key9_add_48 do   # 92 91
       user_id         9
       profile_id      92
       name_id         147
@@ -1839,6 +1839,214 @@ FactoryGirl.define do
     # 527;9;87;48;17;92;147
     # 528;9;92;147;14;87;48
     #
+
+    # Only for 85 - 86 87 88 91 92 172 173
+    # 477;9;85;370;1;86;28
+    # 478;9;86;28;3;85;370
+    # 479;9;85;370;2;87;48
+    # 480;9;87;48;3;85;370
+    # 481;9;86;28;8;87;48
+    # 482;9;87;48;7;86;28
+    # 483;9;85;370;5;88;465
+    # 484;9;88;465;5;85;370
+    # 485;9;86;28;3;88;465
+    # 486;9;88;465;1;86;28
+    # 487;9;87;48;3;88;465
+    # 488;9;88;465;2;87;48
+    # 507;9;85;370;4;91;446
+    # 508;9;91;446;1;85;370
+    # 511;9;86;28;121;91;446
+    # 512;9;91;446;91;86;28
+    # 513;9;87;48;121;91;446
+    # 514;9;91;446;101;87;48
+    # 515;9;88;465;221;91;446
+    # 516;9;91;446;191;88;465
+    # 519;9;85;370;8;92;147
+    # 520;9;92;147;7;85;370
+    # 523;9;91;446;2;92;147
+    # 524;9;92;147;4;91;446
+    # 525;9;86;28;17;92;147
+    # 526;9;92;147;13;86;28
+    # 527;9;87;48;17;92;147
+    # 528;9;92;147;14;87;48
+
+    trait :profile_key9_86_172_53 do   # 86_172
+      user_id         9
+      profile_id      86
+      name_id         28
+      relation_id     1
+      is_profile_id   172
+      is_name_id      122
+    end
+    trait :profile_key9_172_86_54 do   # 172_86
+      user_id         9
+      profile_id      172
+      name_id         122
+      relation_id     3
+      is_profile_id   86
+      is_name_id      28
+    end
+    trait :profile_key9_88_172_55 do   # 88_172
+      user_id         9
+      profile_id      88
+      name_id         465
+      relation_id     91
+      is_profile_id   172
+      is_name_id      122
+    end
+    # 1051;9;86;28;1;172;122
+    # 1052;9;172;122;3;86;28
+    # 1053;9;88;465;91;172;122
+
+
+    trait :profile_key9_172_88_56  do   # 172 88
+      user_id         9
+      profile_id      172
+      name_id         122
+      relation_id     111
+      is_profile_id   88
+      is_name_id      465
+    end
+    trait :profile_key9_85_172_57 do   # 85 172
+      user_id         9
+      profile_id      85
+      name_id         370
+      relation_id     91
+      is_profile_id   172
+      is_name_id      122
+    end
+    trait :profile_key9_172_85_58 do   # 172 85
+      user_id         9
+      profile_id      172
+      name_id         122
+      relation_id     111
+      is_profile_id   85
+      is_name_id      370
+    end
+    # 1054;9;172;122;111;88;465
+    # 1055;9;85;370;91;172;122
+    # 1056;9;172;122;111;85;370
+
+
+    trait :profile_key9_87_172_59  do   # 87_172
+      user_id         9
+      profile_id      87
+      name_id         48
+      relation_id     13
+      is_profile_id   172
+      is_name_id      122
+    end
+    trait :profile_key9_172_87_60 do   # 172_87
+      user_id         9
+      profile_id      172
+      name_id         122
+      relation_id     17
+      is_profile_id   87
+      is_name_id      48
+    end
+    trait :profile_key9_86_173_61 do   # 86_173
+      user_id         9
+      profile_id      86
+      name_id         28
+      relation_id     2
+      is_profile_id   173
+      is_name_id      82
+    end
+    # 1057;9;87;48;13;172;122
+    # 1058;9;172;122;17;87;48
+    # 1059;9;86;28;2;173;82
+
+
+    trait :profile_key9_173_86_62  do   # 173 86
+      user_id         9
+      profile_id      173
+      name_id         82
+      relation_id     3
+      is_profile_id   86
+      is_name_id      28
+    end
+    trait :profile_key9_172_173_63 do   # 172 173
+      user_id         9
+      profile_id      172
+      name_id         122
+      relation_id     8
+      is_profile_id   173
+      is_name_id      82
+    end
+    trait :profile_key9_173_172_64 do   # 173_172
+      user_id         9
+      profile_id      173
+      name_id         82
+      relation_id     7
+      is_profile_id   172
+      is_name_id      122
+    end
+    # 1060;9;173;82;3;86;28
+    # 1061;9;172;122;8;173;82
+    # 1062;9;173;82;7;172;122
+
+    trait :profile_key9_88_173_65  do   # 88 173
+      user_id         9
+      profile_id      88
+      name_id         465
+      relation_id     101
+      is_profile_id   173
+      is_name_id      82
+    end
+    trait :profile_key9_173_88_66 do   # 173 88
+      user_id         9
+      profile_id      173
+      name_id         82
+      relation_id     111
+      is_profile_id   88
+      is_name_id      465
+    end
+    trait :profile_key9_85_173_67 do   # 85_173
+      user_id         9
+      profile_id      85
+      name_id         370
+      relation_id     101
+      is_profile_id   173
+      is_name_id      82
+    end
+    # 1063;9;88;465;101;173;82
+    # 1064;9;173;82;111;88;465
+    # 1065;9;85;370;101;173;82
+
+    trait :profile_key9_173_85_68  do   # 173 85
+      user_id         9
+      profile_id      173
+      name_id         82
+      relation_id     111
+      is_profile_id   85
+      is_name_id      370
+    end
+    trait :profile_key9_87_173_69 do   # 87_173
+      user_id         9
+      profile_id      87
+      name_id         48
+      relation_id     14
+      is_profile_id   173
+      is_name_id      82
+    end
+    trait :profile_key9_173_87_70 do   # 173 87
+      user_id         9
+      profile_id      173
+      name_id         82
+      relation_id     17
+      is_profile_id   87
+      is_name_id      48
+    end
+    # 1066;9;173;82;111;85;370
+    # 1067;9;87;48;14;173;82
+    # 1068;9;173;82;17;87;48
+
+
+
+
+
+
+
 
 
     # Before Add new Profile
@@ -1897,16 +2105,12 @@ FactoryGirl.define do
     # 579;10;95;48;18;100;370
     # 580;10;100;370;16;95;48
 
-
-
-
-
-
   end
 
+
+
+
 end
-
-
 
 
 

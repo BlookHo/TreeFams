@@ -20,7 +20,7 @@
 
 
   -#- if @paged_common_logs_data.blank?
-  - if @common_logs_data.blank?
+  - if @tree_all_logs.blank?
     %table
       %tr
         %td.left.grey.italic
@@ -32,7 +32,6 @@
     %h1 История развития твоего дерева
     %table
       %tr
-        -#%th Выбрать дату
         %th Лог ID
         %th Дата
         %th Автор дерева
@@ -40,23 +39,23 @@
         %th Профиль лога
         %th Имя профиля
         %th Номер лога
-        %th
+        -#%th
         %th
       -#- @paged_common_logs_data.each do |common_logs_data|
-      - @common_logs_data.each do |common_logs_data|
-        %tr{data: {common_log_id: common_logs_data.id}}
-          -#%td= common_logs_data.id
+      - @tree_all_logs.each do |tree_one_log|
+        -#%tr{data: {common_log_id: tree_one_log.id}}
+        %tr
           -#%td.rollback= common_logs_data.id
-          %td= common_logs_data.id
-          %td= common_logs_data.created_at
-          %td= common_logs_data.user_id
-          %td= common_logs_data.log_type  #
-          %td= common_logs_data.profile_id #
-          %td= Name.find(Profile.find(common_logs_data.profile_id).name_id).name #
-          %td= common_logs_data.log_id
-          %td= @text_to_js
+          %td= tree_one_log.id
+          %td= tree_one_log.created_at
+          %td= tree_one_log.user_id
+          %td= tree_one_log.log_type  #
+          %td= tree_one_log.profile_id #
+          %td= Name.find(Profile.find(tree_one_log.profile_id).name_id).name #
+          %td= tree_one_log.log_id
+          -#%td= @text_to_js
           -#%td= 'Klik'
-          %td= link_to 'Выбрать', mark_rollback_path(common_log_id: common_logs_data.id), method: :post, remote: true,  id: 'name_container', class: :messages
+          %td= link_to 'Выбрать', mark_rollback_path(common_log_id: tree_one_log.id), method: :post, remote: true,  id: 'name_container', class: :messages
 
   .point
     %h1
