@@ -65,7 +65,7 @@ class ConnectedUser < ActiveRecord::Base
         new_users_connection.connection_id = connection_id
         new_users_connection.rewrite_profile_id = rewrite_profile
         new_users_connection.overwrite_profile_id = profiles_to_destroy[index]
-        new_users_connection.save
+        # new_users_connection.save
       end
 
     else

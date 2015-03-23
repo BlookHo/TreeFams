@@ -6,18 +6,18 @@ class ConnectUsersTreesController < ApplicationController
   layout 'application.new'
 
   # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-  def connect_users(current_user_id, user_id)
-
-    if current_user_id != user_id
-      new_users_connection = ConnectedUser.new
-      new_users_connection.user_id = current_user_id
-      new_users_connection.with_user_id = user_id
-      new_users_connection.save
-    else
-      logger.info "ERROR: SimilarsConnection of Users - INVALID! Current_user=#{current_user_id.inspect} EQUALS TO user_id=#{user_id.inspect}"
-    end
-
-  end
+  # def connect_users(current_user_id, user_id)
+  #
+  #   if current_user_id != user_id
+  #     new_users_connection = ConnectedUser.new
+  #     new_users_connection.user_id = current_user_id
+  #     new_users_connection.with_user_id = user_id
+  #     new_users_connection.save
+  #   else
+  #     logger.info "ERROR: SimilarsConnection of Users - INVALID! Current_user=#{current_user_id.inspect} EQUALS TO user_id=#{user_id.inspect}"
+  #   end
+  #
+  # end
 
   # Общий метод дла накапливания массива для перезаписи профилей в таблицах
   #
@@ -119,6 +119,10 @@ class ConnectUsersTreesController < ApplicationController
 
   end
 
+
+
+
+
   # Метод дла перезаписи профилей в таблицах
   # who_found_user_id - Автор дерева, который ищет
   # where_found_user_id - Автор дерева, в котором найдено
@@ -127,7 +131,7 @@ class ConnectUsersTreesController < ApplicationController
   # who_connect_ids_arr - массив id, входящих в объед-ное дерево автора (того, кто соединяется)
   # with_who_conn_ids_ar - массив id, входящих в объед-ное дерево того, с кем соединяется автор
   #
-  def connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect_ids_arr, with_who_conn_ids_ar)
+  def connect_trees_prev(profiles_to_rewrite, profiles_to_destroy, who_connect_ids_arr, with_who_conn_ids_ar)
 
     logger.info "DEBUG IN CONNECT_TREES: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
 
@@ -194,6 +198,219 @@ class ConnectUsersTreesController < ApplicationController
 
   end
 
+
+  # Центральный метод соединения деревьев = перезапись профилей в таблицах
+  # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
+  def connection_in_tables(connection_data) #, current_user_id, user_id, connection_id)
+    # def connection_in_tables(connection_data, current_user_id, user_id, connection_id)
+
+    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+    profiles_to_destroy = connection_data[:profiles_to_destroy]
+    who_connect         = connection_data[:who_connect]
+    with_whom_connect   = connection_data[:with_whom_connect]
+    current_user_id     = connection_data[:current_user_id]
+    user_id             = connection_data[:user_id]
+    connection_id       = connection_data[:connection_id]
+
+    # [1 2] c [3]
+    # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
+    # @profiles_to_destroy: [22, 29, 27, 25, 28, 23, 24, 26]
+    # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
+    ###################################################################
+    ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
+    # connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect, with_whom_connect)
+    connect_trees(connection_data) #profiles_to_rewrite, profiles_to_destroy, who_connect, with_whom_connect)
+    ####################################################################
+    ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
+    #                          connect_users(current_user_id.to_i, user_id.to_i) # OLD!!
+
+    ConnectedUser.connect_users(connection_data) #, current_user_id, user_id, connection_id)
+    #### это и есть лог объединения - с массивами профилей!!!!
+
+    ##################################################################
+    ######## Перезапись profile_id при объединении деревьев
+    #              UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
+    ##################################################################
+
+    ######## Перезапись profile_data при объединении деревьев
+    #    ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
+    ##################################################################
+
+  end
+
+
+
+
+  # @note: Перезапись профилей в таблицах
+  # @param connection_data
+  def connect_trees(connection_data) #profiles_to_rewrite, profiles_to_destroy, who_connect_ids_arr, with_who_conn_ids_ar)
+
+    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+    profiles_to_destroy = connection_data[:profiles_to_destroy]
+    who_connect         = connection_data[:who_connect]
+    with_whom_connect   = connection_data[:with_whom_connect]
+    current_user_id     = connection_data[:current_user_id]
+    user_id             = connection_data[:user_id]
+    connection_id       = connection_data[:connection_id]
+
+    logger.info "IN connect_trees: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
+
+    #####################################################
+    # Profile.merge(profiles_to_rewrite, profiles_to_destroy)
+    #####################################################
+
+    # log_connection_tree       = update_table(connection_data, Tree)
+    # log_connection_profilekey = update_table(connection_data, ProfileKey)
+
+    #####################################################
+    update_table(connection_data, Tree)
+    update_table(connection_data, ProfileKey)
+    #####################################################
+
+    # rewrite_tree_arr1 = []
+    # rewrite_tree_arr2 = []
+    # rewrite_profilekey_arr1 = []
+    # rewrite_profilekey_arr2 = []
+
+    #########  перезапись profile_id's & update User
+    ## (остаются): profiles_to_rewrite - противоположные, найденным в поиске
+    ## (уходят): profiles_to_destroy - найден в поиске
+    # Первым параметром идут те профили, которые остаются
+
+    # for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
+    #   # меняем profile_id в match_profiles_arr на profile_id из opposite_profiles_arr
+    #   one_profile = profiles_to_destroy[arr_ind] # profile_id для замены
+    #   logger.info one_profile
+    #
+    #   with_who_conn_ids_ar.each do |one_user_in_tree|
+    #     # Получение массивов для Замены профилей в Tree
+    #     one_arr1 = get_rewrite_profiles_ids(Tree, "profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
+    #     rewrite_tree_arr1 << one_arr1 if !one_arr1.blank?
+    #     @rewrite_tree_arr1 = rewrite_tree_arr1 # DEBUGG_TO_VIEW
+    #     one_arr2 = get_rewrite_profiles_ids(Tree, "is_profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
+    #     rewrite_tree_arr2 << one_arr2 if !one_arr2.blank?
+    #     @rewrite_tree_arr2 = rewrite_tree_arr2 # DEBUGG_TO_VIEW
+    #
+    #     # Получение массивов для Замены профилей в ProfileKey
+    #     one_arr1 = get_rewrite_profiles_ids(ProfileKey, "profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
+    #     rewrite_profilekey_arr1 << one_arr1 if !one_arr1.blank?
+    #     @rewrite_profilekey_arr1 = rewrite_profilekey_arr1 # DEBUGG_TO_VIEW
+    #     one_arr2 = get_rewrite_profiles_ids(ProfileKey, "is_profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
+    #     rewrite_profilekey_arr2 << one_arr2 if !one_arr2.blank?
+    #     @rewrite_profilekey_arr2 = rewrite_profilekey_arr2 # DEBUGG_TO_VIEW
+    #   end
+    #
+    #   who_connect_ids_arr.each do |one_user_in_tree|
+    #     # Получение массивов для Замены профилей в Tree
+    #     one_arr1 = get_rewrite_profiles_ids(Tree, "profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
+    #     rewrite_tree_arr1 << one_arr1 if !one_arr1.blank?
+    #     @rewrite_tree_arr1 = rewrite_tree_arr1 # DEBUGG_TO_VIEW
+    #     one_arr2 = get_rewrite_profiles_ids(Tree, "is_profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
+    #     rewrite_tree_arr2 << one_arr2 if !one_arr2.blank?
+    #     @rewrite_tree_arr2 = rewrite_tree_arr2 # DEBUGG_TO_VIEW
+    #
+    #     # Получение массивов для Замены профилей в ProfileKey
+    #     one_arr1 = get_rewrite_profiles_ids(ProfileKey, "profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
+    #     rewrite_profilekey_arr1 << one_arr1 if !one_arr1.blank?
+    #     @rewrite_profilekey_arr1 = rewrite_profilekey_arr1 # DEBUGG_TO_VIEW
+    #     one_arr2 = get_rewrite_profiles_ids(ProfileKey, "is_profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
+    #     rewrite_profilekey_arr2 << one_arr2 if !one_arr2.blank?
+    #     @rewrite_profilekey_arr2 = rewrite_profilekey_arr2 # DEBUGG_TO_VIEW
+    #   end
+    #
+    # end
+    #
+    # save_rewrite_profiles_ids(Tree, rewrite_tree_arr1 + rewrite_tree_arr2)
+    # @save_in_tree = @saved_profiles_arr # DEBUGG_TO_VIEW
+    # @save_in_tree_LEN = @saved_profiles_arr.length if !@save_in_tree.blank? # DEBUGG_TO_VIEW
+    # save_rewrite_profiles_ids(ProfileKey, rewrite_profilekey_arr1 + rewrite_profilekey_arr2)
+    # @save_in_profilekey = @saved_profiles_arr # DEBUGG_TO_VIEW
+    # @save_in_profilekey_LEN = @saved_profiles_arr.length if !@save_in_profilekey.blank? # DEBUGG_TO_VIEW
+
+  end
+
+  # перезапись значений в полях одной таблицы
+  # лог не формируем как в похожих, т.к он уже сформирован в табл.Connected_User
+  def update_table(connection_data, table )
+    # log_connection = []
+
+    # ТЕСТ
+    # name_of_table = table.table_name
+    # logger.info "*** In module SimilarsConnection update_table: name_of_table = #{name_of_table.inspect} "
+    # model = name_of_table.classify.constantize
+    # logger.info "*** In module SimilarsConnection update_table: model = #{model.inspect} "
+    # logger.info "*** In module SimilarsConnection update_table: table = #{table.inspect} "
+
+    connection_data[:table_name] = table.table_name # DEBUGG_TO
+    logger.info "IN connect_trees update_table: connection_data[:table_name] = #{connection_data[:table_name]}" # DEBUGG_TO
+
+    ['profile_id', 'is_profile_id'].each do |table_field|
+      table_update_data = { table: table, table_field: table_field}
+      # log_connection = update_field(connection_data, table_update_data , log_connection)
+      update_field(connection_data, table_update_data)
+    end
+    # log_connection
+  end
+
+
+  # Делаем общий массив юзеров, для update_field
+  # /
+  def users_connecting_scope(who_connect, with_whom_connect)
+    all_users_to_connect = who_connect + with_whom_connect
+    logger.info "IN connect_trees users_connecting_scope: all_users_to_connect = #{all_users_to_connect}"
+    all_users_to_connect
+  end
+
+  # перезапись значений в одном поле одной таблицы
+  # profiles_to_destroy[arr_ind] - один profile_id для замены
+  # profiles_to_rewrite[arr_ind] - один profile_id, которым меняем
+  def update_field(connection_data, table_update_data)
+
+    who_connect         = connection_data[:who_connect]
+    with_whom_connect   = connection_data[:with_whom_connect]
+    # table_name          = connection_data[:table_name]
+    # current_user_id     = connection_data[:current_user_id]
+    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+    profiles_to_destroy = connection_data[:profiles_to_destroy]
+    # connected_users_arr = connection_data[:connected_users_arr]
+    # connection_id       = connection_data[:connection_id]
+
+    table       = table_update_data[:table]
+    table_field = table_update_data[:table_field]
+
+    all_users_to_connect = users_connecting_scope(who_connect, with_whom_connect)
+
+    for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
+      rows_to_update = table.where(:user_id => all_users_to_connect)
+                            .where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
+      unless rows_to_update.blank?
+        rows_to_update.each do |rewrite_row|
+
+          # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
+        #  rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
+
+          logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, #{rewrite_row.profile_id},
+                          #{rewrite_row.is_profile_id} "
+          logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, #{profiles_to_rewrite[arr_ind]} "
+
+          # one_connection_data = { connected_at: connection_id,              # int
+          #                         current_user_id: current_user_id,        # int
+          #                         table_name: table_name,                  # string
+          #                         table_row: rewrite_row.id,            # int
+          #                         field: table_field,                 # string
+          #                         written: profiles_to_rewrite[arr_ind],        # int
+          #                         overwritten: profiles_to_destroy[arr_ind] }        # int
+          #
+          # log_connection << SimilarsLog.new(one_connection_data)
+
+        end
+
+      end
+
+    end
+    # log_connection
+
+  end
 
 
   # Получение стартового Хэша для объединения профилей на основе:
@@ -538,41 +755,6 @@ class ConnectUsersTreesController < ApplicationController
       redirect_to show_user_requests_path # To: Просмотр Ваших оставшихся запросов'
       # flash - no connection requests data in table
     end
-  end
-
-  # Центральный метод соединения деревьев = перезапись профилей в таблицах
-  # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-  def connection_in_tables(connection_data) #, current_user_id, user_id, connection_id)
-    # def connection_in_tables(connection_data, current_user_id, user_id, connection_id)
-
-    # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    # profiles_to_destroy = connection_data[:profiles_to_destroy]
-    # who_connect         = connection_data[:who_connect]
-    # with_whom_connect   = connection_data[:with_whom_connect]
-
-    # [1 2] c [3]
-    # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
-    # @profiles_to_destroy: [22, 29, 27, 25, 28, 23, 24, 26]
-    # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
-    ###################################################################
-    ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
- #                           connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect, with_whom_connect)
-    ####################################################################
-    ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-  #                          connect_users(current_user_id.to_i, user_id.to_i)
-
-    ConnectedUser.connect_users(connection_data) #, current_user_id, user_id, connection_id)
-
-    ##################################################################
-    ######## Перезапись profile_id при объединении деревьев
- #              UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
-    ##################################################################
-
-
-    ######## Перезапись profile_data при объединении деревьев
-#    ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
-    ##################################################################
-
   end
 
 
