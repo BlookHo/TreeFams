@@ -2043,12 +2043,6 @@ FactoryGirl.define do
 
 
 
-
-
-
-
-
-
     # Before Add new Profile
     # tree #10 Darja
 
@@ -2108,6 +2102,719 @@ FactoryGirl.define do
   end
 
 
+# For Connection_Trees TEST
+#   id  user prof name rel is_pr is_nm
+  factory :connection_profile_keys, class: ProfileKey  do  # 17  2
+    user_id         1
+    profile_id      17
+    name_id         28
+    relation_id     1
+    is_profile_id   2
+    is_name_id      122
+
+    trait :connect_profile_key_1_2 do   # 2   17
+      user_id         1
+      profile_id      2
+      name_id         122
+      relation_id     3
+      is_profile_id   17
+      is_name_id      28
+    end
+    trait :connect_profile_key_1_3   do   # 17  3
+      user_id         1
+      profile_id      17
+      name_id         28
+      relation_id     2
+      is_profile_id   3
+      is_name_id      82
+    end
+  # 1;1;17;28;1;2;122
+  # 2;1;2;122;3;17;28
+  # 3;1;17;28;2;3;82
+
+
+    trait :connect_profile_key_1_4   do   # 3  17
+      user_id         1
+      profile_id      3
+      name_id         82
+      relation_id     3
+      is_profile_id   17
+      is_name_id      28
+    end
+    trait :connect_profile_key_1_5   do   # 2   3
+      user_id         1
+      profile_id      2
+      name_id         122
+      relation_id     8
+      is_profile_id   3
+      is_name_id      82
+    end
+    trait :connect_profile_key_1_6   do   # 3   2
+      user_id         1
+      profile_id      3
+      name_id         82
+      relation_id     7
+      is_profile_id   2
+      is_name_id      122
+    end
+  # 4;1;3;82;3;17;28
+  # 5;1;2;122;8;3;82
+  # 6;1;3;82;7;2;122
+
+
+    trait :connect_profile_key_1_7   do   # 17 15
+      user_id         1
+      profile_id      17
+      name_id         28
+      relation_id     3
+      is_profile_id   15
+      is_name_id      370
+    end
+    trait :connect_profile_key_1_8   do   # 15  17
+      user_id         1
+      profile_id      15
+      name_id         370
+      relation_id     1
+      is_profile_id   17
+      is_name_id      28
+    end
+    trait :connect_profile_key_1_9   do   # 2   15
+      user_id         1
+      profile_id      2
+      name_id         122
+      relation_id     111
+      is_profile_id   15
+      is_name_id      370
+    end
+  # 7;1;17;28;3;15;370
+  # 8;1;15;370;1;17;28
+  # 9;1;2;122;111;15;370
+
+
+    trait :connect_profile_key_1_10  do   # 15  2
+      user_id         1
+      profile_id      15
+      name_id         370
+      relation_id     91
+      is_profile_id   2
+      is_name_id      122
+    end
+    trait :connect_profile_key_1_11  do   # 3   15
+      user_id         1
+      profile_id      3
+      name_id         82
+      relation_id     111
+      is_profile_id   15
+      is_name_id      370
+    end
+    trait :connect_profile_key_1_12  do   # 15  3
+      user_id         1
+      profile_id      15
+      name_id         370
+      relation_id     101
+      is_profile_id   3
+      is_name_id      82
+    end
+  # 10;1;15;370;91;2;122
+  # 11;1;3;82;111;15;370
+  # 12;1;15;370;101;3;82
+
+    trait :connect_profile_key_1_13  do   # 17  16
+      user_id         1
+      profile_id      17
+      name_id         28
+      relation_id     3
+      is_profile_id   16
+      is_name_id      465
+    end
+    trait :connect_profile_key_1_14  do   # 16  17
+      user_id         1
+      profile_id      16
+      name_id         465
+      relation_id     1
+      is_profile_id   17
+      is_name_id      28
+    end
+    trait :connect_profile_key_1_15  do   # 15  16
+      user_id         1
+      profile_id      15
+      name_id         370
+      relation_id     5
+      is_profile_id   16
+      is_name_id      465
+    end
+  # 13;1;17;28;3;16;465
+  # 14;1;16;465;1;17;28
+  # 15;1;15;370;5;16;465
+
+
+    trait :connect_profile_key_1_16  do   # 16  15
+      user_id         1
+      profile_id      16
+      name_id         465
+      relation_id     5
+      is_profile_id   15
+      is_name_id      370
+    end
+    trait :connect_profile_key_1_17  do   # 2   16
+      user_id         1
+      profile_id      2
+      name_id         122
+      relation_id     111
+      is_profile_id   16
+      is_name_id      465
+    end
+    trait :connect_profile_key_1_18  do   # 16  2
+      user_id         1
+      profile_id      16
+      name_id         465
+      relation_id     91
+      is_profile_id   2
+      is_name_id      122
+    end
+  # 16;1;16;465;5;15;370
+  # 17;1;2;122;111;16;465
+  # 18;1;16;465;91;2;122
+
+
+    trait :connect_profile_key_1_19  do   #  3  16
+      user_id         1
+      profile_id      3
+      name_id         82
+      relation_id     111
+      is_profile_id   16
+      is_name_id      465
+    end
+    trait :connect_profile_key_1_20  do   # 16  3
+      user_id         1
+      profile_id      16
+      name_id         465
+      relation_id     101
+      is_profile_id   3
+      is_name_id      82
+    end
+    trait :connect_profile_key_1_21  do   # 17  11
+      user_id         1
+      profile_id      17
+      name_id         28
+      relation_id     8
+      is_profile_id   11
+      is_name_id      48
+    end
+  # 19;1;3;82;111;16;465
+  # 20;1;16;465;101;3;82
+  # 21;1;17;28;8;11;48
+
+
+    trait :connect_profile_key_1_22  do   # 11  17
+      user_id         1
+      profile_id      11
+      name_id         48
+      relation_id     7
+      is_profile_id   17
+      is_name_id      28
+    end
+    trait :connect_profile_key_1_23  do   # 15  11
+      user_id         1
+      profile_id      15
+      name_id         370
+      relation_id     2
+      is_profile_id   11
+      is_name_id      48
+    end
+    trait :connect_profile_key_1_24  do   # 11  15
+      user_id         1
+      profile_id      11
+      name_id         48
+      relation_id     3
+      is_profile_id   15
+      is_name_id      370
+    end
+  # 22;1;11;48;7;17;28
+  # 23;1;15;370;2;11;48
+  # 24;1;11;48;3;15;370
+
+
+    trait :connect_profile_key_1_25  do   # 16  11
+      user_id         1
+      profile_id      16
+      name_id         465
+      relation_id     2
+      is_profile_id   11
+      is_name_id      48
+    end
+    trait :connect_profile_key_1_26  do   # 11  16
+      user_id         1
+      profile_id      11
+      name_id         48
+      relation_id     3
+      is_profile_id   16
+      is_name_id      465
+    end
+    trait :connect_profile_key_1_27  do   # 2   11
+      user_id         1
+      profile_id      2
+      name_id         122
+      relation_id     17
+      is_profile_id   11
+      is_name_id      48
+    end
+  # 25;1;16;465;2;11;48
+  # 26;1;11;48;3;16;465
+  # 27;1;2;122;17;11;48
+
+
+    trait :connect_profile_key_1_28  do   # 11  2
+      user_id         1
+      profile_id      11
+      name_id         48
+      relation_id     13
+      is_profile_id   2
+      is_name_id      122
+    end
+    trait :connect_profile_key_1_29  do   # 3   11
+      user_id         1
+      profile_id      3
+      name_id         82
+      relation_id     17
+      is_profile_id   11
+      is_name_id      48
+    end
+    trait :connect_profile_key_1_30  do   # 11  3
+      user_id         1
+      profile_id      11
+      name_id         48
+      relation_id     14
+      is_profile_id   3
+      is_name_id      82
+    end
+  # 28;1;11;48;13;2;122
+  # 29;1;3;82;17;11;48
+  # 30;1;11;48;14;3;82
+
+
+    trait :connect_profile_key_1_31  do   # 2   7
+      user_id         1
+      profile_id      2
+      name_id         122
+      relation_id     1
+      is_profile_id   7
+      is_name_id      90
+    end
+    trait :connect_profile_key_1_32  do   # 7   2
+      user_id         1
+      profile_id      7
+      name_id         90
+      relation_id     3
+      is_profile_id   2
+      is_name_id      122
+    end
+    trait :connect_profile_key_1_33  do   # 17  7
+      user_id         1
+      profile_id      17
+      name_id         28
+      relation_id     91
+      is_profile_id   7
+      is_name_id      90
+    end
+  # 31;1;2;122;1;7;90
+  # 32;1;7;90;3;2;122
+  # 33;1;17;28;91;7;90
+
+
+    trait :connect_profile_key_1_34  do   # 7  17
+      user_id         1
+      profile_id      7
+      name_id         90
+      relation_id     111
+      is_profile_id   17
+      is_name_id      28
+    end
+    trait :connect_profile_key_1_35  do   # 3   7
+      user_id         1
+      profile_id      3
+      name_id         82
+      relation_id     13
+      is_profile_id   7
+      is_name_id      90
+    end
+    trait :connect_profile_key_1_36  do   # 7  3
+      user_id         1
+      profile_id      7
+      name_id         90
+      relation_id     17
+      is_profile_id   3
+      is_name_id      82
+    end
+  # 34;1;7;90;111;17;28
+  # 35;1;3;82;13;7;90
+  # 36;1;7;90;17;3;82
+
+
+    trait :connect_profile_key_1_37  do   # 2  8
+      user_id         1
+      profile_id      2
+      name_id         122
+      relation_id     2
+      is_profile_id   8
+      is_name_id      449
+    end
+    trait :connect_profile_key_1_38  do   # 8   2
+      user_id         1
+      profile_id      8
+      name_id         449
+      relation_id     3
+      is_profile_id   2
+      is_name_id      122
+    end
+    trait :connect_profile_key_1_39  do   # 7  8
+      user_id         1
+      profile_id      7
+      name_id         90
+      relation_id     8
+      is_profile_id   8
+      is_name_id      449
+    end
+  # 37;1;2;122;2;8;449
+  # 38;1;8;449;3;2;122
+  # 39;1;7;90;8;8;449
+
+
+    trait :connect_profile_key_1_40  do   # 8  7
+      user_id         1
+      profile_id      8
+      name_id         449
+      relation_id     7
+      is_profile_id   7
+      is_name_id      90
+    end
+    trait :connect_profile_key_1_41  do   # 17  8
+      user_id         1
+      profile_id      17
+      name_id         28
+      relation_id     101
+      is_profile_id   8
+      is_name_id      449
+    end
+    trait :connect_profile_key_1_42  do   # 8  17
+      user_id         1
+      profile_id      8
+      name_id         449
+      relation_id     111
+      is_profile_id   17
+      is_name_id      28
+    end
+  # 40;1;8;449;7;7;90
+  # 41;1;17;28;101;8;449
+  # 42;1;8;449;111;17;28
+
+
+    trait :connect_profile_key_1_43  do   # 3  8
+      user_id         1
+      profile_id      3
+      name_id         82
+      relation_id     14
+      is_profile_id   8
+      is_name_id      449
+    end
+    trait :connect_profile_key_1_44  do   # 8   3
+      user_id         1
+      profile_id      8
+      name_id         449
+      relation_id     17
+      is_profile_id   3
+      is_name_id      82
+    end
+    trait :connect_profile_key_1_45  do   # 3  9
+      user_id         1
+      profile_id      3
+      name_id         82
+      relation_id     1
+      is_profile_id   9
+      is_name_id      361
+    end
+  # 43;1;3;82;14;8;449
+  # 44;1;8;449;17;3;82
+  # 45;1;3;82;1;9;361
+
+
+    trait :connect_profile_key_1_46  do   # 9  3
+      user_id         1
+      profile_id      9
+      name_id         361
+      relation_id     4
+      is_profile_id   3
+      is_name_id      82
+    end
+    trait :connect_profile_key_1_47  do   # 17  9
+      user_id         1
+      profile_id      17
+      name_id         28
+      relation_id     92
+      is_profile_id   9
+      is_name_id      361
+    end
+    trait :connect_profile_key_1_48  do   # 9  17
+      user_id         1
+      profile_id      9
+      name_id         361
+      relation_id     112
+      is_profile_id   17
+      is_name_id      28
+    end
+  # 46;1;9;361;4;3;82
+  # 47;1;17;28;92;9;361
+  # 48;1;9;361;112;17;28
+
+
+  # 49;1;2;122;15;9;361
+  # 50;1;9;361;18;2;122
+  # 51;1;3;82;2;10;293
+
+
+  # 52;1;10;293;4;3;82
+  # 53;1;9;361;8;10;293
+  # 54;1;10;293;7;9;361
+
+
+  # 55;1;17;28;102;10;293
+  # 56;1;10;293;112;17;28
+  # 57;1;2;122;16;10;293
+
+
+  # 58;1;10;293;18;2;122
+  #
+  # 59;2;11;48;1;12;343
+  # 60;2;12;343;4;11;48
+  # 61;2;11;48;2;13;82
+
+
+  # 62;2;13;82;4;11;48
+  # 63;2;12;343;8;13;82
+  # 64;2;13;82;7;12;343
+
+
+  # 65;2;11;48;6;14;331
+  # 66;2;14;331;6;11;48
+  # 67;2;12;343;4;14;331
+
+
+  # 68;2;14;331;1;12;343
+  # 69;2;13;82;4;14;331
+  # 70;2;14;331;2;13;82
+
+
+  # 71;2;11;48;3;15;370
+  # 72;2;15;370;2;11;48
+  # 73;2;12;343;112;15;370
+
+
+  # 74;2;15;370;92;12;343
+  # 75;2;13;82;112;15;370
+  # 76;2;15;370;102;13;82
+
+
+  # 77;2;14;331;212;15;370
+  # 78;2;15;370;202;14;331
+  # 79;2;11;48;3;16;465
+
+
+  # 80;2;16;465;2;11;48
+  # 81;2;15;370;5;16;465
+  # 82;2;16;465;5;15;370
+
+
+  # 83;2;12;343;112;16;465
+  # 84;2;16;465;92;12;343
+  # 85;2;13;82;112;16;465
+
+
+  # 86;2;16;465;102;13;82
+  # 87;2;14;331;212;16;465
+  # 88;2;16;465;202;14;331
+
+
+  # 89;2;11;48;7;17;28
+  # 90;2;17;28;8;11;48
+  # 91;2;15;370;1;17;28
+
+
+  # 92;2;17;28;3;15;370
+  # 93;2;16;465;1;17;28
+  # 94;2;17;28;3;16;465
+
+
+  # 95;2;12;343;18;17;28
+  # 96;2;17;28;15;12;343
+  # 97;2;13;82;18;17;28
+
+
+  # 98;2;17;28;16;13;82
+  # 99;2;12;343;1;18;194
+  # 100;2;18;194;3;12;343
+
+
+  # 101;2;11;48;91;18;194
+  # 102;2;18;194;121;11;48
+  # 103;2;14;331;91;18;194
+
+
+  # 104;2;18;194;121;14;331
+  # 105;2;13;82;13;18;194
+  # 106;2;18;194;17;13;82
+
+
+  # 107;2;12;343;2;19;48
+  # 108;2;19;48;3;12;343
+  # 109;2;18;194;8;19;48
+
+
+  # 110;2;19;48;7;18;194
+  # 111;2;14;331;101;19;48
+  # 112;2;19;48;121;14;331
+
+
+  # 113;2;11;48;101;19;48
+  # 114;2;19;48;121;11;48
+  # 115;2;13;82;14;19;48
+
+
+  # 116;2;19;48;17;13;82
+  # 117;2;13;82;1;20;110
+  # 118;2;20;110;4;13;82
+
+
+  # 119;2;14;331;92;20;110
+  # 120;2;20;110;122;14;331
+  # 121;2;11;48;92;20;110
+
+
+  # 122;2;20;110;122;11;48
+  # 123;2;12;343;15;20;110
+  # 124;2;20;110;18;12;343
+
+
+  # 125;2;13;82;2;21;249
+  # 126;2;21;249;4;13;82
+  # 127;2;20;110;8;21;249
+
+
+  # 128;2;21;249;7;20;110
+  # 129;2;14;331;102;21;249
+  # 130;2;21;249;122;14;331
+
+
+  # 131;2;11;48;102;21;249
+  # 132;2;21;249;122;11;48
+  # 133;2;12;343;16;21;249
+
+
+  # 134;2;21;249;18;12;343
+  #
+  # 135;3;22;331;1;23;343
+  # 136;3;23;343;4;22;331
+  # 137;3;22;331;2;24;82
+
+
+  # 138;3;24;82;4;22;331
+  # 139;3;23;343;8;24;82
+  # 140;3;24;82;7;23;343
+
+
+  # 141;3;22;331;6;25;48
+  # 142;3;25;48;6;22;331
+  # 143;3;23;343;4;25;48
+
+
+  # 144;3;25;48;1;23;343
+  # 145;3;24;82;4;25;48
+  # 146;3;25;48;2;24;82
+
+
+  # 147;3;23;343;1;26;194
+  # 148;3;26;194;3;23;343
+  # 149;3;22;331;91;26;194
+
+
+  # 150;3;26;194;121;22;331
+  # 151;3;25;48;91;26;194
+  # 152;3;26;194;121;25;48
+
+
+  # 153;3;24;82;13;26;194
+  # 154;3;26;194;17;24;82
+  # 155;3;23;343;2;27;48
+
+
+  # 156;3;27;48;3;23;343
+  # 157;3;26;194;8;27;48
+  # 158;3;27;48;7;26;194
+
+
+  # 159;3;22;331;101;27;48
+  # 160;3;27;48;121;22;331
+  # 161;3;25;48;101;27;48
+
+
+  # 162;3;27;48;121;25;48
+  # 163;3;24;82;14;27;48
+  # 164;3;27;48;17;24;82
+
+
+  # 165;3;24;82;1;28;110
+  # 166;3;28;110;4;24;82
+  # 167;3;22;331;92;28;110
+
+
+  # 168;3;28;110;122;22;331
+  # 169;3;25;48;92;28;110
+  # 170;3;28;110;122;25;48
+
+
+  # 171;3;23;343;15;28;110
+  # 172;3;28;110;18;23;343
+  # 173;3;24;82;2;29;249
+
+
+  # 174;3;29;249;4;24;82
+  # 175;3;28;110;8;29;249
+  # 176;3;29;249;7;28;110
+
+
+  # 177;3;22;331;102;29;249
+  # 178;3;29;249;122;22;331
+  # 179;3;25;48;102;29;249
+
+
+  # 180;3;29;249;122;25;48
+  # 181;3;23;343;16;29;249
+  # 182;3;29;249;18;23;343
+  #
+  # 183;1;11;48;6;14;331
+  # 184;1;14;331;6;11;48
+  # 185;1;15;370;202;14;331
+
+
+  # 186;1;14;331;212;15;370
+  # 187;1;16;465;202;14;331
+  # 188;1;14;331;212;16;465
+  #
+  #   589;2;15;370;4;124;446
+  #   590;2;124;446;1;15;370
+  #   591;2;17;28;121;124;446
+
+
+  #   592;2;124;446;91;17;28
+  #   593;2;11;48;121;124;446
+  #   594;2;124;446;101;11;48
+
+
+  #   595;2;16;465;221;124;446
+  #   596;2;124;446;191;16;465
+  #
+
+
+    end
 
 
 end

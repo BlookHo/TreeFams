@@ -493,7 +493,300 @@ FactoryGirl.define do
 # 90;10;93;7;"2015-03-05 17:56:32.953397";"2015-03-05 17:56:32.953397";147;100;370;1
 
 
+# For Connection_Trees TEST
 
+    factory :connection_trees, class: Tree  do  # 17 pr2
+      user_id         1
+      profile_id      17
+      name_id         28
+      relation_id     1
+      is_profile_id   2
+      is_sex_id       1
+      is_name_id      122
+
+      trait :connect_tree_1_pr3 do   # 17 pr3
+        # user_id         1
+        # profile_id      17
+        # name_id         28
+        relation_id     2
+        is_profile_id   3
+        is_sex_id       0
+        is_name_id      82
+      end
+
+      trait :connect_tree_1_pr15 do   # 17 pr15
+        # user_id         1
+        # profile_id      17
+        # name_id         28
+        relation_id     3
+        is_profile_id   15
+        is_sex_id       1
+        is_name_id      370
+      end
+    # 1;1;17;1;"2015-01-23 07:31:58.181791";"2015-01-23 12:54:09.172659";28;2;122;1;28
+    # 2;1;17;2;"2015-01-23 07:31:58.432596";"2015-01-23 12:54:09.184552";28;3;82;0;28
+    # 3;1;17;3;"2015-01-23 07:31:58.623986";"2015-01-23 12:54:09.309687";28;15;370;1;28
+
+      trait :connect_tree_1_pr16  do   # 17 pr16
+        # user_id         1
+        # profile_id      17
+        # name_id         28
+        relation_id     3
+        is_profile_id   16
+        is_sex_id       1
+        is_name_id      465
+      end
+      trait :connect_tree_1_pr11  do   # 17 pr11
+        # user_id         1
+        # profile_id      17
+        # name_id         28
+        relation_id     8
+        is_profile_id   11
+        is_sex_id       0
+        is_name_id      48
+      end
+      trait :connect_tree_1_pr7   do   # 2  pr7
+        user_id         1
+        profile_id      2
+        name_id         122
+        relation_id     1
+        is_profile_id   7
+        is_sex_id       1
+        is_name_id      90
+      end
+    # 4;1;17;3;"2015-01-23 07:31:58.876625";"2015-01-23 12:54:09.287704";28;16;465;1;28
+    # 5;1;17;8;"2015-01-23 07:31:59.161437";"2015-01-23 12:54:09.330129";28;11;48;0;28
+    # 6;1;2;1;"2015-01-23 07:31:59.537254";"2015-01-23 07:31:59.537254";122;7;90;1;122
+
+      trait :connect_tree_1_pr8   do   # 2  pr8
+        user_id         1
+        profile_id      2
+        name_id         122
+        relation_id     2
+        is_profile_id   8
+        is_sex_id       0
+        is_name_id      449
+      end
+      trait :connect_tree_1_pr9   do   # 3  pr9
+        # user_id         1
+         profile_id      3
+         name_id         82
+        relation_id     1
+        is_profile_id   9
+        is_sex_id       1
+        is_name_id      361
+      end
+      trait :connect_tree_1_pr10  do   # 3  pr10
+        # user_id         1
+        profile_id      3
+        name_id         82
+        relation_id     2
+        is_profile_id   10
+        is_sex_id       0
+        is_name_id      293
+      end
+    # 7;1;2;2;"2015-01-23 07:31:59.957739";"2015-01-23 07:31:59.957739";122;8;449;0;122
+    # 8;1;3;1;"2015-01-23 07:32:00.256718";"2015-01-23 07:32:00.256718";82;9;361;1;82
+    # 9;1;3;2;"2015-01-23 07:32:00.527583";"2015-01-23 07:32:00.527583";82;10;293;0;82
+
+      trait :connect_tree_2_pr12  do   # 11 pr12
+        user_id         2
+        profile_id      11
+        name_id         48
+        relation_id     1
+        is_profile_id   12
+        is_sex_id       1
+        is_name_id      343
+      end
+      trait :connect_tree_2_pr13  do   # 11 pr13
+        user_id         2
+        profile_id      11
+        name_id         48
+        relation_id     2
+        is_profile_id   13
+        is_sex_id       0
+        is_name_id      82
+      end
+      trait :connect_tree_2_pr14  do   # 11 pr14
+        user_id         2
+        profile_id      11
+        name_id         48
+        relation_id     6
+        is_profile_id   14
+        is_sex_id       0
+        is_name_id      331
+      end
+    # 10;2;11;1;"2015-01-23 07:37:32.888523";"2015-01-23 07:37:32.888523";48;12;343;1;516
+    # 11;2;11;2;"2015-01-23 07:37:33.14772";"2015-01-23 07:37:33.14772";48;13;82;0;516
+    # 12;2;11;6;"2015-01-23 07:37:33.32065";"2015-01-23 07:37:33.32065";48;14;331;0;516
+
+      trait :connect_tree_2_pr15  do   # 11 pr15
+        user_id         2
+        profile_id      11
+        name_id         48
+        relation_id     3
+        is_profile_id   15
+        is_sex_id       1
+        is_name_id      370
+      end
+      trait :connect_tree_2_pr16  do   # 11 pr16
+        user_id         2
+        profile_id      11
+        name_id         48
+        relation_id     3
+        is_profile_id   16
+        is_sex_id       1
+        is_name_id      465
+      end
+      trait :connect_tree_2_pr17  do   # 11 pr17
+        user_id         2
+        profile_id      11
+        name_id         48
+        relation_id     7
+        is_profile_id   17
+        is_sex_id       1
+        is_name_id      28
+      end
+    # 13;2;11;3;"2015-01-23 07:37:33.580355";"2015-01-23 07:37:33.580355";48;15;370;1;516
+    # 14;2;11;3;"2015-01-23 07:37:33.848398";"2015-01-23 07:37:33.848398";48;16;465;1;516
+    # 15;2;11;7;"2015-01-23 07:37:34.161849";"2015-01-23 07:37:34.161849";48;17;28;1;516
+
+      trait :connect_tree_2_pr18  do   # 12 pr18
+        user_id         2
+        profile_id      12
+        name_id         343
+        relation_id     1
+        is_profile_id   18
+        is_sex_id       1
+        is_name_id      194
+      end
+      trait :connect_tree_2_pr19  do   # 12 pr19
+        user_id         2
+        profile_id      12
+        name_id         343
+        relation_id     2
+        is_profile_id   19
+        is_sex_id       0
+        is_name_id      48
+      end
+      trait :connect_tree_2_pr20  do   # 13 pr20
+        user_id         2
+        profile_id      13
+        name_id         82
+        relation_id     1
+        is_profile_id   20
+        is_sex_id       1
+        is_name_id      110
+      end
+    # 16;2;12;1;"2015-01-23 07:37:34.483795";"2015-01-23 07:37:34.483795";343;18;194;1;343
+    # 17;2;12;2;"2015-01-23 07:37:34.800557";"2015-01-23 07:37:34.800557";343;19;48;0;343
+    # 18;2;13;1;"2015-01-23 07:37:35.251939";"2015-01-23 07:37:35.251939";82;20;110;1;82
+
+      trait :connect_tree_2_pr21  do   # 13 pr21
+        user_id         2
+        profile_id      13
+        name_id         82
+        relation_id     2
+        is_profile_id   21
+        is_sex_id       0
+        is_name_id      249
+      end
+      trait :connect_tree_3_pr23  do   # 22 pr23
+        user_id         3
+        profile_id      22
+        name_id         331
+        relation_id     1
+        is_profile_id   23
+        is_sex_id       1
+        is_name_id      343
+      end
+      trait :connect_tree_3_pr24  do   # 22 pr24
+        user_id         3
+        profile_id      22
+        name_id         331
+        relation_id     2
+        is_profile_id   24
+        is_sex_id       0
+        is_name_id      82
+      end
+    # 19;2;13;2;"2015-01-23 07:37:35.545505";"2015-01-23 07:37:35.545505";82;21;249;0;82
+    # 20;3;22;1;"2015-01-23 07:47:59.896943";"2015-01-23 07:47:59.896943";331;23;343;1;331
+    # 21;3;22;2;"2015-01-23 07:48:00.037166";"2015-01-23 07:48:00.037166";331;24;82;0;331
+
+      trait :connect_tree_3_pr25  do   # 22 pr25
+        user_id         3
+        profile_id      22
+        name_id         331
+        relation_id     6
+        is_profile_id   25
+        is_sex_id       0
+        is_name_id      48
+      end
+      trait :connect_tree_3_pr26  do   # 23 pr26
+        user_id         3
+        profile_id      23
+        name_id         343
+        relation_id     1
+        is_profile_id   26
+        is_sex_id       1
+        is_name_id      194
+      end
+      trait :connect_tree_3_pr27  do   # 23 pr27
+        user_id         3
+        profile_id      23
+        name_id         343
+        relation_id     2
+        is_profile_id   27
+        is_sex_id       0
+        is_name_id      48
+      end
+    # 22;3;22;6;"2015-01-23 07:48:00.232801";"2015-01-23 07:48:00.232801";331;25;48;0;331
+    # 23;3;23;1;"2015-01-23 07:48:00.483977";"2015-01-23 07:48:00.483977";343;26;194;1;343
+    # 24;3;23;2;"2015-01-23 07:48:00.775523";"2015-01-23 07:48:00.775523";343;27;48;0;343
+
+      trait :connect_tree_3_pr28  do   # 24 pr28
+        user_id         3
+        profile_id      24
+        name_id         82
+        relation_id     1
+        is_profile_id   28
+        is_sex_id       1
+        is_name_id      110
+      end
+      trait :connect_tree_3_pr29  do   # 24 pr29
+        user_id         3
+        profile_id      24
+        name_id         82
+        relation_id     2
+        is_profile_id   29
+        is_sex_id       0
+        is_name_id      249
+      end
+      trait :connect_tree_1_pr14  do   # 11 pr14
+        user_id         1
+        profile_id      11
+        name_id         48
+        relation_id     6
+        is_profile_id   14
+        is_sex_id       0
+        is_name_id      331
+      end
+    # 25;3;24;1;"2015-01-23 07:48:01.117288";"2015-01-23 07:48:01.117288";82;28;110;1;82
+    # 26;3;24;2;"2015-01-23 07:48:01.404621";"2015-01-23 07:48:01.404621";82;29;249;0;82
+    # 27;1;11;6;"2015-01-23 12:50:28.11907";"2015-01-23 12:54:09.353308";48;14;331;0;516
+
+      trait :connect_tree_2_pr124 do   # 15 pr124
+        user_id         2
+        profile_id      15
+        name_id         370
+        relation_id     4
+        is_profile_id   124
+        is_sex_id       0
+        is_name_id      446
+      end
+    # 92;2;15;4;"2015-03-14 11:11:17.977755";"2015-03-14 11:11:17.977755";370;124;446;0;370
+
+    end
 
   end
 

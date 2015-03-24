@@ -22,6 +22,21 @@ FactoryGirl.define do
       name    "Валентина"
       sex_id  0
     end
+    trait :name_90 do
+      id      90
+      name    "Василий"
+      sex_id  1
+    end
+    trait :name_97 do
+      id      97
+      name    "Вера"
+      sex_id  0
+    end
+    trait :name_110 do
+      id      110
+      name    "Владимир"
+      sex_id  1
+    end
     trait :name_122 do
       id      122
       name    "Вячеслав"
@@ -35,6 +50,26 @@ FactoryGirl.define do
     trait :name_173 do
       id      173
       name    "Елена"
+      sex_id  0
+    end
+    trait :name_194 do
+      id      194
+      name    "Иван"
+      sex_id  1
+    end
+    trait :name_249 do
+      id      249
+      name    "Ксения"
+      sex_id  0
+    end
+    trait :name_293 do
+      id      293
+      name    "Мария"
+      sex_id  0
+    end
+    trait :name_331 do
+      id      331
+      name    "Наталья"
       sex_id  0
     end
     trait :name_343 do
@@ -56,6 +91,11 @@ FactoryGirl.define do
       id      354
       name    "Ольга"
       sex_id  0
+    end
+    trait :name_361 do
+      id      361
+      name    "Павел"
+      sex_id  1
     end
     trait :name_370 do
       id      370
@@ -80,6 +120,11 @@ FactoryGirl.define do
     trait :name_446 do
       id      446
       name    "Таисия"
+      sex_id  0
+    end
+    trait :name_449 do
+      id      449
+      name    "Татьяна"
       sex_id  0
     end
     trait :name_465 do

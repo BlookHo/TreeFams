@@ -56,7 +56,7 @@ class ConnectedUser < ActiveRecord::Base
       logger.info "== In connect_users:  current_user_id = #{current_user_id}, user_id = #{user_id} "
 
       profiles_to_rewrite.each_with_index  do |rewrite_profile, index|
-
+        logger.info "== In connect_users: create_one_connection_row; index = #{index}, profiles_to_destroy[i] = #{profiles_to_destroy[index]} "
         logger.info "== In connect_users:  index = #{index}, rewrite_profile = #{rewrite_profile} "
         logger.info "== In connect_users:  index = #{index}, profiles_to_destroy[i] = #{profiles_to_destroy[index]} "
         new_users_connection = ConnectedUser.new
@@ -65,7 +65,9 @@ class ConnectedUser < ActiveRecord::Base
         new_users_connection.connection_id = connection_id
         new_users_connection.rewrite_profile_id = rewrite_profile
         new_users_connection.overwrite_profile_id = profiles_to_destroy[index]
-        # new_users_connection.save
+        #############################
+ new_users_connection.save
+        #############################
       end
 
     else
@@ -74,8 +76,6 @@ class ConnectedUser < ActiveRecord::Base
     end
 
   end
-
-
 
 
 end

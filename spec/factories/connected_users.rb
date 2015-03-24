@@ -49,6 +49,11 @@ FactoryGirl.define do
       with_user_id 4
     end
 
+    trait :correct_7_8 do
+      user_id 7
+      with_user_id 8
+    end
+
     trait :user_id_nil do
       user_id nil
     end
