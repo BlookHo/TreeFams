@@ -128,6 +128,10 @@ class User < ActiveRecord::Base
   end
 
 
+
+
+
+
   private
 
   def self.create_with_email(email)

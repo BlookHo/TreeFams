@@ -49,7 +49,7 @@ RSpec.describe ConnectedUser, :type => :model do
     end
   end
 
-  describe '- CHECK ConnectedUser Model methods', focus: true  do  #
+  describe '- CHECK ConnectedUser Model methods'  do  # , focus: true
 
     # create model data
     before {
