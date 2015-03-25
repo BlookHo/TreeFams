@@ -40,7 +40,7 @@ class ConnectedUser < ActiveRecord::Base
   #     user_id:              user_id ,#
   #     connection_id:        @connection_id } #
   #
-  def self.connect_users(connection_data) #, current_user_id, user_id, connection_id)
+  def self.set_users_connection(connection_data) #, current_user_id, user_id, connection_id)
     current_user_id     = connection_data[:current_user_id]
     user_id             = connection_data[:user_id]
 
@@ -71,7 +71,7 @@ class ConnectedUser < ActiveRecord::Base
       end
 
     else
-      logger.info "ERROR: SimilarsConnection of Users - INVALID! Current_user=#{current_user_id.inspect}
+      logger.info "ERROR: Connection of Users - INVALID! Current_user=#{current_user_id.inspect}
                    EQUALS TO user_id=#{user_id.inspect}"
     end
 

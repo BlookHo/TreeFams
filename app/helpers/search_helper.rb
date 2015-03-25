@@ -16,14 +16,14 @@ module SearchHelper
     start_hash.each_with_index do |(k, v), index|
       start_hash.each do |key, value|
         next if k == key
-        logger.info "=========== SEARCH DEBUG ========"
-        logger.info "=========== KEY"
-        logger.info key
-        logger.info start_hash[key]
-        logger.info "=========== K"
-        logger.info k
-        logger.info start_hash[k]
-        logger.info "=========== END SEARCH DEBUG ========"
+        # logger.info "=========== SEARCH DEBUG ========"
+        # logger.info "=========== KEY"
+        # logger.info key
+        # logger.info start_hash[key]
+        # logger.info "=========== K"
+        # logger.info k
+        # logger.info start_hash[k]
+        # logger.info "=========== END SEARCH DEBUG ========"
         intersection = start_hash[key] & start_hash[k]
         if duplicates_Many_to_One.has_key?(key)
           duplicates_Many_to_One[key][intersection.keys.first] = intersection[intersection.keys.first] if !intersection.empty?

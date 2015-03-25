@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   include Search   # основной метод поиска
+  include SearchHelper  # Исп-ся в Search,  SimilarsCompleteSearch
 
   include SimilarsStart          # запуск методов поиска стартовых пар похожих
   include SimilarsInitSearch     # методы поиска стартовых пар похожих
@@ -10,7 +11,6 @@ class User < ActiveRecord::Base
 
   include SimilarsHelper  # Исп-ся в Similars
 
-  include SearchHelper  # Исп-ся в Search,  SimilarsCompleteSearch
 
   include UserLock # вроде бы не используется
   include UserAccount

@@ -49,7 +49,7 @@ RSpec.describe ConnectedUser, :type => :model do
     end
   end
 
-  describe '- CHECK ConnectedUser Model methods' do
+  describe '- CHECK ConnectedUser Model methods', focus: true do  #
 
     # create model data
     before {
@@ -270,6 +270,128 @@ RSpec.describe ConnectedUser, :type => :model do
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_46)   # 9  3
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_47)   # 17  9
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_48)   # 9  17
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_49)   # 2  9
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_50)   # 9   2
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_51)   # 3  10
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_52)   # 10  3
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_53)   # 9   10
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_54)   # 10  9
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_55)   # 17  10
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_56)   # 10  17
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_57)   # 2   10
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_58)   # 10  2
+
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_59)   # 11  12
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_60)   # 12  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_61)   # 11  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_62)   # 13  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_63)   # 12  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_64)   # 13  12
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_65)   # 11  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_66)   # 14  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_67)   # 12  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_68)   # 14  12
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_69)   # 13  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_70)   # 14  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_71)   # 11  15
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_72)   # 15  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_73)   # 12  15
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_74)   # 15  12
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_75)   # 13  15
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_76)   # 15  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_77)   # 14  15
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_78)   # 15  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_79)   # 11  16
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_80)   # 16  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_81)   # 15  16
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_82)   # 16  15
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_83)   # 12  16
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_84)   # 16  12
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_85)   # 13  16
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_86)   # 16  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_87)   # 14  16
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_88)   # 16  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_89)   # 11  17
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_90)   # 17  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_91)   # 15  17
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_92)   # 17  15
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_93)   # 16  17
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_94)   # 17  16
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_95)   # 12  17
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_96)   # 17  12
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_97)   # 13  17
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_98)   # 17  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_99)   # 12  18
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_100)  # 18  12
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_101)  # 11  18
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_102)  # 18  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_103)  # 14  18
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_104)  # 18  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_105)  # 13  18
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_106)  # 18  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_107)  # 12  19
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_108)  # 19  12
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_109)  # 18  19
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_110)  # 19  18
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_111)  # 14  19
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_112)  # 19  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_113)  # 11  19
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_114)  # 19  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_115)  # 13  19
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_116)  # 19  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_117)  # 13  20
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_118)  # 20  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_119)  # 14  20
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_120)  # 20  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_121)  # 11  20
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_122)  # 20  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_123)  # 12  20
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_124)  # 20  12
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_125)  # 13  21
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_126)  # 21  13
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_127)  # 20  21
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_128)  # 21  20
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_129)  # 14  21
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_130)  # 21  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_131)  # 11  21
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_132)  # 21  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_133)  # 12  21
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_134)  # 21  12
+
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_135)  # 22  23
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_136)  # 23  22
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_137)  # 22  24
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_138)  # 24  22
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_139)  # 23  24
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_140)  # 24  23
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_141)  # 22  25
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_142)  # 25  22
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_143)  # 23  25
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_144)  # 25  23
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_145)  # 24  25
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_146)  # 25  24
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_147)  # 23  26
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_148)  # 26  23
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_149)  # 22  26
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_150)  # 26  22
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_151)  # 25  26
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_152)  # 26  25
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_153)  # 24  26
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_154)  # 26  24
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_155)  # 23  27
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_156)  # 27  23
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_157)  # 26  27
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_158)  # 27  26
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_159)  # 22  27
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_160)  # 27  22
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_161)  # 25  27
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_162)  # 27  25
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_163)  # 24  27
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_164)  # 27  24
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_165)  # 24  28
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_166)  # 28  24
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_167)  # 22  28
+
 
 
 
@@ -319,7 +441,7 @@ RSpec.describe ConnectedUser, :type => :model do
         expect(connected_users).to eq([1,2])
       end
     end
-    context '- before actions - check tables values ' , focus: true do   #
+    context '- before actions - check tables values ' do   #   , focus: true
       describe '- check Profile have rows count before - Ok' do
         let(:rows_qty) {26}
         it_behaves_like :successful_profiles_rows_count
@@ -336,35 +458,11 @@ RSpec.describe ConnectedUser, :type => :model do
         let(:rows_qty) {2}
         it_behaves_like :successful_connected_users_rows_count
       end
-      # it '- check CommonLog 1st row before - Ok' do
-      #   common_log_first =  CommonLog.first
-      #   # puts "before action: trees_count = #{trees_count.inspect} \n"
-      #   expect(common_log_first.profile_id).to eq(89)
-      #   expect(common_log_first.id).to eq(1)
-      # end
-      # it '- check CommonLog 2nd row before - Ok' do
-      #   common_log_second =  CommonLog.second
-      #   # puts "before action: trees_count = #{trees_count.inspect} \n"
-      #   expect(common_log_second.profile_id).to eq(90)
-      #   expect(common_log_second.id).to eq(2)
-      # end
-      # it '- check CommonLog 3rd row before - Ok' do
-      #   common_log_third =  CommonLog.third
-      #   # puts "before action: trees_count = #{trees_count.inspect} \n"
-      #   expect(common_log_third.profile_id).to eq(172)
-      #   expect(common_log_third.id).to eq(3)
-      # end
-      # it '- check CommonLog 4th row before - Ok' do
-      #   common_log_forth =  CommonLog.find(4)
-      #   # puts "before action: trees_count = #{trees_count.inspect} \n"
-      #   expect(common_log_forth.profile_id).to eq(173)
-      #   expect(common_log_forth.id).to eq(4)
-      # end
     end
 
-    #   # from common_logs_controller.rb#rollback_logs#rollback_add_profile#rollback_add_one_profile , focus: true
-    #   describe ' Check action <rollback_add_one_profile> :' do
-    #     context '- rollback add profile = 173 - check tables values ' do
+      # from connect_users_trees_controller.rb  , focus: true
+    describe ' Check action <set_users_connection> :' do
+      context '- save in Table ConnectedUser connection data - rewrite and overwrite profiles rows ' do
     #
     #       let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 173 } }
     #       before { CommonLog.rollback_add_one_profile(add_log_data ) }
@@ -417,8 +515,8 @@ RSpec.describe ConnectedUser, :type => :model do
     #         let(:profiles_ids_arr_size) {36}
     #         it_behaves_like :successful_profile_keys_profile_ids
     #       end
-    #     end
-    #
+      end
+
     #     context '- rollback add profile = 172 - check tables values ' do
     #
     #       let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 172 } }
@@ -584,7 +682,7 @@ RSpec.describe ConnectedUser, :type => :model do
 
 
 
-    # end
+    end
 
   end
 

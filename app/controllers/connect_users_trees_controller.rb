@@ -224,7 +224,7 @@ class ConnectUsersTreesController < ApplicationController
     ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
     #                          connect_users(current_user_id.to_i, user_id.to_i) # OLD!!
 
-    ConnectedUser.connect_users(connection_data) #, current_user_id, user_id, connection_id)
+    ConnectedUser.set_users_connection(connection_data) #, current_user_id, user_id, connection_id)
     #### это и есть лог объединения - с массивами профилей!!!!
 
     ##################################################################
@@ -553,12 +553,106 @@ class ConnectUsersTreesController < ApplicationController
         logger.info "BEFORE start_search  "
         logger.info " @certain_koeff_for_connect = #{@certain_koeff_for_connect}"
 
+        # Задание на поиск от Дерева Юзера: tree_is_profiles =
+        # [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18]
+
         search_results = current_user.start_search(@certain_koeff_for_connect)
         ##############################################################################
+        logger.info " $$$$$$$$$$$$$$  After connect_users_tr_contrl: CONNECT search_results = #{search_results.inspect}"
+        #  After start_search index: results =
+        # {:connected_author_arr=>[1, 2], :qty_of_tree_profiles=>18,
+        # :profiles_relations_arr=>[
+        # {9=>{3=>4, 10=>8, 2=>18, 17=>112}},
+        # {15=>{17=>1, 11=>2, 124=>4, 16=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202}},
+        # {14=>{12=>1, 13=>2, 11=>6, 18=>91, 20=>92, 19=>101, 21=>102, 15=>212, 16=>212}},
+        # {21=>{13=>4, 20=>7, 12=>18, 11=>122, 14=>122}},
+        # {8=>{2=>3, 7=>7, 3=>17, 17=>111}},
+        # {19=>{12=>3, 18=>7, 13=>17, 11=>121, 14=>121}},
+        # {11=>{12=>1, 13=>2, 15=>3, 16=>3, 14=>6, 17=>7, 2=>13, 3=>14, 18=>91, 20=>92, 19=>101, 21=>102, 124=>121}},
+        # {7=>{2=>3, 8=>8, 3=>17, 17=>111}},
+        # {2=>{7=>1, 8=>2, 17=>3, 3=>8, 9=>15, 10=>16, 11=>17, 15=>111, 16=>111}},
+        # {20=>{13=>4, 21=>8, 12=>18, 11=>122, 14=>122}},
+        # {16=>{17=>1, 11=>2, 15=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202, 124=>221}},
+        # {10=>{3=>4, 9=>7, 2=>18, 17=>112}},
+        # {17=>{2=>1, 3=>2, 15=>3, 16=>3, 11=>8, 12=>15, 13=>16, 7=>91, 9=>92, 8=>101, 10=>102, 124=>121}},
+        # {12=>{18=>1, 19=>2, 11=>4, 14=>4, 13=>8, 20=>15, 21=>16, 17=>18, 15=>112, 16=>112}},
+        # {3=>{9=>1, 10=>2, 17=>3, 2=>7, 7=>13, 8=>14, 11=>17, 15=>111, 16=>111}},
+        # {13=>{20=>1, 21=>2, 11=>4, 14=>4, 12=>7, 18=>13, 19=>14, 17=>18, 15=>112, 16=>112}},
+        # {124=>{15=>1, 17=>91, 11=>101, 16=>191}},
+        # {18=>{12=>3, 19=>8, 13=>17, 11=>121, 14=>121}}],
+        # :profiles_found_arr=>[
+        # {9=>{}},
+        # {15=>{9=>{85=>[1, 2, 4, 5, 91, 101]}, 10=>{100=>[1, 2, 4]}, 11=>{128=>[1, 2, 5, 91, 92, 101, 102]}}},
+        # {14=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
+        # {21=>{3=>{29=>[4, 7, 18, 122, 122]}}},
+        # {8=>{}},
+        # {19=>{3=>{27=>[3, 7, 17, 121, 121]}}},
+        # {11=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}, 11=>{127=>[1, 2, 3, 3, 7, 13, 14]}, 9=>{87=>[3, 3, 7, 13, 14, 121]}, 10=>{171=>[3, 7, 121]}}},
+        # {7=>{}},
+        # {2=>{9=>{172=>[3, 8, 17, 111, 111]}, 11=>{139=>[3, 8, 17, 111, 111]}}},
+        # {20=>{3=>{28=>[4, 8, 18, 122, 122]}}},
+        # {16=>{9=>{88=>[1, 2, 5, 91, 101, 221]}, 11=>{125=>[1, 2, 5, 91, 92, 101, 102]}}},
+        # {10=>{}},
+        # {17=>{9=>{86=>[1, 2, 3, 3, 8, 121]}, 11=>{126=>[1, 2, 3, 3, 8, 15, 16]}, 10=>{170=>[3, 8, 121]}}},
+        # {12=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}, 11=>{155=>[4, 8, 18, 112, 112]}}},
+        # {3=>{9=>{173=>[3, 7, 17, 111, 111]}, 11=>{154=>[3, 7, 17, 111, 111]}}},
+        # {13=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}, 11=>{156=>[4, 7, 18, 112, 112]}}},
+        # {124=>{9=>{91=>[1, 91, 101, 191]}, 10=>{99=>[1, 91, 101]}}},
+        # {18=>{3=>{26=>[3, 8, 17, 121, 121]}}}],
+        # :uniq_profiles_pairs=>{
+        # 15=>{9=>85, 11=>128},
+        # 14=>{3=>22},
+        # 21=>{3=>29},
+        # 19=>{3=>27},
+        # 11=>{3=>25, 11=>127, 9=>87},
+        # 2=>{9=>172, 11=>139},
+        # 20=>{3=>28}, 16=>{9=>88, 11=>125},
+        # 17=>{9=>86, 11=>126},
+        # 12=>{3=>23, 11=>155},
+        # 3=>{9=>173, 11=>154},
+        # 13=>{3=>24, 11=>156},
+        # 124=>{9=>91},
+        # 18=>{3=>26}},
+        # :profiles_with_match_hash=>{
+        # 24=>7, 23=>7, 126=>7, 125=>7, 127=>7, 25=>7, 22=>7, 128=>7,
+        # 86=>6, 88=>6, 87=>6, 85=>6,
+        # 26=>5, 156=>5, 154=>5, 173=>5, 155=>5, 28=>5, 139=>5, 172=>5, 27=>5, 29=>5,
+        # 91=>4},
+        # :by_profiles=>[
+        # {:search_profile_id=>13, :found_tree_id=>3, :found_profile_id=>24, :count=>7},
+        # {:search_profile_id=>12, :found_tree_id=>3, :found_profile_id=>23, :count=>7},
+        # {:search_profile_id=>17, :found_tree_id=>11, :found_profile_id=>126, :count=>7},
+        # {:search_profile_id=>16, :found_tree_id=>11, :found_profile_id=>125, :count=>7},
+        # {:search_profile_id=>11, :found_tree_id=>11, :found_profile_id=>127, :count=>7},
+        # {:search_profile_id=>11, :found_tree_id=>3, :found_profile_id=>25, :count=>7},
+        # {:search_profile_id=>14, :found_tree_id=>3, :found_profile_id=>22, :count=>7},
+        # {:search_profile_id=>15, :found_tree_id=>11, :found_profile_id=>128, :count=>7},
+        # {:search_profile_id=>17, :found_tree_id=>9, :found_profile_id=>86, :count=>6},
+        # {:search_profile_id=>16, :found_tree_id=>9, :found_profile_id=>88, :count=>6},
+        # {:search_profile_id=>11, :found_tree_id=>9, :found_profile_id=>87, :count=>6},
+        # {:search_profile_id=>15, :found_tree_id=>9, :found_profile_id=>85, :count=>6},
+        # {:search_profile_id=>18, :found_tree_id=>3, :found_profile_id=>26, :count=>5},
+        # {:search_profile_id=>13, :found_tree_id=>11, :found_profile_id=>156, :count=>5},
+        # {:search_profile_id=>3, :found_tree_id=>11, :found_profile_id=>154, :count=>5},
+        # {:search_profile_id=>3, :found_tree_id=>9, :found_profile_id=>173, :count=>5},
+        # {:search_profile_id=>12, :found_tree_id=>11, :found_profile_id=>155, :count=>5},
+        # {:search_profile_id=>20, :found_tree_id=>3, :found_profile_id=>28, :count=>5},
+        # {:search_profile_id=>2, :found_tree_id=>11, :found_profile_id=>139, :count=>5},
+        # {:search_profile_id=>2, :found_tree_id=>9, :found_profile_id=>172, :count=>5},
+        # {:search_profile_id=>19, :found_tree_id=>3, :found_profile_id=>27, :count=>5},
+        # {:search_profile_id=>21, :found_tree_id=>3, :found_profile_id=>29, :count=>5},
+        # {:search_profile_id=>124, :found_tree_id=>9, :found_profile_id=>91, :count=>4}]
+        # :by_trees=>[
+        # {:found_tree_id=>9, :found_profile_ids=>[85, 87, 172, 88, 86, 173, 91]},
+        # {:found_tree_id=>11, :found_profile_ids=>[128, 127, 139, 125, 126, 155, 154, 156]},
+        # {:found_tree_id=>3, :found_profile_ids=>[22, 29, 27, 25, 28, 23, 24, 26]}],
+        # :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+
 
         ######## Сбор рез-тов поиска:
         uniq_profiles_pairs = search_results[:uniq_profiles_pairs]
         @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
+
         duplicates_one_to_many = search_results[:duplicates_one_to_many]
         duplicates_many_to_one = search_results[:duplicates_many_to_one]
         @duplicates_one_to_many = duplicates_one_to_many # DEBUGG_TO_VIEW
@@ -570,7 +664,8 @@ class ConnectUsersTreesController < ApplicationController
         stop_by_search_dublicates = false
         stop_by_search_dublicates = true if !duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?
         @stop_by_search_dublicates = stop_by_search_dublicates # DEBUGG_TO_VIEW
-        logger.info "ERROR - STOP connection! ЕСТЬ дублирования в поиске. stop_by_search_dublicates = #{stop_by_search_dublicates}" if !duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?
+        logger.info "ERROR - STOP connection! ЕСТЬ дублирования в поиске. stop_by_search_dublicates =
+                     #{stop_by_search_dublicates}" if !duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?
         if stop_by_search_dublicates == false # если не было дубликатов
            #  uniq_profiles_pairs = {135=>{12=>94}, 129=>{12=>110, 13=>110, 14=>104}}
           #  uniq_profiles_pairs = { 129=>{12=>110, 13=>110, 14=>104}}
@@ -582,6 +677,7 @@ class ConnectUsersTreesController < ApplicationController
           logger.info " stop_by_search_dublicates = #{stop_by_search_dublicates}, @stop_connection = #{@stop_connection}"
           logger.info "BEFORE HARD_COMPLETE_SEARCH uniq_profiles_pairs = #{uniq_profiles_pairs} "
 
+          # with_whom_connect_users_arr = [3]
           init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_pairs)
           logger.info " init_connection_hash = #{init_connection_hash}"
 
@@ -590,6 +686,8 @@ class ConnectUsersTreesController < ApplicationController
           ##### на основе исходного массива ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ - uniq_profiles_pairs -> init_connection_hash
           ##### ПОЛНОЕ Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
           #profiles_to_rewrite, profiles_to_destroy = []
+
+          # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} (pid:6800)
           profiles_to_rewrite, profiles_to_destroy = hard_complete_search(init_connection_hash)
           ##############################################################################
 
@@ -601,8 +699,10 @@ class ConnectUsersTreesController < ApplicationController
           logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_one_to_many = #{@duplicates_one_to_many} "
           logger.info "AFTER HARD_COMPLETE_SEARCH @duplicates_many_to_one = #{@duplicates_many_to_one} "
 
-          #profiles_to_destroy = [65, 66, 67, 70]
-          #profiles_to_rewrite = [651, 661, 671, 701]
+          #profiles_to_destroy = [14, 21, 19, 11, 20, 12, 13, 18]
+          #profiles_to_rewrite = [22, 29, 27, 25, 28, 23, 24, 26]
+          # @duplicates_one_to_many = {}
+          # @duplicates_many_to_one = {}.
 
           end_search_time = Time.now   # Конец отсечки времени поиска
           @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
@@ -618,8 +718,12 @@ class ConnectUsersTreesController < ApplicationController
           }
 
           # [1 2] c [3]
-          # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
-          # @profiles_to_destroy: [22, 29, 27, 25, 28, 23, 24, 26]
+
+          # In check_connection_arrs:  connection_data =
+          # {:who_connect=>[1, 2], :with_whom_connect=>[3],
+          # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+          # :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+          # :current_user_id=>2, :user_id=>"3", :connection_id=>3}
 
           ######## Контроль корректности массивов перед объединением
           stop_by_arrs = false
@@ -627,7 +731,7 @@ class ConnectUsersTreesController < ApplicationController
           if stop_by_arrs == false
             @stop_connection = false  # for view
             flash[:notice] = "Ваши деревья успешно объединены!"
-            logger.info "SimilarsConnection - GO ON! SimilarsConnection array(s) - CORRECT! stop_by_arrs = #{stop_by_arrs}, @stop_connection = #{@stop_connection}"
+            logger.info "Connection - GO ON! array(s) - CORRECT! stop_by_arrs = #{stop_by_arrs}, @stop_connection = #{@stop_connection}"
             connection_message = "Деревья объединяются..."
 
             ##################################################################
@@ -715,14 +819,14 @@ class ConnectUsersTreesController < ApplicationController
       if commons.blank?  # Нет пересечения commons=[]- общих профилей - Ок
 
         if profiles_to_rewrite.size == profiles_to_destroy.size
-          logger.info "Ok to connect. SimilarsConnection array(s) - Equal. Size = #{profiles_to_rewrite.size}."
+          logger.info "Ok to connect. Connection array(s) - Equal. Size = #{profiles_to_rewrite.size}."
 
           # Проверка найденных массивов перезаписи перед объединением - на повторы
           complete_dubles_hash = check_duplications(profiles_to_rewrite, profiles_to_destroy)
 
           if complete_dubles_hash.empty? # Если НЕТ дублирования в массивах
-            connection_message = "Ok to connect. НЕТ Дублирований in SimilarsConnection array(s) "
-            logger.info "Ok to connect. НЕТ Дублирований in SimilarsConnection array(s).  complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
+            connection_message = "Ok to connect. НЕТ Дублирований in Connection array(s) "
+            logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).  complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
           else
             connection_message = "ERROR: Объединение остановлено! ЕСТЬ дублирования в массивах:"
             logger.info "ERROR: STOP connection! ЕСТЬ дублирования в массивах: complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
@@ -744,7 +848,7 @@ class ConnectUsersTreesController < ApplicationController
 
     else
       connection_message = "Объединение остановлено, т.к. недостаточно отношений между профилями. (Массивы объединения - пустые)"
-      logger.info "ERROR: SimilarsConnection array(s) - blank! connection_message = #{connection_message};."
+      logger.info "ERROR: Connection array(s) - blank! connection_message = #{connection_message};."
       stop_by_arrs = true
     end
 
