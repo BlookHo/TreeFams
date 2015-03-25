@@ -42,6 +42,10 @@ FactoryGirl.define do
     trait :correct do
       user_id 1
       with_user_id 2
+      connected             true
+      connection_id         1
+      rewrite_profile_id    85
+      overwrite_profile_id  101
     end
 
     trait :correct_3_4 do
@@ -52,6 +56,10 @@ FactoryGirl.define do
     trait :correct_7_8 do
       user_id 7
       with_user_id 8
+      connected             true
+      connection_id         2
+      rewrite_profile_id    66
+      overwrite_profile_id  100
     end
 
     trait :user_id_nil do

@@ -504,7 +504,7 @@ class ConnectUsersTreesController < ApplicationController
     end
 
     current_user_id = current_user.id #
-    user_id = params[:user_id_to_connect] # From view
+    user_id = params[:user_id_to_connect].to_i # From view
 
     profile_current_user = current_user.profile_id #
     profile_user_id = User.find(user_id).profile_id  #
@@ -716,16 +716,18 @@ class ConnectUsersTreesController < ApplicationController
               user_id:              user_id ,#
               connection_id:        @connection_id #
           }
+          logger.info "Connection - GO ON! connection_data = #{connection_data}"
 
           # [1 2] c [3]
 
           # In check_connection_arrs:  connection_data =
-          # {:who_connect=>[1, 2], :with_whom_connect=>[3],
-          # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
-          # :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
-          # :current_user_id=>2, :user_id=>"3", :connection_id=>3}
 
-          ######## Контроль корректности массивов перед объединением
+           # connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
+           #                    :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+           #                    :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26]
+           # , :current_user_id=>2, :user_id=>3, :connection_id=>3}
+
+           ######## Контроль корректности массивов перед объединением
           stop_by_arrs = false
           stop_by_arrs, connection_message = check_connection_arrs(connection_data)
           if stop_by_arrs == false

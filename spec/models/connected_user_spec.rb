@@ -49,7 +49,7 @@ RSpec.describe ConnectedUser, :type => :model do
     end
   end
 
-  describe '- CHECK ConnectedUser Model methods', focus: true do  #
+  describe '- CHECK ConnectedUser Model methods', focus: true  do  #
 
     # create model data
     before {
@@ -391,7 +391,37 @@ RSpec.describe ConnectedUser, :type => :model do
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_165)  # 24  28
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_166)  # 28  24
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_167)  # 22  28
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_168)  # 28  22
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_169)  # 25  28
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_170)  # 28  25
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_171)  # 23  28
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_172)  # 28  23
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_173)  # 24  29
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_174)  # 29  24
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_175)  # 28  29
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_176)  # 29  28
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_177)  # 22  29
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_178)  # 29  22
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_179)  # 25  29
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_180)  # 29  25
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_181)  # 23  29
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_3_182)  # 29  23
 
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_183)  # 11  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_184)  # 14  11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_185)  # 15  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_186)  # 14  15
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_187)  # 16  14
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_188)  # 14  16
+
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_189)  # 15  124
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_190)  # 124 15
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_191)  # 17  124
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_192)  # 124 17
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_193)  # 11  124
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_194)  # 124 11
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_195)  # 16  124
+      FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_196)  # 124 16
 
 
 
@@ -451,8 +481,8 @@ RSpec.describe ConnectedUser, :type => :model do
         it_behaves_like :successful_tree_rows_count
       end
       describe '- check ProfileKey have rows count before - Ok' do
-        # let(:rows_qty) {46}
-        # it_behaves_like :successful_profile_keys_rows_count
+        let(:rows_qty) {196}
+        it_behaves_like :successful_profile_keys_rows_count
       end
       describe '- check ConnectedUser have rows count before - Ok' do
         let(:rows_qty) {2}
@@ -460,227 +490,37 @@ RSpec.describe ConnectedUser, :type => :model do
       end
     end
 
-      # from connect_users_trees_controller.rb  , focus: true
-    describe ' Check action <set_users_connection> :' do
+      # from connect_users_trees_controller.rb
+    describe ' Check action <set_users_connection> :'  do  # , focus: true
       context '- save in Table ConnectedUser connection data - rewrite and overwrite profiles rows ' do
-    #
-    #       let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 173 } }
-    #       before { CommonLog.rollback_add_one_profile(add_log_data ) }
-    #
-    #       describe '- check CommonLog have rows count - Ok' do
-    #         let(:rows_qty) {3}
-    #         it_behaves_like :successful_common_logs_rows_count
-    #       end
-    #       it '- check CommonLog 1st row - Ok' do
-    #         common_log_first =  CommonLog.first
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_first.profile_id).to eq(89)
-    #         expect(common_log_first.id).to eq(1)
-    #       end
-    #       it '- check CommonLog 2nd row - Ok' do
-    #         common_log_second =  CommonLog.second
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_second.profile_id).to eq(90)
-    #         expect(common_log_second.id).to eq(2)
-    #       end
-    #       it '- check CommonLog 3rd row - Ok' do
-    #         common_log_third =  CommonLog.third
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_third.profile_id).to eq(172)
-    #         expect(common_log_third.id).to eq(3)
-    #       end
-    #       describe '- check Tree have rows count - Ok' do
-    #         let(:rows_qty) {6}
-    #         it_behaves_like :successful_tree_rows_count
-    #       end
-    #       describe '- check ProfileKey have rows count - Ok' do
-    #         let(:rows_qty) {36}
-    #         it_behaves_like :successful_profile_keys_rows_count
-    #       end
-    #       describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
-    #         let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 13, 14, 17, 17, 17,
-    #                                   91, 91, 91, 101, 111, 111, 121, 121, 191, 221]}
-    #         let(:relations_arr_size) {36}
-    #         it_behaves_like :successful_profile_keys_relation_ids
-    #       end
-    #       describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
-    #         let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 13, 14, 17, 17, 17,
-    #                                   91, 91, 91, 101, 111, 111, 121, 121, 191, 221]}
-    #         let(:relations_arr_size) {36}
-    #         it_behaves_like :successful_profile_keys_relation_ids
-    #       end
-    #       describe '- check all profile_ids generated in ProfileKey rows - Ok' do
-    #         let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 88, 88, 88,
-    #                                  88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 172, 172, 172, 172]}
-    #         let(:profiles_ids_arr_size) {36}
-    #         it_behaves_like :successful_profile_keys_profile_ids
-    #       end
+
+        # connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
+        #                    :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+        #                    :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+        #                    :current_user_id=>2, :user_id=>3, :connection_id=>3}
+
+        let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
+                                 :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
+                                 :profiles_to_destroy => [22, 29, 27, 25, 28, 23, 24, 26],
+                                 :current_user_id => 2, :user_id => 3,:connection_id => 3 } }
+        before { ConnectedUser.set_users_connection(connection_data ) }
+
+        describe '- check ConnectedUser have rows count before - Ok' do
+          let(:rows_qty) {10}
+          it_behaves_like :successful_connected_users_rows_count
+        end
+        describe '- check ConnectedUser rewrite_profile_ids generated - Ok' do
+          let(:rewrite_profile_ids_arr) {[11, 12, 13, 14, 18, 19, 20, 21, 66, 85]}
+          let(:rewrite_profile_ids_arr_size) {10}
+          it_behaves_like :successful_connected_users_rewrite_profile_ids
+        end
+        describe '- check ConnectedUser overwrite_profile_ids generated - Ok' do
+          let(:overwrite_profile_ids_arr) {[22, 23, 24, 25, 26, 27, 28, 29, 100, 101]}
+          let(:overwrite_profile_ids_arr_size) {10}
+          it_behaves_like :successful_connected_users_overwrite_profile_ids
+        end
+
       end
-
-    #     context '- rollback add profile = 172 - check tables values ' do
-    #
-    #       let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 172 } }
-    #       before { CommonLog.rollback_add_one_profile(add_log_data ) }
-    #
-    #       describe '- check CommonLog have rows count - Ok' do
-    #         let(:rows_qty) {3}
-    #         it_behaves_like :successful_common_logs_rows_count
-    #       end
-    #       it '- check CommonLog 1st row - Ok' do
-    #         common_log_first =  CommonLog.first
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_first.profile_id).to eq(89) # got profile_id
-    #         expect(common_log_first.id).to eq(1) # got id rows of CommonLog
-    #       end
-    #       it '- check CommonLog 2nd row - Ok' do
-    #         common_log_second =  CommonLog.second
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_second.profile_id).to eq(90)
-    #         expect(common_log_second.id).to eq(2)
-    #       end
-    #       it '- check CommonLog 3rd row - Ok' do
-    #         common_log_third =  CommonLog.third
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_third.profile_id).to eq(173)
-    #         expect(common_log_third.id).to eq(4)
-    #       end
-    #       describe '- check Tree have rows count - Ok' do
-    #         let(:rows_qty) {6}
-    #         it_behaves_like :successful_tree_rows_count
-    #       end
-    #       describe '- check ProfileKey have rows count - Ok' do
-    #         let(:rows_qty) {36}
-    #         it_behaves_like :successful_profile_keys_rows_count
-    #       end
-    #       describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
-    #         let(:relations_ids_arr) {[1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 14, 14, 17, 17, 17,
-    #                                   91, 101, 101, 101, 111, 111, 121, 121, 191, 221]}
-    #         let(:relations_arr_size) {36}
-    #         it_behaves_like :successful_profile_keys_relation_ids
-    #       end
-    #       describe '- check all profile_ids generated in ProfileKey rows - Ok' do
-    #         let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 88, 88, 88,
-    #                                  88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 173, 173, 173, 173]}
-    #         let(:profiles_ids_arr_size) {36}
-    #         it_behaves_like :successful_profile_keys_profile_ids
-    #       end
-    #     end
-    #
-    #   end
-    #
-    #   describe ' Check action <rollback_destroy_one_profile> :' do
-    #     context '- rollback destroy profile = 90 - check tables values ' do
-    #
-    #       let(:destroy_log_data) { {:current_user => current_user_9, :log_type => 2, :profile_id => 90,
-    #                                 :base_profile_id => 85, :relation_id => 3   } }
-    #       before { CommonLog.rollback_add_one_profile(destroy_log_data) }
-    #
-    #       describe '- check CommonLog have rows count - Ok' do
-    #         let(:rows_qty) {3}
-    #         it_behaves_like :successful_common_logs_rows_count
-    #       end
-    #       it '- check CommonLog 1st row - Ok' do
-    #         common_log_first =  CommonLog.first
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_first.profile_id).to eq(89)
-    #         expect(common_log_first.id).to eq(1)
-    #       end
-    #       it '- check CommonLog 2nd row - Ok' do
-    #         common_log_second =  CommonLog.second
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_second.profile_id).to eq(172)
-    #         expect(common_log_second.id).to eq(3)
-    #       end
-    #       it '- check CommonLog 3rd row - Ok' do
-    #         common_log_third =  CommonLog.third
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_third.profile_id).to eq(173)
-    #         expect(common_log_third.id).to eq(4)
-    #       end
-    #       describe '- check Tree have rows count - Ok' do
-    #         let(:rows_qty) {7}
-    #         it_behaves_like :successful_tree_rows_count
-    #       end
-    #       describe '- check ProfileKey have rows count - Ok' do
-    #         let(:rows_qty) {46}
-    #         it_behaves_like :successful_profile_keys_rows_count
-    #       end
-    #       describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
-    #         let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
-    #                                   14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121, 191,
-    #                                   221]}
-    #         let(:relations_arr_size) {46}
-    #         it_behaves_like :successful_profile_keys_relation_ids
-    #       end
-    #       describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
-    #         let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
-    #                                   14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121, 191,
-    #                                   221]}
-    #         let(:relations_arr_size) {46}
-    #         it_behaves_like :successful_profile_keys_relation_ids
-    #       end
-    #       describe '- check all profile_ids generated in ProfileKey rows - Ok' do
-    #         let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 87,
-    #                                  88, 88, 88, 88, 88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172,
-    #                                  173, 173, 173, 173, 173]}
-    #         let(:profiles_ids_arr_size) {46}
-    #         it_behaves_like :successful_profile_keys_profile_ids
-    #       end
-    #     end
-    #
-    #     context '- rollback destroy profile = 89 - check tables values ' do  # , focus: true
-    #
-    #       let(:destroy_log_data) { {:current_user => current_user_9, :log_type => 2, :profile_id => 89,
-    #                                 :base_profile_id => 85, :relation_id => 6 } }
-    #       before { CommonLog.rollback_add_one_profile(destroy_log_data) }
-    #
-    #       describe '- check CommonLog have rows count - Ok' do
-    #         let(:rows_qty) {3}
-    #         it_behaves_like :successful_common_logs_rows_count
-    #       end
-    #       it '- check CommonLog 1st row - Ok' do
-    #         common_log_first =  CommonLog.first
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_first.profile_id).to eq(90) # got profile_id
-    #         expect(common_log_first.id).to eq(2) # got id rows of CommonLog
-    #       end
-    #       it '- check CommonLog 2nd row - Ok' do
-    #         common_log_second =  CommonLog.second
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_second.profile_id).to eq(172)
-    #         expect(common_log_second.id).to eq(3)
-    #       end
-    #       it '- check CommonLog 3rd row - Ok' do
-    #         common_log_third =  CommonLog.third
-    #         # puts "before action: trees_count = #{trees_count.inspect} \n"
-    #         expect(common_log_third.profile_id).to eq(173)
-    #         expect(common_log_third.id).to eq(4)
-    #       end
-    #       describe '- check Tree have rows count - Ok' do
-    #         let(:rows_qty) {7}
-    #         it_behaves_like :successful_tree_rows_count
-    #       end
-    #       describe '- check ProfileKey have rows count - Ok' do
-    #         let(:rows_qty) {46}
-    #         it_behaves_like :successful_profile_keys_rows_count
-    #       end
-    #       describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
-    #         let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
-    #                                   14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121, 191,
-    #                                   221]}
-    #         let(:relations_arr_size) {46}
-    #         it_behaves_like :successful_profile_keys_relation_ids
-    #       end
-    #       describe '- check all profile_ids generated in ProfileKey rows - Ok' do
-    #         let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 87,
-    #                                  88, 88, 88, 88, 88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172,
-    #                                  173, 173, 173, 173, 173]}
-    #         let(:profiles_ids_arr_size) {46}
-    #         it_behaves_like :successful_profile_keys_profile_ids
-    #       end
-    #     end
-
-
 
     end
 
