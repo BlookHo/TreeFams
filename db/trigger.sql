@@ -28,10 +28,26 @@ FOR EACH ROW
 EXECUTE PROCEDURE notify_trigger();
 
 
-
 -- trigger for profiles table
 CREATE TRIGGER watched_table
 AFTER INSERT OR UPDATE OR DELETE
 ON profiles
+FOR EACH ROW
+EXECUTE PROCEDURE notify_trigger();
+
+
+-- trigger for names table
+CREATE TRIGGER watched_table
+AFTER INSERT OR UPDATE OR DELETE
+ON names
+FOR EACH ROW
+EXECUTE PROCEDURE notify_trigger();
+
+
+
+-- trigger for profile_keys table
+CREATE TRIGGER watched_table
+AFTER INSERT OR UPDATE OR DELETE
+ON profile_keys
 FOR EACH ROW
 EXECUTE PROCEDURE notify_trigger();
