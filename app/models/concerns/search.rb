@@ -45,7 +45,7 @@ module Search
     logger.info "== END OF start_search ========================= "
     logger.info " $$$$$$$$$$$$$$  After start_search: results = #{results.inspect}"
 
-    return results
+    results
   end # END OF start_search
 
   # Основной поиск по дереву Автора - Юзера.
@@ -124,16 +124,23 @@ module Search
 
   end
 
-  # Делаем ХЭШ профилей-отношений для искомого дерева. - пригодится.
-  # ВСПОМОГАТЕЛЬНЫЙ РЕЗ-ТАТ ПОИСКА - СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
-  # {профиль искомый -> профиль -> его отношение к искомому} )
+  # @note: Делаем ХЭШ профилей-отношений для искомого дерева. - пригодится.
+  #   Tested
+  # @param:
+  #
+  # @return: ВСПОМОГАТЕЛЬНЫЙ РЕЗ-ТАТ ПОИСКА - СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА
+  #   (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
+  #   [ {profile_searched: -> профиль искомый, profile_relations: -> все отношения к искомому профилю } ]
+  # @see:
   def make_profile_relations(profile_id_searched, one_profile_relations, profiles_relations_arr)
     profile_relations_hash = Hash.new
-    profile_relations_hash.merge!(profile_id_searched  => one_profile_relations)
-    profiles_relations_arr << profile_relations_hash if !profile_relations_hash.empty? # Заполнение выходного массива хэшей
+    one_profile_relations_hash = { profile_searched: profile_id_searched, profile_relations: one_profile_relations}
+    # profile_relations_hash.merge!(profile_id_searched  => one_profile_relations)
+    profile_relations_hash.merge!(one_profile_relations_hash)
+    profiles_relations_arr << profile_relations_hash unless profile_relations_hash.empty? # Заполнение выходного массива хэшей
     logger.info "Все пары profile_relations ИСКОМОГО ПРОФИЛЯ: profile_relations_hash = #{profile_relations_hash} "
     logger.info ""
-    return profiles_relations_arr
+    profiles_relations_arr
   end
 
 
