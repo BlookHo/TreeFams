@@ -558,7 +558,7 @@ RSpec.describe User, :type => :model do
       end
     end
 
-    describe '- check User model Method <Search> - Ok' , focus: true  do  # , focus: true
+    describe '- check User model Method <Search> - Ok'  do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],

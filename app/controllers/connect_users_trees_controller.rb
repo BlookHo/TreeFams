@@ -199,296 +199,6 @@ class ConnectUsersTreesController < ApplicationController
   end
 
 
-  # Центральный метод соединения деревьев = перезапись профилей в таблицах
-  # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-  def connection_in_tables(connection_data) #, current_user_id, user_id, connection_id)
-    # def connection_in_tables(connection_data, current_user_id, user_id, connection_id)
-
-    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy = connection_data[:profiles_to_destroy]
-    who_connect         = connection_data[:who_connect]
-    with_whom_connect   = connection_data[:with_whom_connect]
-    current_user_id     = connection_data[:current_user_id]
-    user_id             = connection_data[:user_id]
-    connection_id       = connection_data[:connection_id]
-
-    # [1 2] c [3]
-    # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
-    # @profiles_to_destroy: [22, 29, 27, 25, 28, 23, 24, 26]
-    # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
-    ###################################################################
-    ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-    # connect_trees(profiles_to_rewrite, profiles_to_destroy, who_connect, with_whom_connect)
-#    connect_trees(connection_data) #profiles_to_rewrite, profiles_to_destroy, who_connect, with_whom_connect)
-    ####################################################################
-    ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-    #                          connect_users(current_user_id.to_i, user_id.to_i) # OLD!!
-
-#    ConnectedUser.set_users_connection(connection_data) #, current_user_id, user_id, connection_id)
-    #### это и есть лог объединения - с массивами профилей!!!!
-
-    ##################################################################
-    ######## Перезапись profile_id при объединении деревьев
-    #              UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
-    ##################################################################
-
-    ######## Перезапись profile_data при объединении деревьев
-    #    ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
-    ##################################################################
-
-  end
-
-
-
-
-  # @note: Перезапись профилей в таблицах
-  # @param connection_data
-  def connect_trees(connection_data) #profiles_to_rewrite, profiles_to_destroy, who_connect_ids_arr, with_who_conn_ids_ar)
-
-    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy = connection_data[:profiles_to_destroy]
-    who_connect         = connection_data[:who_connect]
-    with_whom_connect   = connection_data[:with_whom_connect]
-    current_user_id     = connection_data[:current_user_id]
-    user_id             = connection_data[:user_id]
-    connection_id       = connection_data[:connection_id]
-
-    logger.info "IN connect_trees: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
-
-    #####################################################
-    # Profile.merge(profiles_to_rewrite, profiles_to_destroy)
-    #####################################################
-
-    # log_connection_tree       = update_table(connection_data, Tree)
-    # log_connection_profilekey = update_table(connection_data, ProfileKey)
-
-    #####################################################
-    update_table(connection_data, Tree)
-    update_table(connection_data, ProfileKey)
-    #####################################################
-
-  end
-
-  # перезапись значений в полях одной таблицы
-  # лог не формируем как в похожих, т.к он уже сформирован в табл.Connected_User
-  def update_table(connection_data, table )
-    # log_connection = []
-
-    # ТЕСТ
-    # name_of_table = table.table_name
-    # logger.info "*** In module SimilarsConnection update_table: name_of_table = #{name_of_table.inspect} "
-    # model = name_of_table.classify.constantize
-    # logger.info "*** In module SimilarsConnection update_table: model = #{model.inspect} "
-    # logger.info "*** In module SimilarsConnection update_table: table = #{table.inspect} "
-
-    connection_data[:table_name] = table.table_name # DEBUGG_TO
-    logger.info "IN connect_trees update_table: connection_data[:table_name] = #{connection_data[:table_name]}" # DEBUGG_TO
-
-    ['profile_id', 'is_profile_id'].each do |table_field|
-      table_update_data = { table: table, table_field: table_field}
-      # log_connection = update_field(connection_data, table_update_data , log_connection)
-      update_field(connection_data, table_update_data)
-    end
-    # log_connection
-  end
-
-
-  # Делаем общий массив юзеров, для update_field
-  # /
-  def users_connecting_scope(who_connect, with_whom_connect)
-    all_users_to_connect = who_connect + with_whom_connect
-    logger.info "IN connect_trees users_connecting_scope: all_users_to_connect = #{all_users_to_connect}"
-    all_users_to_connect
-  end
-
-  # перезапись значений в одном поле одной таблицы
-  # profiles_to_destroy[arr_ind] - один profile_id для замены
-  # profiles_to_rewrite[arr_ind] - один profile_id, которым меняем
-  def update_field(connection_data, table_update_data)
-
-    who_connect         = connection_data[:who_connect]
-    with_whom_connect   = connection_data[:with_whom_connect]
-    # table_name          = connection_data[:table_name]
-    # current_user_id     = connection_data[:current_user_id]
-    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy = connection_data[:profiles_to_destroy]
-    # connected_users_arr = connection_data[:connected_users_arr]
-    # connection_id       = connection_data[:connection_id]
-
-    table       = table_update_data[:table]
-    table_field = table_update_data[:table_field]
-
-    all_users_to_connect = users_connecting_scope(who_connect, with_whom_connect)
-
-    for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
-      rows_to_update = table.where(:user_id => all_users_to_connect)
-                            .where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
-      unless rows_to_update.blank?
-        rows_to_update.each do |rewrite_row|
-
-          # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-        #  rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
-
-          logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, #{rewrite_row.profile_id},
-                          #{rewrite_row.is_profile_id} "
-          logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, #{profiles_to_rewrite[arr_ind]} "
-
-          # one_connection_data = { connected_at: connection_id,              # int
-          #                         current_user_id: current_user_id,        # int
-          #                         table_name: table_name,                  # string
-          #                         table_row: rewrite_row.id,            # int
-          #                         field: table_field,                 # string
-          #                         written: profiles_to_rewrite[arr_ind],        # int
-          #                         overwritten: profiles_to_destroy[arr_ind] }        # int
-          #
-          # log_connection << SimilarsLog.new(one_connection_data)
-
-        end
-
-      end
-
-    end
-    # log_connection
-
-  end
-
-
-  # Получение стартового Хэша для объединения профилей на основе:
-  # uniq_profiles_pairs - хэша уникальных достоверных пар профилей,
-  # полученных в рез-те отработки start_search
-  # connected_user - дерева(деревьев), с котороыми собираемся объединяться
-  # На выходе - init_connection_hash - Хэш достоверных пар профилей,
-  # с которых начинается процесс жесткого определения полного набора соответствий между всеми профилями
-  # объединяемых деревьев.
-  # def init_connection_data(with_whom_connect_users_arr, uniq_profiles_pairs)
-  #   logger.info "with_whom_connect_users_arr = #{with_whom_connect_users_arr}, uniq_profiles_pairs = #{uniq_profiles_pairs}"
-  #   init_connection_hash = {} # hash to work with
-  #   uniq_profiles_pairs.each do |searched_profile, trees_hash|
-  #     #logger.info " searched_profile = #{searched_profile}, trees_hash = #{trees_hash}"
-  #     trees_hash.each do |tree_key, found_profile|
-  #       #logger.info " tree_key = #{tree_key}, found_profile = #{found_profile}"
-  #       # выбор результатов для дерева из with_whom_connect_users_arr
-  #       # перезапись в хэше под key = searched_profile
-  #       if with_whom_connect_users_arr.include?(tree_key) #
-  #         init_connection_hash.merge!( searched_profile => found_profile )
-  #         #logger.info " init_connection_hash = #{init_connection_hash}"
-  #       end
-  #     end
-  #   end
-  #   return init_connection_hash
-  # end
-
-
-  # NEW METHOD "HARD COMPLETE SEARCH"- TO DO
-  # Input: start tree No, tree No to connect
-  # сбор полного хэша достоверных пар профилей для объединения
-  # Output:
-  # Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-  # start_tree = от какого дерева объедин.
-  # connected_user = с каким деревом объед-ся
-  # Input: init_connection_hash
-  # def complete_search(complete_search_data)
-  # # def complete_search(init_connection_hash)
-  #     with_whom_connect_users_arr = complete_search_data[:with_whom_connect]
-  #     uniq_profiles_pairs         = complete_search_data[:uniq_profiles_pairs]
-  #
-  #   init_connection_hash = init_connection_data(with_whom_connect_users_arr, uniq_profiles_pairs)
-  #   logger.info "IN complete_search init_connection_hash = #{init_connection_hash}"
-  #   # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} (pid:6800)
-  #
-  #
-  #   logger.info "** IN complete_search *** "
-  #   #logger.info " init_connection_hash = #{init_connection_hash}"
-  #   final_profiles_to_rewrite = []
-  #   final_profiles_to_destroy = []
-  #   if !init_connection_hash.empty?
-  #
-  #     final_connection_hash = init_connection_hash
-  #
-  #     # начало сбора полного хэша достоверных пар профилей для объединения
-  #     until init_connection_hash.empty?
-  #       logger.info "** IN UNTIL top: init_connection_hash = #{init_connection_hash}"
-  #
-  #       # get new_hash for connection
-  #       add_connection_hash = {}
-  #       init_connection_hash.each do |profile_searched, profile_found|
-  #
-  #         new_connection_hash = {}
-  #         # Получение Кругов для первой пары профилей -
-  #         # для последующего сравнения и анализа
-  #         search_bk_arr, search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
-  #         found_bk_arr, found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
-  #         logger.info " "
-  #         logger.info " search_is_profiles_arr = #{search_is_profiles_arr}, found_is_profiles_arr = #{found_is_profiles_arr} "
-  #
-  #         ## Проверка Кругов на дубликаты
-  #         #search_diplicates_hash = find_circle_duplicates(search_bk_profiles_arr)
-  #         #found_diplicates_hash = find_circle_duplicates(found_bk_profiles_arr)
-  #         ## Действия в случае выявления дубликатов в Круге
-  #         #if !search_diplicates_hash.empty?
-  #         #
-  #         #end
-  #         #if !found_diplicates_hash.empty?
-  #         #
-  #         #end
-  #
-  #         # Сравнение двух Кругов пары профилей Если: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
-  #         logger.info " compare_two_circles: ИСКОМОГО ПРОФИЛЯ = #{profile_searched} и НАЙДЕННОГО ПРОФИЛЯ = #{profile_found}:"
-  #         compare_rezult, common_circle_arr, delta = compare_two_circles(found_bk_arr, search_bk_arr)
-  #         logger.info " compare_rezult = #{compare_rezult}"
-  #         logger.info " ПЕРЕСЕЧЕНИЕ двух Кругов: common_circle_arr = #{common_circle_arr}"
-  #         logger.info " РАЗНОСТЬ двух Кругов: delta = #{delta}"
-  #
-  #         # Анализ результата сравнения двух Кругов
-  #         if !common_circle_arr.blank? # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
-  #           new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
-  #         else
-  #           # @@@@@ NB !! Вставить проверку: Если Круги равны, И: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
-  #           # то формируем новый хэш из их профилей, КОТ-Е ТОЖЕ РАВНЫ
-  #           search_is_profiles_arr.each_with_index do | is_profile, index |
-  #             new_connection_hash.merge!(is_profile => found_is_profiles_arr[index])
-  #           end
-  #         end
-  #         logger.info " После сравнения Кругов: new_connection_hash = #{new_connection_hash} "
-  #
-  #         # сокращение нового хэша если его эл-ты уже есть в финальном хэше
-  #         # NB !! Вставить проверку: Если нет такой комбинации: k == profiles_s && v == profile_f
-  #         # а есть: k == profiles_s && v != profile_f (?) возможно ли это? Что возвратит delete_if?.
-  #         # и действия
-  #         final_connection_hash.each do |profiles_s, profile_f|
-  #           new_connection_hash.delete_if { |k,v|  k == profiles_s && v == profile_f }
-  #         end
-  #
-  #         # накапливание нового доп.хаша по всему циклу
-  #         logger.info " after delete_if in new_connection_hash = #{new_connection_hash} "
-  #         add_connection_hash.merge!(new_connection_hash) if !new_connection_hash.empty?
-  #         logger.info " add_connection_hash = #{add_connection_hash} "
-  #
-  #       end
-  #
-  #       # Наращивание финального хэша пар профилей для объединения, если есть чем наращивать
-  #       if !add_connection_hash.empty?
-  #         add_to_hash(final_connection_hash, add_connection_hash)
-  #         logger.info "@@@@@ final_connection_hash = #{final_connection_hash} "
-  #       end
-  #
-  #       # Подготовка к следующему циклу
-  #       init_connection_hash = add_connection_hash
-  #
-  #     end
-  #
-  #     logger.info "final_connection_hash = #{final_connection_hash} "
-  #     logger.info " "
-  #     final_profiles_to_rewrite = final_connection_hash.keys
-  #     final_profiles_to_destroy = final_connection_hash.values
-  #
-  #   end
-  #
-  #   return final_profiles_to_rewrite, final_profiles_to_destroy
-  #
-  # end
-
-
 
   ######## Главный стартовый метод дла перезаписи профилей в таблицах
   # Вход:
@@ -682,7 +392,6 @@ class ConnectUsersTreesController < ApplicationController
           flash[:notice] = "Ваши деревья успешно объединены!"
           @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
 
-          logger.info " After start_search in SEARCH.rb"
           logger.info " stop_by_search_dublicates = #{stop_by_search_dublicates}, @stop_connection = #{@stop_connection}"
           logger.info "BEFORE COMPLETE_SEARCH uniq_profiles_pairs = #{uniq_profiles_pairs} "
 
@@ -693,8 +402,6 @@ class ConnectUsersTreesController < ApplicationController
           ##### ПОЛНОЕ Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
           complete_search_data = { with_whom_connect: with_whom_connect_users_arr,
                                    uniq_profiles_pairs: uniq_profiles_pairs }
-
-          # profiles_to_rewrite, profiles_to_destroy = current_user.complete_search(complete_search_data)
           final_connection_hash = current_user.complete_search(complete_search_data)
           ##############################################################################
           profiles_to_rewrite = final_connection_hash.keys
@@ -730,7 +437,6 @@ class ConnectUsersTreesController < ApplicationController
           # [1 2] c [3]
 
           # In check_connection_arrs:  connection_data =
-
            # connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
            #                    :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
            #                    :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26]
@@ -738,17 +444,17 @@ class ConnectUsersTreesController < ApplicationController
 
            ######## Контроль корректности массивов перед объединением
           stop_by_arrs = false
-          stop_by_arrs, connection_message = check_connection_arrs(connection_data)
+          stop_by_arrs, connection_message = current_user.check_connection_arrs(connection_data)
           if stop_by_arrs == false
             @stop_connection = false  # for view
             flash[:notice] = "Ваши деревья успешно объединены!"
-            logger.info "Connection - GO ON! array(s) - CORRECT! stop_by_arrs = #{stop_by_arrs}, @stop_connection = #{@stop_connection}"
+            logger.info "Connection - GO ON! array(s) - CORRECT! stop_by_arrs = #{stop_by_arrs}, @stop_connection = #{@stop_connection},\n connection_message = #{connection_message}"
             connection_message = "Деревья объединяются..."
 
             ##################################################################
             ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
             # connection_in_tables(connection_data, current_user_id, user_id, @connection_id)
-            connection_in_tables(connection_data) #, current_user_id, user_id, @connection_id)
+            current_user.connection_in_tables(connection_data) #, current_user_id, user_id, @connection_id)
             ##################################################################
             # ##### Update connection requests - to yes connect
             #  yes_to_request(@connection_id)
@@ -763,7 +469,6 @@ class ConnectUsersTreesController < ApplicationController
             # UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
             # UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
             # ###############################################
-
 
           else
             @stop_connection = true  # for view
@@ -785,10 +490,8 @@ class ConnectUsersTreesController < ApplicationController
       @stop_by_arrs = stop_by_arrs # DEBUGG_TO_VIEW
       @connection_message = connection_message # DEBUGG_TO_VIEW
 
-
       # unlock tree
       current_user.unlock_tree!
-
 
   end
 
@@ -811,126 +514,6 @@ class ConnectUsersTreesController < ApplicationController
       # flash - no connection requests data in table
     end
   end
-
-
-  ######## Контроль корректности массивов перед объединением
-  def check_connection_arrs(connection_data )
-    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy = connection_data[:profiles_to_destroy]
-
-    stop_by_arrs = false
-    logger.info "== In check_connection_arrs:  connection_data = #{connection_data}"
-    ######## Контроль корректности массивов перед объединением
-    if !profiles_to_rewrite.blank? && !profiles_to_destroy.blank?
-      logger.info "Ok to connect. Array(s) - Dont blank."
-
-      # Проверка на наличие общих (совпадающих) эл-тов у массивов перезаписи
-      commons = check_commons(profiles_to_rewrite, profiles_to_destroy)
-      logger.info "== In check_uniqness:  commons = #{commons}"
-      if commons.blank?  # Нет пересечения commons=[]- общих профилей - Ок
-
-        if profiles_to_rewrite.size == profiles_to_destroy.size
-          logger.info "Ok to connect. Connection array(s) - Equal. Size = #{profiles_to_rewrite.size}."
-
-          # Проверка найденных массивов перезаписи перед объединением - на повторы
-          complete_dubles_hash = check_duplications(profiles_to_rewrite, profiles_to_destroy)
-
-          if complete_dubles_hash.empty? # Если НЕТ дублирования в массивах
-            connection_message = "Ok to connect. НЕТ Дублирований in Connection array(s) "
-            logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).  complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
-          else
-            connection_message = "ERROR: Объединение остановлено! ЕСТЬ дублирования в массивах:"
-            logger.info "ERROR: STOP connection! ЕСТЬ дублирования в массивах: complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
-            stop_by_arrs = true #
-          end
-
-        else
-          connection_message = "ERROR: Объединение остановлено! Array(s) - NOT Equal!"
-          logger.info "ERROR: STOP connection! Array(s) - NOT Equal!  To_rewrite arr.size = #{profiles_to_rewrite.size}; To_destroy arr.size = #{profiles_to_destroy.size}.  connection_message = #{connection_message};"
-          stop_by_arrs = true
-        end
-
-      else
-        connection_message = "Объединение остановлено. В массивах объединения - есть общие профили!"
-        logger.info "ERROR: В массивах объединения - есть общие профили! connection_message = #{connection_message};."
-        stop_by_arrs = true
-
-      end
-
-    else
-      connection_message = "Объединение остановлено, т.к. недостаточно отношений между профилями. (Массивы объединения - пустые)"
-      logger.info "ERROR: Connection array(s) - blank! connection_message = #{connection_message};."
-      stop_by_arrs = true
-    end
-
-    @complete_dubles_hash = complete_dubles_hash  # DEBUGG_TO_VIEW
-    logger.info "== After in check_connection_arrs:  stop_by_arrs = #{stop_by_arrs}, connection_message = #{connection_message} "
-
-    return stop_by_arrs, connection_message
-  end
-
-
-  # ИСПОЛЬЗУЕТСЯ В МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
-  # Проверка найденных массивов перезаписи при объединении - на повторы
-  # .
-  def check_duplications(profiles_to_rewrite, profiles_to_destroy)
-
-    # Извлечение из массива - повторяющиеся эл-ты в виде массива
-    def repeated(array)
-      counts = Hash.new(0)
-      array.each{|val|counts[val]+=1}
-      counts.reject{|val,count|count==1}.keys
-    end
-
-    repeated_destroy = repeated(profiles_to_destroy)
-    indexs_hash_destroy = {}
-    if !repeated_destroy.blank?
-      for i in 0 .. repeated_destroy.length-1
-        arr_of_dubles = []
-        profiles_to_destroy.each_with_index do |arr_el, index|
-          if arr_el == repeated_destroy[i]
-            arr_of_dubles << profiles_to_rewrite[index]
-          end
-        end
-        indexs_hash_destroy.merge!(repeated_destroy[i] => arr_of_dubles)
-      end
-    end
-
-    repeated_rewrite = repeated(profiles_to_rewrite)
-    indexs_hash_rewrite = {}
-    if !repeated_rewrite.blank?
-      for i in 0 .. repeated_rewrite.length-1
-        arr_of_dubles = []
-        profiles_to_rewrite.each_with_index do |arr_el, index|
-          if arr_el == repeated_rewrite[i]
-            arr_of_dubles << profiles_to_destroy[index]
-          end
-        end
-        indexs_hash_rewrite.merge!(repeated_rewrite[i] => arr_of_dubles)
-      end
-    end
-
-    complete_dubles_hash = {}
-    complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_destroy) if !indexs_hash_destroy.blank?
-    complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_rewrite) if !indexs_hash_rewrite.blank?
-
-    @complete_dubles_hash = complete_dubles_hash # DEBUGG_TO_VIEW
-
-    return complete_dubles_hash
-
-  end
-
-
-  # Проверка на наличие общих (совпадающих) эл-тов у массивов перезаписи
-  # Что - не должно быть!.
-  def check_commons(array1, array2)
-    logger.info "== In check_uniqness:  array1 = #{array1}"
-    logger.info "== In check_uniqness:  array2 = #{array2}"
-    commons = array1 & array2
-
-    return commons
-  end
-
 
 
 end

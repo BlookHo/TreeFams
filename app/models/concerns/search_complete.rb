@@ -17,7 +17,7 @@ module SearchComplete
   #  profiles_to_destroy = [22, 29, 27, 25, 28, 23, 24, 26]
 
   def complete_search(complete_search_data)
-    logger.info "** IN complete_search *** "
+    logger.info "** IN complete_search Module *** "
     with_whom_connect_users_arr = complete_search_data[:with_whom_connect]
     uniq_profiles_pairs         = complete_search_data[:uniq_profiles_pairs]
 
@@ -39,8 +39,7 @@ module SearchComplete
         init_connection_hash.each do |profile_searched, profile_found|
 
           new_connection_hash = {}
-          # Получение Кругов для первой пары профилей -
-          # для последующего сравнения и анализа
+          # Получение Кругов для пары профилей - для последующего сравнения и анализа
           search_bk_arr, search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
           found_bk_arr, found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
           logger.info " "
@@ -131,7 +130,7 @@ module SearchComplete
         end
       end
     end
-    return init_connection_hash
+    init_connection_hash
   end
 
 

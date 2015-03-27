@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   include Search   # основной метод поиска
   include SearchComplete   # метод полного поиска
   include SearchHelper  # Исп-ся в Search,  SimilarsCompleteSearch
+  include ConnectionTrees   # основной метод объединения деревьев
 
   include SimilarsStart          # запуск методов поиска стартовых пар похожих
   include SimilarsInitSearch     # методы поиска стартовых пар похожих
