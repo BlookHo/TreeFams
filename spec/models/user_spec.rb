@@ -558,7 +558,7 @@ RSpec.describe User, :type => :model do
       end
     end
 
-    describe '- check User model Method <Search> - Ok' , focus: true do  # , focus: true
+    describe '- check User model Method <Search> - Ok' , focus: true  do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -677,11 +677,17 @@ RSpec.describe User, :type => :model do
       it "- Check search_results[:uniq_profiles_pairs] after start_search"  do
         puts "In User model: search_results[:uniq_profiles_pairs] = #{search_results[:uniq_profiles_pairs]} \n"
         # Структура - из существующего search.rb
+        # uniq_profiles_pairs =
         # {20=>{3=>28}, 12=>{3=>23}, 13=>{3=>24}, 14=>{3=>22}, 21=>{3=>29}, 18=>{3=>26}, 11=>{3=>25}, 19=>{3=>27}}
+        # или
+        #  uniq_profiles_pairs = {135=>{12=>94}, 129=>{12=>110, 13=>110, 14=>104}} - перед
+        # init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_pairs)
         expect(search_results[:uniq_profiles_pairs].sort_by { |k,v| k }).to eq(
               # преобразованная структура
               [[11, {3=>25}], [12, {3=>23}], [13, {3=>24}], [14, {3=>22}], [18, {3=>26}], [19, {3=>27}],
                [20, {3=>28}], [21, {3=>29}]] )
+        # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  - перед
+        # profiles_to_rewrite, profiles_to_destroy = hard_complete_search(init_connection_hash)
       end
       it "- Check search_results[:profiles_with_match_hash] after start_search"  do
         puts "In User model: search_results[:profiles_with_match_hash] = #{search_results[:profiles_with_match_hash]} \n"
@@ -704,10 +710,15 @@ RSpec.describe User, :type => :model do
         {:search_profile_id=>20, :found_tree_id=>3, :found_profile_id=>28, :count=>5},
         {:search_profile_id=>21, :found_tree_id=>3, :found_profile_id=>29, :count=>5}])
       end
-      it "- Check search_results[:by_trees] after start_search" do
+
+      let(:found_profiles_arr_sorted) { search_results[:by_trees][0][:found_profile_ids].sort }
+      let(:found_tree) { search_results[:by_trees][0][:found_tree_id] }
+      it "- Check search_results[:by_trees] after start_search"  do  #, focus: true
         puts "In User model: search_results[:by_trees] = #{search_results[:by_trees]} \n"
         # Структура - из существующего search.rb
-        expect(search_results[:by_trees]).to eq([{:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}])
+        # search_results[:by_trees] = {:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}
+        expect(found_tree).to eq(3)
+        expect(found_profiles_arr_sorted).to eq([22, 23, 24, 25, 26, 27, 28, 29])
       end
       it "- Check search_results[:duplicates_one_to_many] after start_search" do
         puts "In User model: search_results[:duplicates_one_to_many] = #{search_results[:duplicates_one_to_many]} \n"
@@ -775,7 +786,59 @@ RSpec.describe User, :type => :model do
 
     end
 
-  end
+    describe '- check User model Method <complete_search> - Ok' , focus: true  do  # , focus: true
+
+      # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
+      context '- when valid complete_search_data' do
+        let(:complete_search_data) { {
+            :with_whom_connect => [3],
+            :uniq_profiles_pairs => { #15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
+                                      # 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
+                                     20=>{3=>28} }#,
+                                     # 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} }  #,
+                                     # 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
+        } }
+
+        let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+        let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
+
+        it "- Check Complete search result: final_connection_hash after <complete_search>" do
+          puts "In User model: final_connection_hash = #{final_connection_hash} \n"
+          expect(final_connection_hash).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
+        end
+      end
+
+      context '- when Invalid complete_search_data - with_whom_connect: wrong = [4]' do
+        let(:complete_search_data) { {
+            :with_whom_connect => [4],
+            :uniq_profiles_pairs => { 15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
+                                      11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
+                                      20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} ,
+                                      3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
+        } }
+
+        let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+        let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
+
+        it "- Check Complete search result: final_connection_hash == {} " do
+          puts "In User model: with_whom_connect: wrong - final_connection_hash = #{final_connection_hash} \n"
+          expect(final_connection_hash).to eq( {} )
+        end
+        it "- Check Complete search result: final_connection_hash - incorrect" do
+          puts "In User model: final_connection_hash - wrong: #{final_connection_hash} \n"
+          expect(final_connection_hash).to_not eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24} )
+        end
+
+      end
+
+
+
+
+    end
+
+
+
+    end
 
   # describe 'on update' do
   #   context 'valid update profile_id field in user' do

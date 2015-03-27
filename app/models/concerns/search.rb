@@ -16,7 +16,7 @@ module Search
     ###################################
 
     tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
-    qty_of_tree_profiles = tree_is_profiles.size if !tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
+    qty_of_tree_profiles = tree_is_profiles.size unless tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
 
     logger.info "======================= RUN start_search ========================= "
     logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
@@ -44,7 +44,6 @@ module Search
 
     logger.info "== END OF start_search ========================= "
     logger.info " $$$$$$$$$$$$$$  After start_search: results = #{results.inspect}"
-
     results
   end # END OF start_search
 
@@ -61,7 +60,7 @@ module Search
     logger.info " "
     logger.info "=== IN search_profiles_from_tree === Запуск Циклов поиска по tree_arr === "
     i = 0 # DEBUGG_TO_LOGG
-    if !tree_is_profiles.blank?
+    unless tree_is_profiles.blank?
       tree_is_profiles.each do |profile_id_searched|
         logger.info " "
         logger.info "***** Цикл ПОИСКa: #{i+1}-я ИТЕРАЦИЯ - Ищем профиль: #{profile_id_searched.inspect};"
@@ -127,7 +126,6 @@ module Search
   # @note: Делаем ХЭШ профилей-отношений для искомого дерева. - пригодится.
   #   Tested
   # @param:
-  #
   # @return: ВСПОМОГАТЕЛЬНЫЙ РЕЗ-ТАТ ПОИСКА - СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА
   #   (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
   #   [ {profile_searched: -> профиль искомый, profile_relations: -> все отношения к искомому профилю } ]
@@ -168,7 +166,7 @@ module Search
       logger.info "=== НЕТ результата! В деревьях сайта ничего не найдено! === "
     end
 
-    return found_profiles_hash
+    found_profiles_hash
   end
 
   # Поиск совпадений для одного из профилей
