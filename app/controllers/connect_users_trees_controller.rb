@@ -444,7 +444,13 @@ class ConnectUsersTreesController < ApplicationController
 
            ######## Контроль корректности массивов перед объединением
           stop_by_arrs = false
-          stop_by_arrs, connection_message = current_user.check_connection_arrs(connection_data)
+
+          check_connection_result = current_user.check_connection_arrs(connection_data)
+          # { stop_by_arrs: stop_by_arrs, diag_connection_message: connection_message }
+          stop_by_arrs = check_connection_result[:check_connection_result]
+          connection_message = check_connection_result[:diag_connection_message]
+          logger.info "After Check Connection: check_connection_result = #{check_connection_result} "
+
           if stop_by_arrs == false
             @stop_connection = false  # for view
             flash[:notice] = "Ваши деревья успешно объединены!"

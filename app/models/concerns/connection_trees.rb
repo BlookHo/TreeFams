@@ -47,7 +47,7 @@ module ConnectionTrees
 
 # @note: Перезапись профилей в таблицах
 # @param connection_data
-  def connect_trees(connection_data) #profiles_to_rewrite, profiles_to_destroy, who_connect_ids_arr, with_who_conn_ids_ar)
+  def connect_trees(connection_data)
 
     profiles_to_rewrite = connection_data[:profiles_to_rewrite]
     profiles_to_destroy = connection_data[:profiles_to_destroy]
@@ -164,12 +164,15 @@ module ConnectionTrees
 
     stop_by_arrs = false
     logger.info "== In check_connection_arrs:  connection_data = #{connection_data}"
+    commons = check_commons(profiles_to_rewrite, profiles_to_destroy)
+
+
     ######## Контроль корректности массивов перед объединением
     if !profiles_to_rewrite.blank? && !profiles_to_destroy.blank?
       logger.info "Ok to connect. Array(s) - Dont blank."
 
       # Проверка на наличие общих (совпадающих) эл-тов у массивов перезаписи
-      commons = check_commons(profiles_to_rewrite, profiles_to_destroy)
+      # commons = check_commons(profiles_to_rewrite, profiles_to_destroy)
       logger.info "== In check_uniqness:  commons = #{commons}"
       if commons.blank?  # Нет пересечения commons=[]- общих профилей - Ок
 
@@ -180,29 +183,30 @@ module ConnectionTrees
           complete_dubles_hash = check_duplications(profiles_to_rewrite, profiles_to_destroy)
 
           if complete_dubles_hash.empty? # Если НЕТ дублирования в массивах
-            connection_message = "Ok to connect. НЕТ Дублирований in Connection array(s) "
-            logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).  complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
+            connection_message = "Ok to connect. НЕТ Дублирований in Connection array(s) "  # Tested
+            logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).
+                        complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
           else
-            connection_message = "ERROR: Объединение остановлено! ЕСТЬ дублирования в массивах:"
-            logger.info "ERROR: STOP connection! ЕСТЬ дублирования в массивах: complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
+            connection_message = "Объединение остановлено! ЕСТЬ дублирования в массивах"  # Tested
+            logger.info "ERROR: STOP connection! ЕСТЬ дублирования в массивах:
+                         complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
             stop_by_arrs = true #
           end
 
         else
-          connection_message = "ERROR: Объединение остановлено! Array(s) - NOT Equal!"
-          logger.info "ERROR: STOP connection! Array(s) - NOT Equal!  To_rewrite arr.size = #{profiles_to_rewrite.size}; To_destroy arr.size = #{profiles_to_destroy.size}.  connection_message = #{connection_message};"
+          connection_message = "Объединение остановлено, т.к. массив(ы) объединения - имеют разный размер"  # Tested
+          logger.info "ERROR: STOP connection! Array(s) - NOT Equal! connection_message = #{connection_message} "
           stop_by_arrs = true
         end
 
       else
-        connection_message = "Объединение остановлено. В массивах объединения - есть общие профили!"
+        connection_message = "Объединение остановлено. В массивах объединения - есть общие (совпадающие) профили!" # Tested
         logger.info "ERROR: В массивах объединения - есть общие профили! connection_message = #{connection_message};."
         stop_by_arrs = true
-
       end
 
     else
-      connection_message = "Объединение остановлено, т.к. недостаточно отношений между профилями. (Массивы объединения - пустые)"
+      connection_message = "Объединение остановлено, т.к. массив(ы) объединения - пустые" # Tested
       logger.info "ERROR: Connection array(s) - blank! connection_message = #{connection_message};."
       stop_by_arrs = true
     end
@@ -210,7 +214,13 @@ module ConnectionTrees
     @complete_dubles_hash = complete_dubles_hash  # DEBUGG_TO_VIEW
     logger.info "== After in check_connection_arrs:  stop_by_arrs = #{stop_by_arrs}, connection_message = #{connection_message} "
 
-    return stop_by_arrs, connection_message
+    # check_connection_result =
+        { stop_by_arrs: stop_by_arrs, diag_connection_message: connection_message,
+          common_profiles: commons, complete_dubles_hash: complete_dubles_hash
+        }
+
+
+    # return stop_by_arrs, connection_message
   end
 
 
@@ -269,7 +279,6 @@ module ConnectionTrees
   def check_commons(array1, array2)
     logger.info "== In check_uniqness:  array1 = #{array1}"
     logger.info "== In check_uniqness:  array2 = #{array2}"
-    # commons = array1 & array2
     array1 & array2
   end
 

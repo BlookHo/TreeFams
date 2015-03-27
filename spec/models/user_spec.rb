@@ -786,7 +786,7 @@ RSpec.describe User, :type => :model do
 
     end
 
-    describe '- check User model Method <complete_search> - Ok' , focus: true  do  # , focus: true
+    describe '- check User model Method <complete_search> - Ok'    do  # , focus: true
 
       # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
       context '- when valid complete_search_data' do
@@ -828,17 +828,178 @@ RSpec.describe User, :type => :model do
           puts "In User model: final_connection_hash - wrong: #{final_connection_hash} \n"
           expect(final_connection_hash).to_not eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24} )
         end
+      end
 
+    end
+
+    #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
+    # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+    # :current_user_id=>1, :user_id=>3, :connection_id=>3}
+    describe '- check User model Method < check_connection_arrs(connection_data )>' , focus: true  do  # , focus: true
+      context '- when valid connection_data' do
+        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+                                :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+                                :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+                                :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+        let(:check_connection_result) { current_user_1.check_connection_arrs(connection_data) }
+         # check_connection_result = {:stop_by_arrs=>false,
+         # :diag_connection_message=>"Ok to connect. НЕТ Дублирований in Connection array(s) "}
+
+        it "- check_connection_result: after <check_connection_arrs>" do
+          puts "In User model: check_connection_result[:stop_by_arrs] = #{check_connection_result[:stop_by_arrs]} \n"
+          expect(check_connection_result[:stop_by_arrs]).to eq( false )
+        end
+        it "- check_connection_result: after <check_connection_arrs>" do
+          puts "In User model: check_connection_result[:diag_connection_message] = #{check_connection_result[:diag_connection_message]} \n"
+          expect(check_connection_result[:diag_connection_message]).
+              to eq( "Ok to connect. НЕТ Дублирований in Connection array(s) " )
+        end
+        it "- check_connection_result: after <check_connection_arrs>" do
+          puts "In User model: check_connection_result[:common_profiles] = #{check_connection_result[:common_profiles]} \n"
+          expect(check_connection_result[:common_profiles]).to eq( [] )
+        end
+        it "- check_connection_result: after <check_connection_arrs>" do
+          puts "In User model: check_connection_result[:complete_dubles_hash] = #{check_connection_result[:complete_dubles_hash]} \n"
+          expect(check_connection_result[:complete_dubles_hash]).to eq( {} )
+        end
+
+      end
+      context '- when Invalid connection_data 1 ' do
+        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+                                :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+                                :profiles_to_destroy=>[22, 29, 27, 25, 28, 12, 24, 18],
+                                :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+        let(:check_connection_result) { current_user_1.check_connection_arrs(connection_data) }
+        it "- check_connection_result when the same profile (12 и 18) - is in both arrays" do
+          puts "In User model check_connection_arrs wrong: same profile (12 и 18):
+                 check_connection_result[:stop_by_arrs] =  #{check_connection_result[:stop_by_arrs]} \n"
+          expect(check_connection_result[:stop_by_arrs]).to eq( true )
+        end
+        it "- check_connection_result: when the same profile (12 и 18) - is in both arrays: connection_message " do
+          puts "In User model check_connection_arrs wrong: same profile (12 и 18) - is in both arrays:
+                 check_connection_result[:diag_connection_message] =  #{check_connection_result[:diag_connection_message]} \n"
+          expect(check_connection_result[:diag_connection_message]).
+              to eq( "Объединение остановлено. В массивах объединения - есть общие (совпадающие) профили!" )
+        end
+        it "- check_connection_result: when the same profile (12 и 18) - is in both arrays: common_profiles" do
+          puts "In User model: check_connection_result[:common_profiles] = #{check_connection_result[:common_profiles]} \n"
+          expect(check_connection_result[:common_profiles]).to eq( [12, 18] )
+        end
+        it "- check_connection_result: when the same profile (12 и 18) - is in both arrays: complete_dubles_hash" do
+          puts "In User model: check_connection_result[:complete_dubles_hash] = #{check_connection_result[:complete_dubles_hash]} \n"
+          expect(check_connection_result[:complete_dubles_hash]).to eq( nil )
+        end
+      end
+
+      context '- when Invalid connection_data 2 ' do
+        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+                                :profiles_to_rewrite=>[], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+                                :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+        let(:check_connection_result) { current_user_1.check_connection_arrs(connection_data) }
+        it "- check_connection_result when profiles_to_rewrite = [] - stop_by_arrs = true" do
+          puts "In User model check_connection_arrs wrong: profiles_to_rewrite = []:
+                 check_connection_result[:stop_by_arrs] =  #{check_connection_result[:stop_by_arrs]} \n"
+          expect(check_connection_result[:stop_by_arrs]).to eq( true )
+        end
+        it "- check_connection_result: when profiles_to_rewrite = [] - connection_message " do
+          puts "In User model check_connection_arrs wrong: profiles_to_rewrite = []:
+                 check_connection_result[:diag_connection_message] =  #{check_connection_result[:diag_connection_message]} \n"
+          expect(check_connection_result[:diag_connection_message]).
+              to eq( "Объединение остановлено, т.к. массив(ы) объединения - пустые" )
+        end
+        it "- check_connection_result: when profiles_to_rewrite = [] - common_profiles" do
+          puts "In User model: check_connection_result[:common_profiles] = #{check_connection_result[:common_profiles]} \n"
+          expect(check_connection_result[:common_profiles]).to eq( [] )
+        end
+        it "- check_connection_result: when profiles_to_rewrite = [] - complete_dubles_hash" do
+          puts "In User model: check_connection_result[:complete_dubles_hash] = #{check_connection_result[:complete_dubles_hash]} \n"
+          expect(check_connection_result[:complete_dubles_hash]).to eq( nil )
+        end
+      end
+
+      context '- when Invalid connection_data 3 '  do   # , focus: true
+        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+                                :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12], #, 13, 18],
+                                :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+                                :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+        let(:check_connection_result) { current_user_1.check_connection_arrs(connection_data) }
+        it "- check_connection_result when arrays size are unqual - stop_by_arrs = true" do
+          puts "In User model check_connection_arrs wrong: arrays size are unqual:
+                 check_connection_result[:stop_by_arrs] =  #{check_connection_result[:stop_by_arrs]} \n"
+          expect(check_connection_result[:stop_by_arrs]).to eq( true )
+        end
+        it "- check_connection_result: when arrays size are unqual - connection_message " do
+          puts "In User model check_connection_arrs wrong: profiles_to_rewrite = []:
+                 check_connection_result[:diag_connection_message] =  #{check_connection_result[:diag_connection_message]} \n"
+          expect(check_connection_result[:diag_connection_message]).
+              to eq( "Объединение остановлено, т.к. массив(ы) объединения - имеют разный размер" )
+        end
+        it "- check_connection_result: when arrays size are unqual - common_profiles" do
+          puts "In User model: check_connection_result[:common_profiles] = #{check_connection_result[:common_profiles]} \n"
+          expect(check_connection_result[:common_profiles]).to eq( [] )
+        end
+        it "- check_connection_result: when arrays size are unqual - complete_dubles_hash" do
+          puts "In User model: check_connection_result[:complete_dubles_hash] = #{check_connection_result[:complete_dubles_hash]} \n"
+          expect(check_connection_result[:complete_dubles_hash]).to eq( nil )
+        end
+      end
+
+      context '- when Invalid connection_data 4 '  do   # , focus: true
+        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+                                :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 11],
+                                :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+                                :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+        let(:check_connection_result) { current_user_1.check_connection_arrs(connection_data) }
+        it "- check_connection_result when dubles in arrays - stop_by_arrs = true" do
+          puts "In User model check_connection_arrs wrong: dubles in arrays:
+                 check_connection_result[:stop_by_arrs] =  #{check_connection_result[:stop_by_arrs]} \n"
+          expect(check_connection_result[:stop_by_arrs]).to eq( true )
+        end
+        it "- check_connection_result: when dubles in arrays - connection_message " do
+          puts "In User model check_connection_arrs wrong: dubles in arrays:
+                 check_connection_result[:diag_connection_message] =  #{check_connection_result[:diag_connection_message]} \n"
+          expect(check_connection_result[:diag_connection_message]).
+              to eq( "Объединение остановлено! ЕСТЬ дублирования в массивах" )
+        end
+        it "- check_connection_result: when dubles in arrays - common_profiles" do
+          puts "In User model: check_connection_result[:common_profiles] = #{check_connection_result[:common_profiles]} \n"
+          expect(check_connection_result[:common_profiles]).to eq( [] )
+        end
+        it "- check_connection_result: when dubles in arrays: profile 11 to profiles 25 and 26 - complete_dubles_hash" do
+          puts "In User model: check_connection_result[:complete_dubles_hash] =
+                 #{check_connection_result[:complete_dubles_hash]} \n"
+          expect(check_connection_result[:complete_dubles_hash]).to eq(  {11=>[25, 26]} )
+        end
+      end
+
+    end
+
+
+
+    describe '- check User model Method <connect_trees(connection_data)> - Ok' , focus: true  do  # , focus: true
+      context '- when valid complete_search_data' do
+        let(:complete_search_data) { {
+            :with_whom_connect => [3],
+            :uniq_profiles_pairs => { #15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
+                                      # 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
+                                      20=>{3=>28} }#,
+            # 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} }  #,
+            # 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
+        } }
+
+        let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+        let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
+
+        it "- Check Complete search result: final_connection_hash after <complete_search>" do
+          puts "In User model: final_connection_hash = #{final_connection_hash} \n"
+          expect(final_connection_hash).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
+        end
       end
 
 
-
-
     end
 
-
-
-    end
+  end
 
   # describe 'on update' do
   #   context 'valid update profile_id field in user' do
