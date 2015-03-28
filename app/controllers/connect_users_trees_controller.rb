@@ -129,12 +129,14 @@ class ConnectUsersTreesController < ApplicationController
     who_connect_users_arr = current_user.get_connected_users
     @who_connect_users_arr = who_connect_users_arr
 
+    # Чтобы протестировать: раскомментить следующую строку:
     # who_connect_users_arr = [1,2,3] # for DEBUGG ONLY!!!
-
+    connection_message = "Нельзя объединить ваши деревья, т.к. есть информация, что они уже объединены!"
     # Проверка: может быть дерево автора уже было соединено с выбранным юзером?
-     if check_already_connected(who_connect_users_arr, user_id)
-       return
-     end
+    if check_connection_permit(who_connect_users_arr.include?(user_id.to_i), connection_message) # check IF NOT CONNECTED
+      logger.info "=== IN check_connection_switch: уже объединены"
+      return
+    end
 
     with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
     @with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
@@ -250,7 +252,11 @@ class ConnectUsersTreesController < ApplicationController
     ######## Контроль на наличие дубликатов из поиска:
     # Если есть дубликаты из Поиска, то устанавливаем stop_by_search_dublicates = true
     # На вьюхе проверяем: продолжать ли объединение.
-    if check_duplicates_exist(duplicates_one_to_many, duplicates_many_to_one)
+    # Чтобы протестировать check_connection_permit: в модуле search.rb, после запуска метода
+    # search_profiles_from_tree - раскомментить одну или обе строки с # for DEBUGG ONLY!!!
+    connection_message = "Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
+    if check_connection_permit(!duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?, connection_message)
+      logger.info "=== IN check_connection_switch: дубликаты"
       return
     end
 
@@ -298,16 +304,17 @@ class ConnectUsersTreesController < ApplicationController
     check_connection_result = current_user.check_connection_arrs(connection_data)
     ##############################################################################
 
-    @stop_by_arrs = check_connection_result[:stop_by_arrs]
+    stop_by_arrs = check_connection_result[:stop_by_arrs]
     connection_message = check_connection_result[:diag_connection_message]
-    logger.info "After Check Connection: check_connection_result = #{check_connection_result} "
-
-    if check_stop_connection(check_connection_result[:stop_by_arrs], check_connection_result[:diag_connection_message] )
+    # Чтобы протестировать check_connection_permit: в модуле connection_trees.rb, в конце метода
+    # check_duplications - раскомментить одну строку с complete_dubles_hash = {11=>[25, 26]} # for DEBUGG ONLY!!!
+    if check_connection_permit(stop_by_arrs, connection_message)
+      logger.info "=== IN check_connection_switch: дублирования в массивах"
       return
     end
+    # logger.info "=After 3rd check_connection_switch: @stop_connection || stop_by_arrs = #{@stop_connection || stop_by_arrs}"
 
-    unless @stop_connection || @stop_by_arrs # for stop_connection & view
-
+    unless @stop_connection || stop_by_arrs # for stop_connection & view
       ##################################################################
       ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
       current_user.connection_in_tables(connection_data)
@@ -331,39 +338,24 @@ class ConnectUsersTreesController < ApplicationController
       # UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
       # ###############################################
 
-      # unlock tree
-      current_user.unlock_tree!
-
+      current_user.unlock_tree! # unlock tree
     end
-
 
   end
 
-  # @note: Проверка: может быть дерево автора уже было соединено с выбранным юзером?
-  def check_already_connected(who_connect_users, user_id)
-    if who_connect_users.include?(user_id.to_i) # check_connection: IF NOT CONNECTED
-      flash[:alert] = "Нельзя объединить ваши деревья, т.к. есть информация, что они уже объединены!"
-      logger.info "Нельзя объединить ваши деревья, т.к. есть информация, что они уже объединены!
-           Current_user_arr = #{who_connect_users.inspect}, user_id = #{user_id.inspect}."
-
-      current_user.unlock_tree!  # unlock tree
-      @stop_connection = true  # for stop_connection & view
-
-      redirect_to home_path
-    end
-  end
-
-  # @note: Контроль на наличие дубликатов из поиска:
-  # Если есть дубликаты из Поиска, то устанавливаем stop_by_search_dublicates = true
-  # На вьюхе проверяем: продолжать ли объединение.
-  def  check_duplicates_exist(duplicates_one_many, duplicates_many_one)
-    if !duplicates_one_many.empty? || !duplicates_many_one.empty? #
-      flash[:alert] = "Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
-      logger.info "Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!
-             duplicates_one_to_many = #{duplicates_one_many}; duplicates_many_to_one = #{duplicates_many_one}."
+  # @note: Контроль возможности продолжения объединения деревьев
+  #   На вьюхе проверяем: отображать ли процесс объединения. @stop_connection
+  # @note: Проверка 1: может быть дерево автора уже было соединено с выбранным юзером?
+  #   Проверка 2: на наличие дубликатов из поиска:
+  #   Если есть дубликаты из Поиска, то устанавливаем stop_by_search_dublicates = true
+  #   Проверка 3: Контроль корректности массивов перед объединением
+  def check_connection_permit(switch, connection_message)
+    if switch
+      flash[:alert] = " #{connection_message} "
+      logger.info " #{connection_message} "
 
       current_user.unlock_tree! # unlock tree
-      @stop_connection = true  # for stop_connection & view
+      @stop_connection = true   # for stop_connection & view
 
       redirect_to home_path
     end
@@ -371,10 +363,10 @@ class ConnectUsersTreesController < ApplicationController
 
 
   # @note: Контроль корректности массивов перед объединением
-  def check_stop_connection(stop_connection, diag_connection_message)
+  def check_stop_connection(stop_connection, connection_message)
     if stop_connection
-      flash[:alert] = " #{diag_connection_message} " #  Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны!"
-      logger.info " #{diag_connection_message} " #   Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! "
+      flash[:alert] = " #{connection_message} " #  Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны!"
+      logger.info " #{connection_message} " #   Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! "
 
       current_user.unlock_tree! # unlock tree
       @stop_connection = true  # for stop_connection & view
