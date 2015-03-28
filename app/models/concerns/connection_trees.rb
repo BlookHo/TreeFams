@@ -9,7 +9,6 @@ module ConnectionTrees
 # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
 # :current_user_id=>1, :user_id=>3, :connection_id=>3}
   def connection_in_tables(connection_data) #, current_user_id, user_id, connection_id)
-    # def connection_in_tables(connection_data, current_user_id, user_id, connection_id)
 
     who_connect         = connection_data[:who_connect]
     with_whom_connect   = connection_data[:with_whom_connect]
@@ -156,8 +155,11 @@ module ConnectionTrees
 
   end
 
-
-######## Контроль корректности массивов перед объединением
+  # @note: Контроль корректности массивов перед объединением
+  #    # Tested
+  # @param: connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
+  #   :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+  #   :current_user_id=>1, :user_id=>3, :connection_id=>3}
   def check_connection_arrs(connection_data )
     profiles_to_rewrite = connection_data[:profiles_to_rewrite]
     profiles_to_destroy = connection_data[:profiles_to_destroy]
@@ -165,7 +167,6 @@ module ConnectionTrees
     stop_by_arrs = false
     logger.info "== In check_connection_arrs:  connection_data = #{connection_data}"
     commons = check_commons(profiles_to_rewrite, profiles_to_destroy)
-
 
     ######## Контроль корректности массивов перед объединением
     if !profiles_to_rewrite.blank? && !profiles_to_destroy.blank?
@@ -183,11 +184,12 @@ module ConnectionTrees
           complete_dubles_hash = check_duplications(profiles_to_rewrite, profiles_to_destroy)
 
           if complete_dubles_hash.empty? # Если НЕТ дублирования в массивах
-            connection_message = "Ok to connect. НЕТ Дублирований in Connection array(s) "  # Tested
+            connection_message = "Данные для объединения деревьев - корректны. "  # Tested
             logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).
                         complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
           else
-            connection_message = "Объединение остановлено! ЕСТЬ дублирования в массивах"  # Tested
+            connection_message =
+                "Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! ЕСТЬ дублирования в массивах"  # Tested
             logger.info "ERROR: STOP connection! ЕСТЬ дублирования в массивах:
                          complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
             stop_by_arrs = true #
@@ -214,13 +216,12 @@ module ConnectionTrees
     @complete_dubles_hash = complete_dubles_hash  # DEBUGG_TO_VIEW
     logger.info "== After in check_connection_arrs:  stop_by_arrs = #{stop_by_arrs}, connection_message = #{connection_message} "
 
-    # check_connection_result =
-        { stop_by_arrs: stop_by_arrs, diag_connection_message: connection_message,
-          common_profiles: commons, complete_dubles_hash: complete_dubles_hash
-        }
+    { stop_by_arrs: stop_by_arrs,
+      diag_connection_message: connection_message,
+      common_profiles: commons,
+      complete_dubles_hash: complete_dubles_hash
+    }
 
-
-    # return stop_by_arrs, connection_message
   end
 
 
@@ -269,6 +270,8 @@ module ConnectionTrees
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_rewrite) unless indexs_hash_rewrite.blank?
 
     @complete_dubles_hash = complete_dubles_hash # DEBUGG_TO_VIEW
+
+    # complete_dubles_hash = {11=>[25, 26]}  # for DEBUGG ONLY!!!
 
     complete_dubles_hash
 

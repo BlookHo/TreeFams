@@ -558,7 +558,7 @@ RSpec.describe User, :type => :model do
       end
     end
 
-    describe '- check User model Method <Search> - Ok'  do  # , focus: true
+    describe '- check User model Method <Search> - Ok' , focus: true do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -850,7 +850,8 @@ RSpec.describe User, :type => :model do
           expect(check_connection_result[:stop_by_arrs]).to eq( false )
         end
         it "- check_connection_result: after <check_connection_arrs>" do
-          puts "In User model: check_connection_result[:diag_connection_message] = #{check_connection_result[:diag_connection_message]} \n"
+          puts "In User model: check_connection_result[:diag_connection_message]
+                 = #{check_connection_result[:diag_connection_message]} \n"
           expect(check_connection_result[:diag_connection_message]).
               to eq( "Ok to connect. НЕТ Дублирований in Connection array(s) " )
         end
@@ -859,7 +860,8 @@ RSpec.describe User, :type => :model do
           expect(check_connection_result[:common_profiles]).to eq( [] )
         end
         it "- check_connection_result: after <check_connection_arrs>" do
-          puts "In User model: check_connection_result[:complete_dubles_hash] = #{check_connection_result[:complete_dubles_hash]} \n"
+          puts "In User model: check_connection_result[:complete_dubles_hash]
+                = #{check_connection_result[:complete_dubles_hash]} \n"
           expect(check_connection_result[:complete_dubles_hash]).to eq( {} )
         end
 
@@ -886,7 +888,8 @@ RSpec.describe User, :type => :model do
           expect(check_connection_result[:common_profiles]).to eq( [12, 18] )
         end
         it "- check_connection_result: when the same profile (12 и 18) - is in both arrays: complete_dubles_hash" do
-          puts "In User model: check_connection_result[:complete_dubles_hash] = #{check_connection_result[:complete_dubles_hash]} \n"
+          puts "In User model: check_connection_result[:complete_dubles_hash]
+                = #{check_connection_result[:complete_dubles_hash]} \n"
           expect(check_connection_result[:complete_dubles_hash]).to eq( nil )
         end
       end
@@ -912,7 +915,8 @@ RSpec.describe User, :type => :model do
           expect(check_connection_result[:common_profiles]).to eq( [] )
         end
         it "- check_connection_result: when profiles_to_rewrite = [] - complete_dubles_hash" do
-          puts "In User model: check_connection_result[:complete_dubles_hash] = #{check_connection_result[:complete_dubles_hash]} \n"
+          puts "In User model: check_connection_result[:complete_dubles_hash]
+                 = #{check_connection_result[:complete_dubles_hash]} \n"
           expect(check_connection_result[:complete_dubles_hash]).to eq( nil )
         end
       end
@@ -939,7 +943,8 @@ RSpec.describe User, :type => :model do
           expect(check_connection_result[:common_profiles]).to eq( [] )
         end
         it "- check_connection_result: when arrays size are unqual - complete_dubles_hash" do
-          puts "In User model: check_connection_result[:complete_dubles_hash] = #{check_connection_result[:complete_dubles_hash]} \n"
+          puts "In User model: check_connection_result[:complete_dubles_hash]
+                 = #{check_connection_result[:complete_dubles_hash]} \n"
           expect(check_connection_result[:complete_dubles_hash]).to eq( nil )
         end
       end

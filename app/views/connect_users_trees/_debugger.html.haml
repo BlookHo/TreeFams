@@ -3,17 +3,10 @@
   Кто хочет соединиться: Автор: #{@current_user_id.inspect}
 %p
   @who_connect_users_arr: #{@who_connect_users_arr.inspect}
--#%p
--#  @first_tree: #{@first_tree.inspect}
 %p
   Выбран Юзер, с кем Автор хочет соединиться (из вьюхи): #{@user_id.inspect}
 %p
   @with_whom_connect_users_arr: #{@with_whom_connect_users_arr.inspect}
--#%p
--#  @second_tree: #{@second_tree.inspect}
-
-%h4
-  параметр ПОИСКА: @certain_koeff_for_connect = #{@certain_koeff_for_connect.inspect}
 %h4
   ИТОГОВЫЕ ДОСТОВЕРНЫЕ ПАРЫ ПРОФИЛЕЙ - БЕЗ ДУБЛИКАТОВ: @uniq_profiles_pairs: #{@uniq_profiles_pairs.inspect}
 %h4
@@ -27,46 +20,34 @@
   Определение массивов ПЕРЕЗАПИСИ ПРОФИЛЕЙ:
 
 
--#%p
--#  ВИД ПОИСКА: @type_search_message: #{@type_search_message.inspect}
-
 %h4
   Массивы перезаписи, найденные в Connect_Users
 %p
   @profiles_to_rewrite: #{@profiles_to_rewrite.inspect}
 %p
   @profiles_to_destroy: #{@profiles_to_destroy.inspect}
-%p
-  @complete_dubles_hash: #{@complete_dubles_hash.inspect}
 -#%p
--#  @new_connection_hash: #{@new_connection_hash.inspect}
+-#  @complete_dubles_hash: #{@complete_dubles_hash.inspect}
 -#%p
--#  @diff_hash: #{@diff_hash.inspect}
+-#  @save_in_tree: #{@save_in_tree.inspect}
+-#%p
+-#  @save_in_tree_LEN: #{@save_in_tree_LEN.inspect}
+-#%p
+-#  @save_in_profilekey: #{@save_in_profilekey.inspect}
+-#%p
+-#  @save_in_profilekey_LEN: #{@save_in_profilekey_LEN.inspect}
 
-
-
-
-
-%p
-  @save_in_tree: #{@save_in_tree.inspect}
-%p
-  @save_in_tree_LEN: #{@save_in_tree_LEN.inspect}
-%p
-  @save_in_profilekey: #{@save_in_profilekey.inspect}
-%p
-  @save_in_profilekey_LEN: #{@save_in_profilekey_LEN.inspect}
-
-%br
-
-%p
-  @new_tree_users: #{@new_tree_users.inspect}
-%p
-  @requests_from_arr: #{@requests_from_arr.inspect}
-%p
-  @requests_with_arr: #{@requests_with_arr.inspect}
-%p
-  @all_requests_to_update: #{@all_requests_to_update.inspect}
-
+-#%br
+-#
+-#%p
+-#  @new_tree_users: #{@new_tree_users.inspect}
+-#%p
+-#  @requests_from_arr: #{@requests_from_arr.inspect}
+-#%p
+-#  @requests_with_arr: #{@requests_with_arr.inspect}
+-#%p
+-#  @all_requests_to_update: #{@all_requests_to_update.inspect}
+-#
 
 
 -#= link_to 'Просмотр одного запроса', show_one_request_path(with_user_id: @user_id, connection_id: @user_id),  class: :request

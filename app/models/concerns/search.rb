@@ -17,6 +17,8 @@ module Search
 
     tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
     qty_of_tree_profiles = tree_is_profiles.size unless tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
+    # Задание на поиск от Дерева Юзера: tree_is_profiles =
+    # [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18]
 
     logger.info "======================= RUN start_search ========================= "
     logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
@@ -25,6 +27,10 @@ module Search
 
     ############### ПОИСК ######## NEW LAST METHOD ############
     search_profiles_from_tree(certain_koeff, connected_author_arr, tree_is_profiles) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
+
+    # @duplicates_one_to_many = { 3=> [2, 4]}  # for DEBUGG ONLY!!!
+    # @duplicates_many_to_one = { 4=> 2, 3 => 2}  # for DEBUGG ONLY!!!
+
 
     results = {
         connected_author_arr: connected_author_arr, # where use? - in View
