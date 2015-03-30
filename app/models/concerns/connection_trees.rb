@@ -31,7 +31,7 @@ module ConnectionTrees
     #                          connect_users(current_user_id.to_i, user_id.to_i) # OLD!!
 
     #    ConnectedUser.set_users_connection(connection_data) #, current_user_id, user_id, connection_id)
-    #### это и есть лог объединения - с массивами профилей!!!!
+    #### это массивы профилей!!!!
 
     ##################################################################
     ######## Перезапись profile_id при объединении деревьев
