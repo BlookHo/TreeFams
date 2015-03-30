@@ -319,7 +319,6 @@ class ConnectUsersTreesController < ApplicationController
       ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
       current_user.connection_in_tables(connection_data)
       ##################################################################
-
       flash[:notice] = " #{connection_message} Ваши деревья успешно объединены!"
       logger.info "Connection - GO ON! array(s) - CORRECT!,
                    @stop_connection = #{@stop_connection},\n connection_message = #{connection_message}"
@@ -353,27 +352,12 @@ class ConnectUsersTreesController < ApplicationController
     if switch
       flash[:alert] = " #{connection_message} "
       logger.info " #{connection_message} "
-
       current_user.unlock_tree! # unlock tree
       @stop_connection = true   # for stop_connection & view
-
       redirect_to home_path
     end
   end
 
-
-  # @note: Контроль корректности массивов перед объединением
-  def check_stop_connection(stop_connection, connection_message)
-    if stop_connection
-      flash[:alert] = " #{connection_message} " #  Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны!"
-      logger.info " #{connection_message} " #   Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! "
-
-      current_user.unlock_tree! # unlock tree
-      @stop_connection = true  # for stop_connection & view
-
-      redirect_to home_path
-    end
-  end
 
   # update request data - to yes to connect
   # Ответ ДА на запрос на объединение
@@ -394,6 +378,26 @@ class ConnectUsersTreesController < ApplicationController
       # flash - no connection requests data in table
     end
   end
+
+
+  # Disconnect
+  def disconnect_trees
+
+    # Не заблокировано ли дерево пользователя
+    if current_user.tree_is_locked?
+      flash[:warning] = "Объединения в данный момент невозможно. Временная блокировка пользователя.
+                       Можно повторить попытку позже."
+      return redirect_to home_path #:back
+    else
+      current_user.lock!
+    end
+
+
+    current_user.disconnect
+
+  end
+
+
 
 
 end

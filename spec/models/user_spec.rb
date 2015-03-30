@@ -558,7 +558,7 @@ RSpec.describe User, :type => :model do
       end
     end
 
-    describe '- check User model Method <Search> - Ok' , focus: true do  # , focus: true
+    describe '- check User model Method <Search> - Ok'  do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -802,7 +802,7 @@ RSpec.describe User, :type => :model do
         let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
 
-        it "- Check Complete search result: final_connection_hash after <complete_search>" do
+        it "- Check Valid Complete search result: final_connection_hash after <complete_search>" do
           puts "In User model: final_connection_hash = #{final_connection_hash} \n"
           expect(final_connection_hash).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
         end
@@ -820,11 +820,11 @@ RSpec.describe User, :type => :model do
         let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
 
-        it "- Check Complete search result: final_connection_hash == {} " do
+        it "- Check Invalid Complete search result: final_connection_hash == {} " do
           puts "In User model: with_whom_connect: wrong - final_connection_hash = #{final_connection_hash} \n"
           expect(final_connection_hash).to eq( {} )
         end
-        it "- Check Complete search result: final_connection_hash - incorrect" do
+        it "- Check Invalid Complete search result: final_connection_hash - incorrect" do
           puts "In User model: final_connection_hash - wrong: #{final_connection_hash} \n"
           expect(final_connection_hash).to_not eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24} )
         end
@@ -835,7 +835,7 @@ RSpec.describe User, :type => :model do
     #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
     # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
     # :current_user_id=>1, :user_id=>3, :connection_id=>3}
-    describe '- check User model Method < check_connection_arrs(connection_data )>' , focus: true  do  # , focus: true
+    describe '- check User model Method < check_connection_arrs(connection_data )>'  do  # , focus: true
       context '- when valid connection_data' do
         let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
@@ -853,7 +853,7 @@ RSpec.describe User, :type => :model do
           puts "In User model: check_connection_result[:diag_connection_message]
                  = #{check_connection_result[:diag_connection_message]} \n"
           expect(check_connection_result[:diag_connection_message]).
-              to eq( "Ok to connect. НЕТ Дублирований in Connection array(s) " )
+              to eq( "Данные для объединения деревьев - корректны. " )
         end
         it "- check_connection_result: after <check_connection_arrs>" do
           puts "In User model: check_connection_result[:common_profiles] = #{check_connection_result[:common_profiles]} \n"
@@ -955,22 +955,23 @@ RSpec.describe User, :type => :model do
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         let(:check_connection_result) { current_user_1.check_connection_arrs(connection_data) }
-        it "- check_connection_result when dubles in arrays - stop_by_arrs = true" do
+        it "- check_connection_result when dubles in rewrite array (11) - stop_by_arrs = true" do
           puts "In User model check_connection_arrs wrong: dubles in arrays:
                  check_connection_result[:stop_by_arrs] =  #{check_connection_result[:stop_by_arrs]} \n"
           expect(check_connection_result[:stop_by_arrs]).to eq( true )
         end
-        it "- check_connection_result: when dubles in arrays - connection_message " do
+        it "- check_connection_result: when dubles in rewrite array (11) - connection_message " do
           puts "In User model check_connection_arrs wrong: dubles in arrays:
                  check_connection_result[:diag_connection_message] =  #{check_connection_result[:diag_connection_message]} \n"
           expect(check_connection_result[:diag_connection_message]).
-              to eq( "Объединение остановлено! ЕСТЬ дублирования в массивах" )
+              to eq( "Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! ЕСТЬ дублирования в массивах" )
         end
-        it "- check_connection_result: when dubles in arrays - common_profiles" do
+        it "- check_connection_result: when dubles in rewrite array (11) - common_profiles" do
           puts "In User model: check_connection_result[:common_profiles] = #{check_connection_result[:common_profiles]} \n"
           expect(check_connection_result[:common_profiles]).to eq( [] )
         end
-        it "- check_connection_result: when dubles in arrays: profile 11 to profiles 25 and 26 - complete_dubles_hash" do
+        it "- check_connection_result: when dubles in rewrite array (11):
+                         profile 11 to profiles 25 and 26 - complete_dubles_hash" do
           puts "In User model: check_connection_result[:complete_dubles_hash] =
                  #{check_connection_result[:complete_dubles_hash]} \n"
           expect(check_connection_result[:complete_dubles_hash]).to eq(  {11=>[25, 26]} )
@@ -979,30 +980,89 @@ RSpec.describe User, :type => :model do
 
     end
 
-
-
-    describe '- check User model Method <connect_trees(connection_data)> - Ok' , focus: true  do  # , focus: true
-      context '- when valid complete_search_data' do
-        let(:complete_search_data) { {
-            :with_whom_connect => [3],
-            :uniq_profiles_pairs => { #15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
-                                      # 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
-                                      20=>{3=>28} }#,
-            # 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} }  #,
-            # 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
-        } }
-
-        let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
-        let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
-
-        it "- Check Complete search result: final_connection_hash after <complete_search>" do
-          puts "In User model: final_connection_hash = #{final_connection_hash} \n"
-          expect(final_connection_hash).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
+    describe '- check User model Method <connect_trees(connection_data)> - Ok'   do  # , focus: true
+      context '- check Tables count & fields values' do
+        describe '- check all profile_ids in ProfileKey rows BEFORE connect_trees ' do
+          let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
+                                   9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+                                   11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
+                                   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+                                   15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17,
+                                   17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19,
+                                   20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 23, 23, 23, 23,
+                                   23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 25, 25, 25, 25, 25, 25, 25, 26, 26, 26, 26,
+                                   26, 27, 27, 27, 27, 27, 28, 28, 28, 28, 28, 29, 29, 29, 29, 29, 124, 124, 124, 124]}
+          let(:profiles_ids_arr_size) {196}
+          it_behaves_like :successful_profile_keys_profile_ids
         end
+
       end
 
+      context '- check Tables count & fields values when valid connection_data'  do
+        # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+        # profiles_to_destroy = connection_data[:profiles_to_destroy]
+        # who_connect         = connection_data[:who_connect]
+        # with_whom_connect   = connection_data[:with_whom_connect]
+        # current_user_id     = connection_data[:current_user_id]
+        # user_id             = connection_data[:user_id]
+        # connection_id       = connection_data[:connection_id]
+        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+                                :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+                                :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+                                :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+        before { current_user_1.connection_in_tables(connection_data) }
+
+        describe '- check all profile_ids generated in ProfileKey rows AFTER <connect_trees>' do
+          let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
+                                   9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+                                   11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
+                                   12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
+                                   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15,
+                                   15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16,
+                                   16, 16, 16, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18,
+                                   18, 18, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20,
+                                   20, 20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 124, 124, 124, 124]}
+          let(:profiles_ids_arr_size) {196}
+          it_behaves_like :successful_profile_keys_profile_ids
+        end
+
+      end
 
     end
+
+    describe '- check User model Method <disconnect> - Ok' , focus: true  do  #
+
+      # context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
+      #    let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+      #                           :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+      #                           :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+      #                           :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+      #   let(:disconnection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+      #                           :profiles_to_rewrite=>[22, 29, 27, 25, 28, 23, 24, 26],
+      #                           :profiles_to_destroy=>[14, 21, 19, 11, 20, 12, 13, 18],
+      #                           :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+      #   before { current_user_1.connection_in_tables(connection_data)
+      #            current_user_1.disconnect }
+      #
+      #   describe '- check all profile_ids generated in ProfileKey rows AFTER <disconnect>' do
+      #     let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
+      #                              9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+      #                              11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
+      #                              14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+      #                              15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17,
+      #                              17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19,
+      #                              20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 23, 23, 23, 23,
+      #                              23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 25, 25, 25, 25, 25, 25, 25, 26, 26, 26, 26,
+      #                              26, 27, 27, 27, 27, 27, 28, 28, 28, 28, 28, 29, 29, 29, 29, 29, 124, 124, 124, 124]}
+      #     let(:profiles_ids_arr_size) {196}
+      #     it_behaves_like :successful_profile_keys_profile_ids
+      #   end
+      #
+      # end
+
+    end
+
+
 
   end
 

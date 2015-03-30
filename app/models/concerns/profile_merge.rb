@@ -10,6 +10,7 @@ module ProfileMerge
       profiles_to_destroy = connection_data[:profiles_to_destroy]
       logger.info "Starting merge profile: to_rewrite = #{profiles_to_rewrite},  to_destroy = #{profiles_to_destroy}"
       profiles_to_delete = []
+      puts "In Profiles merge"
 
       log_profiles_connection = []
 

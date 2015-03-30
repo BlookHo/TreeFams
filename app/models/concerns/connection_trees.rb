@@ -1,13 +1,13 @@
 module ConnectionTrees
   extend ActiveSupport::Concern
 
-# @note: основной метод объединения деревьев
-#
-# Центральный метод соединения деревьев = перезапись профилей в таблицах
-# Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-#  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
-# :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
-# :current_user_id=>1, :user_id=>3, :connection_id=>3}
+  # @note: основной метод объединения деревьев
+  #
+  # Центральный метод соединения деревьев = перезапись профилей в таблицах
+  # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
+  #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
+  # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+  # :current_user_id=>1, :user_id=>3, :connection_id=>3}
   def connection_in_tables(connection_data) #, current_user_id, user_id, connection_id)
 
     who_connect         = connection_data[:who_connect]
@@ -17,6 +17,7 @@ module ConnectionTrees
     current_user_id     = connection_data[:current_user_id]
     user_id             = connection_data[:user_id]
     connection_id       = connection_data[:connection_id]
+    puts "In connection_in_tables"
 
     # [1 2] c [3]
     # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
@@ -24,7 +25,7 @@ module ConnectionTrees
     # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
     ###################################################################
     ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-    #    connect_trees(connection_data)
+        connect_trees(connection_data)
     ####################################################################
     ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
     #                          connect_users(current_user_id.to_i, user_id.to_i) # OLD!!
@@ -44,8 +45,8 @@ module ConnectionTrees
   end
 
 
-# @note: Перезапись профилей в таблицах
-# @param connection_data
+  # @note: Перезапись профилей в таблицах
+  # @param connection_data
   def connect_trees(connection_data)
 
     profiles_to_rewrite = connection_data[:profiles_to_rewrite]
@@ -56,26 +57,28 @@ module ConnectionTrees
     user_id             = connection_data[:user_id]
     connection_id       = connection_data[:connection_id]
 
+    puts "In connect_trees"
     logger.info "IN connect_trees: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
 
     #####################################################
-     Profile.merge(connection_data)
+ #    Profile.merge(connection_data)
     #####################################################
 
     # log_connection_tree       = update_table(connection_data, Tree)
     # log_connection_profilekey = update_table(connection_data, ProfileKey)
 
     #####################################################
-    update_table(connection_data, Tree)
-    update_table(connection_data, ProfileKey)
+    # puts "Before update_table "
+    update_table_connection(connection_data, Tree)
+    update_table_connection(connection_data, ProfileKey)
     #####################################################
-
   end
 
-# перезапись значений в полях одной таблицы
-# лог не формируем как в похожих, т.к он уже сформирован в табл.Connected_User
-  def update_table(connection_data, table )
+  # перезапись значений в полях одной таблицы
+  # лог не формируем как в похожих, т.к он уже сформирован в табл.Connected_User
+  def update_table_connection(connection_data, table )
     # log_connection = []
+    # puts "In update_table_connection table = #{table}"
 
     # ТЕСТ
     # name_of_table = table.table_name
@@ -90,24 +93,24 @@ module ConnectionTrees
     ['profile_id', 'is_profile_id'].each do |table_field|
       table_update_data = { table: table, table_field: table_field}
       # log_connection = update_field(connection_data, table_update_data , log_connection)
-      update_field(connection_data, table_update_data)
+      update_field_connection(connection_data, table_update_data)
     end
     # log_connection
   end
 
 
-# Делаем общий массив юзеров, для update_field
-# /
+  # Делаем общий массив юзеров, для update_field
+  # /
   def users_connecting_scope(who_connect, with_whom_connect)
     all_users_to_connect = who_connect + with_whom_connect
     logger.info "IN connect_trees users_connecting_scope: all_users_to_connect = #{all_users_to_connect}"
     all_users_to_connect
   end
 
-# перезапись значений в одном поле одной таблицы
-# profiles_to_destroy[arr_ind] - один profile_id для замены
-# profiles_to_rewrite[arr_ind] - один profile_id, которым меняем
-  def update_field(connection_data, table_update_data)
+  # перезапись значений в одном поле одной таблицы
+  # profiles_to_destroy[arr_ind] - один profile_id для замены
+  # profiles_to_rewrite[arr_ind] - один profile_id, которым меняем
+  def update_field_connection(connection_data, table_update_data)
 
     who_connect         = connection_data[:who_connect]
     with_whom_connect   = connection_data[:with_whom_connect]
@@ -117,6 +120,7 @@ module ConnectionTrees
     profiles_to_destroy = connection_data[:profiles_to_destroy]
     # connected_users_arr = connection_data[:connected_users_arr]
     # connection_id       = connection_data[:connection_id]
+    # puts "In update_field_connection table_update_data = #{table_update_data}"
 
     table       = table_update_data[:table]
     table_field = table_update_data[:table_field]
@@ -129,8 +133,8 @@ module ConnectionTrees
       unless rows_to_update.blank?
         rows_to_update.each do |rewrite_row|
 
-          # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-          #  rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
+     # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
+     rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
 
           logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, #{rewrite_row.profile_id},
                           #{rewrite_row.is_profile_id} "
@@ -155,6 +159,82 @@ module ConnectionTrees
 
   end
 
+
+  # Disconnect
+  def disconnect
+    # From Connected_users
+
+    arrays_hash = get_profiles_arrays
+
+    disconnection_data = make_disconnect_data(arrays_hash)
+
+    # disconnection_data[:current_user_id] = self.id
+    # who_connect_users_arr = self.get_connected_users
+    #
+    # who_connect         = connection_data[:who_connect]
+    # with_whom_connect   = connection_data[:with_whom_connect]
+    # # table_name          = connection_data[:table_name]
+    # # current_user_id     = connection_data[:current_user_id]
+    # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+    # profiles_to_destroy = connection_data[:profiles_to_destroy]
+    #
+    #
+    # who_connect         = disconnection_data[:who_connect]
+    # with_whom_connect   = disconnection_data[:with_whom_connect]
+    #
+    # disconnection_data[:connection_id] = profiles_to_destroy
+
+    #    Profile.merge(disconnection_data)
+    update_table_connection(disconnection_data, Tree)
+    update_table_connection(disconnection_data, ProfileKey)
+
+  end
+
+
+  def get_profiles_arrays
+    # get arrays from ConnectedUser
+
+    # arrays_hash =
+        {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
+
+    # arrays_hash
+  end
+
+
+  def make_disconnect_data(arrays_hash)
+
+    profiles_to_rewrite = arrays_hash.keys
+    profiles_to_destroy = arrays_hash.values
+
+    # let(:disconnection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+    #                         :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+    #                         :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+    #                         :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+    who_connect_users_arr = self.get_connected_users
+
+    user_id = 3
+    with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
+    # get connection_id from CommonLog log_type = 3 - connection of trees
+    connection_id = 3
+
+    # disconnection_data =
+    { who_connect:          who_connect_users_arr, #
+      with_whom_connect:    with_whom_connect_users_arr, #
+      profiles_to_rewrite:  profiles_to_destroy, #
+      profiles_to_destroy:  profiles_to_rewrite, #
+      current_user_id:      self.id, #
+      user_id:              user_id ,#
+      connection_id:        connection_id  }
+
+    # disconnection_data
+  end
+
+
+
+
+
+
+  # todo: refactor
   # @note: Контроль корректности массивов перед объединением
   #    # Tested
   # @param: connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
