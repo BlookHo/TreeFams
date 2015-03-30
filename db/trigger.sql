@@ -51,3 +51,11 @@ AFTER INSERT OR UPDATE OR DELETE
 ON profile_keys
 FOR EACH ROW
 EXECUTE PROCEDURE notify_trigger();
+
+
+-- trigger for connected_users table
+CREATE TRIGGER watched_table
+AFTER INSERT OR UPDATE OR DELETE
+ON connected_users
+FOR EACH ROW
+EXECUTE PROCEDURE notify_trigger();
