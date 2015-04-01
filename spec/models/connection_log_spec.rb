@@ -6,7 +6,7 @@ RSpec.describe ConnectionLog, type: :model do
   describe '- Validation' do
     describe '- on create' do
 
-      context '- valid connection_log' , focus: true do
+      context '- valid connection_log'  do  # , focus: true
 
         let(:good_connections_log) {FactoryGirl.build(:connection_log)}
         it '- 1 Saves a valid connection_log' do
@@ -57,7 +57,7 @@ RSpec.describe ConnectionLog, type: :model do
 
 
       end
-      context '- invalid connection_log' do
+      context '- invalid connection_log'  do  # , focus: true
 
         let(:bad_connections_written_equal_overwritten) {FactoryGirl.build(:connection_log, :bad_written_and_overwritten)}
         it '- 1 Dont save: - written_and_overwritten - equal' do
@@ -86,7 +86,7 @@ RSpec.describe ConnectionLog, type: :model do
 
         let(:bad_connections_table_user_wrong_field) {FactoryGirl.build(:connection_log, :bad_table_user_and_field)}
         it '- 6 Dont save: - wrong_field for table user' do
-          expect(bad_sims_table_user_wrong_field).to_not be_valid
+          expect(bad_connections_table_user_wrong_field).to_not be_valid
         end
 
         let(:bad_connections_table_profile_wrong_field) {FactoryGirl.build(:connection_log, :bad_table_profile_and_field)}
@@ -124,8 +124,6 @@ RSpec.describe ConnectionLog, type: :model do
     let(:other_user_id) {other_user.id}
     let(:third_user_id) {third_user.id}
     let(:four_user_id) {four_user.id}
-
-    # let(:sims_profiles_pairs) {[[38, 42], [41, 40]]}
 
     # create model data
     before do
@@ -177,7 +175,7 @@ RSpec.describe ConnectionLog, type: :model do
 
     end
 
-    describe '* store connection logs*' do
+    describe '* store connection logs* - valid build' do
 
       before do
         ConnectionLog.delete_all

@@ -1,23 +1,24 @@
 module ConnectionTrees
   extend ActiveSupport::Concern
+  # in User model
 
   # @note: основной метод объединения деревьев
-  #
-  # Центральный метод соединения деревьев = перезапись профилей в таблицах
-  # Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
+  #   Центральный метод соединения деревьев = перезапись профилей в таблицах
+  #   Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
   #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
   # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
   # :current_user_id=>1, :user_id=>3, :connection_id=>3}
-  def connection_in_tables(connection_data) #, current_user_id, user_id, connection_id)
+  def connection_in_tables(connection_data)
 
-    who_connect         = connection_data[:who_connect]
-    with_whom_connect   = connection_data[:with_whom_connect]
-    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy = connection_data[:profiles_to_destroy]
-    current_user_id     = connection_data[:current_user_id]
-    user_id             = connection_data[:user_id]
-    connection_id       = connection_data[:connection_id]
-    puts "In connection_in_tables"
+    who_connect_arr         = connection_data[:who_connect_arr]
+    with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
+    profiles_to_rewrite     = connection_data[:profiles_to_rewrite]
+    profiles_to_destroy     = connection_data[:profiles_to_destroy]
+    current_user_id         = connection_data[:current_user_id]
+    user_id                 = connection_data[:user_id]
+    connection_id           = connection_data[:connection_id]
+    # puts "In connection_in_tables"
+    # logger.info "IN connection_in_tables: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
 
     # [1 2] c [3]
     # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
@@ -51,8 +52,8 @@ module ConnectionTrees
 
     profiles_to_rewrite = connection_data[:profiles_to_rewrite]
     profiles_to_destroy = connection_data[:profiles_to_destroy]
-    who_connect         = connection_data[:who_connect]
-    with_whom_connect   = connection_data[:with_whom_connect]
+    who_connect         = connection_data[:who_connect_arr]
+    with_whom_connect   = connection_data[:with_whom_connect_arr]
     current_user_id     = connection_data[:current_user_id]
     user_id             = connection_data[:user_id]
     connection_id       = connection_data[:connection_id]
@@ -60,26 +61,37 @@ module ConnectionTrees
     puts "In connect_trees"
     logger.info "IN connect_trees: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
 
-    #####################################################
- #    Profile.merge(connection_data)
-    #####################################################
-
-    # log_connection_tree       = update_table(connection_data, Tree)
-    # log_connection_profilekey = update_table(connection_data, ProfileKey)
+    # todo: Сделать логирование перезаписи Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
+    # Перезапись profile_data при объединении профилей
+    #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
 
     #####################################################
-    # puts "Before update_table "
-    update_table_connection(connection_data, Tree)
-    update_table_connection(connection_data, ProfileKey)
+    # todo: Раскоммитить 1 строки ниже и закоммитить 1 строки за ними  - для полной перезаписи логов и отладки
+   log_connection_user_profile = Profile.merge(connection_data)
+    # log_connection_user_profile = []
     #####################################################
+    # todo: Раскоммитить 2 строки ниже и закоммитить 2 строки за ними  - для полной перезаписи логов и отладки
+   log_connection_tree       = update_table_connection(connection_data, Tree, ConnectionLog)
+   log_connection_profilekey = update_table_connection(connection_data, ProfileKey, ConnectionLog)
+    #####################################################
+    # log_connection_tree = []
+    # log_connection_profilekey = []
+
+    connection_log = { log_user_profile: log_connection_user_profile,
+                       log_tree: log_connection_tree,
+                       log_profilekey: log_connection_profilekey }
+    complete_connection_log_arr = connection_log[:log_user_profile] + connection_log[:log_tree] +
+                                  connection_log[:log_profilekey]
+    # Запись массива лога в таблицу ConnectionLog
+    ConnectionLog.store_log(complete_connection_log_arr) unless complete_connection_log_arr.blank?
+    # Запись строки Общего лога в таблицу CommonLog
+    make_connection_common_log(connection_data)
+
   end
 
   # перезапись значений в полях одной таблицы
-  # лог не формируем как в похожих, т.к он уже сформирован в табл.Connected_User
-  def update_table_connection(connection_data, table )
-    # log_connection = []
+  def update_table_connection(connection_data, table, log_table )
     # puts "In update_table_connection table = #{table}"
-
     # ТЕСТ
     # name_of_table = table.table_name
     # logger.info "*** In module SimilarsConnection update_table: name_of_table = #{name_of_table.inspect} "
@@ -87,20 +99,19 @@ module ConnectionTrees
     # logger.info "*** In module SimilarsConnection update_table: model = #{model.inspect} "
     # logger.info "*** In module SimilarsConnection update_table: table = #{table.inspect} "
 
-    connection_data[:table_name] = table.table_name # DEBUGG_TO
+    log_connection = []
+    connection_data[:table_name] = table.table_name #
     logger.info "IN connect_trees update_table: connection_data[:table_name] = #{connection_data[:table_name]}" # DEBUGG_TO
 
     ['profile_id', 'is_profile_id'].each do |table_field|
-      table_update_data = { table: table, table_field: table_field}
-      # log_connection = update_field(connection_data, table_update_data , log_connection)
-      update_field_connection(connection_data, table_update_data)
+      table_update_data = { table: table, table_field: table_field, log_table: log_table}
+      log_connection = update_field_connection(connection_data, table_update_data, log_connection)
     end
-    # log_connection
+    log_connection
   end
 
 
-  # Делаем общий массив юзеров, для update_field
-  # /
+  # Делаем общий массив юзеров, для update_field в таблицах
   def users_connecting_scope(who_connect, with_whom_connect)
     all_users_to_connect = who_connect + with_whom_connect
     logger.info "IN connect_trees users_connecting_scope: all_users_to_connect = #{all_users_to_connect}"
@@ -110,20 +121,20 @@ module ConnectionTrees
   # перезапись значений в одном поле одной таблицы
   # profiles_to_destroy[arr_ind] - один profile_id для замены
   # profiles_to_rewrite[arr_ind] - один profile_id, которым меняем
-  def update_field_connection(connection_data, table_update_data)
+  def update_field_connection(connection_data, table_update_data, log_connection)
 
-    who_connect         = connection_data[:who_connect]
-    with_whom_connect   = connection_data[:with_whom_connect]
-    # table_name          = connection_data[:table_name]
-    # current_user_id     = connection_data[:current_user_id]
+    who_connect         = connection_data[:who_connect_arr]
+    with_whom_connect   = connection_data[:with_whom_connect_arr]
+    table_name          = connection_data[:table_name]
+    current_user_id     = connection_data[:current_user_id]
     profiles_to_rewrite = connection_data[:profiles_to_rewrite]
     profiles_to_destroy = connection_data[:profiles_to_destroy]
-    # connected_users_arr = connection_data[:connected_users_arr]
-    # connection_id       = connection_data[:connection_id]
-    # puts "In update_field_connection table_update_data = #{table_update_data}"
+    user_id             = connection_data[:user_id]
+    connection_id       = connection_data[:connection_id]
 
     table       = table_update_data[:table]
     table_field = table_update_data[:table_field]
+    log_table   = table_update_data[:log_table]
 
     all_users_to_connect = users_connecting_scope(who_connect, with_whom_connect)
 
@@ -133,29 +144,53 @@ module ConnectionTrees
       unless rows_to_update.blank?
         rows_to_update.each do |rewrite_row|
 
-     # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-     rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
+     # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи данных в таблицах и логов
+   rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
+      #####################################################
 
-          logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, #{rewrite_row.profile_id},
-                          #{rewrite_row.is_profile_id} "
-          logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, #{profiles_to_rewrite[arr_ind]} "
+          logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, rewrite_row.profile_id = #{rewrite_row.profile_id},
+                         rewrite_row.is_profile_id = #{rewrite_row.is_profile_id}, profiles_to_rewrite[arr_ind] = #{profiles_to_rewrite[arr_ind]} "
 
-          # one_connection_data = { connected_at: connection_id,              # int
-          #                         current_user_id: current_user_id,        # int
-          #                         table_name: table_name,                  # string
-          #                         table_row: rewrite_row.id,            # int
-          #                         field: table_field,                 # string
-          #                         written: profiles_to_rewrite[arr_ind],        # int
-          #                         overwritten: profiles_to_destroy[arr_ind] }        # int
-          #
-          # log_connection << SimilarsLog.new(one_connection_data)
+          one_connection_data = { connected_at: connection_id,                # int
+                                  current_user_id: current_user_id,           # int
+                                  with_user_id: user_id,                      # int
+                                  table_name: table_name,                     # string
+                                  table_row: rewrite_row.id,                  # int
+                                  field: table_field,                         # string
+                                  written: profiles_to_rewrite[arr_ind],      # int
+                                  overwritten: profiles_to_destroy[arr_ind] } # int
+          log_connection << log_table.new(one_connection_data)
 
         end
 
       end
 
     end
-    # log_connection
+    log_connection
+
+  end
+
+
+  # @note: Сделать 1 запись в общие логи: в Common_logs
+  def make_connection_common_log(connection_data)
+    # logger.info "In add_new_profile: Before create_add_log"
+    current_log_type          = 4  # connection trees: rollback == disconnect trees. Тип = разъединение деревьев при rollback
+    current_user_id           = connection_data[:current_user_id]
+    user_id                   = connection_data[:user_id]
+    common_connect_log_number = connection_data[:connection_id] # Берем тот номер соединения деревьев,
+    # который идет из Conn_requests - номер запроса на соединение деревьев. Он - единый и не является порядковым, как
+    # номера логов на добавление и удаление профилей, номера которыхформируются прямо в табл. CommonLogs.
+
+    # new_common_log_number = CommonLog.new_log_id(current_user_id, current_log_type)
+
+    common_log_data = { user_id:         current_user_id,
+                        log_type:        current_log_type,
+                        log_id:          common_connect_log_number,
+                        profile_id:      User.find(current_user_id).profile_id,
+                        base_profile_id: User.find(user_id).profile_id, # после объединения деревьев: профиль может
+                        # отличаться от того, кот. был до объединения
+                        new_relation_id: 999 }  # Условный код для лога объединения деревьев
+    CommonLog.create_common_log(common_log_data)
 
   end
 
@@ -185,8 +220,8 @@ module ConnectionTrees
     # disconnection_data[:connection_id] = profiles_to_destroy
 
     #    Profile.merge(disconnection_data)
-    update_table_connection(disconnection_data, Tree)
-    update_table_connection(disconnection_data, ProfileKey)
+    update_table_connection(disconnection_data, Tree, ConnectionLog)
+    update_table_connection(disconnection_data, ProfileKey, ConnectionLog)
 
   end
 

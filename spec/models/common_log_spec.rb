@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CommonLog, type: :model do
+RSpec.describe CommonLog, type: :model do # , focus: true
 
   describe '- validation' do
     describe '- on create' do

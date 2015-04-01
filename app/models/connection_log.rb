@@ -21,12 +21,6 @@ class ConnectionLog < ActiveRecord::Base
   validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
   # - тогда поле table_row д.б.uniq
 
-  # 4 ##*** In module SimilarsConnection log_profiles_connection:
-  # current_user_id: 7, table_name: "users", table_row: 8, field: "profile_id", written: 84, overwritten: 66, created_at: nil, updated_at: nil>,
-  # current_user_id: 7, table_name: "profiles", table_row: 84, field: "user_id", written: 8, overwritten: nil, created_at: nil, updated_at: nil>,
-  #, current_user_id: 7, table_name: "profiles", table_row: 84, field: "tree_id", written: 7, overwritten: 7, created_at: nil, updated_at: nil>,
-  #  current_user_id: 7, table_name: "profiles", table_row: 66, field: "user_id", written: nil, overwritten: 8, created_at: nil, updated_at: nil>] (pid:9507)
-
   # custom validations
   def written_fields_are_not_equal
     self.errors.add(:similars_logs,
@@ -38,9 +32,9 @@ class ConnectionLog < ActiveRecord::Base
   end
 
   def writtens_can_be_nil?
-    # puts "In SimilarsLog valid:  table_name = #{self.table_name}, written = #{self.written}, field = #{self.field} "
-    # puts "In SimilarsLog valid:  table_name? = #{self.table_name == "profiles"} "
-    # puts "In SimilarsLog valid:  table_name && field? = #{self.table_name == "profiles" && self.field == "user_id"} "
+    # puts "In ConnectionLog valid:  table_name = #{self.table_name}, written = #{self.written}, field = #{self.field} "
+    # puts "In ConnectionLog valid:  table_name? = #{self.table_name == "profiles"} "
+    # puts "In ConnectionLog valid:  table_name && field? = #{self.table_name == "profiles" && self.field == "user_id"} "
     self.table_name == "profiles" && self.field == "user_id"
   end
 
@@ -61,9 +55,15 @@ class ConnectionLog < ActiveRecord::Base
   end
 
 
-  # Для текущего дерева - получение номера id лога для прогона разъединения Похожих,
+  # for RSpec - in User_spec.rb
+  scope :at_current_user_connected_fields, -> (current_user_id, connection_id) { where(current_user_id: current_user_id,
+                                                                                connected_at: connection_id).
+                                                            where(" field = 'profile_id' or field = 'is_profile_id' ")}
+
+
+  # Для текущего дерева - получение номера id лога для прогона разъединения trees,
   # ранее объединенных.
-  # Если такой лог есть, значит ранее были найдены похожие и они объединялись. Значит теперь их
+  # Если такой лог есть, значит ранее trees они объединялись. Значит теперь их
   # можно разъединять.
   # Последний id (максимальный) из существующих логов - :connected_at
   def self.current_tree_log_id(connected_users)
@@ -71,18 +71,18 @@ class ConnectionLog < ActiveRecord::Base
     log_connection_id = []
     # Сбор всех id логов, относящихся к текущему дереву
     current_tree_logs_ids = self.where(current_user_id: connected_users).pluck(:connected_at).uniq
-    # logger.info "In internal_similars_search 1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
+    # logger.info "In  1b: @current_tree_logs_ids = #{current_tree_logs_ids} " unless current_tree_logs_ids.blank?
     log_connection_id = current_tree_logs_ids.max unless current_tree_logs_ids.blank?
-    # logger.info "In internal_similars_search 1b: log_connection_id = #{log_connection_id} " unless log_connection_id.blank?
+    # logger.info "In  1b: log_connection_id = #{log_connection_id} " unless log_connection_id.blank?
     log_connection_id
   end
 
 
-  # From SimilarsConnection-Module # similars_connect_tree
+  # From -Module # similars_connect_tree
   # Сохранение массива логов в таблицу ConnectionLog
-  def self.store_log(similars_common_log)
+  def self.store_log(connection_log)
     # logger.info "MMMMM *** In model ConnectionLog store_log "
-    similars_common_log.each(&:save)
+    connection_log.each(&:save)
   end
 
 

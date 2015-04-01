@@ -285,8 +285,8 @@ class ConnectUsersTreesController < ApplicationController
     @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
 
     connection_data = {
-        who_connect:          who_connect_users_arr, #
-        with_whom_connect:    with_whom_connect_users_arr, #
+        who_connect_arr:          who_connect_users_arr, #
+        with_whom_connect_arr:    with_whom_connect_users_arr, #
         profiles_to_rewrite:  profiles_to_rewrite, #
         profiles_to_destroy:  profiles_to_destroy, #
         current_user_id:      current_user_id, #
@@ -295,7 +295,6 @@ class ConnectUsersTreesController < ApplicationController
     }
     logger.info "Connection - GO ON! connection_data = #{connection_data}"
 
-    # In check_connection_arrs:  connection_data =
     # connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
     #                    :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
     #                    :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26]
@@ -315,6 +314,7 @@ class ConnectUsersTreesController < ApplicationController
     # logger.info "=After 3rd check_connection_switch: @stop_connection || stop_by_arrs = #{@stop_connection || stop_by_arrs}"
 
     unless @stop_connection || stop_by_arrs # for stop_connection & view
+
       ##################################################################
       ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
       current_user.connection_in_tables(connection_data)
@@ -381,7 +381,7 @@ class ConnectUsersTreesController < ApplicationController
 
 
   # Disconnect
-  def disconnect_trees
+  def disconnect
 
     # Не заблокировано ли дерево пользователя
     if current_user.tree_is_locked?
@@ -393,8 +393,16 @@ class ConnectUsersTreesController < ApplicationController
     end
 
 
-    current_user.disconnect
+  # Возвращает объединенные профили в состояние перед объединением
+  # во всех таблицах
+    log_id = params[:log_connection_id] # From Common_log
+    # for RSpec & TO_VIEW
+    @log_id = log_id.to_i
 
+    ############ call of User.module Similars_disconnection #####################
+    current_user.disconnect_tree(log_id.to_i)
+    # tree_info, new_sims, similars =
+    # current_user.start_similars # to restore similars found
   end
 
 

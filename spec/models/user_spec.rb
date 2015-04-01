@@ -518,8 +518,10 @@ RSpec.describe User, :type => :model do
       # WeafamSetting.reset_pk_sequence
       Name.delete_all
       Name.reset_pk_sequence
-      # CommonLog.delete_all
-      # CommonLog.reset_pk_sequence
+      ConnectionLog.delete_all
+      ConnectionLog.reset_pk_sequence
+      CommonLog.delete_all
+      CommonLog.reset_pk_sequence
     }
 
     # create User parameters
@@ -837,7 +839,7 @@ RSpec.describe User, :type => :model do
     # :current_user_id=>1, :user_id=>3, :connection_id=>3}
     describe '- check User model Method < check_connection_arrs(connection_data )>'  do  # , focus: true
       context '- when valid connection_data' do
-        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+        let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
@@ -867,7 +869,7 @@ RSpec.describe User, :type => :model do
 
       end
       context '- when Invalid connection_data 1 ' do
-        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+        let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 12, 24, 18],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
@@ -895,7 +897,7 @@ RSpec.describe User, :type => :model do
       end
 
       context '- when Invalid connection_data 2 ' do
-        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+        let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         let(:check_connection_result) { current_user_1.check_connection_arrs(connection_data) }
@@ -922,7 +924,7 @@ RSpec.describe User, :type => :model do
       end
 
       context '- when Invalid connection_data 3 '  do   # , focus: true
-        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+        let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12], #, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
@@ -950,7 +952,7 @@ RSpec.describe User, :type => :model do
       end
 
       context '- when Invalid connection_data 4 '  do   # , focus: true
-        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+        let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 11],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
@@ -995,7 +997,6 @@ RSpec.describe User, :type => :model do
           let(:profiles_ids_arr_size) {196}
           it_behaves_like :successful_profile_keys_profile_ids
         end
-
       end
 
       context '- check Tables count & fields values when valid connection_data'  do
@@ -1006,7 +1007,7 @@ RSpec.describe User, :type => :model do
         # current_user_id     = connection_data[:current_user_id]
         # user_id             = connection_data[:user_id]
         # connection_id       = connection_data[:connection_id]
-        let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
+        let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
@@ -1025,6 +1026,45 @@ RSpec.describe User, :type => :model do
           let(:profiles_ids_arr_size) {196}
           it_behaves_like :successful_profile_keys_profile_ids
         end
+
+        context ' - check ConnectionLog table AFTER <connect_trees>' do
+
+          describe '- check ConnectionLog rows count ' do
+            let(:rows_qty) {114}
+            it_behaves_like :successful_connection_logs_rows_count
+          end
+
+          describe '- check ConnectionLog fields ' , focus: true  do
+            it '- check Arrays to rewrite & to overwrite - correct and one to one' do
+              # puts "check ConnectionLog fields: current_user_id = #{connection_data[:current_user_id]},
+              #             connected_at = #{connection_data[:connection_id]} "
+              arr_rewrite =  ConnectionLog.at_current_user_connected_fields(connection_data[:current_user_id],
+                                                                            connection_data[:connection_id]).
+                                            pluck(:written).uniq
+              arr_overwrite =  ConnectionLog.at_current_user_connected_fields(connection_data[:current_user_id],
+                                                                              connection_data[:connection_id]).
+                                            pluck(:overwritten).uniq
+              puts "check ConnectionLog Arrays in fields: written = #{arr_rewrite}, overwritten = #{arr_overwrite} "
+              expect(arr_rewrite).to eq([14, 12, 13, 21, 19, 11, 20, 18])
+              expect(arr_overwrite).to eq([22, 23, 24, 29, 27, 25, 28, 26])
+            end
+          end
+
+        end
+
+        context ' - check CommonLog table AFTER <connect_trees>' do
+          describe '- check CommonLog have rows count - Ok ' do
+            let(:rows_qty) {1}
+            it_behaves_like :successful_common_logs_rows_count
+          end
+          it '- check CommonLog 1st & last row - Ok' do
+            common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
+            # got 1 row of CommonLog attributes
+            expect(common_log_row_fields).to eq({"id"=>1, "user_id"=>1, "log_type"=>4, "log_id"=>3, "profile_id"=>17,
+                                                 "base_profile_id"=>14, "relation_id"=>999} )
+          end
+        end
+
 
       end
 
