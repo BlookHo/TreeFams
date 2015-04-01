@@ -1027,29 +1027,15 @@ RSpec.describe User, :type => :model do
           it_behaves_like :successful_profile_keys_profile_ids
         end
 
-        context ' - check ConnectionLog table AFTER <connect_trees>' do
+        describe '- check ConnectionLog rows count AFTER <connect_trees>' do
+          let(:rows_qty) {114}
+          it_behaves_like :successful_connection_logs_rows_count
+        end
 
-          describe '- check ConnectionLog rows count ' do
-            let(:rows_qty) {114}
-            it_behaves_like :successful_connection_logs_rows_count
-          end
-
-          describe '- check ConnectionLog fields ' , focus: true  do
-            it '- check Arrays to rewrite & to overwrite - correct and one to one' do
-              # puts "check ConnectionLog fields: current_user_id = #{connection_data[:current_user_id]},
-              #             connected_at = #{connection_data[:connection_id]} "
-              arr_rewrite =  ConnectionLog.at_current_user_connected_fields(connection_data[:current_user_id],
-                                                                            connection_data[:connection_id]).
-                                            pluck(:written).uniq
-              arr_overwrite =  ConnectionLog.at_current_user_connected_fields(connection_data[:current_user_id],
-                                                                              connection_data[:connection_id]).
-                                            pluck(:overwritten).uniq
-              puts "check ConnectionLog Arrays in fields: written = #{arr_rewrite}, overwritten = #{arr_overwrite} "
-              expect(arr_rewrite).to eq([14, 12, 13, 21, 19, 11, 20, 18])
-              expect(arr_overwrite).to eq([22, 23, 24, 29, 27, 25, 28, 26])
-            end
-          end
-
+        describe '- check ConnectionLog fields AFTER <connect_trees>'   do #, focus: true
+          let(:rewrite) {[14, 12, 13, 21, 19, 11, 20, 18]}
+          let(:overwrite) {[22, 23, 24, 29, 27, 25, 28, 26]}
+          it_behaves_like :successful_rewrite_arrays_logs_after_connect
         end
 
         context ' - check CommonLog table AFTER <connect_trees>' do
@@ -1065,40 +1051,42 @@ RSpec.describe User, :type => :model do
           end
         end
 
-
       end
 
     end
 
-    describe '- check User model Method <disconnect> - Ok'   do  #
+    describe '- check User model Method <disconnect> - Ok'  , focus: true do  #
 
-      # context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
-      #    let(:connection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
-      #                           :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
-      #                           :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
-      #                           :current_user_id=>1, :user_id=>3, :connection_id=>3} }
-      #   let(:disconnection_data) {{:who_connect=>[1, 2], :with_whom_connect=>[3],
-      #                           :profiles_to_rewrite=>[22, 29, 27, 25, 28, 23, 24, 26],
-      #                           :profiles_to_destroy=>[14, 21, 19, 11, 20, 12, 13, 18],
-      #                           :current_user_id=>1, :user_id=>3, :connection_id=>3} }
-      #   before { current_user_1.connection_in_tables(connection_data)
-      #            current_user_1.disconnect }
-      #
-      #   describe '- check all profile_ids generated in ProfileKey rows AFTER <disconnect>' do
-      #     let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
-      #                              9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
-      #                              11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
-      #                              14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-      #                              15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17,
-      #                              17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19,
-      #                              20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 23, 23, 23, 23,
-      #                              23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 25, 25, 25, 25, 25, 25, 25, 26, 26, 26, 26,
-      #                              26, 27, 27, 27, 27, 27, 28, 28, 28, 28, 28, 29, 29, 29, 29, 29, 124, 124, 124, 124]}
-      #     let(:profiles_ids_arr_size) {196}
-      #     it_behaves_like :successful_profile_keys_profile_ids
-      #   end
-      #
-      # end
+      context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
+        let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
+                                :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+                                :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+                                :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+        let(:common_log_id) { 1 }
+        before {
+          current_user_1.connection_in_tables(connection_data)  ############
+          common_log_count = CommonLog.all.count
+          connection_log_count = ConnectionLog.all.count
+          puts "Before Disconnect: Common_log count = #{common_log_count}
+                   Connection_log count = #{connection_log_count}"  # 114
+          current_user_1.disconnect_tree(common_log_id)         ############
+        }
+
+        describe '- check all profile_ids generated in ProfileKey rows AFTER <disconnect>' do
+          let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
+                                   9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
+                                   11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
+                                   14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+                                   15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17,
+                                   17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19,
+                                   20, 20, 20, 20, 20, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22, 22, 23, 23, 23, 23,
+                                   23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 25, 25, 25, 25, 25, 25, 25, 26, 26, 26, 26,
+                                   26, 27, 27, 27, 27, 27, 28, 28, 28, 28, 28, 29, 29, 29, 29, 29, 124, 124, 124, 124]}
+          let(:profiles_ids_arr_size) {196}
+          it_behaves_like :successful_profile_keys_profile_ids
+        end
+
+      end
 
     end
 

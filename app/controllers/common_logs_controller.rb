@@ -78,7 +78,7 @@ class CommonLogsController < ApplicationController
 
 
   # @note Возврат Add Logs
-  # @note Возврат дерева - откат на выбранную дату
+  #   Возврат дерева - откат на выбранную дату
   # @param params[:rollback_date]
   # @param params[:rollback_id]
   def rollback_add_profile(common_log_id)
@@ -118,13 +118,35 @@ class CommonLogsController < ApplicationController
 
   end
 
-  # @note Add Logs
-  # @note Возврат дерева - откат на выбранную дату
+  # @note Disconnect
+  #    Возврат дерева - откат на выбранную дату
   # @param params[:rollback_date]
   # @param params[:rollback_id]
   def rollback_connection_trees(common_log_id)
 
-    logger.info "In CommonLog controller: rollback_connection_trees для common_log_id = #{common_log_id} "
+    logger.info "In CommonLog controller: rollback_connection_trees для common_log_id = #{common_log_id.inspect} "
+
+      # Не заблокировано ли дерево пользователя
+      if current_user.tree_is_locked?
+        flash[:warning] = "Объединения в данный момент невозможно. Временная блокировка пользователя.
+                       Можно повторить попытку позже."
+        return redirect_to home_path #:back
+      else
+        current_user.lock!
+      end
+
+      # Возвращает во всех таблицах объединенные профили в состояние перед объединением
+      # log_id = params[:log_connection_id] # From Common_log
+      # # for RSpec & TO_VIEW
+      # @log_id = log_id.to_i
+
+      ############ call of User.module Similars_disconnection #####################
+      current_user.disconnect_tree(common_log_id)
+
+      current_user.unlock_tree! # unlock tree
+
+    # tree_info, new_sims, similars =
+      # current_user.start_similars # to restore similars found
 
   end
 

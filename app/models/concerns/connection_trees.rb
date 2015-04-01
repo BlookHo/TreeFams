@@ -58,8 +58,8 @@ module ConnectionTrees
     user_id             = connection_data[:user_id]
     connection_id       = connection_data[:connection_id]
 
-    puts "In connect_trees"
-    logger.info "IN connect_trees: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
+    # puts "In connect_trees"
+    # logger.info "IN connect_trees: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
 
     # todo: Сделать логирование перезаписи Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
     # Перезапись profile_data при объединении профилей

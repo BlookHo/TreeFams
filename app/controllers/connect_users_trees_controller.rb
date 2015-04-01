@@ -380,31 +380,6 @@ class ConnectUsersTreesController < ApplicationController
   end
 
 
-  # Disconnect
-  def disconnect
-
-    # Не заблокировано ли дерево пользователя
-    if current_user.tree_is_locked?
-      flash[:warning] = "Объединения в данный момент невозможно. Временная блокировка пользователя.
-                       Можно повторить попытку позже."
-      return redirect_to home_path #:back
-    else
-      current_user.lock!
-    end
-
-
-  # Возвращает объединенные профили в состояние перед объединением
-  # во всех таблицах
-    log_id = params[:log_connection_id] # From Common_log
-    # for RSpec & TO_VIEW
-    @log_id = log_id.to_i
-
-    ############ call of User.module Similars_disconnection #####################
-    current_user.disconnect_tree(log_id.to_i)
-    # tree_info, new_sims, similars =
-    # current_user.start_similars # to restore similars found
-  end
-
 
 
 
