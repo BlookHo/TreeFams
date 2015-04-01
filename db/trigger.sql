@@ -6,7 +6,7 @@ DECLARE
   channel varchar;
   JSON varchar;
 BEGIN
-  channel = TG_TABLE_NAME || '_' || TG_OP;
+  channel = TG_TABLE_NAME || '__' || TG_OP;
   IF (TG_OP = 'DELETE') THEN
     JSON = (SELECT row_to_json(old));
     PERFORM pg_notify(lower(channel), JSON);
