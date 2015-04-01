@@ -1055,7 +1055,7 @@ RSpec.describe User, :type => :model do
 
     end
 
-    describe '- check User model Method <disconnect> - Ok'  , focus: true do  #
+    describe '- check User model Method <disconnect> - Ok'  do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
@@ -1068,11 +1068,11 @@ RSpec.describe User, :type => :model do
           common_log_count = CommonLog.all.count
           connection_log_count = ConnectionLog.all.count
           puts "Before Disconnect: Common_log count = #{common_log_count}
-                   Connection_log count = #{connection_log_count}"  # 114
+                   Connection_log count = #{connection_log_count}"  # 1     114
           current_user_1.disconnect_tree(common_log_id)         ############
         }
 
-        describe '- check all profile_ids generated in ProfileKey rows AFTER <disconnect>' do
+        describe '- check all profile_ids generated in ProfileKey rows AFTER <disconnect_tree>' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
                                    9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
                                    11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13,
@@ -1086,30 +1086,20 @@ RSpec.describe User, :type => :model do
           it_behaves_like :successful_profile_keys_profile_ids
         end
 
+        describe '- check ConnectionLog rows count AFTER <disconnect_tree>' do
+          let(:rows_qty) {0}
+          it_behaves_like :successful_connection_logs_rows_count
+        end
+
+        describe '- check CommonLog have rows count AFTER <disconnect_tree>' do
+          let(:rows_qty) {0}
+          it_behaves_like :successful_common_logs_rows_count
+        end
+
       end
 
     end
 
-
-
   end
-
-  # describe 'on update' do
-  #   context 'valid update profile_id field in user' do
-  #     let(:user) {FactoryGirl.build(:good_user_profile)}
-  #     let(:profile) {FactoryGirl.build(:profile)}
-  #     it 'update profile_id in user' do
-  #       expect(user).to be_valid
-  #       prev_profile_id = user.profile_id
-  #       profile_checked = Profile.first #find(prev_profile_id)
-  #       new_id = 300
-  #       profile_checked.user.update_attributes(:profile_id => new_id, :updated_at => Time.now)
-  #       changed_profile_id = user.profile_id
-  #       expect(changed_profile_id).to_not eq(prev_profile_id)
-  #
-  #     end
-  #   end
-  # end
-
 
 end

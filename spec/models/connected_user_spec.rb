@@ -519,6 +519,13 @@ RSpec.describe ConnectedUser, :type => :model do
           let(:overwrite_profile_ids_arr_size) {10}
           it_behaves_like :successful_connected_users_overwrite_profile_ids
         end
+        describe '- check ConnectedUser get_connected_users got Ok' do
+          let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
+          it "- Return proper connected_users Array result for current_user_id = 1" do
+            puts "Let created: connected_users = #{connected_users} \n"   # [1,2]
+            expect(connected_users).to eq([1,2,3])
+          end
+        end
 
       end
 

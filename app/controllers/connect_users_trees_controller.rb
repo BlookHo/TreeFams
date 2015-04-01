@@ -322,20 +322,20 @@ class ConnectUsersTreesController < ApplicationController
       flash[:notice] = " #{connection_message} Ваши деревья успешно объединены!"
       logger.info "Connection - GO ON! array(s) - CORRECT!,
                    @stop_connection = #{@stop_connection},\n connection_message = #{connection_message}"
+      #################################################################
+      ##### Update connection requests - to yes connect
+      # yes_to_request(@connection_id)
       ##################################################################
-      # ##### Update connection requests - to yes connect
-      #  yes_to_request(@connection_id)
-      # ##################################################################
-      # # Make DONE all connected requests
-      # # - update all requests - with users, connected with current_user
-      #  after_conn_update_requests  # From Helper
-      # ##############################################
-      #
-      # ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
+      # Make DONE all connected requests
+      # - update all requests - with users, connected with current_user
+      # after_conn_update_requests  # From Helper
+      ##############################################
+
+      ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
       # logger.info "== in connection_of_trees UPDATES :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
       # UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
       # UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
-      # ###############################################
+      ###############################################
 
       current_user.unlock_tree! # unlock tree
     end
