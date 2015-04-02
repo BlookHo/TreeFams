@@ -99,7 +99,7 @@ module ProfileMerge
 
       logger.info "# 1 ##*** In module Profile_Merge log_profiles_connection: #{log_profiles_connection.inspect} "
   # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-      opposite_profile.user.update_attributes(:profile_id => main_profile.id, :updated_at => Time.now)
+  #     opposite_profile.user.update_attributes(:profile_id => main_profile.id, :updated_at => Time.now)
 
       # 2 link ##################################
 
@@ -115,7 +115,7 @@ module ProfileMerge
       logger.info "# 2 ##*** In module Profile_Merge log_profiles_connection: #{log_profiles_connection.inspect} "
       ######################################
   # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-     main_profile.update_attributes(:user_id => opposite_profile.user_id, :updated_at => Time.now)
+  #    main_profile.update_attributes(:user_id => opposite_profile.user_id, :updated_at => Time.now)
 
       # 3 link ###################################
 
@@ -134,7 +134,7 @@ module ProfileMerge
 
       ######################################
       # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-     main_profile.update_attributes(:tree_id => opposite_profile.tree_id, :updated_at => Time.now)
+     # main_profile.update_attributes(:tree_id => opposite_profile.tree_id, :updated_at => Time.now)
 
       # 4 link ###################################
       # Если не удаляем opposite_profile профили, то убрать из поля user_id прежний номер user_id - просто nil
@@ -152,7 +152,7 @@ module ProfileMerge
       ######################################
       logger.info "*** In  4 module Profile_Merge make_user_profile_link: log_profiles_connection = #{log_profiles_connection.inspect} "
       # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-     opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
+     # opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
 
       logger.info "###*** In module Profile_Merge make_user_profile_link: opposite_profile.user_id = #{opposite_profile.user_id.inspect} "
       logger.info "###*** In module Profile_Merge make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "

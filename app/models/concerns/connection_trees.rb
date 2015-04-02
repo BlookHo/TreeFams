@@ -31,7 +31,7 @@ module ConnectionTrees
     ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
     #                          connect_users(current_user_id.to_i, user_id.to_i) # OLD!!
 
-      # ConnectedUser.set_users_connection(connection_data) #, current_user_id, user_id, connection_id)
+      ConnectedUser.set_users_connection(connection_data) #, current_user_id, user_id, connection_id)
     #### это массивы профилей!!!!
 
     ##################################################################
@@ -145,7 +145,7 @@ module ConnectionTrees
         rows_to_update.each do |rewrite_row|
 
      # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи данных в таблицах и логов
-   rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
+   # rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
       #####################################################
 
           logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, rewrite_row.profile_id = #{rewrite_row.profile_id},
@@ -324,10 +324,6 @@ module ConnectionTrees
     logger.info "== In check_uniqness:  array2 = #{array2}"
     array1 & array2
   end
-
-
-
-
 
 
 

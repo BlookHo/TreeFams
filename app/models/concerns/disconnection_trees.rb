@@ -8,6 +8,23 @@ module DisconnectionTrees
     # puts "In User model: disconnect_tree: common_log_id = #{common_log_id}"
 
     connection_common_log = CommonLog.find(common_log_id).attributes.except('created_at','updated_at')
+    # common_log_row_fields = CommonLog.find(common_log_id).attributes.except('created_at','updated_at')
+    # expect(common_log_row_fields).to eq({
+    # "id"=>1,
+    # "user_id"=>1,
+    # "log_type"=>4,
+    # "log_id"=>3,
+    # "profile_id"=>17,
+    #  "base_profile_id"=>14,
+    # "relation_id"=>999} )
+
+    # with_user_id = User.where(profile_id: common_log_row_fields["base_profile_id"])
+    conn_users_destroy_data = {
+        user_id: connection_common_log["user_id"], #    1,
+        with_user_id: User.where(profile_id: connection_common_log["base_profile_id"]),    #        3,
+        connection_id: connection_common_log["log_id"]   #    3,
+    }
+
     log_to_redo = restore_connection_log(connection_common_log["log_id"], connection_common_log["user_id"])
     # logger.info "*** In module Disconnection after restore_connection_log:
     #                   log_to_redo.size = #{log_to_redo.size.inspect}"
@@ -18,6 +35,8 @@ module DisconnectionTrees
     log_connection_deletion(log_to_redo)
 
     CommonLog.find(common_log_id).destroy
+
+    ConnectedUser.destroy_connection(conn_users_destroy_data) #
 
   end
 
@@ -31,7 +50,8 @@ module DisconnectionTrees
   end
 
 
-  # Исполнение операций по логам - обратная перезапись в таблицах
+  # @note
+  #   Исполнение операций по логам - обратная перезапись в таблицах
   def redo_connection_log(log_to_redo)
 
     unless log_to_redo.blank?
@@ -44,7 +64,7 @@ module DisconnectionTrees
         logger.info "*** In module DisconnectionTrees redo_connection_log: row_to_update = #{row_to_update.inspect} "
 
         # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-    row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now)
+    # row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now)
 
       end
     end

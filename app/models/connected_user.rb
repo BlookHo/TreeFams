@@ -39,7 +39,6 @@ class ConnectedUser < ActiveRecord::Base
   #     current_user_id:      current_user_id, #
   #     user_id:              user_id ,#
   #     connection_id:        @connection_id } #
-  #
   def self.set_users_connection(connection_data) #, current_user_id, user_id, connection_id)
     current_user_id     = connection_data[:current_user_id]
     user_id             = connection_data[:user_id]
@@ -75,6 +74,20 @@ class ConnectedUser < ActiveRecord::Base
                    EQUALS TO user_id=#{user_id.inspect}"
     end
 
+  end
+
+
+  # @note:
+  # conn_users_destroy_data = {
+  #      user_id: common_log_row_fields["user_id"], #    1,
+  #      with_user_id: User.where(profile_id: common_log_row_fields["base_profile_id"]),    #        3,
+  #      connection_id: common_log_row_fields["log_id"]   #    3,
+  #  }
+  def self.destroy_connection(conn_users_destroy_data)
+
+     self.where(user_id: conn_users_destroy_data[:user_id],
+               with_user_id: conn_users_destroy_data[:with_user_id],
+               connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
   end
 
 

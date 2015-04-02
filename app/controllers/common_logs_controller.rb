@@ -133,8 +133,30 @@ class CommonLogsController < ApplicationController
     else
       current_user.lock!
     end
+
+
+    # common_log_row_fields = CommonLog.find(common_log_id).attributes.except('created_at','updated_at')
+    # # expect(common_log_row_fields).to eq({
+    # # "id"=>1,
+    # # "user_id"=>1,
+    # # "log_type"=>4,
+    # # "log_id"=>3,
+    # # "profile_id"=>17,
+    # #  "base_profile_id"=>14,
+    # # "relation_id"=>999} )
+    #
+    # # with_user_id = User.where(profile_id: common_log_row_fields["base_profile_id"])
+    # conn_users_destroy_data = {
+    #     user_id: common_log_row_fields["user_id"], #    1,
+    #     with_user_id: User.where(profile_id: common_log_row_fields["base_profile_id"]),    #        3,
+    #     connection_id: common_log_row_fields["log_id"]   #    3,
+    # }
+
+
     ############ call of User.module Disconnection_tree #####################
     current_user.disconnect_tree(common_log_id)
+
+    # ConnectedUser.destroy_connection(conn_users_destroy_data) #
 
     current_user.unlock_tree! # unlock tree
 

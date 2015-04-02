@@ -1043,11 +1043,36 @@ RSpec.describe User, :type => :model do
             let(:rows_qty) {1}
             it_behaves_like :successful_common_logs_rows_count
           end
-          it '- check CommonLog 1st & last row - Ok' do
+          it '- check CommonLog 1st & last row - Ok' do # , focus: true
             common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
-            # got 1 row of CommonLog attributes
             expect(common_log_row_fields).to eq({"id"=>1, "user_id"=>1, "log_type"=>4, "log_id"=>3, "profile_id"=>17,
                                                  "base_profile_id"=>14, "relation_id"=>999} )
+          end
+        end
+
+        describe '- check ConnectedUsers AFTER <connect_trees>' , focus: true  do #, focus: true
+          let(:current_user_1) { User.first }  # User = 1. Tree = [1,2]. profile_id = 17
+          let(:currentuser_id) {current_user_1.id}  # id = 1
+          let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
+
+          context '- AFTER <connect_trees> - check connected_users' do
+            it '- check ConnectedUser last row - Ok' do
+              connect_trees_row_fields = ConnectedUser.last.attributes.except('created_at','updated_at')
+              puts "Check ConnectedUser AFTER <connect_trees> \n"
+              expect(connect_trees_row_fields).to eq({"id"=>10, "user_id"=>1, "with_user_id"=>3, "connected"=>false,
+                                                   "connection_id"=>3,
+                                                   "rewrite_profile_id"=>18, "overwrite_profile_id"=>26} )
+            end
+            it "- Return proper connected_users Array result for current_user_id = 1" do
+              # puts "Let created: currentuser_id = #{currentuser_id} \n"
+              # puts "Check ConnectedUser Model methods \n"
+              puts "AFTER <connect_trees> - check connected_users - connected_users created \n"
+              expect(connected_users).to be_a_kind_of(Array)
+            end
+            it "- Return proper connected_users Array result for current_user_id = 1" do
+              puts "connected_users = #{connected_users} \n"
+              expect(connected_users).to eq([1,2,3])
+            end
           end
         end
 
@@ -1055,7 +1080,7 @@ RSpec.describe User, :type => :model do
 
     end
 
-    describe '- check User model Method <disconnect> - Ok'  do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok' , focus: true  do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
@@ -1064,6 +1089,7 @@ RSpec.describe User, :type => :model do
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         let(:common_log_id) { 1 }
         before {
+          puts "Check Disconnect"
           current_user_1.connection_in_tables(connection_data)  ############
           common_log_count = CommonLog.all.count
           connection_log_count = ConnectionLog.all.count
@@ -1095,6 +1121,30 @@ RSpec.describe User, :type => :model do
           let(:rows_qty) {0}
           it_behaves_like :successful_common_logs_rows_count
         end
+
+        describe '- check ConnectedUsers AFTER <disconnect_tree>' , focus: true  do #, focus: true
+          let(:current_user_1) { User.first }  # User = 1. Tree = [1,2]. profile_id = 17
+          let(:currentuser_id) {current_user_1.id}  # id = 1
+          let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
+
+          context '- AFTER <disconnect_tree> - check connected_users' do
+            it "- Return proper connected_users Array result for current_user_id = 1" do
+              puts "AFTER <disconnect_tree> - check connected_users - connected_users created \n"
+              expect(connected_users).to be_a_kind_of(Array)
+            end
+            it "- Return proper connected_users Array result for current_user_id = 1" do
+              puts "connected_users = #{connected_users} \n"
+              expect(connected_users).to eq([1,2])
+            end
+          end
+
+
+        end
+
+
+
+
+
 
       end
 
