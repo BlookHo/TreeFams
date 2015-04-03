@@ -989,6 +989,8 @@ RSpec.describe User, :type => :model do
 
     end
 
+    ################ CONNECTION - DISCONNECTION ###########################
+
     describe '- check User model Method <connect_trees(connection_data)> - Ok'  do  # , focus: true
       context '- check Tables count & fields values BEFORE connect_trees' do
         describe '- check all profile_ids in ProfileKey rows ' do
@@ -1019,6 +1021,9 @@ RSpec.describe User, :type => :model do
         end
 
       end
+
+
+      ################ CONNECTION  ###########################
 
 
       context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'  do
@@ -1152,6 +1157,10 @@ RSpec.describe User, :type => :model do
           #
           # end
 
+          describe '- check ConnectionRequest have rows count - Ok ' do
+            let(:rows_qty) {4}
+            it_behaves_like :successful_connection_request_rows_count
+          end
 
           it '- check ConnectionRequest third row - Ok'  do # , focus: true
             connection_request_fields = ConnectionRequest.third.attributes.except('created_at','updated_at')
@@ -1165,16 +1174,13 @@ RSpec.describe User, :type => :model do
           end
         end
 
-
-
-
-
-
       end
 
     end
 
-    describe '- check User model Method <disconnect> - Ok' , focus: true do  #  , focus: true
+    ################  DISCONNECTION ###########################
+
+    describe '- check User model Method <disconnect> - Ok'  do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
@@ -1185,9 +1191,9 @@ RSpec.describe User, :type => :model do
         before {
           current_user_1.connection_in_tables(connection_data)  ############
           # connected_users_1 = current_user_1.get_connected_users   # [1,2]
-          # common_log_count = CommonLog.all.count
+          # connection_req_count = ConnectionRequest.all.count
           # com_log = CommonLog.first.attributes.except('created_at','updated_at')
-          # puts " common_log = #{com_log} \n"
+          # puts " connection_req_count = #{connection_req_count} \n"
           # connection_log_count = ConnectionLog.all.count
           # user_3_profile = User.find(3).profile_id
           # puts "Before Disconnect:\n user_3_profile = #{user_3_profile}, Common_log count = #{common_log_count}
@@ -1216,6 +1222,21 @@ RSpec.describe User, :type => :model do
             end
           end
         end
+ 
+        describe '- check ConnectionRequest AFTER <disconnect_tree>' , focus: true do #, focus: true
+
+          puts "Check request_disconnection AFTER <disconnect_tree>"
+          describe '- check ConnectionRequest have rows count - Ok ' do
+            let(:rows_qty) {2}
+            it_behaves_like :successful_connection_request_rows_count
+          end
+          it '- check ConnectionRequest third row - Ok'  do # , focus: true
+            connection_request_fields = ConnectionRequest.third #.attributes.except('created_at','updated_at')
+            expect(connection_request_fields).to eq(nil )
+          end
+
+        end
+
 
         describe '- check all profile_ids generated in ProfileKey rows AFTER <disconnect_tree>' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,

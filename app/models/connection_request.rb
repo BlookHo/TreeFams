@@ -106,49 +106,18 @@ class ConnectionRequest < ActiveRecord::Base
   # Ответ ДА на запрос на объединение
   # Действия: сохраняем инфу - кто дал добро (= 1) какому объединению
   # Перед этим - запуск собственно процесса объединения
-
-  # def self.destroy_connection(conn_users_destroy_data)
-  #
-  #   self.where(user_id: conn_users_destroy_data[:user_id],
-  #              with_user_id: conn_users_destroy_data[:with_user_id],
-  #              connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
-  # end
-
-
   def self.request_disconnection(conn_users_destroy_data)
+    connected = User.find(conn_users_destroy_data[:user_id]).get_connected_users
+    connected.each do |one_user|
+      self.where(user_id: conn_users_destroy_data[:with_user_id],
+                 with_user_id: one_user,
+                 connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
+    end
 
-    # conn_users_destroy_data = {
-    #     user_id: connection_common_log["user_id"], #    1,
-    #     with_user_id: User.where(profile_id: connection_common_log["base_profile_id"]),    #        3,
-    #     connection_id: connection_common_log["log_id"]   #    3,
-    # }
-    #
-    # who_connect_arr         = connection_data[:who_connect_arr]
-    # with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
-    # profiles_to_rewrite     = connection_data[:profiles_to_rewrite]
-    # profiles_to_destroy     = connection_data[:profiles_to_destroy]
-    # current_user_id         = connection_data[:current_user_id]
-    # user_id                 = connection_data[:user_id]
-    # connection_id           = connection_data[:connection_id]
-    #
-    # requests_to_destroy =
-    self.where(user_id: conn_users_destroy_data[:user_id],
-               with_user_id: conn_users_destroy_data[:with_user_id],
-               connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
+    puts "In  request_disconnection: connected = #{connected}, conn_users_destroy_data = #{conn_users_destroy_data}"
+    # self.where(user_id: conn_users_destroy_data[:with_user_id],
+    #                         connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
 
-    # unless requests_to_update.blank?
-    #   requests_to_update.each do |request_row|
-    #     request_row.done = true
-    #     request_row.confirm = 1 if request_row.with_user_id == current_user_id
-    #     request_row.save
-    #   end
-    # end
-    # logger.info "In update_requests: Done"
-    # else
-    #   logger.info "WARNING: NO update_requests WAS DONE!"
-    #   redirect_to show_user_requests_path # To: Просмотр Ваших оставшихся запросов'
-    #   # flash - no connection requests data in table
-    # end
   end
 
 

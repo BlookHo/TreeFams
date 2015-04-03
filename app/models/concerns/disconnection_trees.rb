@@ -43,9 +43,10 @@ module DisconnectionTrees
 
     CommonLog.find(common_log_id).destroy
 
-    # puts "In User model: before destroy_connection: conn_users_destroy_data = #{conn_users_destroy_data}"  # 114 ok
 
     ConnectedUser.destroy_connection(conn_users_destroy_data)
+
+    puts "In User model: before request_disconnection: conn_users_destroy_data = #{conn_users_destroy_data}"  # 114 ok
 
     ConnectionRequest.request_disconnection(conn_users_destroy_data)
 
