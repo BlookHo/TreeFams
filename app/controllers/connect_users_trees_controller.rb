@@ -323,12 +323,12 @@ class ConnectUsersTreesController < ApplicationController
       logger.info "Connection - GO ON! array(s) - CORRECT!,
                    @stop_connection = #{@stop_connection},\n connection_message = #{connection_message}"
       #################################################################
-      ##### Update connection requests - to yes connect
+      # ##### Update connection requests - to yes connect
       # yes_to_request(@connection_id)
       ##################################################################
       # Make DONE all connected requests
       # - update all requests - with users, connected with current_user
-      # after_conn_update_requests  # From Helper
+      #  after_conn_update_requests  # From Helper
       ##############################################
 
       ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
@@ -364,6 +364,9 @@ class ConnectUsersTreesController < ApplicationController
   # Действия: сохраняем инфу - кто дал добро (= 1) какому объединению
   # Перед этим - запуск собственно процесса объединения
   def yes_to_request(connection_id)
+
+    ConnectionRequest.request_connect_update(connection_id)
+
     requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
     if !requests_to_update.blank?
       requests_to_update.each do |request_row|

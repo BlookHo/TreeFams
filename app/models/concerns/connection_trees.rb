@@ -28,13 +28,18 @@ module ConnectionTrees
     ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
         connect_trees(connection_data)
     ####################################################################
-    ######## Заполнение таблицы Connected_Trees - записью о том, что деревья с current_user_id и user_id - соединились
-    #                          connect_users(current_user_id.to_i, user_id.to_i) # OLD!!
-
-      ConnectedUser.set_users_connection(connection_data) #, current_user_id, user_id, connection_id)
-    #### это массивы профилей!!!!
-
+    ######## Заполнение таблицы ConnectedUser - записью о том, что деревья с current_user_id и user_id - соединились
+      ConnectedUser.set_users_connection(connection_data) # здесь сохраняются массивы профилей
     ##################################################################
+
+    ## Update connection requests - to yes connect
+      ConnectionRequest.request_connection(connection_data)
+
+    # ConnectionRequest.after_conn_update_requests(connection_data)
+
+
+
+
     ######## Перезапись profile_id при объединении деревьев
                 # UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
     ##################################################################
@@ -145,7 +150,7 @@ module ConnectionTrees
         rows_to_update.each do |rewrite_row|
 
      # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи данных в таблицах и логов
-   # rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
+   rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
       #####################################################
 
           logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, rewrite_row.profile_id = #{rewrite_row.profile_id},

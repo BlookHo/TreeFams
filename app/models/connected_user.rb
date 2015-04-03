@@ -31,6 +31,7 @@ class ConnectedUser < ActiveRecord::Base
   # @note: Заполнение таблицы Connected_Trees - записью о том, что деревья
   #   с current_user_id и user_id - соединились
   #   Call from connect_users_trees_controller
+  #   здесь сохраняются массивы профилей
   # @param  connection_data = {
   #     who_connect:          who_connect_users_arr, #
   #     with_whom_connect:    with_whom_connect_users_arr, #
@@ -49,15 +50,15 @@ class ConnectedUser < ActiveRecord::Base
       profiles_to_destroy = connection_data[:profiles_to_destroy]
       connection_id       = connection_data[:connection_id]
 
-      logger.info "== In connect_users:  connection_data = #{connection_data}, connection_id = #{connection_id}"
-      logger.info "== In connect_users:  profiles_to_rewrite = #{profiles_to_rewrite} "
-      logger.info "== In connect_users:  profiles_to_destroy = #{profiles_to_destroy} "
-      logger.info "== In connect_users:  current_user_id = #{current_user_id}, user_id = #{user_id} "
+      # logger.info "== In connect_users:  connection_data = #{connection_data}, connection_id = #{connection_id}"
+      # logger.info "== In connect_users:  profiles_to_rewrite = #{profiles_to_rewrite} "
+      # logger.info "== In connect_users:  profiles_to_destroy = #{profiles_to_destroy} "
+      # logger.info "== In connect_users:  current_user_id = #{current_user_id}, user_id = #{user_id} "
 
       profiles_to_rewrite.each_with_index  do |rewrite_profile, index|
-        logger.info "== In connect_users: create_one_connection_row; index = #{index}, profiles_to_destroy[i] = #{profiles_to_destroy[index]} "
-        logger.info "== In connect_users:  index = #{index}, rewrite_profile = #{rewrite_profile} "
-        logger.info "== In connect_users:  index = #{index}, profiles_to_destroy[i] = #{profiles_to_destroy[index]} "
+        # logger.info "== In connect_users: create_one_connection_row; index = #{index}, profiles_to_destroy[i] = #{profiles_to_destroy[index]} "
+        # logger.info "== In connect_users:  index = #{index}, rewrite_profile = #{rewrite_profile} "
+        # logger.info "== In connect_users:  index = #{index}, profiles_to_destroy[i] = #{profiles_to_destroy[index]} "
         new_users_connection = ConnectedUser.new
         new_users_connection.user_id = current_user_id
         new_users_connection.with_user_id = user_id

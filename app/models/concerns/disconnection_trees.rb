@@ -17,18 +17,25 @@ module DisconnectionTrees
     # "profile_id"=>17,
     #  "base_profile_id"=>14,
     # "relation_id"=>999} )
+    # puts "In User model: before restore_connection_log: connection_common_log = #{connection_common_log},
+    #        connection_common_log['base_profile_id'] = #{connection_common_log['base_profile_id']}      "  # 114 ok
+    #
+    # puts " user_id = #{User.where(profile_id: 22)} "
+    # puts " user_id = #{User.where(profile_id: connection_common_log["base_profile_id"])} "
+    # puts " user_id = #{Profile.find(connection_common_log["base_profile_id"]).user_id} "
+
 
     # with_user_id = User.where(profile_id: common_log_row_fields["base_profile_id"])
     conn_users_destroy_data = {
         user_id: connection_common_log["user_id"], #    1,
-        with_user_id: User.where(profile_id: connection_common_log["base_profile_id"]),    #        3,
+        with_user_id: Profile.find(connection_common_log["base_profile_id"]).user_id,    #        3,
         connection_id: connection_common_log["log_id"]   #    3,
     }
 
     log_to_redo = restore_connection_log(connection_common_log["log_id"], connection_common_log["user_id"])
     # logger.info "*** In module Disconnection after restore_connection_log:
     #                   log_to_redo.size = #{log_to_redo.size.inspect}"
-    # puts "In User model: before redo_connection_log: log_to_redo.size = #{log_to_redo.size}"
+    # puts "In User model: before redo_connection_log: log_to_redo.size = #{log_to_redo.size}"  # 114 ok
 
     redo_connection_log(log_to_redo)
 
@@ -36,7 +43,12 @@ module DisconnectionTrees
 
     CommonLog.find(common_log_id).destroy
 
-    ConnectedUser.destroy_connection(conn_users_destroy_data) #
+    # puts "In User model: before destroy_connection: conn_users_destroy_data = #{conn_users_destroy_data}"  # 114 ok
+
+    ConnectedUser.destroy_connection(conn_users_destroy_data)
+
+    ConnectionRequest.request_disconnection(conn_users_destroy_data)
+
 
   end
 
@@ -64,7 +76,7 @@ module DisconnectionTrees
         logger.info "*** In module DisconnectionTrees redo_connection_log: row_to_update = #{row_to_update.inspect} "
 
         # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-    # row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now)
+    row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now)
 
       end
     end

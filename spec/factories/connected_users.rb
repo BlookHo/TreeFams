@@ -97,6 +97,28 @@ FactoryGirl.define do
       overwrite_profile_id  85
     end
 
+    trait :connected_3_4 do
+      user_id 7
+      with_user_id 8
+      connected             true
+      connection_id         4
+      rewrite_profile_id    66
+      overwrite_profile_id  100
+    end
+
+    trait :connected_4_5 do
+      user_id 4
+      with_user_id 5
+      connected             true
+      connection_id         5
+      rewrite_profile_id    166
+      overwrite_profile_id  1300
+    end
+
+
+
+
+
   end
 
 
