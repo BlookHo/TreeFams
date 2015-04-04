@@ -35,7 +35,7 @@ module ConnectionTrees
       ConnectionRequest.request_connection(connection_data)
       ConnectionRequest.connected_requests_update(current_user_id)
     ######## Перезапись profile_id при объединении деревьев
-                # UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
+                UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
     ##################################################################
 
     ######## Перезапись profile_data при объединении деревьев
