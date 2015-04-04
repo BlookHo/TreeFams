@@ -150,15 +150,14 @@ class CommonLogsController < ApplicationController
     #     with_user_id: User.where(profile_id: common_log_row_fields["base_profile_id"]),    #        3,
     #     connection_id: common_log_row_fields["log_id"]   #    3,
     # }
+    one_common_log = CommonLog.find(common_log_id)
 
     ############ call of User.module Disconnection_tree #####################
     current_user.disconnect_tree(common_log_id)
 
     ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
-    one_common_log = CommonLog.find(common_log_id)
     # profile_id:       one_common_log.profile_id,
-    #     base_profile_id:  one_common_log.base_profile_id,
-    #     relation_id:      one_common_log.relation_id }
+    base_profile_id =  one_common_log.base_profile_id
     agent_user_id = Profile.find(base_profile_id).user_id
     # logger.info "== in connection_of_trees UPDATES :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
     UpdatesFeed.create(user_id: current_user.id, update_id: 17, agent_user_id: agent_user_id, agent_profile_id: one_common_log.base_profile_id, read: false)

@@ -1411,7 +1411,7 @@ RSpec.describe User, :type => :model do
           end
         end
 
-        describe '- AFTER <connect_tree>  check request_connection have rows count - Ok ' , focus: true do
+        describe '- AFTER <connect_tree>  check request_connection have rows count - Ok '  do # , focus: true
           puts "Check ConnectionRequest AFTER <connect_tree>"
           let(:rows_qty) {13}
           it_behaves_like :successful_connection_request_rows_count
@@ -1430,7 +1430,7 @@ RSpec.describe User, :type => :model do
           it_behaves_like :successful_connection_request_update
         end
 
-        describe '- AFTER <connect_tree>  check connected_requests_update - Ok ' , focus: true   do  # , focus: true
+        describe '- AFTER <connect_tree>  check connected_requests_update - Ok '    do  # , focus: true
 
           describe '- check ConnectionRequest 5 row - Ok ' do
             let(:request_id) {5}

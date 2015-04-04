@@ -154,7 +154,7 @@ class UpdatesFeed < ActiveRecord::Base
                   # в рез-те добавления профиля или объединения деревьев in ProfilesController, ConnectUsersTreesController
         prefix, suffix = updates_feed.combine_8__16_text(updates_feed, current_user_id)
       when 17  # разъединение дереве   # OK
-        prefix, suffix = updates_feed.combine_17_text(updates_feed, current_user_id)
+        prefix, suffix = updates_feed.combine_17_text(updates_feed, text_data, current_user_id)
 
 
       else
@@ -187,7 +187,7 @@ class UpdatesFeed < ActiveRecord::Base
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
   # для UpdatesEvent типа 17
-  def combine_2_text(updates_feed, text_data, current_user_id)
+  def combine_17_text(updates_feed, text_data, current_user_id)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
     current_user_name =  updates_feed.user_update_data(current_user_id)[:user_name]
@@ -199,7 +199,7 @@ class UpdatesFeed < ActiveRecord::Base
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
   # для UpdatesEvent типа 2
-  def combine_17_text(updates_feed, text_data, current_user_id)
+  def combine_2_text(updates_feed, text_data, current_user_id)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
     current_user_name =  updates_feed.user_update_data(current_user_id)[:user_name]
