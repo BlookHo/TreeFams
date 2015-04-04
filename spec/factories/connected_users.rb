@@ -98,8 +98,8 @@ FactoryGirl.define do
     end
 
     trait :connected_3_4 do
-      user_id 7
-      with_user_id 8
+      user_id 3
+      with_user_id 4
       connected             true
       connection_id         4
       rewrite_profile_id    66

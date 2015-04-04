@@ -26,20 +26,14 @@ module ConnectionTrees
     # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
     ###################################################################
     ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
-        connect_trees(connection_data)
+      connect_trees(connection_data)
     ####################################################################
     ######## Заполнение таблицы ConnectedUser - записью о том, что деревья с current_user_id и user_id - соединились
       ConnectedUser.set_users_connection(connection_data) # здесь сохраняются массивы профилей
     ##################################################################
-
     ## Update connection requests - to yes connect
       ConnectionRequest.request_connection(connection_data)
-
-    # ConnectionRequest.after_conn_update_requests(connection_data)
-
-
-
-
+      ConnectionRequest.connected_requests_update(current_user_id)
     ######## Перезапись profile_id при объединении деревьев
                 # UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
     ##################################################################

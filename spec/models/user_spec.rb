@@ -1026,7 +1026,7 @@ RSpec.describe User, :type => :model do
       ################ CONNECTION  ###########################
 
 
-      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'  do
+      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'  do # , focus: true
         # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
         # profiles_to_destroy = connection_data[:profiles_to_destroy]
         # who_connect         = connection_data[:who_connect]
@@ -1059,7 +1059,7 @@ RSpec.describe User, :type => :model do
           it_behaves_like :successful_connection_logs_rows_count
         end
 
-        describe '- check ConnectionLog fields AFTER <connect_trees>'   do #, focus: true
+        describe '- check ConnectionLog fields AFTER <connect_trees>'   do # , focus: true
           let(:rewrite) {[14, 12, 13, 21, 19, 11, 20, 18]}
           let(:overwrite) {[22, 23, 24, 29, 27, 25, 28, 26]}
           it_behaves_like :successful_rewrite_arrays_logs_after_connect
@@ -1102,76 +1102,148 @@ RSpec.describe User, :type => :model do
             end
           end
         end
+      end
 
-        describe '- check ConnectionRequest AFTER <connect_trees>'  do #, focus: true
-          # before {
-          #           # ConnectionRequest
-          #           FactoryGirl.create(:connection_request, :conn_request_3_4)    #
-          #           FactoryGirl.create(:connection_request, :conn_request_4_5)    #
-          #           FactoryGirl.create(:connection_request, :conn_request_4_1)    #
-          #           FactoryGirl.create(:connection_request, :conn_request_4_2)    #
-          #           FactoryGirl.create(:connection_request, :conn_request_1_8)    #
-          #           FactoryGirl.create(:connection_request, :conn_request_1_7)    #
-          #           FactoryGirl.create(:connection_request, :conn_request_5_1)    #
-          #           FactoryGirl.create(:connection_request, :conn_request_5_2)    #
-          #
-          #           # ConnectedUser
-          #           FactoryGirl.create(:connected_user, :connected_3_4)    #
-          #           FactoryGirl.create(:connected_user, :connected_4_5)    #
-          #
-          #   }
+      describe '- check ConnectionRequest AFTER <connect_trees>'  do # , focus: true
+        let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
+                                :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+                                :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+                                :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+        before {  # ConnectionRequest
+                  FactoryGirl.create(:connection_request, :conn_request_3_4)    # id = 5  done: true
+                  FactoryGirl.create(:connection_request, :conn_request_4_5)    # id = 6  done: true
+                  FactoryGirl.create(:connection_request, :conn_request_4_1)    # id = 7  done: false
+                  FactoryGirl.create(:connection_request, :conn_request_4_2)    # id = 8  done: false
+                  FactoryGirl.create(:connection_request, :conn_request_1_8)    # id = 9  done: false
+                  FactoryGirl.create(:connection_request, :conn_request_1_7)    # id = 10  done: false
+                  FactoryGirl.create(:connection_request, :conn_request_5_1)    # id = 11  done: false
+                  FactoryGirl.create(:connection_request, :conn_request_5_2)    # id = 12  done: false
+                  FactoryGirl.create(:connection_request, :conn_request_10_5)   # id = 13  done: false
 
-          # let(:current_user_1) { User.first }  # User = 1. Tree = [1,2]. profile_id = 17
-          # let(:currentuser_id) {current_user_1.id}  # id = 1
-          # let(:connected_users_1) { current_user_1.get_connected_users }  # [1,2]
-          # let(:connected_users_2) { user_2_connected.get_connected_users }
-          # let(:connected_users_3) { user_3_to_connect.get_connected_users }
-          # let(:connected_users_4) { user_4.get_connected_users }
-          # let(:connected_users_5) { user_5.get_connected_users }
-          #
-          # context '- AFTER <connect_tree> - check ConnectedUser' do
-          #   # it "- Return proper connected_users Array result for current_user_id = 1" do
-          #   #   puts "AFTER <disconnect_tree> - check connected_users - connected_users created \n"
-          #   #   expect(connected_users).to be_a_kind_of(Array)
-          #   # end
-          #   it "- Return proper connected_users Array result for current_user_id = 1" do
-          #     puts "connected_users_1 = #{connected_users_1} \n"
-          #     expect(connected_users_1).to eq([1,2])
-          #   end
-          #   it "- Return proper connected_users Array result for current_user_id = 1" do
-          #     puts "connected_users_2 = #{connected_users_2} \n"
-          #     expect(connected_users_2).to eq([1,2])
-          #   end
-          #   it "- Return proper connected_users Array result for current_user_id = 1" do
-          #     puts "connected_users_3 = #{connected_users_3} \n"
-          #     expect(connected_users_3).to eq([1,2])
-          #   end
-          #   it "- Return proper connected_users Array result for current_user_id = 1" do
-          #     puts "connected_users_4 = #{connected_users_4} \n"
-          #     expect(connected_users_4).to eq([1,2])
-          #   end
-          #   it "- Return proper connected_users Array result for current_user_id = 1" do
-          #     puts "connected_users_5 = #{connected_users_5} \n"
-          #     expect(connected_users_5).to eq([1,2])
-          #   end
-          #
-          # end
+                  # ConnectedUser
+                  FactoryGirl.create(:connected_user, :connected_3_4)    #
+                  FactoryGirl.create(:connected_user, :connected_4_5)    #
 
-          describe '- check ConnectionRequest have rows count - Ok ' do
-            let(:rows_qty) {4}
-            it_behaves_like :successful_connection_request_rows_count
+                  current_user_1.connection_in_tables(connection_data)
+
+          }
+
+        let(:current_user_1) { User.first }  # User = 1. Tree = [1,2] - before connect with [3]. profile_id = 17
+        let(:currentuser_id) {current_user_1.id}  # id = 1
+        let(:connected_users_1) { current_user_1.get_connected_users }
+
+        let(:user_2_connected) { User.second }  # User = 2. Tree = [1,2]. profile_id = 11
+        let(:connected_users_2) { user_2_connected.get_connected_users }
+
+        let(:user_3_connected) { User.third }  # User = 3. Tree = [3,4,5]. profile_id = 22
+        let(:connected_users_3) { user_3_connected.get_connected_users }
+
+        let(:user_4_connected) { User.find(4) }  # User = 4. Tree = [3,4,5]. profile_id = 53
+        let(:connected_users_4) { user_4_connected.get_connected_users }
+
+        let(:user_5_connected) { User.find(5) }  # User = 5  Tree = [3,4,5]. profile_id = 63
+        let(:connected_users_5) { user_5_connected.get_connected_users }
+
+        context '- AFTER <connect_tree> - check ConnectedUser' do
+          puts "Check ConnectedUser AFTER <connect_tree>"
+          it "- Return proper connected_users Array result for current_user_id = 1" do
+            puts "connected_users_1 = #{connected_users_1} \n"
+            expect(connected_users_1).to eq([1,2,3,4,5])
+          end
+          it "- Return proper connected_users Array result for current_user_id = 2" do
+            puts "connected_users_2 = #{connected_users_2} \n"
+            expect(connected_users_2).to eq([1,2,3,4,5])
+          end
+          it "- Return proper connected_users Array result for current_user_id = 1" do
+            puts "connected_users_3 = #{connected_users_3} \n"
+            expect(connected_users_3).to eq([1,2,3,4,5])
+          end
+          it "- Return proper connected_users Array result for current_user_id = 1" do
+            puts "connected_users_4 = #{connected_users_4} \n"
+            expect(connected_users_4).to eq([1,2,3,4,5])
+          end
+          it "- Return proper connected_users Array result for current_user_id = 1" do
+            puts "connected_users_5 = #{connected_users_5} \n"
+            expect(connected_users_5).to eq([1,2,3,4,5])
+          end
+        end
+
+        describe '- AFTER <connect_tree>  check request_connection have rows count - Ok ' do
+          puts "Check ConnectionRequest AFTER <connect_tree>"
+          let(:rows_qty) {13}
+          it_behaves_like :successful_connection_request_rows_count
+        end
+
+        describe '- check ConnectionRequest third row - Ok ' do
+          let(:request_id) {3}
+          let(:updated_request) {{"id"=>3, "user_id"=>3, "with_user_id"=>1, "confirm"=>1,
+                                  "done"=>true, "connection_id"=>3}}
+          it_behaves_like :successful_connection_request_update
+        end
+        describe '- check ConnectionRequest forth row - Ok ' do
+          let(:request_id) {4}
+          let(:updated_request) {{"id"=>4, "user_id"=>3, "with_user_id"=>2, "confirm"=>nil,
+                                  "done"=>true, "connection_id"=>3}}
+          it_behaves_like :successful_connection_request_update
+        end
+
+        describe '- AFTER <connect_tree>  check connected_requests_update - Ok '    do  # , focus: true
+
+          describe '- check ConnectionRequest 5 row - Ok ' do
+            let(:request_id) {5}
+            let(:updated_request) {{"id"=>5, "user_id"=>3, "with_user_id"=>4, "confirm"=>1,
+                                    "done"=>true, "connection_id"=>4}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 6 row - Ok ' do
+            let(:request_id) {6}
+            let(:updated_request) {{"id"=>6, "user_id"=>4, "with_user_id"=>5, "confirm"=>1,
+                                    "done"=>true, "connection_id"=>5}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 7 row - Ok ' do
+            let(:request_id) {7}
+            let(:updated_request) {{"id"=>7, "user_id"=>4, "with_user_id"=>1, "confirm"=>2,
+                                    "done"=>true, "connection_id"=>6}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 8 row - Ok ' do
+            let(:request_id) {8}
+            let(:updated_request) {{"id"=>8, "user_id"=>4, "with_user_id"=>2, "confirm"=>2,
+                                    "done"=>true, "connection_id"=>6}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 9 row - Ok ' do
+            let(:request_id) {9}
+            let(:updated_request) {{"id"=>9, "user_id"=>1, "with_user_id"=>8, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>7}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 10 row - Ok ' do
+            let(:request_id) {10}
+            let(:updated_request) {{"id"=>10, "user_id"=>1, "with_user_id"=>7, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>7} }
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 11 row - Ok ' do
+            let(:request_id) {11}
+            let(:updated_request) {{"id"=>11, "user_id"=>5, "with_user_id"=>1, "confirm"=>2,
+                                    "done"=>true, "connection_id"=>8}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 12 row - Ok ' do
+            let(:request_id) {12}
+            let(:updated_request) {{"id"=>12, "user_id"=>5, "with_user_id"=>2, "confirm"=>2,
+                                    "done"=>true, "connection_id"=>8}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 13 row - Ok ' do
+            let(:request_id) {13}
+            let(:updated_request) {{"id"=>13, "user_id"=>10, "with_user_id"=>5, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>9}}
+            it_behaves_like :successful_connection_request_update
           end
 
-          it '- check ConnectionRequest third row - Ok'  do # , focus: true
-            connection_request_fields = ConnectionRequest.third.attributes.except('created_at','updated_at')
-            expect(connection_request_fields).to eq({"id"=>3, "user_id"=>3, "with_user_id"=>1, "confirm"=>1,
-                                                     "done"=>true, "connection_id"=>3} )
-          end
-          it '- check ConnectionRequest forth row - Ok'  do # , focus: true
-            connection_request_fields = ConnectionRequest.find(4).attributes.except('created_at','updated_at')
-            expect(connection_request_fields).to eq({"id"=>4, "user_id"=>3, "with_user_id"=>2, "confirm"=>nil,
-                                                     "done"=>true, "connection_id"=>3} )
-          end
         end
 
       end
@@ -1222,20 +1294,6 @@ RSpec.describe User, :type => :model do
             end
           end
         end
- 
-        describe '- check ConnectionRequest AFTER <disconnect_tree>' , focus: true do #, focus: true
-
-          puts "Check request_disconnection AFTER <disconnect_tree>"
-          describe '- check ConnectionRequest have rows count - Ok ' do
-            let(:rows_qty) {2}
-            it_behaves_like :successful_connection_request_rows_count
-          end
-          it '- check ConnectionRequest third row - Ok'  do # , focus: true
-            connection_request_fields = ConnectionRequest.third #.attributes.except('created_at','updated_at')
-            expect(connection_request_fields).to eq(nil )
-          end
-
-        end
 
 
         describe '- check all profile_ids generated in ProfileKey rows AFTER <disconnect_tree>' do
@@ -1262,13 +1320,182 @@ RSpec.describe User, :type => :model do
           it_behaves_like :successful_common_logs_rows_count
         end
 
+      end
 
+      describe '- check ConnectionRequest AFTER <disconnect_tree>' do #, focus: true
 
+        # puts "Check request_disconnection AFTER <disconnect_tree>"
+        describe '- check ConnectionRequest have rows count - Ok ' do
+          let(:rows_qty) {4}
+          it_behaves_like :successful_connection_request_rows_count
+        end
+        describe '- check ConnectionRequest - rollback third row - Ok ' do
+          let(:request_id) {3}
+          let(:updated_request) {{"id"=>3, "user_id"=>3, "with_user_id"=>1, "confirm"=>nil,
+                                  "done"=>false, "connection_id"=>3}}
+          it_behaves_like :successful_connection_request_update
+        end
+        describe '- check ConnectionRequest - rollback forth row - Ok ' do
+          let(:request_id) {4}
+          let(:updated_request) {{"id"=>4, "user_id"=>3, "with_user_id"=>2, "confirm"=>nil,
+                                  "done"=>false, "connection_id"=>3}}
+          it_behaves_like :successful_connection_request_update
+        end
+        puts "Connection Requests - rolled back AFTER <disconnect_tree>"
+      end
 
+      describe '- check ConnectionRequest AFTER <connect_trees>'   do # , focus: true
+        let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
+                                :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
+                                :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
+                                :current_user_id=>1, :user_id=>3, :connection_id=>3} }
+        let(:common_log_id) { 1 }
 
+        before {  # ConnectionRequest
+          FactoryGirl.create(:connection_request, :conn_request_3_4)    # id = 5  done: true
+          FactoryGirl.create(:connection_request, :conn_request_4_5)    # id = 6  done: true
+          FactoryGirl.create(:connection_request, :conn_request_4_1)    # id = 7  done: false
+          FactoryGirl.create(:connection_request, :conn_request_4_2)    # id = 8  done: false
+          FactoryGirl.create(:connection_request, :conn_request_1_8)    # id = 9  done: false
+          FactoryGirl.create(:connection_request, :conn_request_1_7)    # id = 10  done: false
+          FactoryGirl.create(:connection_request, :conn_request_5_1)    # id = 11  done: false
+          FactoryGirl.create(:connection_request, :conn_request_5_2)    # id = 12  done: false
+          FactoryGirl.create(:connection_request, :conn_request_10_5)   # id = 13  done: false
 
+          # ConnectedUser
+          FactoryGirl.create(:connected_user, :connected_3_4)    #
+          FactoryGirl.create(:connected_user, :connected_4_5)    #
+
+          current_user_1.connection_in_tables(connection_data)
+          current_user_1.disconnect_tree(common_log_id)
+
+        }
+
+        let(:current_user_1) { User.first }  # User = 1. Tree = [1,2] - before connect with [3]. profile_id = 17
+        let(:currentuser_id) {current_user_1.id}  # id = 1
+        let(:connected_users_1) { current_user_1.get_connected_users }
+
+        let(:user_2_connected) { User.second }  # User = 2. Tree = [1,2]. profile_id = 11
+        let(:connected_users_2) { user_2_connected.get_connected_users }
+
+        let(:user_3_connected) { User.third }  # User = 3. Tree = [3,4,5]. profile_id = 22
+        let(:connected_users_3) { user_3_connected.get_connected_users }
+
+        let(:user_4_connected) { User.find(4) }  # User = 4. Tree = [3,4,5]. profile_id = 53
+        let(:connected_users_4) { user_4_connected.get_connected_users }
+
+        let(:user_5_connected) { User.find(5) }  # User = 5  Tree = [3,4,5]. profile_id = 63
+        let(:connected_users_5) { user_5_connected.get_connected_users }
+
+        context '- AFTER <connect_tree> - check ConnectedUser' do
+          puts "Check ConnectedUser AFTER <connect_tree>"
+          it "- Return proper connected_users Array result for current_user_id = 1" do
+            puts "connected_users_1 = #{connected_users_1} \n"
+            expect(connected_users_1).to eq([1,2])
+          end
+          it "- Return proper connected_users Array result for current_user_id = 2" do
+            puts "connected_users_2 = #{connected_users_2} \n"
+            expect(connected_users_2).to eq([1,2])
+          end
+          it "- Return proper connected_users Array result for current_user_id = 1" do
+            puts "connected_users_3 = #{connected_users_3} \n"
+            expect(connected_users_3).to eq([3,4,5])
+          end
+          it "- Return proper connected_users Array result for current_user_id = 1" do
+            puts "connected_users_4 = #{connected_users_4} \n"
+            expect(connected_users_4).to eq([3,4,5])
+          end
+          it "- Return proper connected_users Array result for current_user_id = 1" do
+            puts "connected_users_5 = #{connected_users_5} \n"
+            expect(connected_users_5).to eq([3,4,5])
+          end
+        end
+
+        describe '- AFTER <connect_tree>  check request_connection have rows count - Ok ' , focus: true do
+          puts "Check ConnectionRequest AFTER <connect_tree>"
+          let(:rows_qty) {13}
+          it_behaves_like :successful_connection_request_rows_count
+        end
+
+        describe '- check ConnectionRequest third row - Ok ' do
+          let(:request_id) {3}
+          let(:updated_request) {{"id"=>3, "user_id"=>3, "with_user_id"=>1, "confirm"=>nil,
+                                  "done"=>false, "connection_id"=>3}}
+          it_behaves_like :successful_connection_request_update
+        end
+        describe '- check ConnectionRequest forth row - Ok ' do
+          let(:request_id) {4}
+          let(:updated_request) {{"id"=>4, "user_id"=>3, "with_user_id"=>2, "confirm"=>nil,
+                                  "done"=>false, "connection_id"=>3}}
+          it_behaves_like :successful_connection_request_update
+        end
+
+        describe '- AFTER <connect_tree>  check connected_requests_update - Ok ' , focus: true   do  # , focus: true
+
+          describe '- check ConnectionRequest 5 row - Ok ' do
+            let(:request_id) {5}
+            let(:updated_request) {{"id"=>5, "user_id"=>3, "with_user_id"=>4, "confirm"=>1,
+                                    "done"=>true, "connection_id"=>4}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 6 row - Ok ' do
+            let(:request_id) {6}
+            let(:updated_request) {{"id"=>6, "user_id"=>4, "with_user_id"=>5, "confirm"=>1,
+                                    "done"=>true, "connection_id"=>5}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 7 row - Ok ' do
+            let(:request_id) {7}
+            let(:updated_request) {{"id"=>7, "user_id"=>4, "with_user_id"=>1, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>6}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 8 row - Ok ' do
+            let(:request_id) {8}
+            let(:updated_request) {{"id"=>8, "user_id"=>4, "with_user_id"=>2, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>6}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 9 row - Ok ' do
+            let(:request_id) {9}
+            let(:updated_request) {{"id"=>9, "user_id"=>1, "with_user_id"=>8, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>7}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 10 row - Ok ' do
+            let(:request_id) {10}
+            let(:updated_request) {{"id"=>10, "user_id"=>1, "with_user_id"=>7, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>7} }
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 11 row - Ok ' do
+            let(:request_id) {11}
+            let(:updated_request) {{"id"=>11, "user_id"=>5, "with_user_id"=>1, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>8}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 12 row - Ok ' do
+            let(:request_id) {12}
+            let(:updated_request) {{"id"=>12, "user_id"=>5, "with_user_id"=>2, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>8}}
+            it_behaves_like :successful_connection_request_update
+          end
+          describe '- check ConnectionRequest 13 row - Ok ' do
+            let(:request_id) {13}
+            let(:updated_request) {{"id"=>13, "user_id"=>10, "with_user_id"=>5, "confirm"=>nil,
+                                    "done"=>false, "connection_id"=>9}}
+            it_behaves_like :successful_connection_request_update
+          end
+
+        end
 
       end
+
+
+
+
+
+
 
     end
 

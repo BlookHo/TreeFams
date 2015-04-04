@@ -192,6 +192,14 @@ FactoryGirl.define do
       done            false
     end
 
+    trait :conn_request_10_5 do
+      user_id         10
+      with_user_id    5
+      connection_id   9
+      confirm         nil
+      done            false
+    end
+
 
   end
 

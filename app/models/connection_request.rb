@@ -21,30 +21,31 @@ class ConnectionRequest < ActiveRecord::Base
   # 1 - Yes to connect
   # 2 - Request deleted by System (trees already connected)
 
-  validates_inclusion_of :done, :in => [true, false]
+  validates_inclusion_of :done, :in => [true, false],
+                         :message => "done должно быть [true, false] в ConnectionRequest"
 
 
 
-  # update request data - to yes to connect
-  # Ответ ДА на запрос на объединение
-  # Действия: сохраняем инфу - кто дал добро (= 1) какому объединению
-  # Перед этим - запуск собственно процесса объединения
+  # @note: update request data - to 'yes' to connect
+  #   Ответ ДА на запрос на объединение
+  #   Действия: сохраняем инфу - кто дал добро (= 1) какому объединению
+  #   Перед этим - запуск собственно процесса объединения
   def self.request_connection(connection_data)
-    who_connect_arr         = connection_data[:who_connect_arr]
-    with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
-    profiles_to_rewrite     = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy     = connection_data[:profiles_to_destroy]
+    # who_connect_arr         = connection_data[:who_connect_arr]
+    # with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
+    # profiles_to_rewrite     = connection_data[:profiles_to_rewrite]
+    # profiles_to_destroy     = connection_data[:profiles_to_destroy]
     current_user_id         = connection_data[:current_user_id]
     user_id                 = connection_data[:user_id]
     connection_id           = connection_data[:connection_id]
 
     requests_to_update = self.where(connection_id: connection_id,
                                     user_id: user_id,
-                                    done: false )#.order('created_at').reverse_order
+                                    done: false )
     unless requests_to_update.blank?
       requests_to_update.each do |request_row|
-        request_row.done = true
-        request_row.confirm = 1 if request_row.with_user_id == current_user_id
+        request_row.done    = true
+        request_row.confirm = 1 if request_row.with_user_id == current_user_id  # тот, кто сказал "Да"
         request_row.save
       end
     end
@@ -57,70 +58,46 @@ class ConnectionRequest < ActiveRecord::Base
   end
 
 
-  # Найти все запросы, в которых участвуют члены нового объединенного дерева
-  # Make DONE all connected requests
-  # - update all requests - with users, connected with current_user  # 1.Get connected users - arr
-  # where(user-id - in Arr and with_user in Arr)
-  # set to DONE all.
-  def self.after_conn_update_requests(connection_data)
-    who_connect_arr         = connection_data[:who_connect_arr]
-    with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
-    profiles_to_rewrite     = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy     = connection_data[:profiles_to_destroy]
-    current_user_id         = connection_data[:current_user_id]
-    user_id                 = connection_data[:user_id]
-    connection_id           = connection_data[:connection_id]
+  # @note: Find Array of connection_ids of all requests - included in just connected [1,2,3]
+  #   Найти все запросы, в которых участвуют члены нового объединенного дерева
+  #   Make DONE all connected requests
+  #   - update all requests - with users, connected with current_user  # 1.Get connected users - arr
+  #   where(user-id - in Arr and with_user in Arr)
+  #   set to DONE all.
+  # @param: current_user_id=>1
+  def self.connected_requests_update(current_user_id)
+    new_tree_users = User.find(current_user_id).get_connected_users
+    self.where("user_id in (?)", new_tree_users).where("with_user_id in (?)", new_tree_users)
+        .where(done: false).update_all({done: true, confirm: 2})
+    # puts "In  connected_requests_update: new_tree_users = #{new_tree_users}"
+  end
 
-    new_tree_users = current_user.get_connected_users
-    # @new_tree_users = new_tree_users  # DEBUGG_TO_VIEW
-        # arr = [11,2,14,7]
-        #  @str_arr = arr.map(&:inspect).join('; ')
-        #  @str_arr = arr.join('; ')
-
-    # Find Array of all requests - included in just connected
-    requests_from_arr = self.where("user_id in (?)", new_tree_users).pluck(:connection_id).uniq
-    requests_with_arr = self.where("with_user_id in (?)", new_tree_users).pluck(:connection_id).uniq
-    all_requests_to_update = (requests_from_arr + requests_with_arr).uniq
-
-    # Update all included requests - just connected
-    all_requests_to_update.each do |connection_id|
-      requests_to_update = self.where(:connection_id => connection_id, :done => false )
-      if !requests_to_update.blank?
-        requests_to_update.each do |request_row|
-          request_row.done = true
-          request_row.confirm = 2 # for all requests - system done
-          request_row.save
-        end
-        logger.info "All just connected update_requests DONE!"
-      # else
-      #   logger.info "WARNING: NO update_requests!"
-      #   #redirect_to show_user_requests_path
-      #   # flash - no connection requests data in table
-      end
-    end
-
+  # @note: rollback ConnectionRequest - update request data - to 'yes' to connect
+  #   Ответ ДА на запрос на объединение
+  def self.request_disconnection(disconnect_data)
+    # puts "In  request_disconnection: disconnect_data = #{disconnect_data}"
+    # requests_to_rollback =
+    self.where(connection_id: disconnect_data[:connection_id],   # 3
+               user_id: disconnect_data[:with_user_id],          # 3
+               done: true )
+        .update_all({done: false, confirm: nil})
   end
 
 
-  # update request data - to yes to connect
-  # Ответ ДА на запрос на объединение
-  # Действия: сохраняем инфу - кто дал добро (= 1) какому объединению
-  # Перед этим - запуск собственно процесса объединения
-  def self.request_disconnection(conn_users_destroy_data)
-    connected = User.find(conn_users_destroy_data[:user_id]).get_connected_users
-    connected.each do |one_user|
-      self.where(user_id: conn_users_destroy_data[:with_user_id],
-                 with_user_id: one_user,
-                 connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
-    end
-
-    puts "In  request_disconnection: connected = #{connected}, conn_users_destroy_data = #{conn_users_destroy_data}"
-    # self.where(user_id: conn_users_destroy_data[:with_user_id],
-    #                         connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
+  # @note rollback ConnectionRequest - update request data - to 'yes' to connect
+  # conn_users_destroy_data = {
+  #     user_id: connection_common_log["user_id"], #    1,
+  #     with_user_id: Profile.find(connection_common_log["base_profile_id"]).user_id,    #        3,
+  #     connection_id: connection_common_log["log_id"]   #    3,
+  # }
+  def self.disconnected_requests_update(disconnect_data)
+    connected_tree = User.find(disconnect_data[:user_id]).get_connected_users
+    # puts "In  disconnected_requests_update: connected_tree = #{connected_tree}"
+    self.where("user_id in (?)", connected_tree).where("with_user_id in (?)", connected_tree)
+        .where(done: true, confirm: 2)
+        .update_all({done: false, confirm: nil})
 
   end
-
-
 
 
 

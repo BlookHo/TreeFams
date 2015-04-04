@@ -23,9 +23,9 @@ module DisconnectionTrees
     # puts " user_id = #{User.where(profile_id: 22)} "
     # puts " user_id = #{User.where(profile_id: connection_common_log["base_profile_id"])} "
     # puts " user_id = #{Profile.find(connection_common_log["base_profile_id"]).user_id} "
-
-
     # with_user_id = User.where(profile_id: common_log_row_fields["base_profile_id"])
+
+    # Before CommonLog destroy
     conn_users_destroy_data = {
         user_id: connection_common_log["user_id"], #    1,
         with_user_id: Profile.find(connection_common_log["base_profile_id"]).user_id,    #        3,
@@ -43,10 +43,10 @@ module DisconnectionTrees
 
     CommonLog.find(common_log_id).destroy
 
+    # Before ConnectedUser destroy_connection
+    ConnectionRequest.disconnected_requests_update(conn_users_destroy_data)
 
     ConnectedUser.destroy_connection(conn_users_destroy_data)
-
-    puts "In User model: before request_disconnection: conn_users_destroy_data = #{conn_users_destroy_data}"  # 114 ok
 
     ConnectionRequest.request_disconnection(conn_users_destroy_data)
 
