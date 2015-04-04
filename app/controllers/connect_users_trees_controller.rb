@@ -333,8 +333,8 @@ class ConnectUsersTreesController < ApplicationController
 
       ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
       # logger.info "== in connection_of_trees UPDATES :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
-      # UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
-      # UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
+      UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
+      UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
       ###############################################
 
       current_user.unlock_tree! # unlock tree
@@ -363,24 +363,24 @@ class ConnectUsersTreesController < ApplicationController
   # Ответ ДА на запрос на объединение
   # Действия: сохраняем инфу - кто дал добро (= 1) какому объединению
   # Перед этим - запуск собственно процесса объединения
-  def yes_to_request(connection_id)
-
-    ConnectionRequest.request_connect_update(connection_id)
-
-    requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
-    if !requests_to_update.blank?
-      requests_to_update.each do |request_row|
-        request_row.done = true
-        request_row.confirm = 1 if request_row.with_user_id == current_user.id
-        request_row.save
-      end
-      logger.info "In update_requests: Done"
-    else
-      logger.info "WARNING: NO update_requests WAS DONE!"
-      redirect_to show_user_requests_path # To: Просмотр Ваших оставшихся запросов'
-      # flash - no connection requests data in table
-    end
-  end
+  # def yes_to_request(connection_id)
+  #
+  #   ConnectionRequest.request_connect_update(connection_id)
+  #
+  #   requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
+  #   if !requests_to_update.blank?
+  #     requests_to_update.each do |request_row|
+  #       request_row.done = true
+  #       request_row.confirm = 1 if request_row.with_user_id == current_user.id
+  #       request_row.save
+  #     end
+  #     logger.info "In update_requests: Done"
+  #   else
+  #     logger.info "WARNING: NO update_requests WAS DONE!"
+  #     redirect_to show_user_requests_path # To: Просмотр Ваших оставшихся запросов'
+  #     # flash - no connection requests data in table
+  #   end
+  # end
 
 
 
