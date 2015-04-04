@@ -1252,7 +1252,7 @@ RSpec.describe User, :type => :model do
 
     ################  DISCONNECTION ###########################
 
-    describe '- check User model Method <disconnect> - Ok'  do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok' , focus: true do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
@@ -1260,6 +1260,8 @@ RSpec.describe User, :type => :model do
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         let(:common_log_id) { 1 }
+        let(:user_2_connected) { User.second }  # User = 2. Tree = [1,2]. profile_id = 11
+        # let(:connected_users_2) { user_2_connected.get_connected_users }
         before {
           current_user_1.connection_in_tables(connection_data)  ############
           # connected_users_1 = current_user_1.get_connected_users   # [1,2]
@@ -1271,7 +1273,10 @@ RSpec.describe User, :type => :model do
           # puts "Before Disconnect:\n user_3_profile = #{user_3_profile}, Common_log count = #{common_log_count}
           #          Connection_log count = #{connection_log_count} \n
           #        connected_users_1 = #{connected_users_1} "  # 1     114
-          current_user_1.disconnect_tree(common_log_id)
+
+          # current_user_1.disconnect_tree(common_log_id)
+          user_2_connected.disconnect_tree(common_log_id)
+
           # connected_users_1_disconn = current_user_1.get_connected_users   # [1,2]
           # puts "After Disconnect: connected_users_1_disconn = #{connected_users_1_disconn} "  # 1
           ############

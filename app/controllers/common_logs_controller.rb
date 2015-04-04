@@ -51,8 +51,9 @@ class CommonLogsController < ApplicationController
   def rollback_logs
     rollback_date = params[:rollback_date]
     rollback_id   = params[:rollback_id]
+    connected_users_arr = current_user.get_connected_users
     logger.info "In CommonLog controller: rollback_logs      rollback_id = #{rollback_id},  rollback_date = #{rollback_date} "
-    common_logs_arr = CommonLog.where(user_id: current_user.id)
+    common_logs_arr = CommonLog.where(user_id: connected_users_arr) # current_user.id)
                        .where("id >= ?", rollback_id)    # .where("created_at > #{rollback_date}")
                        .order("created_at DESC")
     common_logs_arr.each do |common_log|
