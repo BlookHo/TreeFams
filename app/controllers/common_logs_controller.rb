@@ -84,11 +84,12 @@ class CommonLogsController < ApplicationController
   # @param params[:rollback_id]
   def rollback_add_profile(common_log_id)
     profile_id = CommonLog.find(common_log_id).profile_id
-    add_log_data = { current_user: current_user,
-                     log_type:     1,
-                     profile_id:   profile_id }
+    rollback_add_log_data = { current_user:  current_user,
+                                  log_type:  1,
+                                profile_id:  profile_id,
+                             common_log_id:  common_log_id }
 
-    CommonLog.rollback_add_one_profile(add_log_data)
+    CommonLog.rollback_add_one_profile(rollback_add_log_data)
   end
 
   # @note Возврат delete Logs
@@ -101,7 +102,8 @@ class CommonLogsController < ApplicationController
                         log_type:         2,
                         profile_id:       one_common_log.profile_id,
                         base_profile_id:  one_common_log.base_profile_id,
-                        relation_id:      one_common_log.relation_id }
+                        relation_id:      one_common_log.relation_id,
+                        common_log_id:    common_log_id   }
 
     CommonLog.rollback_destroy_one_profile(destroy_log_data)
     # logger.info "In CommonLog controller: rollback_delete_profile для common_log_id = #{common_log_id},
@@ -152,6 +154,8 @@ class CommonLogsController < ApplicationController
     #     connection_id: common_log_row_fields["log_id"]   #    3,
     # }
     one_common_log = CommonLog.find(common_log_id)
+    logger.info "In CommonLog controller: rollback_connection_trees: common_log_id = #{common_log_id.inspect} "
+    logger.info "In CommonLog controller: rollback_connection_trees: one_common_log = #{one_common_log.inspect} "
 
     ############ call of User.module Disconnection_tree #####################
     current_user.disconnect_tree(common_log_id)
@@ -160,9 +164,13 @@ class CommonLogsController < ApplicationController
     # profile_id:       one_common_log.profile_id,
     base_profile_id =  one_common_log.base_profile_id
     agent_user_id = Profile.find(base_profile_id).user_id
+
+    logger.info "In CommonLog controller: rollback_connection_trees: base_profile_id = #{base_profile_id.inspect} "
+    logger.info "In CommonLog controller: rollback_connection_trees: agent_user_id = #{agent_user_id.inspect} "
+
     # logger.info "== in connection_of_trees UPDATES :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
-    UpdatesFeed.create(user_id: current_user.id, update_id: 17, agent_user_id: agent_user_id, agent_profile_id: one_common_log.base_profile_id, read: false)
-    UpdatesFeed.create(user_id: agent_user_id, update_id: 17, agent_user_id: current_user.id, agent_profile_id: one_common_log.profile_id, read: false)
+    UpdatesFeed.create(user_id: current_user.id, update_id: 17, agent_user_id: one_common_log.user_id, agent_profile_id: one_common_log.profile_id, read: false)
+    UpdatesFeed.create(user_id: one_common_log.user_id, update_id: 17, agent_user_id: current_user.id, agent_profile_id: current_user.profile_id, read: false)
     ###############################################
 
 

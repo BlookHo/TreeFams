@@ -327,13 +327,28 @@ RSpec.describe CommonLog, type: :model do # , focus: true
         expect(common_log_forth.profile_id).to eq(173)
         expect(common_log_forth.id).to eq(4)
       end
+      describe '- check all relations generated in ProfileKey rows: start state - Ok'  do  # , focus: true
+        let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
+                                  14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121,
+                                  191, 221]}
+        let(:relations_arr_size) {46}
+        it_behaves_like :successful_profile_keys_relation_ids
+      end
+      describe '- check all profile_ids generated in ProfileKey rows: start state - Ok' do
+        let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 87,
+                                 88, 88, 88, 88, 88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172,
+                                 173, 173, 173, 173, 173]}
+        let(:profiles_ids_arr_size) {46}
+        it_behaves_like :successful_profile_keys_profile_ids
+      end
+
     end
 
     # from common_logs_controller.rb#rollback_logs#rollback_add_profile#rollback_add_one_profile , focus: true
     describe ' Check action <rollback_add_one_profile> :' do
       context '- rollback add profile = 173 - check tables values ' do
 
-        let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 173 } }
+        let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 173, common_log_id: 4 } }
         before { CommonLog.rollback_add_one_profile(add_log_data ) }
 
         describe '- check CommonLog have rows count - Ok' do
@@ -342,6 +357,7 @@ RSpec.describe CommonLog, type: :model do # , focus: true
         end
         it '- check CommonLog 1st row - Ok' do
           common_log_first =  CommonLog.first
+          puts "Check CommonLog.rollback_add_one_profile: -173 \n"
           # puts "before action: trees_count = #{trees_count.inspect} \n"
           expect(common_log_first.profile_id).to eq(89)
           expect(common_log_first.id).to eq(1)
@@ -372,12 +388,6 @@ RSpec.describe CommonLog, type: :model do # , focus: true
           let(:relations_arr_size) {36}
           it_behaves_like :successful_profile_keys_relation_ids
         end
-        describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
-          let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 13, 14, 17, 17, 17,
-                                    91, 91, 91, 101, 111, 111, 121, 121, 191, 221]}
-          let(:relations_arr_size) {36}
-          it_behaves_like :successful_profile_keys_relation_ids
-        end
         describe '- check all profile_ids generated in ProfileKey rows - Ok' do
           let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 88, 88, 88,
                                    88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 172, 172, 172, 172]}
@@ -388,7 +398,7 @@ RSpec.describe CommonLog, type: :model do # , focus: true
 
       context '- rollback add profile = 172 - check tables values ' do
 
-        let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 172 } }
+        let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 172, common_log_id: 3 } }
         before { CommonLog.rollback_add_one_profile(add_log_data ) }
 
         describe '- check CommonLog have rows count - Ok' do
@@ -397,6 +407,7 @@ RSpec.describe CommonLog, type: :model do # , focus: true
         end
         it '- check CommonLog 1st row - Ok' do
           common_log_first =  CommonLog.first
+          puts "Check CommonLog.rollback_add_one_profile: -172 \n"
           # puts "before action: trees_count = #{trees_count.inspect} \n"
           expect(common_log_first.profile_id).to eq(89) # got profile_id
           expect(common_log_first.id).to eq(1) # got id rows of CommonLog
@@ -441,15 +452,16 @@ RSpec.describe CommonLog, type: :model do # , focus: true
       context '- rollback destroy profile = 90 - check tables values ' do
 
         let(:destroy_log_data) { {:current_user => current_user_9, :log_type => 2, :profile_id => 90,
-                                  :base_profile_id => 85, :relation_id => 3   } }
-        before { CommonLog.rollback_add_one_profile(destroy_log_data) }
+                                  :base_profile_id => 85, :relation_id => 3, common_log_id: 2    } }
+        before { CommonLog.rollback_destroy_one_profile(destroy_log_data) }
 
-        describe '- check CommonLog have rows count - Ok' do
+        describe '- check CommonLog have rows count: 4 - 1 = 3 - Ok' do
           let(:rows_qty) {3}
           it_behaves_like :successful_common_logs_rows_count
         end
         it '- check CommonLog 1st row - Ok' do
           common_log_first =  CommonLog.first
+          puts "Check CommonLog.rollback_destroy_one_profile: +90 \n"
           # puts "before action: trees_count = #{trees_count.inspect} \n"
           expect(common_log_first.profile_id).to eq(89)
           expect(common_log_first.id).to eq(1)
@@ -466,33 +478,26 @@ RSpec.describe CommonLog, type: :model do # , focus: true
           expect(common_log_third.profile_id).to eq(173)
           expect(common_log_third.id).to eq(4)
         end
-        describe '- check Tree have rows count - Ok' do
-          let(:rows_qty) {7}
+        describe '- check Tree have rows count: + 90 profile - Ok' do
+          let(:rows_qty) {8}
           it_behaves_like :successful_tree_rows_count
         end
-        describe '- check ProfileKey have rows count - Ok' do
-          let(:rows_qty) {46}
+        describe '- check ProfileKey have rows count: + 90 profile - Ok' do
+          let(:rows_qty) {58}
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
-          let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
-                                    14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121, 191,
-                                    221]}
-          let(:relations_arr_size) {46}
-          it_behaves_like :successful_profile_keys_relation_ids
-        end
-        describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
-          let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
-                                    14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121, 191,
-                                    221]}
-          let(:relations_arr_size) {46}
+          let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 5, 6, 7, 7, 7, 8,
+                                    8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 91, 101, 101, 101, 101, 111, 111,
+                                    111, 111, 111, 111, 121, 121, 191, 191, 211, 221]}
+          let(:relations_arr_size) {58}
           it_behaves_like :successful_profile_keys_relation_ids
         end
         describe '- check all profile_ids generated in ProfileKey rows - Ok' do
-          let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 87,
-                                   88, 88, 88, 88, 88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172,
-                                   173, 173, 173, 173, 173]}
-          let(:profiles_ids_arr_size) {46}
+          let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87,
+                                   87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91,
+                                   91, 92, 92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
+          let(:profiles_ids_arr_size) {58}
           it_behaves_like :successful_profile_keys_profile_ids
         end
       end
@@ -500,16 +505,16 @@ RSpec.describe CommonLog, type: :model do # , focus: true
       context '- rollback destroy profile = 89 - check tables values ' do  # , focus: true
 
         let(:destroy_log_data) { {:current_user => current_user_9, :log_type => 2, :profile_id => 89,
-                                  :base_profile_id => 85, :relation_id => 6 } }
-        before { CommonLog.rollback_add_one_profile(destroy_log_data) }
+                                  :base_profile_id => 85, :relation_id => 6, common_log_id: 1 } }
+        before { CommonLog.rollback_destroy_one_profile(destroy_log_data) }
 
-        describe '- check CommonLog have rows count - Ok' do
+        describe '- check CommonLog have rows count: 4 - 1 = 3 - Ok' do
           let(:rows_qty) {3}
           it_behaves_like :successful_common_logs_rows_count
         end
         it '- check CommonLog 1st row - Ok' do
           common_log_first =  CommonLog.first
-          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          puts "Check CommonLog.rollback_destroy_one_profile: +89 \n"
           expect(common_log_first.profile_id).to eq(90) # got profile_id
           expect(common_log_first.id).to eq(2) # got id rows of CommonLog
         end
@@ -525,26 +530,26 @@ RSpec.describe CommonLog, type: :model do # , focus: true
           expect(common_log_third.profile_id).to eq(173)
           expect(common_log_third.id).to eq(4)
         end
-        describe '- check Tree have rows count - Ok' do
-          let(:rows_qty) {7}
+        describe '- check Tree have rows count: + 89 profile - Ok' do
+          let(:rows_qty) {8}
           it_behaves_like :successful_tree_rows_count
         end
-        describe '- check ProfileKey have rows count - Ok' do
-          let(:rows_qty) {46}
+        describe '- check ProfileKey have rows count: + 89 profile - Ok' do
+          let(:rows_qty) {56}
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
-          let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
-                                    14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121, 191,
-                                    221]}
-          let(:relations_arr_size) {46}
+          let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7,
+                                    7, 8, 8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111,
+                                    111, 111, 121, 121, 191, 201, 221, 221]}
+          let(:relations_arr_size) {56}
           it_behaves_like :successful_profile_keys_relation_ids
         end
         describe '- check all profile_ids generated in ProfileKey rows - Ok' do
-          let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 87,
-                                   88, 88, 88, 88, 88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172,
-                                   173, 173, 173, 173, 173]}
-          let(:profiles_ids_arr_size) {46}
+          let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87,
+                                   87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 91, 91, 91, 91, 91, 91,
+                                   92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
+          let(:profiles_ids_arr_size) {56}
           it_behaves_like :successful_profile_keys_profile_ids
         end
       end

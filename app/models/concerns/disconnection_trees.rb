@@ -33,9 +33,6 @@ module DisconnectionTrees
     }
 
     log_to_redo = restore_connection_log(connection_common_log["log_id"], connection_common_log["user_id"])
-    # logger.info "*** In module Disconnection after restore_connection_log:
-    #                   log_to_redo.size = #{log_to_redo.size.inspect}"
-    # puts "In User model: before redo_connection_log: log_to_redo.size = #{log_to_redo.size}"  # 114 ok
 
     redo_connection_log(log_to_redo)
 

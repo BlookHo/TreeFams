@@ -1252,7 +1252,7 @@ RSpec.describe User, :type => :model do
 
     ################  DISCONNECTION ###########################
 
-    describe '- check User model Method <disconnect> - Ok' , focus: true do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok'  do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
