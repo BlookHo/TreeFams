@@ -846,7 +846,7 @@ RSpec.describe User, :type => :model do
     #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
     # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
     # :current_user_id=>1, :user_id=>3, :connection_id=>3}
-    describe '- check User model Method < check_connection_arrs(connection_data )>'  do  # , focus: true
+    describe '- check User model Method < check_connection_arrs(connection_data )>' , focus: true do  # , focus: true
       context '- when valid connection_data' do
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
@@ -901,7 +901,7 @@ RSpec.describe User, :type => :model do
         it "- check_connection_result: when the same profile (12 и 18) - is in both arrays: complete_dubles_hash" do
           puts "In User model: check_connection_result[:complete_dubles_hash]
                 = #{check_connection_result[:complete_dubles_hash]} \n"
-          expect(check_connection_result[:complete_dubles_hash]).to eq( nil )
+          expect(check_connection_result[:complete_dubles_hash]).to eq( {} )
         end
       end
 
@@ -928,7 +928,7 @@ RSpec.describe User, :type => :model do
         it "- check_connection_result: when profiles_to_rewrite = [] - complete_dubles_hash" do
           puts "In User model: check_connection_result[:complete_dubles_hash]
                  = #{check_connection_result[:complete_dubles_hash]} \n"
-          expect(check_connection_result[:complete_dubles_hash]).to eq( nil )
+          expect(check_connection_result[:complete_dubles_hash]).to eq( {} )
         end
       end
 
@@ -956,7 +956,7 @@ RSpec.describe User, :type => :model do
         it "- check_connection_result: when arrays size are unqual - complete_dubles_hash" do
           puts "In User model: check_connection_result[:complete_dubles_hash]
                  = #{check_connection_result[:complete_dubles_hash]} \n"
-          expect(check_connection_result[:complete_dubles_hash]).to eq( nil )
+          expect(check_connection_result[:complete_dubles_hash]).to eq( {} )
         end
       end
 

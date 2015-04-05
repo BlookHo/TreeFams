@@ -5,7 +5,7 @@ class ConnectUsersTreesController < ApplicationController
 
   layout 'application.new'
 
-
+  # todo: refactor
   # @note: Главный стартовый метод объединения деревьев
   # @param: Вход:
   #   current_user_id = params[:current_user_id] = who_found_user_id - Автор дерева, который ищет

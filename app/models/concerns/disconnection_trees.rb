@@ -41,8 +41,6 @@ module DisconnectionTrees
 
     ConnectionRequest.request_disconnection(conn_users_destroy_data)
 
-
-
   end
 
 
