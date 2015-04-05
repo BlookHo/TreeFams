@@ -6,84 +6,6 @@ class ConnectUsersTreesController < ApplicationController
   layout 'application.new'
 
 
-
-  # Метод дла перезаписи профилей в таблицах
-  # who_found_user_id - Автор дерева, который ищет
-  # where_found_user_id - Автор дерева, в котором найдено
-  ## (остаются): profiles_to_rewrite -
-  ## (уходят): profiles_to_destroy -
-  # who_connect_ids_arr - массив id, входящих в объед-ное дерево автора (того, кто соединяется)
-  # with_who_conn_ids_ar - массив id, входящих в объед-ное дерево того, с кем соединяется автор
-  #
-  # def connect_trees_prev(profiles_to_rewrite, profiles_to_destroy, who_connect_ids_arr, with_who_conn_ids_ar)
-  #
-  #   logger.info "DEBUG IN CONNECT_TREES: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
-  #
-  #   rewrite_tree_arr1 = []
-  #   rewrite_tree_arr2 = []
-  #   rewrite_profilekey_arr1 = []
-  #   rewrite_profilekey_arr2 = []
-  #
-  #   #########  перезапись profile_id's & update User
-  #   ## (остаются): profiles_to_rewrite - противоположные, найденным в поиске
-  #   ## (уходят): profiles_to_destroy - найден в поиске
-  #   # Первым параметром идут те профили, которые остаются
-  #   Profile.merge(connection_data)
-  #
-  #   for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
-  #     # меняем profile_id в match_profiles_arr на profile_id из opposite_profiles_arr
-  #     one_profile = profiles_to_destroy[arr_ind] # profile_id для замены
-  #     logger.info one_profile
-  #
-  #     with_who_conn_ids_ar.each do |one_user_in_tree|
-  #       # Получение массивов для Замены профилей в Tree
-  #       one_arr1 = get_rewrite_profiles_ids(Tree, "profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
-  #       rewrite_tree_arr1 << one_arr1 if !one_arr1.blank?
-  #       @rewrite_tree_arr1 = rewrite_tree_arr1 # DEBUGG_TO_VIEW
-  #       one_arr2 = get_rewrite_profiles_ids(Tree, "is_profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
-  #       rewrite_tree_arr2 << one_arr2 if !one_arr2.blank?
-  #       @rewrite_tree_arr2 = rewrite_tree_arr2 # DEBUGG_TO_VIEW
-  #
-  #       # Получение массивов для Замены профилей в ProfileKey
-  #       one_arr1 = get_rewrite_profiles_ids(ProfileKey, "profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
-  #       rewrite_profilekey_arr1 << one_arr1 if !one_arr1.blank?
-  #       @rewrite_profilekey_arr1 = rewrite_profilekey_arr1 # DEBUGG_TO_VIEW
-  #       one_arr2 = get_rewrite_profiles_ids(ProfileKey, "is_profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
-  #       rewrite_profilekey_arr2 << one_arr2 if !one_arr2.blank?
-  #       @rewrite_profilekey_arr2 = rewrite_profilekey_arr2 # DEBUGG_TO_VIEW
-  #     end
-  #
-  #     who_connect_ids_arr.each do |one_user_in_tree|
-  #       # Получение массивов для Замены профилей в Tree
-  #       one_arr1 = get_rewrite_profiles_ids(Tree, "profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
-  #       rewrite_tree_arr1 << one_arr1 if !one_arr1.blank?
-  #       @rewrite_tree_arr1 = rewrite_tree_arr1 # DEBUGG_TO_VIEW
-  #       one_arr2 = get_rewrite_profiles_ids(Tree, "is_profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
-  #       rewrite_tree_arr2 << one_arr2 if !one_arr2.blank?
-  #       @rewrite_tree_arr2 = rewrite_tree_arr2 # DEBUGG_TO_VIEW
-  #
-  #       # Получение массивов для Замены профилей в ProfileKey
-  #       one_arr1 = get_rewrite_profiles_ids(ProfileKey, "profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
-  #       rewrite_profilekey_arr1 << one_arr1 if !one_arr1.blank?
-  #       @rewrite_profilekey_arr1 = rewrite_profilekey_arr1 # DEBUGG_TO_VIEW
-  #       one_arr2 = get_rewrite_profiles_ids(ProfileKey, "is_profile_id", one_user_in_tree, one_profile.to_i, profiles_to_rewrite[arr_ind].to_i)
-  #       rewrite_profilekey_arr2 << one_arr2 if !one_arr2.blank?
-  #       @rewrite_profilekey_arr2 = rewrite_profilekey_arr2 # DEBUGG_TO_VIEW
-  #     end
-  #
-  #   end
-  #
-  #   save_rewrite_profiles_ids(Tree, rewrite_tree_arr1 + rewrite_tree_arr2)
-  #   @save_in_tree = @saved_profiles_arr # DEBUGG_TO_VIEW
-  #   @save_in_tree_LEN = @saved_profiles_arr.length if !@save_in_tree.blank? # DEBUGG_TO_VIEW
-  #   save_rewrite_profiles_ids(ProfileKey, rewrite_profilekey_arr1 + rewrite_profilekey_arr2)
-  #   @save_in_profilekey = @saved_profiles_arr # DEBUGG_TO_VIEW
-  #   @save_in_profilekey_LEN = @saved_profiles_arr.length if !@save_in_profilekey.blank? # DEBUGG_TO_VIEW
-  #
-  # end
-
-
-
   # @note: Главный стартовый метод объединения деревьев
   # @param: Вход:
   #   current_user_id = params[:current_user_id] = who_found_user_id - Автор дерева, который ищет
@@ -129,8 +51,6 @@ class ConnectUsersTreesController < ApplicationController
     who_connect_users_arr = current_user.get_connected_users
     @who_connect_users_arr = who_connect_users_arr
 
-    # Чтобы протестировать: раскомментить следующую строку:
-    # who_connect_users_arr = [1,2,3] # for DEBUGG ONLY!!!
     connection_message = "Нельзя объединить ваши деревья, т.к. есть информация, что они уже объединены!"
     # Проверка: может быть дерево автора уже было соединено с выбранным юзером?
     if check_connection_permit(who_connect_users_arr.include?(user_id.to_i), connection_message) # check IF NOT CONNECTED
@@ -144,98 +64,9 @@ class ConnectUsersTreesController < ApplicationController
     beg_search_time = Time.now   # Начало отсечки времени поиска
 
     ##### Запуск стартового ДОСТОВЕРНОГО поиска с certain_koeff_for_connect из Weafam_Settings
-    # search_results = current_user.start_search(certain_koeff_for_connect)
-    search_results = current_user.start_search(get_certain_koeff) # get_certain_koeff=4 -  значение из Settings from appl.cntrler
+    search_results = current_user.start_search(get_certain_koeff)
+    # get_certain_koeff=4 - значение из Settings from appl.cntrler
     ##############################################################################
-    logger.info " In connection_of_trees, After start_search: search_results = #{search_results.inspect}"
-        #  After start_search index: results =
-        # {:connected_author_arr=>[1, 2], :qty_of_tree_profiles=>18,
-        # :profiles_relations_arr=>[
-        # {9=>{3=>4, 10=>8, 2=>18, 17=>112}},
-        # {15=>{17=>1, 11=>2, 124=>4, 16=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202}},
-        # {14=>{12=>1, 13=>2, 11=>6, 18=>91, 20=>92, 19=>101, 21=>102, 15=>212, 16=>212}},
-        # {21=>{13=>4, 20=>7, 12=>18, 11=>122, 14=>122}},
-        # {8=>{2=>3, 7=>7, 3=>17, 17=>111}},
-        # {19=>{12=>3, 18=>7, 13=>17, 11=>121, 14=>121}},
-        # {11=>{12=>1, 13=>2, 15=>3, 16=>3, 14=>6, 17=>7, 2=>13, 3=>14, 18=>91, 20=>92, 19=>101, 21=>102, 124=>121}},
-        # {7=>{2=>3, 8=>8, 3=>17, 17=>111}},
-        # {2=>{7=>1, 8=>2, 17=>3, 3=>8, 9=>15, 10=>16, 11=>17, 15=>111, 16=>111}},
-        # {20=>{13=>4, 21=>8, 12=>18, 11=>122, 14=>122}},
-        # {16=>{17=>1, 11=>2, 15=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202, 124=>221}},
-        # {10=>{3=>4, 9=>7, 2=>18, 17=>112}},
-        # {17=>{2=>1, 3=>2, 15=>3, 16=>3, 11=>8, 12=>15, 13=>16, 7=>91, 9=>92, 8=>101, 10=>102, 124=>121}},
-        # {12=>{18=>1, 19=>2, 11=>4, 14=>4, 13=>8, 20=>15, 21=>16, 17=>18, 15=>112, 16=>112}},
-        # {3=>{9=>1, 10=>2, 17=>3, 2=>7, 7=>13, 8=>14, 11=>17, 15=>111, 16=>111}},
-        # {13=>{20=>1, 21=>2, 11=>4, 14=>4, 12=>7, 18=>13, 19=>14, 17=>18, 15=>112, 16=>112}},
-        # {124=>{15=>1, 17=>91, 11=>101, 16=>191}},
-        # {18=>{12=>3, 19=>8, 13=>17, 11=>121, 14=>121}}],
-        # :profiles_found_arr=>[
-        # {9=>{}},
-        # {15=>{9=>{85=>[1, 2, 4, 5, 91, 101]}, 10=>{100=>[1, 2, 4]}, 11=>{128=>[1, 2, 5, 91, 92, 101, 102]}}},
-        # {14=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
-        # {21=>{3=>{29=>[4, 7, 18, 122, 122]}}},
-        # {8=>{}},
-        # {19=>{3=>{27=>[3, 7, 17, 121, 121]}}},
-        # {11=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}, 11=>{127=>[1, 2, 3, 3, 7, 13, 14]}, 9=>{87=>[3, 3, 7, 13, 14, 121]}, 10=>{171=>[3, 7, 121]}}},
-        # {7=>{}},
-        # {2=>{9=>{172=>[3, 8, 17, 111, 111]}, 11=>{139=>[3, 8, 17, 111, 111]}}},
-        # {20=>{3=>{28=>[4, 8, 18, 122, 122]}}},
-        # {16=>{9=>{88=>[1, 2, 5, 91, 101, 221]}, 11=>{125=>[1, 2, 5, 91, 92, 101, 102]}}},
-        # {10=>{}},
-        # {17=>{9=>{86=>[1, 2, 3, 3, 8, 121]}, 11=>{126=>[1, 2, 3, 3, 8, 15, 16]}, 10=>{170=>[3, 8, 121]}}},
-        # {12=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}, 11=>{155=>[4, 8, 18, 112, 112]}}},
-        # {3=>{9=>{173=>[3, 7, 17, 111, 111]}, 11=>{154=>[3, 7, 17, 111, 111]}}},
-        # {13=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}, 11=>{156=>[4, 7, 18, 112, 112]}}},
-        # {124=>{9=>{91=>[1, 91, 101, 191]}, 10=>{99=>[1, 91, 101]}}},
-        # {18=>{3=>{26=>[3, 8, 17, 121, 121]}}}],
-        # :uniq_profiles_pairs=>{
-        # 15=>{9=>85, 11=>128},
-        # 14=>{3=>22},
-        # 21=>{3=>29},
-        # 19=>{3=>27},
-        # 11=>{3=>25, 11=>127, 9=>87},
-        # 2=>{9=>172, 11=>139},
-        # 20=>{3=>28}, 16=>{9=>88, 11=>125},
-        # 17=>{9=>86, 11=>126},
-        # 12=>{3=>23, 11=>155},
-        # 3=>{9=>173, 11=>154},
-        # 13=>{3=>24, 11=>156},
-        # 124=>{9=>91},
-        # 18=>{3=>26}},
-        # :profiles_with_match_hash=>{
-        # 24=>7, 23=>7, 126=>7, 125=>7, 127=>7, 25=>7, 22=>7, 128=>7,
-        # 86=>6, 88=>6, 87=>6, 85=>6,
-        # 26=>5, 156=>5, 154=>5, 173=>5, 155=>5, 28=>5, 139=>5, 172=>5, 27=>5, 29=>5,
-        # 91=>4},
-        # :by_profiles=>[
-        # {:search_profile_id=>13, :found_tree_id=>3, :found_profile_id=>24, :count=>7},
-        # {:search_profile_id=>12, :found_tree_id=>3, :found_profile_id=>23, :count=>7},
-        # {:search_profile_id=>17, :found_tree_id=>11, :found_profile_id=>126, :count=>7},
-        # {:search_profile_id=>16, :found_tree_id=>11, :found_profile_id=>125, :count=>7},
-        # {:search_profile_id=>11, :found_tree_id=>11, :found_profile_id=>127, :count=>7},
-        # {:search_profile_id=>11, :found_tree_id=>3, :found_profile_id=>25, :count=>7},
-        # {:search_profile_id=>14, :found_tree_id=>3, :found_profile_id=>22, :count=>7},
-        # {:search_profile_id=>15, :found_tree_id=>11, :found_profile_id=>128, :count=>7},
-        # {:search_profile_id=>17, :found_tree_id=>9, :found_profile_id=>86, :count=>6},
-        # {:search_profile_id=>16, :found_tree_id=>9, :found_profile_id=>88, :count=>6},
-        # {:search_profile_id=>11, :found_tree_id=>9, :found_profile_id=>87, :count=>6},
-        # {:search_profile_id=>15, :found_tree_id=>9, :found_profile_id=>85, :count=>6},
-        # {:search_profile_id=>18, :found_tree_id=>3, :found_profile_id=>26, :count=>5},
-        # {:search_profile_id=>13, :found_tree_id=>11, :found_profile_id=>156, :count=>5},
-        # {:search_profile_id=>3, :found_tree_id=>11, :found_profile_id=>154, :count=>5},
-        # {:search_profile_id=>3, :found_tree_id=>9, :found_profile_id=>173, :count=>5},
-        # {:search_profile_id=>12, :found_tree_id=>11, :found_profile_id=>155, :count=>5},
-        # {:search_profile_id=>20, :found_tree_id=>3, :found_profile_id=>28, :count=>5},
-        # {:search_profile_id=>2, :found_tree_id=>11, :found_profile_id=>139, :count=>5},
-        # {:search_profile_id=>2, :found_tree_id=>9, :found_profile_id=>172, :count=>5},
-        # {:search_profile_id=>19, :found_tree_id=>3, :found_profile_id=>27, :count=>5},
-        # {:search_profile_id=>21, :found_tree_id=>3, :found_profile_id=>29, :count=>5},
-        # {:search_profile_id=>124, :found_tree_id=>9, :found_profile_id=>91, :count=>4}]
-        # :by_trees=>[
-        # {:found_tree_id=>9, :found_profile_ids=>[85, 87, 172, 88, 86, 173, 91]},
-        # {:found_tree_id=>11, :found_profile_ids=>[128, 127, 139, 125, 126, 155, 154, 156]},
-        # {:found_tree_id=>3, :found_profile_ids=>[22, 29, 27, 25, 28, 23, 24, 26]}],
-        # :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
 
     ######## Сбор рез-тов поиска:
     uniq_profiles_pairs = search_results[:uniq_profiles_pairs]
@@ -278,9 +109,6 @@ class ConnectUsersTreesController < ApplicationController
     logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
     logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
 
-    #profiles_to_destroy = [14, 21, 19, 11, 20, 12, 13, 18]
-    #profiles_to_rewrite = [22, 29, 27, 25, 28, 23, 24, 26]
-
     end_search_time = Time.now   # Конец отсечки времени поиска
     @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
 
@@ -311,31 +139,15 @@ class ConnectUsersTreesController < ApplicationController
       logger.info "=== IN check_connection_switch: дублирования в массивах"
       return
     end
-    # logger.info "=After 3rd check_connection_switch: @stop_connection || stop_by_arrs = #{@stop_connection || stop_by_arrs}"
 
     unless @stop_connection || stop_by_arrs # for stop_connection & view
 
-      ##################################################################
       ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
       current_user.connection_in_tables(connection_data)
       ##################################################################
       flash[:notice] = " #{connection_message} Ваши деревья успешно объединены!"
       logger.info "Connection - GO ON! array(s) - CORRECT!,
                    @stop_connection = #{@stop_connection},\n connection_message = #{connection_message}"
-      #################################################################
-      # ##### Update connection requests - to yes connect
-      # yes_to_request(@connection_id)
-      ##################################################################
-      # Make DONE all connected requests
-      # - update all requests - with users, connected with current_user
-      #  after_conn_update_requests  # From Helper
-      ##############################################
-
-      ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
-      # logger.info "== in connection_of_trees UPDATES :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
-      UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
-      UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
-      ###############################################
 
       current_user.unlock_tree! # unlock tree
     end
@@ -357,32 +169,6 @@ class ConnectUsersTreesController < ApplicationController
       redirect_to home_path
     end
   end
-
-
-  # update request data - to yes to connect
-  # Ответ ДА на запрос на объединение
-  # Действия: сохраняем инфу - кто дал добро (= 1) какому объединению
-  # Перед этим - запуск собственно процесса объединения
-  # def yes_to_request(connection_id)
-  #
-  #   ConnectionRequest.request_connect_update(connection_id)
-  #
-  #   requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
-  #   if !requests_to_update.blank?
-  #     requests_to_update.each do |request_row|
-  #       request_row.done = true
-  #       request_row.confirm = 1 if request_row.with_user_id == current_user.id
-  #       request_row.save
-  #     end
-  #     logger.info "In update_requests: Done"
-  #   else
-  #     logger.info "WARNING: NO update_requests WAS DONE!"
-  #     redirect_to show_user_requests_path # To: Просмотр Ваших оставшихся запросов'
-  #     # flash - no connection requests data in table
-  #   end
-  # end
-
-
 
 
 

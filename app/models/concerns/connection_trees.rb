@@ -10,15 +10,14 @@ module ConnectionTrees
   # :current_user_id=>1, :user_id=>3, :connection_id=>3}
   def connection_in_tables(connection_data)
 
-    who_connect_arr         = connection_data[:who_connect_arr]
-    with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
+    # who_connect_arr         = connection_data[:who_connect_arr]
+    # with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
     profiles_to_rewrite     = connection_data[:profiles_to_rewrite]
     profiles_to_destroy     = connection_data[:profiles_to_destroy]
     current_user_id         = connection_data[:current_user_id]
     user_id                 = connection_data[:user_id]
-    connection_id           = connection_data[:connection_id]
+    # connection_id           = connection_data[:connection_id]
     # puts "In connection_in_tables"
-    # logger.info "IN connection_in_tables: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
 
     # [1 2] c [3]
     # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
@@ -34,6 +33,13 @@ module ConnectionTrees
     ## Update connection requests - to yes connect
       ConnectionRequest.request_connection(connection_data)
       ConnectionRequest.connected_requests_update(current_user_id)
+    ##################################################################
+    ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
+    profile_current_user = User.find(current_user_id).profile_id   #
+    profile_user_id = User.find(user_id).profile_id  #
+    UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
+    UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
+
     ######## Перезапись profile_id при объединении деревьев
                 UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
     ##################################################################
@@ -49,16 +55,13 @@ module ConnectionTrees
   # @param connection_data
   def connect_trees(connection_data)
 
-    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    profiles_to_destroy = connection_data[:profiles_to_destroy]
-    who_connect         = connection_data[:who_connect_arr]
-    with_whom_connect   = connection_data[:with_whom_connect_arr]
-    current_user_id     = connection_data[:current_user_id]
-    user_id             = connection_data[:user_id]
-    connection_id       = connection_data[:connection_id]
-
-    # puts "In connect_trees"
-    # logger.info "IN connect_trees: profiles_to_rewrite = #{profiles_to_rewrite}; profiles_to_destroy = #{profiles_to_destroy} "
+    # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+    # profiles_to_destroy = connection_data[:profiles_to_destroy]
+    # who_connect         = connection_data[:who_connect_arr]
+    # with_whom_connect   = connection_data[:with_whom_connect_arr]
+    # current_user_id     = connection_data[:current_user_id]
+    # user_id             = connection_data[:user_id]
+    # connection_id       = connection_data[:connection_id]
 
     # todo: Сделать логирование перезаписи Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
     # Перезапись profile_data при объединении профилей
@@ -112,9 +115,7 @@ module ConnectionTrees
 
   # Делаем общий массив юзеров, для update_field в таблицах
   def users_connecting_scope(who_connect, with_whom_connect)
-    all_users_to_connect = who_connect + with_whom_connect
-    logger.info "IN connect_trees users_connecting_scope: all_users_to_connect = #{all_users_to_connect}"
-    all_users_to_connect
+    who_connect + with_whom_connect
   end
 
   # перезапись значений в одном поле одной таблицы
@@ -147,8 +148,10 @@ module ConnectionTrees
    rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
       #####################################################
 
-          logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id}, rewrite_row.profile_id = #{rewrite_row.profile_id},
-                         rewrite_row.is_profile_id = #{rewrite_row.is_profile_id}, profiles_to_rewrite[arr_ind] = #{profiles_to_rewrite[arr_ind]} "
+          # logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id},
+          #                  rewrite_row.profile_id = #{rewrite_row.profile_id},
+          #                rewrite_row.is_profile_id = #{rewrite_row.is_profile_id},
+          #                  profiles_to_rewrite[arr_ind] = #{profiles_to_rewrite[arr_ind]} "
 
           one_connection_data = { connected_at: connection_id,                # int
                                   current_user_id: current_user_id,           # int

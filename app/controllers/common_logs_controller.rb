@@ -137,42 +137,12 @@ class CommonLogsController < ApplicationController
       current_user.lock!
     end
 
-    # common_log_row_fields = CommonLog.find(common_log_id).attributes.except('created_at','updated_at')
-    # # expect(common_log_row_fields).to eq({
-    # # "id"=>1,
-    # # "user_id"=>1,
-    # # "log_type"=>4,
-    # # "log_id"=>3,
-    # # "profile_id"=>17,
-    # #  "base_profile_id"=>14,
-    # # "relation_id"=>999} )
-    #
-    # # with_user_id = User.where(profile_id: common_log_row_fields["base_profile_id"])
-    # conn_users_destroy_data = {
-    #     user_id: common_log_row_fields["user_id"], #    1,
-    #     with_user_id: User.where(profile_id: common_log_row_fields["base_profile_id"]),    #        3,
-    #     connection_id: common_log_row_fields["log_id"]   #    3,
-    # }
     one_common_log = CommonLog.find(common_log_id)
-    logger.info "In CommonLog controller: rollback_connection_trees: common_log_id = #{common_log_id.inspect} "
-    logger.info "In CommonLog controller: rollback_connection_trees: one_common_log = #{one_common_log.inspect} "
+    # logger.info "In CommonLog controller: rollback_connection_trees: common_log_id = #{common_log_id.inspect} "
+    # logger.info "In CommonLog controller: rollback_connection_trees: one_common_log = #{one_common_log.inspect} "
 
     ############ call of User.module Disconnection_tree #####################
     current_user.disconnect_tree(common_log_id)
-
-    ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
-    # profile_id:       one_common_log.profile_id,
-    base_profile_id =  one_common_log.base_profile_id
-    agent_user_id = Profile.find(base_profile_id).user_id
-
-    logger.info "In CommonLog controller: rollback_connection_trees: base_profile_id = #{base_profile_id.inspect} "
-    logger.info "In CommonLog controller: rollback_connection_trees: agent_user_id = #{agent_user_id.inspect} "
-
-    # logger.info "== in connection_of_trees UPDATES :  profile_current_user = #{profile_current_user}, profile_user_id = #{profile_user_id} "
-    UpdatesFeed.create(user_id: current_user.id, update_id: 17, agent_user_id: one_common_log.user_id, agent_profile_id: one_common_log.profile_id, read: false)
-    UpdatesFeed.create(user_id: one_common_log.user_id, update_id: 17, agent_user_id: current_user.id, agent_profile_id: current_user.profile_id, read: false)
-    ###############################################
-
 
     current_user.unlock_tree! # unlock tree
 

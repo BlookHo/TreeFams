@@ -32,9 +32,9 @@ class ConnectionLog < ActiveRecord::Base
   end
 
   def writtens_can_be_nil?
-    # puts "In ConnectionLog valid:  table_name = #{self.table_name}, written = #{self.written}, field = #{self.field} "
-    # puts "In ConnectionLog valid:  table_name? = #{self.table_name == "profiles"} "
-    # puts "In ConnectionLog valid:  table_name && field? = #{self.table_name == "profiles" && self.field == "user_id"} "
+    # puts "In ConnectionLog Model valid:  table_name = #{self.table_name}, written = #{self.written}, field = #{self.field} "
+    # puts "In ConnectionLog Model valid:  table_name? = #{self.table_name == "profiles"} "
+    # puts "In ConnectionLog Model valid:  table_name && field? = #{self.table_name == "profiles" && self.field == "user_id"} "
     self.table_name == "profiles" && self.field == "user_id"
   end
 

@@ -8,22 +8,6 @@ module DisconnectionTrees
     # puts "In User model: disconnect_tree: common_log_id = #{common_log_id}"
 
     connection_common_log = CommonLog.find(common_log_id).attributes.except('created_at','updated_at')
-    # common_log_row_fields = CommonLog.find(common_log_id).attributes.except('created_at','updated_at')
-    # expect(common_log_row_fields).to eq({
-    # "id"=>1,
-    # "user_id"=>1,
-    # "log_type"=>4,
-    # "log_id"=>3,
-    # "profile_id"=>17,
-    #  "base_profile_id"=>14,
-    # "relation_id"=>999} )
-    # puts "In User model: before restore_connection_log: connection_common_log = #{connection_common_log},
-    #        connection_common_log['base_profile_id'] = #{connection_common_log['base_profile_id']}      "  # 114 ok
-    #
-    # puts " user_id = #{User.where(profile_id: 22)} "
-    # puts " user_id = #{User.where(profile_id: connection_common_log["base_profile_id"])} "
-    # puts " user_id = #{Profile.find(connection_common_log["base_profile_id"]).user_id} "
-    # with_user_id = User.where(profile_id: common_log_row_fields["base_profile_id"])
 
     # Before CommonLog destroy
     conn_users_destroy_data = {
@@ -38,6 +22,16 @@ module DisconnectionTrees
 
     log_connection_deletion(log_to_redo)
 
+    ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
+    # Before CommonLog destroy_connection
+    one_common_log = CommonLog.find(common_log_id)
+    profile_current_user = User.find(self.id).profile_id
+    UpdatesFeed.create(user_id: self.id, update_id: 17, agent_user_id: one_common_log.user_id,
+                       agent_profile_id: one_common_log.profile_id, read: false)
+    UpdatesFeed.create(user_id: one_common_log.user_id, update_id: 17, agent_user_id: self.id,
+                       agent_profile_id: profile_current_user, read: false)
+    ###############################################
+
     CommonLog.find(common_log_id).destroy
 
     # Before ConnectedUser destroy_connection
@@ -46,6 +40,7 @@ module DisconnectionTrees
     ConnectedUser.destroy_connection(conn_users_destroy_data)
 
     ConnectionRequest.request_disconnection(conn_users_destroy_data)
+
 
 
   end

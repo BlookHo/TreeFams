@@ -66,18 +66,12 @@ module ProfileMerge
       user_id           = link_data[:user_id]
       opposite_profile  = link_data[:opposite_profile]
       connection_id     = link_data[:connected_at]
-      logger.info "*** In module ProfileMerge user_profile_connection_link: link_data = #{link_data.inspect} "
+      # logger.info "*** In module ProfileMerge user_profile_connection_link: link_data = #{link_data.inspect} "
 
       # for RSpec
       @main_profile_id = main_profile.id
 
       # 1 link #################################
-      #     name_of_table = User.table_name
-      #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect} "
-      #     name_of_table = Profile.table_name
-      #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect} "
-      #     model = name_of_table.classify.constantize
-      #     logger.info "*** In module SimilarsConnection update_table: model = #{model.inspect} "
 
       one_connection_data = { connected_at: connection_id,
                               current_user_id: current_user_id,
@@ -89,10 +83,10 @@ module ProfileMerge
                               overwritten: opposite_profile.id }
       log_profiles_connection = collect_one_connection_log(log_profiles_connection, one_connection_data)
       ######################################
-      logger.info "#* In module Profile_Merge make_user_profile_link: main_profile.id = #{main_profile.id.inspect} "
-      logger.info "#* In module Profile_Merge make_user_profile_link: opposite_profile = #{opposite_profile.inspect} "
-      logger.info "#* In module Profile_Merge make_user_profile_link: opposite_profile.user = #{opposite_profile.user.inspect} "
-      logger.info "#* In module Profile_Merge make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "
+      # logger.info "#* In module Profile_Merge make_user_profile_link: main_profile.id = #{main_profile.id.inspect} "
+      # logger.info "#* In module Profile_Merge make_user_profile_link: opposite_profile = #{opposite_profile.inspect} "
+      # logger.info "#* In module Profile_Merge make_user_profile_link: opposite_profile.user = #{opposite_profile.user.inspect} "
+      # logger.info "#* In module Profile_Merge make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "
 
       logger.info "# 1 ##*** In module Profile_Merge log_profiles_connection: #{log_profiles_connection.inspect} "
   # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
@@ -125,7 +119,7 @@ module ProfileMerge
                               written: opposite_profile.tree_id,
                               overwritten: main_profile.tree_id }
 
-      logger.info "*** In  3 module Profile_Merge make_user_profile_link: one_connection_data = #{one_connection_data.inspect} "
+      # logger.info "*** In  3 module Profile_Merge make_user_profile_link: one_connection_data = #{one_connection_data.inspect} "
       log_profiles_connection = collect_one_connection_log(log_profiles_connection, one_connection_data)
       logger.info "# 3 ##*** In module Profile_Merge log_profiles_connection: #{log_profiles_connection.inspect} "
 
@@ -151,14 +145,10 @@ module ProfileMerge
       # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
      opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
 
-      logger.info "###*** In module Profile_Merge make_user_profile_link: opposite_profile.user_id = #{opposite_profile.user_id.inspect} "
-      logger.info "###*** In module Profile_Merge make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "
-      logger.info "# 4 ##*** In module Profile_Merge log_profiles_connection: #{log_profiles_connection.inspect} "
-
       log_profiles_connection
     end
 
-    # Сохранение одного лога в табл.ConnectionLog
+    # Для Сохранения одного лога в табл.ConnectionLog
     def collect_one_connection_log(log_user_profiles, one_connection_data)
       log_user_profiles << ConnectionLog.new(one_connection_data)
       log_user_profiles
