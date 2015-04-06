@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ConnectedUser, :type => :model do
+RSpec.describe ConnectionRequest, :type => :model,:disabled=>true do
 
   describe '- Validation' do
     describe '- on create' do
@@ -138,7 +138,7 @@ RSpec.describe ConnectedUser, :type => :model do
       # User current_user_1_connected
       FactoryGirl.create(:user, :current_user_1_connected )  # User = 1 . Tree = [1,2]. profile_id = 17
       FactoryGirl.create(:user, :user_2_connected )  # User = 2 . Tree = [1,2]. profile_id = 11
-          # puts "before All: User.last.id = #{User.last.id}, .profile_id = #{User.last.profile_id} \n"  # user_id = 1
+      # puts "before All: User.last.id = #{User.last.id}, .profile_id = #{User.last.profile_id} \n"  # user_id = 1
       FactoryGirl.create(:user, :user_3_to_connect )  # User = 3 . Tree = [3]. profile_id = 22
       # puts "before All: User.second.id = #{User.second.id}, .profile_id = #{User.second.profile_id} \n"  # user_id = 1
       FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
@@ -426,13 +426,13 @@ RSpec.describe ConnectedUser, :type => :model do
 
 
       #     # puts "before All: ProfileKey.last.user_id = #{ProfileKey.last.user_id} \n"  # user_id = 1
-  #     # puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
-  #     # puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
-  #
-  #     FactoryGirl.create(:common_log, :log_delete_profile_89)    #
-  #     FactoryGirl.create(:common_log, :log_delete_profile_90)    #
-  #     FactoryGirl.create(:common_log, :log_add_profile_172)    #
-  #     FactoryGirl.create(:common_log, :log_add_profile_173)    #
+      #     # puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
+      #     # puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
+      #
+      #     FactoryGirl.create(:common_log, :log_delete_profile_89)    #
+      #     FactoryGirl.create(:common_log, :log_delete_profile_90)    #
+      #     FactoryGirl.create(:common_log, :log_add_profile_172)    #
+      #     FactoryGirl.create(:common_log, :log_add_profile_173)    #
     }
 
     after {
@@ -490,7 +490,7 @@ RSpec.describe ConnectedUser, :type => :model do
       end
     end
 
-      # from connect_users_trees_controller.rb
+    # from connect_users_trees_controller.rb
     describe ' Check action <set_users_connection> :'  do  # , focus: true
       context '- save in Table ConnectedUser connection data - rewrite and overwrite profiles rows ' do
 
@@ -534,4 +534,3 @@ RSpec.describe ConnectedUser, :type => :model do
   end
 
 end
-

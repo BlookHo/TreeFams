@@ -16,14 +16,14 @@ module SearchHelper
     start_hash.each_with_index do |(k, v), index|
       start_hash.each do |key, value|
         next if k == key
-        logger.info "=========== SEARCH DEBUG ========"
-        logger.info "=========== KEY"
-        logger.info key
-        logger.info start_hash[key]
-        logger.info "=========== K"
-        logger.info k
-        logger.info start_hash[k]
-        logger.info "=========== END SEARCH DEBUG ========"
+        # logger.info "=========== SEARCH DEBUG ========"
+        # logger.info "=========== KEY"
+        # logger.info key
+        # logger.info start_hash[key]
+        # logger.info "=========== K"
+        # logger.info k
+        # logger.info start_hash[k]
+        # logger.info "=========== END SEARCH DEBUG ========"
         intersection = start_hash[key] & start_hash[k]
         if duplicates_Many_to_One.has_key?(key)
           duplicates_Many_to_One[key][intersection.keys.first] = intersection[intersection.keys.first] if !intersection.empty?
@@ -80,7 +80,7 @@ module SearchHelper
     profiles_powers_hash = {}
     reduced_profile_relations_hash.each { |k, v_arr | profiles_powers_hash.merge!( k => v_arr.size) }
     logger.info " profiles_powers_hash = #{profiles_powers_hash} "
-    return profiles_powers_hash
+    profiles_powers_hash
   end
 
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "SEARCH.rb"
@@ -112,7 +112,7 @@ module SearchHelper
     else
       logger.info "ERROR IN get_profiles_match_hash profiles_arr: max_profiles_powers_hash.size != 1 "
     end
-    return new_profiles_with_match_hash
+    new_profiles_with_match_hash
   end
 
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "SEARCH.rb"
@@ -136,7 +136,7 @@ module SearchHelper
         profile_trees_relations.each do |key_tree, profile_relations_hash|
           logger.info " profile_relations_hash = #{profile_relations_hash} "
           reduced_profile_relations_hash = reduce_profile_relations(profile_relations_hash, certainty_koeff)
-          if !reduced_profile_relations_hash.empty?
+          unless reduced_profile_relations_hash.empty?
             profiles_powers_hash = make_profiles_power_hash(reduced_profile_relations_hash)
             max_profiles_powers_hash, max_power = get_max_power_profiles_hash(profiles_powers_hash)
             # Выявление дубликатов ТИПА 1 К 2 - One_to_Many
@@ -171,7 +171,7 @@ module SearchHelper
 
 
   # todo: перенести этот метод в Operational - для нескольких моделей
-  # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
+  # ИСПОЛЬЗУЕТСЯ В NEW METHOD complete_search
   # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
   #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
   #new_conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 79=>62}
@@ -212,9 +212,8 @@ module SearchHelper
     one = (first_bk - common_circle_arr)
     two = (second_bk - common_circle_arr)
     logger.info " get_delta_bk: one = #{one}, two = #{two}"
-    circles_delta = (first_bk - common_circle_arr) + (second_bk - common_circle_arr)
-
-    return circles_delta
+    # circles_delta = (first_bk - common_circle_arr) + (second_bk - common_circle_arr)
+    (first_bk - common_circle_arr) + (second_bk - common_circle_arr)
   end
 
   # todo: перенести этот метод в CirclesMethods - для нескольких моделей

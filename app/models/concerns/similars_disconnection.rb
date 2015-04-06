@@ -34,8 +34,7 @@ module SimilarsDisconnection
         #<Profile id: 52, user_id: nil, created_at: "2015-01-24 12:08:26", updated_at: "2015-01-24 12:08:26",
         # name_id: 370, sex_id: 1, tree_id: 4, display_name_id: 370>
 
-        # row_to_update.update_column(:"#{log_row[:field]}", log_row[:overwritten] )
-         row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now)
+        row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now)
 
       end
     end

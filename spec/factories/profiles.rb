@@ -427,6 +427,234 @@ FactoryGirl.define do
   # 173;;"2015-03-21 14:18:44.147049";"2015-03-21 14:18:44.147049";82;0;9;82
 
 
+  factory :connect_profile, class: Profile do   # For Cinnection Trees TEST: 2 connected trees test [1, 2]
+
+
+      # id 1     # user_4   # before
+      user_id   nil
+      name_id   370
+      sex_id    1
+      tree_id   4
+
+      trait :connect_profile_2  do   # 2
+        # id 86
+        user_id   nil
+        name_id   122
+        sex_id    1
+        tree_id   1
+      end
+      trait :connect_profile_3  do   # 3
+        # id 86
+        # user_id   nil
+        name_id   82
+        sex_id    0
+        tree_id   1
+      end
+      trait :connect_profile_7  do   # 7
+        id 7
+        # user_id   nil
+        name_id   90
+        sex_id    1
+        tree_id   1
+      end
+      # 2;;"2015-01-23 07:31:58.060264";"2015-01-23 07:31:58.060264";122;1;1;122
+      # 3;;"2015-01-23 07:31:58.344427";"2015-01-23 07:31:58.344427";82;0;1;82
+      # 7;;"2015-01-23 07:31:59.414155";"2015-01-23 07:31:59.414155";90;1;1;90
+
+      trait :connect_profile_8  do   # 8
+        id 8
+        # user_id   nil
+        name_id   449
+        sex_id    0
+        tree_id   1
+      end
+      trait :connect_profile_9  do   # 9
+        id 9
+        # user_id   nil
+        name_id   361
+        sex_id    1
+        tree_id   1
+      end
+      trait :connect_profile_10 do   # 10
+        id 10
+        # user_id   nil
+        name_id   293
+        sex_id    0
+        tree_id   1
+      end
+      # 8;;"2015-01-23 07:31:59.860816";"2015-01-23 07:31:59.860816";449;0;1;449
+      # 9;;"2015-01-23 07:32:00.169704";"2015-01-23 07:32:00.169704";361;1;1;361
+      # 10;;"2015-01-23 07:32:00.422691";"2015-01-23 07:32:00.422691";293;0;1;293
+
+
+      trait :connect_profile_11 do   # 11
+        id 11
+        user_id   2
+        name_id   48
+        sex_id    0
+        tree_id   2
+      end
+      trait :connect_profile_12 do   # 12
+        id 12
+        user_id   nil
+        name_id   343
+        sex_id    1
+        tree_id   2
+      end
+      trait :connect_profile_13 do   # 13
+        id 13
+        user_id   nil
+        name_id   82
+        sex_id    0
+        tree_id   2
+      end
+      # 11;2;"2015-01-23 07:37:32.790612";"2015-01-23 07:37:32.809612";48;0;2;516
+      # 12;;"2015-01-23 07:37:32.842851";"2015-01-23 07:37:32.842851";343;1;2;343
+      # 13;;"2015-01-23 07:37:33.071763";"2015-01-23 07:37:33.071763";82;0;2;82
+
+
+      trait :connect_profile_14 do   # 14
+        id 14
+        user_id   nil
+        name_id   331
+        sex_id    0
+        tree_id   2
+      end
+      trait :connect_profile_15 do   # 15
+        id 15
+        user_id   nil
+        name_id   370
+        sex_id    1
+        tree_id   2
+      end
+      trait :connect_profile_16 do   # 16
+        id 16
+        user_id   nil
+        name_id   465
+        sex_id    1
+        tree_id   2
+      end
+      # 14;;"2015-01-23 07:37:33.246236";"2015-01-23 07:37:33.246236";331;0;2;331
+      # 15;;"2015-01-23 07:37:33.477205";"2015-01-23 07:37:33.477205";370;1;2;370
+      # 16;;"2015-01-23 07:37:33.768574";"2015-01-23 07:37:33.768574";465;1;2;465
+
+
+      trait :connect_profile_17 do   # 17
+        id 17
+        user_id   1
+        name_id   28
+        sex_id    1
+        tree_id   1
+      end
+      trait :connect_profile_18 do   # 18
+        id 18
+        user_id   nil
+        name_id   194
+        sex_id    1
+        tree_id   2
+      end
+      trait :connect_profile_19 do   # 19
+        id 19
+        user_id   nil
+        name_id   48
+        sex_id    0
+        tree_id   2
+      end
+      # 17;1;"2015-01-23 07:37:34.089346";"2015-01-23 07:37:34.089346";28;1;1;28
+      # 18;;"2015-01-23 07:37:34.388327";"2015-01-23 07:37:34.388327";194;1;2;194
+      # 19;;"2015-01-23 07:37:34.722199";"2015-01-23 07:37:34.722199";48;0;2;48
+
+
+      trait :connect_profile_20 do   # 20
+        id 20
+        user_id   nil
+        name_id   110
+        sex_id    1
+        tree_id   2
+      end
+      trait :connect_profile_21 do   # 21
+        id 21
+        user_id   nil
+        name_id   249
+        sex_id    0
+        tree_id   2
+      end
+      trait :connect_profile_22 do   # 22
+        id 22
+        user_id   3
+        name_id   331
+        sex_id    0
+        tree_id   3
+      end
+      # 20;;"2015-01-23 07:37:35.175336";"2015-01-23 07:37:35.175336";110;1;2;110
+      # 21;;"2015-01-23 07:37:35.446917";"2015-01-23 07:37:35.446917";249;0;2;249
+      # 22;3;"2015-01-23 07:47:59.810321";"2015-01-23 07:47:59.82969";331;0;3;331
+
+
+      trait :connect_profile_23 do   # 23
+        id 23
+        user_id   nil
+        name_id   343
+        sex_id    1
+        tree_id   3
+      end
+      trait :connect_profile_24 do   # 24
+        id 24
+        user_id   nil
+        name_id   82
+        sex_id    0
+        tree_id   3
+      end
+      trait :connect_profile_25 do   # 25
+        id 25
+        user_id   nil
+        name_id   48
+        sex_id    0
+        tree_id   3
+      end
+      # 23;;"2015-01-23 07:47:59.853552";"2015-01-23 07:47:59.853552";343;1;3;343
+      # 24;;"2015-01-23 07:47:59.967496";"2015-01-23 07:47:59.967496";82;0;3;82
+      # 25;;"2015-01-23 07:48:00.145801";"2015-01-23 07:48:00.145801";48;0;3;516
+
+
+      trait :connect_profile_26 do   # 26
+        id 26
+        user_id   nil
+        name_id   194
+        sex_id    1
+        tree_id   3
+      end
+      trait :connect_profile_27 do   # 27
+        id 27
+        user_id   nil
+        name_id   48
+        sex_id    0
+        tree_id   3
+      end
+      trait :connect_profile_28 do   # 28
+        id 28
+        user_id   nil
+        name_id   110
+        sex_id    1
+        tree_id   3
+      end
+      # 26;;"2015-01-23 07:48:00.389447";"2015-01-23 07:48:00.389447";194;1;3;194
+      # 27;;"2015-01-23 07:48:00.703992";"2015-01-23 07:48:00.703992";48;0;3;48
+      # 28;;"2015-01-23 07:48:01.020452";"2015-01-23 07:48:01.020452";110;1;3;110
+
+
+      trait :connect_profile_29 do   # 29
+        id 29
+        user_id   nil
+        name_id   249
+        sex_id    0
+        tree_id   3
+      end
+      # 29;;"2015-01-23 07:48:01.321049";"2015-01-23 07:48:01.321049";249;0;3;249
+
+  end
+
+
 end
 
 

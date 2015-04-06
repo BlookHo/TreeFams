@@ -1,5 +1,9 @@
 class User < ActiveRecord::Base
-  include Search   # основной метод поиска
+  include Search                # основной метод поиска
+  include SearchComplete        # метод полного поиска
+  include SearchHelper          # Исп-ся в Search,  SimilarsCompleteSearch
+  include ConnectionTrees       # основной метод объединения деревьев
+  include DisconnectionTrees    # основной метод разъединения деревьев
 
   include SimilarsStart          # запуск методов поиска стартовых пар похожих
   include SimilarsInitSearch     # методы поиска стартовых пар похожих
@@ -10,7 +14,6 @@ class User < ActiveRecord::Base
 
   include SimilarsHelper  # Исп-ся в Similars
 
-  include SearchHelper  # Исп-ся в Search,  SimilarsCompleteSearch
 
   include UserLock # вроде бы не используется
   include UserAccount
@@ -126,6 +129,10 @@ class User < ActiveRecord::Base
     self.update_attributes(password: password, password_confirmation: password)
     UserMailer.reset_password(self, password).deliver
   end
+
+
+
+
 
 
   private

@@ -1,6 +1,5 @@
 module Search
   extend ActiveSupport::Concern
-#  include SearchHelper
 
   def start_search(certain_koeff)    # Запуск мягкого поиска для объединения
                                      # Значение certain_koeff - из вьюхи/
@@ -17,7 +16,9 @@ module Search
     ###################################
 
     tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
-    qty_of_tree_profiles = tree_is_profiles.size if !tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
+    qty_of_tree_profiles = tree_is_profiles.size unless tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
+    # Задание на поиск от Дерева Юзера: tree_is_profiles =
+    # [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18]
 
     logger.info "======================= RUN start_search ========================= "
     logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
@@ -26,6 +27,8 @@ module Search
 
     ############### ПОИСК ######## NEW LAST METHOD ############
     search_profiles_from_tree(certain_koeff, connected_author_arr, tree_is_profiles) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
+    # @duplicates_one_to_many = { 3=> [2, 4]}     # for DEBUGG ONLY!!!
+    # @duplicates_many_to_one = { 4=> 2, 3 => 2}  # for DEBUGG ONLY!!!
 
     results = {
         connected_author_arr: connected_author_arr, # where use? - in View
@@ -44,7 +47,8 @@ module Search
     }
 
     logger.info "== END OF start_search ========================= "
-    return results
+    logger.info " $$$$$$$$$$$$$$  After start_search: results = #{results.inspect}"
+    results
   end # END OF start_search
 
   # Основной поиск по дереву Автора - Юзера.
@@ -60,7 +64,7 @@ module Search
     logger.info " "
     logger.info "=== IN search_profiles_from_tree === Запуск Циклов поиска по tree_arr === "
     i = 0 # DEBUGG_TO_LOGG
-    if !tree_is_profiles.blank?
+    unless tree_is_profiles.blank?
       tree_is_profiles.each do |profile_id_searched|
         logger.info " "
         logger.info "***** Цикл ПОИСКa: #{i+1}-я ИТЕРАЦИЯ - Ищем профиль: #{profile_id_searched.inspect};"
@@ -123,16 +127,22 @@ module Search
 
   end
 
-  # Делаем ХЭШ профилей-отношений для искомого дерева. - пригодится.
-  # ВСПОМОГАТЕЛЬНЫЙ РЕЗ-ТАТ ПОИСКА - СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
-  # {профиль искомый -> профиль -> его отношение к искомому} )
+  # @note: Делаем ХЭШ профилей-отношений для искомого дерева. - пригодится.
+  #   Tested
+  # @param:
+  # @return: ВСПОМОГАТЕЛЬНЫЙ РЕЗ-ТАТ ПОИСКА - СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА
+  #   (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
+  #   [ {profile_searched: -> профиль искомый, profile_relations: -> все отношения к искомому профилю } ]
+  # @see:
   def make_profile_relations(profile_id_searched, one_profile_relations, profiles_relations_arr)
     profile_relations_hash = Hash.new
-    profile_relations_hash.merge!(profile_id_searched  => one_profile_relations)
-    profiles_relations_arr << profile_relations_hash if !profile_relations_hash.empty? # Заполнение выходного массива хэшей
+    one_profile_relations_hash = { profile_searched: profile_id_searched, profile_relations: one_profile_relations}
+    # profile_relations_hash.merge!(profile_id_searched  => one_profile_relations)
+    profile_relations_hash.merge!(one_profile_relations_hash)
+    profiles_relations_arr << profile_relations_hash unless profile_relations_hash.empty? # Заполнение выходного массива хэшей
     logger.info "Все пары profile_relations ИСКОМОГО ПРОФИЛЯ: profile_relations_hash = #{profile_relations_hash} "
     logger.info ""
-    return profiles_relations_arr
+    profiles_relations_arr
   end
 
 
@@ -160,7 +170,7 @@ module Search
       logger.info "=== НЕТ результата! В деревьях сайта ничего не найдено! === "
     end
 
-    return found_profiles_hash
+    found_profiles_hash
   end
 
   # Поиск совпадений для одного из профилей
@@ -276,6 +286,16 @@ module Search
     return by_profiles, by_trees
   end
 
+  # # Служебный метод для отладки - для LOGGER
+  # # todo: перенести этот метод в Operational - для нескольких моделей
+  # # Показывает массив в logger
+  # def show_in_logger(arr_to_log, string_to_add)
+  #   row_no = 0  # DEBUGG_TO_LOGG
+  #   arr_to_log.each do |row| # DEBUGG_TO_LOGG
+  #     row_no += 1
+  #     logger.debug "#{string_to_add} № #{row_no.inspect}: #{row.attributes.inspect} " # DEBUGG_TO_LOGG
+  #   end  # DEBUGG_TO_LOGG
+  # end
 
 
 

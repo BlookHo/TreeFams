@@ -1,9 +1,19 @@
 class UpdatesFeed < ActiveRecord::Base
 
-  validates_presence_of :user_id, :update_id, :message => "Должно присутствовать в UpdatesFeed"
-  validates_numericality_of :user_id, :update_id, :only_integer => true, :message => "ID автора нового события и ID события должны быть целым числом в UpdatesFeed"
-  validates_numericality_of :user_id, :update_id, :greater_than => 0, :message => "ID автора нового события и ID события должны быть больше 0 в UpdatesFeed"
-  validates_inclusion_of :read, :in => [true, false]
+  validates_presence_of :user_id, :update_id, :agent_user_id, :agent_profile_id,
+                        :message => "Должно присутствовать в UpdatesFeed"
+  validates_numericality_of :user_id, :update_id, :agent_user_id, :agent_profile_id, :only_integer => true,
+                            :message => "ID автора нового события и ID события должны быть целым числом в UpdatesFeed"
+  validates_numericality_of :user_id, :update_id, :agent_user_id, :agent_profile_id, :greater_than => 0,
+                            :message => "ID автора нового события и ID события должны быть больше 0 в UpdatesFeed"
+  validates_inclusion_of :read, :in => [true, false], :message => "Должны быть в [true, false] в UpdatesFeed"
+  validate :updates_users_ids_not_equal  # :user_id  AND :agent_user_id
+
+  # custom validation
+  def updates_users_ids_not_equal
+    self.errors.add(:updates_feeds, 'Юзеры IDs в одном ряду не должны быть равны в UpdatesFeed.') if self.user_id == self.agent_user_id
+  end
+
 
   belongs_to :user
 
@@ -17,8 +27,9 @@ class UpdatesFeed < ActiveRecord::Base
   def self.select_updates(current_user)
     connected_users = current_user.get_connected_users
     logger.info "In select_updates: connected_users = #{connected_users}" #
-    if !connected_users.blank?
-      updates_feeds = UpdatesFeed.where("user_id in (?) or agent_user_id  in (?)", connected_users, connected_users ).where.not(user_id: current_user.id).order('created_at').reverse_order
+    unless connected_users.blank?
+      updates_feeds = UpdatesFeed.where("user_id in (?) or agent_user_id  in (?)", connected_users, connected_users )
+                          .where.not(user_id: current_user.id).order('created_at').reverse_order
       logger.info "In select_updates: updates_feeds.size = #{updates_feeds.size}"
       UpdatesFeed.make_view_data(read_updates(updates_feeds), current_user.id)
     end
@@ -49,16 +60,6 @@ class UpdatesFeed < ActiveRecord::Base
   # todo: переделать в компактный хэш
   def self.collect_one_update_data(updates_feed, current_user_id)
     update_data = Hash.new
-    #update_data = {
-    #    update_text: updates_feed.combine_update_text(updates_feed, current_user_id)
-    #}
-
-    #update_data[:user_update_author] = updates_feed.user_update_data(updates_feed.user_id)[:user_name]
-    #update_data[:user_author_email]  = updates_feed.user_update_data(updates_feed.user_id)[:user_email]
-    #  Если в данном виде обновления профиль-агент не используется, то во View - ничего не показываем
-    #update_data[:agent_in_update]    = updates_feed.fill_agent_field(updates_feed) if !updates_feed.agent_user_id.blank?
-    #update_data[:update_id]          = updates_feed.update_id # DEBUGG TO VIEW
-
     # Show in View /index
     update_data[:update_text]        = updates_feed.combine_update_text(updates_feed, current_user_id)
     # Show in View /index
@@ -100,35 +101,6 @@ class UpdatesFeed < ActiveRecord::Base
     (updates_feed.read_attribute_before_type_cast(:created_at)).to_datetime.strftime('%d.%m.%Y в %k:%M:%S')
   end
 
-  # Заполнение Именем agent_user_id поля agent_in_update для отображения
-  # в случае когда agent_user_id - user
-  # ИЛИ
-  # в случае когда agent_user_id - profile
-  #def fill_agent_field(updates_feed)
-  #
-  #    case updates_feed.update_id
-  #      when 1, 2 # запросы на объединение, объединения   ИЛИ
-  #        # ConnectionRequestsController, ConnectUsersTreesController
-  #        updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name]
-  #
-  #      when 3, 4, 5  # избранный профиль -       ИЛИ
-  #        # добавлен профиль - ProfilesController  ИЛИ
-  #        # приглашение на сайт по почте -  InvitesController
-  #        get_name(updates_feed.agent_profile_id)
-  #
-  #      when 6  # изменились данные профиля
-  #
-  #      when 7  # семейное событие в дереве
-  #
-  #      when 8 .. 16  # кол-во родни в дереве больше 25, 50, 100... - ProfilesController
-  #        get_name(updates_feed.agent_profile_id)
-  #
-  #      else
-  #        nil
-  #    end
-  #
-  #end
-
   # Формирование полного связного текста каждого из сообщений updates_feed
   def combine_update_text(updates_feed, current_user_id)
 
@@ -153,6 +125,9 @@ class UpdatesFeed < ActiveRecord::Base
       when 8 .. 16 # изменилось кол-во родни в объединенном дереве   # OK
                   # в рез-те добавления профиля или объединения деревьев in ProfilesController, ConnectUsersTreesController
         prefix, suffix = updates_feed.combine_8__16_text(updates_feed, current_user_id)
+      when 17  # разъединение дереве   # OK
+        prefix, suffix = updates_feed.combine_17_text(updates_feed, text_data, current_user_id)
+
 
       else
         ""
@@ -183,6 +158,18 @@ class UpdatesFeed < ActiveRecord::Base
   end
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
+  # для UpdatesEvent типа 17
+  def combine_17_text(updates_feed, text_data, current_user_id)
+
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
+    current_user_name =  updates_feed.user_update_data(current_user_id)[:user_name]
+    prefix = 'Внимание, ' + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:author_name]
+    updates_feed.agent_user_id == current_user_id ? suffix = 'твоим деревом' : suffix = 'деревом твоего родственника по имени ' + text_data[:agent_name]
+
+    return prefix, suffix
+  end
+
+  # Формирование итоговой текстовой фразы одного сообщения updates_feed
   # для UpdatesEvent типа 2
   def combine_2_text(updates_feed, text_data, current_user_id)
 
@@ -193,6 +180,8 @@ class UpdatesFeed < ActiveRecord::Base
 
     return prefix, suffix
   end
+
+
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
   # для UpdatesEvent типа 3
