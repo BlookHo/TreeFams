@@ -141,6 +141,7 @@ class ConnectUsersTreesController < ApplicationController
     end
 
     unless @stop_connection || stop_by_arrs # for stop_connection & view
+      # flash[:notice] = " Внимание! Ваши деревья объединяются!"
 
       ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
       current_user.connection_in_tables(connection_data)

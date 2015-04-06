@@ -30,6 +30,10 @@ RSpec.describe UpdatesFeed, type: :model  do # , focus: true
         it '- 4 Dont save: - agent_profile - uninteger' do
           expect(bad_uncorrect_agent_profile).to_not be_valid
         end
+        let(:bad_uncorrect_who_made_event) {FactoryGirl.build(:updates_feed, :uncorrect_who_made_event)}
+        it '- 4 Dont save: - who_made_event - uninteger' do
+          expect(bad_uncorrect_who_made_event).to_not be_valid
+        end
         let(:bad_uncorrect_read) {FactoryGirl.build(:updates_feed, :uncorrect_read)}
         it '- 5 Dont save: - bad_uncorrect_read - not boolean' do
           expect(bad_uncorrect_read).to_not be_valid

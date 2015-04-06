@@ -170,6 +170,8 @@ class ProfilesController < ApplicationController
        # logger.info "In add_new_profile: Before create_add_log   common_log_data = #{common_log_data}"
        CommonLog.create_common_log(common_log_data)
 
+      # todo: delete profile UpdatesFeed
+
     end
     respond_to do |format|
       format.js

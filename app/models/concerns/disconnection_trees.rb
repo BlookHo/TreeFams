@@ -26,10 +26,14 @@ module DisconnectionTrees
     # Before CommonLog destroy_connection
     one_common_log = CommonLog.find(common_log_id)
     profile_current_user = User.find(self.id).profile_id
-    UpdatesFeed.create(user_id: self.id, update_id: 17, agent_user_id: one_common_log.user_id,
-                       agent_profile_id: one_common_log.profile_id, read: false)
-    UpdatesFeed.create(user_id: one_common_log.user_id, update_id: 17, agent_user_id: self.id,
-                       agent_profile_id: profile_current_user, read: false)
+    UpdatesFeed.create(user_id: self.id, update_id: 17,
+                       agent_user_id: one_common_log.user_id, agent_profile_id: one_common_log.profile_id,
+                       who_made_event: self.id,
+                       read: false)
+    UpdatesFeed.create(user_id: one_common_log.user_id, update_id: 17,
+                       agent_user_id: self.id, agent_profile_id: profile_current_user,
+                       who_made_event: self.id,
+                       read: false)
     ###############################################
 
     CommonLog.find(common_log_id).destroy

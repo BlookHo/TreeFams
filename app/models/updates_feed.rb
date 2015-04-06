@@ -1,10 +1,10 @@
 class UpdatesFeed < ActiveRecord::Base
 
-  validates_presence_of :user_id, :update_id, :agent_user_id, :agent_profile_id,
+  validates_presence_of :user_id, :update_id, :agent_user_id, :agent_profile_id, :who_made_event,
                         :message => "Должно присутствовать в UpdatesFeed"
-  validates_numericality_of :user_id, :update_id, :agent_user_id, :agent_profile_id, :only_integer => true,
+  validates_numericality_of :user_id, :update_id, :agent_user_id, :agent_profile_id, :who_made_event, :only_integer => true,
                             :message => "ID автора нового события и ID события должны быть целым числом в UpdatesFeed"
-  validates_numericality_of :user_id, :update_id, :agent_user_id, :agent_profile_id, :greater_than => 0,
+  validates_numericality_of :user_id, :update_id, :agent_user_id, :agent_profile_id, :who_made_event, :greater_than => 0,
                             :message => "ID автора нового события и ID события должны быть больше 0 в UpdatesFeed"
   validates_inclusion_of :read, :in => [true, false], :message => "Должны быть в [true, false] в UpdatesFeed"
   validate :updates_users_ids_not_equal  # :user_id  AND :agent_user_id
@@ -51,7 +51,22 @@ class UpdatesFeed < ActiveRecord::Base
   def self.make_view_data(updates_feeds, current_user_id)
     view_update_data = []
     updates_feeds.each do |updates_feed|
-      view_update_data << UpdatesFeed.collect_one_update_data(updates_feed, current_user_id) if !updates_feed.blank?
+      new_update = UpdatesFeed.collect_one_update_data(updates_feed, current_user_id) unless updates_feed.blank?
+      # todo: insert check for repetition of update_data[:update_text]  & update_data[:update_created]
+      # already in view_update_data
+      inckl = false
+      view_update_data.each do |update_in_array|
+        if new_update[:update_text] ==  update_in_array[:update_text] && new_update[:update_created] ==  update_in_array[:update_created]
+          inckl = true
+
+      
+
+        end
+      end
+      view_update_data << new_update if inckl == false
+
+
+        # view_update_data << UpdatesFeed.collect_one_update_data(updates_feed, current_user_id) unless updates_feed.blank?
     end
     view_update_data
   end
@@ -106,12 +121,12 @@ class UpdatesFeed < ActiveRecord::Base
 
     text_data = updates_feed.get_text_data(updates_feed)
     prefix, suffix = ""
-
+    # todo: delete profile
     case updates_feed.update_id # по типу UpdatesEvent
       when 1 # запросы на объединение in ConnectionRequestsController  # OK
         prefix, suffix = updates_feed.combine_1_text(updates_feed, text_data, current_user_id)
-      when 2 # объединения in ConnectUsersTreesController  # OK
-        prefix, suffix = updates_feed.combine_2_text(updates_feed, text_data, current_user_id)
+      when 2, 17 # объединения/разъединение дереве in ConnectionTrees.rb & DisconnectionTrees.rb  # OK
+        prefix, suffix = updates_feed.combine_2_17_text(updates_feed, text_data, current_user_id)
       when 3  # избранный профиль -
         prefix, suffix = updates_feed.combine_3_text(updates_feed, text_data)
       when 4  # добавлен профиль in ProfilesController   # OK
@@ -125,9 +140,8 @@ class UpdatesFeed < ActiveRecord::Base
       when 8 .. 16 # изменилось кол-во родни в объединенном дереве   # OK
                   # в рез-те добавления профиля или объединения деревьев in ProfilesController, ConnectUsersTreesController
         prefix, suffix = updates_feed.combine_8__16_text(updates_feed, current_user_id)
-      when 17  # разъединение дереве   # OK
-        prefix, suffix = updates_feed.combine_17_text(updates_feed, text_data, current_user_id)
-
+      # when 17  # разъединение дереве   # OK
+      #   prefix, suffix = updates_feed.combine_17_text(updates_feed, text_data, current_user_id)
 
       else
         ""
@@ -141,13 +155,14 @@ class UpdatesFeed < ActiveRecord::Base
   def get_text_data(updates_feed)
     text_data = Hash.new
     text_data[:author_name] = updates_feed.user_update_data(updates_feed.user_id)[:user_name]
+    text_data[:who_made_event_name] = updates_feed.user_update_data(updates_feed.who_made_event)[:user_name]
     text_data[:event_text] = updates_feed.update_event_data(updates_feed.update_id)[:text]
 
     text_data
   end
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
-  # для UpdatesEvent типа 1
+  # для UpdatesEvent типа 1 запросы на объединение
   def combine_1_text(updates_feed, text_data, current_user_id)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
@@ -157,34 +172,36 @@ class UpdatesFeed < ActiveRecord::Base
     return prefix, suffix
   end
 
-  # Формирование итоговой текстовой фразы одного сообщения updates_feed
-  # для UpdatesEvent типа 17
-  def combine_17_text(updates_feed, text_data, current_user_id)
+
+  # @note:  Формирование итоговой текстовой фразы одного сообщения updates_feed
+  #   для UpdatesEvent типа 2 и 17:
+  def combine_2_17_text(updates_feed, text_data, current_user_id)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
     current_user_name =  updates_feed.user_update_data(current_user_id)[:user_name]
-    prefix = 'Внимание, ' + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:author_name]
-    updates_feed.agent_user_id == current_user_id ? suffix = 'твоим деревом' : suffix = 'деревом твоего родственника по имени ' + text_data[:agent_name]
+    updates_feed.update_id == 2 ? greeting = 'Поздравляем, ' : greeting = 'Внимание, '
+
+    if current_user_id == updates_feed.who_made_event
+      prefix = greeting + current_user_name  + '! ' + 'Тобой'
+      suffix = ' деревом твоего родственника по имени ' + text_data[:author_name]
+    else
+      # if current_user_id != updates_feed.agent_user_id && current_user_id != updates_feed.user_id
+        prefix = greeting + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:who_made_event_name]
+        suffix = ' твоим деревом'
+      # else
+      #   prefix = greeting + current_user_name  + '! ' + 'dd Пользователем по имени ' + text_data[:who_made_event_name]
+      #   suffix = ' твоим деревом'
+      #
+      # end
+    end
 
     return prefix, suffix
   end
 
-  # Формирование итоговой текстовой фразы одного сообщения updates_feed
-  # для UpdatesEvent типа 2
-  def combine_2_text(updates_feed, text_data, current_user_id)
-
-    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
-    current_user_name =  updates_feed.user_update_data(current_user_id)[:user_name]
-    prefix = 'Поздравляем, ' + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:author_name]
-    updates_feed.agent_user_id == current_user_id ? suffix = 'твоим деревом' : suffix = 'деревом твоего родственника по имени ' + text_data[:agent_name]
-
-    return prefix, suffix
-  end
-
 
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
-  # для UpdatesEvent типа 3
+  # для UpdatesEvent типа 3 избранный профиль
   def combine_3_text(updates_feed, text_data)
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_profile_id) : text_data[:agent_name] = ""
     text_data[:agent_name] != "" ? suffix = text_data[:agent_name] : suffix = ""
@@ -193,7 +210,7 @@ class UpdatesFeed < ActiveRecord::Base
   end
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
-  # для UpdatesEvent типа 4
+  # для UpdatesEvent типа 4 добавлен профиль
   def combine_4_text(updates_feed, text_data)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_profile_id) : text_data[:agent_name] = ""
@@ -204,7 +221,7 @@ class UpdatesFeed < ActiveRecord::Base
   end
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
-  # для UpdatesEvent типа 5
+  # для UpdatesEvent типа 5 приглашение на сайт
   def combine_5_text(updates_feed, text_data)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_profile_id) : text_data[:agent_name] = ""
@@ -215,7 +232,7 @@ class UpdatesFeed < ActiveRecord::Base
   end
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
-  # для UpdatesEvent типа 8_9_10
+  # для UpdatesEvent типа 8___16  изменилось кол-во родни
   def combine_8__16_text(updates_feed, current_user_id)
 
     prefix = 'Поздравляем, ' + updates_feed.user_update_data(current_user_id)[:user_name] + '!'

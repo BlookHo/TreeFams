@@ -37,8 +37,15 @@ module ConnectionTrees
     ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
     profile_current_user = User.find(current_user_id).profile_id   #
     profile_user_id = User.find(user_id).profile_id  #
-    UpdatesFeed.create(user_id: current_user_id, update_id: 2, agent_user_id: user_id, agent_profile_id: profile_user_id, read: false)
-    UpdatesFeed.create(user_id: user_id, update_id: 2, agent_user_id: current_user_id, agent_profile_id: profile_current_user, read: false)
+    UpdatesFeed.create(user_id: current_user_id, update_id: 2,
+                       agent_user_id: user_id, agent_profile_id: profile_user_id,
+                       who_made_event: current_user_id,
+                       read: false)
+    UpdatesFeed.create(user_id: user_id,
+                       update_id: 2, agent_user_id: current_user_id,
+                       agent_profile_id: profile_current_user,
+                       who_made_event: current_user_id,
+                       read: false)
 
     ######## Перезапись profile_id при объединении деревьев
     UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)

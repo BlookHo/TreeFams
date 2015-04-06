@@ -1112,7 +1112,7 @@ RSpec.describe User, :type => :model do
           end
         end
 
-        describe '- check UpdatesFeed AFTER <connect_trees>'  do #, focus: true
+        describe '- check UpdatesFeed AFTER <connect_trees>' do #, focus: true
           describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
             let(:rows_qty) {2}  # т.к.  - вне модели
             it_behaves_like :successful_updates_feed_rows_count
@@ -1120,12 +1120,12 @@ RSpec.describe User, :type => :model do
           it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
             connection_request_fields = UpdatesFeed.first.attributes.except('created_at','updated_at')
             expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
-                                                     "read"=>false, "agent_profile_id"=>14} )
+                                                     "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
           end
           it '- check UpdatesFeed 2 row - Ok' do # , focus: true
             connection_request_fields = UpdatesFeed.last.attributes.except('created_at','updated_at')
             expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
-                                                     "read"=>false, "agent_profile_id"=>17} )
+                                                     "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
           end
         end
 
@@ -1327,7 +1327,7 @@ RSpec.describe User, :type => :model do
           end
         end
 
-        describe '- check UpdatesFeed AFTER <disconnect_tree>' do #, focus: true
+        describe '- check UpdatesFeed AFTER <disconnect_tree>'  , focus: true do #, focus: true
           describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
             let(:rows_qty) {4}  # т.к.  - вне модели
             it_behaves_like :successful_updates_feed_rows_count
@@ -1335,22 +1335,22 @@ RSpec.describe User, :type => :model do
           it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
             connection_request_fields = UpdatesFeed.find(1).attributes.except('created_at','updated_at')
             expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
-                                                     "read"=>false, "agent_profile_id"=>14} )
+                                                     "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
           end
           it '- check UpdatesFeed 2 row - Ok' do # , focus: true
             connection_request_fields = UpdatesFeed.find(2).attributes.except('created_at','updated_at')
             expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
-                                                     "read"=>false, "agent_profile_id"=>17} )
+                                                     "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
           end
           it '- check UpdatesFeed 3 row - Ok'  do # , focus: true
             connection_request_fields = UpdatesFeed.find(3).attributes.except('created_at','updated_at')
             expect(connection_request_fields).to eq({"id"=>3, "user_id"=>2, "update_id"=>17, "agent_user_id"=>1,
-                                                     "read"=>false, "agent_profile_id"=>17} )
+                                                     "read"=>false, "agent_profile_id"=>17, "who_made_event"=>2} )
           end
           it '- check UpdatesFeed 4 row - Ok' do # , focus: true
             connection_request_fields = UpdatesFeed.find(4).attributes.except('created_at','updated_at')
             expect(connection_request_fields).to eq( {"id"=>4, "user_id"=>1, "update_id"=>17, "agent_user_id"=>2,
-                                                      "read"=>false, "agent_profile_id"=>11}
+                                                      "read"=>false, "agent_profile_id"=>11, "who_made_event"=>2}
                                                  )
           end
         end
