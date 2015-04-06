@@ -323,6 +323,7 @@ module ConnectionTrees
 
   end
 
+
   # @note:  Выбор соответствующего диагностического сообщения по результатам проверки
   #   массивов перезаписи перед объединением деревьев.
   def diagnoze_message(item)
@@ -345,7 +346,7 @@ module ConnectionTrees
   end
 
 
-  # todo: refactor?
+  # todo: refactor ?
   # ИСПОЛЬЗУЕТСЯ В МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
   # Проверка найденных массивов перезаписи при объединении - на повторы
   def check_duplications(profiles_to_rewrite, profiles_to_destroy)
