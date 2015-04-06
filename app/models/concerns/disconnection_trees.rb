@@ -16,13 +16,14 @@ module DisconnectionTrees
         connection_id: connection_common_log["log_id"]   #    3,
     }
 
+
     log_to_redo = restore_connection_log(connection_common_log["log_id"], connection_common_log["user_id"])
 
     redo_connection_log(log_to_redo)
 
     log_connection_deletion(log_to_redo)
 
-    ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
+    ##########  UPDATES FEEDS - № 17  ############## В обоих направлениях: Кто с Кем и Обратно
     # Before CommonLog destroy_connection
     one_common_log = CommonLog.find(common_log_id)
     profile_current_user = User.find(self.id).profile_id
@@ -34,6 +35,16 @@ module DisconnectionTrees
                        agent_user_id: self.id, agent_profile_id: profile_current_user,
                        who_made_event: self.id,
                        read: false)
+    connected = self.get_connected_users
+
+    connected.each do |each_user|
+      if each_user != self.id && each_user != one_common_log.user_id
+        UpdatesFeed.create(user_id: each_user, update_id: 17,
+                           agent_user_id: self.id, agent_profile_id: profile_current_user,
+                           who_made_event: self.id,
+                           read: false)
+      end
+    end
     ###############################################
 
     CommonLog.find(common_log_id).destroy

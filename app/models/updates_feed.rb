@@ -17,7 +17,7 @@ class UpdatesFeed < ActiveRecord::Base
 
   belongs_to :user
 
-  # Выбираем те обновления, кот. относятся к дереву, в котором сидит current_user,
+  # @note: Выбираем те обновления, кот. относятся к дереву, в котором сидит current_user,
   # т.е. сгенерированные членами твоего дерева (и избранными тобой профилями-юзерами)
   # Но без созданных тобой - т.е. без current_user
   # Упорядочены по дате создания - сначала самые свежие
@@ -26,64 +26,70 @@ class UpdatesFeed < ActiveRecord::Base
   # Дурацкая запись SQL запроса из-за OR
   def self.select_updates(current_user)
     connected_users = current_user.get_connected_users
-    logger.info "In select_updates: connected_users = #{connected_users}" #
+    # logger.info "In select_updates: connected_users = #{connected_users}" #
     unless connected_users.blank?
       updates_feeds = UpdatesFeed.where("user_id in (?) or agent_user_id  in (?)", connected_users, connected_users )
                           .where.not(user_id: current_user.id).order('created_at').reverse_order
-      logger.info "In select_updates: updates_feeds.size = #{updates_feeds.size}"
+      # logger.info "In select_updates: updates_feeds.size = #{updates_feeds.size}"
       UpdatesFeed.make_view_data(read_updates(updates_feeds), current_user.id)
     end
   end
 
 
-
-  # Пометка отображенных обновлений как прочитанные
-  # для подсвечивания в View.
+  # @note:  Пометка отображенных обновлений как прочитанные
+  #  для подсвечивания в View.
   def self.read_updates(updates_feeds)
     updates_feeds.each do |one_update|
       one_update.read = true
       one_update.save
-      #logger.info "In read_updates: save: one_update.read = #{one_update.read} "
     end
   end
 
-  # Создание массива для отображения обновлений для View
+  # @note:  Создание массива для отображения обновлений для View
   def self.make_view_data(updates_feeds, current_user_id)
     view_update_data = []
     updates_feeds.each do |updates_feed|
       new_update = UpdatesFeed.collect_one_update_data(updates_feed, current_user_id) unless updates_feed.blank?
-      # todo: insert check for repetition of update_data[:update_text]  & update_data[:update_created]
-      # already in view_update_data
-      inckl = false
-      view_update_data.each do |update_in_array|
-        if new_update[:update_text] ==  update_in_array[:update_text] && new_update[:update_created] ==  update_in_array[:update_created]
-          inckl = true
-
-      
-
-        end
-      end
-      view_update_data << new_update if inckl == false
-
-
-        # view_update_data << UpdatesFeed.collect_one_update_data(updates_feed, current_user_id) unless updates_feed.blank?
+      view_update_data << new_update unless UpdatesFeed.check_skip_updates_feed(view_update_data, new_update)    # == false
     end
     view_update_data
   end
 
+  # @note: Проверка текущего обновления:
+  #   если такое точно уже было ( для типа 2 и 17 - объединение/разъединение)
+  #   то не включаем его в массив отображения
+  def self.check_skip_updates_feed(view_update_data, new_update)
+    skip = false
+    view_update_data.each do |update_in_array|
+      skip = true if
+              new_update[:update_text] == update_in_array[:update_text] &&
+              new_update[:update_created] == update_in_array[:update_created] &&
+              (new_update[:update_id] == 17 or new_update[:update_id] == 2)
+    end
+    skip
+  end
+
+
+
   # Создание одного хэша - элемента массива для отображения обновлений для View
   # todo: переделать в компактный хэш
+  # update_data = Hash.new
+  # # Show in View /index
+  # update_data[:update_text]        = updates_feed.combine_update_text(updates_feed, current_user_id)
+  # # Show in View /index
+  # update_data[:update_created]     = updates_feed.read_datatime_created(updates_feed)
+  #
+  # # JUST NOW - Did not Show in View /index(later)
+  # update_data[:update_id]         = updates_feed.update_id
+  # update_data[:update_read]        = updates_feed.read
+  # update_data[:update_image]       = updates_feed.update_event_data(updates_feed.update_id)[:image]
   def self.collect_one_update_data(updates_feed, current_user_id)
-    update_data = Hash.new
-    # Show in View /index
-    update_data[:update_text]        = updates_feed.combine_update_text(updates_feed, current_user_id)
-    # Show in View /index
-    update_data[:update_created]     = updates_feed.read_datatime_created(updates_feed)
-
-    # JUST NOW - Did not Show in View /index(later)
-    update_data[:update_read]        = updates_feed.read
-    update_data[:update_image]       = updates_feed.update_event_data(updates_feed.update_id)[:image]
-
+    update_data = { update_text:    updates_feed.combine_update_text(updates_feed, current_user_id), # Show in View /index
+                    update_created: updates_feed.read_datatime_created(updates_feed), # Show in View /index
+                    update_id:      updates_feed.update_id, # Does not Show in View /index(later)
+                    update_read:    updates_feed.read, # Does not Show in View /index(later)
+                    update_image:   updates_feed.update_event_data(updates_feed.update_id)[:image] # Does not Show in View /index(later)
+    }
     update_data
   end
 
@@ -183,16 +189,10 @@ class UpdatesFeed < ActiveRecord::Base
 
     if current_user_id == updates_feed.who_made_event
       prefix = greeting + current_user_name  + '! ' + 'Тобой'
-      suffix = ' деревом твоего родственника по имени ' + text_data[:author_name]
+      suffix = ' с деревом твоего родственника по имени ' + text_data[:author_name]
     else
-      # if current_user_id != updates_feed.agent_user_id && current_user_id != updates_feed.user_id
-        prefix = greeting + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:who_made_event_name]
-        suffix = ' твоим деревом'
-      # else
-      #   prefix = greeting + current_user_name  + '! ' + 'dd Пользователем по имени ' + text_data[:who_made_event_name]
-      #   suffix = ' твоим деревом'
-      #
-      # end
+      prefix = greeting + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:who_made_event_name]
+      suffix = ' твоего дерева'
     end
 
     return prefix, suffix

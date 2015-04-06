@@ -1112,7 +1112,7 @@ RSpec.describe User, :type => :model do
           end
         end
 
-        describe '- check UpdatesFeed AFTER <connect_trees>' do #, focus: true
+        describe '- check UpdatesFeed AFTER <connect_trees>' , focus: true do #, focus: true
           describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
             let(:rows_qty) {2}  # т.к.  - вне модели
             it_behaves_like :successful_updates_feed_rows_count
@@ -1327,9 +1327,9 @@ RSpec.describe User, :type => :model do
           end
         end
 
-        describe '- check UpdatesFeed AFTER <disconnect_tree>'  , focus: true do #, focus: true
+        describe '- check UpdatesFeed AFTER <disconnect_tree>' , focus: true do #, focus: true
           describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
-            let(:rows_qty) {4}  # т.к.  - вне модели
+            let(:rows_qty) {5}  # т.к.  - вне модели
             it_behaves_like :successful_updates_feed_rows_count
           end
           it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
@@ -1350,6 +1350,12 @@ RSpec.describe User, :type => :model do
           it '- check UpdatesFeed 4 row - Ok' do # , focus: true
             connection_request_fields = UpdatesFeed.find(4).attributes.except('created_at','updated_at')
             expect(connection_request_fields).to eq( {"id"=>4, "user_id"=>1, "update_id"=>17, "agent_user_id"=>2,
+                                                      "read"=>false, "agent_profile_id"=>11, "who_made_event"=>2}
+                                                 )
+          end
+          it '- check UpdatesFeed 5 row - Ok' do # , focus: true
+            connection_request_fields = UpdatesFeed.find(5).attributes.except('created_at','updated_at')
+            expect(connection_request_fields).to eq( {"id"=>5, "user_id"=>3, "update_id"=>17, "agent_user_id"=>2,
                                                       "read"=>false, "agent_profile_id"=>11, "who_made_event"=>2}
                                                  )
           end

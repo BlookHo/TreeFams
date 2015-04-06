@@ -5,7 +5,7 @@ UpdatesEvent.reset_pk_sequence
 UpdatesEvent.create([
 
 {name: ' отправлен запрос на объединение деревьев от пользователя по имени ', image: 'updates/connect_request.png'},
-{name: ' проведено объединение с ', image: 'updates/connection_tree.png'},
+{name: ' проведено объединение ', image: 'updates/connection_tree.png'},
 {name: ' пометил как избранного профиль с именем ', image: 'updates/fav_choose.png'},
 {name: ' в дерево родни добавлен новый профиль с именем ', image: 'updates/add_profile.png'},
 {name: ' на сайт приглашен новый пользователь по имени ', image: 'updates/invitation.png'},
@@ -20,6 +20,7 @@ UpdatesEvent.create([
 {name: ' Количество родни в твоем дереве (размер дерева) превысило 50 человек!', image: 'updates/tree_vol_50.png'}, # 14-  50
 {name: ' Количество родни в твоем дереве (размер дерева) превысило 100 человек!', image: 'updates/tree_vol_100.png'},  # 15-  100
 {name: ' Количество родни в твоем дереве (размер дерева) превысило 150 человек!', image: 'updates/tree_vol_150.png'},  # 16-  150
-{name: ' проведено разъединение с ', image: 'updates/disconnection_tree.png'}
+{name: ' проведено разъединение ', image: 'updates/disconnection_tree.png'},
+{name: ' в дереве родни удален профиль с именем ', image: 'updates/disconnection_tree.png'}
 
 ])
