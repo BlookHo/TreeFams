@@ -111,6 +111,15 @@ class User < ActiveRecord::Base
 
 
 
+  def update_connected_users!
+    connected_user_ids = self.get_connected_users
+    # connected_user_ids = connected_user_ids.map{|id| id.to_i }
+    connected_user_ids.each do |connected_user_id|
+      user = User.find(connected_user_id)
+      user.update_attribute(:connected_users, connected_user_ids)
+    end
+  end
+
 
 
   #########################################

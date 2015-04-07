@@ -92,4 +92,15 @@ class ConnectedUser < ActiveRecord::Base
   end
 
 
+
+  after_update  :update_connected_users
+  after_create  :update_connected_users
+  after_destroy :update_connected_users
+
+  def update_connected_users
+    user = User.find(self.user_id)
+    user.update_connected_users!
+  end
+
+
 end
