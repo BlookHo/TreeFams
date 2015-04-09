@@ -59,3 +59,11 @@ AFTER INSERT OR UPDATE OR DELETE
 ON connected_users
 FOR EACH ROW
 EXECUTE PROCEDURE notify_trigger();
+
+
+-- trigger for trees table
+CREATE TRIGGER watched_table
+AFTER INSERT OR UPDATE OR DELETE
+ON trees
+FOR EACH ROW
+EXECUTE PROCEDURE notify_trigger();
