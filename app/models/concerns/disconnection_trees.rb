@@ -27,22 +27,31 @@ module DisconnectionTrees
     # Before CommonLog destroy_connection
     one_common_log = CommonLog.find(common_log_id)
     profile_current_user = User.find(self.id).profile_id
-    UpdatesFeed.create(user_id: self.id, update_id: 17,
-                       agent_user_id: one_common_log.user_id, agent_profile_id: one_common_log.profile_id,
-                       who_made_event: self.id,
-                       read: false)
-    UpdatesFeed.create(user_id: one_common_log.user_id, update_id: 17,
-                       agent_user_id: self.id, agent_profile_id: profile_current_user,
-                       who_made_event: self.id,
-                       read: false)
+    # UpdatesFeed.create(user_id: self.id, update_id: 17,
+    #                    agent_user_id: one_common_log.user_id, agent_profile_id: one_common_log.profile_id,
+    #                    who_made_event: self.id,
+    #                    read: false)
+    # UpdatesFeed.create(user_id: one_common_log.user_id, update_id: 17,
+    #                    agent_user_id: self.id, agent_profile_id: profile_current_user,
+    #                    who_made_event: self.id,
+    #                    read: false)
     connected = self.get_connected_users
 
-    connected.each do |each_user|
-      if each_user != self.id && each_user != one_common_log.user_id
-        UpdatesFeed.create(user_id: each_user, update_id: 17,
+    connected.each do |each_user_id|
+      if each_user_id != self.id && each_user_id != one_common_log.user_id
+        # profile_current_user = User.find(self.id).profile_id
+        profile_each_user = User.find(each_user_id).profile_id
+
+        UpdatesFeed.create(user_id: each_user_id, update_id: 17,
                            agent_user_id: self.id, agent_profile_id: profile_current_user,
                            who_made_event: self.id,
                            read: false)
+        UpdatesFeed.create(user_id: self.id, update_id: 17,
+                           agent_user_id: each_user_id, agent_profile_id: profile_each_user,
+                           who_made_event: self.id,
+                           read: false)
+
+
       end
     end
     ###############################################
