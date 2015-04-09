@@ -27,8 +27,8 @@ module SimilarsConnection
     # log_connection_tree = []
     # log_connection_profilekey = []
 
-    common_log = {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
-    complete_log_arr = common_log[:log_user_profile] + common_log[:log_tree] + common_log[:log_profilekey]
+    common_sims_log = {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
+    complete_log_arr = common_sims_log[:log_user_profile] + common_sims_log[:log_tree] + common_sims_log[:log_profilekey]
 
     # Запись массива лога в таблицу SimilarsLog под номером log_id
     SimilarsLog.store_log(complete_log_arr) unless complete_log_arr.blank?
@@ -39,9 +39,15 @@ module SimilarsConnection
 
     ### Удаление сохраненных ранее найденных пар похожих
     SimilarsFound.clear_similars_found(data_to_clear)
-    logger.info "# CONN ##*** In module SimilarsConnection common_logs: #{common_log.inspect} "
+    logger.info "# CONN ##*** In module SimilarsConnection common_sims_logs: #{common_sims_log.inspect} "
 
-    common_log
+    # Запись строки Общего лога в таблицу CommonLog
+    # make_sims_connec_common_sims_log(connection_data)
+
+
+
+
+    common_sims_log
   end
   # {:log_user_profile=>[],
   #  :log_tree=>[#<SimilarsLog id: 3972, connected_at: 5, current_user_id: 5, table_name: "trees", table_row: 40, field: "profile_id", written: 38, overwritten: 42, created_at: "2015-02-12 10:55:31", updated_at: "2015-02-12 10:55:31">,
@@ -142,6 +148,50 @@ module SimilarsConnection
 
     end
     log_connection
+
+  end
+
+
+  # @note: Сделать 1 запись в общие логи: в common_sims_logs
+  def make_sims_connec_common_log(connection_data)
+    # logger.info "In add_new_profile: Before create_add_log"
+    current_log_type          = 4  # connection trees: rollback == disconnect trees. Тип = разъединение деревьев при rollback
+    current_user_id           = connection_data[:current_user_id]
+    user_id                   = connection_data[:user_id]
+    common_connect_log_number = connection_data[:connection_id] # Берем тот номер соединения деревьев,
+    # который идет из Conn_requests - номер запроса на соединение деревьев. Он - единый и не является порядковым, как
+    # номера логов на добавление и удаление профилей, номера которыхформируются прямо в табл. CommonLogs.
+
+    # new_common_log_number = CommonLog.new_log_id(current_user_id, current_log_type) # No use
+
+    common_log_data = { user_id:         current_user_id,
+                        log_type:        current_log_type,
+                        log_id:          common_connect_log_number,
+                        profile_id:      User.find(current_user_id).profile_id,
+                        base_profile_id: User.find(user_id).profile_id, # после объединения деревьев: профиль может
+                        # отличаться от того, кот. был до объединения
+                        new_relation_id: 999 }  # Условный код для лога объединения деревьев
+    CommonLog.create_common_log(common_log_data)
+
+    # From Profile_Keys controller
+    # # logger.info "In add_new_profile: Before create_add_log"
+    # current_log_type = 1  #  # add: rollback == delete. Тип = добавление нового профиля при rollback
+    # new_log_number = CommonLog.new_log_id(@base_profile.tree_id, current_log_type)
+    #
+    # common_log_data = { user_id:         @base_profile.tree_id,
+    #                     log_type:        current_log_type,
+    #                     log_id:          new_log_number,
+    #                     profile_id:      @profile.id,
+    #                     base_profile_id: @base_profile.id,
+    #                     new_relation_id: @profile.relation_id }
+    # # logger.info "In Profile controller: Before create_common_log   common_log_data= #{common_log_data} "
+    # CommonLog.create_common_log(common_log_data)
+    #
+
+
+
+
+
 
   end
 
