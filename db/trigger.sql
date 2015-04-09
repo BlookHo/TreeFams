@@ -60,5 +60,14 @@ ON connected_users
 FOR EACH ROW
 EXECUTE PROCEDURE notify_trigger();
 
+
 --- DROP TRIGGER ON connected_users
 DROP TRIGGER watched_table ON connected_users;
+
+
+-- trigger for trees table
+CREATE TRIGGER watched_table
+AFTER INSERT OR UPDATE OR DELETE
+ON trees
+FOR EACH ROW
+EXECUTE PROCEDURE notify_trigger();
