@@ -17,12 +17,12 @@ FactoryGirl.define do
     # 3
     trait :connected_user_3 do
       user_id 4
-      with_user_id 66
+      with_user_id 13
     end
 
     # 4
     trait :connected_user_4 do
-      user_id 44
+      user_id 12
       with_user_id 5
     end
 

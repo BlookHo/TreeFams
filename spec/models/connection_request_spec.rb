@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe ConnectionRequest, :type => :model,:disabled=>true do
+RSpec.describe ConnectionRequest, :type => :model    do #   , focus: true  ,:disabled=>true
 
   describe '- Validation' do
-    describe '- on create' do
+    describe '- on create' do  #  , focus: true
 
       context '- valid connected_users' do
         let(:good_connected_users) {FactoryGirl.build(:connected_user, :correct)}
@@ -49,10 +49,14 @@ RSpec.describe ConnectionRequest, :type => :model,:disabled=>true do
     end
   end
 
-  describe '- CHECK ConnectedUser Model methods'  do  # , focus: true
+  describe '- CHECK in ConnectedUser Model methods'  do  # , focus: true
 
     # create model data
     before {
+
+      User.delete_all
+      User.reset_pk_sequence
+
       #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
       FactoryGirl.create(:name, :name_48)    # Анна
@@ -138,8 +142,9 @@ RSpec.describe ConnectionRequest, :type => :model,:disabled=>true do
       # User current_user_1_connected
       FactoryGirl.create(:user, :current_user_1_connected )  # User = 1 . Tree = [1,2]. profile_id = 17
       FactoryGirl.create(:user, :user_2_connected )  # User = 2 . Tree = [1,2]. profile_id = 11
-      # puts "before All: User.last.id = #{User.last.id}, .profile_id = #{User.last.profile_id} \n"  # user_id = 1
+      # puts "before All: User.first.profile_id = #{User.first.profile_id}, User.last.profile_id = #{User.last.profile_id} \n"  # user_id = 1
       FactoryGirl.create(:user, :user_3_to_connect )  # User = 3 . Tree = [3]. profile_id = 22
+      # puts "before All: User.first.profile_id = #{User.first.profile_id}, User.last.profile_id = #{User.last.profile_id} \n"  # user_id = 1
       # puts "before All: User.second.id = #{User.second.id}, .profile_id = #{User.second.profile_id} \n"  # user_id = 1
       FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
       FactoryGirl.create(:user, :user_5 )  # User = 5 . Tree = 10. profile_id = 555
@@ -148,7 +153,7 @@ RSpec.describe ConnectionRequest, :type => :model,:disabled=>true do
       FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
 
       # ConnectedUser
-      FactoryGirl.create(:connected_user, :correct)      # 1  2
+      FactoryGirl.create(:connected_user, :correct)      # 1  2 , :correct
       FactoryGirl.create(:connected_user, :correct_7_8)  # 7  8
 
       # Profile
@@ -423,16 +428,6 @@ RSpec.describe ConnectionRequest, :type => :model,:disabled=>true do
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_195)  # 16  124
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_196)  # 124 16
 
-
-
-      #     # puts "before All: ProfileKey.last.user_id = #{ProfileKey.last.user_id} \n"  # user_id = 1
-      #     # puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
-      #     # puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
-      #
-      #     FactoryGirl.create(:common_log, :log_delete_profile_89)    #
-      #     FactoryGirl.create(:common_log, :log_delete_profile_90)    #
-      #     FactoryGirl.create(:common_log, :log_add_profile_172)    #
-      #     FactoryGirl.create(:common_log, :log_add_profile_173)    #
     }
 
     after {
@@ -454,14 +449,11 @@ RSpec.describe ConnectionRequest, :type => :model,:disabled=>true do
       # CommonLog.reset_pk_sequence
     }
 
-    # create User parameters
-    let(:current_user_1) { User.first }  # User = 1. Tree = [1,2]. profile_id = 17
-    let(:currentuser_id) {current_user_1.id}  # id = 1
-    let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
-
+    let(:current_user) { User.first }
+    let(:connected_users) { current_user.get_connected_users }
     context '- before actions - check connected_users' do
       it "- Return proper connected_users Array result for current_user_id = 1" do
-        puts "Let created: currentuser_id = #{currentuser_id} \n"   # 1
+        puts "Let created: currentuser_id = #{current_user.id} \n"   # 1
         puts "Check ConnectedUser Model methods \n"
         puts "Before All - connected_users created \n"  #
         expect(connected_users).to be_a_kind_of(Array)
@@ -520,7 +512,8 @@ RSpec.describe ConnectionRequest, :type => :model,:disabled=>true do
           it_behaves_like :successful_connected_users_overwrite_profile_ids
         end
         describe '- check ConnectedUser get_connected_users got Ok' do
-          let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
+          let(:current_user) { User.find(2) }
+          let(:connected_users) { current_user.get_connected_users }
           it "- Return proper connected_users Array result for current_user_id = 1" do
             puts "Let created: connected_users = #{connected_users} \n"   # [1,2]
             expect(connected_users).to eq([1,2,3])

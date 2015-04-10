@@ -10,6 +10,8 @@ RSpec.describe CommonLogsController, type: :controller do
     allow(controller).to receive(:current_user).and_return current_user
 
     FactoryGirl.create(:user, :user_2)  # User = 2. Tree = 2. profile_id = 66
+    FactoryGirl.create(:user, :user_3 )  # User = 3 . Tree = [3]. profile_id = 22
+    FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
     # puts "before All: current_user.id = #{current_user.id} \n" # id = 1
     # puts "before All: User.last.id = #{User.last.id} \n" # id = 2
     # puts "before All: User.find(2).profile_id = #{User.find(2).profile_id} \n" # id = 2 profile_id = 66

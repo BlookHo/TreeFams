@@ -38,17 +38,37 @@ RSpec.describe User, :type => :model do
 
   end
 
-  describe '- Check method get_connected_users' do
+  describe '- Check method get_connected_users'   do  # , focus: true
 
     before do
+      User.delete_all
+      User.reset_pk_sequence
       ConnectedUser.delete_all
       ConnectedUser.reset_pk_sequence
+
+      FactoryGirl.create(:user, :current_user_1_connected )  # User = 1 . Tree = [1,2]. profile_id = 17
+      FactoryGirl.create(:user, :user_2_connected )  # User = 2 . Tree = [1,2]. profile_id = 11
+      # puts "before All: User.last.id = #{User.last.id}, .profile_id = #{User.last.profile_id} \n"  # user_id = 1
+      FactoryGirl.create(:user, :user_3_to_connect )  # User = 3 . Tree = [3]. profile_id = 22
+      # puts "before All: User.second.id = #{User.second.id}, .profile_id = #{User.second.profile_id} \n"  # user_id = 1
+      FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
+      FactoryGirl.create(:user, :user_5 )  # User = 5 . Tree = 10. profile_id = 555
+      FactoryGirl.create(:user, :user_6 )  # User = 6 . Tree = 10. profile_id = 666
+      FactoryGirl.create(:user, :user_7 )  # User = 7. Tree = 10. profile_id = 777
+      FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
+      FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 10. profile_id = 888
+      FactoryGirl.create(:user, :user_10)  # User = 10. Tree = 10. profile_id = 888
+      FactoryGirl.create(:user, :user_11)  # User = 11. Tree = 10. profile_id = 888
+      FactoryGirl.create(:user, :user_12)  # User = 12. Tree = 10. profile_id = 888
+      FactoryGirl.create(:user, :user_13)  # User = 13. Tree = 10. profile_id = 888
+
       FactoryGirl.create(:connected_user, )
       FactoryGirl.create(:connected_user, :connected_user_2)
       FactoryGirl.create(:connected_user, :connected_user_3)
       FactoryGirl.create(:connected_user, :connected_user_4)
       FactoryGirl.create(:connected_user, :connected_user_5)
       FactoryGirl.create(:connected_user, :connected_user_6)
+
       # puts "before 6. connected_user = #{ConnectedUser.find(6).user_id} \n"
 
     end
@@ -56,13 +76,14 @@ RSpec.describe User, :type => :model do
     after do
       ConnectedUser.delete_all
       ConnectedUser.reset_pk_sequence
+      User.delete_all
+      User.reset_pk_sequence
     end
 
-    let(:current_user) { create(:user) }
-    let(:current_user_id) { current_user.id }
-    let(:connected_users) { current_user.get_connected_users }
 
     context '- 1. after action: Check proper result of proper data type ' do
+      let(:current_user) { User.find(1) }
+      let(:connected_users) { current_user.get_connected_users }
       it "- First Return proper Array Sorted result for current_user_id = 1" do
         puts "Check ConnectedUser in User Model \n"
         expect(connected_users).to be_a_kind_of(Array)
@@ -71,6 +92,8 @@ RSpec.describe User, :type => :model do
     end
 
     context '- 2. after action: Check proper result of proper data type ' do
+      let(:current_user) { User.find(2) }
+      let(:connected_users) { current_user.get_connected_users }
       it "- Second Return proper Array Sorted result for current_user_id = 2" do
         expect(connected_users).to be_a_kind_of(Array)
         expect(connected_users).to eq([1,2])
@@ -78,6 +101,8 @@ RSpec.describe User, :type => :model do
     end
 
     context '- 3. after action: Check proper result of proper data type ' do
+      let(:current_user) { User.find(3) }
+      let(:connected_users) { current_user.get_connected_users }
       it "- Third Return proper Array Sorted result for current_user_id = 3" do
         expect(connected_users).to be_a_kind_of(Array)
         expect(connected_users).to eq([3,9,10,11])
@@ -85,13 +110,17 @@ RSpec.describe User, :type => :model do
     end
 
     context '- 4. after action: Check proper result of proper data type ' do
+      let(:current_user) { User.find(4) }
+      let(:connected_users) { current_user.get_connected_users }
       it "- Fourth Return proper Array Sorted result for current_user_id = 4" do
         expect(connected_users).to be_a_kind_of(Array)
-        expect(connected_users).to eq([4,66])
+        expect(connected_users).to eq([4,13])
       end
     end
 
     context '- 5. after action: Check proper result of proper data type ' do
+      let(:current_user) { User.find(5) }
+      let(:connected_users) { current_user.get_connected_users }
       it "- Fifth Return UNproper Type result for current_user_id = 5" do
         expect(connected_users).to_not be_a_kind_of(Hash)
         expect(connected_users).to_not eq([1,5])
@@ -99,6 +128,8 @@ RSpec.describe User, :type => :model do
     end
 
     context '- 6. after action: Check proper result of proper data type ' do
+      let(:current_user) { User.find(6) }
+      let(:connected_users) { current_user.get_connected_users }
       it "- Sixth Return UNproper Array result for current_user_id = 6" do
         expect(connected_users).to be_a_kind_of(Array)
         expect(connected_users).to_not eq([1])
@@ -106,6 +137,8 @@ RSpec.describe User, :type => :model do
     end
 
     context '- 7. after action: Check proper result of proper data type ' do
+      let(:current_user) { User.find(7) }
+      let(:connected_users) { current_user.get_connected_users }
       it "- Seventh Return proper Array not_[] result for current_user_id = 7" do
         # puts " 7. After get_connected_users - current_user_id = #{current_user_id} \n"
         # puts " 7. After get_connected_users - conn_users = #{connected_users} \n"

@@ -4,6 +4,8 @@ FactoryGirl.define do
     profile_id 63
     email "petr_andr@pe.pe"
     password 'qwertyuiop'
+    connected_users {}
+
 
     trait :wrong_email do
       email "petr_and"
@@ -52,6 +54,21 @@ FactoryGirl.define do
     trait :user_10 do
       profile_id 93
       email "add_darja@da.da"
+    end
+
+    trait :user_11 do
+      profile_id 99
+      email "misha@da.da"
+    end
+
+    trait :user_12 do
+      profile_id 193
+      email "tolaa@da.da"
+    end
+
+    trait :user_13 do
+      profile_id 295
+      email "vera@da.da"
     end
 
     trait :current_user_1_connected do # For [1, 2] connected trees test

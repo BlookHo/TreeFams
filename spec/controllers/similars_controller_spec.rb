@@ -20,6 +20,8 @@ describe SimilarsController, :type => :controller , similars: true do
       # puts "before All: Name.first.name = #{Name.first.name} \n"  # Андрей
 
       FactoryGirl.create(:user, :user_2)  # User = 2. Tree = 2. profile_id = 66
+      FactoryGirl.create(:user, :user_3)  # User = 3. Tree = 3. profile_id = 333
+      FactoryGirl.create(:user, :user_4)  # User = 4. Tree = 4. profile_id = 444
       # puts "before All: User.last.id = #{User.last.id} \n" # id = 2
       # puts "before All: User.find(2).profile_id = #{User.find(2).profile_id} \n" # id = 2
       # puts "before All: user_2.profile_id = #{user_2.profile_id} \n" # id = 2   profile_id = 66
@@ -306,18 +308,6 @@ describe SimilarsController, :type => :controller , similars: true do
           # puts "In check results: second_pair_profile_ids = #{second_pair_profile_ids} \n"
         end
 
-        # expect(assigns(:similars)).to eq( [
-           #  {:first_profile_id=>81, :first_name_id=>"Ольга", :first_relation_id=>"Сестра", :name_first_relation_id=>"Елены",
-           #   :first_sex_id=>"Ж", :second_profile_id=>70, :second_name_id=>"Ольга", :second_relation_id=>"Жена",
-           #   :name_second_relation_id=>"Петра", :second_sex_id=>"Ж",
-           #   :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]},
-           #   :common_power=>4, :inter_relations=>[]},
-           #  {:first_profile_id=>79, :first_name_id=>"Олег", :first_relation_id=>"Отец", :name_first_relation_id=>"Ольги",
-           #   :first_sex_id=>"М", :second_profile_id=>82, :second_name_id=>"Олег", :second_relation_id=>"Отец",
-           #   :name_second_relation_id=>"Елены", :second_sex_id=>"М",
-           #   :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]},
-           #   :common_power=>4, :inter_relations=>[]}] )
-
       end
 
       context '- After action <internal_similars_search>: check SimilarsFound' do
@@ -385,7 +375,6 @@ describe SimilarsController, :type => :controller , similars: true do
           it '- before action <connect_similars> got Empty array of [rows_ids] from Tree logs - Ok' do
             puts "check SimilarsLog for Tree\n"
             rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name).pluck(:table_row)
-            # puts "before 1 action <connect_similars> check in Tree: table_name = #{table_name.inspect} \n"
             # puts "before 1 action <connect_similars> check in Tree: rows_ids = #{rows_ids.inspect} \n"
             expect(rows_ids).to eq([]) # got rows_ids array for Tree logs before connection
           end
@@ -396,7 +385,6 @@ describe SimilarsController, :type => :controller , similars: true do
           it '- before action <connect_similars> got Empty array of [rows_ids] from ProfileKey logs - Ok' do
             rows_ids = SimilarsLog.where(current_user_id: connected_users, table_name: table_name).pluck(:table_row)
             puts "check SimilarsLog for ProfileKey\n"
-            # puts "before 1 action <connect_similars> check in ProfileKey: table_name = #{table_name.inspect} \n"
             # puts "before 1 action <connect_similars> check in ProfileKey: rows_ids = #{rows_ids.inspect} \n"
             expect(rows_ids).to eq([]) # got rows_ids array for ProfileKey logs before connection
           end

@@ -161,8 +161,9 @@ module SimilarsConnection
     common_connect_log_number = connection_data[:connection_id] # Берем тот номер соединения similars,
     # который идет из Conn_requests - номер запроса на соединение деревьев. Он - единый и не является порядковым, как
     # номера логов на добавление и удаление профилей, номера которыхформируются прямо в табл. CommonLogs.
-    puts "In make_sims_connec_common_log: current_user_id = #{current_user_id}"
-    puts "In make_sims_connec_common_log: connection_data = #{connection_data} "
+
+    # puts "In make_sims_connec_common_log: current_user_id = #{current_user_id}"
+    # puts "In make_sims_connec_common_log: connection_data = #{connection_data} "
 
     # new_common_log_number = CommonLog.new_log_id(current_user_id, current_log_type) # No use
 
