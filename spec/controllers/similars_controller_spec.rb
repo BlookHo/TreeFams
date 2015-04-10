@@ -219,6 +219,8 @@ describe SimilarsController, :type => :controller , similars: true do
       Name.reset_pk_sequence
       SimilarsFound.delete_all
       SimilarsFound.reset_pk_sequence
+      CommonLog.delete_all
+      CommonLog.reset_pk_sequence
     }
 
   describe 'CHECK SimilarsController methods' do
@@ -346,7 +348,14 @@ describe SimilarsController, :type => :controller , similars: true do
       let(:second_init_profile) {70}
       let(:log_connection_id) {1}
 
-      describe '- Before action #connect_similars' do
+      describe '- Before action #connect_similars'    do # , focus: true
+        # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+        # profiles_to_destroy = connection_data[:profiles_to_destroy]
+        # who_connect         = connection_data[:who_connect]
+        # with_whom_connect   = connection_data[:with_whom_connect]
+        # current_user_id     = connection_data[:current_user_id]
+        # user_id             = connection_data[:user_id]
+        # connection_id       = connection_data[:connection_id]
         context '- check User ' do
           it '- in User_2 profile_id before changed - Ok' do
             puts "Check before #connect_similars \n"
@@ -393,16 +402,29 @@ describe SimilarsController, :type => :controller , similars: true do
           end
         end
 
+        context ' - check CommonLog table before <connect_similars>' do
+          describe '- check CommonLog have rows count - Ok ' do
+            let(:rows_qty) {0}
+            it_behaves_like :successful_common_logs_rows_count
+          end
+          # it '- check CommonLog 1st & last row - Ok' do # , focus: true
+          #   common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
+          #   expect(common_log_row_fields).to eq({"id"=>1, "user_id"=>1, "log_type"=>4, "log_id"=>3, "profile_id"=>17,
+          #                                        "base_profile_id"=>14, "relation_id"=>999} )
+          # end
+        end
+
+
       end
 
-      describe '- After action #connect_similars' do
+      describe '- After action #connect_similars'  do  # , focus: true
         before { get :internal_similars_search
         get :connect_similars,
             first_profile_id: first_init_profile, second_profile_id: second_init_profile,
             :format => 'js' }
         after { get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js' }
 
-        context '- check instances ' do
+        context '- check instances '  do
           it "- got values: init_hash" do
             puts "After #connect_similars check instances\n"
             puts "check init_hash \n"
@@ -429,10 +451,21 @@ describe SimilarsController, :type => :controller , similars: true do
           it '- log connected_at in SimilarsLog - Ok' do
             connected_at =  SimilarsLog.last.connected_at
             current_user_logged =  SimilarsLog.last.current_user_id
-            # puts "In check log connected_at in SimilarsLog:  connected_at = #{connected_at.inspect} \n"
             expect(connected_at).to eq(1) # got log connected_at of connected similars
-            # puts "In check log connected_at in SimilarsLog:  current_user_logged = #{current_user_logged.inspect} \n"
             expect(current_user_logged).to eq(1) # got log current_user_id of connected similars
+          end
+
+          context ' - check CommonLog table before <connect_similars>' do
+            describe '- check CommonLog have rows count - Ok ' do
+              # puts "In check CommonLog in SimilarsLog:  connected_at = #{connected_at.inspect} \n"
+              let(:rows_qty) {1}
+              it_behaves_like :successful_common_logs_rows_count
+            end
+            it '- check CommonLog 1st & last row - Ok' do # , focus: true
+              common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
+              expect(common_log_row_fields).to eq({"id"=>1, "user_id"=>1, "log_type"=>3, "log_id"=>1, "profile_id"=>63,
+                                                   "base_profile_id"=>63, "relation_id"=>888} )
+            end
           end
         end
 
@@ -647,6 +680,8 @@ describe SimilarsController, :type => :controller , similars: true do
           get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js'
         end
       end
+
+
 
 
 

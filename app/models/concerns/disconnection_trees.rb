@@ -42,12 +42,12 @@ module DisconnectionTrees
         # profile_current_user = User.find(self.id).profile_id
         profile_each_user = User.find(each_user_id).profile_id
 
-        UpdatesFeed.create(user_id: each_user_id, update_id: 17,
-                           agent_user_id: self.id, agent_profile_id: profile_current_user,
-                           who_made_event: self.id,
-                           read: false)
         UpdatesFeed.create(user_id: self.id, update_id: 17,
                            agent_user_id: each_user_id, agent_profile_id: profile_each_user,
+                           who_made_event: self.id,
+                           read: false)
+        UpdatesFeed.create(user_id: each_user_id, update_id: 17,
+                           agent_user_id: self.id, agent_profile_id: profile_current_user,
                            who_made_event: self.id,
                            read: false)
 

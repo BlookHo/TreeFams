@@ -186,9 +186,7 @@ module ConnectionTrees
     user_id                   = connection_data[:user_id]
     common_connect_log_number = connection_data[:connection_id] # Берем тот номер соединения деревьев,
     # который идет из Conn_requests - номер запроса на соединение деревьев. Он - единый и не является порядковым, как
-    # номера логов на добавление и удаление профилей, номера которыхформируются прямо в табл. CommonLogs.
-
-    # new_common_log_number = CommonLog.new_log_id(current_user_id, current_log_type) # No use
+    # номера логов на добавление и удаление профилей, номера которых формируются прямо в табл. CommonLogs.
 
     common_log_data = { user_id:         current_user_id,
                         log_type:        current_log_type,
@@ -202,77 +200,7 @@ module ConnectionTrees
 
 
 
-  # @note: Контроль корректности массивов перед объединением
-  #    # Tested
-  # @param: connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
-  #   :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
-  #   :current_user_id=>1, :user_id=>3, :connection_id=>3}
-  # def check_connection_arrs_old(connection_data )
-  #   profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-  #   profiles_to_destroy = connection_data[:profiles_to_destroy]
-  #
-  #   stop_by_arrs = false
-  #   logger.info "== In check_connection_arrs:  connection_data = #{connection_data}"
-  #   commons = check_commons(profiles_to_rewrite, profiles_to_destroy)
-  #
-  #   ######## Контроль корректности массивов перед объединением
-  #   if !profiles_to_rewrite.blank? && !profiles_to_destroy.blank?   # 1
-  #     logger.info "Ok to connect. Array(s) - Dont blank."
-  #
-  #     # Проверка на наличие общих (совпадающих) эл-тов у массивов перезаписи
-  #     # commons = check_commons(profiles_to_rewrite, profiles_to_destroy)
-  #     logger.info "== In check_uniqness:  commons = #{commons}"
-  #     if commons.blank?  # Нет пересечения commons=[]- общих профилей - Ок   # 2
-  #
-  #       if profiles_to_rewrite.size == profiles_to_destroy.size    # 3
-  #         # logger.info "Ok to connect. Connection array(s) - Equal. Size = #{profiles_to_rewrite.size}."
-  #
-  #         # Проверка найденных массивов перезаписи перед объединением - на повторы
-  #         complete_dubles_hash = check_duplications(profiles_to_rewrite, profiles_to_destroy)
-  #
-  #         if complete_dubles_hash.empty? # Если НЕТ дублирования в массивах   # 5
-  #           connection_message = "Данные для объединения деревьев - корректны. "  # Tested
-  #           # logger.info "Ok to connect. НЕТ Дублирований in Connection array(s).
-  #           #             complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
-  #         else    # 4
-  #           connection_message =
-  #               "Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! ЕСТЬ дублирования в массивах"  # Tested
-  #           # logger.info "ERROR: STOP connection! ЕСТЬ дублирования в массивах:
-  #           #              complete_dubles_hash = #{complete_dubles_hash};  connection_message = #{connection_message};"
-  #           stop_by_arrs = true #
-  #         end
-  #
-  #       else
-  #         connection_message = "Объединение остановлено, т.к. массив(ы) объединения - имеют разный размер"  # Tested
-  #         # logger.info "ERROR: STOP connection! Array(s) - NOT Equal! connection_message = #{connection_message} "
-  #         stop_by_arrs = true
-  #       end
-  #
-  #     else
-  #       connection_message = "Объединение остановлено. В массивах объединения - есть общие (совпадающие) профили!" # Tested
-  #       # logger.info "ERROR: В массивах объединения - есть общие профили! connection_message = #{connection_message};."
-  #       stop_by_arrs = true
-  #     end
-  #
-  #   else
-  #     connection_message = "Объединение остановлено, т.к. массив(ы) объединения - пустые" # Tested
-  #     # logger.info "ERROR: Connection array(s) - blank! connection_message = #{connection_message};."
-  #     stop_by_arrs = true
-  #   end
-  #
-  #   @complete_dubles_hash = complete_dubles_hash  # DEBUGG_TO_VIEW
-  #   # logger.info "== After in check_connection_arrs:  stop_by_arrs = #{stop_by_arrs}, connection_message = #{connection_message} "
-  #
-  #   { stop_by_arrs: stop_by_arrs,
-  #     diag_connection_message: connection_message,
-  #     common_profiles: commons,
-  #     complete_dubles_hash: complete_dubles_hash
-  #   }
-  #
-  # end
-
-
-
+  # todo: refact
   # @note: Контроль корректности массивов перед объединением
   #    # Tested
   # @param: connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
@@ -398,7 +326,6 @@ module ConnectionTrees
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_rewrite) unless indexs_hash_rewrite.blank?
 
     # @complete_dubles_hash = complete_dubles_hash # DEBUGG_TO_VIEW
-
     # complete_dubles_hash = {11=>[25, 26]}  # for DEBUGG ONLY!!!
 
     complete_dubles_hash
@@ -408,8 +335,6 @@ module ConnectionTrees
   # Проверка на наличие общих (совпадающих) эл-тов у массивов перезаписи
   # Что - не должно быть!.
   def check_commons(array1, array2)
-    # logger.info "== In check_uniqness:  array1 = #{array1}"
-    # logger.info "== In check_uniqness:  array2 = #{array2}"
     array1 & array2
   end
 

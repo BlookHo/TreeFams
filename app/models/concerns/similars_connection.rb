@@ -42,7 +42,7 @@ module SimilarsConnection
     logger.info "# CONN ##*** In module SimilarsConnection common_sims_logs: #{common_sims_log.inspect} "
 
     # Запись строки Общего лога в таблицу CommonLog
-    # make_sims_connec_common_sims_log(connection_data)
+    make_sims_connec_common_log(connection_data)
 
 
 
@@ -155,12 +155,14 @@ module SimilarsConnection
   # @note: Сделать 1 запись в общие логи: в common_sims_logs
   def make_sims_connec_common_log(connection_data)
     # logger.info "In add_new_profile: Before create_add_log"
-    current_log_type          = 4  # connection trees: rollback == disconnect trees. Тип = разъединение деревьев при rollback
+    current_log_type          = 3  # connection trees: rollback == disconnect similars. Тип = разъединение similars при rollback
     current_user_id           = connection_data[:current_user_id]
-    user_id                   = connection_data[:user_id]
-    common_connect_log_number = connection_data[:connection_id] # Берем тот номер соединения деревьев,
+    # user_id                   = connection_data[:user_id]
+    common_connect_log_number = connection_data[:connection_id] # Берем тот номер соединения similars,
     # который идет из Conn_requests - номер запроса на соединение деревьев. Он - единый и не является порядковым, как
     # номера логов на добавление и удаление профилей, номера которыхформируются прямо в табл. CommonLogs.
+    puts "In make_sims_connec_common_log: current_user_id = #{current_user_id}"
+    puts "In make_sims_connec_common_log: connection_data = #{connection_data} "
 
     # new_common_log_number = CommonLog.new_log_id(current_user_id, current_log_type) # No use
 
@@ -168,9 +170,8 @@ module SimilarsConnection
                         log_type:        current_log_type,
                         log_id:          common_connect_log_number,
                         profile_id:      User.find(current_user_id).profile_id,
-                        base_profile_id: User.find(user_id).profile_id, # после объединения деревьев: профиль может
-                        # отличаться от того, кот. был до объединения
-                        new_relation_id: 999 }  # Условный код для лога объединения деревьев
+                        base_profile_id: User.find(current_user_id).profile_id,
+                        new_relation_id: 888 }  # Условный код для лога объединения similars
     CommonLog.create_common_log(common_log_data)
 
     # From Profile_Keys controller

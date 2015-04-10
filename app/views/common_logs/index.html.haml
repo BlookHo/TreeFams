@@ -34,10 +34,10 @@
       %tr
         %th Лог ID
         %th Дата
-        %th Автор дерева
+        %th Автор действия
         %th Тип лога
-        %th Профиль лога
-        %th Имя профиля
+        %th Профиль автора
+        %th Имя автора
         %th Номер лога
         -#%th
         %th
@@ -49,7 +49,7 @@
           %td= tree_one_log.id
           %td= tree_one_log.created_at
           %td= tree_one_log.user_id
-          %td= tree_one_log.log_type  #
+          %td= LogType.name_log_type(tree_one_log.log_type)  #
           %td= tree_one_log.profile_id #
           %td= Name.find(Profile.find(tree_one_log.profile_id).name_id).name #
           %td= tree_one_log.log_id

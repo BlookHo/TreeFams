@@ -7,12 +7,25 @@ module SimilarsDisconnection
   def disconnect_sims_in_tables(log_id)
     logger.info "*** In module SimilarsDisconnection disconnect_sims_in_tables: log_id = #{log_id} "
 
+    # From disconnect_trees
+    # connection_common_log = CommonLog.find(common_log_id).attributes.except('created_at','updated_at')
+    # conn_users_destroy_data = {
+    #     user_id: connection_common_log["user_id"], #    1,
+    #     with_user_id: Profile.find(connection_common_log["base_profile_id"]).user_id,    #        3,
+    #     connection_id: connection_common_log["log_id"]   #    3,
+    # }
+
+
     log_to_redo = restore_log(log_id)
     logger.info "*** In module SimilarsDisconnection disconnect_sims_in_tables: log_to_redo = #{log_to_redo.inspect} "
 
     redo_log(log_to_redo)
 
     log_deletion(log_to_redo)
+
+    # From disconnect_trees
+    # CommonLog.find(common_log_id).destroy
+
 
   end
 
