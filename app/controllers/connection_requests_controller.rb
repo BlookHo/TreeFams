@@ -19,7 +19,7 @@ class ConnectionRequestsController < ApplicationController
       profile_user_to_connect = User.find(user_to_connect).profile_id if !user_to_connect.blank?
       ##########  UPDATES - № 1  ####################
       logger.info "In create_requests:  user_id = #{current_user.id}, agent_user_id = #{user_to_connect}, agent_profile_id = #{profile_user_to_connect} " #
-      UpdatesFeed.create(user_id: current_user.id, update_id: 1, agent_user_id: user_to_connect, agent_profile_id: profile_user_to_connect, read: false)
+      UpdatesFeed.create(user_id: current_user.id, update_id: 1, agent_user_id: user_to_connect, agent_profile_id: profile_user_to_connect,  who_made_event: current_user.id, read: false)
       logger.info "In create_requests: UpdatesFeed.create"
       ###############################################
     end
