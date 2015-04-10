@@ -99,7 +99,8 @@ class ProfilesController < ApplicationController
         CommonLog.create_common_log(common_log_data)
 
         ##########  UPDATES FEEDS - № 4  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 4, agent_user_id: current_user.id, agent_profile_id: @profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 4, agent_user_id: current_user.id,
+                           agent_profile_id: @profile.id,  who_made_event: current_user.id, read: false)
         ##########  UPDATES FEEDS - № 8, 9, 10  #############
         @profile.case_update_amounts(@profile, current_user)
 

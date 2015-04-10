@@ -18,7 +18,8 @@ class InvitesController < ApplicationController
       logger.info "In create invitation_email:  user_profile = #{user_profile}, params[:profile_id].to_i = #{params[:profile_id].to_i} " #
 
       ##########  UPDATES - № 5  ####################         agent_user_id: current_user.id,
-      updates_data = { user_id: current_user.id, update_id: 5, agent_user_id: user_profile, agent_profile_id: params[:profile_id].to_i, read: false}
+      updates_data = { user_id: current_user.id, update_id: 5, agent_user_id: user_profile,
+                       agent_profile_id: params[:profile_id].to_i,  who_made_event: current_user.id, read: false}
       UpdatesFeed.create(updates_data)
       ###############################################
 

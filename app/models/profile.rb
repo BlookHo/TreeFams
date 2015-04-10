@@ -263,39 +263,48 @@ class Profile < ActiveRecord::Base
     case tree_profiles_amount
       when 11 # кол-во родни в дереве больше 10
         ##########  UPDATES FEEDS - № 8  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 8, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 8, agent_user_id: current_user.id,
+                           agent_profile_id: profile.id,  who_made_event: current_user.id, read: false)
 
       when 16  # кол-во родни в дереве больше 15
         ##########  UPDATES FEEDS - № 9  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 9, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 9, agent_user_id: current_user.id,
+                           agent_profile_id: profile.id, who_made_event: current_user.id, read: false)
 
       when 21  # кол-во родни в дереве больше 20
         ##########  UPDATES FEEDS - № 10  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 10, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 10, agent_user_id: current_user.id,
+                           agent_profile_id: profile.id, who_made_event: current_user.id, read: false)
 
       when 26  # кол-во родни в дереве больше 25
         ##########  UPDATES FEEDS - № 11  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 11, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 11, agent_user_id: current_user.id,
+                           agent_profile_id: profile.id, who_made_event: current_user.id, read: false)
 
       when 31  # кол-во родни в дереве больше 30
         ##########  UPDATES FEEDS - № 12  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 12, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 12, agent_user_id: current_user.id,
+                           agent_profile_id: profile.id, who_made_event: current_user.id, read: false)
 
       when 41  # кол-во родни в дереве больше 40
         ##########  UPDATES FEEDS - № 13  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 13, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 13, agent_user_id: current_user.id,
+                           agent_profile_id: profile.id, who_made_event: current_user.id, read: false)
 
       when 51  # кол-во родни в дереве больше 50
         ##########  UPDATES FEEDS - № 14  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 14, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 14, agent_user_id: current_user.id,
+                           agent_profile_id: profile.id, who_made_event: current_user.id, read: false)
 
       when 101  # кол-во родни в дереве больше 100
         ##########  UPDATES FEEDS - № 15  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 15, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 15, agent_user_id: current_user.id,
+                           agent_profile_id: profile.id, who_made_event: current_user.id, read: false)
 
       when 151  # кол-во родни в дереве больше 150
         ##########  UPDATES FEEDS - № 16  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 16, agent_user_id: current_user.id, agent_profile_id: profile.id, read: false)
+        UpdatesFeed.create(user_id: current_user.id, update_id: 16, agent_user_id: current_user.id,
+                           agent_profile_id: profile.id, who_made_event: current_user.id, read: false)
 
       else  # No update
 
