@@ -7,12 +7,12 @@ class UpdatesFeed < ActiveRecord::Base
   validates_numericality_of :user_id, :update_id, :agent_user_id, :agent_profile_id, :who_made_event, :greater_than => 0,
                             :message => "ID автора нового события и ID события должны быть больше 0 в UpdatesFeed"
   validates_inclusion_of :read, :in => [true, false], :message => "Должны быть в [true, false] в UpdatesFeed"
-  validate :updates_users_ids_not_equal  # :user_id  AND :agent_user_id
+  # validate :updates_fields_not_equal  # :user_id  AND :agent_user_id
 
   # custom validation
-  def updates_users_ids_not_equal
-    self.errors.add(:updates_feeds, 'Юзеры IDs в одном ряду не должны быть равны в UpdatesFeed.') if self.user_id == self.agent_user_id
-  end
+  # def updates_fields_not_equal
+  #   self.errors.add(:updates_feeds, 'Fields в одном ряду не должны быть равны в UpdatesFeed.') if self.agent_profile_id == self.agent_user_id
+  # end
 
 
   belongs_to :user
@@ -72,7 +72,6 @@ class UpdatesFeed < ActiveRecord::Base
 
 
   # Создание одного хэша - элемента массива для отображения обновлений для View
-  # todo: переделать в компактный хэш
   # update_data = Hash.new
   # # Show in View /index
   # update_data[:update_text]        = updates_feed.combine_update_text(updates_feed, current_user_id)
@@ -135,8 +134,8 @@ class UpdatesFeed < ActiveRecord::Base
         prefix, suffix = updates_feed.combine_2_17_text(updates_feed, text_data, current_user_id)
       when 3  # избранный профиль -
         prefix, suffix = updates_feed.combine_3_text(updates_feed, text_data)
-      when 4  # добавлен профиль in ProfilesController   # OK
-        prefix, suffix = updates_feed.combine_4_text(updates_feed, text_data)
+      when 4, 18  # добавлен профиль in ProfilesController   # OK
+        prefix, suffix = updates_feed.combine_4_18_text(updates_feed, text_data)
       when 5  # приглашение на сайт по почте in InvitesController   # OK
         prefix, suffix = updates_feed.combine_5_text(updates_feed, text_data)
 
@@ -211,7 +210,7 @@ class UpdatesFeed < ActiveRecord::Base
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed
   # для UpdatesEvent типа 4 добавлен профиль
-  def combine_4_text(updates_feed, text_data)
+  def combine_4_18_text(updates_feed, text_data)
 
     !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.get_name(updates_feed.agent_profile_id) : text_data[:agent_name] = ""
     prefix = 'Твоим родственником ' + inflect_name(text_data[:author_name],4)

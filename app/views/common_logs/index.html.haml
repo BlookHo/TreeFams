@@ -2,21 +2,21 @@
   -#%h1 Просмотр общих логов дерева
   -#%br
 
-  -#%h1 Данные о текущем дереве
-  -#- if @tree_info.empty?
-  -#  %table
-  -#    %tr
-  -#      %td.left.grey.italic
-  -#        Данныx о текущем дереве - нет
-  -#- else
-  -#  %h2 На сайте - пользователь (current_user.id): #{@current_user_id}
-  -#  %h2 Пользователи - авторы дерева: #{@tree_info[:connected_users]}
-  -#  -#%h2 ID Профилей Пользователей - авторов дерева: #{@tree_info[:users_profiles_ids]}
-  -#  -#%h2 Массив профилей в дереве:     #{@tree_info[:tree_is_profiles]}
-  -#  -#%h2 Количество профилей в дереве: #{@tree_info[:tree_profiles_amount]}
-  -#  %h2 Полный массив профилей в дереве (с авторами):  #{@tree_info[:all_tree_profiles]}
-  -#  %h2 Полное количество профилей в дереве (с авторами): #{@tree_info[:all_tree_profiles_amount]}
-  -#%br
+  %h1 Данные о текущем дереве
+  - if @tree_info.empty?
+    %table
+      %tr
+        %td.left.grey.italic
+          Данныx о текущем дереве - нет
+  - else
+    %h2 На сайте - пользователь (current_user.id): #{@current_user_id}
+    %h2 Пользователи - авторы дерева: #{@tree_info[:connected_users]}
+    -#%h2 ID Профилей Пользователей - авторов дерева: #{@tree_info[:users_profiles_ids]}
+    -#%h2 Массив профилей в дереве:     #{@tree_info[:tree_is_profiles]}
+    -#%h2 Количество профилей в дереве: #{@tree_info[:tree_profiles_amount]}
+    %h2 Полный массив профилей в дереве (с авторами):  #{@tree_info[:all_tree_profiles]}
+    %h2 Полное количество профилей в дереве (с авторами): #{@tree_info[:all_tree_profiles_amount]}
+  %br
 
 
   -#- if @paged_common_logs_data.blank?
@@ -37,8 +37,8 @@
         %th Дата
         %th Дерево
         %th Действие
-        %th Имя автора
-        %th Профиль автора действия
+        %th Имя
+        %th Профиль
         %th Номер лога
         -#%th
         %th

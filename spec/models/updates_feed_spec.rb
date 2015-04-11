@@ -38,10 +38,10 @@ RSpec.describe UpdatesFeed, type: :model  do # , focus: true
         it '- 5 Dont save: - bad_uncorrect_read - not boolean' do
           expect(bad_uncorrect_read).to_not be_valid
         end
-        let(:bad_uncorrect_user_and_agent_user) {FactoryGirl.build(:updates_feed, :uncorrect_user_and_agent_user)}
-        it '- 6 Dont save: - bad_user_and_agent_user - equal' do
-          expect(bad_uncorrect_user_and_agent_user).to_not be_valid
-        end
+        # let(:bad_uncorrect_user_and_agent_user) {FactoryGirl.build(:updates_feed, :uncorrect_user_and_agent_user)}
+        # it '- 6 Dont save: - bad_user_and_agent_user - equal' do
+        #   expect(bad_uncorrect_user_and_agent_user).to_not be_valid
+        # end
 
       end
 

@@ -5,8 +5,8 @@ class ConnectionRequestsController < ApplicationController
 
   before_filter :logged_in?
 
-  # формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
-  # Присваиваем текущий Номер для connection_id
+  # @note: формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
+  #   Присваиваем текущий Номер для connection_id
   def create_requests(with_whom_connect_users_arr, max_connection_id)
     with_whom_connect_users_arr.each do |user_to_connect|
       new_connection_request = ConnectionRequest.new
@@ -16,10 +16,11 @@ class ConnectionRequestsController < ApplicationController
       ##########################################
             new_connection_request.save
       ##########################################
-      profile_user_to_connect = User.find(user_to_connect).profile_id if !user_to_connect.blank?
+      profile_user_to_connect = User.find(user_to_connect).profile_id unless user_to_connect.blank?
       ##########  UPDATES - № 1  ####################
       logger.info "In create_requests:  user_id = #{current_user.id}, agent_user_id = #{user_to_connect}, agent_profile_id = #{profile_user_to_connect} " #
-      UpdatesFeed.create(user_id: current_user.id, update_id: 1, agent_user_id: user_to_connect, agent_profile_id: profile_user_to_connect,  who_made_event: current_user.id, read: false)
+      UpdatesFeed.create(user_id: current_user.id, update_id: 1, agent_user_id: user_to_connect,
+                         agent_profile_id: profile_user_to_connect,  who_made_event: current_user.id, read: false)
       logger.info "In create_requests: UpdatesFeed.create"
       ###############################################
     end
@@ -27,9 +28,10 @@ class ConnectionRequestsController < ApplicationController
 
 
 
-  # Формирование нового запроса на объединение деревьев
-  # От кого - от текущего Юзера
-  # С кем - из формы просмотра рез-тов поиска
+  # todo: refact
+  # @note: Формирование нового запроса на объединение деревьев
+  #   От кого - от текущего Юзера
+  #   С кем - из формы просмотра рез-тов поиска
   def make_connection_request
 
       current_user_id = current_user.id #
@@ -62,7 +64,8 @@ class ConnectionRequestsController < ApplicationController
             create_requests(@with_whom_connect_users_arr, max_connection_id)
 
             # Формирование хэша данных всех запросов current_user для view
-            current_user_connection_ids = ConnectionRequest.where(:user_id => current_user.id, :done => false ).order('created_at').reverse_order.pluck('connection_id').uniq
+            current_user_connection_ids = ConnectionRequest.where(:user_id => current_user.id, :done => false )
+                                              .order('created_at').reverse_order.pluck('connection_id').uniq
             @user_requests_data = fill_requests_data(current_user_connection_ids)
             @current_user_connection_ids = current_user_connection_ids
 
@@ -88,25 +91,26 @@ class ConnectionRequestsController < ApplicationController
 
 
 
-  # Проверка на существование встречного запроса на объединение
+  # @note: Проверка на существование встречного запроса на объединение
   def counter_request_exists(with_user_id)
     ConnectionRequest.exists?(:user_id => with_user_id, :with_user_id => current_user.id, :done => false )
     logger.info "In check_counter_request: Встречный запрос = #{ConnectionRequest.exists?(:user_id => with_user_id, :with_user_id => current_user.id, :done => false )} "
   end
 
-  # определение Юзеров - участников объединения деревьев
-  # who_connect_users_arr:   кто объединяется = инициатор
-  # with_whom_connect_users_arr:  с кем объединяется = ответчик
+  # @note: определение Юзеров - участников объединения деревьев
+  #   who_connect_users_arr:   кто объединяется = инициатор
+  #   with_whom_connect_users_arr:  с кем объединяется = ответчик
   def find_users_connectors(with_user_id)
     @who_connect_users_arr = current_user.get_connected_users
     @with_whom_connect_users_arr = User.find(with_user_id).get_connected_users  #
   end
 
-  # Заполнение хэша данными о запросах по их [IDs]
+  # @note: Заполнение хэша данными о запросах по их [IDs]
   def fill_requests_data(connection_ids)
     requests_data = {}
     connection_ids.each do |one_connection_id|
-      request = ConnectionRequest.where(:connection_id => one_connection_id, :done => false ).order('created_at').reverse_order.first
+      request = ConnectionRequest.where(:connection_id => one_connection_id, :done => false )
+                    .order('created_at').reverse_order.first
       one_request = {}
       one_request.merge!(:request_from_user_id  => request.user_id)
       one_request.merge!(:request_to_user_id => request.with_user_id)
@@ -119,23 +123,25 @@ class ConnectionRequestsController < ApplicationController
     return requests_data
   end
 
-  # Показываем все запросы на объединение текущего Юзера
-  # Переход сюда из Хэдера.
-  # GET /connection_requests/1
-  # GET /connection_requests/1.json
+  # @note: Показываем все запросы на объединение текущего Юзера
+  #   Переход сюда из Хэдера.
+  #   GET /connection_requests/1
+  #   GET /connection_requests/1.json
   def show_user_requests
     # flash[:notice] = "Ваш запрос отправлен"
     # Полученные Вами НОВЫЕ запросы на объединение - в ожидании Вашего решения
-    connection_ids_to_current_user = ConnectionRequest.where(:with_user_id => current_user.id, :done => false ).order('created_at').reverse_order.pluck('connection_id').uniq
+    connection_ids_to_current_user = ConnectionRequest.where(:with_user_id => current_user.id, :done => false )
+                                         .order('created_at').reverse_order.pluck('connection_id').uniq
     @requests_to_user_data = fill_requests_data(connection_ids_to_current_user)
 
     # Все ваши запросы - в ожидании на объединение
-    current_user_connection_ids = ConnectionRequest.where(:user_id => current_user.id, :done => false ).order('created_at').reverse_order.pluck('connection_id').uniq
+    current_user_connection_ids = ConnectionRequest.where(:user_id => current_user.id, :done => false )
+                                      .order('created_at').reverse_order.pluck('connection_id').uniq
     @user_requests_data = fill_requests_data(current_user_connection_ids)
 
   end
 
-  # Формирование структуры данных для отображения запросов
+  # @note: Формирование структуры данных для отображения запросов
   #
   def get_one_request_data(connection_id)
 
@@ -160,15 +166,16 @@ class ConnectionRequestsController < ApplicationController
 
   end
 
-  # Формируем состав одного запроса по connection_id для view
+  # @note: Формируем состав одного запроса по connection_id для view
   def show_one_request
       connection_id = params[:connection_id].to_i # From view Link
       get_one_request_data(connection_id)
   end
 
-  # update request data - to yes or no connect
+  # @note: update request data - to yes or no connect
   def update_requests(value, connection_id)
-    requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
+    requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false )
+                             .order('created_at').reverse_order
     if !requests_to_update.blank?
       requests_to_update.each do |request_row|
         request_row.done = true
@@ -181,10 +188,10 @@ class ConnectionRequestsController < ApplicationController
     end
   end
 
-   # Ответ НЕТ на запрос на объединение
-  # Действия: сохраняем инфу - кто отказал какому объединению
-  # После этого - пометить, что-то?
-  # GET /connection_requests/no_connect
+  # @note: Ответ НЕТ на запрос на объединение
+  #   Действия: сохраняем инфу - кто отказал какому объединению
+  #   После этого - пометить, что-то?
+  #   GET /connection_requests/no_connect
   def no_connect
     #no_user_id = params[:no_user_id].to_i # From view
     #logger.info "== no_user_id = #{no_user_id}"

@@ -89,19 +89,28 @@ class ProfilesController < ApplicationController
         current_log_type = 1  #  # add: rollback == delete. Тип = добавление нового профиля при rollback
         new_log_number = CommonLog.new_log_id(@base_profile.tree_id, current_log_type)
 
-        common_log_data = { user_id:         @base_profile.tree_id,
-                            log_type:        current_log_type,
-                            log_id:          new_log_number,
-                            profile_id:      @profile.id,
-                            base_profile_id: @base_profile.id,
-                            new_relation_id: @profile.relation_id }
+        common_log_data = { user_id:         @base_profile.tree_id,   # 3   Алексей к Анне у Натальи
+                            log_type:        current_log_type,        # 1
+                            log_id:          new_log_number,          # 2
+                            profile_id:      @profile.id,             # 215
+                            base_profile_id: @base_profile.id,        # 25
+                            new_relation_id: @profile.relation_id }   # 3
         # logger.info "In Profile controller: Before create_common_log   common_log_data= #{common_log_data} "
         CommonLog.create_common_log(common_log_data)
 
         ##########  UPDATES FEEDS - № 4  ####################
-        UpdatesFeed.create(user_id: current_user.id, update_id: 4, agent_user_id: current_user.id,
-                           agent_profile_id: @profile.id,  who_made_event: current_user.id, read: false)
-        ##########  UPDATES FEEDS - № 8, 9, 10  #############
+        update_feed_data = { user_id:           current_user.id,    # 3   Алексей к Анне у Натальи
+                             update_id:         4,                  # 4
+                             agent_user_id:     @profile.tree_id,   # 3
+                             read:              false,              #
+                             agent_profile_id:  @profile.id,        # 215
+                             who_made_event:    current_user.id }   # 3
+        logger.info "In Profile controller: Before create UpdatesFeed   update_feed_data= #{update_feed_data} "
+        # update_feed_data= {:user_id=>1, :update_id=>4, :agent_user_id=>2, :read=>false, :agent_profile_id=>219, :who_made_event=>1} (pid:16287)
+
+        UpdatesFeed.create(update_feed_data) #
+
+        ##########  UPDATES FEEDS - № 8, 9, 10 ... 16 #############
         @profile.case_update_amounts(@profile, current_user)
 
         @questions = nil
@@ -150,7 +159,7 @@ class ProfilesController < ApplicationController
        tree_row = Tree.where(is_profile_id: params[:id])
        new_relation_id = tree_row[0].relation_id
        # logger.info "In Profiles_contr destroy: Before delete Tree  new_relation_id = #{new_relation_id} "
-       # Профиль, к которому добавляем (на котором вызвали меню +)
+       # Профиль, от которого растет удаляемый (?)
        base_profile = Profile.find(tree_row[0].profile_id)  #
 
        Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
@@ -171,7 +180,15 @@ class ProfilesController < ApplicationController
        # logger.info "In add_new_profile: Before create_add_log   common_log_data = #{common_log_data}"
        CommonLog.create_common_log(common_log_data)
 
-      # todo: delete profile UpdatesFeed
+       ##########  UPDATES FEEDS - № 18  ####################
+       update_feed_data = { user_id:           current_user.id,    #
+                            update_id:         18,                  #
+                            agent_user_id:     base_profile.tree_id,   #
+                            read:              false,              #
+                            agent_profile_id:  params[:id],        #
+                            who_made_event:    current_user.id }   #
+       logger.info "In Profile controller: Before destroy UpdatesFeed   update_feed_data= #{update_feed_data} "
+       UpdatesFeed.create(update_feed_data) #
 
     end
     respond_to do |format|

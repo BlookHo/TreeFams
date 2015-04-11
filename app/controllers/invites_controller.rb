@@ -15,7 +15,8 @@ class InvitesController < ApplicationController
       flash.now[:notice] = "Приглашение отправлено"
 
       user_profile = Profile.find(params[:profile_id].to_i).tree_id
-      logger.info "In create invitation_email:  user_profile = #{user_profile}, params[:profile_id].to_i = #{params[:profile_id].to_i} " #
+      logger.info "In create invitation_email:  user_profile = #{user_profile},
+                   params[:profile_id].to_i = #{params[:profile_id].to_i} " #
 
       ##########  UPDATES - № 5  ####################         agent_user_id: current_user.id,
       updates_data = { user_id: current_user.id, update_id: 5, agent_user_id: user_profile,
