@@ -21,6 +21,8 @@ UpdatesEvent.create([
 {name: ' Количество родни в твоем дереве (размер дерева) превысило 100 человек!', image: 'updates/tree_vol_100.png'},  # 15-  100
 {name: ' Количество родни в твоем дереве (размер дерева) превысило 150 человек!', image: 'updates/tree_vol_150.png'},  # 16-  150
 {name: ' проведено разъединение ', image: 'updates/disconnection_tree.png'},
-{name: ' в дереве родни удален профиль с именем ', image: 'updates/disconnection_tree.png'}
+{name: ' в дереве родни удален профиль с именем ', image: 'updates/destroy_profile.png'},
+{name: ' проведено объединение похожих профилей ', image: 'updates/connect_simsilars.png'},
+{name: ' проведено разъединение похожих профилей ', image: 'updates/disconnect_simsilars.png'}
 
 ])

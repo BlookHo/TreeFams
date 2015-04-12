@@ -109,13 +109,27 @@ class CommonLogsController < ApplicationController
   end
 
   # todo: Connect with Similars methods & refactor
-  # @note Add Logs
+  # @note Similars Connect log - Rollback
   # @note Возврат дерева - откат на выбранную дату
   # @param params[:rollback_date]
   # @param params[:rollback_id]
   def rollback_similars_profiles(common_log_id)
 
     logger.info "In CommonLog controller: rollback_similars_profiles для common_log_id = #{common_log_id} "
+    # logger.info "In CommonLog controller: rollback_connection_trees для common_log_id = #{common_log_id.inspect} "
+    # Не заблокировано ли дерево пользователя
+    # if current_user.tree_is_locked?
+    #   flash[:warning] = "Объединения в данный момент невозможно. Временная блокировка пользователя.
+    #                  Можно повторить попытку позже."
+    #   return redirect_to home_path #:back
+    # else
+    #   current_user.lock!
+    # end
+
+    ############ call of User.module Similars_disconnection #####################
+    current_user.disconnect_sims(common_log_id)
+
+    # current_user.unlock_tree!
 
   end
 

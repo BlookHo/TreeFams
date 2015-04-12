@@ -45,6 +45,18 @@ module SimilarsConnection
     make_sims_connec_common_log(connection_data)
 
 
+    # ##########  UPDATES FEEDS - № 19  # similars_connect ###################
+    # update_feed_data = { user_id:           self.id,    # 3
+    #                      update_id:         19,                  #
+    #                      agent_user_id:     @profile.tree_id,   # 3
+    #                      read:              false,              #
+    #                      agent_profile_id:  @profile.id,        # 215
+    #                      who_made_event:    self.id }   # 3
+    # logger.info "In SimilarsConnection: Before create UpdatesFeed   update_feed_data= #{update_feed_data} "
+    # # update_feed_data= {:user_id=>1, :update_id=>4, :agent_user_id=>2, :read=>false, :agent_profile_id=>219, :who_made_event=>1} (pid:16287)
+    #
+    # UpdatesFeed.create(update_feed_data) #
+
 
 
     common_sims_log
@@ -151,10 +163,10 @@ module SimilarsConnection
 
   end
 
-
+  # todo: check connect sims create common_log & update_feed
   # @note: Сделать 1 запись в общие логи: в common_sims_logs
   def make_sims_connec_common_log(connection_data)
-    # logger.info "In add_new_profile: Before create_add_log"
+    logger.info "In make_sims_connec_common_log: Before common_log"
     current_log_type          = 3  # connection trees: rollback == disconnect similars. Тип = разъединение similars при rollback
     current_user_id           = connection_data[:current_user_id]
     # user_id                   = connection_data[:user_id]
@@ -173,26 +185,8 @@ module SimilarsConnection
                         profile_id:      User.find(current_user_id).profile_id,
                         base_profile_id: User.find(current_user_id).profile_id,
                         new_relation_id: 888 }  # Условный код для лога объединения similars
+    logger.info "In SimilarsConnection : Before create_common_log   common_log_data= #{common_log_data} "
     CommonLog.create_common_log(common_log_data)
-
-    # From Profile_Keys controller
-    # # logger.info "In add_new_profile: Before create_add_log"
-    # current_log_type = 1  #  # add: rollback == delete. Тип = добавление нового профиля при rollback
-    # new_log_number = CommonLog.new_log_id(@base_profile.tree_id, current_log_type)
-    #
-    # common_log_data = { user_id:         @base_profile.tree_id,
-    #                     log_type:        current_log_type,
-    #                     log_id:          new_log_number,
-    #                     profile_id:      @profile.id,
-    #                     base_profile_id: @base_profile.id,
-    #                     new_relation_id: @profile.relation_id }
-    # # logger.info "In Profile controller: Before create_common_log   common_log_data= #{common_log_data} "
-    # CommonLog.create_common_log(common_log_data)
-    #
-
-
-
-
 
 
   end

@@ -126,7 +126,7 @@ class UpdatesFeed < ActiveRecord::Base
 
     text_data = updates_feed.get_text_data(updates_feed)
     prefix, suffix = ""
-    # todo: delete profile
+    # todo: similars
     case updates_feed.update_id # по типу UpdatesEvent
       when 1 # запросы на объединение in ConnectionRequestsController  # OK
         prefix, suffix = updates_feed.combine_1_text(updates_feed, text_data, current_user_id)
@@ -145,11 +145,10 @@ class UpdatesFeed < ActiveRecord::Base
       when 8 .. 16 # изменилось кол-во родни в объединенном дереве   # OK
                   # в рез-те добавления профиля или объединения деревьев in ProfilesController, ConnectUsersTreesController
         prefix, suffix = updates_feed.combine_8__16_text(updates_feed, current_user_id)
-      # when 17  # разъединение дереве   # OK
-      #   prefix, suffix = updates_feed.combine_17_text(updates_feed, text_data, current_user_id)
-
+      when 19, 20 # объединения/разъединение similars in SimConnectionTrees.rb & SimDisconnectionTrees.rb  #
+        prefix, suffix = updates_feed.combine_19_20_text(updates_feed, text_data, current_user_id)
       else
-        ""
+        logger.info "ERROR In combine_update_text: Undefined updates_feed.update_id = #{updates_feed.update_id}"
 
     end
     prefix + text_data[:event_text] + suffix

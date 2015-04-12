@@ -98,7 +98,7 @@ class ProfilesController < ApplicationController
         # logger.info "In Profile controller: Before create_common_log   common_log_data= #{common_log_data} "
         CommonLog.create_common_log(common_log_data)
 
-        ##########  UPDATES FEEDS - № 4  ####################
+        ##########  UPDATES FEEDS - № 4  # create ###################
         update_feed_data = { user_id:           current_user.id,    # 3   Алексей к Анне у Натальи
                              update_id:         4,                  # 4
                              agent_user_id:     @profile.tree_id,   # 3
@@ -180,7 +180,7 @@ class ProfilesController < ApplicationController
        # logger.info "In add_new_profile: Before create_add_log   common_log_data = #{common_log_data}"
        CommonLog.create_common_log(common_log_data)
 
-       ##########  UPDATES FEEDS - № 18  ####################
+       ##########  UPDATES FEEDS - № 18  # destroy ###################
        update_feed_data = { user_id:           current_user.id,    #
                             update_id:         18,                  #
                             agent_user_id:     base_profile.tree_id,   #

@@ -12,10 +12,10 @@
 
 
 
-        -#- if !@similars_qty.blank? && @similars_qty > 0
-        -#  %li= link_to raw("<i class='fa fa-gears'></i> Тест <span>#{@similars_qty}</span>"), internal_similars_search_path, :class => "ttip", title: "Есть похожие! Запуск теста на наличие похожих профилей в твоем дереве"
-        -#- else
-        -#  %li= link_to raw("<i class='fa fa-gears'></i> Тест "), internal_similars_search_path, :class => "ttip", title: "Запуск теста на наличие похожих профилей в твоем дереве"
+        - if !@similars_qty.blank? && @similars_qty > 0
+          %li= link_to raw("<i class='fa fa-gears'></i> Тест <span>#{@similars_qty}</span>"), internal_similars_search_path, :class => "ttip", title: "Есть похожие! Запуск теста на наличие похожих профилей в твоем дереве"
+        - else
+          %li= link_to raw("<i class='fa fa-gears'></i> Тест "), internal_similars_search_path, :class => "ttip", title: "Запуск теста на наличие похожих профилей в твоем дереве"
 
         -# = count_new_requests
         -# - if @new_requests_count.blank? || @new_requests_count == 0
