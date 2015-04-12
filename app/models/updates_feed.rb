@@ -196,6 +196,25 @@ class UpdatesFeed < ActiveRecord::Base
     return prefix, suffix
   end
 
+  # @note:  Формирование итоговой текстовой фразы одного сообщения updates_feed
+  #   для UpdatesEvent типа 2 и 17:
+  def combine_19_20_text(updates_feed, text_data, current_user_id)
+
+    !updates_feed.agent_user_id.blank? ? text_data[:agent_name] = updates_feed.user_update_data(updates_feed.agent_user_id)[:user_name] : text_data[:agent_name] = ""
+    current_user_name =  updates_feed.user_update_data(current_user_id)[:user_name]
+    # updates_feed.update_id == 2 ? greeting = 'Поздравляем, ' :
+    greeting = 'Внимание, '
+    if current_user_id == updates_feed.who_made_event
+      prefix = greeting + current_user_name  + '! ' + 'Тобой'
+      suffix = ' с деревом твоего родственника по имени ' + text_data[:author_name]
+    else
+      prefix = greeting + current_user_name  + '! ' + 'Пользователем по имени ' + text_data[:who_made_event_name]
+      suffix = ' твоего дерева'
+    end
+
+    return prefix, suffix
+  end
+
 
 
   # Формирование итоговой текстовой фразы одного сообщения updates_feed

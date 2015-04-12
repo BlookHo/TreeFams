@@ -50,8 +50,6 @@ module DisconnectionTrees
                            agent_user_id: self.id, agent_profile_id: profile_current_user,
                            who_made_event: self.id,
                            read: false)
-
-
       end
     end
     ###############################################
