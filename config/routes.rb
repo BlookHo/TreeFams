@@ -29,7 +29,6 @@ Weafam::Application.routes.draw do
   match 'make_connection_request' => 'connection_requests#make_connection_request', via: :post
 
 
-
   # search similars & connecting
   # SearchSimilars controller
   match 'internal_similars_search' => 'similars#internal_similars_search', via: :get
@@ -57,8 +56,6 @@ Weafam::Application.routes.draw do
   match 'rollback_logs' => 'common_logs#rollback_logs', via: :get
   match 'mark_rollback' => 'common_logs#mark_rollback', via: :post
   match 'mark_rollback' => 'common_logs#mark_rollback', via: :get
-
-
 
 
   # messages controller
@@ -135,7 +132,6 @@ Weafam::Application.routes.draw do
   get "connect_users_trees/connect_profiles_keys"
 
 
-
   get 'profile/context-menu', to: 'profiles#context_menu', as: :profile_context_menu
 
   resources :profiles, except: [:index, :edit] do
@@ -153,10 +149,7 @@ Weafam::Application.routes.draw do
   resources :profile_datas, only: [:update, :create]
 
 
-
   match '/passwrod/reset' => 'password#reset', via: [:get, :post], as: :reset_password
-
-
 
 
   # for Mailer
@@ -165,9 +158,6 @@ Weafam::Application.routes.draw do
 
   match 'invitation_email' => 'weafam_mailer#invitation_email', via: :get
   match 'invitation_email' => 'weafam_mailer#invitation_email', via: :post
-
-
-
 
 
   # Send invite email
@@ -198,7 +188,7 @@ Weafam::Application.routes.draw do
   get '/home',        to: 'home#index',  as: :home
   get '/home/search', to: 'home#search', as: :home_search
 
-
+  match 'show_similars' => 'home#show_similars', via: :post
 
   # Autocompletes
   ##################################################

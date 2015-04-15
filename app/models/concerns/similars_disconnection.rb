@@ -70,16 +70,18 @@ module SimilarsDisconnection
     # From disconnect_trees
     # CommonLog.find(log_id).destroy
 
-    # ##########  UPDATES FEEDS - № 20  # similars_disconnect ###################
-    # update_feed_data = { user_id:           self.id,    # 3
-    #                      update_id:         20,                  #
-    #                      agent_user_id:     @profile.tree_id,   # 3
-    #                      read:              false,              #
-    #                      agent_profile_id:  @profile.id,        # 215
-    #                      who_made_event:    self.id }   # 3
-    # logger.info "In SimilarsDisconnection: Before create UpdatesFeed   update_feed_data= #{update_feed_data} "
-    # # update_feed_data= {:user_id=>1, :update_id=>4, :agent_user_id=>2, :read=>false, :agent_profile_id=>219, :who_made_event=>1} (pid:16287)
-    # UpdatesFeed.create(update_feed_data) #
+    ##########  UPDATES FEEDS - № 20  # similars_disconnect ###################
+    profile_current_user = User.find(self.id).profile_id
+
+    update_feed_data = { user_id:           self.id,    # 3
+                         update_id:         20,                  #
+                         agent_user_id:     self.id,   # 3
+                         read:              false,              #
+                         agent_profile_id:  profile_current_user,        # 215
+                         who_made_event:    self.id }   # 3
+    logger.info "In SimilarsDisconnection: Before create UpdatesFeed   update_feed_data= #{update_feed_data} "
+    # update_feed_data= {:user_id=>1, :update_id=>4, :agent_user_id=>2, :read=>false, :agent_profile_id=>219, :who_made_event=>1} (pid:16287)
+    UpdatesFeed.create(update_feed_data) #
 
 
   end

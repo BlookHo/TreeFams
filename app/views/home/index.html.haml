@@ -5,6 +5,9 @@
 = render 'search_results_button'
 = render 'zoom_range'
 = render 'notification'
+-#%p Similars @similars: #{@similars.size.inspect}
+- unless @similars.empty?
+  = render 'similars_display_button'
 
 #profile-context-menu{style:'display:none;'}
 

@@ -223,6 +223,8 @@ describe SimilarsController, :type => :controller , similars: true do
       SimilarsFound.reset_pk_sequence
       CommonLog.delete_all
       CommonLog.reset_pk_sequence
+      UpdatesFeed.delete_all
+      UpdatesFeed.reset_pk_sequence
     }
 
   describe 'CHECK SimilarsController methods' do
@@ -395,17 +397,18 @@ describe SimilarsController, :type => :controller , similars: true do
             let(:rows_qty) {0}
             it_behaves_like :successful_common_logs_rows_count
           end
-          # it '- check CommonLog 1st & last row - Ok' do # , focus: true
-          #   common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
-          #   expect(common_log_row_fields).to eq({"id"=>1, "user_id"=>1, "log_type"=>4, "log_id"=>3, "profile_id"=>17,
-          #                                        "base_profile_id"=>14, "relation_id"=>999} )
-          # end
         end
 
+        describe '- check UpdatesFeed before <connect_similars>'   do #, focus: true
+          describe '- check UpdatesFeed rows count before <connect_similars>' do
+            let(:rows_qty) {0}  #
+            it_behaves_like :successful_updates_feed_rows_count
+          end
+        end
 
       end
 
-      describe '- After action #connect_similars' , focus: true do  # , focus: true
+      describe '- After action #connect_similars'  do  # , focus: true
         before { get :internal_similars_search
         get :connect_similars,
             first_profile_id: first_init_profile, second_profile_id: second_init_profile,
@@ -443,7 +446,7 @@ describe SimilarsController, :type => :controller , similars: true do
             expect(current_user_logged).to eq(1) # got log current_user_id of connected similars
           end
 
-          context ' - check CommonLog table before <connect_similars>' do
+          context ' - check CommonLog table After <connect_similars>' do
             describe '- check CommonLog have rows count - Ok ' do
               # puts "In check CommonLog in SimilarsLog:  connected_at = #{connected_at.inspect} \n"
               let(:rows_qty) {1}
@@ -455,6 +458,19 @@ describe SimilarsController, :type => :controller , similars: true do
                                                    "base_profile_id"=>63, "relation_id"=>888} )
             end
           end
+
+          context '- check UpdatesFeed After <connect_similars>'  do #, focus: true
+            describe '- check UpdatesFeed rows count After <connect_similars>' do
+              let(:rows_qty) {1}  #
+              it_behaves_like :successful_updates_feed_rows_count
+            end
+            it '- check UpdatesFeed 1 row - Ok'  do #
+              connection_request_fields = UpdatesFeed.first.attributes.except('created_at','updated_at')
+              expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>19, "agent_user_id"=>1,
+                                                       "read"=>false, "agent_profile_id"=>63, "who_made_event"=>1} )
+            end
+          end
+
         end
 
       end
@@ -650,19 +666,15 @@ describe SimilarsController, :type => :controller , similars: true do
                       :format => 'js'        }
         it "- <connect_similars> respond content_type" do
           puts "After #connect_similars check render_template & response status \n"
-          # puts "In responds with = text/html' \n"
           expect(response.content_type).to eq("text/html")
         end
         it "- render_template <connect_similars>" do
-          # puts "In responds render_template: 'similars/connect_similars' \n"
           expect(subject).to render_template 'similars/connect_similars'
         end
         it '- responds with 200' do
-          # puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
           expect(response.status).to eq(200)
         end
         it '- no responds with 401' do
-          # puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
           expect(response.status).to_not eq(401)
         end
       end
@@ -682,7 +694,6 @@ describe SimilarsController, :type => :controller , similars: true do
         subject { get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js' }
         it "- <disconnect_similars> respond content_type" do
           puts "Check #disconnect_similars \n"
-          # puts "After #connect_similars check ProfileKey \n"
           # puts "In responds with = text/html' \n"
           expect(response.content_type).to eq("text/html")
         end
@@ -752,24 +763,13 @@ describe SimilarsController, :type => :controller , similars: true do
         end
       end
 
-      context 'After #disconnect_similars check - check CommonLog table ' , focus: true  do
+      context 'After #disconnect_similars check - check CommonLog table '  do   #  , focus: true
         describe '- check CommonLog have rows count - Ok ' do
           # puts "In check CommonLog in SimilarsLog:  connected_at = #{connected_at.inspect} \n"
           let(:rows_qty) {0}
           it_behaves_like :successful_common_logs_rows_count
         end
-        # it '- check CommonLog 1st & last row - Ok' do # , focus: true
-        #   common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
-        #   expect(common_log_row_fields).to eq({"id"=>1, "user_id"=>1, "log_type"=>3, "log_id"=>1, "profile_id"=>63,
-        #                                        "base_profile_id"=>63, "relation_id"=>888} )
-        # end
       end
-
-
-  # пометить те ряды, кот-е меняются при объед/разъед (см. в Логах - row_number)
-  # их и надо тестировать на корректность изменений туда-сюда
-
-
 
 
     end

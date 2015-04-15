@@ -5,6 +5,18 @@ var search_marked_profile_ids = [];
 var current_search_result = 0;
 var current_search_resuls_tree_owner_id;
 
+//var similars_btn = $('#similars-display-button');
+
+
+// Получение результатов поиска и отображение на кнопке на домашней странице
+//function getSimilarsResults(callback) {
+//    $.get( "/api/v1/search", { token: access_token } )
+//        .done(function( data ) {
+//            search_results = data;
+//            if (callback){ callback(search_results); }
+//        });
+//};
+//
 
 
 function getCurrentTreeUserId(){
@@ -142,3 +154,4 @@ showSearchResult = function(){
       $('#jsdebug').text(JSON.stringify(search_marked_profile_ids))
     });
 }
+
