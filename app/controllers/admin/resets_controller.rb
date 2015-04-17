@@ -16,50 +16,40 @@ class Admin::ResetsController < Admin::AdminController
   end
 
 
-
   private
-
 
   def reset!
     User.delete_all
     User.reset_pk_sequence
     User.create([])
 
-
     Profile.delete_all
     Profile.reset_pk_sequence
     Profile.create([])
-
 
     ProfileData.delete_all
     ProfileData.reset_pk_sequence
     ProfileData.create([])
 
-
     Tree.delete_all
     Tree.reset_pk_sequence
     Tree.create([])
-
 
     ProfileKey.delete_all
     ProfileKey.reset_pk_sequence
     ProfileKey.create([])
 
-
     ConnectionRequest.delete_all
     ConnectionRequest.reset_pk_sequence
     ConnectionRequest.create([])
-
 
     ConnectedUser.delete_all
     ConnectedUser.reset_pk_sequence
     ConnectedUser.create([])
 
-
     Message.delete_all
     Message.reset_pk_sequence
     Message.create([])
-
 
     PendingUser.delete_all
     PendingUser.reset_pk_sequence
@@ -68,6 +58,23 @@ class Admin::ResetsController < Admin::AdminController
     UpdatesFeed.delete_all
     UpdatesFeed.reset_pk_sequence
     UpdatesFeed.create([])
+
+    CommonLog.delete_all
+    CommonLog.reset_pk_sequence
+    CommonLog.create([])
+
+    ConnectionLog.delete_all
+    ConnectionLog.reset_pk_sequence
+    ConnectionLog.create([])
+
+    SimilarsFound.delete_all
+    SimilarsFound.reset_pk_sequence
+    SimilarsFound.create([])
+
+    SimilarsLog.delete_all
+    SimilarsLog.reset_pk_sequence
+    SimilarsLog.create([])
+
   end
 
 
