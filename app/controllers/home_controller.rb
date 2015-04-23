@@ -1,12 +1,73 @@
+# class  Hash  # SuperHash <
+#   def method_missing(name, *args, &block)
+#
+#     puts "method '#{name}' is missing"
+#
+#     key = name#.to_s
+#     # logger.info "In method_missing name = #{key}" #", self = #{self} " #  unless tree_info.blank?
+#     # if key?(name)
+#     #   self[name]
+#     # else
+#     #   super
+#     # end
+#
+#     self.class.send :define_method, name do
+#       # do your thing
+#       self[name] if self.has_key? key
+#     end
+#     self.send(name)
+#     # return self.class.send :define_method, name do self[:v] end if self.has_key? name
+#     # return self[key] if self.has_key? key
+#     # super
+#   end
+#
+#   def call_me
+#     puts "method call_me is running"
+#   end
+#
+#
+# end
+#
+#
+
+
+
 class HomeController < ApplicationController
 
   before_filter :logged_in?
   layout 'application.new'
   include SimilarsHelper
-
+  # require 'ostruct' # for metaprogramming  work!
+  # require 'hash_methods.rb' # for metaprogramming  work!
 
   # All profiles in user's tree
   def index
+
+    # TEST
+    # work!
+    # os = OpenStruct.new @attributes
+    # @rez = os.key1 #
+
+
+    # TEST
+    # does work: Metaprogramming - need require and make Hash from SHash in /lib/hash_methods.rb
+    # @attributes = {key1: "Doe", wideName: {first_name: "Mike", sec_name: "Bill"}, givenName: "John"}
+    # puts "1. @attributes = #{@attributes}, #{@attributes.class} "
+    # puts @attributes.call_me
+    # name = "call_me_more"
+    # puts " name = #{name} "
+    # @attributes.class.send :define_method, name do
+    #   puts "2. define_method '#{name}' "
+    # end
+    # puts "3. respond = #{@attributes.respond_to?(name)} \n\n"
+    # s = @attributes.givenName
+    # puts "4. s = #{s},  @attributes.key1 = #{@attributes.key1} "
+    # nns = @attributes.wideName.sec_name
+    # puts "5. s = #{nns},  @attributes.key1 = #{@attributes.wideName.sec_name} "
+    #
+
+
+
     sims_exists = false
     @tree_info, new_sims, @similars = current_user.start_similars
     # todo: проверить: убрать запуск метода SimilarsLog.current_tree_log_id и взять @log_connection_id из sim_data
