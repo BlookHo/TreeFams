@@ -37,6 +37,8 @@ module DisconnectionTrees
     #                    read: false)
     connected = self.get_connected_users
 
+    conn_users_destroy_data[:self_connected] = connected
+
     connected.each do |each_user_id|
       if each_user_id != self.id && each_user_id != one_common_log.user_id
         # profile_current_user = User.find(self.id).profile_id
@@ -56,7 +58,8 @@ module DisconnectionTrees
 
     CommonLog.find(common_log_id).destroy
 
-    # Before ConnectedUser destroy_connection
+    # Before ConnectedUser destroy_connection для всех запросов на объединение, ранее установленных как выполненные,
+    # confirm был равен 2, т.е. для всех входящих в запросы юзеров (деревьев)
     ConnectionRequest.disconnected_requests_update(conn_users_destroy_data)
 
     ConnectedUser.destroy_connection(conn_users_destroy_data)

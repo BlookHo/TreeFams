@@ -30,6 +30,7 @@ class ConnectionRequest < ActiveRecord::Base
   #   Ответ ДА на запрос на объединение
   #   Действия: сохраняем инфу - кто дал добро (= 1) какому объединению
   #   Перед этим - запуск собственно процесса объединения
+  #   Здесь confirm уст-ся в 1, тем самым указывается, какой юзер сказал ДА на запрос.
   def self.request_connection(connection_data)
     # who_connect_arr         = connection_data[:who_connect_arr]
     # with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
@@ -64,6 +65,8 @@ class ConnectionRequest < ActiveRecord::Base
   #   - update all requests - with users, connected with current_user  # 1.Get connected users - arr
   #   where(user-id - in Arr and with_user in Arr)
   #   set to DONE all.
+  #   Здесь confirm уст-ся в 2, тем самым СИСТЕМОЙ указывается, что все юзеры, имевшие ранее запросы на объединения -
+  #   - объединяются СИСТЕМОЙ, ПО ФАКТУ ПРИСУТСТВИЯ  в деревьях участников объединения.
   # @param: current_user_id=>1
   def self.connected_requests_update(current_user_id)
     new_tree_users = User.find(current_user_id).get_connected_users
@@ -74,6 +77,8 @@ class ConnectionRequest < ActiveRecord::Base
 
   # @note: rollback ConnectionRequest - update request data - to 'yes' to connect
   #   Ответ ДА на запрос на объединение
+  # Здесь - обратный update того conn._requests, который был установлены как выполненные ЮЗЕРОМ, т.е. у которых
+  # confirm был установлен в 1. Теперь - опять nil.
   def self.request_disconnection(disconnect_data)
     # puts "In  request_disconnection: disconnect_data = #{disconnect_data}"
     # requests_to_rollback =
@@ -90,6 +95,8 @@ class ConnectionRequest < ActiveRecord::Base
   #     with_user_id: Profile.find(connection_common_log["base_profile_id"]).user_id,    #        3,
   #     connection_id: connection_common_log["log_id"]   #    3,
   # }
+  # Здесь - обратный update тех conn._requests, которые были установлены как выполненные СИСТЕМОЙ, т.е. те, у которых
+  # confirm был установлен в 2. Теперь - опять nil.
   def self.disconnected_requests_update(disconnect_data)
     connected_tree = User.find(disconnect_data[:user_id]).get_connected_users
     # puts "In  disconnected_requests_update: connected_tree = #{connected_tree}"
@@ -100,6 +107,54 @@ class ConnectionRequest < ActiveRecord::Base
   end
 
 
+  # @note: update connection_requests if search_results does not include trees to be connected in requests
+  #
+  def self.check_requests_with_search(current_user, connected_users_arr)
+    search_data = current_user.start_search(WeafamSetting.first.certain_koeff)
+    # puts "In User model: disconnect_tree: certain_koeff = #{WeafamSetting.first.certain_koeff} "
+    self.check_valid_requests(search_data, connected_users_arr)
+  end
+
+  # @note:
+  #
+  def self.check_valid_requests(search_data, connected_users_arr)
+    # puts "In disconnect_tree: check_valid_requests:: search_data = #{search_data},
+    #       connected_users_arr = #{connected_users_arr} "
+
+    # search_data =
+    # {:connected_author_arr=>[12], :qty_of_tree_profiles=>5,
+    #  :profiles_relations_arr=>[{:profile_searched=>185, :profile_relations=>{}},
+    #                            {:profile_searched=>188, :profile_relations=>{}},
+    #                            {:profile_searched=>238, :profile_relations=>{}},
+    #                            {:profile_searched=>187, :profile_relations=>{}},
+    #                            {:profile_searched=>182, :profile_relations=>{187=>1, 188=>2, 181=>3, 238=>8, 185=>111}}],
+    #  :profiles_found_arr=>[{182=>{13=>{192=>[1, 2, 3, 8]}}}],
+    #  :uniq_profiles_pairs=>{182=>{13=>192}},
+    #  :profiles_with_match_hash=>{192=>4},
+    #  :by_profiles=>[{:search_profile_id=>182, :found_tree_id=>13, :found_profile_id=>192, :count=>4}],
+    #  :by_trees=>[{:found_tree_id=>13, :found_profile_ids=>[192]}],
+    #  :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+
+    # connected_users_arr => [12, 13]
+
+    search_res_trees = []
+    search_data[:by_trees].each do |one_tree|
+      search_res_trees << one_tree[:found_tree_id]
+    end
+    # puts "In disconnect_tree: check_valid_requests:: search_res_trees = #{search_res_trees}"
+
+    current_to_connect = self.where("user_id in (?)", connected_users_arr)
+                             .where("with_user_id in (?)", connected_users_arr)
+                             .where(done: false)
+
+    current_to_connect.each do |one_request|
+      unless search_res_trees.include?(one_request.user_id)
+        puts "In disconnect_tree: include check:: one_request.user_id = #{one_request.user_id}, one_request.id = #{one_request.id}"
+        ConnectionRequest.find(one_request.id).destroy
+      end
+    end
+
+  end
 
 
 end
