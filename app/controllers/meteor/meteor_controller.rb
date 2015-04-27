@@ -12,5 +12,9 @@ module Meteor
     end
 
 
+    def current_user
+      User.find_by(access_token: token)
+    end
+
   end
 end
