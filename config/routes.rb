@@ -222,7 +222,7 @@ Weafam::Application.routes.draw do
       get :login, to: 'login#login'
 
       namespace :profiles do
-        get "destroy/:profile_id", to: "profiles#destroy"
+        get :destroy, to: "profiles#destroy"
       end
 
     end
