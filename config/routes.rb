@@ -222,7 +222,8 @@ Weafam::Application.routes.draw do
       get :login, to: 'login#login'
 
       namespace :profiles do
-        get :destroy, to: "profiles#destroy"
+        get :destroy, to: "profiles_destroy#destroy"
+        get :create,  to: "profiles_create#create"
       end
 
     end

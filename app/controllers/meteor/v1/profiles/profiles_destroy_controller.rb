@@ -1,14 +1,9 @@
 module Meteor
   module V1
     module Profiles
-      class ProfilesController < MeteorController
+      class ProfilesDestroyController < MeteorController
 
           before_filter :authenticate
-
-          def todestroy
-            @profile = Profile.where(id: params[:profile_id]).first
-            respond_with @profile
-          end
 
 
           def destroy
@@ -58,7 +53,7 @@ module Meteor
                                     who_made_event:    current_user.id }   #
                logger.info "In Profile controller: Before destroy UpdatesFeed   update_feed_data= #{update_feed_data} "
                UpdatesFeed.create(update_feed_data) #
-               
+
                @response =  {status: "ok"}
                respond_with @response
             end
