@@ -72,6 +72,14 @@ ON trees
 FOR EACH ROW
 EXECUTE PROCEDURE notify_trigger();
 
+
+-- trigger for connection_requests table
+CREATE TRIGGER watched_table
+AFTER INSERT OR UPDATE OR DELETE
+ON connection_requests
+FOR EACH ROW
+EXECUTE PROCEDURE notify_trigger();
+
 -- trigger for connection_requests table
 CREATE TRIGGER watched_table
 AFTER INSERT OR UPDATE OR DELETE

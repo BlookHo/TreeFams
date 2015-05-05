@@ -2,6 +2,8 @@ module Meteor
   module V1
     class LoginController < MeteorController
 
+      skip_before_filter :authenticate
+
       def login
         user = User.find_by_email(params[:email])
         if user && user.authenticate(params[:password])
