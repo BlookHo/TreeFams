@@ -13,14 +13,16 @@ class CommonLog < ActiveRecord::Base
                                                    # 888 - для логов разъединения  деревьев
                                                    # 999 - для логов объединения деревьев
                                                    :message => "Должны быть целым числом из заданного множества в CommonLog"
+  attr_accessor :agent_name, :tree_user_name
 
 
   # Collect One type of Common_logs for current_user_id
   def self.get_tree_all_logs(connected_users) #, log_type)
-    # logger.info "In CommonLog model: collect_common_logs: connected_users = #{current_user_id} "
-    # common_logs_data = CommonLog.where(user_id: current_user_id, log_type: log_type).order("created_at DESC")
     common_logs_data = CommonLog.where(user_id: connected_users).order("created_at DESC")
-    # logger.info "In CommonLog model: collect_common_logs: common_logs_data = #{common_logs_data} "
+    common_logs_data.each do |one_common_log|
+      one_common_log.tree_user_name = User.find(one_common_log.user_id).name
+      one_common_log.agent_name = Name.find(Profile.find(one_common_log[:profile_id]).name_id).name
+    end
     common_logs_data
   end
 

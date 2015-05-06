@@ -21,8 +21,8 @@ Weafam::Application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_deliveries = true
 
-  config.action_mailer.default_url_options = { :host => 'localhost', port: '3000' }  #Bl
-  #config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'localhost', port: '3003' }  #Bl
+  #config.action_mailer.default_url_options = { :host => 'localhost:3003' }
 
   config.action_mailer.delivery_method = :smtp #Bl
 
@@ -33,7 +33,7 @@ Weafam::Application.configure do
       :enable_starttls_auto => true,  #
       #:address => "smtp.gmail.com",       ## CHANGE for Gmail
       :address => "smtp.yandex.ru",       ## for Yandex
-      :domain => 'localhost:3000',
+      :domain => 'localhost:3003',
       :user_name => 'weallfamily@yandex.ru',  ########### CHANGE!!
       :password => 'interweb',                ########### CHANGE new passw!!
       :authentication => 'plain',
@@ -41,7 +41,7 @@ Weafam::Application.configure do
      }
 
   # For Mailcatcher
-  #config.action_mailer.smtp_settings = { :address => "localhost", :domain => 'localhost:3000', :port => 1025 }
+  #config.action_mailer.smtp_settings = { :address => "localhost", :domain => 'localhost:3003', :port => 1025 }
   #config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
 
 

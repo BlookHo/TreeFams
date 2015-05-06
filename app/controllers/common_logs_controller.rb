@@ -72,11 +72,21 @@ class CommonLogsController < ApplicationController
       end
     end
 
-    # logger.info "In CommonLog controller: After All rollback_logs: Возврат дерева в состояние на выбранную дату.
-    #                  rollback_date = #{rollback_date}"
-    # flash.now[:info] = "Возврат дерева в состояние на выбранную дату. rollback_date = #{rollback_date} "
+    # here to check requests to keepif exists in search results
+    # todo: uncomment this line to work check
+    # todo: !!!!!!  UPDATE RSPEC - User, Conn.req.  !!!!!!! ->
+    # кол-во рядом - меньше. на те, кот-х нет в рез-х поиска.
+    # т.е. задать рез-ты поиска в spec
+  # check_requests(connected_users_arr) ##########
+
   end
 
+  # @note
+  #
+  def check_requests(connected_users_arr)
+    # logger.info "In CommonLog controller: check_requests: connected_users_arr = #{connected_users_arr} "
+    ConnectionRequest.check_requests_with_search(current_user, connected_users_arr)
+  end
 
   # @note Возврат Add Logs
   #   Возврат дерева - откат на выбранную дату

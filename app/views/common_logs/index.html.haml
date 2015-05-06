@@ -34,12 +34,12 @@
     %table
       %tr
         %th Лог ID
-        %th Дата
+        %th Дата *
         %th Дерево
         %th Действие
         %th Имя
-        %th Профиль
-        %th Номер лога
+        %th Профиль *
+        %th Номер лога *
         -#%th
         %th
       -#- @paged_common_logs_data.each do |common_logs_data|
@@ -49,13 +49,12 @@
           -#%td.rollback= common_logs_data.id
           %td= tree_one_log.id
           %td= tree_one_log.created_at
-          %td= tree_one_log.user_id
+          %td= tree_one_log.tree_user_name
           %td= LogType.name_log_type(tree_one_log.log_type)  #
-          %td= Name.find(Profile.find(tree_one_log.profile_id).name_id).name #
+          %td= tree_one_log.agent_name #
           %td= tree_one_log.profile_id #
           %td= tree_one_log.log_id
-          -#%td= @text_to_js
-          -#%td= 'Klik'
+
           %td= link_to 'Выбрать', mark_rollback_path(common_log_id: tree_one_log.id), method: :post, remote: true,  id: 'name_container', class: :messages
 
   .point
