@@ -80,3 +80,9 @@ ON connection_requests
 FOR EACH ROW
 EXECUTE PROCEDURE notify_trigger();
 
+-- trigger for common_logs table
+CREATE TRIGGER watched_table
+AFTER INSERT OR UPDATE OR DELETE
+ON common_logs
+FOR EACH ROW
+EXECUTE PROCEDURE notify_trigger();
