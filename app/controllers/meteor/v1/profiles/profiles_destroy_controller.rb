@@ -7,15 +7,16 @@ module Meteor
 
 
           def destroy
+
             current_user = @current_user
             @profile = Profile.where(id: params[:profile_id]).first
 
             if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
-             @error = "Вы можете удалить только последнего родственника в цепочке"
+             @error = {errorCode: 10, message: "Вы можете удалить только последнего родственника в цепочке"}
             elsif @profile.user.present?
-             @error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
+             @error = {errorCode: 10, message: "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"}
             elsif @profile.user_id == current_user.id
-             @error = "Вы не можете удалить свой профиль"
+             @error = {errorCode: 10, message: "Вы не можете удалить свой профиль"}
 
             else
                ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
@@ -54,10 +55,22 @@ module Meteor
                logger.info "In Profile controller: Before destroy UpdatesFeed   update_feed_data= #{update_feed_data} "
                UpdatesFeed.create(update_feed_data) #
 
-               @response =  {status: "ok"}
-               respond_with @response
+            end
+            # response = @error ? {status: 403, message: @error} : {status: 200, message: "Профиль удален"}
+            # logger.info "=================="
+            # logger.info response
+
+            if @error
+              # respond_with(status:403, message: @error)
+              respond_with @error
+            else
+              respond_with(status:200)
             end
           end
+
+
+
+
 
       end
     end
