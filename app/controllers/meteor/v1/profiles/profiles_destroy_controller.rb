@@ -5,19 +5,12 @@ module Meteor
 
           before_filter :authenticate
 
-
           def destroy
-
             current_user = @current_user
             @profile = Profile.where(id: params[:profile_id]).first
 
-            if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
-             @error = {errorCode: 10, message: "Вы можете удалить только последнего родственника в цепочке"}
-            elsif @profile.user.present?
-             @error = {errorCode: 10, message: "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"}
-            elsif @profile.user_id == current_user.id
-             @error = {errorCode: 10, message: "Вы не можете удалить свой профиль"}
-
+            if @profile.user.present? && @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
+              @error = {errorCode: 10, message: "Вы можете удалить только последний профиль в цепочке который не принадлежит зарегестрированному пользователю."}
             else
                ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
 
@@ -61,7 +54,6 @@ module Meteor
             # logger.info response
 
             if @error
-              # respond_with(status:403, message: @error)
               respond_with @error
             else
               respond_with(status:200)
