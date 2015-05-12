@@ -45,20 +45,21 @@ class CommonLog < ActiveRecord::Base
   # @return [Boolean] выполнение метода = true
   # @see CommonLog
   def self.create_common_log(common_log_data)
-      common_log = self.new
+        common_log = self.new
         common_log.user_id         = common_log_data[:user_id]
         common_log.log_type        = common_log_data[:log_type]
         common_log.log_id          = common_log_data[:log_id]
         common_log.profile_id      = common_log_data[:profile_id]
         common_log.base_profile_id = common_log_data[:base_profile_id]
         common_log.relation_id     = common_log_data[:new_relation_id]
-      if common_log.save
-        logger.info "In CommonLog model: create_common_log: good save "
-      else
-        # todo: дает undefined method for flash?
-        # flash.now[:alert] = "Ошибка при создании CommonLog"
-        logger.info "In CommonLog model: Ошибка при создании CommonLog"
-      end
+        common_log.save
+      # if common_log.save
+      #   logger.info "In CommonLog model: create_common_log: good save "
+      # else
+      #   # todo: дает undefined method for flash?
+      #   # flash.now[:alert] = "Ошибка при создании CommonLog"
+      #   logger.info "In CommonLog model: Ошибка при создании CommonLog"
+      # end
   end
 
 

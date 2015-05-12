@@ -147,12 +147,10 @@ class ProfilesController < ApplicationController
 
   def destroy
     @profile = Profile.where(id: params[:id]).first
-    if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
-     @error = "Вы можете удалить только последнего родственника в цепочке"
-    elsif @profile.user.present?
-     @error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
-    elsif @profile.user_id == current_user.id
-     @error = "Вы не можете удалить свой профиль"
+    if @profile.user.present?
+      @error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
+    elsif @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
+      @error = "Вы можете удалить только последнего родственника в цепочке"
     else
        ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
 
