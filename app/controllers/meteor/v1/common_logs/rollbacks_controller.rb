@@ -13,6 +13,15 @@ module Meteor
           logger.info "In RollbacksController: current_user.id = #{current_user.id}  "
           CommonLog.rollback(rollback_id, @current_user)
           # respond_with roll
+          logger.info "In RollbacksController: After rollback: @error = #{@error}  " if @error
+          logger.info "In RollbacksController: After rollback"
+
+          if @error
+            respond_with @error
+          else
+            respond_with(status:200)
+          end
+
         end
 
 

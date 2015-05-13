@@ -50,6 +50,8 @@ class CommonLogsController < ApplicationController
     rollback_id   = params[:rollback_id]
     CommonLog.rollback(rollback_id, current_user)
 
+
+
   end
 
 
