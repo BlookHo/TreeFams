@@ -1,5 +1,7 @@
 class CommonLog < ActiveRecord::Base
 
+  include CommonLogsRollback    # основной метод отката назад логов деревьев
+
 
   validates_presence_of      :user_id, :log_type, :log_id, :profile_id, :base_profile_id, :relation_id,
                              :message => "Должно присутствовать в CommonLog"
