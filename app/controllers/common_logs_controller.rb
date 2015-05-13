@@ -5,7 +5,7 @@ class CommonLogsController < ApplicationController
 
   before_filter :logged_in?
 
-  # Show All types of Common_logs for connected_users
+  # @note Show All types of Common_logs for connected_users
   def index
     # get & show tree data
     tree_info = Tree.get_tree_info(current_user)
@@ -44,10 +44,11 @@ class CommonLogsController < ApplicationController
 
   # @note Возврат дерева - откат на выбранную дату
   # @param params[:rollback_date]
+  # @param current_user
   def rollback_logs
 
     rollback_id   = params[:rollback_id]
-    CommonLog.start_rollback(rollback_id, current_user)
+    CommonLog.rollback(rollback_id, current_user)
 
   end
 

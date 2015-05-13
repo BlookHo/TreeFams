@@ -1,18 +1,20 @@
-module CommonLogsRollback
+module CommonLogs
   extend ActiveSupport::Concern
   # in CommonLog model
 
   module ClassMethods
 
     # @note: основной метод запуска возврата дерева в состояние на выбранную дату
-    def start_rollback(rollback_id, current_user)
+    def rollback(rollback_id, current_user)
+      logger.info "START In rollback module: current_user.id = #{current_user.id}  "
 
       connected_users_arr = current_user.get_connected_users
 
-      # logger.info "In CommonLog controller: rollback_logs      rollback_id = #{rollback_id},  rollback_date = #{rollback_date} "
       common_logs_arr = CommonLog.where(user_id: connected_users_arr) # current_user.id)
                             .where("id >= ?", rollback_id)    # .where("created_at > #{rollback_date}")
                             .order("created_at DESC")
+      logger.info "In rollback module: common_logs_arr.size = #{common_logs_arr.size}  " unless common_logs_arr.blank?
+
       common_logs_arr.each do |common_log|
 
         case common_log.log_type
@@ -35,6 +37,7 @@ module CommonLogsRollback
       # кол-во рядом - меньше. на те, кот-х нет в рез-х поиска.
       # т.е. задать рез-ты поиска в spec
       # check_requests(connected_users_arr) ##########
+      logger.info "END rollback module "
 
     end
 
