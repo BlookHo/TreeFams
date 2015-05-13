@@ -42,10 +42,7 @@ class CommonLogsController < ApplicationController
   end
 
 
-  # todo: All types of rollback
   # @note Возврат дерева - откат на выбранную дату
-  # вставить этот метод в вызов в _rollback_adds
-  # поменять название /
   # @param params[:rollback_date]
   def rollback_logs
 
@@ -53,7 +50,6 @@ class CommonLogsController < ApplicationController
     CommonLog.start_rollback(rollback_id, current_user)
 
   end
-
 
 
 
