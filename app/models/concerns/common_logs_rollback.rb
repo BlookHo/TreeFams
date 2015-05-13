@@ -39,6 +39,14 @@ module CommonLogsRollback
     end
 
 
+    # @note
+    #
+    def check_requests(connected_users_arr)
+      # logger.info "In CommonLog controller: check_requests: connected_users_arr = #{connected_users_arr} "
+      ConnectionRequest.check_requests_with_search(current_user, connected_users_arr)
+    end
+
+
     # @note Возврат Add Logs
     #   Возврат дерева - откат на выбранную дату
     # @param params[:rollback_date]
@@ -52,6 +60,7 @@ module CommonLogsRollback
 
       CommonLog.rollback_add_one_profile(rollback_add_log_data)
     end
+
 
     # @note Возврат delete Logs
     # @note Возврат дерева - откат на выбранную дату
@@ -68,6 +77,7 @@ module CommonLogsRollback
 
       CommonLog.rollback_destroy_one_profile(destroy_log_data)
     end
+
 
     # todo: Connect with Similars methods & refactor
     # @note Similars Connect log - Rollback
@@ -91,8 +101,8 @@ module CommonLogsRollback
       current_user.disconnect_sims(common_log_id)
 
       # current_user.unlock_tree!
-
     end
+
 
     # @note Disconnect
     #    Возврат дерева - откат на выбранную дату
@@ -102,25 +112,20 @@ module CommonLogsRollback
 
       # logger.info "In CommonLog controller: rollback_connection_trees для common_log_id = #{common_log_id.inspect} "
       # Не заблокировано ли дерево пользователя
-      if current_user.tree_is_locked?
-        flash[:warning] = "Объединения в данный момент невозможно. Временная блокировка пользователя.
-                       Можно повторить попытку позже."
-        return redirect_to home_path #:back
-      else
-        current_user.lock!
-      end
+      # if current_user.tree_is_locked?
+      #   flash[:warning] = "Объединения в данный момент невозможно. Временная блокировка пользователя.
+      #                  Можно повторить попытку позже."
+      #   return redirect_to home_path #:back
+      # else
+      #   current_user.lock!
+      # end
 
       ############ call of User.module Disconnection_tree #####################
       current_user.disconnect_tree(common_log_id)
 
-      current_user.unlock_tree!
-
+      # current_user.unlock_tree!
     end
 
 
-
-
   end
-
-
 end
