@@ -46,16 +46,9 @@ class CommonLogsController < ApplicationController
   # @param params[:rollback_date]
   # @param current_user
   def rollback_logs
-
     rollback_id   = params[:rollback_id]
     CommonLog.rollback(rollback_id, current_user)
-
-
-
   end
-
-
-
 
 
 end

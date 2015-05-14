@@ -27,7 +27,6 @@ class ConnectionRequestsController < ApplicationController
   end
 
 
-
   # todo: refact
   # @note: Формирование нового запроса на объединение деревьев
   #   От кого - от текущего Юзера
@@ -90,12 +89,12 @@ class ConnectionRequestsController < ApplicationController
   end
 
 
-
   # @note: Проверка на существование встречного запроса на объединение
   def counter_request_exists(with_user_id)
     ConnectionRequest.exists?(:user_id => with_user_id, :with_user_id => current_user.id, :done => false )
     logger.info "In check_counter_request: Встречный запрос = #{ConnectionRequest.exists?(:user_id => with_user_id, :with_user_id => current_user.id, :done => false )} "
   end
+
 
   # @note: определение Юзеров - участников объединения деревьев
   #   who_connect_users_arr:   кто объединяется = инициатор
@@ -104,6 +103,7 @@ class ConnectionRequestsController < ApplicationController
     @who_connect_users_arr = current_user.get_connected_users
     @with_whom_connect_users_arr = User.find(with_user_id).get_connected_users  #
   end
+
 
   # @note: Заполнение хэша данными о запросах по их [IDs]
   def fill_requests_data(connection_ids)
@@ -123,6 +123,7 @@ class ConnectionRequestsController < ApplicationController
     return requests_data
   end
 
+
   # @note: Показываем все запросы на объединение текущего Юзера
   #   Переход сюда из Хэдера.
   #   GET /connection_requests/1
@@ -138,20 +139,17 @@ class ConnectionRequestsController < ApplicationController
     current_user_connection_ids = ConnectionRequest.where(:user_id => current_user.id, :done => false )
                                       .order('created_at').reverse_order.pluck('connection_id').uniq
     @user_requests_data = fill_requests_data(current_user_connection_ids)
-
   end
 
-  # @note: Формирование структуры данных для отображения запросов
-  #
-  def get_one_request_data(connection_id)
 
+  # @note: Формирование структуры данных для отображения запросов
+  def get_one_request_data(connection_id)
     one_user_request_data = {}
     requests_arr = []
 
     request = ConnectionRequest.where(:connection_id => connection_id, :done => false ).order('created_at').reverse_order
     request.each do |request_row|
       one_request = {}
-
       one_request.merge!(:request_id  => request_row.id)
       one_request.merge!(:request_from_user_id  => request_row.user_id)
       one_request.merge!(:request_to_user_id => request_row.with_user_id)
@@ -163,8 +161,8 @@ class ConnectionRequestsController < ApplicationController
     end
     one_user_request_data.merge!(connection_id => requests_arr)
     @user_request_data = one_user_request_data
-
   end
+
 
   # @note: Формируем состав одного запроса по connection_id для view
   def show_one_request
@@ -172,7 +170,9 @@ class ConnectionRequestsController < ApplicationController
       get_one_request_data(connection_id)
   end
 
+
   # @note: update request data - to yes or no connect
+  #   по номеру запроса на объединение connection_id
   def update_requests(value, connection_id)
     requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false )
                              .order('created_at').reverse_order
@@ -188,80 +188,18 @@ class ConnectionRequestsController < ApplicationController
     end
   end
 
+
   # @note: Ответ НЕТ на запрос на объединение
+  #   update request data - No to connect
+  # Make DONE=refused == 0 for all connected requests
+  # - update all requests - with users, connected with current_user
   #   Действия: сохраняем инфу - кто отказал какому объединению
-  #   После этого - пометить, что-то?
   #   GET /connection_requests/no_connect
   def no_connect
-    #no_user_id = params[:no_user_id].to_i # From view
-    #logger.info "== no_user_id = #{no_user_id}"
     connection_id = params[:connection_id].to_i # From view Link
-
-    # update request data - No to connect
     update_requests(0, connection_id)
-    ##################################################################
-    # Make DONE all connected requests
-    # - update all requests - with users, connected with current_user
-    after_conn_update_requests  # From Helper
-    ##############################################
-
     redirect_to show_user_requests_path
-
   end
 
-  ## POST /connection_requests
-  ## POST /connection_requests.json
-  #def create
-  #
-  #  @connection_request = ConnectionRequest.new#(connection_request_params)
-  #
-  #  respond_to do |format|
-  #    if @connection_request.save
-  #      format.html { redirect_to @connection_request, notice: 'SimilarsConnection request was successfully created.' }
-  #      format.json { render :show, status: :created, location: @connection_request }
-  #    else
-  #      format.html { render :new }
-  #      format.json { render json: @connection_request.errors, status: :unprocessable_entity }
-  #    end
-  #  end
-  #end
-  #
-  ## PATCH/PUT /connection_requests/1
-  ## PATCH/PUT /connection_requests/1.json
-  #def update
-  #  respond_to do |format|
-  #    if @connection_request.update(params[:id])
-  #      format.html { redirect_to @connection_request, notice: 'SimilarsConnection request was successfully updated.' }
-  #      format.json { render :show, status: :ok, location: @connection_request }
-  #    else
-  #      format.html { render :edit }
-  #      format.json { render json: @connection_request.errors, status: :unprocessable_entity }
-  #    end
-  #  end
-  #end
-  #
-  ## DELETE /connection_requests/1
-  ## DELETE /connection_requests/1.json
-  #def destroy
-  #  @connection_request.destroy
-  #  respond_to do |format|
-  #    format.html { redirect_to connection_requests_url, notice: 'SimilarsConnection request was successfully destroyed.' }
-  #    format.json { head :no_content }
-  #  end
-  #end
-
-
-
-
-  #private
-  #  # Use callbacks to share common setup or constraints between actions.
-  #  def set_connection_request
-  #    @connection_request = ConnectionRequest.find(params[:id])
-  #  end
-  #
-  #  # Never trust parameters from the scary internet, only allow the white list through.
-  #  def connection_request_params
-  #    params.require(:connection_request).permit(:user_id, :with_user_id, :confirm, :done, :created_at)
-  #  end
 
 end
