@@ -27,6 +27,8 @@ module Search
 
     ############### ПОИСК ######## NEW LAST METHOD ############
     search_profiles_from_tree(certain_koeff, connected_author_arr, tree_is_profiles) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
+
+    # TEST CONNECTION FAILS
     # @duplicates_one_to_many = { 3=> [2, 4]}     # for DEBUGG ONLY!!!
     # @duplicates_many_to_one = { 4=> 2, 3 => 2}  # for DEBUGG ONLY!!!
 

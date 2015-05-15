@@ -4,66 +4,73 @@ module ConnectionTrees
 
 
 
+  # @note: Стартовый метод объединения деревьев
   def connection(user_id, connection_id)
 
-    current_user_id = self.id          #
-    profile_current_user = self.profile_id   #
-    profile_user_id = User.find(user_id).profile_id  #
-    logger.info "== in connection_of_trees 1: profile_current_user = #{profile_current_user},
-                 profile_user_id = #{profile_user_id},  connection_id = #{connection_id} "
-
-    @connection_request =  ConnectionRequest.where(connection_id: connection_id).first
-    @from_user = User.find(@connection_request.user_id)
-    @to_user = User.find(@connection_request.with_user_id)
-
-    # @connection_id = params[:connection_id].to_i # From view Link - where pressed button Yes
-
-    logger.info "=== IN connection_of_trees ==="
-    logger.info "current_user_id = #{current_user_id}, user_id = #{user_id} "
-    logger.info "connection_id = #{connection_id}"
-
     who_connect_users_arr = self.get_connected_users
-    @who_connect_users_arr = who_connect_users_arr
+    connection_results = {}
 
+    # Проверка 1 - уже объединены
     connection_message = "Нельзя объединить ваши деревья, т.к. есть информация, что они уже объединены!"
     # Проверка: может быть дерево автора уже было соединено с выбранным юзером?
-    if check_connection_permit(who_connect_users_arr.include?(user_id.to_i), connection_message) # check IF NOT CONNECTED
+    if who_connect_users_arr.include?(user_id.to_i) # check IF NOT CONNECTED
       logger.info "=== IN check_connection_switch: уже объединены"
-      return
+      connection_results[:stop_connection] = true # STOP connection
+      connection_results[:connection_message] = connection_message #
+
+      return connection_results
     end
 
-    with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
-    @with_whom_connect_users_arr = with_whom_connect_users_arr # DEBUGG_TO_VIEW
-
-    # beg_search_time = Time.now   # Начало отсечки времени поиска
+    beg_search_time = Time.now   # Начало отсечки времени поиска
 
     ##### Запуск стартового ДОСТОВЕРНОГО поиска с certain_koeff_for_connect из Weafam_Settings
+    with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
     certain_koeff = WeafamSetting.first.certain_koeff
     search_results = self.start_search(certain_koeff)
-    # get_certain_koeff=4 - значение из Settings from appl.cntrler
-    ##############################################################################
+    # get_certain_koeff=4 - значение из Settings
+    logger.info "@@@@@@ Search Results: search_results = #{search_results} "
+    # # [inf] @@@@@@ Search Results: search_results
+    # {:connected_author_arr=>[16], :qty_of_tree_profiles=>9,
+    #  :profiles_relations_arr=>[{:profile_searched=>347, :profile_relations=>{341=>4, 348=>8, 340=>18, 342=>112, 339=>112}}, {:profile_searched=>341, :profile_relations=>{347=>1, 348=>2, 342=>3, 339=>3, 340=>7, 345=>13, 346=>14, 344=>17, 343=>111}}, {:profile_searched=>342, :profile_relations=>{340=>1, 341=>2, 339=>5, 345=>91, 347=>92, 346=>101, 348=>102, 343=>211}}, {:profile_searched=>343, :profile_relations=>{339=>1, 344=>2, 340=>91, 341=>101, 342=>191}}, {:profile_searched=>348, :profile_relations=>{341=>4, 347=>7, 340=>18, 342=>112, 339=>112}}, {:profile_searched=>340, :profile_relations=>{345=>1, 346=>2, 342=>3, 339=>3, 341=>8, 347=>15, 348=>16, 344=>17, 343=>111}},
+    #                            {:profile_searched=>344, :profile_relations=>{343=>3, 339=>7, 340=>13, 341=>14}}, {:profile_searched=>345, :profile_relations=>{340=>3, 346=>8, 341=>17, 342=>111, 339=>111}}, {:profile_searched=>346, :profile_relations=>{340=>3, 345=>7, 341=>17, 342=>111, 339=>111}}], :profiles_found_arr=>[{347=>{17=>{357=>[4, 8, 18, 112, 112]}}}, {341=>{17=>{351=>[1, 2, 3, 3, 7, 13, 14]}}}, {342=>{17=>{349=>[1, 2, 5, 91, 92, 101, 102]}}}, {343=>{}}, {348=>{17=>{358=>[4, 7, 18, 112, 112]}}}, {340=>{17=>{350=>[1, 2, 3, 3, 8, 15, 16]}}}, {344=>{}}, {345=>{17=>{355=>[3, 8, 17, 111, 111]}}}, {346=>{17=>{356=>[3, 7, 17, 111, 111]}}}],
+    #  :uniq_profiles_pairs=>{347=>{17=>357}, 341=>{17=>351}, 342=>{17=>349}, 348=>{17=>358}, 340=>{17=>350}, 345=>{17=>355}, 346=>{17=>356}},
+    #  :profiles_with_match_hash=>{350=>7, 349=>7, 351=>7, 356=>5, 355=>5, 358=>5, 357=>5},
+    #  :by_profiles=>[{:search_profile_id=>340, :found_tree_id=>17, :found_profile_id=>350, :count=>7},
+    #                 {:search_profile_id=>342, :found_tree_id=>17, :found_profile_id=>349, :count=>7},
+    #                 {:search_profile_id=>341, :found_tree_id=>17, :found_profile_id=>351, :count=>7},
+    #                 {:search_profile_id=>346, :found_tree_id=>17, :found_profile_id=>356, :count=>5},
+    #                 {:search_profile_id=>345, :found_tree_id=>17, :found_profile_id=>355, :count=>5},
+    #                 {:search_profile_id=>348, :found_tree_id=>17, :found_profile_id=>358, :count=>5},
+    #                 {:search_profile_id=>347, :found_tree_id=>17, :found_profile_id=>357, :count=>5}],
+    #  :by_trees=>[{:found_tree_id=>17, :found_profile_ids=>[357, 351, 349, 358, 350, 355, 356]}],
+    #  :duplicates_one_to_many=>{3=>[2, 4]}, :duplicates_many_to_one=>{}}
+
 
     ######## Сбор рез-тов поиска:
     uniq_profiles_pairs = search_results[:uniq_profiles_pairs]
     duplicates_one_to_many = search_results[:duplicates_one_to_many]
     duplicates_many_to_one = search_results[:duplicates_many_to_one]
-    @duplicates_one_to_many = duplicates_one_to_many  # DEBUGG_TO_VIEW
-    @duplicates_many_to_one = duplicates_many_to_one  # DEBUGG_TO_VIEW
 
     logger.info "In connection_of_trees, After start_search: duplicates_one_to_many = #{duplicates_one_to_many},
                  duplicates_many_to_one = #{duplicates_many_to_one} "
 
-    @stop_connection = false  # for view
+    stop_connection = false  # for controle & to return, to view
 
-    ######## Контроль на наличие дубликатов из поиска:
-    # Если есть дубликаты из Поиска, то устанавливаем stop_by_search_dublicates = true
+    # Проверка 2 - Контроль на наличие дубликатов из поиска:
+    # Если есть дубликаты из Поиска, то устанавливаем stop_connection = true
     # На вьюхе проверяем: продолжать ли объединение.
     # Чтобы протестировать check_connection_permit: в модуле search.rb, после запуска метода
     # search_profiles_from_tree - раскомментить одну или обе строки с # for DEBUGG ONLY!!!
     connection_message = "Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
-    if self.check_connection_permit(!duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?, connection_message)
-      logger.info "=== IN check_connection_switch: дубликаты"
-      return
+    # if self.check_connection_permit(!duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?, connection_message)
+    if (!duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?)
+      logger.info "=== IN check_connection_switch: ЕСТЬ дубликаты!!"
+      connection_results[:stop_connection] = true # STOP connection
+      connection_results[:connection_message] = connection_message #
+      connection_results[:duplicates_one_to_many] = duplicates_one_to_many #
+      connection_results[:duplicates_many_to_one] = duplicates_many_to_one #
+
+      return connection_results
     end
 
     logger.info "BEFORE complete_search: uniq_profiles_pairs = #{uniq_profiles_pairs} "
@@ -78,60 +85,75 @@ module ConnectionTrees
     profiles_to_rewrite = final_connection_hash.keys
     profiles_to_destroy = final_connection_hash.values
 
-    @profiles_to_rewrite = profiles_to_rewrite # DEBUGG_TO_VIEW
-    @profiles_to_destroy = profiles_to_destroy # DEBUGG_TO_VIEW
     logger.info "AFTER complete_search:"
     logger.info "ALL profiles_to_rewrite = #{profiles_to_rewrite} "
     logger.info "ALL profiles_to_destroy = #{profiles_to_destroy} "
 
-    # end_search_time = Time.now   # Конец отсечки времени поиска
-    # @elapsed_search_time = (end_search_time - beg_search_time).round(5) # Длительность поиска - для инфы
+    end_search_time = Time.now   # Конец отсечки времени поиска
+    elapsed_search_time = (end_search_time - beg_search_time).round(5)
+    # Длительность полного поиска - для инфы
 
-    connection_data = {
+    connection_results = {
         who_connect_arr:          who_connect_users_arr, #
         with_whom_connect_arr:    with_whom_connect_users_arr, #
-        profiles_to_rewrite:  profiles_to_rewrite, #
-        profiles_to_destroy:  profiles_to_destroy, #
-        current_user_id:      current_user_id, #
-        user_id:              user_id ,#
-        connection_id:        connection_id #
+        uniq_profiles_pairs:      uniq_profiles_pairs, #
+        duplicates_one_to_many:   duplicates_one_to_many, #
+        duplicates_many_to_one:   duplicates_many_to_one, #
+        profiles_to_rewrite:      profiles_to_rewrite, #
+        profiles_to_destroy:      profiles_to_destroy, #
+        current_user_id:          self.id, #
+        user_id:                  user_id ,#
+        connection_id:            connection_id, #
+        search_time:              elapsed_search_time #
     }
-    logger.info "Connection - GO ON! connection_data = #{connection_data}"
+    logger.info "Before check_connection_arrs: connection_results = #{connection_results}"
 
-    # connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
-    #                    :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
-    #                    :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26]
-    # , :current_user_id=>2, :user_id=>3, :connection_id=>3}
     ######## Контроль корректности массивов перед объединением
-    check_connection_result = self.check_connection_arrs(connection_data)
-    ##############################################################################
+    check_connection_result = self.check_connection_arrs(connection_results)
+    stop_by_arrs          = check_connection_result[:stop_by_arrs]
+    connection_message    = check_connection_result[:diag_connection_message]
+    common_profiles       = check_connection_result[:common_profiles]
+    complete_dubles_hash  = check_connection_result[:complete_dubles_hash]
 
-    stop_by_arrs = check_connection_result[:stop_by_arrs]
-    connection_message = check_connection_result[:diag_connection_message]
+    connection_results[:connection_message] = connection_message #
+
+    # Проверка 3 - некорректные массивы профилей для объединения
     # Чтобы протестировать check_connection_permit: в модуле connection_trees.rb, в конце метода
     # check_duplications - раскомментить одну строку с complete_dubles_hash = {11=>[25, 26]} # for DEBUGG ONLY!!!
-    if check_connection_permit(stop_by_arrs, connection_message)
-      logger.info "=== IN check_connection_switch: дублирования в массивах"
-      return
+    # if check_connection_permit(stop_by_arrs, connection_message)
+    if stop_by_arrs
+      logger.info "=== Проверка 3: дублирования в массивах"
+      logger.info " stop_by_arrs = #{stop_by_arrs}, connection_message = #{connection_message} "
+
+      connection_results[:stop_connection] = true # STOP connection
+      connection_results[:common_profiles] = common_profiles #
+      connection_results[:complete_dubles_hash] = complete_dubles_hash #
+
+      # connection_results = TEST!!!
+      #     {:who_connect_arr=>[16], :with_whom_connect_arr=>[17],
+      #      :uniq_profiles_pairs=>{347=>{17=>357}, 341=>{17=>351}, 342=>{17=>349}, 348=>{17=>358}, 340=>{17=>350}, 345=>{17=>355}, 346=>{17=>356}},
+      #      :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{},
+      #      :profiles_to_rewrite=>[347, 341, 342, 348, 340, 345, 346, 339],
+      #      :profiles_to_destroy=>[357, 351, 349, 358, 350, 355, 356, 352],
+      #      :current_user_id=>16, :user_id=>17, :connection_id=>5, :search_time=>0.77329, :connection_message=>"Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! ЕСТЬ дублирования в массивах",
+      #      :stop_connection=>true, :common_profiles=>[], :complete_dubles_hash=>{11=>[25, 26]}}
+
+      return connection_results
     end
 
-    unless @stop_connection || stop_by_arrs # for stop_connection & view
-      # flash[:notice] = " Внимание! Ваши деревья объединяются!"
+    #  Если все предыдущие проверки пройдены, то - запуск объединения в таблицах
+    unless stop_connection || stop_by_arrs # for stop_connection & view
+      logger.info "Для объединения - все корректно!, stop_connection = #{stop_connection},\n connection_message = #{connection_message}"
 
       ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
-      self.connection_in_tables(connection_data)
+      self.connection_in_tables(connection_results)
       ##################################################################
-      # flash[:notice] = " #{connection_message} Ваши деревья успешно объединены!"
-      logger.info "Connection - GO ON! array(s) - CORRECT!,
-                   @stop_connection = #{@stop_connection},\n connection_message = #{connection_message}"
-
-      self.unlock_tree! # unlock tree
     end
+    logger.info "stop_connection = #{stop_connection},\n connection_message = #{connection_message}"
+    connection_results[:stop_connection] = stop_connection #
 
+    connection_results
   end
-
-
-
 
 
   # @note: основной метод объединения деревьев
@@ -151,9 +173,6 @@ module ConnectionTrees
     # connection_id           = connection_data[:connection_id]
     # puts "In connection_in_tables"
 
-    # [1 2] c [3]
-    # @profiles_to_rewrite: [14, 21, 19, 11, 20, 12, 13, 18]
-    # @profiles_to_destroy: [22, 29, 27, 25, 28, 23, 24, 26]
     # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
     ###################################################################
     ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
@@ -387,7 +406,6 @@ module ConnectionTrees
       diag_connection_message: connection_message,
       common_profiles:         commons,
       complete_dubles_hash:    complete_dubles_hash  }
-
   end
 
 
@@ -457,6 +475,7 @@ module ConnectionTrees
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_destroy) unless indexs_hash_destroy.blank?
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_rewrite) unless indexs_hash_rewrite.blank?
 
+    # TEST CONNECTION FAILS
     # @complete_dubles_hash = complete_dubles_hash # DEBUGG_TO_VIEW
     # complete_dubles_hash = {11=>[25, 26]}  # for DEBUGG ONLY!!!
 
@@ -472,18 +491,25 @@ module ConnectionTrees
 
 
   # @note: Контроль возможности продолжения объединения деревьев
-  #   На вьюхе проверяем: отображать ли процесс объединения. @stop_connection
+  #   На вьюхе проверяем: отображать ли процесс объединения. stop_connection
   # @note: Проверка 1: может быть дерево автора уже было соединено с выбранным юзером?
   #   Проверка 2: на наличие дубликатов из поиска:
   #   Если есть дубликаты из Поиска, то устанавливаем stop_by_search_dublicates = true
   #   Проверка 3: Контроль корректности массивов перед объединением
-  def check_connection_permit(switch, connection_message)
-    if switch
-      flash[:alert] = " #{connection_message} "
-      logger.info " #{connection_message} "
-      self.unlock_tree! # unlock tree
-      @stop_connection = true   # for stop_connection & view
-      redirect_to home_path
+  def check_connection_permit(condition, connection_message)
+    if condition
+      # # flash[:alert] = " #{connection_message} "
+      # logger.info " #{connection_message} "
+      # self.unlock_tree! # unlock tree
+      # stop_connection = true   # for stop_connection & view
+      # # redirect_to home_path
+      # stop_connection
+      connection_results[:stop_connection] = true # STOP connection
+      connection_results[:connection_message] = connection_message #
+
+      connection_results
+
+
     end
   end
 
