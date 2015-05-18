@@ -28,6 +28,7 @@ module ConnectionTrees
     certain_koeff = WeafamSetting.first.certain_koeff
     search_results = self.start_search(certain_koeff)
     # get_certain_koeff=4 - значение из Settings
+
     logger.info "@@@@@@ Search Results: search_results = #{search_results} "
     # # [inf] @@@@@@ Search Results: search_results
     # {:connected_author_arr=>[16], :qty_of_tree_profiles=>9,
@@ -62,7 +63,6 @@ module ConnectionTrees
     # Чтобы протестировать check_connection_permit: в модуле search.rb, после запуска метода
     # search_profiles_from_tree - раскомментить одну или обе строки с # for DEBUGG ONLY!!!
     connection_message = "Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
-    # if self.check_connection_permit(!duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?, connection_message)
     if (!duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?)
       logger.info "=== IN check_connection_switch: ЕСТЬ дубликаты!!"
       connection_results[:stop_connection] = true # STOP connection
@@ -73,7 +73,7 @@ module ConnectionTrees
       return connection_results
     end
 
-    logger.info "BEFORE complete_search: uniq_profiles_pairs = #{uniq_profiles_pairs} "
+    # logger.info "BEFORE complete_search: uniq_profiles_pairs = #{uniq_profiles_pairs} "
     ##############################################################################
     ##### запуск ПОЛНОГО метода поиска от дерева Автора
     ##### на основе исходного массива ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ - uniq_profiles_pairs -> init_connection_hash
@@ -120,7 +120,6 @@ module ConnectionTrees
     # Проверка 3 - некорректные массивы профилей для объединения
     # Чтобы протестировать check_connection_permit: в модуле connection_trees.rb, в конце метода
     # check_duplications - раскомментить одну строку с complete_dubles_hash = {11=>[25, 26]} # for DEBUGG ONLY!!!
-    # if check_connection_permit(stop_by_arrs, connection_message)
     if stop_by_arrs
       logger.info "=== Проверка 3: дублирования в массивах"
       logger.info " stop_by_arrs = #{stop_by_arrs}, connection_message = #{connection_message} "
@@ -171,9 +170,7 @@ module ConnectionTrees
     current_user_id         = connection_data[:current_user_id]
     user_id                 = connection_data[:user_id]
     # connection_id           = connection_data[:connection_id]
-    # puts "In connection_in_tables"
 
-    # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
     ###################################################################
     ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
       connect_trees(connection_data)
@@ -249,6 +246,7 @@ module ConnectionTrees
 
   end
 
+
   # перезапись значений в полях одной таблицы
   def update_table_connection(connection_data, table, log_table )
     # name_of_table = table.table_name
@@ -274,6 +272,7 @@ module ConnectionTrees
     who_connect + with_whom_connect
   end
 
+
   # перезапись значений в одном поле одной таблицы
   # profiles_to_destroy[arr_ind] - один profile_id для замены
   # profiles_to_rewrite[arr_ind] - один profile_id, которым меняем
@@ -294,14 +293,27 @@ module ConnectionTrees
 
     all_users_to_connect = users_connecting_scope(who_connect, with_whom_connect)
 
+    # prof_to_store = []  # Если учитывать, какой профиль старее, моложе
+
     for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
       rows_to_update = table.where(:user_id => all_users_to_connect)
                            .where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
       unless rows_to_update.blank?
         rows_to_update.each do |rewrite_row|
 
+          # Если учитывать, какой профиль старее, моложе
+          # if profiles_to_rewrite[arr_ind] > profiles_to_destroy[arr_ind]
+          #   profile_to_store = profiles_to_rewrite[arr_ind]
+          # else
+          #   profile_to_store = profiles_to_destroy[arr_ind]
+          # end
+          # prof_to_store << profile_to_store
+
      # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи данных в таблицах и логов
    rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
+
+   # Если учитывать, какой профиль старее, моложе
+   # rewrite_row.update_attributes(:"#{table_field}" => profile_to_store, :updated_at => Time.now)
       #####################################################
 
           # logger.info "IN connect_trees update_field: rewrite_row.id = #{rewrite_row.id},
@@ -324,8 +336,11 @@ module ConnectionTrees
       end
 
     end
-    log_connection
 
+    # Если учитывать, какой профиль старее, моложе
+    # prof_to_store = #{prof_to_store} "
+
+    log_connection
   end
 
 
@@ -350,10 +365,8 @@ module ConnectionTrees
   end
 
 
-
-  # todo: refact
   # @note: Контроль корректности массивов перед объединением
-  #    # Tested
+  # Tested
   # @param: connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
   #   :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
   #   :current_user_id=>1, :user_id=>3, :connection_id=>3}
@@ -431,7 +444,6 @@ module ConnectionTrees
   end
 
 
-  # todo: refactor ?
   # ИСПОЛЬЗУЕТСЯ В МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
   # Проверка найденных массивов перезаписи при объединении - на повторы
   def check_duplications(profiles_to_rewrite, profiles_to_destroy)
@@ -475,13 +487,13 @@ module ConnectionTrees
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_destroy) unless indexs_hash_destroy.blank?
     complete_dubles_hash = complete_dubles_hash.merge!(indexs_hash_rewrite) unless indexs_hash_rewrite.blank?
 
-    # TEST CONNECTION FAILS
+    # TO TEST WHEN CONNECTION FAILS
     # @complete_dubles_hash = complete_dubles_hash # DEBUGG_TO_VIEW
     # complete_dubles_hash = {11=>[25, 26]}  # for DEBUGG ONLY!!!
 
     complete_dubles_hash
-
   end
+
 
   # Проверка на наличие общих (совпадающих) эл-тов у массивов перезаписи
   # Что - не должно быть!.
@@ -496,23 +508,23 @@ module ConnectionTrees
   #   Проверка 2: на наличие дубликатов из поиска:
   #   Если есть дубликаты из Поиска, то устанавливаем stop_by_search_dublicates = true
   #   Проверка 3: Контроль корректности массивов перед объединением
-  def check_connection_permit(condition, connection_message)
-    if condition
-      # # flash[:alert] = " #{connection_message} "
-      # logger.info " #{connection_message} "
-      # self.unlock_tree! # unlock tree
-      # stop_connection = true   # for stop_connection & view
-      # # redirect_to home_path
-      # stop_connection
-      connection_results[:stop_connection] = true # STOP connection
-      connection_results[:connection_message] = connection_message #
-
-      connection_results
-
-
-    end
-  end
-
+  # def check_connection_permit(condition, connection_message)
+  #   if condition
+  #     # # flash[:alert] = " #{connection_message} "
+  #     # logger.info " #{connection_message} "
+  #     # self.unlock_tree! # unlock tree
+  #     # stop_connection = true   # for stop_connection & view
+  #     # # redirect_to home_path
+  #     # stop_connection
+  #     connection_results[:stop_connection] = true # STOP connection
+  #     connection_results[:connection_message] = connection_message #
+  #
+  #     connection_results
+  #
+  #
+  #   end
+  # end
+  #
 
 
 
