@@ -6,6 +6,7 @@ module ConnectionTrees
 
   # @note: Стартовый метод объединения деревьев
   def connection(user_id, connection_id)
+    logger.info "=== IN connection: user_id = #{user_id}, connection_id = #{connection_id}"
 
     who_connect_users_arr = self.get_connected_users
     connection_results = {}
@@ -501,30 +502,6 @@ module ConnectionTrees
     array1 & array2
   end
 
-
-  # @note: Контроль возможности продолжения объединения деревьев
-  #   На вьюхе проверяем: отображать ли процесс объединения. stop_connection
-  # @note: Проверка 1: может быть дерево автора уже было соединено с выбранным юзером?
-  #   Проверка 2: на наличие дубликатов из поиска:
-  #   Если есть дубликаты из Поиска, то устанавливаем stop_by_search_dublicates = true
-  #   Проверка 3: Контроль корректности массивов перед объединением
-  # def check_connection_permit(condition, connection_message)
-  #   if condition
-  #     # # flash[:alert] = " #{connection_message} "
-  #     # logger.info " #{connection_message} "
-  #     # self.unlock_tree! # unlock tree
-  #     # stop_connection = true   # for stop_connection & view
-  #     # # redirect_to home_path
-  #     # stop_connection
-  #     connection_results[:stop_connection] = true # STOP connection
-  #     connection_results[:connection_message] = connection_message #
-  #
-  #     connection_results
-  #
-  #
-  #   end
-  # end
-  #
 
 
 

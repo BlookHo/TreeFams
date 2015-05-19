@@ -171,35 +171,24 @@ class ConnectionRequestsController < ApplicationController
   end
 
 
-  # @note: update request data - to yes or no connect
-  #   по номеру запроса на объединение connection_id
-  def update_requests(value, connection_id)
-    requests_to_update = ConnectionRequest.where(:connection_id => connection_id, :done => false )
-                             .order('created_at').reverse_order
-    if !requests_to_update.blank?
-      requests_to_update.each do |request_row|
-        request_row.done = true
-        request_row.confirm = value if request_row.with_user_id == current_user.id
-        request_row.save
-      end
-    else
-      redirect_to show_user_requests_path
-      # flash - no connection requests data in table
-    end
-  end
-
-
   # @note: Ответ НЕТ на запрос на объединение
-  #   update request data - No to connect
+  #   No to connect
   # Make DONE=refused == 0 for all connected requests
   # - update all requests - with users, connected with current_user
   #   Действия: сохраняем инфу - кто отказал какому объединению
   #   GET /connection_requests/no_connect
   def no_connect
     connection_id = params[:connection_id].to_i # From view Link
-    update_requests(0, connection_id)
+    # logger.info "=== IN no_connect: connection_id = #{connection_id}"
+    conn_request_data = {
+        connection_id: connection_id,
+        current_user_id: current_user.id
+    }
+    ConnectionRequest.no_to_request(conn_request_data)
     redirect_to show_user_requests_path
   end
+
+
 
 
 end

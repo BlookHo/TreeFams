@@ -25,6 +25,28 @@ class ConnectionRequest < ActiveRecord::Base
                          :message => "done должно быть [true, false] в ConnectionRequest"
 
 
+  # @note: 'НЕТ' to connect
+  #   Ответ НЕТ на запрос на объединение
+  #   по номеру запроса на объединение connection_id
+  #   Здесь confirm уст-ся в 0, тем самым указывается, какой юзер сказал НЕТ на запрос.
+  def self.no_to_request(conn_request_data)
+    connection_id    = conn_request_data[:connection_id]
+    current_user_id  = conn_request_data[:current_user_id]
+
+    requests_to_update = self.where(:connection_id => connection_id, :done => false )
+                             .order('created_at').reverse_order
+    if !requests_to_update.blank?
+      requests_to_update.each do |request_row|
+        request_row.done    = true
+        request_row.confirm = 0 if request_row.with_user_id == current_user_id
+        request_row.save
+      end
+    # else
+    #   redirect_to show_user_requests_path
+      # flash - no connection requests data in table
+    end
+  end
+
 
   # @note: update request data - to 'yes' to connect
   #   Ответ ДА на запрос на объединение
@@ -75,6 +97,7 @@ class ConnectionRequest < ActiveRecord::Base
     # puts "In  connected_requests_update: new_tree_users = #{new_tree_users}"
   end
 
+
   # @note: rollback ConnectionRequest - update request data - to 'yes' to connect
   #   Ответ ДА на запрос на объединение
   # Здесь - обратный update того conn._requests, который был установлены как выполненные ЮЗЕРОМ, т.е. у которых
@@ -103,7 +126,6 @@ class ConnectionRequest < ActiveRecord::Base
     self.where("user_id in (?)", connected_tree).where("with_user_id in (?)", connected_tree)
         .where(done: true, confirm: 2)
         .update_all({done: false, confirm: nil})
-
   end
 
 
@@ -114,6 +136,7 @@ class ConnectionRequest < ActiveRecord::Base
     # puts "In User model: disconnect_tree: certain_koeff = #{WeafamSetting.first.certain_koeff} "
     self.check_valid_requests(search_data, connected_users_arr)
   end
+
 
   # @note:
   #
@@ -155,6 +178,8 @@ class ConnectionRequest < ActiveRecord::Base
     end
 
   end
+
+
 
 
 end

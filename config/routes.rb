@@ -230,6 +230,10 @@ Weafam::Application.routes.draw do
         get :rollback, to: "rollbacks#rollback"
       end
 
+      namespace :connection_requests do
+        get :no_connect, to: "no_connect#no_connect"
+      end
+
     end
   end
 
