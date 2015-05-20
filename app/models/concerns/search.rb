@@ -48,11 +48,75 @@ module Search
         duplicates_many_to_one: @duplicates_many_to_one
     }
 
+    store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
+
     logger.info "== END OF start_search ========================= "
     logger.info " $$$$$$$$$$$$$$  After start_search: results = #{results.inspect}"
     results
   end # END OF start_search
 
+  # @note запись рез-тов поиска в отдельную таблицу - для Метеора
+  #
+  def store_search_results(results)
+    by_profiles = results[:by_profiles]
+    by_trees = results[:by_trees]
+    # logger.info "= in store_search_results: by_profiles = #{by_profiles.inspect},\n by_trees = #{by_trees.inspect}"
+    found_tree_ids = collect_tree_ids(by_trees)
+    # previous_results_count = SearchResults.where(user_id: self, found_user_id: found_tree_ids).count
+    previous_results = SearchResults.where(user_id: self, found_user_id: found_tree_ids)
+    # logger.info "= found_tree_ids = #{found_tree_ids.inspect}, previous_results_count = #{previous_results_count.inspect} "
+    if !previous_results.blank?
+      previous_results.each(&:destroy)
+      store_results(found_tree_ids, by_profiles)
+    else
+      store_results(found_tree_ids, by_profiles)
+    end
+  end
+  # by_profiles = [{:search_profile_id=>340, :found_tree_id=>17, :found_profile_id=>350, :count=>7},
+  # {:search_profile_id=>342, :found_tree_id=>17, :found_profile_id=>349, :count=>7},
+  # {:search_profile_id=>341, :found_tree_id=>17, :found_profile_id=>351, :count=>7},
+  # {:search_profile_id=>346, :found_tree_id=>17, :found_profile_id=>356, :count=>5},
+  # {:search_profile_id=>345, :found_tree_id=>17, :found_profile_id=>355, :count=>5},
+  # {:search_profile_id=>348, :found_tree_id=>17, :found_profile_id=>358, :count=>5},
+  # {:search_profile_id=>347, :found_tree_id=>17, :found_profile_id=>357, :count=>5}]
+  # by_trees = [{:found_tree_id=>17, :found_profile_ids=>[357, 351, 349, 358, 350, 355, 356]}]
+
+  # @note - сбор tree_ids всех найденных деревьев
+  def collect_tree_ids(by_trees)
+    found_tree_ids = []
+    by_trees.each do |one_found_tree|
+      found_tree_ids << one_found_tree[:found_tree_id]
+    end
+    found_tree_ids
+  end
+
+  # @note - сбор данных о профилях из рез-тов поиска в виде массивов
+  def collect_search_profile_ids(by_profiles, tree_id)
+    search_profile_id = []
+    found_profile_id = []
+    count = []
+    by_profiles.each do |one_profiles_hash|
+      if one_profiles_hash[:found_tree_id] == tree_id
+        search_profile_id << one_profiles_hash[:search_profile_id]
+        found_profile_id << one_profiles_hash[:found_profile_id]
+        count << one_profiles_hash[:count]
+      end
+    end
+    return search_profile_id, found_profile_id, count
+  end
+
+  # @note - запись результатов поиска
+  def store_results(found_tree_ids, by_profiles)
+    found_tree_ids.each do |tree_id|
+      search_profile_ids, found_profile_ids, count = collect_search_profile_ids(by_profiles, tree_id)
+      # logger.info "= search_profile_ids = #{search_profile_ids.inspect}, found_profile_ids = #{found_profile_ids.inspect},
+      #           count = #{count.inspect} "
+      found_profile_ids.each_with_index do |profile_id, index|
+        SearchResults.create(user_id: self.id, found_user_id: tree_id, profile_id: search_profile_ids[index],
+                             found_profile_id: profile_id, count: count[index] )
+      end
+    end
+  end
 
   # Основной поиск по дереву Автора - Юзера.
   # @note GET /
