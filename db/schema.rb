@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150407072909) do
+ActiveRecord::Schema.define(version: 20150520085033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -167,6 +167,16 @@ ActiveRecord::Schema.define(version: 20150407072909) do
     t.integer  "origin_profile_sex_id"
   end
 
+  create_table "search_results", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "found_user_id"
+    t.integer  "profile_id"
+    t.integer  "found_profile_id"
+    t.integer  "count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "similars_founds", force: true do |t|
     t.integer  "user_id",           null: false
     t.integer  "first_profile_id",  null: false
@@ -190,10 +200,6 @@ ActiveRecord::Schema.define(version: 20150407072909) do
   end
 
   add_index "similars_logs", ["current_user_id"], name: "index_similars_logs_on_current_user_id", using: :btree
-
-  create_table "test_keys", force: true do |t|
-    t.string "title"
-  end
 
   create_table "trees", force: true do |t|
     t.integer  "user_id"

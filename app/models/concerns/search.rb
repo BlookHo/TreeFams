@@ -53,6 +53,7 @@ module Search
     results
   end # END OF start_search
 
+
   # Основной поиск по дереву Автора - Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
