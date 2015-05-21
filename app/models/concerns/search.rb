@@ -48,6 +48,7 @@ module Search
         duplicates_many_to_one: @duplicates_many_to_one
     }
 
+    logger.info "= Before store_search_results ========================= "
     store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
 
     logger.info "== END OF start_search ========================= "
@@ -62,11 +63,29 @@ module Search
   def store_search_results(results)
     by_profiles = results[:by_profiles]
     by_trees = results[:by_trees]
+
+    by_profiles =
+    [{:search_profile_id=>18, :found_tree_id=>2, :found_profile_id=>9, :count=>5},
+     {:search_profile_id=>18, :found_tree_id=>1, :found_profile_id=>19, :count=>5},
+     {:search_profile_id=>17, :found_tree_id=>2, :found_profile_id=>8, :count=>5},
+     {:search_profile_id=>17, :found_tree_id=>1, :found_profile_id=>18, :count=>5},
+     {:search_profile_id=>19, :found_tree_id=>1, :found_profile_id=>17, :count=>5},
+     {:search_profile_id=>62, :found_tree_id=>1, :found_profile_id=>111, :count=>5},
+     {:search_profile_id=>19, :found_tree_id=>2, :found_profile_id=>7, :count=>5},
+     {:search_profile_id=>62, :found_tree_id=>2, :found_profile_id=>11, :count=>5},
+     {:search_profile_id=>20, :found_tree_id=>2, :found_profile_id=>13, :count=>4},
+     {:search_profile_id=>20, :found_tree_id=>1, :found_profile_id=>113, :count=>4}]
+
+    by_trees =
+    [{:found_tree_id=>1, :found_profile_ids=>[13, 7, 11, 8, 9]},
+     {:found_tree_id=>2, :found_profile_ids=>[13, 7, 11, 8, 9]}]
+
+
     # logger.info "= in store_search_results: by_profiles = #{by_profiles.inspect},\n by_trees = #{by_trees.inspect}"
     found_tree_ids = collect_tree_ids(by_trees)
     # previous_results_count = SearchResults.where(user_id: self, found_user_id: found_tree_ids).count
     previous_results = SearchResults.where(user_id: self, found_user_id: found_tree_ids)
-    # logger.info "= found_tree_ids = #{found_tree_ids.inspect}, previous_results_count = #{previous_results_count.inspect} "
+    logger.info "= found_tree_ids = #{found_tree_ids.inspect} "
     if !previous_results.blank?
       previous_results.each(&:destroy)
       store_results(found_tree_ids, by_profiles)
@@ -82,6 +101,7 @@ module Search
   # {:search_profile_id=>348, :found_tree_id=>17, :found_profile_id=>358, :count=>5},
   # {:search_profile_id=>347, :found_tree_id=>17, :found_profile_id=>357, :count=>5}]
   # by_trees = [{:found_tree_id=>17, :found_profile_ids=>[357, 351, 349, 358, 350, 355, 356]}]
+
 
   # @note - сбор tree_ids всех найденных деревьев
   def collect_tree_ids(by_trees)
@@ -110,13 +130,9 @@ module Search
   # @note - запись результатов поиска
   def store_results(found_tree_ids, by_profiles)
     found_tree_ids.each do |tree_id|
-      search_profile_ids, found_profile_ids, count = collect_search_profile_ids(by_profiles, tree_id)
-      # logger.info "= search_profile_ids = #{search_profile_ids.inspect}, found_profile_ids = #{found_profile_ids.inspect},
-      #           count = #{count.inspect} "
-      found_profile_ids.each_with_index do |profile_id, index|
-        SearchResults.create(user_id: self.id, found_user_id: tree_id, profile_id: search_profile_ids[index],
-                             found_profile_id: profile_id, count: count[index] )
-      end
+      searched_profile_ids, found_profile_ids, counts = collect_search_profile_ids(by_profiles, tree_id)
+      SearchResults.create(user_id: self.id, found_user_id: tree_id, profile_id: searched_profile_ids[0],
+                           found_profile_id: found_profile_ids[0], count: counts[0], found_profile_ids: found_profile_ids )
     end
   end
 
@@ -313,18 +329,6 @@ module Search
     end
   end
 
-  # make final sorted by_trees search results
-  def make_by_trees_results(filling_hash)
-    by_trees = []
-    filling_hash.each do |tree_id, profiles_ids|
-      one_tree_hash = {}
-      one_tree_hash.merge!(:found_tree_id => tree_id)
-      one_tree_hash.merge!(:found_profile_ids => profiles_ids)
-      by_trees << one_tree_hash
-    end
-    return by_trees
-  end
-
   # make final search results for view
   def make_search_results(uniq_hash, profiles_match_hash)
     by_profiles = []
@@ -349,10 +353,31 @@ module Search
 
     # make final sorted by_profiles search results
     by_profiles = by_profiles.sort_by {|h| [ h[:count] ]}.reverse
+
+    # get_found_profile_ids(by_profiles)
     # make final by_trees search results
     by_trees = make_by_trees_results(filling_hash)
 
     return by_profiles, by_trees
+  end
+
+  # # @note Получить массивы профилей упорядоченных по count для каждого дерева
+  # def get_found_profile_ids(by_profiles)
+  #
+  #
+  # end
+
+
+  # make final sorted by_trees search results
+  def make_by_trees_results(filling_hash)
+    by_trees = []
+    filling_hash.each do |tree_id, profiles_ids|
+      one_tree_hash = {}
+      one_tree_hash.merge!(:found_tree_id => tree_id)
+      one_tree_hash.merge!(:found_profile_ids => profiles_ids)
+      by_trees << one_tree_hash
+    end
+    return by_trees
   end
 
   # # Служебный метод для отладки - для LOGGER
