@@ -235,6 +235,11 @@ Weafam::Application.routes.draw do
         get :yes_connect, to: "yes_connect#yes_connect"
       end
 
+      namespace :search_results do
+        get :search, to: "search_results#search"
+      end
+
+
     end
   end
 

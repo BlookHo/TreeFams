@@ -51,9 +51,11 @@ module Search
     store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
 
     logger.info "== END OF start_search ========================= "
-    logger.info " $$$$$$$$$$$$$$  After start_search: results = #{results.inspect}"
+    logger.info " $$$$-----$$$  After start_search: results = #{results.inspect}"
     results
   end # END OF start_search
+
+
 
   # @note запись рез-тов поиска в отдельную таблицу - для Метеора
   #
