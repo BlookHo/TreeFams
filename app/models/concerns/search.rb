@@ -57,28 +57,26 @@ module Search
   end # END OF start_search
 
 
-
   # @note запись рез-тов поиска в отдельную таблицу - для Метеора
-  #
   def store_search_results(results)
     by_profiles = results[:by_profiles]
     by_trees = results[:by_trees]
 
-    by_profiles =
-    [{:search_profile_id=>18, :found_tree_id=>2, :found_profile_id=>9, :count=>5},
-     {:search_profile_id=>18, :found_tree_id=>1, :found_profile_id=>19, :count=>5},
-     {:search_profile_id=>17, :found_tree_id=>2, :found_profile_id=>8, :count=>5},
-     {:search_profile_id=>17, :found_tree_id=>1, :found_profile_id=>18, :count=>5},
-     {:search_profile_id=>19, :found_tree_id=>1, :found_profile_id=>17, :count=>5},
-     {:search_profile_id=>62, :found_tree_id=>1, :found_profile_id=>111, :count=>5},
-     {:search_profile_id=>19, :found_tree_id=>2, :found_profile_id=>7, :count=>5},
-     {:search_profile_id=>62, :found_tree_id=>2, :found_profile_id=>11, :count=>5},
-     {:search_profile_id=>20, :found_tree_id=>2, :found_profile_id=>13, :count=>4},
-     {:search_profile_id=>20, :found_tree_id=>1, :found_profile_id=>113, :count=>4}]
-
-    by_trees =
-    [{:found_tree_id=>1, :found_profile_ids=>[13, 7, 11, 8, 9]},
-     {:found_tree_id=>2, :found_profile_ids=>[13, 7, 11, 8, 9]}]
+    # by_profiles =
+    # [{:search_profile_id=>18, :found_tree_id=>2, :found_profile_id=>9, :count=>5},
+    #  {:search_profile_id=>18, :found_tree_id=>1, :found_profile_id=>19, :count=>5},
+    #  {:search_profile_id=>17, :found_tree_id=>2, :found_profile_id=>8, :count=>5},
+    #  {:search_profile_id=>17, :found_tree_id=>1, :found_profile_id=>18, :count=>5},
+    #  {:search_profile_id=>19, :found_tree_id=>1, :found_profile_id=>17, :count=>5},
+    #  {:search_profile_id=>62, :found_tree_id=>1, :found_profile_id=>111, :count=>5},
+    #  {:search_profile_id=>19, :found_tree_id=>2, :found_profile_id=>7, :count=>5},
+    #  {:search_profile_id=>62, :found_tree_id=>2, :found_profile_id=>11, :count=>5},
+    #  {:search_profile_id=>20, :found_tree_id=>2, :found_profile_id=>13, :count=>4},
+    #  {:search_profile_id=>20, :found_tree_id=>1, :found_profile_id=>113, :count=>4}]
+    #
+    # by_trees =
+    # [{:found_tree_id=>1, :found_profile_ids=>[13, 7, 11, 8, 9]},
+    #  {:found_tree_id=>2, :found_profile_ids=>[13, 7, 11, 8, 9]}]
 
 
     # logger.info "= in store_search_results: by_profiles = #{by_profiles.inspect},\n by_trees = #{by_trees.inspect}"
@@ -112,6 +110,7 @@ module Search
     found_tree_ids
   end
 
+
   # @note - сбор данных о профилях из рез-тов поиска в виде массивов
   def collect_search_profile_ids(by_profiles, tree_id)
     search_profile_id = []
@@ -127,6 +126,7 @@ module Search
     return search_profile_id, found_profile_id, count
   end
 
+
   # @note - запись результатов поиска
   def store_results(found_tree_ids, by_profiles)
     found_tree_ids.each do |tree_id|
@@ -135,6 +135,7 @@ module Search
                            found_profile_id: found_profile_ids[0], count: counts[0], found_profile_ids: found_profile_ids )
     end
   end
+
 
   # Основной поиск по дереву Автора - Юзера.
   # @note GET /
