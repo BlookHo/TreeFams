@@ -1026,7 +1026,7 @@ RSpec.describe User, :type => :model do
 
     ################ CONNECTION - DISCONNECTION ###########################
 
-    describe '- check User model Method <connect_trees(connection_data)> - Ok' , focus: true do  # , focus: true
+    describe '- check User model Method <connect_trees(connection_data)> - Ok'  do  # , focus: true
       context '- check Tables count & fields values BEFORE connect_trees' do
         describe '- check all profile_ids in ProfileKey rows ' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,

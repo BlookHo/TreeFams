@@ -233,12 +233,12 @@ Weafam::Application.routes.draw do
       namespace :connection_requests do
         get :no_connect, to: "no_connect#no_connect"
         get :yes_connect, to: "yes_connect#yes_connect"
+        get :make_request, to: "make_request#make_request"
       end
 
       namespace :search_results do
         get :search, to: "search_results#search"
       end
-
 
     end
   end

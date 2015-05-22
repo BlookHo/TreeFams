@@ -25,6 +25,101 @@ class ConnectionRequest < ActiveRecord::Base
                          :message => "done должно быть [true, false] в ConnectionRequest"
 
 
+
+  # todo: refact
+  # @note: Формирование нового запроса на объединение деревьев
+  #   От кого - от текущего Юзера
+  #   С кем - из формы просмотра рез-тов поиска
+  def self.make_request(current_user, with_user_id)
+    logger.info "In make_request: current_user.id = #{current_user.id}, with_user_id = #{with_user_id} "
+
+    # TODO проверить, существует ли уже такой запрос  если да, то вернуть его данные
+    if  !ConnectionRequest.exists?(:user_id => current_user.id , :with_user_id => with_user_id, :done => false )
+
+      # определение Юзеров - участников объединения деревьев
+      who_connect_ids, with_whom_connect_ids = find_users_connectors(current_user, with_user_id) if current_user
+      # logger.info "In make_request: who_connect_ids = #{who_connect_ids},
+      #             with_whom_connect_users_arr = #{with_whom_connect_ids} "
+
+      # Если деревья еще не объединялись?
+      if !who_connect_ids.include?(with_user_id.to_i) # check_connection: IF NOT CONNECTED
+
+        # Если нет уже встречного запроса на объединение
+        if !ConnectionRequest.exists?(:user_id => with_user_id, :with_user_id => current_user.id, :done => false )
+
+          # Определение текущего номера запроса
+          connection_id = get_connection_id
+
+          # max_connection_id = ConnectionRequest.maximum(:connection_id) # next connection No
+          # if max_connection_id == nil # to start numeration of connections
+          #   max_connection_id = 1
+          # else
+          #   max_connection_id += 1
+          # end
+          # logger.info " max_connection_id = #{max_connection_id.inspect}"
+
+          # формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
+          create_requests(with_whom_connect_ids, connection_id, current_user.id)
+
+        else
+          logger.info "Warning:: Встречный запрос на объединение! "
+        end
+      else
+        logger.info "Warning:: Current_user &  with_user_id - Already connected! "
+      end
+    else
+      logger.info "Запрос уже существует! "
+    end
+
+  end
+
+
+  # @note: формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
+  #   Присваиваем текущий Номер для connection_id
+  def self.create_requests(with_whom_connect_ids, max_connection_id, current_user_id)
+    with_whom_connect_ids.each do |user_to_connect|
+      new_connection_request = ConnectionRequest.new
+      new_connection_request.connection_id = max_connection_id
+      new_connection_request.user_id = current_user_id
+      new_connection_request.with_user_id = user_to_connect
+      ##########################################
+      new_connection_request.save
+      ##########################################
+      # profile_user_to_connect = User.find(user_to_connect).profile_id unless user_to_connect.blank?
+      # ##########  UPDATES - № 1  ####################
+      # logger.info "In create_requests:  user_id = #{current_user_id}, agent_user_id = #{user_to_connect},
+      #              agent_profile_id = #{profile_user_to_connect} " #
+      # UpdatesFeed.create(user_id: current_user_id, update_id: 1, agent_user_id: user_to_connect,
+      #                    agent_profile_id: profile_user_to_connect,  who_made_event: current_user_id, read: false)
+      # logger.info "In create_requests: UpdatesFeed.create"
+      ###############################################
+    end
+  end
+
+
+  # @note: определение Юзеров - участников объединения деревьев
+  #   who_connect_users_arr:   кто объединяется = инициатор
+  #   with_whom_connect_users_arr:  с кем объединяется = ответчик
+  def self.find_users_connectors(current_user, with_user_id)
+    who_connect_users_arr = current_user.get_connected_users
+    with_whom_connect_users_arr = User.find(with_user_id).get_connected_users
+    return who_connect_users_arr, with_whom_connect_users_arr
+  end
+
+  # @note: Определение текущего номера запроса
+  def self.get_connection_id
+    #(current_user, with_user_id)
+    connection_id = ConnectionRequest.maximum(:connection_id) # next connection No
+    if connection_id == nil # to start numeration of connections
+      connection_id = 1
+    else
+      connection_id += 1
+    end
+    logger.info " connection_id = #{connection_id.inspect}"
+    connection_id
+  end
+
+
   # @note: 'НЕТ' to connect
   #   Ответ НЕТ на запрос на объединение
   #   по номеру запроса на объединение connection_id
