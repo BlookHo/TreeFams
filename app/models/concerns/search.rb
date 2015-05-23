@@ -132,7 +132,9 @@ module Search
     found_tree_ids.each do |tree_id|
       searched_profile_ids, found_profile_ids, counts = collect_search_profile_ids(by_profiles, tree_id)
       SearchResults.create(user_id: self.id, found_user_id: tree_id, profile_id: searched_profile_ids[0],
-                           found_profile_id: found_profile_ids[0], count: counts[0], found_profile_ids: found_profile_ids )
+                           found_profile_id: found_profile_ids[0], count: counts[0],
+                           found_profile_ids: found_profile_ids, searched_profile_ids: searched_profile_ids,
+                           counts: counts )
     end
   end
 
