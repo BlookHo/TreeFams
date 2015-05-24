@@ -50,14 +50,6 @@ class ConnectionRequest < ActiveRecord::Base
           # Определение текущего номера запроса
           connection_id = get_connection_id
 
-          # max_connection_id = ConnectionRequest.maximum(:connection_id) # next connection No
-          # if max_connection_id == nil # to start numeration of connections
-          #   max_connection_id = 1
-          # else
-          #   max_connection_id += 1
-          # end
-          # logger.info " max_connection_id = #{max_connection_id.inspect}"
-
           # формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
           create_requests(with_whom_connect_ids, connection_id, current_user.id)
 
@@ -84,15 +76,15 @@ class ConnectionRequest < ActiveRecord::Base
       new_connection_request.with_user_id = user_to_connect
       ##########################################
       new_connection_request.save
-      ##########################################
-      # profile_user_to_connect = User.find(user_to_connect).profile_id unless user_to_connect.blank?
-      # ##########  UPDATES - № 1  ####################
+      #########################################
+      profile_user_to_connect = User.find(user_to_connect).profile_id unless user_to_connect.blank?
+      ##########  UPDATES - № 1  ####################
       # logger.info "In create_requests:  user_id = #{current_user_id}, agent_user_id = #{user_to_connect},
       #              agent_profile_id = #{profile_user_to_connect} " #
-      # UpdatesFeed.create(user_id: current_user_id, update_id: 1, agent_user_id: user_to_connect,
-      #                    agent_profile_id: profile_user_to_connect,  who_made_event: current_user_id, read: false)
+      UpdatesFeed.create(user_id: current_user_id, update_id: 1, agent_user_id: user_to_connect,
+                         agent_profile_id: profile_user_to_connect,  who_made_event: current_user_id, read: false)
       # logger.info "In create_requests: UpdatesFeed.create"
-      ###############################################
+      ##############################################
     end
   end
 
@@ -105,6 +97,7 @@ class ConnectionRequest < ActiveRecord::Base
     with_whom_connect_users_arr = User.find(with_user_id).get_connected_users
     return who_connect_users_arr, with_whom_connect_users_arr
   end
+
 
   # @note: Определение текущего номера запроса
   def self.get_connection_id
@@ -167,12 +160,7 @@ class ConnectionRequest < ActiveRecord::Base
         request_row.save
       end
     end
-      # logger.info "In update_requests: Done"
-    # else
-    #   logger.info "WARNING: NO update_requests WAS DONE!"
-    #   redirect_to show_user_requests_path # To: Просмотр Ваших оставшихся запросов'
-    #   # flash - no connection requests data in table
-    # end
+
   end
 
 
@@ -189,7 +177,6 @@ class ConnectionRequest < ActiveRecord::Base
     new_tree_users = User.find(current_user_id).get_connected_users
     self.where("user_id in (?)", new_tree_users).where("with_user_id in (?)", new_tree_users)
         .where(done: false).update_all({done: true, confirm: 2})
-    # puts "In  connected_requests_update: new_tree_users = #{new_tree_users}"
   end
 
 
@@ -198,8 +185,6 @@ class ConnectionRequest < ActiveRecord::Base
   # Здесь - обратный update того conn._requests, который был установлены как выполненные ЮЗЕРОМ, т.е. у которых
   # confirm был установлен в 1. Теперь - опять nil.
   def self.request_disconnection(disconnect_data)
-    # puts "In  request_disconnection: disconnect_data = #{disconnect_data}"
-    # requests_to_rollback =
     self.where(connection_id: disconnect_data[:connection_id],   # 3
                user_id: disconnect_data[:with_user_id],          # 3
                done: true )
@@ -217,7 +202,6 @@ class ConnectionRequest < ActiveRecord::Base
   # confirm был установлен в 2. Теперь - опять nil.
   def self.disconnected_requests_update(disconnect_data)
     connected_tree = User.find(disconnect_data[:user_id]).get_connected_users
-    # puts "In  disconnected_requests_update: connected_tree = #{connected_tree}"
     self.where("user_id in (?)", connected_tree).where("with_user_id in (?)", connected_tree)
         .where(done: true, confirm: 2)
         .update_all({done: false, confirm: nil})
@@ -228,7 +212,6 @@ class ConnectionRequest < ActiveRecord::Base
   #
   def self.check_requests_with_search(current_user, connected_users_arr)
     search_data = current_user.start_search(WeafamSetting.first.certain_koeff)
-    # puts "In User model: disconnect_tree: certain_koeff = #{WeafamSetting.first.certain_koeff} "
     self.check_valid_requests(search_data, connected_users_arr)
   end
 
@@ -236,30 +219,11 @@ class ConnectionRequest < ActiveRecord::Base
   # @note:
   #
   def self.check_valid_requests(search_data, connected_users_arr)
-    # puts "In disconnect_tree: check_valid_requests:: search_data = #{search_data},
-    #       connected_users_arr = #{connected_users_arr} "
-
-    # search_data =
-    # {:connected_author_arr=>[12], :qty_of_tree_profiles=>5,
-    #  :profiles_relations_arr=>[{:profile_searched=>185, :profile_relations=>{}},
-    #                            {:profile_searched=>188, :profile_relations=>{}},
-    #                            {:profile_searched=>238, :profile_relations=>{}},
-    #                            {:profile_searched=>187, :profile_relations=>{}},
-    #                            {:profile_searched=>182, :profile_relations=>{187=>1, 188=>2, 181=>3, 238=>8, 185=>111}}],
-    #  :profiles_found_arr=>[{182=>{13=>{192=>[1, 2, 3, 8]}}}],
-    #  :uniq_profiles_pairs=>{182=>{13=>192}},
-    #  :profiles_with_match_hash=>{192=>4},
-    #  :by_profiles=>[{:search_profile_id=>182, :found_tree_id=>13, :found_profile_id=>192, :count=>4}],
-    #  :by_trees=>[{:found_tree_id=>13, :found_profile_ids=>[192]}],
-    #  :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
-
-    # connected_users_arr => [12, 13]
 
     search_res_trees = []
     search_data[:by_trees].each do |one_tree|
       search_res_trees << one_tree[:found_tree_id]
     end
-    # puts "In disconnect_tree: check_valid_requests:: search_res_trees = #{search_res_trees}"
 
     current_to_connect = self.where("user_id in (?)", connected_users_arr)
                              .where("with_user_id in (?)", connected_users_arr)
