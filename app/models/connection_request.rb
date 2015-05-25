@@ -32,7 +32,8 @@ class ConnectionRequest < ActiveRecord::Base
   #   С кем - из формы просмотра рез-тов поиска
   def self.make_request(current_user, with_user_id)
     logger.info "In make_request: current_user.id = #{current_user.id}, with_user_id = #{with_user_id} "
-
+    msg = ""
+    msg_code = 1
     # TODO проверить, существует ли уже такой запрос  если да, то вернуть его данные
     if  !ConnectionRequest.exists?(:user_id => current_user.id , :with_user_id => with_user_id, :done => false )
 
@@ -55,14 +56,20 @@ class ConnectionRequest < ActiveRecord::Base
 
         else
           logger.info "Warning:: Встречный запрос на объединение! "
+          msg = "Уже существует встречный запрос на объединение! "
+          msg_code = 2
         end
       else
         logger.info "Warning:: Current_user &  with_user_id - Already connected! "
+        msg = "Деревья уже объединены! "
+        msg_code = 3
       end
     else
       logger.info "Запрос уже существует! "
+      msg = "Запрос уже существует! "
+      msg_code = 4
     end
-
+    return msg, msg_code
   end
 
 
