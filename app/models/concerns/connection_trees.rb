@@ -18,8 +18,8 @@ module ConnectionTrees
       logger.info "=== IN check_connection_switch: уже объединены"
       connection_results[:stop_connection] = true # STOP connection
       connection_results[:connection_message] = connection_message #
-
-      return connection_results
+      connection_results[:diag_connection_item] = 11
+          return connection_results
     end
 
     beg_search_time = Time.now   # Начало отсечки времени поиска
@@ -68,13 +68,13 @@ module ConnectionTrees
       logger.info "=== IN check_connection_switch: ЕСТЬ дубликаты!!"
       connection_results[:stop_connection] = true # STOP connection
       connection_results[:connection_message] = connection_message #
+      connection_results[:diag_connection_item] = 22
       connection_results[:duplicates_one_to_many] = duplicates_one_to_many #
       connection_results[:duplicates_many_to_one] = duplicates_many_to_one #
 
       return connection_results
     end
 
-    # logger.info "BEFORE complete_search: uniq_profiles_pairs = #{uniq_profiles_pairs} "
     ##############################################################################
     ##### запуск ПОЛНОГО метода поиска от дерева Автора
     ##### на основе исходного массива ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ - uniq_profiles_pairs -> init_connection_hash
@@ -112,11 +112,13 @@ module ConnectionTrees
     ######## Контроль корректности массивов перед объединением
     check_connection_result = self.check_connection_arrs(connection_results)
     stop_by_arrs          = check_connection_result[:stop_by_arrs]
+    diag_connection_item  = check_connection_result[:diag_item]
     connection_message    = check_connection_result[:diag_connection_message]
     common_profiles       = check_connection_result[:common_profiles]
     complete_dubles_hash  = check_connection_result[:complete_dubles_hash]
 
-    connection_results[:connection_message] = connection_message #
+    connection_results[:connection_message]   = connection_message #
+    connection_results[:diag_connection_item] = diag_connection_item #
 
     # Проверка 3 - некорректные массивы профилей для объединения
     # Чтобы протестировать check_connection_permit: в модуле connection_trees.rb, в конце метода
@@ -149,7 +151,8 @@ module ConnectionTrees
       self.connection_in_tables(connection_results)
       ##################################################################
     end
-    logger.info "stop_connection = #{stop_connection},\n connection_message = #{connection_message}"
+    logger.info "stop_connection = #{stop_connection},
+            \n diag_connection_item = #{diag_connection_item}, connection_message = #{connection_message}"
     connection_results[:stop_connection] = stop_connection #
 
     connection_results
@@ -377,46 +380,47 @@ module ConnectionTrees
 
     # Корректные значения - для корректных массивов
     stop_by_arrs = false
-    item = 5                  # Параметр для выбора корректного сообщения
+    item = 1                  # Параметр для выбора корректного сообщения
     commons = []              # Исходное значение общих (совпадающих) эл-тов у массивов перезаписи перед проверкой
     complete_dubles_hash = {} # Исходное значение Хаша дубликатов перед проверкой
 
     # Если массивы - пустые
     if profiles_to_rewrite.blank? or profiles_to_destroy.blank?   # 1
       stop_by_arrs = true
-      item = 1
+      item = 2
     end
 
-    if item == 5  # До этой проверки все было Ок с массивами
+    if item == 1  # До этой проверки все было Ок с массивами
       commons = check_commons(profiles_to_rewrite, profiles_to_destroy)
       # Проверка на наличие общих (совпадающих) эл-тов у массивов перезаписи
       unless commons.blank?  # ЕСТЬ пересечения общих профилей - commons != []  # 2
-        stop_by_arrs = true
-        item = 2
-      end
-    end
-
-    if item == 5  # До этой проверки все было Ок с массивами
-      # Проверка найденных массивов перезаписи перед объединением - на повторы
-      if profiles_to_rewrite.size == profiles_to_destroy.size    # 3
-        complete_dubles_hash = check_duplications(profiles_to_rewrite, profiles_to_destroy)
-      else
         stop_by_arrs = true
         item = 3
       end
     end
 
-    if item == 5  # До этой проверки все было Ок с массивами
+    if item == 1  # До этой проверки все было Ок с массивами
+      # Проверка найденных массивов перезаписи перед объединением - на повторы
+      if profiles_to_rewrite.size == profiles_to_destroy.size    # 3
+        complete_dubles_hash = check_duplications(profiles_to_rewrite, profiles_to_destroy)
+      else
+        stop_by_arrs = true
+        item = 4
+      end
+    end
+
+    if item == 1  # До этой проверки все было Ок с массивами
       # Проверка хэша дублей: Если ЕСТЬ дублирования в массивах   # 5
       unless complete_dubles_hash.empty?
         stop_by_arrs = true #
-        item = 4
+        item = 5
       end
     end
 
     connection_message = diagnoze_message(item)
 
     { stop_by_arrs:            stop_by_arrs,
+      diag_item:               item,
       diag_connection_message: connection_message,
       common_profiles:         commons,
       complete_dubles_hash:    complete_dubles_hash  }
@@ -428,16 +432,16 @@ module ConnectionTrees
   def diagnoze_message(item)
     case item
       when 1
-        connection_message = "Объединение остановлено, т.к. массив(ы) объединения - пустые" # Tested
+        connection_message = "Данные для объединения деревьев - корректны. "  # Tested
       when 2
-        connection_message = "Объединение остановлено. В массивах объединения - есть общие (совпадающие) профили!" # Tested
+        connection_message = "Объединение остановлено, т.к. массив(ы) объединения - пустые" # Tested
       when 3
-        connection_message = "Объединение остановлено, т.к. массив(ы) объединения - имеют разный размер"  # Tested
+        connection_message = "Объединение остановлено. В массивах объединения - есть общие (совпадающие) профили!" # Tested
       when 4
+        connection_message = "Объединение остановлено, т.к. массив(ы) объединения - имеют разный размер"  # Tested
+      when 5
         connection_message =
             "Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! ЕСТЬ дублирования в массивах"  # Tested
-      when 5
-        connection_message = "Данные для объединения деревьев - корректны. "  # Tested
       else
         connection_message = "Внимание: Диагноз массивов объединения деревьев - не был поставлен"  # Tested
     end

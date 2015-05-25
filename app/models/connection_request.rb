@@ -26,7 +26,6 @@ class ConnectionRequest < ActiveRecord::Base
 
 
 
-  # todo: refact
   # @note: Формирование нового запроса на объединение деревьев
   #   От кого - от текущего Юзера
   #   С кем - из формы просмотра рез-тов поиска
@@ -34,7 +33,6 @@ class ConnectionRequest < ActiveRecord::Base
     logger.info "In make_request: current_user.id = #{current_user.id}, with_user_id = #{with_user_id} "
     msg = ""
     msg_code = 1
-    # TODO проверить, существует ли уже такой запрос  если да, то вернуть его данные
     if  !ConnectionRequest.exists?(:user_id => current_user.id , :with_user_id => with_user_id, :done => false )
 
       # определение Юзеров - участников объединения деревьев

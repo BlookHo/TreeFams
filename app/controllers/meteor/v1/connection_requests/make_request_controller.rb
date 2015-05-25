@@ -20,7 +20,7 @@ module Meteor
           # logger.info "In MakeRequestController: @error = #{@error}" if @error
           # logger.info "In MakeRequestController: After connect:  @current_user.id = #{@current_user.id}"
           logger.info "In MakeRequestController: After connect:  msg_code = #{msg_code}, msg = #{msg} "
-          status_code = 300 if msg_code > 1 # status NotOk
+          status_code = 600 if msg_code > 1 # status NotOk
 
           if @error
             respond_with @error

@@ -13,25 +13,23 @@ module Meteor
           user_id = params[:user_id]
           logger.info "In YesConnectController: user_id = #{user_id}"
 
-          # logger.info "In RollbacksController: @current_user.id = #{@current_user.id}  "
-          # logger.info "In RollbacksController: current_user.id = #{current_user.id}  "
-          # conn_request_data = {
-          #     connection_id: connection_id,
-          #     current_user_id: @current_user.id
-          # }
+          status_code = 200 # status Ok
 
-          @current_user.connection(user_id, connection_id)
+          connection_results = @current_user.connection(user_id, connection_id)
+          msg_code = connection_results[:diag_connection_item]
+          msg      = connection_results[:connection_message]
 
-          # connection_results =
-          #     current_user.connection(user_id, connection_id)
+          logger.info "In YesConnectController: After connect:  msg_code = #{msg_code}, msg = #{msg} "
+
           # respond_with yes_con
-          logger.info "In YesConnectController: @error = #{@error}" if @error
-          logger.info "In YesConnectController: After YES  @current_user.id = #{@current_user.id}"
+          # logger.info "In YesConnectController: @error = #{@error}" if @error
+          # logger.info "In YesConnectController: After YES  @current_user.id = #{@current_user.id}"
 
+          status_code = 300 if msg_code > 1 # status NotOk
           if @error
             respond_with @error
           else
-            respond_with(status:200)
+            respond_with({status: status_code, msg_code: msg_code, msg: msg})
           end
 
         end

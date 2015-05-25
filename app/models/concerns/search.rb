@@ -49,7 +49,10 @@ module Search
     }
 
     logger.info "= Before store_search_results ========================= "
-    store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
+    if (results[:duplicates_one_to_many].empty? && results[:duplicates_many_to_one].empty?)
+      # Store new results ONLY IF there are NO BOTH duplicates
+      store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
+    end
 
     logger.info "== END OF start_search ========================= "
     logger.info " $$$$-----$$$  After start_search: results = #{results.inspect}"
