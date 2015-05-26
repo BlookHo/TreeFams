@@ -226,6 +226,11 @@ Weafam::Application.routes.draw do
         get :create,  to: "profiles_create#create"
       end
 
+
+      namespace :names do
+        get :create,  to: "names_create#create"
+      end
+
       namespace :common_logs do
         get :rollback, to: "rollbacks#rollback"
       end

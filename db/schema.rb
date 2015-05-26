@@ -204,6 +204,10 @@ ActiveRecord::Schema.define(version: 20150523074945) do
 
   add_index "similars_logs", ["current_user_id"], name: "index_similars_logs_on_current_user_id", using: :btree
 
+  create_table "test_keys", force: true do |t|
+    t.string "title"
+  end
+
   create_table "trees", force: true do |t|
     t.integer  "user_id"
     t.integer  "profile_id"
