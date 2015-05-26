@@ -118,8 +118,7 @@ class ConnectionRequest < ActiveRecord::Base
   end
 
 
-  # @note: 'НЕТ' to connect
-  #   Ответ НЕТ на запрос на объединение
+  # @note: 'НЕТ' to connect  Ответ НЕТ на запрос на объединение
   #   по номеру запроса на объединение connection_id
   #   Здесь confirm уст-ся в 0, тем самым указывается, какой юзер сказал НЕТ на запрос.
   def self.no_to_request(conn_request_data)
