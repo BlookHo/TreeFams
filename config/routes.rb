@@ -221,6 +221,14 @@ Weafam::Application.routes.draw do
     namespace :v1 do
       get :login, to: 'login#login'
 
+
+      namespace :validations do
+        namespace :emails do
+          get :exist, to: "emails#exist"
+        end
+      end
+
+
       namespace :profiles do
         get :destroy, to: "profiles_destroy#destroy"
         get :create,  to: "profiles_create#create"
