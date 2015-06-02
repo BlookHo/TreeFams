@@ -20,6 +20,9 @@ class SignupController < ApplicationController
 
   def create
     @data = sanitize_data(params['family'].compact)
+    logger.info("================")
+    logger.info(@data)
+    logger.info("================")
     has_new_names? ? create_pending_user : create_regular_user
   end
 

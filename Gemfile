@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.1.4'
 
+gem 'thin'
+
 gem 'activerecord-jdbcsqlite3-adapter', platforms: [:jruby]
 gem 'activerecord-import'
 gem 'coveralls', require: false

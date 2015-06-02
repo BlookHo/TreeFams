@@ -219,6 +219,7 @@ Weafam::Application.routes.draw do
   ##################################################
   namespace :meteor, defaults: {format: 'json'} do
     namespace :v1 do
+
       get :login, to: 'login#login'
 
 
@@ -226,6 +227,11 @@ Weafam::Application.routes.draw do
         namespace :emails do
           get :exist, to: "emails#exist"
         end
+      end
+
+
+      namespace :signup do
+        get :create, to: 'signup#create'
       end
 
 
