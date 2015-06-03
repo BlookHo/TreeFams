@@ -5,25 +5,17 @@ module Meteor
 
         skip_before_filter :authenticate
 
+        def test
+          user = User.first
+          respond_with user
+        end
+
 
         def create
-          logger.info("==============  Start singup")
           data = params['family']
-
-          logger.info("==============  Grab data")
           data = JSON.parse(data)
-
-          logger.info("==============  Parse data")
           data = sanitize_data(data.compact)
-
-          logger.info("Start create user:")
-          logger.info(data)
-
           formatData = {'family' => data}
-
-
-          logger.info("formatData:")
-          logger.info(formatData)
 
           user = User.new( email: data["author"]["email"] )
           user.valid? # нужно дернуть метод, чтобы получить ошибки
@@ -31,8 +23,12 @@ module Meteor
             user = User.create_user_account_with_json_data(data)
             # Send welcome email
             UserMailer.welcome_mail(user).deliver
-            respond_with(status: 200)
+
+            logger.info("RESPOND WITH USER:")
+            logger.info(user)
+            respond_with({token: user.access_token})
           else
+            logger.info("RESPOND WITH 500")
             respond_with(status: 500)
           end
         end
