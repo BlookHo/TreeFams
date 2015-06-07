@@ -76,6 +76,10 @@ module UserAccount
 
 
     def get_extra_profile(relation_name, user)
+      logger.info("=================")
+      logger.info(relation_name)
+      logger.info(user)
+      logger.info("=================")
       if relation_name == 'father_father' || relation_name == 'father_mother'
         return user.profile.fathers(user.id).first.is_profile
       else
