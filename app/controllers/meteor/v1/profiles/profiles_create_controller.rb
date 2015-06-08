@@ -82,7 +82,7 @@ module Meteor
             ProfileKey.add_new_profile(
               extra_profile.sex_id,
               extra_profile,
-              create_profile(data.merge({tree_id: user.id}.as_json)),
+              create_profile(data.merge({tree_id: user.id}.as_json), user),
               get_id_for_extra_relation(relation_name),
               exclusions_hash: nil,
               tree_ids: user.get_connected_users
