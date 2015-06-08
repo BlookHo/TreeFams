@@ -75,6 +75,10 @@ class Admin::ResetsController < Admin::AdminController
     SimilarsLog.reset_pk_sequence
     SimilarsLog.create([])
 
+    SearchResults.delete_all
+    SearchResults.reset_pk_sequence
+    SearchResults.create([])
+
   end
 
 
