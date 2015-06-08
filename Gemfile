@@ -7,10 +7,11 @@ gem 'thin'
 gem 'activerecord-jdbcsqlite3-adapter', platforms: [:jruby]
 gem 'activerecord-import'
 gem 'coveralls', require: false
-platforms :rbx do
-  gem 'rubysl', '~> 2.0'
-  gem 'rubinius-developer_tools'
-end
+
+# platforms :rbx do
+#   gem 'rubysl', '~> 2.0'
+#   gem 'rubinius-developer_tools'
+# end
 
 # on mac os x fail:
 # gem install pg -- --with-pg-config=/Applications/Postgres.app/Contents/Versions/9.3/bin/pg_config
@@ -105,7 +106,6 @@ group :development, :test do
   # Test framework
   gem 'rspec-rails'
   gem 'rspec-support'
-  #, "~> 3.0"
   # gem 'rspec-support', '~> 3.2.1'
   # For active record imitation in tests
   gem 'factory_girl_rails'

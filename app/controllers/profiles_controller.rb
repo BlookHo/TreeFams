@@ -188,6 +188,10 @@ class ProfilesController < ApplicationController
        logger.info "In Profile controller: Before destroy UpdatesFeed   update_feed_data= #{update_feed_data} "
        UpdatesFeed.create(update_feed_data) #
 
+       # Mark profile as deleted
+       @profile.update_attribute('deleted', true)
+
+
     end
     respond_to do |format|
       format.js
