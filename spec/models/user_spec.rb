@@ -1082,6 +1082,12 @@ RSpec.describe User, :type => :model do
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         before { current_user_1.connection_in_tables(connection_data) }
 
+        describe '- check Profiles AFTER <connect_trees>' , focus: true do #, focus: true
+          let(:opposite_profiles_arr) {connection_data[:profiles_to_destroy]}
+          let(:profiles_deleted) {[true,true,true,true,true,true,true,true]}
+          it_behaves_like :successful_profiles_deleted_arr
+        end
+
         describe '- check all profile_ids generated in ProfileKey rows AFTER <connect_trees>' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
                                    9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11,
