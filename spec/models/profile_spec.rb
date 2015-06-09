@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Profile, :type => :model  do # , focus: true
+RSpec.describe Profile, :type => :model , focus: true do # , focus: true
 
   describe '- validation' do
     describe '- on create' do
@@ -12,7 +12,7 @@ RSpec.describe Profile, :type => :model  do # , focus: true
           expect(first_profile).to be_valid
           profile_fields = Profile.first.attributes.except('created_at','updated_at', 'sex_id')
           expect(profile_fields).to eq({"id"=>1, "user_id"=>1, "name_id"=>354,
-                                        "tree_id"=>5, "display_name_id"=>354, "deleted"=>false} )
+                                        "tree_id"=>5, "display_name_id"=>354, "deleted"=>0} )
         end
 
         let(:second_profile) {FactoryGirl.create(:profile_two)}
