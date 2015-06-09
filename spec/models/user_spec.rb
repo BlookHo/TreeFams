@@ -1068,7 +1068,7 @@ RSpec.describe User, :type => :model do
       ################ CONNECTION  ###########################
 
 
-      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'  do # , focus: true
+      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>' , focus: true do # , focus: true
         # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
         # profiles_to_destroy = connection_data[:profiles_to_destroy]
         # who_connect         = connection_data[:who_connect]
@@ -1082,7 +1082,7 @@ RSpec.describe User, :type => :model do
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         before { current_user_1.connection_in_tables(connection_data) }
 
-        describe '- check Profiles AFTER <connect_trees>' , focus: true do #, focus: true
+        describe '- check Profiles AFTER <connect_trees>' , focus: true  do #, focus: true
           let(:opposite_profiles_arr) {connection_data[:profiles_to_destroy]}
           let(:profiles_deleted) {[true,true,true,true,true,true,true,true]}
           it_behaves_like :successful_profiles_deleted_arr
@@ -1102,12 +1102,20 @@ RSpec.describe User, :type => :model do
           it_behaves_like :successful_profile_keys_profile_ids
         end
 
-        describe '- check ConnectionLog rows count AFTER <connect_trees>' do
+        describe '- check ConnectionLog Profiles.deleted update count AFTER <connect_trees>' , focus: true do
+          it '- check ConnectionLog have rows count - Ok' do
+            profiles_del_logs_count =  ConnectionLog.where(field: 'deleted').count
+            puts "in check ConnectionLog Profiles.deleted count: profiles_del_logs_count = #{profiles_del_logs_count.inspect} \n"
+            # expect(connection_logs_count).to eq(rows_qty) # got rows_qty of ConnectionLog
+          end
+        end
+
+        describe '- check ConnectionLog rows count AFTER <connect_trees>' , focus: true do
           let(:rows_qty) {114}
           it_behaves_like :successful_connection_logs_rows_count
         end
 
-        describe '- check ConnectionLog fields AFTER <connect_trees>'   do # , focus: true
+        describe '- check ConnectionLog fields AFTER <connect_trees>' , focus: true  do # , focus: true
           let(:rewrite) {[14, 12, 13, 21, 19, 11, 20, 18]}
           let(:overwrite) {[22, 23, 24, 29, 27, 25, 28, 26]}
           it_behaves_like :successful_rewrite_arrays_logs_after_connect

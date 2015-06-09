@@ -17,8 +17,6 @@ module ProfileMerge
 
         main_profile     = Profile.find(profile_id)
         opposite_profile = Profile.find(profiles_to_destroy[index])
-        # Mark opposite profiles as deleted
-        opposite_profile.update_attributes(:deleted => true, :updated_at => Time.now)
 
         logger.info "Данные из профиля  #{opposite_profile.id} будут перенесены в профиль #{main_profile.id}"
 
