@@ -1,18 +1,21 @@
 FactoryGirl.define do
 
   factory :profile_one, class: Profile do
-    user_id nil
+    user_id 1
     name_id 354 # Ольга
-    sex_id  0
+    sex_id  1
     tree_id  5
     display_name_id  354
+    deleted  false
 
     trait :big_IDs do
       id 644444
       user_id   2222222
-      name_id   90000
+      name_id   9000
       sex_id    1
       tree_id   111111
+      deleted  false
+
     end
 
     trait :without_user_id do
@@ -21,11 +24,9 @@ FactoryGirl.define do
       name_id   900
       sex_id    1
       tree_id   111
+      deleted  false
+
     end
-
-
-
-
 
   end
 
@@ -35,14 +36,16 @@ FactoryGirl.define do
     sex_id  0
     tree_id  4
     display_name_id  354
+    deleted  false
   end
 
   factory :profile_three, class: Profile do
-    user_id nil
+    user_id 3
     name_id 351  # Олeг
     sex_id  1
     tree_id  4
     display_name_id  351
+    deleted  false
   end
 
   factory :profile_four, class: Profile do
@@ -51,6 +54,7 @@ FactoryGirl.define do
     sex_id  1
     tree_id  5
     display_name_id  351
+    deleted  false
   end
 
   factory :profile, class: Profile do          # For 2 connected trees test [1, 2]
@@ -61,6 +65,7 @@ FactoryGirl.define do
       name_id   40
       sex_id    1
       tree_id   1
+      deleted  false
     end
     trait :profile_64 do
       id 64
@@ -68,6 +73,7 @@ FactoryGirl.define do
       name_id   90
       sex_id    1
       tree_id   1
+      deleted  false
     end
     # 63;7;"2015-02-18 11:53:19.475839";"2015-02-18 11:53:19.533272";40;1;7;40
     # 64;;"2015-02-18 11:53:19.564597";"2015-02-18 11:53:19.564597";90;1;7;90
@@ -78,6 +84,7 @@ FactoryGirl.define do
       name_id   345
       sex_id    0
       tree_id   1
+      deleted  false
     end
     trait :profile_66 do    # For 2 connected trees test - 2nd. Tree = 2. User = 2.
       id 66
@@ -85,6 +92,7 @@ FactoryGirl.define do
       name_id   370
       sex_id    1
       tree_id   1
+      deleted  false
     end
     # 65;;"2015-02-18 11:53:19.752213";"2015-02-18 11:53:19.752213";345;0;7;345
     # 66;8;"2015-02-18 11:53:19.966229";"2015-02-21 11:23:56.161504";370;1;7;370
@@ -95,6 +103,7 @@ FactoryGirl.define do
       name_id   173
       sex_id    0
       tree_id   1
+      deleted  false
     end
     trait :profile_68 do
       id 68
@@ -102,6 +111,7 @@ FactoryGirl.define do
       name_id   343
       sex_id    1
       tree_id   1
+      deleted  false
     end
     # 67;;"2015-02-18 11:53:20.202033";"2015-02-18 11:53:20.202033";173;0;7;173
     # 68;;"2015-02-18 11:53:20.469564";"2015-02-18 11:53:20.469564";343;1;7;343
@@ -112,6 +122,7 @@ FactoryGirl.define do
       name_id   293
       sex_id    0
       tree_id   1
+      deleted  false
     end
     trait :profile_70 do
       id 70
@@ -119,6 +130,7 @@ FactoryGirl.define do
       name_id   354
       sex_id    0
       tree_id   1
+      deleted  false
     end
     # 69;;"2015-02-18 11:53:20.779024";"2015-02-18 11:53:20.779024";293;0;7;293
     # 70;;"2015-02-18 11:55:30.780192";"2015-02-18 11:55:30.780192";354;0;7;354
@@ -129,6 +141,7 @@ FactoryGirl.define do
       name_id   173
       sex_id    0
       tree_id   1
+      deleted  false
     end
     trait :profile_79 do
       id 79
@@ -136,6 +149,7 @@ FactoryGirl.define do
       name_id   351
       sex_id    1
       tree_id   1
+      deleted  false
     end
     # 78;;"2015-02-18 12:51:09.018631";"2015-02-18 12:51:09.018631";173;0;7;173
     # 79;;"2015-02-18 12:53:33.898579";"2015-02-18 12:53:33.898579";351;1;7;351
@@ -146,6 +160,7 @@ FactoryGirl.define do
       name_id   187
       sex_id    0
       tree_id   1
+      deleted  false
     end
     trait :profile_81 do
       id 81
@@ -153,6 +168,7 @@ FactoryGirl.define do
       name_id   354
       sex_id    0
       tree_id   1
+      deleted  false
     end
     # 80;;"2015-02-18 12:56:08.787504";"2015-02-18 12:56:08.787504";187;0;7;187
     # 81;;"2015-02-18 12:57:04.576695";"2015-02-18 12:57:04.576695";354;0;7;354
@@ -163,6 +179,7 @@ FactoryGirl.define do
       name_id   351
       sex_id    1
       tree_id   1
+      deleted  false
     end
     trait :profile_83 do
       id 83
@@ -170,6 +187,7 @@ FactoryGirl.define do
       name_id   187
       sex_id    0
       tree_id   1
+      deleted  false
     end
     trait :profile_84 do
       id 84
@@ -177,6 +195,7 @@ FactoryGirl.define do
       name_id   370
       sex_id    1
       tree_id   1
+      deleted  false
     end
     # 82;;"2015-02-18 12:58:04.842485";"2015-02-18 12:58:04.842485";351;1;7;351
     # 83;;"2015-02-18 13:02:25.277551";"2015-02-18 13:02:25.277551";187;0;7;187
@@ -230,6 +249,7 @@ FactoryGirl.define do
       name_id   370
       sex_id    1
       tree_id   9
+      deleted  false
     end
     trait :add_profile_86 do
       id 86
@@ -237,6 +257,7 @@ FactoryGirl.define do
       name_id   28
       sex_id    1
       tree_id   9
+      deleted  false
     end
     trait :add_profile_87 do
       id 87
@@ -244,6 +265,7 @@ FactoryGirl.define do
       name_id   48
       sex_id    0
       tree_id   9
+      deleted  false
     end
     # 85;9;"2015-03-05 17:52:17.536001";"2015-03-05 17:52:17.633286";370;1;9;370
     # 86;;"2015-03-05 17:52:17.702448";"2015-03-05 17:52:17.702448";28;1;9;28
@@ -255,6 +277,7 @@ FactoryGirl.define do
       name_id   465
       sex_id    1
       tree_id   9
+      deleted  false
     end
     trait :add_profile_89 do # before
       id 89
@@ -262,6 +285,7 @@ FactoryGirl.define do
       name_id   345
       sex_id    0
       tree_id   9
+      deleted  false
     end
     trait :add_profile_90 do # before
       id 90
@@ -269,6 +293,7 @@ FactoryGirl.define do
       name_id   343
       sex_id    1
       tree_id   9
+      deleted  false
     end
     # 88;;"2015-03-05 17:52:18.23326";"2015-03-05 17:52:18.23326";465;1;9;465
     # 89;;"2015-03-05 17:52:18.532318";"2015-03-05 17:52:18.532318";345;0;9;345
@@ -280,6 +305,7 @@ FactoryGirl.define do
       name_id   446
       sex_id    0
       tree_id   9
+      deleted  false
     end
     trait :add_profile_92 do
       id 92
@@ -287,6 +313,7 @@ FactoryGirl.define do
       name_id   147
       sex_id    0
       tree_id   9
+      deleted  false
     end
     # 91;;"2015-03-05 17:52:19.201909";"2015-03-05 17:52:19.201909";446;0;9;446
     # 92;;"2015-03-05 17:52:19.668259";"2015-03-05 17:52:19.668259";147;0;9;147
@@ -298,6 +325,7 @@ FactoryGirl.define do
       name_id   147
       sex_id    0
       tree_id   10
+      deleted  false
     end
     trait :add_profile_94 do
       id 94
@@ -305,6 +333,7 @@ FactoryGirl.define do
       name_id   28
       sex_id    1
       tree_id   10
+      deleted  false
     end
     trait :add_profile_95 do
       id 95
@@ -312,6 +341,7 @@ FactoryGirl.define do
       name_id   48
       sex_id    0
       tree_id   10
+      deleted  false
     end
     # 93;10;"2015-03-05 17:56:30.580363";"2015-03-05 17:56:30.641443";147;0;10;147
     # 94;;"2015-03-05 17:56:30.681683";"2015-03-05 17:56:30.681683";28;1;10;28
@@ -323,6 +353,7 @@ FactoryGirl.define do
       name_id   465
       sex_id    1
       tree_id   10
+      deleted  false
     end
     trait :add_profile_97 do
       id 97
@@ -330,6 +361,7 @@ FactoryGirl.define do
       name_id   345
       sex_id    0
       tree_id   10
+      deleted  false
     end
     trait :add_profile_98 do
       id 98
@@ -337,6 +369,7 @@ FactoryGirl.define do
       name_id   343
       sex_id    1
       tree_id   10
+      deleted  false
     end
     # 96;;"2015-03-05 17:56:31.071608";"2015-03-05 17:56:31.071608";465;1;10;465
     # 97;;"2015-03-05 17:56:31.365143";"2015-03-05 17:56:31.365143";345;0;10;345
@@ -348,6 +381,7 @@ FactoryGirl.define do
       name_id   446
       sex_id    0
       tree_id   10
+      deleted  false
     end
     trait :add_profile_100 do
       id 100
@@ -355,6 +389,7 @@ FactoryGirl.define do
       name_id   370
       sex_id    1
       tree_id   10
+      deleted  false
     end
     # 99;;"2015-03-05 17:56:32.29124";"2015-03-05 17:56:32.29124";446;0;10;446
     # 100;;"2015-03-05 17:56:32.835348";"2015-03-05 17:56:32.835348";370;1;10;370
@@ -366,6 +401,7 @@ FactoryGirl.define do
       name_id   419
       sex_id    1
       tree_id   9 #
+      deleted  false
     end
     trait :add_profile_102 do  # Светлана
       id 102
@@ -373,6 +409,7 @@ FactoryGirl.define do
       name_id   412
       sex_id    0
       tree_id   9  #
+      deleted  false
     end
 
     # For Common_Logs Tree 9
@@ -383,6 +420,7 @@ FactoryGirl.define do
       name_id   122
       sex_id    1
       tree_id   9 #
+      deleted  false
     end
     trait :add_profile_173 do  # Валентина
       id 173
@@ -390,6 +428,7 @@ FactoryGirl.define do
       name_id   82
       sex_id    0
       tree_id   9  #
+      deleted  false
     end
     # 172;;"2015-03-21 14:18:28.192824";"2015-03-21 14:18:28.192824";122;1;9;122
     # 173;;"2015-03-21 14:18:44.147049";"2015-03-21 14:18:44.147049";82;0;9;82
@@ -435,6 +474,7 @@ FactoryGirl.define do
       name_id   370
       sex_id    1
       tree_id   4
+      deleted  false
 
       trait :connect_profile_2  do   # 2
         # id 86
@@ -442,6 +482,7 @@ FactoryGirl.define do
         name_id   122
         sex_id    1
         tree_id   1
+        deleted  false
       end
       trait :connect_profile_3  do   # 3
         # id 86
@@ -449,6 +490,7 @@ FactoryGirl.define do
         name_id   82
         sex_id    0
         tree_id   1
+        deleted  false
       end
       trait :connect_profile_7  do   # 7
         id 7
@@ -456,6 +498,7 @@ FactoryGirl.define do
         name_id   90
         sex_id    1
         tree_id   1
+        deleted  false
       end
       # 2;;"2015-01-23 07:31:58.060264";"2015-01-23 07:31:58.060264";122;1;1;122
       # 3;;"2015-01-23 07:31:58.344427";"2015-01-23 07:31:58.344427";82;0;1;82
@@ -467,6 +510,7 @@ FactoryGirl.define do
         name_id   449
         sex_id    0
         tree_id   1
+        deleted  false
       end
       trait :connect_profile_9  do   # 9
         id 9
@@ -474,6 +518,7 @@ FactoryGirl.define do
         name_id   361
         sex_id    1
         tree_id   1
+        deleted  false
       end
       trait :connect_profile_10 do   # 10
         id 10
@@ -481,6 +526,7 @@ FactoryGirl.define do
         name_id   293
         sex_id    0
         tree_id   1
+        deleted  false
       end
       # 8;;"2015-01-23 07:31:59.860816";"2015-01-23 07:31:59.860816";449;0;1;449
       # 9;;"2015-01-23 07:32:00.169704";"2015-01-23 07:32:00.169704";361;1;1;361
@@ -493,6 +539,7 @@ FactoryGirl.define do
         name_id   48
         sex_id    0
         tree_id   2
+        deleted  false
       end
       trait :connect_profile_12 do   # 12
         id 12
@@ -500,6 +547,7 @@ FactoryGirl.define do
         name_id   343
         sex_id    1
         tree_id   2
+        deleted  false
       end
       trait :connect_profile_13 do   # 13
         id 13
@@ -507,6 +555,7 @@ FactoryGirl.define do
         name_id   82
         sex_id    0
         tree_id   2
+        deleted  false
       end
       # 11;2;"2015-01-23 07:37:32.790612";"2015-01-23 07:37:32.809612";48;0;2;516
       # 12;;"2015-01-23 07:37:32.842851";"2015-01-23 07:37:32.842851";343;1;2;343
@@ -519,6 +568,7 @@ FactoryGirl.define do
         name_id   331
         sex_id    0
         tree_id   2
+        deleted  false
       end
       trait :connect_profile_15 do   # 15
         id 15
@@ -526,6 +576,7 @@ FactoryGirl.define do
         name_id   370
         sex_id    1
         tree_id   2
+        deleted  false
       end
       trait :connect_profile_16 do   # 16
         id 16
@@ -533,6 +584,7 @@ FactoryGirl.define do
         name_id   465
         sex_id    1
         tree_id   2
+        deleted  false
       end
       # 14;;"2015-01-23 07:37:33.246236";"2015-01-23 07:37:33.246236";331;0;2;331
       # 15;;"2015-01-23 07:37:33.477205";"2015-01-23 07:37:33.477205";370;1;2;370
@@ -545,6 +597,7 @@ FactoryGirl.define do
         name_id   28
         sex_id    1
         tree_id   1
+        deleted  false
       end
       trait :connect_profile_18 do   # 18
         id 18
@@ -552,6 +605,7 @@ FactoryGirl.define do
         name_id   194
         sex_id    1
         tree_id   2
+        deleted  false
       end
       trait :connect_profile_19 do   # 19
         id 19
@@ -559,6 +613,7 @@ FactoryGirl.define do
         name_id   48
         sex_id    0
         tree_id   2
+        deleted  false
       end
       # 17;1;"2015-01-23 07:37:34.089346";"2015-01-23 07:37:34.089346";28;1;1;28
       # 18;;"2015-01-23 07:37:34.388327";"2015-01-23 07:37:34.388327";194;1;2;194
@@ -571,6 +626,7 @@ FactoryGirl.define do
         name_id   110
         sex_id    1
         tree_id   2
+        deleted  false
       end
       trait :connect_profile_21 do   # 21
         id 21
@@ -578,6 +634,7 @@ FactoryGirl.define do
         name_id   249
         sex_id    0
         tree_id   2
+        deleted  false
       end
       trait :connect_profile_22 do   # 22
         id 22
@@ -585,6 +642,7 @@ FactoryGirl.define do
         name_id   331
         sex_id    0
         tree_id   3
+        deleted  false
       end
       # 20;;"2015-01-23 07:37:35.175336";"2015-01-23 07:37:35.175336";110;1;2;110
       # 21;;"2015-01-23 07:37:35.446917";"2015-01-23 07:37:35.446917";249;0;2;249
@@ -597,6 +655,7 @@ FactoryGirl.define do
         name_id   343
         sex_id    1
         tree_id   3
+        deleted  false
       end
       trait :connect_profile_24 do   # 24
         id 24
@@ -604,6 +663,7 @@ FactoryGirl.define do
         name_id   82
         sex_id    0
         tree_id   3
+        deleted  false
       end
       trait :connect_profile_25 do   # 25
         id 25
@@ -611,6 +671,7 @@ FactoryGirl.define do
         name_id   48
         sex_id    0
         tree_id   3
+        deleted  false
       end
       # 23;;"2015-01-23 07:47:59.853552";"2015-01-23 07:47:59.853552";343;1;3;343
       # 24;;"2015-01-23 07:47:59.967496";"2015-01-23 07:47:59.967496";82;0;3;82
@@ -623,6 +684,7 @@ FactoryGirl.define do
         name_id   194
         sex_id    1
         tree_id   3
+        deleted  false
       end
       trait :connect_profile_27 do   # 27
         id 27
@@ -630,6 +692,7 @@ FactoryGirl.define do
         name_id   48
         sex_id    0
         tree_id   3
+        deleted  false
       end
       trait :connect_profile_28 do   # 28
         id 28
@@ -637,6 +700,7 @@ FactoryGirl.define do
         name_id   110
         sex_id    1
         tree_id   3
+        deleted  false
       end
       # 26;;"2015-01-23 07:48:00.389447";"2015-01-23 07:48:00.389447";194;1;3;194
       # 27;;"2015-01-23 07:48:00.703992";"2015-01-23 07:48:00.703992";48;0;3;48
@@ -649,6 +713,7 @@ FactoryGirl.define do
         name_id   249
         sex_id    0
         tree_id   3
+        deleted  false
       end
       # 29;;"2015-01-23 07:48:01.321049";"2015-01-23 07:48:01.321049";249;0;3;249
 
