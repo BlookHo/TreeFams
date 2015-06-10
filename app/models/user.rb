@@ -114,14 +114,21 @@ class User < ActiveRecord::Base
 
   def update_connected_users!
     connected_user_ids = self.get_connected_users
-
     cids = connected_user_ids.size > 0 ? connected_user_ids : [self.id]
-
     connected_user_ids.each do |connected_user_id|
       user = User.find(connected_user_id)
       user.update_attribute(:connected_users, connected_user_ids)
     end
   end
+
+
+  def update_disconnected_users!
+    self.connected_users.each do |connected_user_id|
+      user = User.find(connected_user_id)
+      user.update_attribute(:connected_users, connected_user_ids)
+    end
+  end
+
 
 
 
