@@ -1429,6 +1429,17 @@ RSpec.describe User, :type => :model do
           it_behaves_like :successful_connection_logs_rows_count
         end
 
+
+
+        # Проверка deleted у Profiles AFTER <disconnect_tree>
+        describe '- check Profiles deleted AFTER <disconnect_tree>' , focus: true  do #, focus: true
+          let(:opposite_profiles_arr) {connection_data[:profiles_to_destroy]}
+          let(:profiles_deleted) {[0,0,0,0,0,0,0,0]}
+          it_behaves_like :successful_profiles_deleted_arr
+        end
+
+
+
         describe '- check CommonLog have rows count AFTER <disconnect_tree>' do
           let(:rows_qty) {0}
           it_behaves_like :successful_common_logs_rows_count

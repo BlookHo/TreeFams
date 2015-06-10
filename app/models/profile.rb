@@ -16,8 +16,7 @@ class Profile < ActiveRecord::Base
   include ProfileApiCircles
   include SimilarsProfileMerge
 
-  validates_presence_of :name_id, :tree_id, :deleted, #, :sex_id,
-                        :message => "Должно присутствовать в Profile"
+  validates_presence_of :name_id, :tree_id, :deleted, :message => "Должно присутствовать в Profile"
   validates_inclusion_of :deleted, :in => [0, 1],
                          :message => ":deleted должно быть [0, 1] в Profile"
   validates_numericality_of  :name_id, :tree_id, #:display_name_id,

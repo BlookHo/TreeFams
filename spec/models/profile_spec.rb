@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Profile, :type => :model , focus: true do # , focus: true
+RSpec.describe Profile, :type => :model  do # , focus: true
 
   describe '- validation' do
     describe '- on create' do
