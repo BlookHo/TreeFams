@@ -125,7 +125,7 @@ class User < ActiveRecord::Base
   def update_disconnected_users!
     self.connected_users.each do |connected_user_id|
       user = User.find(connected_user_id)
-      user.update_attribute(:connected_users, connected_user_ids)
+      user.update_attribute(:connected_users, user.get_connected_users)
     end
   end
 
