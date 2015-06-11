@@ -1,27 +1,31 @@
 require 'rails_helper'
 
-RSpec.describe Profile, :type => :model do
+RSpec.describe Profile, :type => :model  do # , focus: true
 
   describe '- validation' do
     describe '- on create' do
       context '- valid profiles' do
-        let(:first_profile) {FactoryGirl.build(:profile_one)}  # id 38
+        let(:first_profile) {FactoryGirl.create(:profile_one)}
         it '- 1 saves a valid profile_one' do
+
           puts " Model Profile validation "
           expect(first_profile).to be_valid
+          profile_fields = Profile.first.attributes.except('created_at','updated_at', 'sex_id')
+          expect(profile_fields).to eq({"id"=>1, "user_id"=>1, "name_id"=>354,
+                                        "tree_id"=>5, "display_name_id"=>354, "deleted"=>0} )
         end
 
-        let(:second_profile) {FactoryGirl.build(:profile_two)}  # id 42
+        let(:second_profile) {FactoryGirl.create(:profile_two)}
         it '- 2 saves a valid profile_two' do
           expect(second_profile).to be_valid
         end
 
-        let(:first_profile_2) {FactoryGirl.build(:profile_three)} # id 41
+        let(:first_profile_2) {FactoryGirl.build(:profile_three)}
         it '- 3 saves a valid profile_three' do
           expect(first_profile_2).to be_valid
         end
 
-        let(:second_profile_2) {FactoryGirl.build(:profile_four)}  # id 40
+        let(:second_profile_2) {FactoryGirl.build(:profile_four)}
         it '- 4 saves a valid profile_four' do
           expect(second_profile_2).to be_valid
         end

@@ -1068,7 +1068,7 @@ RSpec.describe User, :type => :model do
       ################ CONNECTION  ###########################
 
 
-      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'  do # , focus: true
+      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>' , focus: true do # , focus: true
         # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
         # profiles_to_destroy = connection_data[:profiles_to_destroy]
         # who_connect         = connection_data[:who_connect]
@@ -1081,6 +1081,12 @@ RSpec.describe User, :type => :model do
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         before { current_user_1.connection_in_tables(connection_data) }
+
+        describe '- check Profiles AFTER <connect_trees>' , focus: true  do #, focus: true
+          let(:opposite_profiles_arr) {connection_data[:profiles_to_destroy]}
+          let(:profiles_deleted) {[1,1,1,1,1,1,1,1]}
+          it_behaves_like :successful_profiles_deleted_arr
+        end
 
         describe '- check all profile_ids generated in ProfileKey rows AFTER <connect_trees>' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
@@ -1096,14 +1102,23 @@ RSpec.describe User, :type => :model do
           it_behaves_like :successful_profile_keys_profile_ids
         end
 
-        describe '- check ConnectionLog rows count AFTER <connect_trees>' do
-          let(:rows_qty) {114}
+        describe '- check ConnectionLog Profiles.deleted update count AFTER <connect_trees>' , focus: true do
+          it '- check ConnectionLog have rows count - Ok' do
+            profiles_del_logs_count =  ConnectionLog.where(field: 'deleted').count
+            puts "in check ConnectionLog Profiles.deleted count: profiles_del_logs_count = #{profiles_del_logs_count.inspect} \n"
+            # expect(connection_logs_count).to eq(rows_qty) # got rows_qty of ConnectionLog
+          end
+        end
+
+        describe '- check ConnectionLog rows count AFTER <connect_trees>' , focus: true do
+          let(:rows_qty) {122}
           it_behaves_like :successful_connection_logs_rows_count
         end
 
-        describe '- check ConnectionLog fields AFTER <connect_trees>'   do # , focus: true
+        describe '- check ConnectionLog fields AFTER <connect_trees>' , focus: true  do # , focus: true
           let(:rewrite) {[14, 12, 13, 21, 19, 11, 20, 18]}
           let(:overwrite) {[22, 23, 24, 29, 27, 25, 28, 26]}
+          let(:deleted) {[1,1,1,1,1,1,1,1]}
           it_behaves_like :successful_rewrite_arrays_logs_after_connect
         end
 
@@ -1133,8 +1148,6 @@ RSpec.describe User, :type => :model do
                                                    "rewrite_profile_id"=>18, "overwrite_profile_id"=>26} )
             end
             it "- Return proper connected_users Array result for current_user_id = 1" do
-              # puts "Let created: currentuser_id = #{currentuser_id} \n"
-              # puts "Check ConnectedUser Model methods \n"
               puts "AFTER <connect_trees> - check connected_users - connected_users created \n"
               expect(connected_users).to be_a_kind_of(Array)
             end
@@ -1144,6 +1157,16 @@ RSpec.describe User, :type => :model do
             end
           end
         end
+
+
+        describe '- check User.connected_users AFTER <connect_trees>' , focus: true  do #, focus: true
+          let(:connected_users_arr_1) {[1,2,3]}
+          let(:connected_users_arr_2) {[1,2,3]}
+          let(:connected_users_arr_3) {[1,2,3]}
+          puts "Check AFTER <connect_trees>"
+          it_behaves_like :successful_users_connected
+        end
+
 
         describe '- check UpdatesFeed AFTER <connect_trees>' do #, focus: true
           describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
@@ -1360,6 +1383,15 @@ RSpec.describe User, :type => :model do
           end
         end
 
+        describe '- check User.connected_users AFTER <disconnect_tree>' , focus: true  do #, focus: true
+          let(:connected_users_arr_1) {[1,2]}
+          let(:connected_users_arr_2) {[1,2]}
+          let(:connected_users_arr_3) {[1,2,3]}   ############ [3]!
+          puts "Check AFTER <disconnect_tree>"
+          it_behaves_like :successful_users_connected
+        end
+
+
         describe '- check UpdatesFeed AFTER <disconnect_tree>'  do #, focus: true
           describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
             let(:rows_qty) {4}  # т.к.  - вне модели
@@ -1413,6 +1445,17 @@ RSpec.describe User, :type => :model do
           let(:rows_qty) {0}
           it_behaves_like :successful_connection_logs_rows_count
         end
+
+
+
+        # Проверка deleted у Profiles AFTER <disconnect_tree>
+        describe '- check Profiles deleted AFTER <disconnect_tree>' , focus: true  do #, focus: true
+          let(:opposite_profiles_arr) {connection_data[:profiles_to_destroy]}
+          let(:profiles_deleted) {[0,0,0,0,0,0,0,0]}
+          it_behaves_like :successful_profiles_deleted_arr
+        end
+
+
 
         describe '- check CommonLog have rows count AFTER <disconnect_tree>' do
           let(:rows_qty) {0}

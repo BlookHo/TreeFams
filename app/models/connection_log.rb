@@ -5,7 +5,7 @@ class ConnectionLog < ActiveRecord::Base
                         :message => "Должно присутствовать в ConnectionLog"
 
   validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
-  validates_numericality_of :written, :overwritten,:greater_than => 0, :unless => :writtens_can_be_nil?
+  # validates_numericality_of :written, :overwritten,:greater_than => 0, :unless => :writtens_can_be_nil?
   validates_numericality_of :written, :overwritten, :only_integer => true, :unless => :writtens_can_be_nil?
   validate :written_fields_are_not_equal, :unless => :writtens_can_be_equal? # :written AND :overwritten
 
@@ -14,9 +14,10 @@ class ConnectionLog < ActiveRecord::Base
   validates_numericality_of :connected_at, :current_user_id, :with_user_id, :table_row, :greater_than => 0,
                             :message => "Должны быть больше 0 в ConnectionLog"
 
+  # validates_inclusion_of :field, :in => ["deleted"], :if => :table_profiles?
   validates_inclusion_of :field, :in => ["profile_id"], :if => :table_users?
   validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
-  validates_inclusion_of :field, :in => ["tree_id", "user_id"], :if => :table_profiles?
+  validates_inclusion_of :field, :in => ["tree_id", "user_id", "deleted"], :if => :table_profiles?
   validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
   validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
   # - тогда поле table_row д.б.uniq
@@ -59,6 +60,10 @@ class ConnectionLog < ActiveRecord::Base
   scope :at_current_user_connected_fields, -> (current_user_id, connection_id) { where(current_user_id: current_user_id,
                                                                                 connected_at: connection_id).
                                                             where(" field = 'profile_id' or field = 'is_profile_id' ")}
+  scope :at_current_user_deleted_field, -> (current_user_id, connection_id) { where(current_user_id: current_user_id,
+                                                                                       connected_at: connection_id).
+                                                            where(" field = 'deleted' ")}
+
 
 
   # Для текущего дерева - получение номера id лога для прогона разъединения trees,
@@ -81,7 +86,7 @@ class ConnectionLog < ActiveRecord::Base
   # From -Module # similars_connect_tree
   # Сохранение массива логов в таблицу ConnectionLog
   def self.store_log(connection_log)
-    # logger.info "MMMMM *** In model ConnectionLog store_log "
+    logger.info "MMMMM *** In model ConnectionLog store_log "
     connection_log.each(&:save)
   end
 

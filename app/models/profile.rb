@@ -16,11 +16,12 @@ class Profile < ActiveRecord::Base
   include ProfileApiCircles
   include SimilarsProfileMerge
 
-  validates_presence_of :name_id, :tree_id, #:display_name_id, :sex_id,
-                        :message => "Должно присутствовать в Profile"
+  validates_presence_of :name_id, :tree_id, :deleted, :message => "Должно присутствовать в Profile"
+  validates_inclusion_of :deleted, :in => [0, 1],
+                         :message => ":deleted должно быть [0, 1] в Profile"
   validates_numericality_of  :name_id, :tree_id, #:display_name_id,
                             :greater_than => 0, :message => "Должны быть больше 0 в Profile"
-  validates_numericality_of  :name_id,  :tree_id, #:display_name_id, :sex_id,
+  validates_numericality_of  :name_id,  :tree_id, :deleted, #:display_name_id, :sex_id,
                             :only_integer => true,  :message => "Должны быть целым числом в Profile"
   # validates_inclusion_of :sex_id, :in => [1,0], :message => "Должны быть [1,0] в Profile"
   validates_presence_of :user_id, :allow_nil => true
