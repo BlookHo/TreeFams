@@ -64,6 +64,8 @@ module DisconnectionTrees
 
     ConnectedUser.destroy_connection(conn_users_destroy_data)
 
+    self.update_disconnected_users!
+
     ConnectionRequest.request_disconnection(conn_users_destroy_data)
 
   end

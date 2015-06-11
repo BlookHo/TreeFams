@@ -1386,7 +1386,7 @@ RSpec.describe User, :type => :model do
         describe '- check User.connected_users AFTER <disconnect_tree>' , focus: true  do #, focus: true
           let(:connected_users_arr_1) {[1,2]}
           let(:connected_users_arr_2) {[1,2]}
-          let(:connected_users_arr_3) {[1,2,3]}   ############ [3]!
+          let(:connected_users_arr_3) {[3]}   ############ [3]!
           puts "Check AFTER <disconnect_tree>"
           it_behaves_like :successful_users_connected
         end
