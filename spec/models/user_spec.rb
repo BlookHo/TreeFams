@@ -1148,8 +1148,6 @@ RSpec.describe User, :type => :model do
                                                    "rewrite_profile_id"=>18, "overwrite_profile_id"=>26} )
             end
             it "- Return proper connected_users Array result for current_user_id = 1" do
-              # puts "Let created: currentuser_id = #{currentuser_id} \n"
-              # puts "Check ConnectedUser Model methods \n"
               puts "AFTER <connect_trees> - check connected_users - connected_users created \n"
               expect(connected_users).to be_a_kind_of(Array)
             end
@@ -1159,6 +1157,16 @@ RSpec.describe User, :type => :model do
             end
           end
         end
+
+
+        describe '- check User.connected_users AFTER <connect_trees>' , focus: true  do #, focus: true
+          let(:connected_users_arr_1) {[1,2,3]}
+          let(:connected_users_arr_2) {[1,2,3]}
+          let(:connected_users_arr_3) {[1,2,3]}
+          puts "Check AFTER <connect_trees>"
+          it_behaves_like :successful_users_connected
+        end
+
 
         describe '- check UpdatesFeed AFTER <connect_trees>' do #, focus: true
           describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
@@ -1374,6 +1382,15 @@ RSpec.describe User, :type => :model do
             end
           end
         end
+
+        describe '- check User.connected_users AFTER <disconnect_tree>' , focus: true  do #, focus: true
+          let(:connected_users_arr_1) {[1,2]}
+          let(:connected_users_arr_2) {[1,2]}
+          let(:connected_users_arr_3) {[1,2,3]}   ############ [3]!
+          puts "Check AFTER <disconnect_tree>"
+          it_behaves_like :successful_users_connected
+        end
+
 
         describe '- check UpdatesFeed AFTER <disconnect_tree>'  do #, focus: true
           describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
