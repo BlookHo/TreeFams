@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disabled=>true
+RSpec.describe ConnectionRequest, :type => :model  , focus: true   do #   , focus: true  ,:disabled=>true
 
   describe '- Validation' do
     describe '- on create' do  #  , focus: true
