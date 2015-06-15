@@ -60,13 +60,13 @@ module DisconnectionTrees
 
     # Before ConnectedUser destroy_connection для всех запросов на объединение, ранее установленных как выполненные,
     # confirm был равен 2, т.е. для всех входящих в запросы юзеров (деревьев)
-    ConnectionRequest.disconnected_requests_update(conn_users_destroy_data)
+    # ConnectionRequest.disconnected_requests_update(conn_users_destroy_data)
 
     ConnectedUser.destroy_connection(conn_users_destroy_data)
 
     self.update_disconnected_users!
 
-    ConnectionRequest.request_disconnection(conn_users_destroy_data)
+    # ConnectionRequest.request_disconnection(conn_users_destroy_data)
 
   end
 
