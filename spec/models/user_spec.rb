@@ -1068,7 +1068,7 @@ RSpec.describe User, :type => :model do
       ################ CONNECTION  ###########################
 
 
-      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>' , focus: true do # , focus: true
+      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'  do # , focus: true
         # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
         # profiles_to_destroy = connection_data[:profiles_to_destroy]
         # who_connect         = connection_data[:who_connect]
@@ -1102,7 +1102,7 @@ RSpec.describe User, :type => :model do
           it_behaves_like :successful_profile_keys_profile_ids
         end
 
-        describe '- check ConnectionLog Profiles.deleted update count AFTER <connect_trees>' , focus: true do
+        describe '- check ConnectionLog Profiles.deleted update count AFTER <connect_trees>'  do # , focus: true
           it '- check ConnectionLog have rows count - Ok' do
             profiles_del_logs_count =  ConnectionLog.where(field: 'deleted').count
             puts "in check ConnectionLog Profiles.deleted count: profiles_del_logs_count = #{profiles_del_logs_count.inspect} \n"
@@ -1335,7 +1335,7 @@ RSpec.describe User, :type => :model do
 
     ################  DISCONNECTION ###########################
 
-    describe '- check User model Method <disconnect> - Ok' , focus: true do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok'  do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
