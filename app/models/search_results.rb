@@ -3,6 +3,7 @@ class SearchResults < ActiveRecord::Base
   validates_presence_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count, :found_profile_ids,
                         :searched_profile_ids, :counts,
                         :message => "Должно присутствовать в SearchResults"
+  # validates_presence_of :connection_id, absence: true, :message => "Может отсутствовать в SearchResults"
 
   validates_numericality_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count,
                             :only_integer => true,
@@ -10,6 +11,8 @@ class SearchResults < ActiveRecord::Base
   validates_numericality_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count,
                             :greater_than => 0,
                             :message => "Должны быть больше 0 в SearchResults"
+  validates_numericality_of :connection_id, :only_integer => true, :greater_than => 0, allow_nil: true,
+                            :message => "Должно быть больше 0 и целым числом, если существует, в SearchResults"
 
   # custom validation
 

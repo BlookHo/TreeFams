@@ -155,6 +155,8 @@ RSpec.describe User, :type => :model do
       #Weafam_settings
       FactoryGirl.create(:weafam_setting)    #
 
+      # SearchResults
+      FactoryGirl.create(:search_results)
 
       #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
@@ -564,6 +566,8 @@ RSpec.describe User, :type => :model do
       CommonLog.reset_pk_sequence
       UpdatesFeed.delete_all
       UpdatesFeed.reset_pk_sequence
+      SearchResults.delete_all
+      SearchResults.reset_pk_sequence
     }
 
     # create User parameters
@@ -829,6 +833,37 @@ RSpec.describe User, :type => :model do
       # :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
 
     end
+
+    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
+      let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+      before { current_user_1.start_search(certain_koeff_for_connect) }
+      describe '- check SearchResults have rows count after <search> - Ok' do
+        let(:rows_qty) {2}
+        it_behaves_like :successful_search_results_rows_count
+      end
+      it '- check SearchResults First Factory row - Ok' do # , focus: true
+        search_results_fields = SearchResults.first.attributes.except('created_at','updated_at')
+        expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
+                                             "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[1, 2],
+                                             "searched_profile_ids"=>[1, 2], "counts"=>[1, 2],
+                                             "connection_id"=>nil} )
+      end
+      it '- check SearchResults Second row - made by Method Search - Ok' do # , focus: true
+        search_results_fields = SearchResults.second.attributes.except('created_at','updated_at')
+        expect(search_results_fields).to eq({"id"=>2, "user_id"=>1, "found_user_id"=>3, "profile_id"=>11,
+                                             "found_profile_id"=>25, "count"=>7,
+                                             "found_profile_ids"=>[25, 22, 24, 23, 27, 26, 29, 28],
+                                             "searched_profile_ids"=>[11, 14, 13, 12, 19, 18, 21, 20],
+                                             "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3} )
+      end
+
+
+
+
+    end
+
+
+
 
     describe '- check User model Method <complete_search> - Ok'    do  # , focus: true
 

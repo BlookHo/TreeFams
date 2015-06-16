@@ -20,6 +20,7 @@ module Search
     # Задание на поиск от Дерева Юзера: tree_is_profiles =
     # [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18]
 
+    # puts "======================= RUN start_search ========================= "
     logger.info "======================= RUN start_search ========================= "
     logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
     logger.info "Задание на поиск от Дерева Юзера: tree_is_profiles = #{tree_is_profiles} "
@@ -54,8 +55,8 @@ module Search
       store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
     end
 
-    logger.info "== END OF start_search ========================= "
-    logger.info " $$$$-----$$$  After start_search: results = #{results.inspect}"
+    logger.info "== END OF start_search ===  results = #{results.inspect}"
+    puts "== END OF start_search === "
     results
   end # END OF start_search
 
@@ -64,6 +65,8 @@ module Search
   def store_search_results(results)
     by_profiles = results[:by_profiles]
     by_trees = results[:by_trees]
+
+    # puts " In store_search_results ========================= "
 
     # by_profiles =
     # [{:search_profile_id=>18, :found_tree_id=>2, :found_profile_id=>9, :count=>5},
@@ -86,6 +89,10 @@ module Search
     found_tree_ids = collect_tree_ids(by_trees)
     # previous_results_count = SearchResults.where(user_id: self, found_user_id: found_tree_ids).count
     previous_results = SearchResults.where(user_id: self, found_user_id: found_tree_ids)
+
+    cty_rows = SearchResults.all.count
+    puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, cty_rows = #{cty_rows.inspect} "
+
     logger.info "= found_tree_ids = #{found_tree_ids.inspect} "
     if !previous_results.blank?
       previous_results.each(&:destroy)
@@ -132,17 +139,37 @@ module Search
 
   # @note - запись результатов поиска
   def store_results(found_tree_ids, by_profiles)
+    puts "In store_results = by_profiles = #{by_profiles.inspect} "
+
     found_tree_ids.each do |tree_id|
       searched_profile_ids, found_profile_ids, counts = collect_search_profile_ids(by_profiles, tree_id)
+
+      connection_id = request_exist(tree_id)
+
       SearchResults.create(user_id: self.id, found_user_id: tree_id, profile_id: searched_profile_ids[0],
                            found_profile_id: found_profile_ids[0], count: counts[0],
                            found_profile_ids: found_profile_ids, searched_profile_ids: searched_profile_ids,
-                           counts: counts )
+                           counts: counts, connection_id: connection_id  )
     end
+
+    cty_rows = SearchResults.all.count
+    puts "In store_results - after create: cty_rows = #{cty_rows.inspect} "
+
   end
 
 
-  # Основной поиск по дереву Автора - Юзера.
+  # @note Если встречный запрос существует, то получаем его connection_id
+  def request_exist(tree_id)
+    request = ConnectionRequest.where(:user_id => tree_id, :with_user_id => self.id, :done => false )
+    unless request.blank?
+      connection_id = request[0].connection_id
+    end
+    puts "In request_exist: connection_id = #{connection_id.inspect} "
+    connection_id
+  end
+
+
+    # Основной поиск по дереву Автора - Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
@@ -352,13 +379,6 @@ module Search
         one_result_hash.merge!(:found_profile_id => found_profile_id)
         count = profiles_match_hash.values_at(found_profile_id)[0] if !profiles_match_hash.empty?
         one_result_hash.merge!(:count => count)
-
-        # check_request_exists?
-
-        # update_conn_req_id
-        #
-
-
 
         by_profiles << one_result_hash
 
