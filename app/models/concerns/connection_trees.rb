@@ -186,6 +186,9 @@ module ConnectionTrees
       ConnectionRequest.request_connection(connection_data)
       ConnectionRequest.connected_requests_update(current_user_id)
     ##################################################################
+    # SearchResults.update_done_connect()
+
+
     ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
     profile_current_user = User.find(current_user_id).profile_id   #
     profile_user_id = User.find(user_id).profile_id  #

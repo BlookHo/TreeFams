@@ -352,6 +352,14 @@ module Search
         one_result_hash.merge!(:found_profile_id => found_profile_id)
         count = profiles_match_hash.values_at(found_profile_id)[0] if !profiles_match_hash.empty?
         one_result_hash.merge!(:count => count)
+
+        # check_request_exists?
+
+        # update_conn_req_id
+        #
+
+
+
         by_profiles << one_result_hash
 
       end

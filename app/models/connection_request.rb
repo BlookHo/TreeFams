@@ -133,7 +133,10 @@ class ConnectionRequest < ActiveRecord::Base
         request_row.confirm = 0 if request_row.with_user_id == current_user_id
         request_row.save
       end
-    # else
+
+      # SearchResults.update_no_to_connect()
+
+      # else
     #   redirect_to show_user_requests_path
       # flash - no connection requests data in table
     end
