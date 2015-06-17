@@ -1117,6 +1117,20 @@ RSpec.describe User, :type => :model do
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         before { current_user_1.connection_in_tables(connection_data) }
 
+        context '- check SearchResults model AFTER <connect_trees> module' ,  focus: true  do #  ,  focus: true
+          describe '- check SearchResults have rows count AFTER <connect_trees> - Ok' do
+            let(:rows_qty) {1}
+            it_behaves_like :successful_search_results_rows_count
+          end
+          it '- check SearchResults First Factory row - Ok' do # , focus: true
+            search_results_fields = SearchResults.first.attributes.except('created_at','updated_at')
+            expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
+                                                 "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[1, 2],
+                                                 "searched_profile_ids"=>[1, 2], "counts"=>[1, 2],
+                                                 "connection_id"=>nil} )
+          end
+        end
+
         describe '- check Profiles AFTER <connect_trees>'   do #, focus: true
           let(:opposite_profiles_arr) {connection_data[:profiles_to_destroy]}
           let(:profiles_deleted) {[1,1,1,1,1,1,1,1]}

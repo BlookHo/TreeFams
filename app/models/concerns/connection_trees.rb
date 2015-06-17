@@ -167,13 +167,13 @@ module ConnectionTrees
   # :current_user_id=>1, :user_id=>3, :connection_id=>3}
   def connection_in_tables(connection_data)
 
-    # who_connect_arr         = connection_data[:who_connect_arr]
-    # with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
+    who_connect_arr         = connection_data[:who_connect_arr]
+    with_whom_connect_arr   = connection_data[:with_whom_connect_arr]
     profiles_to_rewrite     = connection_data[:profiles_to_rewrite]
     profiles_to_destroy     = connection_data[:profiles_to_destroy]
     current_user_id         = connection_data[:current_user_id]
     user_id                 = connection_data[:user_id]
-    # connection_id           = connection_data[:connection_id]
+    connection_id           = connection_data[:connection_id]
 
     ###################################################################
     ######## Собственно Центральный метод соединения деревьев = перезапись профилей в таблицах
@@ -186,8 +186,9 @@ module ConnectionTrees
       ConnectionRequest.request_connection(connection_data)
       ConnectionRequest.connected_requests_update(current_user_id)
     ##################################################################
-    # SearchResults.update_done_connect()
-
+    # Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
+    previous_results = SearchResults.where("user_id in (?)", who_connect_arr).where("found_user_id in (?)", with_whom_connect_arr)
+    previous_results.each(&:destroy) unless previous_results.blank?
 
     ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
     profile_current_user = User.find(current_user_id).profile_id   #

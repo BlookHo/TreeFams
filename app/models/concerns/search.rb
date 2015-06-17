@@ -161,6 +161,7 @@ module Search
   # @note Если встречный запрос существует, то получаем его connection_id
   def request_exist(tree_id)
     request = ConnectionRequest.where(:user_id => tree_id, :with_user_id => self.id, :done => false )
+    # request = nil
     unless request.blank?
       connection_id = request[0].connection_id
     end
