@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150616112504) do
+ActiveRecord::Schema.define(version: 20150617095406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,10 +176,11 @@ ActiveRecord::Schema.define(version: 20150616112504) do
     t.integer  "count"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "found_profile_ids",    array: true
-    t.integer  "searched_profile_ids", array: true
-    t.integer  "counts",               array: true
+    t.integer  "found_profile_ids",                array: true
+    t.integer  "searched_profile_ids",             array: true
+    t.integer  "counts",                           array: true
     t.integer  "connection_id"
+    t.integer  "pending_connect",      default: 0
   end
 
   create_table "similars_founds", force: true do |t|

@@ -18,6 +18,11 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
           expect(good_search_results_big_ids).to be_valid
         end
 
+        let(:good_search_results2) {FactoryGirl.build(:search_results, :correct2)}
+        it '- 2 Saves a valid good_search_results2 - big IDs' do
+          expect(good_search_results2).to be_valid
+        end
+
       end
 
       context '- invalid search_results'  do  # , focus: true

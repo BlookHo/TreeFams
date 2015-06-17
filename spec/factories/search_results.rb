@@ -7,10 +7,22 @@ FactoryGirl.define do
     profile_id 5
     found_profile_id 7
     count 4
-    found_profile_ids [1,2]
-    searched_profile_ids [1,2]
-    counts [1,2]
+    found_profile_ids [7,25]
+    searched_profile_ids [5,52]
+    counts [4,4]
     connection_id nil
+
+    trait :correct2 do
+      user_id 2
+      found_user_id 3
+      profile_id 1555
+      found_profile_id 1444
+      count 5
+      found_profile_ids [1444,22222]
+      searched_profile_ids [1555,27777]
+      counts [5,5]
+      connection_id 7
+    end
 
     trait :big_IDs do
       user_id 1222222
