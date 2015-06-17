@@ -47,28 +47,33 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
           expect(bad_search_results_nonintegers4).to_not be_valid
         end
 
+        let(:bad_search_results_nonintegers5) {FactoryGirl.build(:search_results, :unintegers5)}
+        it '- 5 Dont save: - unintegers fields' do
+          expect(bad_search_results_nonintegers5).to_not be_valid
+        end
+
         let(:bad_unarray_found_profile_ids) {FactoryGirl.build(:search_results, :unarray_found_profile_ids)}
-        it '- 5 Dont save: - unarray field found_profile_ids' do
+        it '- 6 Dont save: - unarray field found_profile_ids' do
           expect(bad_unarray_found_profile_ids).to_not be_valid
         end
 
         let(:bad_unarray_searched_profile_ids) {FactoryGirl.build(:search_results, :unarray_searched_profile_ids)}
-        it '- 6 Dont save: - unarray field searched_profile_ids' do
+        it '- 7 Dont save: - unarray field searched_profile_ids' do
           expect(bad_unarray_searched_profile_ids).to_not be_valid
         end
 
         let(:bad_unarray_counts) {FactoryGirl.build(:search_results, :unarray_counts)}
-        it '- 7 Dont save: - unarray fields counts' do
+        it '- 8 Dont save: - unarray fields counts' do
           expect(bad_unarray_counts).to_not be_valid
         end
 
         let(:bad_users_equals) {FactoryGirl.build(:search_results, :users_equals)}
-        it '- 8 Dont save: - :user_id  AND :found_user_id - equals' do
+        it '- 9 Dont save: - :user_id  AND :found_user_id - equals' do
           expect(bad_users_equals).to_not be_valid
         end
 
         let(:bad_profiles_equals) {FactoryGirl.build(:search_results, :profiles_equals)}
-        it '- 9 Dont save: - :profile_id  AND :found_profile_id - equals' do
+        it '- 10 Dont save: - :profile_id  AND :found_profile_id - equals' do
           expect(bad_profiles_equals).to_not be_valid
         end
 

@@ -3,9 +3,7 @@ class SearchResults < ActiveRecord::Base
   validates_presence_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count, :found_profile_ids,
                         :searched_profile_ids, :counts,
                         :message => "Должно присутствовать в SearchResults"
-  # validates_presence_of :connection_id, absence: true, :message => "Может отсутствовать в SearchResults"
-
-  validates_numericality_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count,
+  validates_numericality_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count, :pending_connect,
                             :only_integer => true,
                             :message => "Должны быть целым числом в SearchResults"
   validates_numericality_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count,
@@ -13,6 +11,8 @@ class SearchResults < ActiveRecord::Base
                             :message => "Должны быть больше 0 в SearchResults"
   validates_numericality_of :connection_id, :only_integer => true, :greater_than => 0, allow_nil: true,
                             :message => "Должно быть больше 0 и целым числом, если существует, в SearchResults"
+  validates_inclusion_of :pending_connect, :in => [0, 1],
+                         :message => ":pending_connect должно быть [0, 1] в SearchResults"
 
   # custom validation
 
@@ -58,6 +58,12 @@ class SearchResults < ActiveRecord::Base
     end
   end
 
+
+  # @note: Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
+  def self.destroy_previous_results(who_connect_arr, with_whom_connect_arr)
+    previous_results = self.where("user_id in (?)", who_connect_arr).where("found_user_id in (?)", with_whom_connect_arr)
+    previous_results.each(&:destroy) unless previous_results.blank?
+  end
 
 
 

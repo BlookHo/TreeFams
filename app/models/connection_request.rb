@@ -52,6 +52,7 @@ class ConnectionRequest < ActiveRecord::Base
           # формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
           create_requests(with_whom_connect_ids, connection_id, current_user.id)
 
+
         else
           logger.info "Warning:: Встречный запрос на объединение! "
           msg = "Уже существует встречный запрос на объединение! "
@@ -90,8 +91,21 @@ class ConnectionRequest < ActiveRecord::Base
                          agent_profile_id: profile_user_to_connect,  who_made_event: current_user_id, read: false)
       # logger.info "In create_requests: UpdatesFeed.create"
       ##############################################
+
     end
+
+    # todo: to SearchResults model
+    # @note: При создании запроса на объединение,
+    #   соответствующие рез-ты поиска получают признак pending_connect = 1
+    # def make_pending_results
+    current_user_results = SearchResults.where(user_id: current_user_id).where("found_user_id in (?)", with_whom_connect_ids)
+    current_user_results.update_all({pending_connect: 1}) unless current_user_results.blank?
+    # end
+
+
   end
+
+
 
 
   # @note: определение Юзеров - участников объединения деревьев

@@ -11,6 +11,7 @@ FactoryGirl.define do
     searched_profile_ids [5,52]
     counts [4,4]
     connection_id nil
+    pending_connect 0
 
     trait :correct2 do
       user_id 2
@@ -22,6 +23,8 @@ FactoryGirl.define do
       searched_profile_ids [1555,27777]
       counts [5,5]
       connection_id 7
+      pending_connect 1
+
     end
 
     trait :big_IDs do
@@ -82,6 +85,19 @@ FactoryGirl.define do
       connection_id 777.7777
     end
 
+    trait :unintegers5 do
+      # user_id 1222222
+      # found_user_id 13333333
+      # profile_id 14444444
+      # found_profile_id 15555555
+      # count 15
+      # found_profile_ids [15555555,222222222]
+      # searched_profile_ids [14444444,277777777]
+      # counts [15,2]
+      connection_id 777
+      pending_connect 2
+    end
+
     trait :unarray_found_profile_ids do
       # user_id 1222222
       # found_user_id 13333333
@@ -91,7 +107,8 @@ FactoryGirl.define do
       found_profile_ids 155
       searched_profile_ids 14
       # counts [15,2]
-      connection_id 77
+      # connection_id 77
+      pending_connect 0
     end
 
     trait :unarray_searched_profile_ids do

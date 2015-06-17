@@ -1,61 +1,64 @@
 require 'rails_helper'
 
-RSpec.describe ConnectionRequest, :type => :model  , focus: true   do #   , focus: true  ,:disabled=>true
+RSpec.describe ConnectionRequest, :type => :model , focus: true  do #   , focus: true  ,:disabled=>true
 
-  describe '- Validation' do
-    describe '- on create' do  #  , focus: true
-
-      context '- valid connected_users' do
-        let(:good_connected_users) {FactoryGirl.build(:connected_user, :correct)}
-        it '- 1. Saves a valid good_connected_users pair' do
-          puts " Model ConnectedUser validation "
-          expect(good_connected_users).to be_valid
-        end
-        let(:good_connected_users_2) {FactoryGirl.build(:connected_user, :big_IDs)}
-        it '- 2. Saves a valid connected_users pair - big IDs' do
-          expect(good_connected_users_2).to be_valid
-        end
-      end
-
-      context '- Invalid connected_users pairs' do
-        let(:bad_connected_users_1) {FactoryGirl.build(:connected_user, :user_id_nil)}
-        it '- 1. Does not save an invalid connected_users pair - user_id_nil' do
-          expect(bad_connected_users_1).to_not be_valid
-        end
-        let(:bad_connected_users_2) {FactoryGirl.build(:connected_user, :ids_equal)}
-        it '- 2. Does not save an invalid connected_users pair - equal Profile_IDs' do
-          expect(bad_connected_users_2).to_not be_valid
-        end
-        let(:bad_connected_users_3) {FactoryGirl.build(:connected_user, :one_id_less_zero)}
-        it '- 3. Does not save an invalid connected_users pair - one_id_less_zero' do
-          expect(bad_connected_users_3).to_not be_valid
-        end
-        let(:bad_connected_users_4) {FactoryGirl.build(:connected_user, :other_id_less_zero)}
-        it '- 4. Does not save an invalid connected_users pair - other_id_less_zero' do
-          expect(bad_connected_users_4).to_not be_valid
-        end
-        let(:bad_connected_users_5) {FactoryGirl.build(:connected_user, :one_id_Uninteger)}
-        it '- 5. Does not save an invalid connected_users pair - one_id_Uninteger' do
-          expect(bad_connected_users_5).to_not be_valid
-        end
-      end
-
-      context '- invalid connected_users rows' do
-        let(:bad_profiles_fields_are_equal) {FactoryGirl.build(:connected_user, :bad_profiles_fields_eual)}
-        it '- 1 Dont save: - bad_profiles_fields - equal' do
-          expect(bad_profiles_fields_are_equal).to_not be_valid
-        end
-      end
-    end
-  end
-
+#   describe '- Validation' do
+#     describe '- on create' do  #  , focus: true
+#
+#       context '- valid connected_users' do
+#         let(:good_connected_users) {FactoryGirl.build(:connected_user, :correct)}
+#         it '- 1. Saves a valid good_connected_users pair' do
+#           puts " Model ConnectedUser validation "
+#           expect(good_connected_users).to be_valid
+#         end
+#         let(:good_connected_users_2) {FactoryGirl.build(:connected_user, :big_IDs)}
+#         it '- 2. Saves a valid connected_users pair - big IDs' do
+#           expect(good_connected_users_2).to be_valid
+#         end
+#       end
+#
+#       context '- Invalid connected_users pairs' do
+#         let(:bad_connected_users_1) {FactoryGirl.build(:connected_user, :user_id_nil)}
+#         it '- 1. Does not save an invalid connected_users pair - user_id_nil' do
+#           expect(bad_connected_users_1).to_not be_valid
+#         end
+#         let(:bad_connected_users_2) {FactoryGirl.build(:connected_user, :ids_equal)}
+#         it '- 2. Does not save an invalid connected_users pair - equal Profile_IDs' do
+#           expect(bad_connected_users_2).to_not be_valid
+#         end
+#         let(:bad_connected_users_3) {FactoryGirl.build(:connected_user, :one_id_less_zero)}
+#         it '- 3. Does not save an invalid connected_users pair - one_id_less_zero' do
+#           expect(bad_connected_users_3).to_not be_valid
+#         end
+#         let(:bad_connected_users_4) {FactoryGirl.build(:connected_user, :other_id_less_zero)}
+#         it '- 4. Does not save an invalid connected_users pair - other_id_less_zero' do
+#           expect(bad_connected_users_4).to_not be_valid
+#         end
+#         let(:bad_connected_users_5) {FactoryGirl.build(:connected_user, :one_id_Uninteger)}
+#         it '- 5. Does not save an invalid connected_users pair - one_id_Uninteger' do
+#           expect(bad_connected_users_5).to_not be_valid
+#         end
+#       end
+#
+#       context '- invalid connected_users rows' do
+#         let(:bad_profiles_fields_are_equal) {FactoryGirl.build(:connected_user, :bad_profiles_fields_eual)}
+#         it '- 1 Dont save: - bad_profiles_fields - equal' do
+#           expect(bad_profiles_fields_are_equal).to_not be_valid
+#         end
+#       end
+#     end
+#   end
+#
   describe '- CHECK in ConnectedUser Model methods'  do  # , focus: true
 
     # create model data
     before {
+      #Weafam_settings
+      FactoryGirl.create(:weafam_setting)    #
 
-      User.delete_all
-      User.reset_pk_sequence
+      # SearchResults
+      FactoryGirl.create(:search_results)
+      FactoryGirl.create(:search_results, :correct2)
 
       #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
@@ -142,9 +145,8 @@ RSpec.describe ConnectionRequest, :type => :model  , focus: true   do #   , focu
       # User current_user_1_connected
       FactoryGirl.create(:user, :current_user_1_connected )  # User = 1 . Tree = [1,2]. profile_id = 17
       FactoryGirl.create(:user, :user_2_connected )  # User = 2 . Tree = [1,2]. profile_id = 11
-      # puts "before All: User.first.profile_id = #{User.first.profile_id}, User.last.profile_id = #{User.last.profile_id} \n"  # user_id = 1
+      # puts "before All: User.last.id = #{User.last.id}, .profile_id = #{User.last.profile_id} \n"  # user_id = 1
       FactoryGirl.create(:user, :user_3_to_connect )  # User = 3 . Tree = [3]. profile_id = 22
-      # puts "before All: User.first.profile_id = #{User.first.profile_id}, User.last.profile_id = #{User.last.profile_id} \n"  # user_id = 1
       # puts "before All: User.second.id = #{User.second.id}, .profile_id = #{User.second.profile_id} \n"  # user_id = 1
       FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
       FactoryGirl.create(:user, :user_5 )  # User = 5 . Tree = 10. profile_id = 555
@@ -153,7 +155,7 @@ RSpec.describe ConnectionRequest, :type => :model  , focus: true   do #   , focu
       FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
 
       # ConnectedUser
-      FactoryGirl.create(:connected_user, :correct)      # 1  2 , :correct
+      FactoryGirl.create(:connected_user, :correct)      # 1  2
       FactoryGirl.create(:connected_user, :correct_7_8)  # 7  8
 
       # Profile
@@ -428,9 +430,24 @@ RSpec.describe ConnectionRequest, :type => :model  , focus: true   do #   , focu
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_195)  # 16  124
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_196)  # 124 16
 
+      #     # puts "before All: ProfileKey.last.user_id = #{ProfileKey.last.user_id} \n"  # user_id = 1
+      #     # puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
+      #     # puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
+
+      FactoryGirl.create(:connection_request, :conn_request_1_2)    #
+      FactoryGirl.create(:connection_request, :conn_request_7_8)    #
+      FactoryGirl.create(:connection_request, :conn_request_3_1)    #
+      FactoryGirl.create(:connection_request, :conn_request_3_2)    #
+
+      #     FactoryGirl.create(:common_log, :log_delete_profile_89)    #
+      #     FactoryGirl.create(:common_log, :log_delete_profile_90)    #
+      #     FactoryGirl.create(:common_log, :log_add_profile_172)    #
+      #     FactoryGirl.create(:common_log, :log_add_profile_173)    #
     }
 
     after {
+      ConnectionRequest.delete_all
+      ConnectionRequest.reset_pk_sequence
       User.delete_all
       User.reset_pk_sequence
       ConnectedUser.delete_all
@@ -445,82 +462,140 @@ RSpec.describe ConnectionRequest, :type => :model  , focus: true   do #   , focu
       # WeafamSetting.reset_pk_sequence
       Name.delete_all
       Name.reset_pk_sequence
-      # CommonLog.delete_all
-      # CommonLog.reset_pk_sequence
+      ConnectionLog.delete_all
+      ConnectionLog.reset_pk_sequence
+      CommonLog.delete_all
+      CommonLog.reset_pk_sequence
+      UpdatesFeed.delete_all
+      UpdatesFeed.reset_pk_sequence
+      SearchResults.delete_all
+      SearchResults.reset_pk_sequence
     }
 
-    let(:current_user) { User.first }
-    let(:connected_users) { current_user.get_connected_users }
-    context '- before actions - check connected_users' do
-      it "- Return proper connected_users Array result for current_user_id = 1" do
-        puts "Let created: currentuser_id = #{current_user.id} \n"   # 1
-        puts "Check ConnectedUser Model methods \n"
-        puts "Before All - connected_users created \n"  #
-        expect(connected_users).to be_a_kind_of(Array)
+    # create User parameters
+    let(:current_user_1) { User.first }  # User = 1. Tree = [1,2]. profile_id = 17
+    let(:currentuser_id) {current_user_1.id}  # id = 1
+    let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
+
+    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
+      let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+      before { current_user_1.start_search(certain_koeff_for_connect) }
+      describe '- check SearchResults have rows count after <search> - Ok' do
+        let(:rows_qty) {3}
+        it_behaves_like :successful_search_results_rows_count
       end
-      it "- Return proper connected_users Array result for current_user_id = 1" do
-        puts "Let created: connected_users = #{connected_users} \n"   # [1,2]
-        expect(connected_users).to eq([1,2])
+      it '- check SearchResults First Factory row - Ok' do # , focus: true
+        search_results_fields = SearchResults.first.attributes.except('created_at','updated_at')
+        expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
+                                             "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
+                                             "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
+                                             "connection_id"=>nil, "pending_connect"=>0} )
       end
+      it '- check SearchResults Second Factory row - Ok' do # , focus: true
+        search_results_fields = SearchResults.second.attributes.except('created_at','updated_at')
+        expect(search_results_fields).to eq({"id"=>2, "user_id"=>2, "found_user_id"=>3, "profile_id"=>1555,
+                                             "found_profile_id"=>1444, "count"=>5, "found_profile_ids"=>[1444, 22222],
+                                             "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
+                                             "connection_id"=>7, "pending_connect"=>1}  )
+      end
+      it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
+        search_results_fields = SearchResults.third.attributes.except('created_at','updated_at')
+        expect(search_results_fields).to eq({"id"=>3, "user_id"=>1, "found_user_id"=>3, "profile_id"=>11,
+                                             "found_profile_id"=>25, "count"=>7,
+                                             "found_profile_ids"=>[25, 22, 24, 23, 27, 26, 29, 28],
+                                             "searched_profile_ids"=>[11, 14, 13, 12, 19, 18, 21, 20],
+                                             "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3,
+                                             "pending_connect"=>0} )
+      end
+
     end
-    context '- before actions - check tables values ' do   #   , focus: true
-      describe '- check Profile have rows count before - Ok' do
-        let(:rows_qty) {26}
-        it_behaves_like :successful_profiles_rows_count
-      end
-      describe '- check Tree have rows count before - Ok' do
-        let(:rows_qty) {28}
-        it_behaves_like :successful_tree_rows_count
-      end
-      describe '- check ProfileKey have rows count before - Ok' do
-        let(:rows_qty) {196}
-        it_behaves_like :successful_profile_keys_rows_count
-      end
-      describe '- check ConnectedUser have rows count before - Ok' do
-        let(:rows_qty) {2}
-        it_behaves_like :successful_connected_users_rows_count
-      end
-    end
 
-    # from connect_users_trees_controller.rb
-    describe ' Check action <set_users_connection> :'  do  # , focus: true
-      context '- save in Table ConnectedUser connection data - rewrite and overwrite profiles rows ' do
+#     let(:current_user) { User.first }
+#     let(:connected_users) { current_user.get_connected_users }
+#     context '- before actions - check connected_users' do
+#       it "- Return proper connected_users Array result for current_user_id = 1" do
+#         puts "Let created: currentuser_id = #{current_user.id} \n"   # 1
+#         puts "Check ConnectedUser Model methods \n"
+#         puts "Before All - connected_users created \n"  #
+#         expect(connected_users).to be_a_kind_of(Array)
+#       end
+#       it "- Return proper connected_users Array result for current_user_id = 1" do
+#         puts "Let created: connected_users = #{connected_users} \n"   # [1,2]
+#         expect(connected_users).to eq([1,2])
+#       end
+#     end
+#     context '- before actions - check tables values ' do   #   , focus: true
+#       describe '- check Profile have rows count before - Ok' do
+#         let(:rows_qty) {26}
+#         it_behaves_like :successful_profiles_rows_count
+#       end
+#       describe '- check Tree have rows count before - Ok' do
+#         let(:rows_qty) {28}
+#         it_behaves_like :successful_tree_rows_count
+#       end
+#       describe '- check ProfileKey have rows count before - Ok' do
+#         let(:rows_qty) {196}
+#         it_behaves_like :successful_profile_keys_rows_count
+#       end
+#       describe '- check ConnectedUser have rows count before - Ok' do
+#         let(:rows_qty) {2}
+#         it_behaves_like :successful_connected_users_rows_count
+#       end
+#     end
 
-        # connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
-        #                    :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
-        #                    :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
-        #                    :current_user_id=>2, :user_id=>3, :connection_id=>3}
+    describe ' Check ConnectionRequest Methods :'  do  # , focus: true
+#       context '- save in Table ConnectedUser connection data - rewrite and overwrite profiles rows ' do
 
-        let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
-                                 :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
-                                 :profiles_to_destroy => [22, 29, 27, 25, 28, 23, 24, 26],
-                                 :current_user_id => 2, :user_id => 3,:connection_id => 3 } }
-        before { ConnectedUser.set_users_connection(connection_data ) }
+        let(:with_whom_connect_ids) { [1, 2] }
+        let(:max_connection_id) { 444 }
+        let(:current_user_id) { 3 }
+        let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
 
-        describe '- check ConnectedUser have rows count before - Ok' do
-          let(:rows_qty) {10}
-          it_behaves_like :successful_connected_users_rows_count
-        end
-        describe '- check ConnectedUser rewrite_profile_ids generated - Ok' do
-          let(:rewrite_profile_ids_arr) {[11, 12, 13, 14, 18, 19, 20, 21, 66, 85]}
-          let(:rewrite_profile_ids_arr_size) {10}
-          it_behaves_like :successful_connected_users_rewrite_profile_ids
-        end
-        describe '- check ConnectedUser overwrite_profile_ids generated - Ok' do
-          let(:overwrite_profile_ids_arr) {[22, 23, 24, 25, 26, 27, 28, 29, 100, 101]}
-          let(:overwrite_profile_ids_arr_size) {10}
-          it_behaves_like :successful_connected_users_overwrite_profile_ids
-        end
-        describe '- check ConnectedUser get_connected_users got Ok' do
-          let(:current_user) { User.find(2) }
-          let(:connected_users) { current_user.get_connected_users }
-          it "- Return proper connected_users Array result for current_user_id = 1" do
-            puts "Let created: connected_users = #{connected_users} \n"   # [1,2]
-            expect(connected_users).to eq([1,2,3])
-          end
+        before {
+          current_user_1.start_search(certain_koeff_for_connect)
+          ConnectionRequest.create_requests(with_whom_connect_ids, max_connection_id, current_user_id )
+        }
+
+        describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok' do
+          let(:rows_qty) {6}
+          it_behaves_like :successful_connection_request_rows_count
         end
 
-      end
+        describe '- check SearchResults have rows count after <search> - Ok' do
+          let(:rows_qty) {3}
+          it_behaves_like :successful_search_results_rows_count
+        end
+
+        it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
+          search_results_fields = SearchResults.third.attributes.except('created_at','updated_at')
+          expect(search_results_fields).to eq({"id"=>3, "user_id"=>1, "found_user_id"=>3, "profile_id"=>11,
+                                               "found_profile_id"=>25, "count"=>7,
+                                               "found_profile_ids"=>[25, 22, 24, 23, 27, 26, 29, 28],
+                                               "searched_profile_ids"=>[11, 14, 13, 12, 19, 18, 21, 20],
+                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3,
+                                               "pending_connect"=>0} )
+        end
+
+#         describe '- check ConnectedUser rewrite_profile_ids generated - Ok' do
+#           let(:rewrite_profile_ids_arr) {[11, 12, 13, 14, 18, 19, 20, 21, 66, 85]}
+#           let(:rewrite_profile_ids_arr_size) {10}
+#           it_behaves_like :successful_connected_users_rewrite_profile_ids
+#         end
+#         describe '- check ConnectedUser overwrite_profile_ids generated - Ok' do
+#           let(:overwrite_profile_ids_arr) {[22, 23, 24, 25, 26, 27, 28, 29, 100, 101]}
+#           let(:overwrite_profile_ids_arr_size) {10}
+#           it_behaves_like :successful_connected_users_overwrite_profile_ids
+#         end
+#         describe '- check ConnectedUser get_connected_users got Ok' do
+#           let(:current_user) { User.find(2) }
+#           let(:connected_users) { current_user.get_connected_users }
+#           it "- Return proper connected_users Array result for current_user_id = 1" do
+#             puts "Let created: connected_users = #{connected_users} \n"   # [1,2]
+#             expect(connected_users).to eq([1,2,3])
+#           end
+#         end
+#
+#       end
 
     end
 

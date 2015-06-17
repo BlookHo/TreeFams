@@ -1,5 +1,5 @@
 
-RSpec.describe User, :type => :model do
+RSpec.describe User, :type => :model  do  # , focus: true
 
   describe '- validation' do
     before do
@@ -833,6 +833,7 @@ RSpec.describe User, :type => :model do
       # {:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}],
       # :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
 
+
     end
 
     context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
@@ -847,14 +848,14 @@ RSpec.describe User, :type => :model do
         expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
                                              "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
                                              "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
-                                             "connection_id"=>nil} )
+                                             "connection_id"=>nil, "pending_connect"=>0} )
       end
       it '- check SearchResults Second Factory row - Ok' do # , focus: true
         search_results_fields = SearchResults.second.attributes.except('created_at','updated_at')
         expect(search_results_fields).to eq({"id"=>2, "user_id"=>2, "found_user_id"=>3, "profile_id"=>1555,
                                              "found_profile_id"=>1444, "count"=>5, "found_profile_ids"=>[1444, 22222],
                                              "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
-                                             "connection_id"=>7}  )
+                                             "connection_id"=>7, "pending_connect"=>1}  )
       end
       it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
         search_results_fields = SearchResults.third.attributes.except('created_at','updated_at')
@@ -862,15 +863,11 @@ RSpec.describe User, :type => :model do
                                              "found_profile_id"=>25, "count"=>7,
                                              "found_profile_ids"=>[25, 22, 24, 23, 27, 26, 29, 28],
                                              "searched_profile_ids"=>[11, 14, 13, 12, 19, 18, 21, 20],
-                                             "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3} )
+                                             "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3,
+                                             "pending_connect"=>0} )
       end
 
-
-
-
     end
-
-
 
 
     describe '- check User model Method <complete_search> - Ok'    do  # , focus: true
@@ -1135,7 +1132,7 @@ RSpec.describe User, :type => :model do
             expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
                                                  "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
                                                  "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
-                                                 "connection_id"=>nil} )
+                                                 "connection_id"=>nil, "pending_connect"=>0} )
           end
         end
 

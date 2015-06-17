@@ -186,9 +186,9 @@ module ConnectionTrees
       ConnectionRequest.request_connection(connection_data)
       ConnectionRequest.connected_requests_update(current_user_id)
     ##################################################################
+
     # Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
-    previous_results = SearchResults.where("user_id in (?)", who_connect_arr).where("found_user_id in (?)", with_whom_connect_arr)
-    previous_results.each(&:destroy) unless previous_results.blank?
+    SearchResults.destroy_previous_results(who_connect_arr, with_whom_connect_arr)
 
     ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
     profile_current_user = User.find(current_user_id).profile_id   #
