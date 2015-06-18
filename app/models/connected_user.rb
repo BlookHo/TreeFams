@@ -93,7 +93,7 @@ class ConnectedUser < ActiveRecord::Base
 
 
 
-  after_update  :update_connected_users
+  # after_update  :update_connected_users
   after_create  :update_connected_users
   # after_destroy :update_connected_users
   def update_connected_users

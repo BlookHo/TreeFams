@@ -6,6 +6,7 @@ module ConnectionTrees
 
   # @note: Стартовый метод объединения деревьев
   def connection(user_id, connection_id)
+    User.transaction do
     logger.info "=== IN connection: user_id = #{user_id}, connection_id = #{connection_id}"
 
     who_connect_users_arr = self.get_connected_users
@@ -156,6 +157,7 @@ module ConnectionTrees
     connection_results[:stop_connection] = stop_connection #
 
     connection_results
+    end
   end
 
 
@@ -561,4 +563,3 @@ module ConnectionTrees
 
 
 end # End of ConnectionTrees module
-
