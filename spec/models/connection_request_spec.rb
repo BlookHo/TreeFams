@@ -480,6 +480,12 @@ RSpec.describe ConnectionRequest, :type => :model , focus: true  do #   , focus:
     context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
+
+      describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok' do
+        let(:rows_qty) {4}
+        it_behaves_like :successful_connection_request_rows_count
+      end
+
       describe '- check SearchResults have rows count after <search> - Ok' do
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
@@ -499,60 +505,41 @@ RSpec.describe ConnectionRequest, :type => :model , focus: true  do #   , focus:
                                              "connection_id"=>7, "pending_connect"=>1}  )
       end
       it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
-        search_results_fields = SearchResults.third.attributes.except('created_at','updated_at')
+        search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
+                                                                      'searched_profile_ids')
         expect(search_results_fields).to eq({"id"=>3, "user_id"=>1, "found_user_id"=>3, "profile_id"=>11,
                                              "found_profile_id"=>25, "count"=>7,
-                                             "found_profile_ids"=>[25, 22, 24, 23, 27, 26, 29, 28],
-                                             "searched_profile_ids"=>[11, 14, 13, 12, 19, 18, 21, 20],
                                              "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3,
                                              "pending_connect"=>0} )
       end
+      it '- check SearchResults Third row.found_profile_ids - made by Method Search - Ok' do
+        search_results_fields = SearchResults.third.found_profile_ids.sort
+        expect(search_results_fields).to eq( [22, 23, 24, 25, 26, 27, 28, 29])
+      end
+      it '- check SearchResults Third row.searched_profile_ids - made by Method Search - Ok' do
+        search_results_fields = SearchResults.third.searched_profile_ids.sort
+        expect(search_results_fields).to eq( [11, 12, 13, 14, 18, 19, 20, 21])
+      end
+      it '- check SearchResults Third row.counts - made by Method Search - Ok' do
+        search_results_fields = SearchResults.third.counts.sort
+        expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7, 7])
+      end
+
 
     end
 
-#     let(:current_user) { User.first }
-#     let(:connected_users) { current_user.get_connected_users }
-#     context '- before actions - check connected_users' do
-#       it "- Return proper connected_users Array result for current_user_id = 1" do
-#         puts "Let created: currentuser_id = #{current_user.id} \n"   # 1
-#         puts "Check ConnectedUser Model methods \n"
-#         puts "Before All - connected_users created \n"  #
-#         expect(connected_users).to be_a_kind_of(Array)
-#       end
-#       it "- Return proper connected_users Array result for current_user_id = 1" do
-#         puts "Let created: connected_users = #{connected_users} \n"   # [1,2]
-#         expect(connected_users).to eq([1,2])
-#       end
-#     end
-#     context '- before actions - check tables values ' do   #   , focus: true
-#       describe '- check Profile have rows count before - Ok' do
-#         let(:rows_qty) {26}
-#         it_behaves_like :successful_profiles_rows_count
-#       end
-#       describe '- check Tree have rows count before - Ok' do
-#         let(:rows_qty) {28}
-#         it_behaves_like :successful_tree_rows_count
-#       end
-#       describe '- check ProfileKey have rows count before - Ok' do
-#         let(:rows_qty) {196}
-#         it_behaves_like :successful_profile_keys_rows_count
-#       end
-#       describe '- check ConnectedUser have rows count before - Ok' do
-#         let(:rows_qty) {2}
-#         it_behaves_like :successful_connected_users_rows_count
-#       end
-#     end
 
     describe ' Check ConnectionRequest Methods :'  do  # , focus: true
 #       context '- save in Table ConnectedUser connection data - rewrite and overwrite profiles rows ' do
 
+        let(:current_user_3) { User.third }  # User = 1. Tree = [1,2]. profile_id = 17
         let(:with_whom_connect_ids) { [1, 2] }
         let(:max_connection_id) { 444 }
         let(:current_user_id) { 3 }
         let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
 
         before {
-          current_user_1.start_search(certain_koeff_for_connect)
+          current_user_3.start_search(certain_koeff_for_connect)
           ConnectionRequest.create_requests(with_whom_connect_ids, max_connection_id, current_user_id )
         }
 
@@ -567,35 +554,24 @@ RSpec.describe ConnectionRequest, :type => :model , focus: true  do #   , focus:
         end
 
         it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
-          search_results_fields = SearchResults.third.attributes.except('created_at','updated_at')
-          expect(search_results_fields).to eq({"id"=>3, "user_id"=>1, "found_user_id"=>3, "profile_id"=>11,
-                                               "found_profile_id"=>25, "count"=>7,
-                                               "found_profile_ids"=>[25, 22, 24, 23, 27, 26, 29, 28],
-                                               "searched_profile_ids"=>[11, 14, 13, 12, 19, 18, 21, 20],
-                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3,
-                                               "pending_connect"=>0} )
+          search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
+                                                                        'searched_profile_ids')
+          expect(search_results_fields).to eq({"id"=>3, "user_id"=>3, "found_user_id"=>2, "profile_id"=>23,
+                                               "found_profile_id"=>12, "count"=>7, "counts"=>[7, 7, 7, 5, 5, 5, 5],
+                                               "connection_id"=>nil, "pending_connect"=>1} )
         end
-
-#         describe '- check ConnectedUser rewrite_profile_ids generated - Ok' do
-#           let(:rewrite_profile_ids_arr) {[11, 12, 13, 14, 18, 19, 20, 21, 66, 85]}
-#           let(:rewrite_profile_ids_arr_size) {10}
-#           it_behaves_like :successful_connected_users_rewrite_profile_ids
-#         end
-#         describe '- check ConnectedUser overwrite_profile_ids generated - Ok' do
-#           let(:overwrite_profile_ids_arr) {[22, 23, 24, 25, 26, 27, 28, 29, 100, 101]}
-#           let(:overwrite_profile_ids_arr_size) {10}
-#           it_behaves_like :successful_connected_users_overwrite_profile_ids
-#         end
-#         describe '- check ConnectedUser get_connected_users got Ok' do
-#           let(:current_user) { User.find(2) }
-#           let(:connected_users) { current_user.get_connected_users }
-#           it "- Return proper connected_users Array result for current_user_id = 1" do
-#             puts "Let created: connected_users = #{connected_users} \n"   # [1,2]
-#             expect(connected_users).to eq([1,2,3])
-#           end
-#         end
-#
-#       end
+        it '- check SearchResults Third row.found_profile_ids - made by Method Search - Ok' do
+          search_results_fields = SearchResults.third.found_profile_ids.sort
+          expect(search_results_fields).to eq( [11, 12, 13, 18, 19, 20, 21])
+        end
+        it '- check SearchResults Third row.searched_profile_ids - made by Method Search - Ok' do
+          search_results_fields = SearchResults.third.searched_profile_ids.sort
+          expect(search_results_fields).to eq( [23, 24, 25, 26, 27, 28, 29])
+        end
+        it '- check SearchResults Third row.counts - made by Method Search - Ok' do
+          search_results_fields = SearchResults.third.counts.sort
+          expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7])
+        end
 
     end
 

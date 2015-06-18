@@ -56,7 +56,7 @@ module Search
     end
 
     logger.info "== END OF start_search ===  results = #{results.inspect}"
-    puts "== END OF start_search === "
+    # puts "== END OF start_search === "
     results
 
     # {:connected_author_arr=>[1, 2], :qty_of_tree_profiles=>16,
@@ -115,6 +115,7 @@ module Search
   def store_search_results(results)
     by_profiles = results[:by_profiles]
     by_trees = results[:by_trees]
+    current_user_tree_ids = results[:connected_author_arr]
 
     # puts " In store_search_results ========================= "
 
@@ -140,15 +141,15 @@ module Search
     # previous_results_count = SearchResults.where(user_id: self, found_user_id: found_tree_ids).count
     previous_results = SearchResults.where(user_id: self, found_user_id: found_tree_ids)
 
-    cty_rows = SearchResults.all.count
-    puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, cty_rows = #{cty_rows.inspect} "
+    # cty_rows = SearchResults.all.count
+    # puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, cty_rows = #{cty_rows.inspect} "
 
     logger.info "= found_tree_ids = #{found_tree_ids.inspect} "
     if !previous_results.blank?
       previous_results.each(&:destroy)
-      store_results(found_tree_ids, by_profiles)
+      store_results(found_tree_ids, by_profiles, current_user_tree_ids)
     else
-      store_results(found_tree_ids, by_profiles)
+      store_results(found_tree_ids, by_profiles, current_user_tree_ids)
     end
   end
   # by_profiles = [{:search_profile_id=>340, :found_tree_id=>17, :found_profile_id=>350, :count=>7},
@@ -188,14 +189,17 @@ module Search
 
 
   # @note - запись результатов поиска
-  def store_results(found_tree_ids, by_profiles)
+  def store_results(found_tree_ids, by_profiles, current_user_tree_ids)
     # puts "In store_results = by_profiles = #{by_profiles.inspect} "
 
     found_tree_ids.each do |tree_id|
       searched_profile_ids, found_profile_ids, counts = collect_search_profile_ids(by_profiles, tree_id)
 
-      connection_id = counter_request_exist(tree_id)
-      value = my_request_exist(tree_id)
+      connected_tree_id = User.find(tree_id).get_connected_users # Состав объединенного дерева в виде массива id
+      # puts "In store_results - after create: connected_tree_id = #{connected_tree_id.inspect} "
+
+      connection_id = counter_request_exist(connected_tree_id, current_user_tree_ids)
+      value = my_request_exist(connected_tree_id, current_user_tree_ids)
 
       SearchResults.create(user_id: self.id, found_user_id: tree_id, profile_id: searched_profile_ids[0],
                            found_profile_id: found_profile_ids[0], count: counts[0],
@@ -203,33 +207,33 @@ module Search
                            counts: counts, connection_id: connection_id, pending_connect: value  )
     end
 
-    cty_rows = SearchResults.all.count
-    puts "In store_results - after create: cty_rows = #{cty_rows.inspect} "
+    qty_rows = SearchResults.all.count
+    puts "In store_results - SearchResults created: qty_rows = #{qty_rows.inspect} "
 
   end
 
 
   # @note Если запрос текущего юзера существует, то устанавливаем в 1 его рез-тов поиска
-  def my_request_exist(tree_id)
-    my_request = ConnectionRequest.where(:user_id => self.id, :with_user_id => tree_id, :done => false )
-    # my_request = nil
+  def my_request_exist(connected_tree_id, current_user_tree_ids)
+    my_request = ConnectionRequest.where("with_user_id in (?)", connected_tree_id).where(:done => false )
+                                  .where("user_id in (?)", current_user_tree_ids)
     value = 0
     unless my_request.blank?
       value = 1
     end
-    puts "In request_exist: value = #{value.inspect} "
+    # puts "In request_exist: value = #{value.inspect} "
     value
   end
 
 
   # @note Если встречный запрос существует, то получаем его connection_id
-  def counter_request_exist(tree_id)
-    request = ConnectionRequest.where(:user_id => tree_id, :with_user_id => self.id, :done => false )
-    # request = nil
+  def counter_request_exist(connected_tree_id, current_user_tree_ids)
+    request = ConnectionRequest.where("user_id in (?)", connected_tree_id)
+                               .where("with_user_id in (?)", current_user_tree_ids).where(:done => false )
     unless request.blank?
       connection_id = request[0].connection_id
     end
-    puts "In request_exist: connection_id = #{connection_id.inspect} "
+    # puts "In request_exist: connection_id = #{connection_id.inspect} "
     connection_id
   end
 
