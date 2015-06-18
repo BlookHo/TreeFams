@@ -1,5 +1,5 @@
 
-RSpec.describe User, :type => :model do
+RSpec.describe User, :type => :model  do  # , focus: true
 
   describe '- validation' do
     before do
@@ -155,6 +155,9 @@ RSpec.describe User, :type => :model do
       #Weafam_settings
       FactoryGirl.create(:weafam_setting)    #
 
+      # SearchResults
+      FactoryGirl.create(:search_results)
+      FactoryGirl.create(:search_results, :correct2)
 
       #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
@@ -564,6 +567,8 @@ RSpec.describe User, :type => :model do
       CommonLog.reset_pk_sequence
       UpdatesFeed.delete_all
       UpdatesFeed.reset_pk_sequence
+      SearchResults.delete_all
+      SearchResults.reset_pk_sequence
     }
 
     # create User parameters
@@ -828,7 +833,53 @@ RSpec.describe User, :type => :model do
       # {:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}],
       # :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
 
+
     end
+
+    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
+      let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+      before { current_user_1.start_search(certain_koeff_for_connect) }
+      describe '- check SearchResults have rows count after <search> - Ok' do
+        let(:rows_qty) {3}
+        it_behaves_like :successful_search_results_rows_count
+      end
+      it '- check SearchResults First Factory row - Ok' do # , focus: true
+        search_results_fields = SearchResults.first.attributes.except('created_at','updated_at')
+        expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
+                                             "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
+                                             "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
+                                             "connection_id"=>nil, "pending_connect"=>0} )
+      end
+      it '- check SearchResults Second Factory row - Ok' do # , focus: true
+        search_results_fields = SearchResults.second.attributes.except('created_at','updated_at')
+        expect(search_results_fields).to eq({"id"=>2, "user_id"=>2, "found_user_id"=>3, "profile_id"=>1555,
+                                             "found_profile_id"=>1444, "count"=>5, "found_profile_ids"=>[1444, 22222],
+                                             "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
+                                             "connection_id"=>7, "pending_connect"=>1}  )
+      end
+      it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
+        search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
+                                                                      'searched_profile_ids')
+        expect(search_results_fields).to eq({"id"=>3, "user_id"=>1, "found_user_id"=>3, "profile_id"=>11,
+                                             "found_profile_id"=>25, "count"=>7,
+                                             "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3,
+                                             "pending_connect"=>0} )
+      end
+      it '- check SearchResults Third row.found_profile_ids - made by Method Search - Ok' do
+        search_results_fields = SearchResults.third.found_profile_ids.sort
+        expect(search_results_fields).to eq( [22, 23, 24, 25, 26, 27, 28, 29])
+      end
+      it '- check SearchResults Third row.searched_profile_ids - made by Method Search - Ok' do
+        search_results_fields = SearchResults.third.searched_profile_ids.sort
+        expect(search_results_fields).to eq( [11, 12, 13, 14, 18, 19, 20, 21])
+      end
+      it '- check SearchResults Third row.counts - made by Method Search - Ok' do
+        search_results_fields = SearchResults.third.counts.sort
+        expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7, 7])
+      end
+
+    end
+
 
     describe '- check User model Method <complete_search> - Ok'    do  # , focus: true
 
@@ -1081,6 +1132,20 @@ RSpec.describe User, :type => :model do
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         before { current_user_1.connection_in_tables(connection_data) }
+
+        context '- check SearchResults model AFTER <connect_trees> module' ,  focus: true  do #  ,  focus: true
+          describe '- check SearchResults have rows count AFTER <connect_trees> - Ok' do
+            let(:rows_qty) {1}
+            it_behaves_like :successful_search_results_rows_count
+          end
+          it '- check SearchResults First Factory row - Ok' do # , focus: true
+            search_results_fields = SearchResults.first.attributes.except('created_at','updated_at')
+            expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
+                                                 "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
+                                                 "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
+                                                 "connection_id"=>nil, "pending_connect"=>0} )
+          end
+        end
 
         describe '- check Profiles AFTER <connect_trees>'   do #, focus: true
           let(:opposite_profiles_arr) {connection_data[:profiles_to_destroy]}

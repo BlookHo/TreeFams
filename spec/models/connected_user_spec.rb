@@ -53,6 +53,10 @@ RSpec.describe ConnectedUser, :type => :model  do  #  , focus: true
 
     # create model data
     before {
+      # SearchResults
+      FactoryGirl.create(:search_results)
+
+
       #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
       FactoryGirl.create(:name, :name_48)    # Анна
