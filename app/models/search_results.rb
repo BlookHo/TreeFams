@@ -61,8 +61,11 @@ class SearchResults < ActiveRecord::Base
 
   # @note: Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
   def self.destroy_previous_results(who_connect_arr, with_whom_connect_arr)
-    previous_results = self.where("user_id in (?)", who_connect_arr).where("found_user_id in (?)", with_whom_connect_arr)
-    previous_results.each(&:destroy) unless previous_results.blank?
+    previous_results1 = self.where("user_id in (?)", who_connect_arr).where("found_user_id in (?)", with_whom_connect_arr)
+    previous_results1.each(&:destroy) unless previous_results1.blank?
+    previous_results2 = self.where("user_id in (?)", with_whom_connect_arr).where("found_user_id in (?)", who_connect_arr)
+    previous_results2.each(&:destroy) unless previous_results2.blank?
+
   end
 
 
