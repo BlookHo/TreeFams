@@ -220,8 +220,8 @@ module ConnectionTrees
   # @param connection_data
   def connect_trees(connection_data)
 
-    # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
-    # profiles_to_destroy = connection_data[:profiles_to_destroy]
+    profiles_to_rewrite = connection_data[:profiles_to_rewrite]
+    profiles_to_destroy = connection_data[:profiles_to_destroy]
     # who_connect         = connection_data[:who_connect_arr]
     # with_whom_connect   = connection_data[:with_whom_connect_arr]
     # current_user_id     = connection_data[:current_user_id]
@@ -230,9 +230,7 @@ module ConnectionTrees
 
     # todo: Сделать логирование перезаписи Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
     # Перезапись profile_data при объединении профилей
-    #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
-
-    # logger.info "IN connect_trees Before logs_profiles_deleted: connection_data = #{connection_data}"
+    ProfileData.connect_profiles_data(profiles_to_rewrite, profiles_to_destroy)
 
     #####################################################
     # todo: Раскоммитить 1 строки ниже и закоммитить 1 строки за ними  - для полной перезаписи логов и отладки

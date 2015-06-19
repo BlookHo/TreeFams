@@ -836,7 +836,7 @@ RSpec.describe User, :type => :model  do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
+    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
       describe '- check SearchResults have rows count after <search> - Ok' do
@@ -1133,7 +1133,7 @@ RSpec.describe User, :type => :model  do  # , focus: true
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         before { current_user_1.connection_in_tables(connection_data) }
 
-        context '- check SearchResults model AFTER <connect_trees> module' ,  focus: true  do #  ,  focus: true
+        context '- check SearchResults model AFTER <connect_trees> module'  do #  ,  focus: true
           describe '- check SearchResults have rows count AFTER <connect_trees> - Ok' do
             let(:rows_qty) {1}
             it_behaves_like :successful_search_results_rows_count
@@ -1621,14 +1621,14 @@ RSpec.describe User, :type => :model  do  # , focus: true
 
         describe '- check ConnectionRequest third row - Ok ' do
           let(:request_id) {3}
-          let(:updated_request) {{"id"=>3, "user_id"=>3, "with_user_id"=>1, "confirm"=>nil,
-                                  "done"=>false, "connection_id"=>3}}
+          let(:updated_request) {{"id"=>3, "user_id"=>3, "with_user_id"=>1, "confirm"=>1,
+                                  "done"=>true, "connection_id"=>3}}
           it_behaves_like :successful_connection_request_update
         end
         describe '- check ConnectionRequest forth row - Ok ' do
           let(:request_id) {4}
           let(:updated_request) {{"id"=>4, "user_id"=>3, "with_user_id"=>2, "confirm"=>nil,
-                                  "done"=>false, "connection_id"=>3}}
+                                  "done"=>true, "connection_id"=>3}}
           it_behaves_like :successful_connection_request_update
         end
 
@@ -1648,14 +1648,14 @@ RSpec.describe User, :type => :model  do  # , focus: true
           end
           describe '- check ConnectionRequest 7 row - Ok ' do
             let(:request_id) {7}
-            let(:updated_request) {{"id"=>7, "user_id"=>4, "with_user_id"=>1, "confirm"=>nil,
-                                    "done"=>false, "connection_id"=>6}}
+            let(:updated_request) {{"id"=>7, "user_id"=>4, "with_user_id"=>1, "confirm"=>2,
+                                    "done"=>true, "connection_id"=>6}}
             it_behaves_like :successful_connection_request_update
           end
           describe '- check ConnectionRequest 8 row - Ok ' do
             let(:request_id) {8}
-            let(:updated_request) {{"id"=>8, "user_id"=>4, "with_user_id"=>2, "confirm"=>nil,
-                                    "done"=>false, "connection_id"=>6}}
+            let(:updated_request) {{"id"=>8, "user_id"=>4, "with_user_id"=>2, "confirm"=>2,
+                                    "done"=>true, "connection_id"=>6}}
             it_behaves_like :successful_connection_request_update
           end
           describe '- check ConnectionRequest 9 row - Ok ' do
@@ -1672,14 +1672,14 @@ RSpec.describe User, :type => :model  do  # , focus: true
           end
           describe '- check ConnectionRequest 11 row - Ok ' do
             let(:request_id) {11}
-            let(:updated_request) {{"id"=>11, "user_id"=>5, "with_user_id"=>1, "confirm"=>nil,
-                                    "done"=>false, "connection_id"=>8}}
+            let(:updated_request) {{"id"=>11, "user_id"=>5, "with_user_id"=>1, "confirm"=>2,
+                                    "done"=>true, "connection_id"=>8}}
             it_behaves_like :successful_connection_request_update
           end
           describe '- check ConnectionRequest 12 row - Ok ' do
             let(:request_id) {12}
-            let(:updated_request) {{"id"=>12, "user_id"=>5, "with_user_id"=>2, "confirm"=>nil,
-                                    "done"=>false, "connection_id"=>8}}
+            let(:updated_request) {{"id"=>12, "user_id"=>5, "with_user_id"=>2, "confirm"=>2,
+                                    "done"=>true, "connection_id"=>8}}
             it_behaves_like :successful_connection_request_update
           end
           describe '- check ConnectionRequest 13 row - Ok ' do

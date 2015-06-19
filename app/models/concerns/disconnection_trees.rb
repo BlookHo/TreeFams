@@ -60,13 +60,17 @@ module DisconnectionTrees
 
     # Before ConnectedUser destroy_connection для всех запросов на объединение, ранее установленных как выполненные,
     # confirm был равен 2, т.е. для всех входящих в запросы юзеров (деревьев)
-    # ConnectionRequest.disconnected_requests_update(conn_users_destroy_data)
+    # Этот метод ниже выключен, чтобы не возвращать запросы на объед-е в состояние, перед объединением.
+    #  См. также изменения в user_spec.rb, lines: 1626,1632,1653,1659,1677,1683
+    #   ConnectionRequest.disconnected_requests_update(conn_users_destroy_data)
 
     ConnectedUser.destroy_connection(conn_users_destroy_data)
 
     self.update_disconnected_users!
 
-    # ConnectionRequest.request_disconnection(conn_users_destroy_data)
+    # Этот метод ниже выключен, чтобы не возвращать запросы на объед-е в состояние, перед объединением.
+    #  См. также изменения в user_spec.rb, lines: 1626,1632,1653,1659,1677,1683
+    #   ConnectionRequest.request_disconnection(conn_users_destroy_data)
 
   end
 

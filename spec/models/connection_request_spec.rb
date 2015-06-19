@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ConnectionRequest, :type => :model , focus: true  do #   , focus: true  ,:disabled=>true
+RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disabled=>true
 
 #   describe '- Validation' do
 #     describe '- on create' do  #  , focus: true
@@ -477,7 +477,7 @@ RSpec.describe ConnectionRequest, :type => :model , focus: true  do #   , focus:
     let(:currentuser_id) {current_user_1.id}  # id = 1
     let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
 
-    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
+    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
 
