@@ -4,7 +4,7 @@ RSpec.describe ProfileData, :type => :model do
 
 
 
-  describe '- validation'  , focus: true  do
+  describe '- validation'    do
     before {
 
     FactoryGirl.create(:profile_data)    #
@@ -51,7 +51,7 @@ RSpec.describe ProfileData, :type => :model do
     end
   end
 
-    describe '- Connection Method check' , focus: true do # , focus: true
+    describe '- Connection Method check'  do # , focus: true
       # create model data
       before do
 
