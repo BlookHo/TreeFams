@@ -67,44 +67,46 @@ class ProfileData < ActiveRecord::Base
       p_data_rewrite = self.where(profile_id: one_profile_rewrite)
       p_data_destroy = self.where(profile_id: profiles_to_destroy[index])
 
-      ['last_name', 'biography', 'birthday', 'country', 'city'].each do |table_field|
-        if !p_data_rewrite[0]["#{table_field}"].blank? && !p_data_destroy[0]["#{table_field}"].blank?
-          # Both - not empty   Проверять, кто Главный, того и записывать
-          if fillness_arr_rewrite[index] >= fillness_arr_destroy[index]
-          # Если оба равные, то записывать от p_data_rewrite
+      if !p_data_rewrite.blank? && !p_data_rewrite.blank?
+        ['last_name', 'biography', 'birthday', 'country', 'city'].each do |table_field|
+          if !p_data_rewrite[0]["#{table_field}"].blank? && !p_data_destroy[0]["#{table_field}"].blank?
+            # Both - not empty   Проверять, кто Главный, того и записывать
+            if fillness_arr_rewrite[index] >= fillness_arr_destroy[index]
+            # Если оба равные, то записывать от p_data_rewrite
+              new_profile_data_row["#{table_field}"] = p_data_rewrite[0]["#{table_field}"]
+            else
+              new_profile_data_row["#{table_field}"] = p_data_destroy[0]["#{table_field}"]
+            end
+          elsif !p_data_rewrite[0]["#{table_field}"].blank? && p_data_destroy[0]["#{table_field}"].blank?
+            # p_data_rewrite - not empty.   записывать от p_data_rewrite
             new_profile_data_row["#{table_field}"] = p_data_rewrite[0]["#{table_field}"]
-          else
+
+          elsif p_data_rewrite[0]["#{table_field}"].blank? && !p_data_destroy[0]["#{table_field}"].blank?
+            # p_data_destroy - not empty.   записывать от p_data_destroy
             new_profile_data_row["#{table_field}"] = p_data_destroy[0]["#{table_field}"]
+
+          elsif p_data_rewrite[0]["#{table_field}"].blank? && p_data_destroy[0]["#{table_field}"].blank?
+            # p_data_destroy - not empty.   записывать nil
+            new_profile_data_row["#{table_field}"] = nil
           end
-        elsif !p_data_rewrite[0]["#{table_field}"].blank? && p_data_destroy[0]["#{table_field}"].blank?
-          # p_data_rewrite - not empty.   записывать от p_data_rewrite
-          new_profile_data_row["#{table_field}"] = p_data_rewrite[0]["#{table_field}"]
-
-        elsif p_data_rewrite[0]["#{table_field}"].blank? && !p_data_destroy[0]["#{table_field}"].blank?
-          # p_data_destroy - not empty.   записывать от p_data_destroy
-          new_profile_data_row["#{table_field}"] = p_data_destroy[0]["#{table_field}"]
-
-        elsif p_data_rewrite[0]["#{table_field}"].blank? && p_data_destroy[0]["#{table_field}"].blank?
-          # p_data_destroy - not empty.   записывать nil
-          new_profile_data_row["#{table_field}"] = nil
         end
+
+        p_data_rewrite.each do |one_data_row|
+          one_data_row.update_attributes(:last_name => new_profile_data_row["last_name"],
+                                         :biography => new_profile_data_row["biography"],
+                                         :birthday => new_profile_data_row["birthday"],
+                                         :country => new_profile_data_row["country"],
+                                         :city => new_profile_data_row["city"],
+                                         :updated_at => Time.now)
+        end
+
+        p_data_destroy.each do |one_data_row|
+          one_data_row.update_attributes(:deleted => 1,:updated_at => Time.now)
+          # puts "In ProfileData.connect : one_data_row.deleted = #{one_data_row.deleted} "
+
+        end
+
       end
-
-      p_data_rewrite.each do |one_data_row|
-        one_data_row.update_attributes(:last_name => new_profile_data_row["last_name"],
-                                       :biography => new_profile_data_row["biography"],
-                                       :birthday => new_profile_data_row["birthday"],
-                                       :country => new_profile_data_row["country"],
-                                       :city => new_profile_data_row["city"],
-                                       :updated_at => Time.now)
-      end
-
-      p_data_destroy.each do |one_data_row|
-        one_data_row.update_attributes(:deleted => 1,:updated_at => Time.now)
-        # puts "In ProfileData.connect : one_data_row.deleted = #{one_data_row.deleted} "
-
-      end
-
     end
     puts "In connect_profiles_data: new_profile_data_row = #{new_profile_data_row} "
 
