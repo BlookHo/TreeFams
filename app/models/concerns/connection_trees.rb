@@ -230,7 +230,7 @@ module ConnectionTrees
 
     # todo: Сделать логирование перезаписи Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
     # Перезапись profile_data при объединении профилей
-    # ProfileData.connect_profiles_data(profiles_to_rewrite, profiles_to_destroy)
+    ProfileData.connect_profiles_data(profiles_to_rewrite, profiles_to_destroy)
 
     #####################################################
     # todo: Раскоммитить 1 строки ниже и закоммитить 1 строки за ними  - для полной перезаписи логов и отладки
