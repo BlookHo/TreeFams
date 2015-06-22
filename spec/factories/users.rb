@@ -108,6 +108,26 @@ FactoryGirl.define do
     password '1111'
   end
 
+  # For ProfileData destroy method test
+  factory :user_profile_data, class: User do #
+
+    id 155
+    profile_id 559
+    email "dimitrii@di.di"
+    password '1111'
+
+    trait :user_210 do
+      id 210
+      profile_id 22111
+      email "andrew@an.an"
+      password '11111'
+    end
+
+
+
+
+  end
+
 
 
 end

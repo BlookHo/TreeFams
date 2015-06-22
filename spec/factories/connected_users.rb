@@ -116,6 +116,45 @@ FactoryGirl.define do
     end
 
 
+    # For Test ProfileData.spec - method destroy_profile_data
+
+    trait :for_profile_data_5_10 do
+      user_id 155
+      with_user_id 210
+      connected             true
+      connection_id         9
+      rewrite_profile_id    5
+      overwrite_profile_id  10
+    end
+
+    trait :for_profile_data_6_11 do
+      user_id 155
+      with_user_id 210
+      # connected             true
+      # connection_id         5
+      rewrite_profile_id    6
+      overwrite_profile_id  11
+    end
+
+    trait :for_profile_data_7_12 do
+      user_id 155
+      with_user_id 210
+      # connected             true
+      # connection_id         5
+      rewrite_profile_id    7
+      overwrite_profile_id  12
+    end
+
+    trait :for_profile_data_8_13 do
+      user_id 155
+      with_user_id 210
+      # connected             true
+      # connection_id         5
+      rewrite_profile_id    8
+      overwrite_profile_id  13
+    end
+
+
 
 
 
