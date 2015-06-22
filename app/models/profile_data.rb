@@ -105,12 +105,10 @@ class ProfileData < ActiveRecord::Base
           # puts "In ProfileData.connect : one_data_row.deleted = #{one_data_row.deleted} "
 
         end
-
       end
     end
     puts "In connect_profiles_data: new_profile_data_row = #{new_profile_data_row} "
 
-    # return new_profile_data_row
   end
 
 
@@ -135,23 +133,25 @@ class ProfileData < ActiveRecord::Base
     fillness_arr = []
     profiles_ids.each_with_index do |one_profile_rewrite, index|
       count = 0
+      
       profile_data_row = self.where(profile_id: one_profile_rewrite)
-      if !profile_data_row[0]['last_name'].blank?
-        count = count + 1
+      if !profile_data_row.blank?
+        if !profile_data_row[0]['last_name'].blank?
+          count = count + 1
+        end
+        if !profile_data_row[0]['biography'].blank?
+          count = count + 1
+        end
+        if !profile_data_row[0]['birthday'].blank?
+          count = count + 1
+        end
+        if !profile_data_row[0]['country'].blank?
+          count = count + 1
+        end
+        if !profile_data_row[0]['city'].blank?
+          count = count + 1
+        end
       end
-      if !profile_data_row[0]['biography'].blank?
-        count = count + 1
-      end
-      if !profile_data_row[0]['birthday'].blank?
-        count = count + 1
-      end
-      if !profile_data_row[0]['country'].blank?
-        count = count + 1
-      end
-      if !profile_data_row[0]['city'].blank?
-        count = count + 1
-      end
-
       fillness_arr[index] = count
 
     end

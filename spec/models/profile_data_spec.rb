@@ -26,7 +26,7 @@ RSpec.describe ProfileData, :type => :model do
       ProfileData.reset_pk_sequence
     }
 
-    describe '- on create' do
+    describe '- on create' , focus: true do
 
       it '- check ProfileData First Factory row - Ok'  do # , focus: true
         profile_data_fields = ProfileData.first.attributes.except('created_at','updated_at','birthday')
@@ -51,7 +51,7 @@ RSpec.describe ProfileData, :type => :model do
     end
   end
 
-    describe '- Connection Method check'  do # , focus: true
+    describe '- Connection Method check' , focus: true do # , focus: true
       # create model data
       before do
 
