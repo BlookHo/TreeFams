@@ -26,7 +26,7 @@ RSpec.describe ProfileData, :type => :model do
       ProfileData.reset_pk_sequence
     }
 
-    describe '- on create' , focus: true do
+    describe '- on create'  do
 
       it '- check ProfileData First Factory row - Ok'  do # , focus: true
         profile_data_fields = ProfileData.first.attributes.except('created_at','updated_at','birthday')
@@ -51,7 +51,7 @@ RSpec.describe ProfileData, :type => :model do
     end
   end
 
-    describe '- Connection Method check - all ProfileData rows exists' , focus: true do # , focus: true
+    describe '- Connection Method check - all ProfileData rows exists'  do # , focus: true
       # create model data
       before do
 
@@ -158,7 +158,7 @@ RSpec.describe ProfileData, :type => :model do
   end
 
 
-  describe '- Connection Method check - some rewrite ProfileData rows - blank' , focus: true do # , focus: true
+  describe '- Connection Method check - some rewrite ProfileData rows - blank'  do # , focus: true
     # create model data
     before do
 
@@ -239,7 +239,7 @@ RSpec.describe ProfileData, :type => :model do
   end
 
 
-  describe '- Connection Method check - some destroy ProfileData rows - blank' , focus: true do # , focus: true
+  describe '- Connection Method check - some destroy ProfileData rows - blank'  do # , focus: true
     # create model data
     before do
 

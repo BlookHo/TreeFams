@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SimilarsFound, :type => :model do
+RSpec.describe SimilarsFound, :type => :model  do  # , focus: true
   #pending "add some examples to (or delete) #{__FILE__}"
 
   describe '- Validation' do
