@@ -83,7 +83,7 @@ module ProfileApiCircles
       is_relation_id: nil,
       distance: 0,
       current_user_profile: current_user.try(:profile_id) == self.id,
-      avatar: self.avatar_path(:round_thumb),
+      # avatar: self.avatar_path(:round_thumb),
       # has_rights: (user_ids.include? self.tree_id),
       user_id: (self.user_id ? self.user_id : false)
     }
@@ -108,7 +108,7 @@ module ProfileApiCircles
         target: target.nil? ? self.id : target,
         distance: distance || @current_distance,
         current_user_profile: current_user.try(:profile_id) == key.is_profile_id,
-        avatar: key.is_profile.avatar_path(:round_thumb),
+        # avatar: key.is_profile.avatar_path(:round_thumb),
         user_id: (key.is_profile.user_id ? key.is_profile.user_id : false)
       }
     end
