@@ -46,7 +46,7 @@ class CommonLog < ActiveRecord::Base
   #                                log_id:  new_log_number, profile_id: new_profile.id }
   # @return [Boolean] выполнение метода = true
   # @see CommonLog
-  def self.create_common_log(common_log_data)
+  def self.dcreate_common_log(common_log_data)
         common_log = self.new
         common_log.user_id         = common_log_data[:user_id]
         common_log.log_type        = common_log_data[:log_type]
@@ -63,6 +63,17 @@ class CommonLog < ActiveRecord::Base
       #   logger.info "In CommonLog model: Ошибка при создании CommonLog"
       # end
   end
+  def self.create_common_log(common_log_data)
+    create(
+        user_id:         common_log_data[:user_id],
+    log_type:        common_log_data[:log_type],
+    log_id:          common_log_data[:log_id],
+    profile_id:      common_log_data[:profile_id],
+    base_profile_id: common_log_data[:base_profile_id],
+    relation_id:     common_log_data[:new_relation_id]
+    )
+  end
+
 
 
   # @note Получение списка profile_id - по выбранным ранее логам (по id)
@@ -103,22 +114,29 @@ class CommonLog < ActiveRecord::Base
     elsif @profile.user_id == current_user.id
       @error = "Вы не можете удалить свой профиль"
     else
-      ProfileKey.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
-      Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
-
-      # todo: не удалять ProfileData?
-      ProfileData.where(profile_id: @profile.id).map(&:destroy)
+      self.delete_profile_data(@profile)
 
       # CommonLog.where(user_id: current_user.id, log_type: log_type, profile_id: @profile.id).map(&:destroy)
       CommonLog.find(rollback_add_log_data[:common_log_id]).destroy
 
-      # todo: В дальнейшем надо будет чистить от не используемых профилей - но аккуратно
-      # @profile.destroy # Не удаляем профили, чтобы иметь возм-ть повторить создание удаленных профилей
-      # Mark profile as deleted
-      @profile.update_attribute('deleted', true)
-      logger.info "In CommonLog model: rollback_add_one_profile: @profile.deleted = #{@profile.deleted} "
-
     end
+  end
+
+
+  # @note Rollback_add == Destroy
+  #   Удаление записей содержащих profile_id из таблиц - по выбранным ранее логам (по дате)
+  def self.delete_profile_data(profile)
+    ProfileKey.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
+    Tree.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
+
+    # todo: удалять ProfileData?
+    ProfileData.where(profile_id: profile.id).map(&:destroy)
+
+    # todo: В дальнейшем надо будет чистить от не используемых профилей - но аккуратно
+    # @profile.destroy # Не удаляем профили, чтобы иметь возм-ть повторить создание удаленных профилей
+    # Mark profile as deleted
+    profile.update_attribute('deleted', true)
+    logger.info "In CommonLog model: rollback_add_one_profile: @profile.deleted = #{profile.deleted} "
   end
 
 
