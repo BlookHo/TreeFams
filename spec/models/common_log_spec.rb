@@ -345,7 +345,7 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
     end
 
     # from common_logs_controller.rb#rollback_logs#rollback_add_profile#rollback_add_one_profile , focus: true
-    describe ' Check action <rollback_add_one_profile> :' , focus: true do
+    describe ' Check action <rollback_add_one_profile> :'  do # , focus: true
       context '- rollback add profile = 173 - check tables values ' do
 
         let(:add_log_data) { {:current_user => current_user_9, :log_type => 1, :profile_id => 173, common_log_id: 4 } }
@@ -448,7 +448,7 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
 
     end
 
-    describe ' Check action <rollback_destroy_one_profile> :' , focus: true do
+    describe ' Check action <rollback_destroy_one_profile> :'  do  # , focus: true
       context '- rollback destroy profile = 90 - check tables values ' do
 
         let(:destroy_log_data) { {:current_user => current_user_9, :log_type => 2, :profile_id => 90,

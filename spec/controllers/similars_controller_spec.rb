@@ -227,10 +227,10 @@ describe SimilarsController, :type => :controller , similars: true do
       UpdatesFeed.reset_pk_sequence
     }
 
-  describe 'CHECK SimilarsController methods' do
+  describe 'CHECK SimilarsController methods'   do # , focus: true
     let(:connected_users) { current_user.get_connected_users }
 
-    context '- before actions - check connected_users' do
+    context '- before actions - check connected_users' , focus: true do
       # let(:connected_users) { current_user.get_connected_users }
       it "- Return proper connected_users Array result for current_user_id = 1" do
         puts "Check SimilarsController \n"
@@ -244,7 +244,7 @@ describe SimilarsController, :type => :controller , similars: true do
       end
     end
 
-     describe 'GET #internal_similars_search' do
+     describe 'GET #internal_similars_search' , focus: true do
 
       context '- after action <internal_similars_search> - check render_template & response status' do
         subject { get :internal_similars_search }
@@ -277,7 +277,6 @@ describe SimilarsController, :type => :controller , similars: true do
         before {get :internal_similars_search}
 
         it '- tree_info: tree_is_profiles, tree_profiles_amount - Ok' do
-          # puts "In check results: tree_info \n"
           expect(assigns(:tree_info)).to include(:tree_is_profiles => [63, 64, 65, 66, 67, 68, 69, 70, 78, 79, 80, 81, 82, 83, 84])
           expect(assigns(:tree_info)).to include(:tree_profiles_amount => 15)
           expect(assigns(:tree_info)).to include(:users_profiles_ids=>[63, 66])
@@ -289,7 +288,6 @@ describe SimilarsController, :type => :controller , similars: true do
         end
 
         it '- log_connection_id - Ok' do
-          # puts "In check results: log_connection_id \n"
           expect(assigns(:log_connection_id)).to eq([])
         end
 

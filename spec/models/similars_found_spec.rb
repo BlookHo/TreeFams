@@ -52,7 +52,7 @@ RSpec.describe SimilarsFound, :type => :model  do  # , focus: true
   end
 
 
-  describe '- Model methods' do
+  describe '- Model methods'  do  # , focus: true
 
     # create users
     let(:user) {FactoryGirl.create(:user)}
@@ -107,6 +107,7 @@ RSpec.describe SimilarsFound, :type => :model  do  # , focus: true
         context '- Return correct new_similars' do
           it '- 2 Find new_similars PAIRS when sims_profiles_pairs ARE new' do
             new_similars = SimilarsFound.find_stored_similars(sims_profiles_pairs, other_user_id)
+            puts "In find_stored_similars:  new_similars = #{new_similars} "
             expect(new_similars).to eq([[81, 70],[79, 82]]) # all new similars
           end
         end
