@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SimilarsFound, :type => :model  do  # , focus: true
+RSpec.describe SimilarsFound, :type => :model  do  # ,focus: true
   #pending "add some examples to (or delete) #{__FILE__}"
 
   describe '- Validation' do
@@ -75,10 +75,12 @@ RSpec.describe SimilarsFound, :type => :model  do  # , focus: true
       # puts " before  SimilarsFound: SimilarsFound.first.user_id = #{SimilarsFound.first.user_id.inspect} "
     end
 
-    # after {
-    #   SimilarsFound.delete_all
-    #   SimilarsFound.reset_pk_sequence
-    #  }
+    after {
+      SimilarsFound.delete_all
+      SimilarsFound.reset_pk_sequence
+      User.delete_all
+      User.reset_pk_sequence
+    }
 
     # from similars_start.rb#check_new_similars
     describe '* find_stored_similars *' do

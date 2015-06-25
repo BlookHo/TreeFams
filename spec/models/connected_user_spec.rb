@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ConnectedUser, :type => :model  do  #  , focus: true
+RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
 
   describe '- Validation' do
     describe '- on create' do

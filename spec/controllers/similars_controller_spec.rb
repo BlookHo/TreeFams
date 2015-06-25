@@ -1,4 +1,4 @@
-describe SimilarsController, :type => :controller , similars: true do
+describe SimilarsController, :type => :controller , similars: true  do  # , focus: true
 
 
     let(:current_user) { create(:user) }   # User = 1. Tree = 1. profile_id = 63
@@ -230,7 +230,7 @@ describe SimilarsController, :type => :controller , similars: true do
   describe 'CHECK SimilarsController methods'   do # , focus: true
     let(:connected_users) { current_user.get_connected_users }
 
-    context '- before actions - check connected_users' , focus: true do
+    context '- before actions - check connected_users'  do  # , focus: true
       # let(:connected_users) { current_user.get_connected_users }
       it "- Return proper connected_users Array result for current_user_id = 1" do
         puts "Check SimilarsController \n"
@@ -244,7 +244,7 @@ describe SimilarsController, :type => :controller , similars: true do
       end
     end
 
-     describe 'GET #internal_similars_search' , focus: true do
+     describe 'GET #internal_similars_search'  do # , focus: true
 
       context '- after action <internal_similars_search> - check render_template & response status' do
         subject { get :internal_similars_search }

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe LogType, :type => :model do
+RSpec.describe LogType, :type => :model  do # , focus: true
 
   describe '- validation' do
     describe '- on create' do
