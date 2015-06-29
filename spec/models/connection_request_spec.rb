@@ -49,7 +49,7 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
 #     end
 #   end
 #
-  describe '- CHECK in ConnectedUser Model methods'  do  # , focus: true
+  describe '- CHECK in ConnectedUser Model methods'   do  # , focus: true
 
     # create model data
     before {

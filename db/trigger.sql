@@ -101,3 +101,10 @@ AFTER INSERT OR UPDATE OR DELETE
 ON profile_data
 FOR EACH ROW
 EXECUTE PROCEDURE notify_trigger();
+
+-- trigger for similars_found table
+CREATE TRIGGER watched_table
+AFTER INSERT OR UPDATE OR DELETE
+ON similars_founds
+FOR EACH ROW
+EXECUTE PROCEDURE notify_trigger();

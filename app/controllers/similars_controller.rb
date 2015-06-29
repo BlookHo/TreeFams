@@ -29,29 +29,27 @@ class SimilarsController < ApplicationController
   # Запуск методов определения похожих профилей в текущем дереве
   def internal_similars_search
     # puts "In action internal_similars_search - START \n"
-    connected_users = current_user.get_connected_users
+    # connected_users = current_user.get_connected_users
 
-    ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
-    SimilarsFound.clear_tree_similars(connected_users)
     #################
-    tree_info, new_sims, similars = current_user.start_similars # search similars
+    similars_data = current_user.start_similars # search similars
 
     # to show similars connected in view & for RSpec
-    @tree_info = tree_info
-    @new_sims = new_sims
-    @similars = similars
-    @connected_users = connected_users
+    @tree_info = similars_data[:tree_info]
+    @new_sims = similars_data[:new_sims]
+    @similars = similars_data[:similars]
+    @connected_users = similars_data[:connected_users]
+    @log_connection_id = similars_data[:log_connection_id]
     @current_user_id = current_user.id
-    @log_connection_id = SimilarsLog.current_tree_log_id(connected_users) unless connected_users.empty?
+    # @log_connection_id =  SimilarsLog.current_tree_log_id(@connected_users) unless @connected_users.empty?
 
-    if similars.empty?   # т.е. нет похожих
+    if @similars.empty?   # т.е. нет похожих
       flash.now[:notice] = "Успешное сообщение: В дереве все Ок - 'похожих' профилей нет."
     else  # т.е. есть похожие
-      unless new_sims=="" #.empty?  # т.е. есть инфа о похожих
+      unless @new_sims=="" #.empty?  # т.е. есть инфа о похожих
         flash.now[:warning] = "Warning from server! Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно..."
         # flash.now[:alert]
-        @tree_info = tree_info  # To View
-        view_tree_similars(tree_info, similars) unless @tree_info.empty?  # to internal_similars_search.html.haml
+        view_tree_similars(@tree_info, @similars) unless @tree_info.empty?  # to internal_similars_search.html.haml
       end
     end
   end

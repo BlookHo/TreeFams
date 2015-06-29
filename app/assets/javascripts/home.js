@@ -155,7 +155,7 @@ start = function(){
               .attr("class", 'name')
               .attr("text-anchor", "middle")
               .attr("y", 55)
-              .text( function(d){ return d.display_name; });
+              .text( function(d){ return d.display_name + ' ' + d.id; });
 
 
 
@@ -266,7 +266,7 @@ start = function(){
               .attr("class", 'name')
               .attr("text-anchor", "middle")
               .attr("y", 35)
-              .text( function(d){ return d.display_name; });
+              .text( function(d){ return d.display_name + ' ' + d.id; });
 
 
         // Profile icon
@@ -333,8 +333,8 @@ start = function(){
               .attr("class", 'name')
               .attr("text-anchor", "middle")
               .attr("y", 35)
-              // .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
-              .text( function(d){ return d.display_name; });
+              .text( function(d){ return d.name + ' (id:'+ d.id+')'; });
+              //.text( function(d){ return d.display_name; });
 
 
         // Profile's icon

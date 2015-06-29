@@ -50,7 +50,8 @@ module ProfileKeysGeneration
       base_sex_id           = base_profile.sex_id
       base_display_name_id  = base_profile.display_name_id
       base_name_id          = base_profile.name_id
-      tree_id               = base_profile.tree_id
+
+      tree_id               = base_profile.tree_id   # было base_profile до 29.6.15
 
       new_profile_id        = new_profile.id
       new_profile_name_id   = new_profile.name_id
@@ -59,7 +60,8 @@ module ProfileKeysGeneration
 
       new_tree = Tree.new
         # Базовый профиль = base_profile - профиль, к которому добавляем новый профиль
-        new_tree.user_id            = tree_id          # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый (user_id ID От_Профиля (From_Profile))
+        new_tree.user_id            = tree_id          # id дерева, которому принадлежит профиль
+        # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый (user_id ID От_Профиля (From_Profile))
         new_tree.profile_id         = base_profile_id  # base_profile.id - profile_id базового профиля # От_Профиля
         new_tree.name_id            = base_name_id     # base_profile.name_id   # name_id базового профиля # От_Профиля
         new_tree.display_name_id    = base_display_name_id     # base_profile.display_name_id   # name_id базового профиля # От_Профиля

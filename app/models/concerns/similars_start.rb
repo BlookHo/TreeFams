@@ -9,16 +9,27 @@ module SimilarsStart
   def start_similars
     new_sims = ""
     tree_info = Tree.get_tree_info(self)
+
     # logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info} "
+    connected_users = self.get_connected_users
+
+    ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
+    SimilarsFound.clear_tree_similars(connected_users)
 
     ###### Запуск User метода определения первых пар Похожих ##################
     similars = User.similars_init_search(tree_info)
     #############################################################################
     check_similars_data =  {  similars: similars, current_user_id: self.id    }
     new_sims = check_new_similars(check_similars_data) unless similars.empty?
+    log_connection_id = []
+    log_connection_id = SimilarsLog.current_tree_log_id(connected_users) unless connected_users.empty?
 
     # logger.info "In SimilarsStart 4: sim_data = #{new_sims} "
-    return tree_info, new_sims, similars
+    {tree_info: tree_info,
+     new_sims: new_sims,
+     similars: similars,
+     connected_users: connected_users,
+     log_connection_id: log_connection_id }
   end
 
   # В случае, когда найдены Похожие, проверяем: есть ли среди них НОВЫЕ Похожие

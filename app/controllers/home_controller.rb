@@ -66,24 +66,25 @@ class HomeController < ApplicationController
     # puts "5. s = #{nns},  @attributes.key1 = #{@attributes.wideName.sec_name} "
     #
 
-
-
-    sims_exists = false
-    @tree_info, new_sims, @similars = current_user.start_similars
-    # todo: проверить: убрать запуск метода SimilarsLog.current_tree_log_id и взять @log_connection_id из sim_data
+    similars_data = current_user.start_similars
+    @tree_info = similars_data[:tree_info]
+    # new_sims = similars_data[:new_sims]
+    @similars = similars_data[:similars]
+    logger.info "########## In home/index: @similars = #{@similars} "
+    @log_connection_id = similars_data[:log_connection_id]
+        # todo: проверить: убрать запуск метода SimilarsLog.current_tree_log_id и взять @log_connection_id из sim_data
     # для отображения в show_similars_data
-    @log_connection_id = SimilarsLog.current_tree_log_id(@tree_info[:connected_users]) unless @tree_info.empty?
-    sims_exists = true unless @similars.empty?  # т.е. есть похожие
+    # @log_connection_id = SimilarsLog.current_tree_log_id(@tree_info[:connected_users]) unless @tree_info.empty?
 
-    # unless @similars.empty?  # т.е. есть похожие
-    if sims_exists  # т.е. есть похожие
+    unless @similars.empty?  # т.е. есть похожие
       flash.now[:warning] = "Warning from server! Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно..."
-      unless new_sims==""#.empty?  #  т.е. есть новые похожие - отлич. от ранее записанных
-        # @tree_info = tree_info  # To View
-        view_tree_similars(@tree_info, @similars) unless @tree_info.empty?
-        render :template => 'similars/show_similars_data' # показываем инфу о похожих
-      end
+    #   unless new_sims==""#.empty?  #  т.е. есть новые похожие - отлич. от ранее записанных
+    #     # @tree_info = tree_info  # To View
+    #     view_tree_similars(@tree_info, @similars) unless @tree_info.empty?
+    #     render :template => 'similars/show_similars_data' # показываем инфу о похожих
+    #   end
     end
+
   end
 
 
@@ -91,11 +92,21 @@ class HomeController < ApplicationController
   end
 
   def show_similars
-    tree_info, new_sims, similars = current_user.start_similars
-    # similars = params[:similars]
-    @tree_info = tree_info  # To View
-    view_tree_similars(tree_info, similars) unless similars.empty?
-    render :template => 'similars/show_similars_data' # показываем инфу о похожих
+
+    similars_data = current_user.start_similars
+    @tree_info = similars_data[:tree_info]
+    new_sims = similars_data[:new_sims]
+    @similars = similars_data[:similars]
+    # @log_connection_id = similars_data[:log_connection_id]
+
+    unless @similars.empty?  # т.е. есть похожие
+      flash.now[:warning] = "Warning from server! Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно..."
+      unless new_sims==""   #.empty?  #  т.е. есть новые похожие - отлич. от ранее записанных
+        view_tree_similars(@tree_info, @similars) unless @tree_info.empty?
+        render :template => 'similars/show_similars_data' # показываем инфу о похожих
+      end
+    end
+
   end
 
 

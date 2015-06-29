@@ -1,7 +1,34 @@
 require 'rails_helper'
 
-RSpec.describe ConnectionLog, type: :model do
+RSpec.describe ConnectionLog, type: :model  do  # , focus: true
   #pending "add some examples to (or delete) #{__FILE__}"
+
+  after {
+    ConnectionRequest.delete_all
+    ConnectionRequest.reset_pk_sequence
+    User.delete_all
+    User.reset_pk_sequence
+    ConnectedUser.delete_all
+    ConnectedUser.reset_pk_sequence
+    Tree.delete_all
+    Tree.reset_pk_sequence
+    Profile.delete_all
+    Profile.reset_pk_sequence
+    ProfileKey.delete_all
+    ProfileKey.reset_pk_sequence
+    # WeafamSetting.delete_all
+    # WeafamSetting.reset_pk_sequence
+    Name.delete_all
+    Name.reset_pk_sequence
+    ConnectionLog.delete_all
+    ConnectionLog.reset_pk_sequence
+    CommonLog.delete_all
+    CommonLog.reset_pk_sequence
+    UpdatesFeed.delete_all
+    UpdatesFeed.reset_pk_sequence
+    SearchResults.delete_all
+    SearchResults.reset_pk_sequence
+  }
 
   describe '- Validation' do
     describe '- on create' do

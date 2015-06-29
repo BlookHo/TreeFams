@@ -96,12 +96,12 @@ module DisconnectionTrees
         #     {:table_name=>"profiles", :table_row=>52, :field=>"tree_id", :written=>5, :overwritten=>4}
         model = log_row[:table_name].classify.constantize
         # logger.info "*** In module DisconnectionTrees redo_log: model = #{model.inspect} "
-        row_to_update = model.find(log_row[:table_row])
+        row_to_update = model.find(log_row[:table_row]) if model.exists? id: log_row[:table_row]
         logger.info "*** In module DisconnectionTrees redo_connection_log: log_row = #{log_row.inspect} "
         logger.info "*** In module DisconnectionTrees redo_connection_log: row_to_update = #{row_to_update.inspect} "
 
         # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-    row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now)
+    row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now) unless row_to_update.blank?
 
       end
     end
