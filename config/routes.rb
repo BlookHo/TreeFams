@@ -260,6 +260,11 @@ Weafam::Application.routes.draw do
         get :search, to: "search_results#search"
       end
 
+
+      namespace :profile_data do
+        get :update, to: "profile_data_update#update"
+      end
+
     end
   end
 
