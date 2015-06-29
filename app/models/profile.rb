@@ -51,11 +51,11 @@ class Profile < ActiveRecord::Base
   end
 
   def last_name
-    profile_datas.try(:first).try(:last_name)
+    profile_data.try(:first).try(:last_name)
   end
 
   def middle_name
-    profile_datas.try(:first).try(:middle_name)
+    profile_data.try(:first).try(:middle_name)
   end
 
   def full_name
@@ -73,7 +73,7 @@ class Profile < ActiveRecord::Base
 
   def avatars
     # ProfileData.where(profile_id: self.id).where.not(avatar_file_name: nil)
-    self.profile_datas.where.not(avatar_file_name: nil)
+    self.profile_data.where.not(avatar_file_name: nil)
   end
 
 
