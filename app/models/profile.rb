@@ -38,8 +38,9 @@ class Profile < ActiveRecord::Base
   belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key: :display_name_id
   has_many   :trees
 
-  has_many   :profile_datas#, dependent: :destroy - не удаляются, но переписываются
-  accepts_nested_attributes_for :profile_datas
+  # has_many   :profile_datas#, dependent: :destroy - не удаляются, но переписываются
+  has_one :profile_data
+  accepts_nested_attributes_for :profile_data
 
   before_save do
     self.sex_id = name.try(:sex_id)
