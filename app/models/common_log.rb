@@ -135,7 +135,7 @@ class CommonLog < ActiveRecord::Base
     # todo: В дальнейшем надо будет чистить от не используемых профилей - но аккуратно
     # @profile.destroy # Не удаляем профили, чтобы иметь возм-ть повторить создание удаленных профилей
     # Mark profile as deleted
-    profile.update_attribute('deleted', true)
+    profile.update_attribute('deleted', 1)
     logger.info "In CommonLog model: rollback_add_one_profile: @profile.deleted = #{profile.deleted} "
   end
 
@@ -163,7 +163,7 @@ class CommonLog < ActiveRecord::Base
     # logger.info "In Profile controller: rollback_destroy_one_profile  @profile.relation_id = #{@profile.relation_id} "
 
     # Mark profile as NOT deleted- back
-    @profile.update_attribute('deleted', false)
+    @profile.update_attribute('deleted', 0)
 
 
     # todo: учесть при работе с нестандартными вопросами

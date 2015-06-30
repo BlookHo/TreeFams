@@ -189,7 +189,7 @@ class ProfilesController < ApplicationController
        UpdatesFeed.create(update_feed_data) #
 
        # Mark profile as deleted
-       @profile.update_attribute('deleted', true)
+       @profile.update_attribute('deleted', 1)
 
 
     end
