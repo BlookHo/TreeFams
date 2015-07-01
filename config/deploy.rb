@@ -9,7 +9,8 @@ require 'bundler/capistrano' # Для работы bundler.
 set :application, "weafam"
 set :user, "weafam"
 set :rails_env, "production"
-set :domain, "weafam@128.199.38.4" # Это необходимо для деплоя через ssh.
+set :domain, "weafam@46.101.148.117" # Weafam AppServer
+# set :domain, "weafam@128.199.38.4" # Это необходимо для деплоя через ssh.
 set :deploy_to, "/home/weafam/www/#{application}"
 set :use_sudo, false
 
