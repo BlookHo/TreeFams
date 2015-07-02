@@ -2,8 +2,8 @@ module SimilarsConnection
   extend ActiveSupport::Concern
   # in User model
 
-  #
-  #
+  # @note Основной метод объединения похожих профилей в одном дереве
+  # @params Первый и Второй похожие профили из одной пары
   def similars_connection(first_profile_connecting, second_profile_connecting)
 
     #################################################
