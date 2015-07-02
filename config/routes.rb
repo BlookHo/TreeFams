@@ -48,7 +48,7 @@ Weafam::Application.routes.draw do
   resources :common_logs, except: [:update, :edit, :show]
 
   get 'common_logs/index'
-  # match 'connect_similars' => 'similars#connect_similars', via: :get
+  # match 'connect_similars' => 'similars_founds#connect_similars', via: :get
   get 'common_logs/create'
   # get 'common_logs/show'
   get 'common_logs/destroy'
@@ -260,6 +260,9 @@ Weafam::Application.routes.draw do
         get :search, to: "search_results#search"
       end
 
+      namespace :similars_founds do
+        get :search_similars, to: "similars_founds#search_similars"
+      end
 
       namespace :profile_data do
         get :update, to: "profile_data_update#update"

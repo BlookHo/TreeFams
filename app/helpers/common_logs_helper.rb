@@ -4,7 +4,7 @@ module CommonLogsHelper
   def view_tree_data(tree_info)
     @tree_info = tree_info
     @current_user_id = current_user.id
-    # @paged_similars_data = pages_of(@similars, 10) # Пагинация ТОЛЬКО ДЛЯ МАССИВА ХЭШЕЙ - по 10 строк на стр.
+    # @paged_similars_data = pages_of(@similars_founds, 10) # Пагинация ТОЛЬКО ДЛЯ МАССИВА ХЭШЕЙ - по 10 строк на стр.
   end
 
   # Отобр-е истории дерева - логов его развития - во вьюхе

@@ -17,7 +17,7 @@ module Api
       def iternal
         certain_koeff = get_certain_koeff #3
         tree_info, sim_data, similars = current_user.start_similars
-        result = {similars: similars, sim_data: sim_data}
+        result = {similars_founds: similars, sim_data: sim_data}
         respond_with result
       end
 
