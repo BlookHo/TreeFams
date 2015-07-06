@@ -30,6 +30,8 @@ module Meteor
               # TODO Strange error only in production
 
               begin
+                logger.info ProfileData.where(profile_id: 41)
+                logger.info ProfileData.where(profile_id: 85)
                ProfileData.where(profile_id: @profile.id).to_a.map(&:destroy)
               rescue Exception => e
 
