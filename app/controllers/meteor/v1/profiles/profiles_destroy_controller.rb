@@ -27,9 +27,14 @@ module Meteor
               #    pd.destroy
               #  end
 
+              # TODO Strange error only in production
+              begin
                ProfileData.where(profile_id: @profile.id).to_a.map(&:destroy)
-               #
-               #
+              rescue Exception => e
+                logger.info e
+              end
+              #
+              #
               #  logger.info "=========== pds =========="
               #  logger.info pds
               #  logger.info "=========== pds =========="
