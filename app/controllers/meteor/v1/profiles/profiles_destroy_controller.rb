@@ -23,9 +23,19 @@ module Meteor
                Tree.where("is_profile_id = ? OR profile_id = ?", @profile.id, @profile.id).map(&:destroy)
                # todo: не удалять ProfileData?
                # ProfileData.where(profile_id: @profile.id).map(&:destroy)
-               ProfileData.where(profile_id: @profile.id).each do |pd|
-                 pd.destroy
-               end
+              #  ProfileData.where(profile_id: @profile.id).each do |pd|
+              #    pd.destroy
+              #  end
+
+               ProfileData.where(profile_id: @profile.id).to_a.map(&:destroy)
+               #
+               #
+              #  logger.info "=========== pds =========="
+              #  logger.info pds
+              #  logger.info "=========== pds =========="
+              #  pds.each do |pd|
+              #    pd.destroy
+              #  end
                # @profile.destroy # Не удаляем профили, чтобы иметь возм-ть повторить создание удаленных профилей
 
                # logger.info "In Profiles_contr destroy: Before create_add_log"
