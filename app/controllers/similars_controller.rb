@@ -63,38 +63,18 @@ class SimilarsController < ApplicationController
   # ПЕредает их в модель для непосредственного объединения
   # Лог - это массив записей о параметрах всех совершенных объединениях дерева
   def connect_similars
-    # puts "In action connect_similars - START \n"
+
     first_profile_connecting  = params[:first_profile_id].to_i
     second_profile_connecting = params[:second_profile_id].to_i
-    init_hash = { first_profile_connecting => second_profile_connecting}
-    logger.info "*** In connect_similars 2:  init_hash = #{init_hash} "
-    # puts "In action connect_similars:  first_profile_connecting = #{first_profile_connecting.inspect} \n"
-    # puts "In action connect_similars:  init_hash = #{init_hash.inspect} \n"
 
-    # todo: check similars_complete_search, when init_hash has many profiles
-    #################################################
-    profiles_to_rewrite, profiles_to_destroy = current_user.similars_complete_search(init_hash)
-    #################################################
-
-    last_log_id = SimilarsLog.last.connected_at unless SimilarsLog.all.empty?
-    # logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
-    # порядковый номер connection - взять значение из последнего лога
-    last_log_id == nil ? last_log_id = 1 : last_log_id += 1
-    # logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
-
+    sim_connection_result = current_user.similars_connection(first_profile_connecting,
+                                                             second_profile_connecting)
     # for RSpec & TO_VIEW
-    @init_hash = init_hash
-    @profiles_to_rewrite = profiles_to_rewrite
-    @profiles_to_destroy = profiles_to_destroy
-    @last_log_id = last_log_id
+    @init_hash           = sim_connection_result[:init_hash]
+    @profiles_to_rewrite = sim_connection_result[:profiles_to_rewrite]
+    @profiles_to_destroy = sim_connection_result[:profiles_to_destroy]
+    log_connection       = sim_connection_result[:last_log_id]
 
-    similars_connection_data = {profiles_to_rewrite: profiles_to_rewrite, #
-                                profiles_to_destroy: profiles_to_destroy,
-                                current_user_id: current_user.id,
-                                connection_id: last_log_id }
-    ######## call of User.module Similars_connection
-    log_connection = current_user.similars_connect_tree(similars_connection_data)
-    #################################################
     show_log_data(log_connection)
     flash[:notice] = "Похожие профили в дереве успешно объединены"
   end

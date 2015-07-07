@@ -28,16 +28,44 @@ class Tree < ActiveRecord::Base
   # Считаем кол-во профилей в дереве:
   # Кол-во рядов объединеннного дерева + кол-во Юзеров в объед-м дереве
   # т.к. у них (авторов) нет своих рядов в Tree
-  def self.tree_amount(current_user)
+  def self.tree_amounts(current_user)
     connected_users = current_user.get_connected_users
     unless connected_users.blank?
-      profiles = Tree.where(user_id: connected_users).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
-      tree_is_profiles = profiles.map {|p| p.is_profile_id }.uniq.sort
-      profiles_qty = tree_is_profiles.size #+ connected_users.size
 
-      return profiles_qty, tree_is_profiles
+      users_tree_data = User.get_users_male_female(connected_users)
+
+      profiles = Tree.where(user_id: connected_users).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
+
+      # all tree profiles
+      tree_is_profiles = profiles.map {|p| p.is_profile_id }.uniq.sort
+      profiles_qty = tree_is_profiles.size
+
+      # all tree male profiles
+      tree_male_profiles, profiles_male_qty = Tree.get_tree_sex_profiles(profiles, 1)
+      # all tree female profiles
+      tree_female_profiles, profiles_female_qty = Tree.get_tree_sex_profiles(profiles, 0)
+
+      { profiles_qty: profiles_qty,
+        tree_is_profiles: tree_is_profiles,
+        profiles_male_qty: profiles_male_qty,
+        tree_male_profiles: tree_male_profiles,
+        profiles_female_qty: profiles_female_qty,
+        tree_female_profiles: tree_female_profiles,
+        user_males: users_tree_data[:user_males],
+        user_females: users_tree_data[:user_females],
+        user_males_qty: users_tree_data[:user_males_qty],
+        user_females_qty: users_tree_data[:user_females_qty] }
     end
   end
+
+  # @note: Получение массива профилей в дереве по Полу
+  # all tree sex profiles
+  def self.get_tree_sex_profiles(tree_profiles, sex)
+    tree_sex_profiles = tree_profiles.map {|p| p.is_profile_id if p.is_sex_id == sex; }.compact.uniq.sort
+    profiles_sex_qty = tree_sex_profiles.size
+    return tree_sex_profiles, profiles_sex_qty
+  end
+
 
   # Used in Search & MainController
   # ИСПОЛЬЗУЕТСЯ В ПОИСКЕ И МЕТОДЕ ОБЪЕДИНЕНИЯ ДЕРЕВЬЕВ - connection_of_trees
@@ -76,7 +104,10 @@ class Tree < ActiveRecord::Base
   def self.get_tree_profiles_info(current_user)
     connected_users = current_user.get_connected_users
     author_tree_arr = get_connected_tree(connected_users) # DISTINCT Массив объединенного дерева из Tree
-    profiles_qty, tree_is_profiles = tree_amount(current_user)
+
+    tree_content_data = tree_amounts(current_user)
+    profiles_qty = tree_content_data[:profiles_qty]
+    tree_is_profiles = tree_content_data[:tree_is_profiles]
     {   connected_users: connected_users,    # Пользователи - авторы дерева
         author_tree_arr: author_tree_arr,    # Пользователи - авторы дерева
         tree_profiles_amount: profiles_qty,  # Количество профилей в дереве
