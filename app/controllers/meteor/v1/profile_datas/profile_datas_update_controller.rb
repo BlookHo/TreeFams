@@ -1,7 +1,7 @@
 module Meteor
   module V1
-    module ProfileData
-      class ProfileDataUpdateController < MeteorController
+    module ProfileDatas
+      class ProfileDatasUpdateController < MeteorController
 
         before_filter :authenticate
 

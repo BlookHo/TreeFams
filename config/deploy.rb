@@ -9,7 +9,8 @@ require 'bundler/capistrano' # Для работы bundler.
 set :application, "weafam"
 set :user, "weafam"
 set :rails_env, "production"
-set :domain, "weafam@128.199.38.4" # Это необходимо для деплоя через ssh.
+set :domain, "weafam@46.101.148.117" # Weafam AppServer
+# set :domain, "weafam@128.199.38.4" # Это необходимо для деплоя через ssh.
 set :deploy_to, "/home/weafam/www/#{application}"
 set :use_sudo, false
 
@@ -30,7 +31,15 @@ role :app, domain
 role :db,  domain, :primary => true
 
 
-
+# base: &base
+#   adapter: postgresql
+#   username: postgres
+#   password: interweb
+#   encoding: utf8
+#   reconnect: false
+#   pool: 5
+#   timeout: 5000
+#   host: 127.0.0.1
 
 # Настройка БД
 namespace :db do
@@ -39,13 +48,15 @@ namespace :db do
     db_config = ERB.new <<-EOF
     base: &base
       adapter: postgresql
-      username: postgres
-      password: interweb
+      username: weafamdb
+      password: 8dj4js9
       encoding: utf8
       reconnect: false
       pool: 5
       timeout: 5000
       host: 127.0.0.1
+
+
 
 
     production:

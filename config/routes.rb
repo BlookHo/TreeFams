@@ -264,8 +264,8 @@ Weafam::Application.routes.draw do
         get :search_similars, to: "similars_founds#search_similars"
       end
 
-      namespace :profile_data do
-        get :update, to: "profile_data_update#update"
+      namespace :profile_datas do
+        get :update, to: "profile_datas_update#update"
       end
 
     end
