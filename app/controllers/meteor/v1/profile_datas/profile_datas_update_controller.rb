@@ -3,17 +3,18 @@ module Meteor
     module ProfileDatas
       class ProfileDatasUpdateController < MeteorController
 
+        skip_before_filter :verify_authenticity_token
         before_filter :authenticate
 
         def update
           profile_data = find_profile_data
 
           if (params["last_name"])
-            map_last_name(profile_data)
-          # elsif params.birthday
-          #   map_birthday(profile_data)
+            profile_data.last_name = params["last_name"]
           elsif params["city"]
-            map_city(profile_data)
+            profile_data.city = params["city"]
+          elsif params["avatar_mongo_id"]
+            profile_data.avatar_mongo_id = params["avatar_mongo_id"]
           end
 
 
@@ -27,26 +28,9 @@ module Meteor
 
         private
 
-        def map_last_name(profile_data)
-          if params["last_name"].blank?
-            return profile_data.last_name = nil
-          else
-            return profile_data.last_name = params["last_name"]
-          end
-        end
-
-        def map_city(profile_data)
-          if params["city"].blank?
-            return profile_data.city = nil
-          else
-            return profile_data.city = params["city"]
-          end
-        end
-
-
-
         def find_profile_data
           # TODO secure issue
+          # check user access to profile
           profile = Profile.where(id: params["profile_id"]).first
           profile.profile_data ? profile.profile_data : profile.build_profile_data
         end
