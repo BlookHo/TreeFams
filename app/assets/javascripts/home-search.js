@@ -5,7 +5,7 @@ var search_marked_profile_ids = [];
 var current_search_result = 0;
 var current_search_resuls_tree_owner_id;
 
-//var similars_btn = $('#similars-display-button');
+//var similars_btn = $('#similars_founds-display-button');
 
 
 // Получение результатов поиска и отображение на кнопке на домашней странице

@@ -150,8 +150,22 @@ class User < ActiveRecord::Base
   end
 
 
+  # @note Получение массивов юзеров - мужчин и женщин в дереве
+  def self.get_users_male_female(connected_users)
+    user_males = []
+    user_females = []
+    connected_users.each do |conn_user|
+      profile_user = Profile.find(User.find(conn_user).profile_id)
+      profile_user.sex_id == 1 ? user_males << profile_user.id : user_females << profile_user.id
+    end
+    user_males_qty = user_males.size # all tree male users qty
+    user_females_qty = user_females.size # all tree female users qty
 
-
+    { user_males: user_males,
+      user_females: user_females,
+      user_males_qty: user_males_qty,
+      user_females_qty: user_females_qty }
+  end
 
 
   private

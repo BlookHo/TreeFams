@@ -1,7 +1,7 @@
 module Meteor
   module V1
-    module Similars
-      class SimilarsController < MeteorController
+    module SimilarsFounds
+      class SimilarsFoundsController < MeteorController
 
         before_filter :authenticate
 

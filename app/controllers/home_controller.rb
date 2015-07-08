@@ -64,7 +64,20 @@ class HomeController < ApplicationController
     # puts "4. s = #{s},  @attributes.key1 = #{@attributes.key1} "
     # nns = @attributes.wideName.sec_name
     # puts "5. s = #{nns},  @attributes.key1 = #{@attributes.wideName.sec_name} "
+
+
+    # tree_content_data = Tree.tree_amounts(current_user)
     #
+    # logger.info "In home/index: Tree info:  profiles_qty= #{tree_content_data[:profiles_qty]},
+    #               tree_is_profiles= #{tree_content_data[:tree_is_profiles]},
+    #               profiles_male_qty= #{tree_content_data[:profiles_male_qty]},
+    #               tree_male_profiles= #{tree_content_data[:tree_male_profiles]},
+    #               profiles_female_qty= #{tree_content_data[:profiles_female_qty]},
+    #               tree_female_profiles= #{tree_content_data[:tree_female_profiles]},
+    #               user_males= #{tree_content_data[:user_males]},
+    #               user_females= #{tree_content_data[:user_females]},
+    #               user_males_qty= #{tree_content_data[:user_males_qty]},
+    #               user_females_qty= #{tree_content_data[:user_females_qty]} "
 
     similars_data = current_user.start_similars
     @tree_info = similars_data[:tree_info]

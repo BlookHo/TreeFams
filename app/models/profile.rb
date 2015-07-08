@@ -264,7 +264,8 @@ class Profile < ActiveRecord::Base
   def case_update_amounts(profile, current_user)
 
     # Определение кол-во профилей в дереве после добавления нового профиля
-    tree_profiles_amount = Tree.tree_amount(current_user)
+    tree_content_data = Tree.tree_amounts(current_user)
+    tree_profiles_amount = tree_content_data[:profiles_qty]
     #logger.info "In create: tree_profiles_amount = #{tree_profiles_amount} "
 
     case tree_profiles_amount

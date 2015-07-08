@@ -333,7 +333,7 @@ describe SimilarsController, :type => :controller , similars: true  do  # , focu
 
     end
 
-    describe 'GET #connect_similars' do
+    describe 'GET #connect_similars' ,focus: true  do #
       let(:first_init_profile) {81}
       let(:second_init_profile) {70}
       let(:log_connection_id) {1}
@@ -406,7 +406,7 @@ describe SimilarsController, :type => :controller , similars: true  do  # , focu
 
       end
 
-      describe '- After action #connect_similars'  do  # , focus: true
+      describe '- After action #connect_similars'   do  # , focus: true
         before { get :internal_similars_search
         get :connect_similars,
             first_profile_id: first_init_profile, second_profile_id: second_init_profile,
@@ -679,7 +679,7 @@ describe SimilarsController, :type => :controller , similars: true  do  # , focu
 
     end
 
-    describe 'GET #disconnect_similars' do
+    describe 'GET #disconnect_similars' ,focus: true   do  # ,focus: true
       let(:first_init_profile) {81}
       let(:second_init_profile) {70}
       let(:log_connection_id) {1}

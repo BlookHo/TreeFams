@@ -58,7 +58,7 @@ module DisconnectionTrees
 
     CommonLog.find(common_log_id).destroy
 
-    # ProfileData.destroy_profile_data(conn_users_destroy_data)
+    ProfileData.destroy_profile_data(conn_users_destroy_data)
 
 
     # Before ConnectedUser destroy_connection для всех запросов на объединение, ранее установленных как выполненные,
