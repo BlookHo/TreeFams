@@ -333,7 +333,7 @@ describe SimilarsController, :type => :controller , similars: true  do  # , focu
 
     end
 
-    describe 'GET #connect_similars' ,focus: true  do #
+    describe 'GET #connect_similars'   do # ,focus: true
       let(:first_init_profile) {81}
       let(:second_init_profile) {70}
       let(:log_connection_id) {1}
@@ -679,7 +679,7 @@ describe SimilarsController, :type => :controller , similars: true  do  # , focu
 
     end
 
-    describe 'GET #disconnect_similars' ,focus: true   do  # ,focus: true
+    describe 'GET #disconnect_similars'    do  # ,focus: true
       let(:first_init_profile) {81}
       let(:second_init_profile) {70}
       let(:log_connection_id) {1}

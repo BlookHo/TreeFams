@@ -92,7 +92,7 @@ class ProfileData < ActiveRecord::Base
                                          :birthday => new_data_row["birthday"],
                                          :country => new_data_row["country"],
                                          :city => new_data_row["city"],
-                                         :avatar => new_data_row["avatar_mongo_id"],
+                                         :avatar_mongo_id => new_data_row["avatar_mongo_id"],
                                          :updated_at => Time.now)
         end
 
@@ -106,7 +106,7 @@ class ProfileData < ActiveRecord::Base
                     birthday: data_destroy[0]["birthday"],
                     country: data_destroy[0]["country"],
                     city: data_destroy[0]["city"],
-                    avatar: data_destroy[0]["avatar_mongo_id"] )
+                    avatar_mongo_id: data_destroy[0]["avatar_mongo_id"] )
         self.mark_deleted_profile_data(data_destroy)
         puts "In connect_profiles_data: Check rewrite=blank "
 
