@@ -3,7 +3,7 @@ module Meteor
     module ProfileDatas
       class ProfileDatasUpdateController < MeteorController
 
-        skip_before_filter :verify_authenticity_token
+        # skip_before_filter :verify_authenticity_token
         before_filter :authenticate
 
         def update
