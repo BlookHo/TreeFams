@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ProfileData, :type => :model  do # , focus: true
+RSpec.describe ProfileData, :type => :model , focus: true do # , focus: true
 
 
 
@@ -32,7 +32,7 @@ RSpec.describe ProfileData, :type => :model  do # , focus: true
         profile_data_fields = ProfileData.first.attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>1, "profile_id"=>3, "last_name"=>"Иванов",
                                            "biography"=>"Текст про Иванова", "country"=>"Россия",
-                                           "city"=>"Москва", "deleted"=>0 })
+                                           "city"=>"Москва", "deleted"=>0, "avatar_mongo_id"=>nil })
                                            # "birthday"=> '2015-06-18 11:28:09.738909',
                                            # "birthday"=>  'Thu, 18 Jun 2015',
       end
@@ -40,7 +40,7 @@ RSpec.describe ProfileData, :type => :model  do # , focus: true
         profile_data_fields = ProfileData.second.attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>2, "profile_id"=>4, "last_name"=>"Иванов",
                                            "biography"=>"Второй Текст про Иванова", "country"=>"Россия",
-                                           "city"=>"Санкт-Петербург", "deleted"=>0})
+                                           "city"=>"Санкт-Петербург", "deleted"=>0, "avatar_mongo_id"=>nil})
       end
 
       describe '- check ProfileData have rows count - Ok' do
@@ -100,36 +100,38 @@ RSpec.describe ProfileData, :type => :model  do # , focus: true
           profile_data_fields = ProfileData.third.attributes.except('created_at','updated_at','birthday')
           expect(profile_data_fields).to eq({"id"=>3, "profile_id"=>5, "last_name"=>"Иванов",
                                              "biography"=>"Текст из 5 про Иванова", "country"=>"Россия",
-                                             "city"=>"Санкт-Петербург", "deleted"=>0})
+                                             "city"=>"Санкт-Петербург", "deleted"=>0, "avatar_mongo_id"=>nil})
           profile_data_fields = ProfileData.find(7).attributes.except('created_at','updated_at','birthday')
           expect(profile_data_fields).to eq({"id"=>7, "profile_id"=>10, "last_name"=>"Иванов",
-                                             "biography"=>"", "country"=>"Белоруссия", "city"=>"", "deleted"=>1})
+                                             "biography"=>"", "country"=>"Белоруссия", "city"=>"",
+                                             "deleted"=>1, "avatar_mongo_id"=>nil})
 
           profile_data_fields = ProfileData.find(4).attributes.except('created_at','updated_at','birthday')
           expect(profile_data_fields).to eq({"id"=>4, "profile_id"=>6, "last_name"=>"Иванов",
                                              "biography"=>"Текст из 11 про Иванова", "country"=>"Молдавия",
-                                             "city"=>"Кишинев", "deleted"=>0})
+                                             "city"=>"Кишинев", "deleted"=>0, "avatar_mongo_id"=>nil})
           profile_data_fields = ProfileData.find(8).attributes.except('created_at','updated_at','birthday')
           expect(profile_data_fields).to eq({"id"=>8, "profile_id"=>11, "last_name"=>"Иванов",
                                              "biography"=>"Текст из 11 про Иванова", "country"=>"Молдавия",
-                                             "city"=>"Кишинев", "deleted"=>1})
+                                             "city"=>"Кишинев", "deleted"=>1, "avatar_mongo_id"=>nil})
 
           profile_data_fields = ProfileData.find(5).attributes.except('created_at','updated_at','birthday')
           expect(profile_data_fields).to eq({"id"=>5, "profile_id"=>7, "last_name"=>"Иванов",
                                              "biography"=>"Текст из 12 ", "country"=>"Россия",
-                                             "city"=>"Санкт-Петербург", "deleted"=>0})
+                                             "city"=>"Санкт-Петербург", "deleted"=>0, "avatar_mongo_id"=>nil})
           profile_data_fields = ProfileData.find(9).attributes.except('created_at','updated_at','birthday')
           expect(profile_data_fields).to eq({"id"=>9, "profile_id"=>12, "last_name"=>"",
                                              "biography"=>"Текст из 12 ", "country"=>"Россия",
-                                             "city"=>"", "deleted"=>1})
+                                             "city"=>"", "deleted"=>1, "avatar_mongo_id"=>nil})
 
           profile_data_fields = ProfileData.find(6).attributes.except('created_at','updated_at','birthday')
           expect(profile_data_fields).to eq({"id"=>6, "profile_id"=>8, "last_name"=>"ИвановИЧ",
                                              "biography"=>"Текст из 8 про Иванова", "country"=>"Россия",
-                                             "city"=>"Санкт-Петербург", "deleted"=>0})
+                                             "city"=>"Санкт-Петербург", "deleted"=>0, "avatar_mongo_id"=>nil})
           profile_data_fields = ProfileData.find(10).attributes.except('created_at','updated_at','birthday')
           expect(profile_data_fields).to eq({"id"=>10, "profile_id"=>13, "last_name"=>"Иванов",
-                                             "biography"=>"", "country"=>"Китай", "city"=>"", "deleted"=>1})
+                                             "biography"=>"", "country"=>"Китай", "city"=>"",
+                                             "deleted"=>1, "avatar_mongo_id"=>nil})
 
         end
 
@@ -197,33 +199,33 @@ RSpec.describe ProfileData, :type => :model  do # , focus: true
         profile_data_fields = ProfileData.find(3).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>3, "profile_id"=>6, "last_name"=>"Иванов",
                                            "biography"=>"Текст из 11 про Иванова", "country"=>"Молдавия",
-                                           "city"=>"Кишинев", "deleted"=>0})
+                                           "city"=>"Кишинев", "deleted"=>0, "avatar_mongo_id"=>nil})
         profile_data_fields = ProfileData.find(6).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>6, "profile_id"=>11, "last_name"=>"Иванов",
                                            "biography"=>"Текст из 11 про Иванова", "country"=>"Молдавия",
-                                           "city"=>"Кишинев", "deleted"=>1})
+                                           "city"=>"Кишинев", "deleted"=>1, "avatar_mongo_id"=>nil})
 
         profile_data_fields = ProfileData.find(4).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>4, "profile_id"=>8, "last_name"=>"ИвановИЧ",
                                            "biography"=>"Текст из 8 про Иванова", "country"=>"Россия",
-                                           "city"=>"Санкт-Петербург", "deleted"=>0})
+                                           "city"=>"Санкт-Петербург", "deleted"=>0, "avatar_mongo_id"=>nil})
         profile_data_fields = ProfileData.find(8).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>8, "profile_id"=>13, "last_name"=>"Иванов", "biography"=>"",
-                                           "country"=>"Китай", "city"=>"", "deleted"=>1})
+                                           "country"=>"Китай", "city"=>"", "deleted"=>1, "avatar_mongo_id"=>nil})
 
         profile_data_fields = ProfileData.find(5).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>5, "profile_id"=>10, "last_name"=>"Иванов", "biography"=>"",
-                                           "country"=>"Белоруссия", "city"=>"", "deleted"=>1})
+                                           "country"=>"Белоруссия", "city"=>"", "deleted"=>1, "avatar_mongo_id"=>nil})
         profile_data_fields = ProfileData.find(7).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>7, "profile_id"=>12, "last_name"=>"", "biography"=>"Текст из 12 ",
-                                           "country"=>"Россия", "city"=>"", "deleted"=>1})
+                                           "country"=>"Россия", "city"=>"", "deleted"=>1, "avatar_mongo_id"=>nil})
 
         profile_data_fields = ProfileData.find(9).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>9, "profile_id"=>5, "last_name"=>"Иванов", "biography"=>"",
-                                           "country"=>"Белоруссия", "city"=>"", "deleted"=>0})
+                                           "country"=>"Белоруссия", "city"=>"", "deleted"=>0, "avatar_mongo_id"=>nil})
         profile_data_fields = ProfileData.find(10).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>10, "profile_id"=>7, "last_name"=>"", "biography"=>"Текст из 12 ",
-                                           "country"=>"Россия", "city"=>"", "deleted"=>0})
+                                           "country"=>"Россия", "city"=>"", "deleted"=>0, "avatar_mongo_id"=>nil})
 
       end
 
@@ -277,28 +279,30 @@ RSpec.describe ProfileData, :type => :model  do # , focus: true
         profile_data_fields = ProfileData.third.attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>3, "profile_id"=>5, "last_name"=>"Иванов",
                                            "biography"=>"Текст из 5 про Иванова", "country"=>"Россия",
-                                           "city"=>"Санкт-Петербург", "deleted"=>0})
+                                           "city"=>"Санкт-Петербург", "deleted"=>0, "avatar_mongo_id"=>nil})
 
         profile_data_fields = ProfileData.find(4).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>4, "profile_id"=>6, "last_name"=>"Иванов",
                                            "biography"=>"Текст из 11 про Иванова", "country"=>"Молдавия",
-                                           "city"=>"Кишинев", "deleted"=>0})
+                                           "city"=>"Кишинев", "deleted"=>0, "avatar_mongo_id"=>nil})
         profile_data_fields = ProfileData.find(7).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>7, "profile_id"=>11, "last_name"=>"Иванов",
                                            "biography"=>"Текст из 11 про Иванова", "country"=>"Молдавия",
-                                           "city"=>"Кишинев", "deleted"=>1})
+                                           "city"=>"Кишинев", "deleted"=>1, "avatar_mongo_id"=>nil})
 
         profile_data_fields = ProfileData.find(5).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>5, "profile_id"=>7, "last_name"=>"Иванов",
-                                           "biography"=>"", "country"=>"", "city"=>"Санкт-Петербург", "deleted"=>0})
+                                           "biography"=>"", "country"=>"", "city"=>"Санкт-Петербург",
+                                           "deleted"=>0, "avatar_mongo_id"=>nil})
 
         profile_data_fields = ProfileData.find(6).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>6, "profile_id"=>8, "last_name"=>"ИвановИЧ",
                                            "biography"=>"Текст из 8 про Иванова", "country"=>"Россия",
-                                           "city"=>"Санкт-Петербург", "deleted"=>0})
+                                           "city"=>"Санкт-Петербург", "deleted"=>0, "avatar_mongo_id"=>nil})
         profile_data_fields = ProfileData.find(8).attributes.except('created_at','updated_at','birthday')
         expect(profile_data_fields).to eq({"id"=>8, "profile_id"=>13, "last_name"=>"Иванов",
-                                           "biography"=>"", "country"=>"Китай", "city"=>"", "deleted"=>1})
+                                           "biography"=>"", "country"=>"Китай", "city"=>"",
+                                           "deleted"=>1, "avatar_mongo_id"=>nil})
       end
 
       describe '- check ProfileData have rows count - Ok' do
