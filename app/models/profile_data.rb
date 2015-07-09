@@ -64,7 +64,7 @@ class ProfileData < ActiveRecord::Base
       data_destroy = self.where(profile_id: profiles_to_destroy[index])
 
       if !data_rewrite.blank? && !data_destroy.blank?
-        ['last_name', 'biography', 'birthday', 'country', 'city'].each do |field|
+        ['last_name', 'biography', 'birthday', 'country', 'city', 'avatar_mongo_id'].each do |field|
           if !data_rewrite[0]["#{field}"].blank? && !data_destroy[0]["#{field}"].blank?
             # Both - not empty   Проверять, кто Главный, того и записывать
             fillness_arr_rewrite[index] >= fillness_arr_destroy[index] ?
@@ -92,6 +92,7 @@ class ProfileData < ActiveRecord::Base
                                          :birthday => new_data_row["birthday"],
                                          :country => new_data_row["country"],
                                          :city => new_data_row["city"],
+                                         :avatar => new_data_row["avatar_mongo_id"],
                                          :updated_at => Time.now)
         end
 
@@ -104,7 +105,8 @@ class ProfileData < ActiveRecord::Base
                     biography: data_destroy[0]["biography"],
                     birthday: data_destroy[0]["birthday"],
                     country: data_destroy[0]["country"],
-                    city: data_destroy[0]["city"])
+                    city: data_destroy[0]["city"],
+                    avatar: data_destroy[0]["avatar_mongo_id"] )
         self.mark_deleted_profile_data(data_destroy)
         puts "In connect_profiles_data: Check rewrite=blank "
 
@@ -152,6 +154,9 @@ class ProfileData < ActiveRecord::Base
           count = count + 1
         end
         if !profile_data_row[0]['city'].blank?
+          count = count + 1
+        end
+        if !profile_data_row[0]['avatar_mongo_id'].blank?
           count = count + 1
         end
       end
