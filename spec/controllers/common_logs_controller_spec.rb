@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CommonLogsController, type: :controller , focus: true  do #  , focus: true
+RSpec.describe CommonLogsController, type: :controller   do #  , focus: true
 
   let(:current_user) { create(:user) }   # User = 1. Tree = 1. profile_id = 63
   let(:currentuser_id) {current_user.id}
@@ -34,7 +34,7 @@ RSpec.describe CommonLogsController, type: :controller , focus: true  do #  , fo
     Name.reset_pk_sequence
   }
 
-  describe 'CHECK CommonLogsController methods' do
+  describe 'CHECK CommonLogsController methods' , focus: true do
     let(:connected_users) { current_user.get_connected_users }
 
     context '- before actions - check connected_users' do
