@@ -236,6 +236,11 @@ Weafam::Application.routes.draw do
       end
 
 
+      namespace :passwords do
+        get :reset, to: 'passwords_reset#reset'
+      end
+
+
       namespace :profiles do
         get :destroy, to: "profiles_destroy#destroy"
         get :create,  to: "profiles_create#create"
