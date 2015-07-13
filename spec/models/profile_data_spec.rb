@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ProfileData, :type => :model , focus: true do # , focus: true
+RSpec.describe ProfileData, :type => :model  do # , focus: true
 
 
 

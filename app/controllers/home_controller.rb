@@ -65,6 +65,31 @@ class HomeController < ApplicationController
     # nns = @attributes.wideName.sec_name
     # puts "5. s = #{nns},  @attributes.key1 = #{@attributes.wideName.sec_name} "
 
+    def site_stats
+    all_profiles = Profile.where(deleted: 0)
+    all_profiles_qty = all_profiles.count
+    all_profiles_male_qty = all_profiles.where(sex_id: 1).count
+    all_profiles_female_qty = all_profiles.where(sex_id: 0).count
+    all_users_qty = User.all.count
+    all_trees_qty = User.pluck(:connected_users).uniq.length
+    # trees_qty = User.pluck(:connected_users).uniq.length
+
+    logger.info "In StatController: all_profiles_qty = #{all_profiles_qty},
+          all_profiles_male_qty = #{all_profiles_male_qty},
+ all_profiles_female_qty = #{all_profiles_female_qty},
+ all_users_qty = #{all_users_qty},  all_trees_qty = #{all_trees_qty},
+  "
+      { all_profiles_qty: all_profiles_qty,
+               all_profiles_male_qty: all_profiles_male_qty,
+               all_profiles_female_qty: all_profiles_female_qty,
+               all_users_qty: all_users_qty,
+               all_trees_qty: all_trees_qty
+      }
+    end
+
+    all_site_stats = site_stats
+    logger.info "In StatController: all_site_stats = #{all_site_stats} "
+
 
     # tree_content_data = Tree.tree_amounts(current_user)
     #

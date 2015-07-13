@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CommonLogsController, type: :controller , focus: true  do #  , focus: true
+RSpec.describe CommonLogsController, type: :controller   do #  , focus: true
 
   let(:current_user) { create(:user) }   # User = 1. Tree = 1. profile_id = 63
   let(:currentuser_id) {current_user.id}
@@ -19,6 +19,29 @@ RSpec.describe CommonLogsController, type: :controller , focus: true  do #  , fo
     FactoryGirl.create(:connected_user, :correct)      # 1  2
     FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
     # puts "before All: ConnectedUser.count = #{ConnectedUser.all.count} \n" # 2 rows
+
+    # Profile
+    FactoryGirl.create(:profile, :profile_63)
+    FactoryGirl.create(:profile, :profile_64)
+    FactoryGirl.create(:profile, :profile_65)
+    FactoryGirl.create(:profile, :profile_66)
+    FactoryGirl.create(:profile, :profile_67)
+    FactoryGirl.create(:profile, :profile_68)
+    FactoryGirl.create(:profile, :profile_69)
+    FactoryGirl.create(:profile, :profile_70)
+    FactoryGirl.create(:profile, :profile_78)
+    FactoryGirl.create(:profile, :profile_79)
+    FactoryGirl.create(:profile, :profile_80)
+    FactoryGirl.create(:profile, :profile_81)
+    FactoryGirl.create(:profile, :profile_82)
+    FactoryGirl.create(:profile, :profile_83)
+    FactoryGirl.create(:profile, :profile_84)
+    # puts "before All: Profile.find(63).user_id = #{Profile.find(63).user_id.inspect} \n"  # id = 63
+    # puts "before All: Profile.find(66).name_id = #{Profile.find(66).name_id.inspect} \n"  # id = 66
+    # puts "before All: Profile.last.id = #{Profile.last.id} \n"  # id = 64
+    # puts "before All: Profile.last.name_id = #{Profile.last.name_id} \n"  # name_id = 90
+    # puts "before All: Profile.count = #{Profile.all.count} \n" # 2
+
   }
 
   after {
@@ -34,7 +57,7 @@ RSpec.describe CommonLogsController, type: :controller , focus: true  do #  , fo
     Name.reset_pk_sequence
   }
 
-  describe 'CHECK CommonLogsController methods' do
+  describe 'CHECK CommonLogsController methods'  do  # , focus: true
     let(:connected_users) { current_user.get_connected_users }
 
     context '- before actions - check connected_users' do
