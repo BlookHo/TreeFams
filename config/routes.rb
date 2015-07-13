@@ -272,6 +272,10 @@ Weafam::Application.routes.draw do
         get :update, to: "profile_data_update#update"
       end
 
+      namespace :stat do
+        get :stat_common, to: "stat#stat_common"
+      end
+
     end
   end
 
