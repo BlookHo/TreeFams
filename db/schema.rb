@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150708083325) do
+ActiveRecord::Schema.define(version: 20150713160008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 20150708083325) do
     t.datetime "updated_at"
     t.integer  "display_name_id"
     t.integer  "is_display_name_id"
+    t.integer  "deleted",            default: 0
   end
 
   add_index "profile_keys", ["profile_id"], name: "index_profile_keys_on_profile_id", using: :btree
@@ -215,6 +216,7 @@ ActiveRecord::Schema.define(version: 20150708083325) do
     t.integer  "is_sex_id"
     t.integer  "display_name_id"
     t.integer  "is_display_name_id"
+    t.integer  "deleted",            default: 0
   end
 
   add_index "trees", ["profile_id"], name: "index_trees_on_profile_id", using: :btree
