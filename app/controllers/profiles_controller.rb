@@ -37,6 +37,7 @@ class ProfilesController < ApplicationController
   def create
     # Профиль, к которому добавляем (на котором вызвали меню +)
     @base_profile = Profile.find(params[:base_profile_id])
+    puts "In create: @base_profile = #{@base_profile}"
 
     # Sex того профиля, к кому добавляем (на котором вызвали меню +) к автору отображаемого круга
     @base_sex_id = @base_profile.sex_id
@@ -49,9 +50,18 @@ class ProfilesController < ApplicationController
     @author_profile_id = params[:author_profile_id]
 
     @profile = Profile.new(profile_params)  # Новый добавляемый профиль
+    logger.info  "In Profile controller: create  @profile = #{@profile} "
+    puts "In Profile controller: create  @profile = #{@profile} "
+    logger.info  "In Profile controller: create  @profile.relation_id = #{@profile.relation_id} "
+    puts "In Profile controller: create  @profile.relation_id = #{@profile.relation_id} "
+
     # @profile.user_id = 0  # признак того, что это не Юзер (а лишь добавляемый профиль)
+
+    puts "In create: @profile = #{@profile}"
+
     @profile.tree_id = @base_profile.tree_id # Дерево, которому принадлежит базовый профиль - к кому добавляем
-    # logger.info "In Profile controller: create  @profile.tree_id = #{@profile.tree_id} "
+    logger.info  "In Profile controller: create  @profile.tree_id = #{@profile.tree_id} "
+    puts "In Profile controller: create  @profile.tree_id = #{@profile.tree_id} "
     # logger.info "In Profile controller: create  @profile.relation_id = #{@profile.relation_id} "
 
     # Имя
@@ -230,6 +240,12 @@ class ProfilesController < ApplicationController
   end
 
 
+  def profile_params
+    params[:profile].permit(:profile_name,
+                            :relation_id,
+                            :display_name_id)
+  end
+
 
   private
 
@@ -289,10 +305,5 @@ class ProfilesController < ApplicationController
 
 
 
-  def profile_params
-    params[:profile].permit(:profile_name,
-                            :relation_id,
-                            :display_name_id)
-  end
 
 end
