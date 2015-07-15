@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
 
   include SimilarsHelper  # Исп-ся в Similars
 
+  include ProfileCreation  # Исп-ся в Profiles
 
   include UserLock # вроде бы не используется
   include UserAccount

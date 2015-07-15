@@ -4,6 +4,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
 
   before {
 
+
     User.delete_all
     User.reset_pk_sequence
 
@@ -93,6 +94,11 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
     FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
     FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 9 . profile_id = 85
     # FactoryGirl.create(:user, :user_10 )  # User = 10. Tree = 10. profile_id = 93
+
+    allow(controller).to receive(:logged_in?)
+    allow(controller).to receive(:current_user).and_return current_user
+
+
 
     # ConnectedUser
     FactoryGirl.create(:connected_user, :correct)      # 1  2
@@ -231,14 +237,33 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
     CommonLog.reset_pk_sequence
   }
 
-  describe 'CHECK ProfilesController methods'  , focus: true  do # , focus: true
+  describe 'CHECK ProfilesController methods'    do # , focus: true
 
     describe 'GET #create'  do # , focus: true
+
+      let(:current_user) { User.find(9) }   # User = 9. Tree = 1. profile_id = 85
+      let(:currentuser_id) {current_user.id}
+
+      let(:base_profile_id) {92}
+      # let(:base_relation_id) {3}
+      # let(:author_profile_id) {85}
+      let(:profile_params) { {profile_name: "Федор" ,
+                              relation_id: 5,
+                              display_name_id: 465 } }
+      # let(:answers) {}
+      let(:profile_name_id) {465}
+
+
       context '- before action <create> - check ' do
 
         describe '- check User have rows count before - Ok' do
           let(:rows_qty) {9}
           it_behaves_like :successful_users_rows_count
+        end
+        describe '- check Profiles have rows count before - Ok' do
+          let(:rows_qty) {10}
+          let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91, 92, 172, 173]}
+          it_behaves_like :successful_profiles_count_and_ids
         end
         describe '- check Tree have rows count before - Ok' do
           let(:rows_qty) {7}
@@ -293,45 +318,60 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
 
       end
 
-      let(:current_user) { User.find(9) }   # User = 9. Tree = 1. profile_id = 85
-      let(:currentuser_id) {current_user.id}
 
-      context '- after action <create> - check render_template & response status' do
-        let(:base_profile_id) {92}
-        let(:base_relation_id) {3}
-        let(:author_profile_id) {85}
-        let(:profile_params) { {profile_name: "Федор" ,
-                                relation_id: 5,
-                                display_name_id: 465 } }
-        let(:answers) {}
+      describe '- POST <create> - check after action'  , focus: true  do
 
-        before {
-          allow(controller).to receive(:logged_in?)
-          allow(controller).to receive(:current_user).and_return current_user
-          puts "before action: base_profile_id = #{base_profile_id.inspect} \n"
+        context '- after action <create> - check render_template & response status' do
+          before {  post :create,
+                         base_profile_id: base_profile_id,
+                         # base_relation_id: base_relation_id,
+                         # author_profile_id: author_profile_id,
+                         # answers: answers,
+                         profile: profile_params,
+                         profile_name_id: profile_name_id
+            # format: 'js'
+          }
 
-          get :create,
-                      base_profile_id: base_profile_id,
-                      base_relation_id: base_relation_id,
-                      author_profile_id: author_profile_id,
-                      answers: answers,
-                      profile: profile_params
-                      # :format => 'js'
-        }
+          it "- render_template create" do
+            puts "Check #create\n"
+            puts "In render_template :  currentuser_id = #{currentuser_id} \n"
+            expect(subject).to render_template :create
+          end
+          it '- responds with 200' do
+            puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
+            expect(response.status).to eq(200)
+          end
+          it '- no responds with 401' do
+            puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
+            expect(response.status).to_not eq(401)
+          end
 
-        it "- render_template create" do
-          puts "Check #create\n"
-          # puts "In render_template :  currentuser_id = #{currentuser_id} \n"
-          expect(subject).to render_template :new
+          describe '- check Profiles have rows count after CREATE  - Ok' do
+            let(:rows_qty) {11}
+            let(:rows_ids_arr) {[1, 85, 86, 87, 88, 89, 90, 91, 92, 172, 173]}
+            it_behaves_like :successful_profiles_count_and_ids
+          end
+          describe '- check Tree have rows count before - Ok' do
+            let(:rows_qty) {8}
+            it_behaves_like :successful_tree_rows_count
+          end
+          describe '- check ProfileKey have rows count before - Ok' do
+            let(:rows_qty) {50}
+            it_behaves_like :successful_profile_keys_rows_count
+          end
+          describe '- check CommonLog have rows count before - Ok' do
+            let(:rows_qty) {5}
+            it_behaves_like :successful_common_logs_rows_count
+          end
+          it '- check CommonLog 1st & last row - Ok' do # , focus: true
+            common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
+            expect(common_log_row_fields).to eq({"id"=>5, "user_id"=>9, "log_type"=>1, "log_id"=>3, "profile_id"=>1,
+                                                 "base_profile_id"=>92, "relation_id"=>5} )
+          end
+
         end
-        it '- responds with 200' do
-          # puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
-          expect(response.status).to eq(200)
-        end
-        it '- no responds with 401' do
-          # puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
-          expect(response.status).to_not eq(401)
-        end
+
+
       end
 
 

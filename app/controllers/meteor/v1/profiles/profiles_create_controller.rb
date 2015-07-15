@@ -7,9 +7,9 @@ module Meteor
 
 
           def create
-            profile = Profile.where(id: params[:profile_id]).first
-            name = Name.where(id: params[:name_id]).first
-            relation_id = params[:relation_id]
+            profile = Profile.where(id: params[:profile_id]).first  # base_profile
+            name = Name.where(id: params[:name_id]).first   # new profile name id
+            relation_id = params[:relation_id]  # new profile relation_id
             current_user = @current_user
 
             new_profile = create_profile(name, current_user)
