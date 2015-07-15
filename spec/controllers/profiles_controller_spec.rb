@@ -245,12 +245,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
       let(:currentuser_id) {current_user.id}
 
       let(:base_profile_id) {92}
-      # let(:base_relation_id) {3}
-      # let(:author_profile_id) {85}
-      let(:profile_params) { {profile_name: "Федор" ,
-                              relation_id: 5,
-                              display_name_id: 465 } }
-      # let(:answers) {}
+      let(:relation_id) {5}
       let(:profile_name_id) {465}
 
 
@@ -324,13 +319,8 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
         context '- after action <create> - check render_template & response status' do
           before {  post :create,
                          base_profile_id: base_profile_id,
-                         # base_relation_id: base_relation_id,
-                         # author_profile_id: author_profile_id,
-                         # answers: answers,
-                         profile: profile_params,
-                         profile_name_id: profile_name_id
-            # format: 'js'
-          }
+                         relation_id: relation_id,
+                         profile_name_id: profile_name_id }
 
           it "- render_template create" do
             puts "Check #create\n"

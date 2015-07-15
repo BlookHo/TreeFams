@@ -35,16 +35,11 @@ class ProfilesController < ApplicationController
 
 
   def create
-
     params_to_create = {
         base_profile_id:   params[:base_profile_id],
-        # base_relation_id:  params[:base_relation_id],
-        # author_profile_id: params[:author_profile_id],
-        profile_params:    profile_params,
-        profile_name_id:   params[:profile_name_id],
-
+        relation_id:  params[:relation_id],
+        profile_name_id:   params[:profile_name_id]
     }
-
     @base_profile = current_user.creation_profile(params_to_create)
 
         # # Профиль, к которому добавляем (на котором вызвали меню +)
