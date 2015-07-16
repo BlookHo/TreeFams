@@ -3,15 +3,14 @@ module ProfileCreation
 
 
 
+  # @note: Основной метод создания нового профиля
+  def creation_profile(params_to_create)
 
-  def creation_profile(params_to_create)    # Запуск мягкого поиска для объединения
-
-    puts "In creation_profile: params_to_create = #{params_to_create} "
+    puts "In Rails Concern: creation_profile: params_to_create = #{params_to_create} "
 
     profile = Profile.where(id: params_to_create[:base_profile_id] ).first  # base_profile
     name = Name.where(id: params_to_create[:profile_name_id]).first   # new profile name id
     relation_id = params_to_create[:relation_id]  # new profile relation_id
-    # puts "In creation_profile: name.id = #{name.id}, self.id = #{self.id} "
 
     new_profile = create_one_profile(name, self.id)
     create_keys(profile, new_profile, relation_id, self)
