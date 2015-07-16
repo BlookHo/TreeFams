@@ -314,7 +314,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
       end
 
 
-      describe '- POST <create> - check after action'  , focus: true  do
+      describe '- POST <create> - check after action'   do # , focus: true
 
         context '- after action <create> - check render_template & response status' do
           before {  post :create,
@@ -323,7 +323,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
                          profile_name_id: profile_name_id }
 
           it "- render_template create" do
-            puts "Check #create\n"
+            puts "Check profile #create\n"
             puts "In render_template :  currentuser_id = #{currentuser_id} \n"
             expect(subject).to render_template :create
           end
@@ -361,13 +361,207 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
 
         end
 
+      end
+
+    end
+
+
+    describe 'GET #destroy'  do # , focus: true
+
+      let(:current_user) { User.find(9) }   # User = 9. Tree = 1. profile_id = 85
+      let(:currentuser_id) {current_user.id}
+
+      let(:base_profile_id) {92}
+      # let(:relation_id) {5}
+      let(:profile_name_id) {465}
+      let(:profile_params) {{relation_id: 5}}
+
+      context '1 - before action <create> - check ' do
+
+        describe '- check User have rows count before - Ok' do
+          let(:rows_qty) {9}
+          it_behaves_like :successful_users_rows_count
+        end
+        describe '- check Profiles have rows count before - Ok' do
+          let(:rows_qty) {10}
+          let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91, 92, 172, 173]}
+          it_behaves_like :successful_profiles_count_and_ids
+        end
+        describe '- check Tree have rows count before - Ok' do
+          let(:rows_qty) {7}
+          it_behaves_like :successful_tree_rows_count
+        end
+        describe '- check ProfileKey have rows count before - Ok' do
+          let(:rows_qty) {46}
+          it_behaves_like :successful_profile_keys_rows_count
+        end
+        describe '- check CommonLog have rows count before - Ok' do
+          let(:rows_qty) {4}
+          it_behaves_like :successful_common_logs_rows_count
+        end
+        it '- check CommonLog 1st row before - Ok' do
+          common_log_first =  CommonLog.first
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_first.profile_id).to eq(89)
+          expect(common_log_first.id).to eq(1)
+        end
+        it '- check CommonLog 2nd row before - Ok' do
+          common_log_second =  CommonLog.second
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_second.profile_id).to eq(90)
+          expect(common_log_second.id).to eq(2)
+        end
+        it '- check CommonLog 3rd row before - Ok' do
+          common_log_third =  CommonLog.third
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_third.profile_id).to eq(172)
+          expect(common_log_third.id).to eq(3)
+        end
+        it '- check CommonLog 4th row before - Ok' do
+          common_log_forth =  CommonLog.find(4)
+          # puts "before action: trees_count = #{trees_count.inspect} \n"
+          expect(common_log_forth.profile_id).to eq(173)
+          expect(common_log_forth.id).to eq(4)
+        end
+        describe '- check all relations generated in ProfileKey rows: start state - Ok'  do  # , focus: true
+          let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
+                                    14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121,
+                                    191, 221]}
+          let(:relations_arr_size) {46}
+          it_behaves_like :successful_profile_keys_relation_ids
+        end
+        describe '- check all profile_ids generated in ProfileKey rows: start state - Ok' do
+          let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 87,
+                                   88, 88, 88, 88, 88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172,
+                                   173, 173, 173, 173, 173]}
+          let(:profiles_ids_arr_size) {46}
+          it_behaves_like :successful_profile_keys_profile_ids
+        end
+
+      end
+
+
+      describe '- POST <create> - check after action'   do  # , focus: true
+
+        context '2 - after action <create> - check render_template & response status' do
+          before {  post :create,
+                         base_profile_id: base_profile_id,
+                         profile_name_id: profile_name_id,
+                         profile: profile_params
+          }
+
+          it "- render_template create" do
+            puts "Check profile #create\n"
+            puts "In render_template :  currentuser_id = #{currentuser_id} \n"
+            expect(subject).to render_template :create
+          end
+          it '- responds with 200' do
+            puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
+            expect(response.status).to eq(200)
+          end
+          it '- no responds with 401' do
+            puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
+            expect(response.status).to_not eq(401)
+          end
+
+          describe '- check Profiles have rows count after CREATE  - Ok' do
+            let(:rows_qty) {11}
+            let(:rows_ids_arr) {[1, 85, 86, 87, 88, 89, 90, 91, 92, 172, 173]}
+            it_behaves_like :successful_profiles_count_and_ids
+          end
+          describe '- check Tree have rows count after - Ok' do
+            let(:rows_qty) {8}
+            it_behaves_like :successful_tree_rows_count
+          end
+          describe '- check ProfileKey have rows count after - Ok' do
+            let(:rows_qty) {50}
+            it_behaves_like :successful_profile_keys_rows_count
+          end
+          describe '- check CommonLog have rows count after - Ok' do
+            let(:rows_qty) {5}
+            it_behaves_like :successful_common_logs_rows_count
+          end
+          it '- check CommonLog 1st & last row - Ok' do # , focus: true
+            common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
+            expect(common_log_row_fields).to eq({"id"=>5, "user_id"=>9, "log_type"=>1, "log_id"=>3, "profile_id"=>1,
+                                                 "base_profile_id"=>92, "relation_id"=>5} )
+          end
+
+        end
+
+      end
+
+
+      describe '- GET <destroy> - check after action' , focus: true   do  # , focus: true
+
+        let(:destroy_id) {1}
+
+        context '3 - after action <create> and <destroy> - check render_template & response status' do
+          before {  post :create,
+                         base_profile_id: base_profile_id,
+                         profile_name_id: profile_name_id,
+                         profile: profile_params
+                    get :destroy, id: destroy_id
+          }
+
+          it "- render_template destroy" do
+            puts "Check profile #destroy\n"
+            puts "In render_template :  currentuser_id = #{currentuser_id} \n"
+            expect(subject).to render_template :destroy
+          end
+          it '- responds with 200' do
+            puts "In responds with 200:  currentuser_id = #{currentuser_id} \n"
+            expect(response.status).to eq(200)
+          end
+          it '- no responds with 401' do
+            puts "In no responds with 401:  currentuser_id = #{currentuser_id} \n"
+            expect(response.status).to_not eq(401)
+          end
+
+          describe '- check Profiles have rows count after <create> and <destroy>  - Ok' do
+            let(:rows_qty) {11}
+            let(:rows_ids_arr) {[1, 85, 86, 87, 88, 89, 90, 91, 92, 172, 173]}
+            it_behaves_like :successful_profiles_count_and_ids
+          end
+          describe '- check Tree have rows count after - Ok' do
+            let(:rows_qty) {8}
+            it_behaves_like :successful_tree_rows_count
+          end
+          describe '- check ProfileKey have rows count after - Ok' do
+            let(:rows_qty) {50}
+            it_behaves_like :successful_profile_keys_rows_count
+          end
+          describe '- check CommonLog have rows count after - Ok' do
+            let(:rows_qty) {6}
+            it_behaves_like :successful_common_logs_rows_count
+          end
+          it '- check CommonLog 1st & last row - Ok' do # , focus: true
+            common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
+            expect(common_log_row_fields).to eq({"id"=>6, "user_id"=>9, "log_type"=>2, "log_id"=>3, "profile_id"=>1,
+                                                 "base_profile_id"=>92, "relation_id"=>5} )
+          end
+          describe '- check DeletionLog have rows count after - Ok' do
+            let(:rows_qty) {5}
+            it_behaves_like :successful_deletion_logs_rows_count
+          end
+
+        end
 
       end
 
 
 
 
+
+
+
     end
+
+
+
+
+
+
   end
 
 end
