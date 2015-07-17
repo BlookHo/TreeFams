@@ -10,6 +10,8 @@ module Meteor
             puts "From Meteor - in Rails destroy: destroying_profile: params[:profile_id] = #{params[:profile_id]}"
             response = @current_user.destroying_profile(params[:profile_id])
 
+            # ПРЕДЫДУЩАЯ ВЕРСИЯ
+            #
             # @profile = Profile.where(id: params[:profile_id]).first
             #
             # if @profile.user.present? && @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0

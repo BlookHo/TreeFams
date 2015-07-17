@@ -444,11 +444,16 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           let(:profiles_ids_arr_size) {36}
           it_behaves_like :successful_profile_keys_profile_ids
         end
+        describe '- check DeletionLog have rows count after - Ok' do
+          let(:rows_qty) {0}
+          it_behaves_like :successful_deletion_logs_rows_count
+        end
+
       end
 
     end
 
-    describe ' Check action <rollback_destroy_one_profile> :'  do  # , focus: true
+    describe ' Check action <rollback_destroy_one_profile> :' , focus: true  do  # , focus: true
       context '- rollback destroy profile = 90 - check tables values ' do
 
         let(:destroy_log_data) { {:current_user => current_user_9, :log_type => 2, :profile_id => 90,
@@ -500,6 +505,16 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           let(:profiles_ids_arr_size) {58}
           it_behaves_like :successful_profile_keys_profile_ids
         end
+
+        describe '- check DeletionLog have rows count after - Ok' do
+          let(:rows_qty) {0}
+          it_behaves_like :successful_deletion_logs_rows_count
+        end
+
+
+
+
+
       end
 
       context '- rollback destroy profile = 89 - check tables values ' do  # , focus: true

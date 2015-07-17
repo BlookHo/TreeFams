@@ -229,15 +229,13 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
     Profile.reset_pk_sequence
     ProfileKey.delete_all
     ProfileKey.reset_pk_sequence
-    # WeafamSetting.delete_all
-    # WeafamSetting.reset_pk_sequence
     Name.delete_all
     Name.reset_pk_sequence
     CommonLog.delete_all
     CommonLog.reset_pk_sequence
   }
 
-  describe 'CHECK ProfilesController methods'    do # , focus: true
+  describe 'CHECK ProfilesController methods'   do # , focus: true
 
     describe 'GET #create'  do # , focus: true
 
@@ -245,9 +243,8 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
       let(:currentuser_id) {current_user.id}
 
       let(:base_profile_id) {92}
-      let(:relation_id) {5}
       let(:profile_name_id) {465}
-
+      let(:profile_params) {{relation_id: 5}}
 
       context '- before action <create> - check ' do
 
@@ -319,8 +316,8 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
         context '- after action <create> - check render_template & response status' do
           before {  post :create,
                          base_profile_id: base_profile_id,
-                         relation_id: relation_id,
-                         profile_name_id: profile_name_id }
+                         profile_name_id: profile_name_id,
+                         profile: profile_params  }
 
           it "- render_template create" do
             puts "Check profile #create\n"
@@ -372,7 +369,6 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
       let(:currentuser_id) {current_user.id}
 
       let(:base_profile_id) {92}
-      # let(:relation_id) {5}
       let(:profile_name_id) {465}
       let(:profile_params) {{relation_id: 5}}
 
@@ -447,8 +443,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
           before {  post :create,
                          base_profile_id: base_profile_id,
                          profile_name_id: profile_name_id,
-                         profile: profile_params
-          }
+                         profile: profile_params  }
 
           it "- render_template create" do
             puts "Check profile #create\n"
@@ -492,7 +487,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
       end
 
 
-      describe '- GET <destroy> - check after action' , focus: true   do  # , focus: true
+      describe '- GET <destroy> - check after action'   do  # , focus: true
 
         let(:destroy_id) {1}
 
@@ -501,7 +496,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
                          base_profile_id: base_profile_id,
                          profile_name_id: profile_name_id,
                          profile: profile_params
-                    get :destroy, id: destroy_id
+          get :destroy, id: destroy_id
           }
 
           it "- render_template destroy" do
@@ -550,6 +545,50 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
       end
 
 
+      describe '- GET <destroy> - check after rollback_destroy' , focus: true  do  # , focus: true
+
+        let(:destroy_id) {1}
+        let(:destroy_log_data) { {:current_user => current_user, :log_type => 2, :profile_id => 1,
+                                  :base_profile_id => 92, :relation_id => 5, common_log_id: 6    } }
+
+        context '3 - after action <create> and <destroy> - check render_template & response status' do
+          before {  post :create,
+                         base_profile_id: base_profile_id,
+                         profile_name_id: profile_name_id,
+                         profile: profile_params
+          get :destroy, id: destroy_id
+          CommonLog.rollback_destroy_one_profile(destroy_log_data) }
+
+          describe '- check Profiles have rows count after <create> and <destroy>  - Ok' do
+            let(:rows_qty) {11}
+            let(:rows_ids_arr) {[1, 85, 86, 87, 88, 89, 90, 91, 92, 172, 173]}
+            it_behaves_like :successful_profiles_count_and_ids
+          end
+          describe '- check Tree have rows count after - Ok' do  # change here
+            let(:rows_qty) {8}
+            it_behaves_like :successful_tree_rows_count
+          end
+          describe '- check ProfileKey have rows count after - Ok' do   # change here
+            let(:rows_qty) {50}
+            it_behaves_like :successful_profile_keys_rows_count
+          end
+          describe '- check CommonLog have rows count after - Ok' do
+            let(:rows_qty) {5}
+            it_behaves_like :successful_common_logs_rows_count
+          end
+          it '- check CommonLog 1st & last row - Ok' do # , focus: true
+            common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
+            expect(common_log_row_fields).to eq({"id"=>5, "user_id"=>9, "log_type"=>1, "log_id"=>3, "profile_id"=>1,
+                                                 "base_profile_id"=>92, "relation_id"=>5} )
+          end
+          describe '- check DeletionLog have rows count after - Ok' do
+            let(:rows_qty) {5}
+            it_behaves_like :successful_deletion_logs_rows_count
+          end
+
+        end
+
+      end
 
 
 

@@ -8,7 +8,6 @@ module ProfileDestroying
 
     # puts "In Rails Concern: destroying_profile: profile_id = #{profile_id} "
 
-
     profile = Profile.where(id: profile_id).first
     if profile.user.present?
       error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
@@ -18,16 +17,12 @@ module ProfileDestroying
 
       tree_row = Tree.where(is_profile_id: profile_id)
       new_relation_id = tree_row[0].relation_id
-      # logger.info "In Profiles_contr destroy: Before delete Tree  new_relation_id = #{new_relation_id} "
-      # Профиль, от которого растет удаляемый (?)
+      # Профиль, от которого растет удаляемый
       base_profile = Profile.find(tree_row[0].profile_id)  #
-
 
       # todo: пока удаляем ProfileData
       ProfileData.where(profile_id: profile.id).map(&:destroy)
-      # profile.destroy # Не удаляем профили, чтобы иметь возм-ть повторить создание удаленных профилей
 
-      # logger.info "In Profiles_contr destroy: Before create_add_log"
       current_log_type = 2  #  # delete : rollback == add. Тип = удаление нового профиля при rollback
       new_log_number = CommonLog.new_log_id(base_profile.tree_id, current_log_type)
 
@@ -49,19 +44,17 @@ module ProfileDestroying
             current_user_id: self.id,
             table: table.table_name
         }
-
         # puts "In Rails Concern: deletion_tables_logs: destroy_table_data = #{destroy_table_data} "
-
         log_table_del = log_table_rows_deleted(destroy_table_data)
         deletion_tables_logs = deletion_tables_logs +  log_table_del
-
       end
       # puts " Before model DeletionLog store_log: deletion_tables_logs = #{deletion_tables_logs} "
 
-      # Tree.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
 
       # Запись массива лога в таблицу DeletionLog
       DeletionLog.store_deletion_log(deletion_tables_logs) unless deletion_tables_logs.blank?
+
+      # Tree.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
       # ProfileKey.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
 
 

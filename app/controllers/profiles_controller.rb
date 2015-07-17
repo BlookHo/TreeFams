@@ -37,10 +37,13 @@ class ProfilesController < ApplicationController
   # @note: Запуск основного метода создания нового профиля
   def create
 
+    relation_id_param = params[:profile].fetch("relation_id") unless params[:profile].blank?
+    # todo: вставить проверки params на nil
     params_to_create = {
         base_profile_id:   params[:base_profile_id],
         profile_name_id:   params[:profile_name_id],
-        relation_id:       params[:profile].fetch("relation_id")
+        # relation_id:    params[:profile].fetch("relation_id")
+        relation_id:    relation_id_param
     }
     puts "In Profiles_controller: create: params_to_create = #{params_to_create} "
 
