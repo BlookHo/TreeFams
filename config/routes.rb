@@ -231,8 +231,7 @@ Weafam::Application.routes.draw do
 
 
       namespace :signup do
-        get :create, to: 'signup#create'
-        get :test, to: 'signup#test'
+        post :create, to: 'signup#create'
       end
 
 

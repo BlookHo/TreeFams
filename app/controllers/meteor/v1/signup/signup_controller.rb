@@ -5,15 +5,14 @@ module Meteor
 
         skip_before_filter :authenticate
 
-        def test
-          user = User.first
-          respond_with user
-        end
-
 
         def create
           data = params['family']
           data = JSON.parse(data)
+
+
+          logger.info("METEOR SIGNUP #{data}")
+
           data = sanitize_data(data.compact)
           formatData = {'family' => data}
 
@@ -26,7 +25,8 @@ module Meteor
 
             logger.info("RESPOND WITH USER:")
             logger.info(user)
-            respond_with({token: user.access_token})
+            # respond_with({token: user.access_token})
+            render json: {token: user.access_token}
           else
             logger.info("RESPOND WITH 500")
             respond_with(status: 500)

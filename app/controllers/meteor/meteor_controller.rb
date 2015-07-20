@@ -2,7 +2,7 @@ module Meteor
   class MeteorController < ApplicationController
 
     respond_to :json
-
+    skip_before_filter :verify_authenticity_token
     before_filter :authenticate
 
     protected
@@ -12,6 +12,6 @@ module Meteor
         @current_user = User.find_by(access_token: token)
       end
     end
-    
+
   end
 end
