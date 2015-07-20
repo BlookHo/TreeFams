@@ -150,6 +150,7 @@ class CommonLog < ActiveRecord::Base
     profile_id        = destroy_log_data[:profile_id]
     base_profile_id   = destroy_log_data[:base_profile_id]
     relation_id       = destroy_log_data[:relation_id]
+    log_id            = destroy_log_data[:log_id]
 
 
     # Профиль, к которому добавляем (на котором вызвали меню +)
@@ -165,68 +166,24 @@ class CommonLog < ActiveRecord::Base
     # Mark profile as NOT deleted- back
     @profile.update_attribute('deleted', 0)
 
-
-
     ################################
     # Вернуть "удаленные" ряды в таблицах в 0
-    # log_to_redo = restore_deletion_log(connection_common_log["log_id"], connection_common_log["user_id"])
-    #
-    # redo_deletion_log(log_to_redo)
-    #
-    # deletion_logs_deletion(log_to_redo)
+    puts "In CommonLog model: rollback_destroy_one_profile: destroy_log_data[:log_id] = #{destroy_log_data[:log_id]}, current_user.id = #{current_user.id}"
+    log_to_redo = DeletionLog.restore_deletion_log(destroy_log_data[:log_id], destroy_log_data[:current_user])
 
+    DeletionLog.redo_deletion_log(log_to_redo)
 
+    DeletionLog.deletion_logs_deletion(log_to_redo)
 
-    # todo: учесть при работе с нестандартными вопросами
     #     @profile.answers_hash = {}  # Исключаем нестандартные вопросы
     #     ProfileKey.add_new_profile(@base_sex_id, @base_profile, @profile, relation_id,
     #                                      exclusions_hash: @profile.answers_hash,
     #                                      tree_ids: current_user.get_connected_users)
 
-
-
-
-
-
     CommonLog.find(destroy_log_data[:common_log_id]).destroy
   end
 
 
-
-  # Получение массива логов из таблицы ConnectionLog по номеру лога log_id
-  def restore_deletion_log(log_id, user_id)
-    # puts "In User model: restore_connection_log: log_id = #{log_id}, user_id = #{user_id}"
-    # logger.info "*** In module DisconnectionTrees restore_connection_log:
-    #              log_id = #{log_id}, user_id = #{user_id} "
-    ConnectionLog.where(connected_at: log_id, current_user_id: user_id)
-  end
-
-
-  # @note
-  #   Исполнение операций по логам - обратная перезапись в таблицах
-  def redo_deletion_log(log_to_redo)
-
-    unless log_to_redo.blank?
-      log_to_redo.each do |log_row|
-        #     {:table_name=>"profiles", :table_row=>52, :field=>"tree_id", :written=>5, :overwritten=>4}
-        model = log_row[:table_name].classify.constantize
-        # logger.info "*** In module DisconnectionTrees redo_log: model = #{model.inspect} "
-        row_to_update = model.find(log_row[:table_row]) if model.exists? id: log_row[:table_row]
-        logger.info "*** In module DisconnectionTrees redo_connection_log: log_row = #{log_row.inspect} "
-        logger.info "*** In module DisconnectionTrees redo_connection_log: row_to_update = #{row_to_update.inspect} "
-
-        # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-        row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now) unless row_to_update.blank?
-
-      end
-    end
-
-  end
-
-  # Удаление разъединенного лога - после обратной перезаписи в таблицах
-  def deletion_logs_deletion(log_to_redo)
-    log_to_redo.map(&:destroy)
-  end
 
 
 end

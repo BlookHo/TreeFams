@@ -356,6 +356,7 @@ FactoryGirl.define do
       is_profile_id   89
       is_name_id      345
       is_sex_id       0
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     trait :add_tree9_5 do # before # 90
       user_id         9
@@ -365,6 +366,7 @@ FactoryGirl.define do
       is_profile_id   90
       is_name_id      343
       is_sex_id       1
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     trait :add_tree9_6 do # before  # 91
       user_id         9
@@ -374,6 +376,7 @@ FactoryGirl.define do
       is_profile_id   91
       is_name_id      446
       is_sex_id       0
+      deleted         0  # ###############################
     end
 # 80;9;85;6;"2015-03-05 17:52:18.62151";"2015-03-05 17:52:18.62151";370;89;345;0
 # 81;9;85;3;"2015-03-05 17:52:18.944942";"2015-03-05 17:52:18.944942";370;90;343;1

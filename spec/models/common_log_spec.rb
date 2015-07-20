@@ -454,11 +454,39 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
     end
 
     describe ' Check action <rollback_destroy_one_profile> :' , focus: true  do  # , focus: true
+      describe '- check Tree have rows count: + 90 profile - Ok' do
+        let(:rows_qty) {7}
+        it_behaves_like :successful_tree_rows_count
+      end
+      it '- check Tree last row - Ok' do # , focus: true
+        tree_row_fields = Tree.last.attributes.except('created_at','updated_at')
+        expect(tree_row_fields).to eq({"id"=>7, "user_id"=>9, "profile_id"=>86, "relation_id"=>2,
+                                       "name_id"=>28, "is_profile_id"=>173, "is_name_id"=>82,
+                                       "is_sex_id"=>0, "display_name_id"=>nil, "is_display_name_id"=>nil,
+                                       "deleted"=>0} )
+      end
+
       context '- rollback destroy profile = 90 - check tables values ' do
 
         let(:destroy_log_data) { {:current_user => current_user_9, :log_type => 2, :profile_id => 90,
-                                  :base_profile_id => 85, :relation_id => 3, common_log_id: 2    } }
-        before { CommonLog.rollback_destroy_one_profile(destroy_log_data) }
+                                  :base_profile_id => 85, :relation_id => 3, log_id: 2, common_log_id: 2 } }
+        before {
+          FactoryGirl.create(:tree, :add_tree9_5) # before # 90
+
+          FactoryGirl.create(:profile_key, :profile_key9_add_21) # before # 85 90
+          FactoryGirl.create(:profile_key, :profile_key9_add_22) # before # 85 90
+          FactoryGirl.create(:profile_key, :profile_key9_add_23)  # 86 90
+          FactoryGirl.create(:profile_key, :profile_key9_add_24)    # 90 86
+          FactoryGirl.create(:profile_key, :profile_key9_add_25)    # 87 90
+          FactoryGirl.create(:profile_key, :profile_key9_add_26)  # 90 87
+          FactoryGirl.create(:profile_key, :profile_key9_add_27) # before  # 88 90
+          FactoryGirl.create(:profile_key, :profile_key9_add_28) # before  # 90 88
+          FactoryGirl.create(:profile_key, :profile_key9_add_29) # before  # 89 90
+          FactoryGirl.create(:profile_key, :profile_key9_add_30) # before  # 89 90
+          FactoryGirl.create(:profile_key, :profile_key9_add_33) # before  # 90 91
+          FactoryGirl.create(:profile_key, :profile_key9_add_34) # before  # 91 90
+
+          CommonLog.rollback_destroy_one_profile(destroy_log_data) }
 
         describe '- check CommonLog have rows count: 4 - 1 = 3 - Ok' do
           let(:rows_qty) {3}
@@ -487,21 +515,27 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           let(:rows_qty) {8}
           it_behaves_like :successful_tree_rows_count
         end
+        it '- check Tree last row - Ok' do # , focus: true
+          tree_row_fields = Tree.last.attributes.except('created_at','updated_at')
+          expect(tree_row_fields).to eq({"id"=>8, "user_id"=>9, "profile_id"=>85, "relation_id"=>3, "name_id"=>370,
+                                         "is_profile_id"=>90, "is_name_id"=>343, "is_sex_id"=>1, "display_name_id"=>nil,
+                                         "is_display_name_id"=>nil, "deleted"=>1} )
+        end
         describe '- check ProfileKey have rows count: + 90 profile - Ok' do
           let(:rows_qty) {58}
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
-          let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 5, 6, 7, 7, 7, 8,
-                                    8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 91, 101, 101, 101, 101, 111, 111,
-                                    111, 111, 111, 111, 121, 121, 191, 191, 211, 221]}
+          let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 5, 6, 7, 7, 7, 8, 8, 8,
+                                    13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 91, 101, 101, 101, 101, 111, 111, 111,
+                                    111, 111, 111, 121, 121, 191, 191, 201, 211, 211, 221]}
           let(:relations_arr_size) {58}
           it_behaves_like :successful_profile_keys_relation_ids
         end
         describe '- check all profile_ids generated in ProfileKey rows - Ok' do
           let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87,
-                                   87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91,
-                                   91, 92, 92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
+                                   87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91,
+                                   91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
           let(:profiles_ids_arr_size) {58}
           it_behaves_like :successful_profile_keys_profile_ids
         end
@@ -511,17 +545,30 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           it_behaves_like :successful_deletion_logs_rows_count
         end
 
-
-
-
-
       end
+
 
       context '- rollback destroy profile = 89 - check tables values ' do  # , focus: true
 
         let(:destroy_log_data) { {:current_user => current_user_9, :log_type => 2, :profile_id => 89,
-                                  :base_profile_id => 85, :relation_id => 6, common_log_id: 1 } }
-        before { CommonLog.rollback_destroy_one_profile(destroy_log_data) }
+                                  :base_profile_id => 85, :relation_id => 6, log_id: 1, common_log_id: 1 } }
+        before {
+          FactoryGirl.create(:tree, :add_tree9_4) # before # 89
+
+          FactoryGirl.create(:profile_key, :profile_key9_add_13) # before # 85 89
+          FactoryGirl.create(:profile_key, :profile_key9_add_14) # before # 85 89
+          FactoryGirl.create(:profile_key, :profile_key9_add_15)    # 86 89
+          FactoryGirl.create(:profile_key, :profile_key9_add_16)    # 89 86
+          FactoryGirl.create(:profile_key, :profile_key9_add_17)   # 87 89
+          FactoryGirl.create(:profile_key, :profile_key9_add_18)  # 87 89
+          FactoryGirl.create(:profile_key, :profile_key9_add_19) # before # 88 89
+          FactoryGirl.create(:profile_key, :profile_key9_add_20) # before # 88 89
+          FactoryGirl.create(:profile_key, :profile_key9_add_29) # before  # 89 90
+          FactoryGirl.create(:profile_key, :profile_key9_add_30) # before  # 89 90
+          FactoryGirl.create(:profile_key, :profile_key9_add_41) # before # 89 91
+          FactoryGirl.create(:profile_key, :profile_key9_add_42) # before # 91 89
+
+          CommonLog.rollback_destroy_one_profile(destroy_log_data) }
 
         describe '- check CommonLog have rows count: 4 - 1 = 3 - Ok' do
           let(:rows_qty) {3}
@@ -549,27 +596,35 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           let(:rows_qty) {8}
           it_behaves_like :successful_tree_rows_count
         end
+         it '- check Tree last row - Ok' do # , focus: true
+          tree_row_fields = Tree.last.attributes.except('created_at','updated_at')
+          expect(tree_row_fields).to eq({"id"=>8, "user_id"=>9, "profile_id"=>85, "relation_id"=>6, "name_id"=>370,
+                                         "is_profile_id"=>89, "is_name_id"=>345, "is_sex_id"=>0, "display_name_id"=>nil,
+                                         "is_display_name_id"=>nil, "deleted"=>1} )
+        end
         describe '- check ProfileKey have rows count: + 89 profile - Ok' do
-          let(:rows_qty) {56}
+          let(:rows_qty) {58}
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
           let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7,
                                     7, 8, 8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111,
-                                    111, 111, 121, 121, 191, 201, 221, 221]}
-          let(:relations_arr_size) {56}
+                                    111, 111, 121, 121, 191, 201, 201, 211, 221, 221]}
+          let(:relations_arr_size) {58}
           it_behaves_like :successful_profile_keys_relation_ids
         end
         describe '- check all profile_ids generated in ProfileKey rows - Ok' do
           let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87,
-                                   87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 91, 91, 91, 91, 91, 91,
-                                   92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
-          let(:profiles_ids_arr_size) {56}
+                                   87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89, 90, 91, 91, 91, 91,
+                                   91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
+          let(:profiles_ids_arr_size) {58}
           it_behaves_like :successful_profile_keys_profile_ids
         end
       end
 
     end
+
+
 
     describe ' Check action <rollback_similars_profiles(common_log_id)> :', disable: true do
         # todo: Чтобы тестить разъединение похожих нужно:
