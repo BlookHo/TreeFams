@@ -79,7 +79,7 @@ module CommonLogs
                           log_id:           one_common_log.log_id ,
                           common_log_id:    common_log_id
       } # common_log_id
-      puts "In CommonLog model: rollback_delete_profile: one_common_log.log_id = #{one_common_log.log_id}, current_user.id = #{current_user.id}"
+      puts "In CommonLog model: rollback_delete_profile: log_id = #{one_common_log.log_id}, current_user.id = #{current_user.id}"
 
       CommonLog.rollback_destroy_one_profile(destroy_log_data)
     end

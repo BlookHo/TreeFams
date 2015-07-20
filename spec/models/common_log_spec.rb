@@ -486,6 +486,12 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           FactoryGirl.create(:profile_key, :profile_key9_add_33) # before  # 90 91
           FactoryGirl.create(:profile_key, :profile_key9_add_34) # before  # 91 90
 
+          FactoryGirl.create(:deletion_log, :deletion_pr_id_1_tree) # before # 90
+          FactoryGirl.create(:deletion_log, :deletion_pr_id_1_profile_key_1) # before # 90
+          FactoryGirl.create(:deletion_log, :deletion_pr_id_1_profile_key_2) # before # 90
+          FactoryGirl.create(:deletion_log, :deletion_pr_id_1_profile_key_3) # before # 90
+          FactoryGirl.create(:deletion_log, :deletion_pr_id_1_profile_key_4) # before # 90
+
           CommonLog.rollback_destroy_one_profile(destroy_log_data) }
 
         describe '- check CommonLog have rows count: 4 - 1 = 3 - Ok' do
@@ -515,11 +521,11 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           let(:rows_qty) {8}
           it_behaves_like :successful_tree_rows_count
         end
-        it '- check Tree last row - Ok' do # , focus: true
+        it '- check Tree last row - Ok' do
           tree_row_fields = Tree.last.attributes.except('created_at','updated_at')
           expect(tree_row_fields).to eq({"id"=>8, "user_id"=>9, "profile_id"=>85, "relation_id"=>3, "name_id"=>370,
                                          "is_profile_id"=>90, "is_name_id"=>343, "is_sex_id"=>1, "display_name_id"=>nil,
-                                         "is_display_name_id"=>nil, "deleted"=>1} )
+                                         "is_display_name_id"=>nil, "deleted"=>0} )
         end
         describe '- check ProfileKey have rows count: + 90 profile - Ok' do
           let(:rows_qty) {58}
@@ -538,6 +544,13 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
                                    91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
           let(:profiles_ids_arr_size) {58}
           it_behaves_like :successful_profile_keys_profile_ids
+        end
+        it '- check ProfileKey last row - Ok' do # , focus: true
+          profile_keys_row_fields = ProfileKey.last.attributes.except('created_at','updated_at')
+          puts "after rollback_destroy_one_profile: ProfileKey last row - Ok\n"
+          expect(profile_keys_row_fields).to eq({"id"=>58, "user_id"=>9, "profile_id"=>91, "name_id"=>446,
+                                                 "relation_id"=>5, "is_profile_id"=>90, "is_name_id"=>343,
+                                                 "display_name_id"=>nil, "is_display_name_id"=>nil, "deleted"=>0} )
         end
 
         describe '- check DeletionLog have rows count after - Ok' do
@@ -567,6 +580,9 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           FactoryGirl.create(:profile_key, :profile_key9_add_30) # before  # 89 90
           FactoryGirl.create(:profile_key, :profile_key9_add_41) # before # 89 91
           FactoryGirl.create(:profile_key, :profile_key9_add_42) # before # 91 89
+
+
+
 
           CommonLog.rollback_destroy_one_profile(destroy_log_data) }
 

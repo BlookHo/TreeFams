@@ -63,6 +63,8 @@ class CommonLog < ActiveRecord::Base
   #     #   logger.info "In CommonLog model: Ошибка при создании CommonLog"
   #     # end
   # end
+
+  # Запись строки Общего лога в таблицу CommonLog
   def self.create_common_log(common_log_data)
     create(
         user_id:         common_log_data[:user_id],
@@ -168,7 +170,7 @@ class CommonLog < ActiveRecord::Base
 
     ################################
     # Вернуть "удаленные" ряды в таблицах в 0
-    puts "In CommonLog model: rollback_destroy_one_profile: destroy_log_data[:log_id] = #{destroy_log_data[:log_id]}, current_user.id = #{current_user.id}"
+    # puts "In CommonLog model: rollback_destroy_one_profile: destroy_log_data[:log_id] = #{destroy_log_data[:log_id]}, current_user.id = #{current_user.id}"
     log_to_redo = DeletionLog.restore_deletion_log(destroy_log_data[:log_id], destroy_log_data[:current_user])
 
     DeletionLog.redo_deletion_log(log_to_redo)

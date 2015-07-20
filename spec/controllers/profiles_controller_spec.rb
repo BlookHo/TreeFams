@@ -1,14 +1,9 @@
 describe ProfilesController, :type => :controller   do  # , focus: true  #, similars: true
 
-
-
   before {
-
 
     User.delete_all
     User.reset_pk_sequence
-
-
 
     #Name -  # before
     FactoryGirl.create(:name, :name_28)    # Алексей
@@ -491,15 +486,14 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
 
       describe '- GET <destroy> - check after action' , focus: true  do  # , focus: true
 
-        let(:destroy_id) {1}
+        let(:destroy_id) {1}    # profile_id to destroy
 
         context '3 - after action <create> and <destroy> - check render_template & response status' do
           before {  post :create,
                          base_profile_id: base_profile_id,
                          profile_name_id: profile_name_id,
                          profile: profile_params
-          get :destroy, id: destroy_id
-          }
+                    get :destroy, id: destroy_id }
 
           it "- render_template destroy" do
             puts "Check profile #destroy\n"
@@ -544,6 +538,24 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
                                                    "written"=>1, "overwritten"=>0} )
           end
           it '- check DeletionLog 1st & last row - Ok' do # , focus: true
+            deletion_log_row_fields = DeletionLog.second.attributes.except('created_at','updated_at')
+            expect(deletion_log_row_fields).to eq({"id"=>2, "log_number"=>3, "current_user_id"=>9,
+                                                   "table_name"=>"profile_keys", "table_row"=>47, "field"=>"deleted",
+                                                   "written"=>1, "overwritten"=>0} )
+          end
+          it '- check DeletionLog 1st & last row - Ok' do # , focus: true
+            deletion_log_row_fields = DeletionLog.third.attributes.except('created_at','updated_at')
+            expect(deletion_log_row_fields).to eq({"id"=>3, "log_number"=>3, "current_user_id"=>9,
+                                                   "table_name"=>"profile_keys", "table_row"=>48, "field"=>"deleted",
+                                                   "written"=>1, "overwritten"=>0} )
+          end
+          it '- check DeletionLog 1st & last row - Ok' do # , focus: true
+            deletion_log_row_fields = DeletionLog.fourth.attributes.except('created_at','updated_at')
+            expect(deletion_log_row_fields).to eq({"id"=>4, "log_number"=>3, "current_user_id"=>9,
+                                                   "table_name"=>"profile_keys", "table_row"=>49,
+                                                   "field"=>"deleted", "written"=>1, "overwritten"=>0} )
+          end
+          it '- check DeletionLog 1st & last row - Ok' do # , focus: true
             deletion_log_row_fields = DeletionLog.last.attributes.except('created_at','updated_at')
             expect(deletion_log_row_fields).to eq({"id"=>5, "log_number"=>3, "current_user_id"=>9,
                                                    "table_name"=>"profile_keys", "table_row"=>50, "field"=>"deleted",
@@ -562,8 +574,6 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
       describe '- GET <destroy> - check after rollback_destroy' , focus: true  do  # , focus: true
 
         let(:destroy_id) {1}
-        # let(:destroy_log_data) { {:current_user => current_user, :log_type => 2, :profile_id => 1,
-        #                           :base_profile_id => 92, :relation_id => 5, log_id: 3    } }
         let(:common_log_id) {6}
 
         context '3 - after action <create> and <destroy> - check tables' do
@@ -571,10 +581,8 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
                          base_profile_id: base_profile_id,
                          profile_name_id: profile_name_id,
                          profile: profile_params
-          get :destroy, id: destroy_id
-
-          CommonLog.rollback_delete_profile(common_log_id, current_user) }
-          # CommonLog.rollback_destroy_one_profile(destroy_log_data) }
+                    get :destroy, id: destroy_id
+                    CommonLog.rollback_delete_profile(common_log_id, current_user) }
 
           describe '- check Profiles have rows count after <create> and <destroy>  - Ok' do
             let(:rows_qty) {11}
@@ -598,12 +606,6 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
             expect(common_log_row_fields).to eq({"id"=>5, "user_id"=>9, "log_type"=>1, "log_id"=>3, "profile_id"=>1,
                                                  "base_profile_id"=>92, "relation_id"=>5} )
           end
-          # it '- check DeletionLog 1st & last row - Ok' do # , focus: true
-          #   deletion_log_row_fields = DeletionLog.last.attributes.except('created_at','updated_at')
-          #   expect(deletion_log_row_fields).to eq({"id"=>5, "log_number"=>3, "current_user_id"=>9,
-          #                                          "table_name"=>"profile_keys", "table_row"=>50, "field"=>"deleted",
-          #                                          "written"=>1, "overwritten"=>0} )
-          # end
           describe '- check DeletionLog have rows count after - Ok' do
             let(:rows_qty) {0}
             it_behaves_like :successful_deletion_logs_rows_count
@@ -612,7 +614,6 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
         end
 
       end
-
 
 
 

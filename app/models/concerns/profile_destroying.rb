@@ -5,9 +5,6 @@ module ProfileDestroying
 
   # @note: Основной метод удаления профиля
   def destroying_profile(profile_id)
-
-    # puts "In Rails Concern: destroying_profile: profile_id = #{profile_id} "
-
     profile = Profile.where(id: profile_id).first
     if profile.user.present?
       error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
@@ -32,7 +29,7 @@ module ProfileDestroying
                           profile_id:      profile_id,
                           base_profile_id: base_profile.id,
                           new_relation_id: new_relation_id  }
-      # logger.info "In add_new_profile: Before create_add_log   common_log_data = #{common_log_data}"
+      # Запись строки Общего лога в таблицу CommonLog
       CommonLog.create_common_log(common_log_data)
 
       #######################################################
@@ -44,12 +41,9 @@ module ProfileDestroying
             current_user_id: self.id,
             table: table.table_name
         }
-        # puts "In Rails Concern: deletion_tables_logs: destroy_table_data = #{destroy_table_data} "
         log_table_del = log_table_rows_deleted(destroy_table_data)
         deletion_tables_logs = deletion_tables_logs +  log_table_del
       end
-      # puts " Before model DeletionLog store_log: deletion_tables_logs = #{deletion_tables_logs} "
-
 
       # Запись массива лога в таблицу DeletionLog
       DeletionLog.store_deletion_log(deletion_tables_logs) unless deletion_tables_logs.blank?
@@ -70,9 +64,6 @@ module ProfileDestroying
 
       # Mark profile as deleted
       profile.update_attribute('deleted', 1)
-
-      # Запись строки Общего лога в таблицу CommonLog
-      # make_deletion_common_log(connection_data)
 
     end
 
@@ -110,7 +101,6 @@ module ProfileDestroying
       end
       logs_table_del
     end
-
 
   end
 
