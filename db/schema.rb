@@ -120,7 +120,6 @@ ActiveRecord::Schema.define(version: 20150708083325) do
     t.date     "birthday"
     t.string   "country"
     t.string   "city"
-    t.integer  "deleted",         default: 0
     t.string   "avatar_mongo_id"
   end
 
@@ -202,6 +201,10 @@ ActiveRecord::Schema.define(version: 20150708083325) do
   end
 
   add_index "similars_logs", ["current_user_id"], name: "index_similars_logs_on_current_user_id", using: :btree
+
+  create_table "test_keys", force: true do |t|
+    t.string "title"
+  end
 
   create_table "trees", force: true do |t|
     t.integer  "user_id"
