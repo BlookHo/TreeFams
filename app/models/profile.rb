@@ -327,7 +327,10 @@ class Profile < ActiveRecord::Base
   def self.check_profiles_exists(profile_id, is_profile_id)
     yes = false
     yes = true if self.where(id: profile_id, deleted: 0) && self.where(id: is_profile_id, deleted: 0)
+    logger.info "*** In module Profile.check_profiles_exists: yes = #{yes.inspect} "
+
     yes
+
   end
 
 
