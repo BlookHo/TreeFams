@@ -10,27 +10,45 @@ class DeletionLog < ActiveRecord::Base
 
 
   # Получение массива логов из таблицы DeletionLog по номеру лога log_id
-  def self.restore_deletion_log(log_id, user_id)
+  def self.restore_deletion_log(log_id, current_user)
+
+    connected_users_arr = current_user.get_connected_users
+
     # puts "In DeletionLog model: restore_deletion_log: log_id = #{log_id}, user_id.id = #{user_id.id}"
-    DeletionLog.where(log_number: log_id, current_user_id: user_id)
+    DeletionLog.where(log_number: log_id, current_user_id: connected_users_arr)
   end
 
 
   # @note
   #   Исполнение операций по deletion_log - обратная перезапись в таблицах
   def self.redo_deletion_log(log_to_redo)
+
+    # def check_profiles_exists(profile_id, is_profile_id)
+    #   yes = false
+    #   yes = true if Profile.where(id: profile_id, deleted: 0) && Profile.where(id: is_profile_id, deleted: 0)
+    #   yes
+    # end
+
     puts "In DeletionLog model: redo_deletion_log: log_to_redo.size = #{log_to_redo.size}" unless log_to_redo.blank?
 
     unless log_to_redo.blank?
       log_to_redo.each do |log_row|
         #     {:table_name=>"profiles", :table_row=>52, :field=>"tree_id", :written=>5, :overwritten=>4}
         model = log_row[:table_name].classify.constantize
-        row_to_update = model.find(log_row[:table_row]) if model.exists? id: log_row[:table_row]
-        # logger.info "*** In module DisconnectionTrees redo_connection_log: row_to_update = #{row_to_update.inspect} "
-        # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-        row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now) unless row_to_update.blank?
+        if model.exists? id: log_row[:table_row]
+          row_to_update = model.find(log_row[:table_row])
+          # logger.info "*** In module DisconnectionTrees redo_connection_log: row_to_update = #{row_to_update.inspect} "
+          # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
+
+          if Profile.check_profiles_exists(row_to_update.profile_id, row_to_update.is_profile_id)
+            row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten],
+                                            :updated_at => Time.now) unless row_to_update.blank?
+          end
+        end
+
       end
     end
+
 
   end
 

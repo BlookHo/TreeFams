@@ -542,7 +542,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
             expect(deletion_log_row_fields).to eq({"id"=>2, "log_number"=>3, "current_user_id"=>9,
                                                    "table_name"=>"profile_keys", "table_row"=>47, "field"=>"deleted",
                                                    "written"=>1, "overwritten"=>0} )
-          end
+          end 
           it '- check DeletionLog 1st & last row - Ok' do # , focus: true
             deletion_log_row_fields = DeletionLog.third.attributes.except('created_at','updated_at')
             expect(deletion_log_row_fields).to eq({"id"=>3, "log_number"=>3, "current_user_id"=>9,

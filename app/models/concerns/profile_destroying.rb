@@ -23,7 +23,7 @@ module ProfileDestroying
       current_log_type = 2  #  # delete : rollback == add. Тип = удаление нового профиля при rollback
       new_log_number = CommonLog.new_log_id(base_profile.tree_id, current_log_type)
 
-      common_log_data = { user_id:         base_profile.tree_id,
+      common_log_data = { user_id:         self.id,
                           log_type:        current_log_type,
                           log_id:          new_log_number,
                           profile_id:      profile_id,
