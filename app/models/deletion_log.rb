@@ -22,30 +22,21 @@ class DeletionLog < ActiveRecord::Base
   # @note
   #   Исполнение операций по deletion_log - обратная перезапись в таблицах
   def self.redo_deletion_log(log_to_redo)
-
-    # def check_profiles_exists(profile_id, is_profile_id)
-    #   yes = false
-    #   yes = true if Profile.where(id: profile_id, deleted: 0) && Profile.where(id: is_profile_id, deleted: 0)
-    #   yes
-    # end
-
     puts "In DeletionLog model: redo_deletion_log: log_to_redo.size = #{log_to_redo.size}" unless log_to_redo.blank?
-
     unless log_to_redo.blank?
       log_to_redo.each do |log_row|
-        #     {:table_name=>"profiles", :table_row=>52, :field=>"tree_id", :written=>5, :overwritten=>4}
         model = log_row[:table_name].classify.constantize
         if model.exists? id: log_row[:table_row]
           row_to_update = model.find(log_row[:table_row])
-          # logger.info "*** In module DisconnectionTrees redo_connection_log: row_to_update = #{row_to_update.inspect} "
-          # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
+          # if model == ProfileKey
+            if Profile.check_profiles_exists?(row_to_update.profile_id, row_to_update.is_profile_id)
+              # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
+              row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten],
+                                              :updated_at => Time.now) unless row_to_update.blank?
+            end
+          # end
 
-          if Profile.check_profiles_exists(row_to_update.profile_id, row_to_update.is_profile_id)
-            row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten],
-                                            :updated_at => Time.now) unless row_to_update.blank?
-          end
         end
-
       end
     end
 
