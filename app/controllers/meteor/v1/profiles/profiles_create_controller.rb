@@ -7,6 +7,8 @@ module Meteor
 
           # @note: Запуск основного метода создания нового профиля
           def create
+            puts "profile create"
+            puts params
             params_to_create = {
                 base_profile_id:   params[:base_profile_id],
                 profile_name_id:   params[:profile_name_id],
