@@ -41,29 +41,8 @@ class CommonLog < ActiveRecord::Base
     last_log_id
   end
 
-  # @note Создание AR записи одного Общего Лога in model CommonLog
-  # @param common_log_data [Hash] { user_id: connected_user.id, log_type: current_log_type,
-  #                                log_id:  new_log_number, profile_id: new_profile.id }
-  # @return [Boolean] выполнение метода = true
-  # @see CommonLog
-  # def self.dcreate_common_log(common_log_data)
-  #       common_log = self.new
-  #       common_log.user_id         = common_log_data[:user_id]
-  #       common_log.log_type        = common_log_data[:log_type]
-  #       common_log.log_id          = common_log_data[:log_id]
-  #       common_log.profile_id      = common_log_data[:profile_id]
-  #       common_log.base_profile_id = common_log_data[:base_profile_id]
-  #       common_log.relation_id     = common_log_data[:new_relation_id]
-  #       common_log.save
-  #     # if common_log.save
-  #     #   logger.info "In CommonLog model: create_common_log: good save "
-  #     # else
-  #     #   # todo: дает undefined method for flash?
-  #     #   # flash.now[:alert] = "Ошибка при создании CommonLog"
-  #     #   logger.info "In CommonLog model: Ошибка при создании CommonLog"
-  #     # end
-  # end
 
+  # @note Создание AR записи одного Общего Лога in model CommonLog
   # Запись строки Общего лога в таблицу CommonLog
   def self.create_common_log(common_log_data)
     create(
@@ -77,29 +56,8 @@ class CommonLog < ActiveRecord::Base
   end
 
 
-
-  # @note Получение списка profile_id - по выбранным ранее логам (по id)
-  #   На входе - rollback_id - граница rollback для удаления
-  #   Для заданных current_user_id, log_type
-  # @param rollback_id [Integer]
-  #   rollback_date [Datetime]
-  #   current_user_id [Integer]
-  #   log_type [Integer]
-  # @return profiles_arr [Array]
-  # @see CommonLog
-  # todo: NO USE?
-  # def self.profiles_for_rollback(rollback_id, rollback_date, current_user_id, log_type)
-  #   logger.info "In CommonLog model: profiles_for_rollback: rollback_id = #{rollback_id}, rollback_date = #{rollback_date} "
-  #   profiles_arr = CommonLog.where(user_id: current_user_id, log_type: log_type)
-  #                      .where("id >= ?", rollback_id)    # .where("created_at > #{rollback_date}")
-  #                      .order("created_at DESC").pluck(:profile_id)
-  #   profiles_arr
-  # end
-
   # @note Rollback_add == Destroy
   #   Удаление записей содержащих profile_id из таблиц - по выбранным ранее логам (по дате)
-  # В основе - массив профилей для удаления
-  #     add_log_data = { current_user: current_user, log_type: 1, profile_id: profile_id }
   def self.rollback_add_one_profile(rollback_add_log_data )
 
     current_user = rollback_add_log_data[:current_user]
@@ -107,7 +65,6 @@ class CommonLog < ActiveRecord::Base
     profile_id   = rollback_add_log_data[:profile_id]
     # log_id       = rollback_add_log_data[:common_log_id]
 
-    # logger.info "In CommonLog model: rollback_add_one_profile: rollback_add_log_data = #{rollback_add_log_data} "
     @profile = Profile.find(profile_id)
     if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
       @error = "Вы можете удалить только последнего родственника в цепочке"
@@ -117,10 +74,7 @@ class CommonLog < ActiveRecord::Base
       @error = "Вы не можете удалить свой профиль"
     else
       self.delete_profile_data(@profile)
-
-      # CommonLog.where(user_id: current_user.id, log_type: log_type, profile_id: @profile.id).map(&:destroy)
       CommonLog.find(rollback_add_log_data[:common_log_id]).destroy
-
     end
   end
 
@@ -147,42 +101,29 @@ class CommonLog < ActiveRecord::Base
   # В основе - массив профилей для удаления
   def self.rollback_destroy_one_profile(destroy_log_data)
 
-    current_user      = destroy_log_data[:current_user]
-    # log_type          = destroy_log_data[:log_type]
-    profile_id        = destroy_log_data[:profile_id]
-    base_profile_id   = destroy_log_data[:base_profile_id]
-    relation_id       = destroy_log_data[:relation_id]
-    log_id            = destroy_log_data[:log_id]
-
-
+    # Previous version
     # Профиль, к которому добавляем (на котором вызвали меню +)
-    @base_profile = Profile.find(base_profile_id)  # FOR add_new_profile
-
+    # @base_profile = Profile.find(base_profile_id)  # FOR add_new_profile
     # Sex того профиля, к кому добавляем (на котором вызвали меню +) к автору отображаемого круга
-    @base_sex_id = @base_profile.sex_id # FOR add_new_profile
-    # logger.info "In CommonLog model: rollback_destroy_one_profile: @base_sex_id = #{@base_sex_id} "
-
-    @profile = Profile.find(profile_id)  # FOR add_new_profile Старый ЛОГИРУЕМЫЙ добавляемый профиль
-    # logger.info "In Profile controller: rollback_destroy_one_profile  @profile.relation_id = #{@profile.relation_id} "
+    # @base_sex_id = @base_profile.sex_id # FOR add_new_profile
 
     # Mark profile as NOT deleted- back
-    @profile.update_attribute('deleted', 0)
+    profile = Profile.find(destroy_log_data[:profile_id])  # FOR add_new_profile Старый ЛОГИРУЕМЫЙ добавляемый профиль
+    profile.update_attribute('deleted', 0)
 
-    ################################
     # Вернуть "удаленные" ряды в таблицах в 0
-    # puts "In CommonLog model: rollback_destroy_one_profile: destroy_log_data[:log_id] = #{destroy_log_data[:log_id]}, current_user.id = #{current_user.id}"
     log_to_redo = DeletionLog.restore_deletion_log(destroy_log_data[:log_id], destroy_log_data[:current_user])
-
     DeletionLog.redo_deletion_log(log_to_redo)
-
     DeletionLog.deletion_logs_deletion(log_to_redo)
 
-    #     @profile.answers_hash = {}  # Исключаем нестандартные вопросы
+    CommonLog.find(destroy_log_data[:common_log_id]).destroy
+
+    # Previous version
+    # @profile.answers_hash = {}  # Исключаем нестандартные вопросы
     #     ProfileKey.add_new_profile(@base_sex_id, @base_profile, @profile, relation_id,
     #                                      exclusions_hash: @profile.answers_hash,
     #                                      tree_ids: current_user.get_connected_users)
 
-    CommonLog.find(destroy_log_data[:common_log_id]).destroy
   end
 
 

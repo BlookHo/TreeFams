@@ -48,6 +48,7 @@ module ProfileDestroying
       # Запись массива лога в таблицу DeletionLog
       DeletionLog.store_deletion_log(deletion_tables_logs) unless deletion_tables_logs.blank?
 
+      # Previous version
       # Tree.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
       # ProfileKey.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
 

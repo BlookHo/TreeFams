@@ -28,19 +28,14 @@ class DeletionLog < ActiveRecord::Base
         model = log_row[:table_name].classify.constantize
         if model.exists? id: log_row[:table_row]
           row_to_update = model.find(log_row[:table_row])
-          # if model == ProfileKey
             if Profile.check_profiles_exists?(row_to_update.profile_id, row_to_update.is_profile_id)
               # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
               row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten],
                                               :updated_at => Time.now) unless row_to_update.blank?
             end
-          # end
-
         end
       end
     end
-
-
   end
 
 

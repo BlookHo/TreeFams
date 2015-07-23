@@ -453,7 +453,7 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
 
     end
 
-    describe ' Check action <rollback_destroy_one_profile> :' , focus: true  do  # , focus: true
+    describe ' Check action <rollback_destroy_one_profile> :'   do  # , focus: true
       describe '- check Tree have rows count: + 90 profile - Ok' do
         let(:rows_qty) {7}
         it_behaves_like :successful_tree_rows_count

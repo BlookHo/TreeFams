@@ -484,7 +484,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
       end
 
 
-      describe '- GET <destroy> - check after action' , focus: true  do  # , focus: true
+      describe '- GET <destroy> - check after action'   do  # , focus: true
 
         let(:destroy_id) {1}    # profile_id to destroy
 
@@ -571,7 +571,7 @@ describe ProfilesController, :type => :controller   do  # , focus: true  #, simi
       end
 
 
-      describe '- GET <destroy> - check after rollback_destroy' , focus: true  do  # , focus: true
+      describe '- GET <destroy> - check after rollback_destroy'   do  # , focus: true
 
         let(:destroy_id) {1}
         let(:common_log_id) {6}
