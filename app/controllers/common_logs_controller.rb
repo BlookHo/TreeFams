@@ -9,7 +9,6 @@ class CommonLogsController < ApplicationController
   def index
     # get & show tree data
     tree_info = Tree.get_tree_info(current_user)
-    # logger.info "In CommonLog: tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info} "
 
     # to show similars connected in view & for RSpec
     @tree_info = tree_info
@@ -30,7 +29,6 @@ class CommonLogsController < ApplicationController
   def mark_rollback
     unless params[:common_log_id].blank?
       @common_log_id = params[:common_log_id].to_i
-      # flash[:notice] = "Изменена пометка mark_rollback"
       @common_log_type = CommonLog.find(params[:common_log_id].to_i).log_type
       @common_log_date = CommonLog.find(params[:common_log_id].to_i).created_at#.strftime("%F")
       @log_date_to_show = @common_log_date.strftime("%F")

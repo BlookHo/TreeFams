@@ -2467,6 +2467,7 @@ FactoryGirl.define do
       relation_id     3
       is_profile_id   90
       is_name_id      343
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     # 495;9;88;465;6;89;345
     # 496;9;89;345;5;88;465
@@ -2479,6 +2480,7 @@ FactoryGirl.define do
       relation_id     1
       is_profile_id   85
       is_name_id      370
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     trait :profile_key9_add_23 do   # 86 90
       user_id         9
@@ -2487,6 +2489,7 @@ FactoryGirl.define do
       relation_id     111
       is_profile_id   90
       is_name_id      343
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     trait :profile_key9_add_24 do   # 90 86
       user_id         9
@@ -2495,6 +2498,7 @@ FactoryGirl.define do
       relation_id     91
       is_profile_id   86
       is_name_id      28
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     # 498;9;90;343;1;85;370
     # 499;9;86;28;111;90;343
@@ -2507,6 +2511,7 @@ FactoryGirl.define do
       relation_id     111
       is_profile_id   90
       is_name_id      343
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     trait :profile_key9_add_26 do   # 90 87
       user_id         9
@@ -2515,6 +2520,7 @@ FactoryGirl.define do
       relation_id     101
       is_profile_id   87
       is_name_id      48
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     trait :profile_key9_add_27 do # before # 88 90
       user_id         9
@@ -2523,6 +2529,7 @@ FactoryGirl.define do
       relation_id     211
       is_profile_id   90
       is_name_id      343
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     # 501;9;87;48;111;90;343
     # 502;9;90;343;101;87;48
@@ -2535,6 +2542,7 @@ FactoryGirl.define do
       relation_id     191
       is_profile_id   88
       is_name_id      465
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     trait :profile_key9_add_29 do # before # 89 90
       user_id         9
@@ -2543,6 +2551,7 @@ FactoryGirl.define do
       relation_id     211
       is_profile_id   90
       is_name_id      343
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     trait :profile_key9_add_30 do # before# 90 89
       user_id         9
@@ -2551,6 +2560,7 @@ FactoryGirl.define do
       relation_id     201
       is_profile_id   89
       is_name_id      345
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     # 504;9;90;343;191;88;465
     # 505;9;89;345;211;90;343
@@ -2579,6 +2589,7 @@ FactoryGirl.define do
       relation_id     6
       is_profile_id   91
       is_name_id      446
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     # 507;9;85;370;4;91;446
     # 508;9;91;446;1;85;370
@@ -2591,6 +2602,7 @@ FactoryGirl.define do
       relation_id     5
       is_profile_id   90
       is_name_id      343
+      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
     end
     trait :profile_key9_add_35 do   # 86 91
       user_id         9

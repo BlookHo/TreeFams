@@ -32,19 +32,19 @@ module CommonLogs
       end
 
       # here to check requests to keepif exists in search results
-      # todo: uncomment this line to work check
+      # todo: uncomment this line below to work check
       # todo: !!!!!!  UPDATE RSPEC - User, Conn.req.  !!!!!!! ->
       # кол-во рядом - меньше. на те, кот-х нет в рез-х поиска.
       # т.е. задать рез-ты поиска в spec
-      # check_requests(connected_users_arr) ##########
+      # check_requests(current_user, connected_users_arr) ##########
       logger.info "END rollback module "
 
     end
 
 
-    # @note
+    # @note SEE ABOWE todo's:
     #
-    def check_requests(connected_users_arr)
+    def check_requests(current_user, connected_users_arr)
       # logger.info "In CommonLog controller: check_requests: connected_users_arr = #{connected_users_arr} "
       ConnectionRequest.check_requests_with_search(current_user, connected_users_arr)
     end
@@ -76,21 +76,22 @@ module CommonLogs
                           profile_id:       one_common_log.profile_id,
                           base_profile_id:  one_common_log.base_profile_id,
                           relation_id:      one_common_log.relation_id,
-                          common_log_id:    common_log_id   }
+                          log_id:           one_common_log.log_id ,
+                          common_log_id:    common_log_id
+      } # common_log_id
+      puts "In CommonLog model: rollback_delete_profile: log_id = #{one_common_log.log_id}, current_user.id = #{current_user.id}"
 
       CommonLog.rollback_destroy_one_profile(destroy_log_data)
     end
 
 
-    # todo: Connect with Similars methods & refactor
     # @note Similars Connect log - Rollback
     # @note Возврат дерева - откат на выбранную дату
     # @param params[:rollback_date]
     # @param params[:rollback_id]
     def rollback_similars_profiles(common_log_id, current_user)
 
-      logger.info "In CommonLog controller: rollback_similars_profiles для common_log_id = #{common_log_id} "
-      # logger.info "In CommonLog controller: rollback_connection_trees для common_log_id = #{common_log_id.inspect} "
+      # logger.info "In CommonLog controller: rollback_similars_profiles для common_log_id = #{common_log_id} "
       # Не заблокировано ли дерево пользователя
       # if current_user.tree_is_locked?
       #   flash[:warning] = "Объединения в данный момент невозможно. Временная блокировка пользователя.

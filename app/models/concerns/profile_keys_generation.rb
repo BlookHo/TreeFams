@@ -75,7 +75,9 @@ module ProfileKeysGeneration
     #########################
       new_tree.save
     #########################
-       [ base_profile_id, base_sex_id, base_name_id, base_display_name_id, # 0, 1, 2, 3
+      # puts "In save_new_tree_row: new_relation_id = #{new_relation_id}"
+
+      [ base_profile_id, base_sex_id, base_name_id, base_display_name_id, # 0, 1, 2, 3
          new_relation_id.to_i,                                             # 4,
          new_profile_id, new_profile_name_id, new_prf_disp_name_id  ]      # 5, 6, 7
     end
