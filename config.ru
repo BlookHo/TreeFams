@@ -7,7 +7,7 @@ console = ActiveSupport::Logger.new($stdout)
 console.formatter = Rails.logger.formatter
 console.level = Rails.logger.level
 
-Rails.logger.extend(ActiveSupport::Logger.broadcast(console))
+# Rails.logger.extend(ActiveSupport::Logger.broadcast(console)) # comment this to have one lines and reload
 
 
 run Rails.application

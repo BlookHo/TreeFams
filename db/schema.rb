@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150708083325) do
+ActiveRecord::Schema.define(version: 20150716140716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,18 @@ ActiveRecord::Schema.define(version: 20150708083325) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "connection_id"
+  end
+
+  create_table "deletion_logs", force: true do |t|
+    t.integer  "log_number"
+    t.integer  "current_user_id"
+    t.string   "table_name"
+    t.integer  "table_row"
+    t.string   "field"
+    t.integer  "written"
+    t.integer  "overwritten"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "log_types", force: true do |t|
@@ -134,6 +146,7 @@ ActiveRecord::Schema.define(version: 20150708083325) do
     t.datetime "updated_at"
     t.integer  "display_name_id"
     t.integer  "is_display_name_id"
+    t.integer  "deleted",            default: 0
   end
 
   add_index "profile_keys", ["profile_id"], name: "index_profile_keys_on_profile_id", using: :btree
@@ -214,6 +227,7 @@ ActiveRecord::Schema.define(version: 20150708083325) do
     t.integer  "is_sex_id"
     t.integer  "display_name_id"
     t.integer  "is_display_name_id"
+    t.integer  "deleted",            default: 0
   end
 
   add_index "trees", ["profile_id"], name: "index_trees_on_profile_id", using: :btree

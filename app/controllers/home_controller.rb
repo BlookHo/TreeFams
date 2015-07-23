@@ -65,31 +65,6 @@ class HomeController < ApplicationController
     # nns = @attributes.wideName.sec_name
     # puts "5. s = #{nns},  @attributes.key1 = #{@attributes.wideName.sec_name} "
 
-    def site_stats
-    all_profiles = Profile.where(deleted: 0)
-    all_profiles_qty = all_profiles.count
-    all_profiles_male_qty = all_profiles.where(sex_id: 1).count
-    all_profiles_female_qty = all_profiles.where(sex_id: 0).count
-    all_users_qty = User.all.count
-    all_trees_qty = User.pluck(:connected_users).uniq.length
-    # trees_qty = User.pluck(:connected_users).uniq.length
-
-    logger.info "In StatController: all_profiles_qty = #{all_profiles_qty},
-          all_profiles_male_qty = #{all_profiles_male_qty},
- all_profiles_female_qty = #{all_profiles_female_qty},
- all_users_qty = #{all_users_qty},  all_trees_qty = #{all_trees_qty},
-  "
-      { all_profiles_qty: all_profiles_qty,
-               all_profiles_male_qty: all_profiles_male_qty,
-               all_profiles_female_qty: all_profiles_female_qty,
-               all_users_qty: all_users_qty,
-               all_trees_qty: all_trees_qty
-      }
-    end
-
-    all_site_stats = site_stats
-    logger.info "In StatController: all_site_stats = #{all_site_stats} "
-
 
     # tree_content_data = Tree.tree_amounts(current_user)
     #
@@ -103,6 +78,17 @@ class HomeController < ApplicationController
     #               user_females= #{tree_content_data[:user_females]},
     #               user_males_qty= #{tree_content_data[:user_males_qty]},
     #               user_females_qty= #{tree_content_data[:user_females_qty]} "
+
+
+    # TEST
+    # if Profile.check_profiles_exists?(417, 420)
+    #   logger.info "########## In home/index: check_profiles_exists: - YES"
+    #   # row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten],
+    #   #                                 :updated_at => Time.now) unless row_to_update.blank?
+    # else
+    #   logger.info "########## In home/index: check_profiles_exists: - NO"
+    # end
+
 
     similars_data = current_user.start_similars
     @tree_info = similars_data[:tree_info]
