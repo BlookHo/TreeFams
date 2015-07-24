@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150723153539) do
+ActiveRecord::Schema.define(version: 20150724103920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(version: 20150723153539) do
     t.text     "biography"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "birthday"
+    t.string   "birthday"
     t.string   "country"
     t.string   "city"
     t.string   "avatar_mongo_id"
