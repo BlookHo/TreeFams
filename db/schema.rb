@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150716140716) do
+ActiveRecord::Schema.define(version: 20150724103920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,10 +129,11 @@ ActiveRecord::Schema.define(version: 20150716140716) do
     t.text     "biography"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "birthday"
+    t.string   "birthday"
     t.string   "country"
     t.string   "city"
     t.string   "avatar_mongo_id"
+    t.integer  "deleted",         default: 0
   end
 
   create_table "profile_keys", force: true do |t|
@@ -214,10 +215,6 @@ ActiveRecord::Schema.define(version: 20150716140716) do
   end
 
   add_index "similars_logs", ["current_user_id"], name: "index_similars_logs_on_current_user_id", using: :btree
-
-  create_table "test_keys", force: true do |t|
-    t.string "title"
-  end
 
   create_table "trees", force: true do |t|
     t.integer  "user_id"

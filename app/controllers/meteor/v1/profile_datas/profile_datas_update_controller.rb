@@ -13,6 +13,8 @@ module Meteor
             profile_data.last_name = params["last_name"]
           elsif params["city"]
             profile_data.city = params["city"]
+          elsif params["birthday"]
+            profile_data.birthday = params["birthday"]
           elsif params["avatar_mongo_id"]
             profile_data.avatar_mongo_id = params["avatar_mongo_id"]
           end
