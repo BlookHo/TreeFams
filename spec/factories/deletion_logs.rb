@@ -29,7 +29,8 @@ FactoryGirl.define do
     end
 
 
-    # validation
+    # validation of UNCORRECT
+
     trait :uncorrect_type do
       log_type 10
     end
@@ -38,6 +39,9 @@ FactoryGirl.define do
       user_id  3.5
       log_type  3
     end
+
+
+
 
     # rollback_destroy_one_profile - in common_log_spec
     trait :deletion_pr_id_1_tree do
