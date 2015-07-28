@@ -1,14 +1,5 @@
 class DeletionLog < ActiveRecord::Base
-
-  # t.integer :log_number
-  # t.integer :current_user_id
-  # t.string :table_name
-  # t.integer :table_row
-  # t.string :field
-  # t.integer :written
-  # t.integer :overwritten
-  #
-
+  
   validates_presence_of :log_number, :current_user_id, :written, :overwritten, :table_name, :table_row, :field,
                         :message => "Должно присутствовать в DeletionLog"
   validates_numericality_of :log_number, :current_user_id, :table_row, :written, :overwritten, :only_integer => true,
