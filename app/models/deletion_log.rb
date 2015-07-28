@@ -1,5 +1,64 @@
 class DeletionLog < ActiveRecord::Base
 
+  # t.integer :log_number
+  # t.integer :current_user_id
+  # t.string :table_name
+  # t.integer :table_row
+  # t.string :field
+  # t.integer :written
+  # t.integer :overwritten
+  #
+
+  validates_presence_of :log_number, :current_user_id, :written, :overwritten, :table_name, :table_row, :field,
+                        :message => "Должно присутствовать в DeletionLog"
+  validates_numericality_of :log_number, :current_user_id, :written, :overwritten,
+                             :message => "Должны быть целым числом в DeletionLog"
+  validates_numericality_of :log_number, :current_user_id,
+                            :greater_than => 0, :message => "Должны быть больше 0 в DeletionLog"
+  validate :written_fields_are_not_equal # :written AND :overwritten
+  validates_inclusion_of :written, :overwritten, :in => [0, 1]
+
+  validates_inclusion_of :field, :in => ["deleted"]
+  validates_inclusion_of :table_name, :in => ["trees", "profile_keys"]
+  validates_uniqueness_of :table_row, scope: [:table_name, :field]
+
+
+  # custom validations
+  def written_fields_are_not_equal
+    self.errors.add(:similars_logs,
+         'Значения полей в одном ряду не должны быть равны в DeletionLog.') if self.written == self.overwritten
+  end
+
+  # def writtens_can_be_equal?
+  #   self.table_name == "profiles" && self.field == "tree_id"
+  # end
+
+  # def writtens_can_be_nil?
+  #   # puts "In ConnectionLog Model valid:  table_name = #{self.table_name}, written = #{self.written}, field = #{self.field} "
+  #   # puts "In ConnectionLog Model valid:  table_name? = #{self.table_name == "profiles"} "
+  #   # puts "In ConnectionLog Model valid:  table_name && field? = #{self.table_name == "profiles" && self.field == "user_id"} "
+  #   self.table_name == "profiles" && self.field == "user_id"
+  # end
+
+  # def table_users?
+  #   self.table_name == "users"
+  # end
+  #
+  # def table_trees_pr_keys?
+  #   self.table_name == "trees" || self.table_name == "profile_keys"
+  # end
+  #
+  # def table_profiles?
+  #   self.table_name == "profiles"
+  # end
+  #
+  # def field_tree?
+  #   self.field == "tree_id"
+  # end
+
+
+
+
 
   # From -Module ProfileDestroying
   # Сохранение массива логов в таблицу DeletionLog

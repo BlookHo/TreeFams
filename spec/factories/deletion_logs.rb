@@ -1,5 +1,6 @@
 FactoryGirl.define do
 
+  # CORRECT
   factory :deletion_log, class: DeletionLog  do
     log_number 3
     current_user_id 9
@@ -8,6 +9,25 @@ FactoryGirl.define do
     field "deleted"
     written 1
     overwritten 0
+
+    trait :big_IDs do
+      log_number    3333333333
+      current_user_id 1000000000
+      table_row       5555555555
+      written         1
+      overwritten     0
+    end
+
+    trait :table_tree_deleted do   # корректная ситуация
+      table_name      "trees"
+      field           "deleted"
+    end
+
+    trait :table_pr_key_deleted do   # корректная ситуация
+      table_name      "profile_keys"
+      field           "deleted"
+    end
+
 
     # validation
     trait :uncorrect_type do

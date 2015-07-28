@@ -132,8 +132,8 @@ ActiveRecord::Schema.define(version: 20150724103920) do
     t.string   "birthday"
     t.string   "country"
     t.string   "city"
-    t.string   "avatar_mongo_id"
     t.integer  "deleted",         default: 0
+    t.string   "avatar_mongo_id"
   end
 
   create_table "profile_keys", force: true do |t|
