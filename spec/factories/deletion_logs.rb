@@ -1,7 +1,7 @@
 FactoryGirl.define do
 
   # CORRECT
-  factory :deletion_log, class: DeletionLog  do
+  factory :deletion_log   do # class: DeletionLog
     log_number 3
     current_user_id 9
     table_name "trees"
@@ -18,28 +18,41 @@ FactoryGirl.define do
       overwritten     0
     end
 
-    trait :table_tree_deleted do   # корректная ситуация
+    trait :table_tree_deleted do
       table_name      "trees"
       field           "deleted"
     end
 
-    trait :table_pr_key_deleted do   # корректная ситуация
+    trait :table_pr_key_deleted do
       table_name      "profile_keys"
       field           "deleted"
     end
 
 
     # validation of UNCORRECT
+    trait :uncorrect_log_number do
+      log_number 10.8
+    end
 
-    trait :uncorrect_type do
-      log_type 10
+    trait :uncorrect_table_row do
+      table_row  3.5
+      log_number 108
+    end
+
+    trait :uncorrect_table_name do
+      table_row  35
+      table_name  "users"
     end
 
     trait :uncorrect_user do
-      user_id  3.5
-      log_type  3
+      table_name  "trees"
+      current_user_id  3.9
     end
 
+    trait :uncorrect_written do
+      current_user_id  309
+      written  2
+    end
 
 
 

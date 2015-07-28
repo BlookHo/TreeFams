@@ -2,6 +2,37 @@ require 'rails_helper'
 
 RSpec.describe DeletionLog, type: :model do # , focus: true
 
+  after {
+    DeletionLog.delete_all
+    DeletionLog.reset_pk_sequence
+
+    # ConnectionRequest.delete_all
+    # ConnectionRequest.reset_pk_sequence
+    # User.delete_all
+    # User.reset_pk_sequence
+    # ConnectedUser.delete_all
+    # ConnectedUser.reset_pk_sequence
+    # Tree.delete_all
+    # Tree.reset_pk_sequence
+    # Profile.delete_all
+    # Profile.reset_pk_sequence
+    # ProfileKey.delete_all
+    # ProfileKey.reset_pk_sequence
+    # # WeafamSetting.delete_all
+    # # WeafamSetting.reset_pk_sequence
+    # Name.delete_all
+    # Name.reset_pk_sequence
+    # ConnectionLog.delete_all
+    # ConnectionLog.reset_pk_sequence
+    # CommonLog.delete_all
+    # CommonLog.reset_pk_sequence
+    # UpdatesFeed.delete_all
+    # UpdatesFeed.reset_pk_sequence
+    # SearchResults.delete_all
+    # SearchResults.reset_pk_sequence
+  }
+
+
   describe '- Validation' do
     describe '- on create' do
 
@@ -30,53 +61,36 @@ RSpec.describe DeletionLog, type: :model do # , focus: true
 
       end
 
-      context '- invalid deletion_log'  do  # , focus: true
+      context '- invalid deletion_log'  , focus: true do  # , focus: true
 
-        let(:bad_connections_written_equal_overwritten) {FactoryGirl.build(:deletion_log, :bad_written_and_overwritten)}
-        it '- 1 Dont save: - written_and_overwritten - equal' do
-          expect(bad_connections_written_equal_overwritten).to_not be_valid
+        let(:bad_deletion_log_uncorrect_log_number) {FactoryGirl.build(:deletion_log, :uncorrect_log_number)}
+        # let(:last_log_number) { DeletionLog.last.log_number }
+
+        it '- 1 Dont save: - uncorrect_log_number' do
+          # puts "In uncorrect_log_number:  last_log_number = #{last_log_number} "
+
+          expect(bad_deletion_log_uncorrect_log_number).to_not be_valid
         end
 
-        let(:bad_connections_written_nil_table) {FactoryGirl.build(:deletion_log, :bad_written_nil_table)}
-        it '- 2 Dont save: - written = nil: table = trees, user_id' do
-          expect(bad_connections_written_nil_table).to_not be_valid
+        let(:bad_deletion_log_uncorrect_table_row) {FactoryGirl.build(:deletion_log, :uncorrect_table_row)}
+        it '- 2 Dont save: - uncorrect_table_row' do
+          expect(bad_deletion_log_uncorrect_table_row).to_not be_valid
         end
 
-        let(:bad_connections_written_nil_field) {FactoryGirl.build(:deletion_log, :bad_written_nil_field)}
-        it '- 3 Dont save: - written = nil: table = profiles, wrong field = profile_id' do
-          expect(bad_connections_written_nil_field).to_not be_valid
+        let(:bad_deletion_log_uncorrect_table_name) {FactoryGirl.build(:deletion_log, :uncorrect_table_name)}
+        it '- 3 Dont save: - uncorrect_table_name' do
+          expect(bad_deletion_log_uncorrect_table_name).to_not be_valid
         end
 
-        let(:bad_connections_table_tree_wrong_field) {FactoryGirl.build(:deletion_log, :bad_table_tree_and_field)}
-        it '- 4 Dont save: - wrong_field for table tree' do
-          expect(bad_connections_table_tree_wrong_field).to_not be_valid
+        let(:bad_deletion_log_uncorrect_user) {FactoryGirl.build(:deletion_log, :uncorrect_user)}
+        it '- 4 Dont save: - uncorrect_user' do
+          expect(bad_deletion_log_uncorrect_user).to_not be_valid
         end
 
-        let(:bad_connections_table_pr_key_wrong_field) {FactoryGirl.build(:deletion_log, :bad_table_pr_key_and_field)}
-        it '- 5 Dont save: - wrong_field for table pr_key' do
-          expect(bad_connections_table_pr_key_wrong_field).to_not be_valid
+        let(:bad_deletion_log_uncorrect_written) {FactoryGirl.build(:deletion_log, :uncorrect_written)}
+        it '- 5 Dont save: - uncorrect_written' do
+          expect(bad_deletion_log_uncorrect_written).to_not be_valid
         end
-
-        let(:bad_connections_table_user_wrong_field) {FactoryGirl.build(:deletion_log, :bad_table_user_and_field)}
-        it '- 6 Dont save: - wrong_field for table user' do
-          expect(bad_connections_table_user_wrong_field).to_not be_valid
-        end
-
-        let(:bad_connections_table_profile_wrong_field) {FactoryGirl.build(:deletion_log, :bad_table_profile_and_field)}
-        it '- 7 Dont save: - wrong_field for table profile' do
-          expect(bad_connections_table_profile_wrong_field).to_not be_valid
-        end
-
-        let(:bad_connections_overwritten_nil_table) {FactoryGirl.build(:deletion_log, :bad_overwritten_nil_table)}
-        it '- 8 Dont save: - overwritten = nil: table = profiles, wrong field = profile_id' do
-          expect(bad_connections_overwritten_nil_table).to_not be_valid
-        end
-
-        let(:bad_connections_overwritten_nil_field) {FactoryGirl.build(:deletion_log, :bad_overwritten_nil_field)}
-        it '- 9 Dont save: - overwritten = nil: table = profiles, wrong field = profile_id' do
-          expect(bad_connections_overwritten_nil_field).to_not be_valid
-        end
-
 
       end
 
@@ -87,5 +101,4 @@ RSpec.describe DeletionLog, type: :model do # , focus: true
 
 
 
-  # pending "add some examples to (or delete) #{__FILE__}"
 end
