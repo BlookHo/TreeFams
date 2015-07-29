@@ -30,7 +30,7 @@ module SimilarsInitSearch
     # todo: перенести этот метод в CirclesMethods - для нескольких моделей
     # Получаем один круг для одного профиля в дереве
     def get_profile_circle(profile_id, connected_users_arr)
-      profile_circle = ProfileKey.where(:user_id => connected_users_arr, :profile_id => profile_id)
+      profile_circle = ProfileKey.where(:user_id => connected_users_arr, :profile_id => profile_id, :deleted => 0)
                            .order('relation_id','is_name_id')
                            .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
       #logger.info "In get_profile_circle1: profile_circle.size = #{profile_circle.size}" if !profile_circle.blank?

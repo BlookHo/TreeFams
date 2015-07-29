@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+
   include Search                # основной метод поиска
   include SearchComplete        # метод полного поиска
   include SearchHelper          # Исп-ся в Search,  SimilarsCompleteSearch

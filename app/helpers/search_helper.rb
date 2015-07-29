@@ -241,7 +241,7 @@ module SearchHelper
   def get_one_profile_circle(profile_id, user_id)
     connected_users_arr = User.find(user_id).get_connected_users  ##найти БК для найденного профиля .where('relation_id <= 8')
     if !connected_users_arr.blank?
-      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id)
+      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id, deleted: 0)
                                  .order('user_id','relation_id','is_name_id' )
                                   #.select(:user_id, :name_id, :relation_id, :is_name_id).distinct
       if !found_profile_circle.blank?

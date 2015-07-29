@@ -1,42 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe DeletionLog, type: :model do # , focus: true
+RSpec.describe DeletionLog, type: :model , focus: true do # , focus: true
 
   after {
     DeletionLog.delete_all
     DeletionLog.reset_pk_sequence
-
-    # ConnectionRequest.delete_all
-    # ConnectionRequest.reset_pk_sequence
-    # User.delete_all
-    # User.reset_pk_sequence
-    # ConnectedUser.delete_all
-    # ConnectedUser.reset_pk_sequence
-    # Tree.delete_all
-    # Tree.reset_pk_sequence
-    # Profile.delete_all
-    # Profile.reset_pk_sequence
-    # ProfileKey.delete_all
-    # ProfileKey.reset_pk_sequence
-    # # WeafamSetting.delete_all
-    # # WeafamSetting.reset_pk_sequence
-    # Name.delete_all
-    # Name.reset_pk_sequence
-    # ConnectionLog.delete_all
-    # ConnectionLog.reset_pk_sequence
-    # CommonLog.delete_all
-    # CommonLog.reset_pk_sequence
-    # UpdatesFeed.delete_all
-    # UpdatesFeed.reset_pk_sequence
-    # SearchResults.delete_all
-    # SearchResults.reset_pk_sequence
   }
 
 
   describe '- Validation' do
     describe '- on create' do
 
-      context '- valid deletion_log' , focus: true do  # , focus: true
+      context '- valid deletion_log'  do  # , focus: true
 
         let(:good_deletion_log) {FactoryGirl.build(:deletion_log)}
         it '- 1 Saves a valid deletion_log' do
@@ -61,7 +36,7 @@ RSpec.describe DeletionLog, type: :model do # , focus: true
 
       end
 
-      context '- invalid deletion_log'  , focus: true do  # , focus: true
+      context '- invalid deletion_log'  do  # , focus: true
 
         let(:bad_deletion_log_uncorrect_log_number) {FactoryGirl.build(:deletion_log, :uncorrect_log_number)}
         # let(:last_log_number) { DeletionLog.last.log_number }
@@ -90,6 +65,11 @@ RSpec.describe DeletionLog, type: :model do # , focus: true
         let(:bad_deletion_log_uncorrect_written) {FactoryGirl.build(:deletion_log, :uncorrect_written)}
         it '- 5 Dont save: - uncorrect_written' do
           expect(bad_deletion_log_uncorrect_written).to_not be_valid
+        end
+
+        let(:bad_deletion_log_uncorrect_written_and_overwritten) {FactoryGirl.build(:deletion_log, :uncorrect_written_and_overwritten)}
+        it '- 6 Dont save: - uncorrect_written_and_overwritten' do
+          expect(bad_deletion_log_uncorrect_written_and_overwritten).to_not be_valid
         end
 
       end

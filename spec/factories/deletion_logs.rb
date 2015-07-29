@@ -54,6 +54,11 @@ FactoryGirl.define do
       written  2
     end
 
+    trait :uncorrect_written_and_overwritten do
+      overwritten  1
+      written  1
+    end
+
 
 
     # rollback_destroy_one_profile - in common_log_spec
