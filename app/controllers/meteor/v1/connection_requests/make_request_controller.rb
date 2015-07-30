@@ -15,6 +15,15 @@ module Meteor
           status_code = 200 # status Ok
           msg, msg_code = ConnectionRequest.make_request(@current_user, with_user_id)
 
+          
+          # Start search for conn_request Contr-agent
+          certain_koeff = WeafamSetting.first.certain_koeff
+          logger.info "In SearchResultsController: certain_koeff = #{certain_koeff}, @current_user.id = #{@current_user.id}  "
+          ## ЗАПУСК ПОИСКА
+          with_user_id.start_search(certain_koeff)
+          logger.info "In SearchResultsController: After start_search: @error = #{@error}  " if @error
+          logger.info "In SearchResultsController: After start_search"
+
           # respond_with yes_con
 
           # logger.info "In MakeRequestController: @error = #{@error}" if @error
