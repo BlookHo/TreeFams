@@ -70,6 +70,7 @@ Weafam::Application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
+  # smtp://notification@weallfamily.ru:32d2h990@smtp.yandex.ru:465
   config.action_mailer.raise_delivery_errors = true
 
   config.action_mailer.delivery_method = :smtp

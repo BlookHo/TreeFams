@@ -1,6 +1,6 @@
 # encoding: utf-8
 class WeafamMailer < ActionMailer::Base
-  default from: "notification@weallfamily.ru"
+  default from: "Мы все – родня! <notification@weallfamily.ru>"
 
   def invitation_email(email_name, profile_id, current_user_id)
 
