@@ -29,6 +29,7 @@ module Meteor
           all_profiles_male_qty = all_profiles.where(sex_id: 1).count
           all_profiles_female_qty = all_profiles.where(sex_id: 0).count
           all_users_qty = User.all.count
+
           all_trees_qty = User.pluck(:connected_users).uniq.length
 
           # logger.info "In StatController: all_profiles_qty = #{all_profiles_qty},

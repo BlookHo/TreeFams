@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150724103920) do
+ActiveRecord::Schema.define(version: 20150730081929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -280,6 +280,24 @@ ActiveRecord::Schema.define(version: 20150724103920) do
 
   create_table "weafam_settings", force: true do |t|
     t.integer  "certain_koeff", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "weafam_stats", force: true do |t|
+    t.integer  "users",           default: 0
+    t.integer  "users_male",      default: 0
+    t.integer  "users_female",    default: 0
+    t.integer  "profiles",        default: 0
+    t.integer  "profiles_male",   default: 0
+    t.integer  "profiles_female", default: 0
+    t.integer  "trees",           default: 0
+    t.integer  "invitations",     default: 0
+    t.integer  "requests",        default: 0
+    t.integer  "connections",     default: 0
+    t.integer  "refuse_requests", default: 0
+    t.integer  "disconnections",  default: 0
+    t.integer  "similars_found",  default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe DeletionLog, type: :model , focus: true do # , focus: true
+RSpec.describe DeletionLog, type: :model  do # , focus: true
 
   after {
     DeletionLog.delete_all
