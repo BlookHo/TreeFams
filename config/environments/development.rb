@@ -28,11 +28,11 @@ Weafam::Application.configure do
 
   config.action_mailer.smtp_settings =
       {
-       :port => 465,
+       :port => 25,
            #25, # 1025     -  mailcatcher
        # 587, 465, 25
       :enable_starttls_auto => true,  #
-      # :address => "smtp.gmail.com",       ## CHANGE for Gmail
+      #:address => "smtp.gmail.com",       ## CHANGE for Gmail
       :address => "smtp.yandex.ru",       ## for Yandex
       :domain => 'localhost:3003',
       :user_name => 'notification@weallfamily.ru',  ########### CHANGE!!

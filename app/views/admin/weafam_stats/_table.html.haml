@@ -1,0 +1,37 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th #
+      %th Юзеры
+      %th Юзеры М
+      %th Юзеры Ж
+      %th Профили
+      %th Профили М
+      %th Профили Ж
+      %th Деревья
+      %th Приглашения
+      %th Запросы
+      %th Объединения
+      %th Отказы запросов
+      %th Разъединения
+      %th Похожие
+      %th
+  %tbody
+    - @stats.each do |stat|
+      %tr
+        %td= stat.id
+        %td= stat.users
+        %td= stat.users_male
+        %td= stat.users_female
+        %td= stat.profiles
+        %td= stat.profiles_male
+        %td= stat.profiles_female
+        %td= stat.trees
+        %td= stat.invitations
+        %td= stat.requests
+        %td= stat.connections
+        %td= stat.refuse_requests
+        %td= stat.disconnections
+        %td= stat.similars_found
+        %td
+          -#= link_to "Войти как #{user.email.split('@').first}@...", admin_user_login_as_user_path(user.id), data: {confirm: "Войти как #{user.name}?"}, method: :post

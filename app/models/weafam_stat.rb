@@ -23,7 +23,7 @@ class WeafamStat < ActiveRecord::Base
                             :message => "ID автора сообщения или получателя сообщения должны быть больше или равно 0 в WeafamStat"
 
 
-  # @note: Start call of site stats calc
+  # @note: Start call of site weafam_stats calc
   def self.site_stats
     logger.info "In WeafamStat site_stats"
 

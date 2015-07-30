@@ -1,4 +1,4 @@
-class Admin::StatsController < Admin::AdminController
+class Admin::WeafamStatsController < Admin::AdminController
 
 
   def index
