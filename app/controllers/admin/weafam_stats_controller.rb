@@ -2,9 +2,9 @@ class Admin::WeafamStatsController < Admin::AdminController
 
 
   def index
-    @stats = WeafamStat.order('id DESC').page params[:page]
+    @stats = WeafamStat.page params[:page]
   end
-
+  # order('id DESC').
 
 
   # def login_as

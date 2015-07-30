@@ -23,8 +23,42 @@ class WeafamStat < ActiveRecord::Base
                             :message => "ID автора сообщения или получателя сообщения должны быть больше или равно 0 в WeafamStat"
 
 
+
+
+  def self.create_stats_row
+
+    stats_params = collect_site_stats
+    @weafam_stat = create(stats_params)
+    logger.info "In WeafamStat create_stats_row: @weafam_stat = #{@weafam_stat} "
+
+  end
+
+   # {:profiles=>270, :profiles_male=>149, :profiles_female=>121, :users=>18, :users_male=>14, :users_female=>4, :trees=>15}
+   #
+   # ["profiles", 270], ["profiles_female", 121], ["profiles_male", 149], ["trees", 15],
+   # ["users", 18], ["users_female", 4], ["users_male", 14]]
+
+
+
+#   def stats_params(all_stat_data)
+#     {users: all_stat_data[:users],
+#     users_male: all_stat_data[:users_male],
+#     users_female: all_stat_data[:users_female],
+#     profiles: all_stat_data[:profiles],
+#     profiles_male: all_stat_data[:profiles_male],
+#     profiles_female: all_stat_data[:profiles_female],
+#     trees: all_stat_data[:trees],
+#     invitations: all_stat_data[:invitations],
+#     requests: all_stat_data[:requests],
+#     connections: all_stat_data[:connections],
+#     refuse_requests: all_stat_data[:refuse_requests],
+#     disconnections: all_stat_data[:disconnections],
+#     similars_found: all_stat_data[:similars_found] }
+# end
+#
+
   # @note: Start call of site weafam_stats calc
-  def self.site_stats
+  def self.collect_site_stats
     logger.info "In WeafamStat site_stats"
 
     profiles_stat_data = Profile.collect_profile_stats
