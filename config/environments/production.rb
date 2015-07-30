@@ -76,9 +76,9 @@ Weafam::Application.configure do
   config.action_mailer.smtp_settings =
       {
       :address => "smtp.yandex.ru",       ## for Yandex
-      :port => 465, #587,
+      :port => 25, #587,
 
-      #:domain => 'weallfamily.ru',
+      :domain => 'weallfamily.ru',
 
       :user_name => 'notification@weallfamily.ru',  ##
       :password => '32d2h990',                ##
