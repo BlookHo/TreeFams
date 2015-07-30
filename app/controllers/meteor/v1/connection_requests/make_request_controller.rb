@@ -30,7 +30,7 @@ module Meteor
         end
 
 
-        # @note: Start search for conn_request Contr-agent
+        # @note: Start search for conn_request Counter-agent
         def start_counter_search(with_user_id)
 
           certain_koeff = WeafamSetting.first.certain_koeff
@@ -38,7 +38,7 @@ module Meteor
           with_user = User.find(with_user_id)
           logger.info "In MakeRequestController: with_user_id = #{with_user_id} "
 
-          ## ЗАПУСК ПОИСКА
+          ## ЗАПУСК ПОИСКА НАВСТРЕЧУ
           with_user.start_search(certain_koeff)
           logger.info "In MakeRequestController: After start_search: @error = #{@error}  " if @error
           logger.info "In MakeRequestController: After start_search"
