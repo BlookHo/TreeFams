@@ -94,17 +94,17 @@ class HomeController < ApplicationController
 
     # TEST
 
-    if WeafamStat.exists?
-      logger.info "TEST WeafamStat: last.exists"
-      # if (Time.current - 1.day) > WeafamStat.last.created_at
-      #   logger.info "TEST WeafamStat: Time.current - 1.day"
-        WeafamStat.site_stats
-      # else
-      #   logger.info "TEST WeafamStat: DO NOT 1.day) > "
-      # end
-    else
-      logger.info "TEST WeafamStat: DO NOT last.exists"
-    end
+    # if WeafamStat.exists?
+    #   logger.info "TEST WeafamStat: last.exists"
+    #   # if (Time.current - 1.day) > WeafamStat.last.created_at
+    #   #   logger.info "TEST WeafamStat: Time.current - 1.day"
+    #     WeafamStat.site_stats
+    #   # else
+    #   #   logger.info "TEST WeafamStat: DO NOT 1.day) > "
+    #   # end
+    # else
+    #   logger.info "TEST WeafamStat: DO NOT last.exists"
+    # end
 
 
 
