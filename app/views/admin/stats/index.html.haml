@@ -1,0 +1,11 @@
+.page-header
+  %h2
+    Статистика сайта
+    %small= User.count
+
+
+= paginate @stats
+, :theme => 'admin'
+= render 'table'
+= paginate @stats
+, :theme => 'admin'

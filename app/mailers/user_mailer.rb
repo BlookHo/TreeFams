@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: "weallfamily@yandex.ru"
+  default from: "notification@weallfamily.ru"
 
   def welcome_mail(user, password = '1111')
     @name = user.name

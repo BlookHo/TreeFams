@@ -1,6 +1,6 @@
 # encoding: utf-8
 class WeafamMailer < ActionMailer::Base
-  default from: "weallfamily@yandex.ru"
+  default from: "notification@weallfamily.ru"
 
   def invitation_email(email_name, profile_id, current_user_id)
 
@@ -15,7 +15,7 @@ class WeafamMailer < ActionMailer::Base
 
       logger.info "In invitation_email:  @profile_name = #{@profile_name}, @current_user_name = #{@current_user_name} " #
 
-      mail(to: email_name, subject: "Приглашение на сайт < Мы все - родня >", reply_to: 'weallfamily@yandex.ru')
+      mail(to: email_name, subject: "Приглашение на сайт < Мы все - родня >", reply_to: 'notification@weallfamily.ru')
       logger.info "In invitation_email: after mail"
 
     else
