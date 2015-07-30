@@ -331,7 +331,14 @@ class Profile < ActiveRecord::Base
   end
 
 
-
+  # @note: collect Profiles stat
+  def self.collect_profile_stats
+    all_profiles = where(deleted: 0)
+    { profiles: all_profiles.count,
+      profiles_male: all_profiles.where(sex_id: 1).count,
+      profiles_female: all_profiles.where(sex_id: 0).count
+    }
+  end
 
 
 

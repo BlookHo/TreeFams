@@ -23,32 +23,37 @@ class WeafamStat < ActiveRecord::Base
                             :message => "ID автора сообщения или получателя сообщения должны быть больше или равно 0 в WeafamStat"
 
 
-
+  # @note: Start call of site stats calc
   def self.site_stats
+    logger.info "In WeafamStat site_stats"
 
-    profiles_stat = colect_profiles
+    profiles_stat_data = Profile.collect_profile_stats
+    # logger.info "In WeafamStat site_stats: profiles_stat_data = #{profiles_stat_data}"
+    users_stat_data = User.collect_user_stats
+    # logger.info "In WeafamStat site_stats: users_stat_data = #{users_stat_data}"
 
-    all_profiles = Profile.where(deleted: 0)
-    profiles = all_profiles.count
-    profiles_male = all_profiles.where(sex_id: 1).count
-    profiles_female = all_profiles.where(sex_id: 0).count
-
-    all_users_qty = User.all.count
 
     all_trees_qty = User.pluck(:connected_users).uniq.length
 
-    # logger.info "In StatController: all_profiles_qty = #{all_profiles_qty},
-    # all_profiles_male_qty = #{all_profiles_male_qty},
-    # all_profiles_female_qty = #{all_profiles_female_qty},
-    # all_users_qty = #{all_users_qty},  all_trees_qty = #{all_trees_qty} "
-    { profiles: profiles,
-      profiles_male: profiles_male,
-      profiles_female: profiles_female,
-      all_users_qty: all_users_qty,
+    # logger.info "In StatController: all_profiles_qty = #{all_profiles_qty}"
+    all_stat_data = { profiles: profiles_stat_data[:profiles],
+      profiles_male: profiles_stat_data[:profiles_male],
+      profiles_female: profiles_stat_data[:profiles_female],
+      users: users_stat_data[:users],
+      users_male: users_stat_data[:users_male],
+      users_female: users_stat_data[:users_female],
       all_trees_qty: all_trees_qty
     }
-
+    logger.info "In WeafamStat site_stats: all_stat_data = #{all_stat_data}"
+    all_stat_data
   end
+
+
+
+
+
+{:profiles=>270, :profiles_male=>149, :profiles_female=>121, :users=>18, :users_male=>15, :users_female=>4, :all_trees_qty=>15}
+
 
 
 

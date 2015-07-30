@@ -153,7 +153,7 @@ class User < ActiveRecord::Base
   end
 
 
-  # @note Получение массивов юзеров - мужчин и женщин в дереве
+  # @note Получение массивов юзеров - мужчин и женщин в ОДНОМ дереве
   def self.get_users_male_female(connected_users)
     user_males = []
     user_females = []
@@ -169,6 +169,28 @@ class User < ActiveRecord::Base
       user_males_qty: user_males_qty,
       user_females_qty: user_females_qty }
   end
+
+
+  # @note Получение массивов юзеров - мужчин и женщин on site
+  def self.collect_user_stats
+    all_users = all.count
+    users_sex = collect_sex_users
+     { users: all_users, users_male: users_sex[:users_male], users_female: users_sex[:users_female] }
+  end
+
+
+  def self.collect_sex_users
+    users_male = 0
+    users_female = 0
+    all.each do |user|
+      users_male += 1 if user.profile.sex_id == 1
+      users_female += 1 if user.profile.sex_id == 0
+    end
+    { users_male: users_male, users_female: users_female}
+  end
+
+
+
 
 
   private
