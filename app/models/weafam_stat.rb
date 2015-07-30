@@ -31,28 +31,35 @@ class WeafamStat < ActiveRecord::Base
     # logger.info "In WeafamStat site_stats: profiles_stat_data = #{profiles_stat_data}"
     users_stat_data = User.collect_user_stats
     # logger.info "In WeafamStat site_stats: users_stat_data = #{users_stat_data}"
+    trees = User.pluck(:connected_users).uniq.length
+    # logger.info "In StatController: trees = #{trees}"
 
 
-    all_trees_qty = User.pluck(:connected_users).uniq.length
-
-    # logger.info "In StatController: all_profiles_qty = #{all_profiles_qty}"
     all_stat_data = { profiles: profiles_stat_data[:profiles],
       profiles_male: profiles_stat_data[:profiles_male],
       profiles_female: profiles_stat_data[:profiles_female],
       users: users_stat_data[:users],
       users_male: users_stat_data[:users_male],
       users_female: users_stat_data[:users_female],
-      all_trees_qty: all_trees_qty
+      trees: trees
     }
+
+    # t.integer :invitations    , default: 0
+    # t.integer :requests       , default: 0
+    # t.integer :connections    , default: 0
+    # t.integer :refuse_requests, default: 0
+    # t.integer :disconnections , default: 0
+    # t.integer :similars_found , default: 0
+
+
+
     logger.info "In WeafamStat site_stats: all_stat_data = #{all_stat_data}"
+    logger.info ""
     all_stat_data
   end
 
 
-
-
-
-{:profiles=>270, :profiles_male=>149, :profiles_female=>121, :users=>18, :users_male=>15, :users_female=>4, :all_trees_qty=>15}
+{:profiles=>270, :profiles_male=>149, :profiles_female=>121, :users=>18, :users_male=>14, :users_female=>4, :trees=>15}
 
 
 
