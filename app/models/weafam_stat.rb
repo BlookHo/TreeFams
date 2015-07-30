@@ -27,8 +27,7 @@ class WeafamStat < ActiveRecord::Base
 
   def self.create_stats_row
 
-    stats_params = collect_site_stats
-    @weafam_stat = create(stats_params)
+    @weafam_stat = create(collect_site_stats)
     logger.info "In WeafamStat create_stats_row: @weafam_stat = #{@weafam_stat} "
 
   end
@@ -67,7 +66,7 @@ class WeafamStat < ActiveRecord::Base
     # logger.info "In WeafamStat site_stats: users_stat_data = #{users_stat_data}"
     trees = User.pluck(:connected_users).uniq.length
     # logger.info "In StatController: trees = #{trees}"
-
+    similars_found = SimilarsFound.all.count
 
     all_stat_data = { profiles: profiles_stat_data[:profiles],
       profiles_male: profiles_stat_data[:profiles_male],
@@ -75,7 +74,9 @@ class WeafamStat < ActiveRecord::Base
       users: users_stat_data[:users],
       users_male: users_stat_data[:users_male],
       users_female: users_stat_data[:users_female],
-      trees: trees
+      trees: trees,
+      similars_found: similars_found
+
     }
 
     # t.integer :invitations    , default: 0

@@ -21,8 +21,8 @@
     - @stats.each do |stat|
       %tr
         %td= stat.id
-        %td= stat.created_at.strftime("%d-%b-%Y %H:%M")
-        -#%td= localize(stat.created_at, :format => :long)
+        -#%td= stat.created_at.strftime("%d-%b-%Y %H:%M")
+        %td= localize(stat.created_at, :format => :long)
         %td= stat.users
         %td= stat.users_male
         %td= stat.users_female
