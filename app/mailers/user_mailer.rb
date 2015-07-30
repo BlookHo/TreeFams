@@ -1,11 +1,11 @@
 class UserMailer < ActionMailer::Base
-  default from: "Мы все – родня! <notification@weallfamily.ru>"
+  default from: "\"Мы все – родня!\" <notification@weallfamily.ru>"
 
   def welcome_mail(user, password = '1111')
     @name = user.name
     @email = user.email
     @password = password
-    mail(to: @email, subject: 'Мы все - родня. Регистрация: данные для входа в ваш аккаунт.')
+    mail(to: @email, subject: 'Регистрация: данные для входа в ваш аккаунт.')
   end
 
 
@@ -13,7 +13,7 @@ class UserMailer < ActionMailer::Base
     @name = user.name
     @email = user.email
     @password = password
-    mail(to: @email, subject: 'Мы все - родня. Восстановление пароля.')
+    mail(to: @email, subject: 'Восстановление пароля.')
   end
 
 end
