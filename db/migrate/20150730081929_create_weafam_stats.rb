@@ -1,4 +1,5 @@
 class CreateWeafamStats < ActiveRecord::Migration
+  
   def change
     create_table :weafam_stats do |t|
       t.integer :users          , default: 0
