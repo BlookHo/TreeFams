@@ -341,7 +341,7 @@ module Search
     logger.info "=== IN get_found_profiles "
     found_profiles_hash = Hash.new  #
     relation_match_arr = ProfileKey.where.not(user_id: connected_users)
-                             .where(:name_id => relation_row.name_id, :relation_id => relation_row.relation_id, :is_name_id => relation_row.is_name_id)
+                             .where(:name_id => relation_row.name_id, :relation_id => relation_row.relation_id, :is_name_id => relation_row.is_name_id, deleted: 0)
                              .order('user_id','relation_id','is_name_id')
                              .select(:id, :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id)
                              .distinct
@@ -373,7 +373,7 @@ module Search
     profiles_hash = Hash.new
     one_profile_relations_hash = Hash.new
 
-    all_profile_rows = ProfileKey.where(:user_id => connected_users).where(:profile_id => profile_id_searched).order('relation_id','is_name_id').select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
+    all_profile_rows = ProfileKey.where(:user_id => connected_users).where(:profile_id => profile_id_searched, deleted: 0).order('relation_id','is_name_id').select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
     # поиск массива записей искомого круга для каждого профиля в дереве Юзера
     logger.info "Круг ИСКОМОГО ПРОФИЛЯ = #{profile_id_searched.inspect} в (объединенном) дереве #{connected_users} зарег-го Юзера"      # :user_id, , :id
     show_in_logger(all_profile_rows, "all_profile_rows - запись" )  # DEBUGG_TO_LOGG
