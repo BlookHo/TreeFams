@@ -67,6 +67,12 @@ class WeafamStat < ActiveRecord::Base
     trees = User.pluck(:connected_users).uniq.length
     # logger.info "In StatController: trees = #{trees}"
     similars_found = SimilarsFound.all.count
+    invitations = 10
+    requests = 10
+    connections = 10
+    refuse_requests = 10
+    disconnections = 10
+
 
     all_stat_data = { profiles: profiles_stat_data[:profiles],
       profiles_male: profiles_stat_data[:profiles_male],
@@ -75,8 +81,12 @@ class WeafamStat < ActiveRecord::Base
       users_male: users_stat_data[:users_male],
       users_female: users_stat_data[:users_female],
       trees: trees,
+      invitations: invitations,
+      requests: requests,
+      connections: connections,
+      refuse_requests: refuse_requests,
+      disconnections: disconnections,
       similars_found: similars_found
-
     }
 
     # t.integer :invitations    , default: 0

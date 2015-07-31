@@ -1,0 +1,13 @@
+= form_for @weafam_stat do |f|
+  - if @weafam_stat.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@weafam_stat.errors.count, "error")} prohibited this @weafam_stat from being saved:"
+      %ul
+        - @weafam_stat.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :profiles
+    = f.number_field :profiles
+  .actions
+    = f.submit 'Save'

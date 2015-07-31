@@ -177,3 +177,5 @@ gem "bullet", :group => "development"
 
 gem "ruby-growl"
 #gem "squeel" - sql
+
+gem 'whenever', :require => false # v 0.9.4
