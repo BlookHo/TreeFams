@@ -10,18 +10,17 @@ module Meteor
           data = params['family']
           data = JSON.parse(data)
 
-
-          logger.info("METEOR SIGNUP #{data}")
+          # logger.info("METEOR SIGNUP #{data}")
 
           data = sanitize_data(data.compact)
-          formatData = {'family' => data}
 
           user = User.new( email: data["author"]["email"] )
           user.valid? # нужно дернуть метод, чтобы получить ошибки
           if user.errors.messages[:email].nil?
             user = User.create_user_account_with_json_data(data)
             # Send welcome email
-            UserMailer.welcome_mail(user).deliver
+
+            # UserMailer.welcome_mail(user).deliver
 
             logger.info("RESPOND WITH USER:")
             logger.info(user)
@@ -40,11 +39,10 @@ module Meteor
         def sanitize_data(data)
           proc = Proc.new { |k, v| v.kind_of?(Hash) ? (v.delete_if(&proc); nil) : v.blank? };
           data.delete_if(&proc)
-          # data["brothers"].each do |member, index|
-          #   logger.info(member)
-          # end
-          # data
+          return data
         end
+
+
 
 
       end

@@ -191,8 +191,6 @@ class User < ActiveRecord::Base
 
 
 
-
-
   private
 
   def self.create_with_email(email)
