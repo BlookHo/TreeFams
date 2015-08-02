@@ -200,7 +200,7 @@ class User < ActiveRecord::Base
   end
 
   def self.generate_password
-    '1111'
+    SecureRandom.hex(2)
   end
 
 
