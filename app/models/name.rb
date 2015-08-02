@@ -11,6 +11,13 @@ class Name < ActiveRecord::Base
   # Пол имен синонимов должен соответствовать полу главного имени
   validate :children_sex
 
+
+
+  before_save do
+    self.name =self.name.mb_chars.capitalize.to_s
+  end
+
+
   def children_sex
     unless parent_name_id.nil?
       parent_name = Name.find(parent_name_id)
