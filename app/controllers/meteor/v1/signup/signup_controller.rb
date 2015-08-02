@@ -20,7 +20,9 @@ module Meteor
             user = User.create_user_account_with_json_data(data)
             # Send welcome email
 
-            # UserMailer.welcome_mail(user).deliver
+            Thread.new do
+              UserMailer.welcome_mail(user).deliver
+            end
 
             logger.info("RESPOND WITH USER:")
             logger.info(user)
