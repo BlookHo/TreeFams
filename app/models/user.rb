@@ -191,14 +191,14 @@ class User < ActiveRecord::Base
 
 
 
-  private
+  #private
 
   def self.create_with_email(email)
     self.create(email: email, password: User.generate_password, password_confirmation: User.generate_password)
   end
 
   def self.generate_password
-    SecureRandom.hex(2)
+    '1111'
   end
 
 
