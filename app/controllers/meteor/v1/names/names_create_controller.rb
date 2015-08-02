@@ -12,7 +12,7 @@ module Meteor
           if n.save
             respond_with(status:200)
           else
-            # respond with error
+            respond_with(status:200)
           end
         end
 
