@@ -191,12 +191,7 @@ class User < ActiveRecord::Base
 
 
 
-  # private
-
-  # def self.create_with_email(email)
-  #   password = User.generate_password
-  #   self.new(email: email, password: password, password_confirmation: password)
-  # end
+  private
 
 
   def self.create_with_email_and_password(email, password)
