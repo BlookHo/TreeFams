@@ -16,13 +16,6 @@ module Meteor
           user.valid? # нужно дернуть метод, чтобы получить ошибки
 
           if user.errors.messages[:email].nil?
-            user = User.create_user_account_with_json_data(data)
-            # Send welcome email
-            Thread.new do
-              UserMailer.welcome_mail(user).deliver
-            end
-
-          if user.errors.messages[:email].nil?
             user = User.create_user_account_with_json_data(data, password)
             Thread.new do
               UserMailer.welcome_mail(user, password).deliver
