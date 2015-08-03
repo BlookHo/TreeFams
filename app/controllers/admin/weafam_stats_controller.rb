@@ -1,7 +1,6 @@
 class Admin::WeafamStatsController < Admin::AdminController
 
 
-
   before_action :set_weafam_stat, only: [:show, :destroy]
 
   # GET /weafam_stats
@@ -9,7 +8,6 @@ class Admin::WeafamStatsController < Admin::AdminController
   def index
     @weafam_stats = WeafamStat.page params[:page]  # order('id DESC').
   end
-
 
   # GET /weafam_stats/1
   # GET /weafam_stats/1.json
@@ -31,11 +29,6 @@ class Admin::WeafamStatsController < Admin::AdminController
   def set_weafam_stat
     @weafam_stat = WeafamStat.find(params[:id])
   end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
-  # def weafam_stat_params
-  #   params.require(:weafam_stat).permit(:profiles)
-  # end
 
 
 end

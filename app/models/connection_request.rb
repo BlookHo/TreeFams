@@ -25,6 +25,20 @@ class ConnectionRequest < ActiveRecord::Base
                          :message => "done должно быть [true, false] в ConnectionRequest"
 
 
+  # @note: Определение кол-ва совершенных объединений
+  #   От всех Юзеров
+  def self.connections_amount
+    where(done: true, confirm: 1).count
+  end
+
+
+  # @note: Определение кол-ва совершенных объединений
+  #   От всех Юзеров
+  def self.connections_refuses
+    where(done: true, confirm: 0).count
+  end
+
+
 
   # @note: Формирование нового запроса на объединение деревьев
   #   От кого - от текущего Юзера

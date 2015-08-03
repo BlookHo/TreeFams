@@ -94,90 +94,32 @@ class HomeController < ApplicationController
 
     # TEST
 
-    if WeafamStat.exists?
-      logger.info "TEST WeafamStat: last.exists"
-      # if (Time.current - 1.day) > WeafamStat.last.created_at
-      #   logger.info "TEST WeafamStat: Time.current - 1.day"
-        WeafamStat.create_stats_row
-      # else
-      #   logger.info "TEST WeafamStat: DO NOT 1.day) > "
-      # end
-    else
-      logger.info "TEST WeafamStat: DO NOT last.exists"
-    end
+    # if WeafamStat.exists?
+    #   logger.info "TEST WeafamStat: last.exists"
+    #   # if (Time.current - 1.day) > WeafamStat.last.created_at
+    #   #   logger.info "TEST WeafamStat: Time.current - 1.day"
+    #     WeafamStat.create_stats_row
+    #   # else
+    #   #   logger.info "TEST WeafamStat: DO NOT 1.day) > "
+    #   # end
+    # else
+    #   logger.info "TEST WeafamStat: DO NOT last.exists"
+    # end
 
+    if Counter.exists?
+        logger.info "TEST Counter: exists"
 
+      logger.info "TEST Counter: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
+      Counter.increment_invites
 
+      Counter.increment_disconnects
 
-    def generate_system_param #создает запись статистики сайта
+      logger.info "Counter AFTER: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
 
-      make_date_fltr
-
-      lastSystemParam = SystemParam.last
-      @prev_time = lastSystemParam.created_at
-      @time_current = Time.current - 1.day
-      opn_last = Opinion.last #  извлечение последнено (макс-ного) номера мнения
-      @id_opn_last = opn_last.id
-      ######################## МАКСИМАЛЬНОЕ КОЛ-ВО ЮЗЕРОВ ЗА ВСЕ ВРЕМЯ ############################################
-      #    user_last = User.last #  извлечение последнено (макс-ного) номера мнения
-      #    id_user_last = User.all.count # сосчитать кол-во рядов в таблице
-      ######################## КОЛ-ВО НОВЫХ ЮЗЕРОВ ЗА МЕСЯЦ  ############################################
-      @id_us_mn = User.find_by_sql (" SELECT count(*) from users WHERE created_at > '#{@fltr_month}' ") # на выходе - ХЭШ!
-      @id_usr_month = @id_us_mn[0]['count(*)'] # Ok  номер макс-ма -  записи в базе user Ok!
-      ######################## КОЛ-ВО НОВЫХ МНЕНИЙ ЗА МЕСЯЦ  с даты ##########################################
-      @id_n_o = Opinion.find_by_sql (" SELECT count(*) from opinions WHERE created_at > '#{@fltr_month}' ") # на выходе - ХЭШ!
-      @id_new_opns = @id_n_o[0]['count(*)'] # Ok   в базе мнений Ok!
-      ######################## МАКСИМАЛЬНОЕ КОЛ-ВО МНЕНИЙ ЗА ВСЕ ВРЕМЯ ##########################################
-      #    opn_last = Opinion.last #  извлечение последнено (макс-ного) номера мнения
-      ######################## КОЛ-ВО НОВЫХ ГОЛОСОВАНИЙ ЗА МЕСЯЦ  с даты ##########################################
-      @id_v_n = VoteOpn.find_by_sql (" SELECT count(*) from vote_opns WHERE created_at > '#{@fltr_month}' ") # на выходе - ХЭШ!
-      @id_votes_new = @id_v_n[0]['count(*)'] # Ok   в базе голос-й Ok!
-      ###################### КОЛ-ВО НОВЫХ ГОЛОСОВАНИЙ ЗА ЗА ВСЕ ВРЕМЯ ##########################################
-      vote_last = VoteOpn.last #  извлечение последнено (макс-ного) номера мнения
-      if !vote_last.blank?
-        id_vote_last = VoteOpn.all.count # сосчитать кол-во рядов в таблице
       else
-        id_vote_last = 0
-      end
-
-      id_user_last = User.all.count # сосчитать кол-во рядов в таблице
-      id_opn_last = Opinion.all.count # сосчитать кол-во рядов в таблице
-      unfound_id_last = UnfoundWord.all.count # сосчитать кол-во рядов в таблице
-      award_id_last = AwardOrder.all.count # сосчитать кол-во рядов в таблице.last.id
-
-      @time_to_record = true # DEBUG
-      new_system_row = SystemParam.new
-      new_system_row.users_total_qty = id_user_last
-      new_system_row.cover_opinion = lastSystemParam.cover_opinion
-      new_system_row.opn_total_qty = id_opn_last
-      new_system_row.dmn_total_qty = 0
-      new_system_row.votes_total_qty = id_vote_last
-      new_system_row.comments_total_qty = 0 # DEBUG    TMP
-      new_system_row.slovar_words_qty = 0 # DEBUG   TMP
-      new_system_row.unfound_words_current_qty = unfound_id_last
-      new_system_row.awards_qty = award_id_last
-      new_system_row.zakaz_total_qty = 0 # DEBUG     TMP
-      new_system_row.save
-
+        logger.info "TEST Counter: DO NOT exists"
 
     end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

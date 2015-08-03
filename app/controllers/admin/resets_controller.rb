@@ -9,7 +9,7 @@ class Admin::ResetsController < Admin::AdminController
   def create
     if params[:password] == '2114'
       reset!
-      redirect_to :back, notice: "Данный удалены!"
+      redirect_to :back, notice: "Данныe удалены!"
     else
       redirect_to :back, alert: "Не действительный пароль!"
     end
@@ -78,6 +78,18 @@ class Admin::ResetsController < Admin::AdminController
     SearchResults.delete_all
     SearchResults.reset_pk_sequence
     SearchResults.create([])
+
+    Counter.delete_all
+    Counter.reset_pk_sequence
+    Counter.create([])
+
+    WeafamStat.delete_all
+    WeafamStat.reset_pk_sequence
+    WeafamStat.create([])
+
+    DeletionLog.delete_all
+    DeletionLog.reset_pk_sequence
+    DeletionLog.create([])
 
   end
 

@@ -66,12 +66,12 @@ class WeafamStat < ActiveRecord::Base
     # logger.info "In WeafamStat site_stats: users_stat_data = #{users_stat_data}"
     trees = User.pluck(:connected_users).uniq.length
     # logger.info "In StatController: trees = #{trees}"
+    requests = ConnectionRequest.all.count
+    connections = ConnectionRequest.connections_amount
+    refuse_requests = ConnectionRequest.connections_refuses
+    invitations = Counter.first.invites
+    disconnections = Counter.first.disconnects
     similars_found = SimilarsFound.all.count
-    invitations = 10
-    requests = 10
-    connections = 10
-    refuse_requests = 10
-    disconnections = 10
 
 
     all_stat_data = { profiles: profiles_stat_data[:profiles],

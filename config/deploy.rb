@@ -65,7 +65,6 @@ namespace :db do
 
 
 
-
     production:
       database: weafam
       <<: *base
