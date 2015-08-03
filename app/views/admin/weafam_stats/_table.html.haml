@@ -19,7 +19,7 @@
       %th
       %th
   %tbody
-    - @stats.each do |stat|
+    - @weafam_stats.each do |stat|
       %tr
         %td= stat.id
         -#%td= stat.created_at.strftime("%d-%b-%Y %H:%M")
@@ -37,6 +37,5 @@
         %td= stat.refuse_requests
         %td= stat.disconnections
         %td= stat.similars_found
-        -#%td= link_to 'Show', stat
-        -#%td= link_to 'Destroy', stat, :method => :delete, :data => { :confirm => 'Are you sure?' }
-        -#= link_to "Войти как #{user.email.split('@').first}@...", admin_user_login_as_user_path(user.id), data: {confirm: "Войти как #{user.name}?"}, method: :post
+        %td= link_to 'Show', admin_weafam_stat_path(stat)
+        %td= link_to 'Destroy', admin_weafam_stat_path(stat), :method => :delete, :data => { :confirm => 'Are you sure?' }

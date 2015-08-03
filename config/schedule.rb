@@ -15,7 +15,7 @@
 #
 
 
-every 1.minute do
+every 20.minutes do
   runner "WeafamStat.create_stats_row" , environment: :development
 end
 

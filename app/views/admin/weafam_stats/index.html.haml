@@ -3,11 +3,8 @@
     Статистика сайта
     %small= User.count
 
-= paginate @stats
--#, :theme => 'admin'
+= paginate @weafam_stats, :theme => 'admin'
 = render 'table'
-
-= paginate @stats
--#, :theme => 'admin'
+= paginate @weafam_stats, :theme => 'admin'
 
 
