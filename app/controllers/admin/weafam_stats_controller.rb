@@ -6,7 +6,7 @@ class Admin::WeafamStatsController < Admin::AdminController
   # GET /weafam_stats
   # GET /weafam_stats.json
   def index
-    @weafam_stats = WeafamStat.page params[:page]  # order('id DESC').
+    @weafam_stats = WeafamStat.order('id').page params[:page] # DESC
   end
 
   # GET /weafam_stats/1

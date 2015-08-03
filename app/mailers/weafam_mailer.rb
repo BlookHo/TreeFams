@@ -20,6 +20,8 @@ class WeafamMailer < ActionMailer::Base
       mail(to: email_name, subject: "Приглашение на сайт < Мы все - родня >", reply_to: 'notification@weallfamily.ru')
       logger.info "In invitation_email: after mail"
 
+      Counter.increment_invites
+
     else
       logger.info "In invitation_email: enter_email   if !profile_id.to_i.blank? && !current_user_id.to_i.blank?: #{!profile_id.to_i.blank? && !current_user_id.to_i.blank?}"
       flash[:alert] = "Не определены адресат и/или отправитель электронной почты. Почтовое сообщение не отправлено. "

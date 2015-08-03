@@ -106,20 +106,19 @@ class HomeController < ApplicationController
     #   logger.info "TEST WeafamStat: DO NOT last.exists"
     # end
 
-    if Counter.exists?
-        logger.info "TEST Counter: exists"
-
-      logger.info "TEST Counter: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
-      Counter.increment_invites
-
-      Counter.increment_disconnects
-
-      logger.info "Counter AFTER: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
-
-      else
-        logger.info "TEST Counter: DO NOT exists"
-
-    end
+    # if Counter.exists?
+    #   logger.info "TEST Counter: exists"
+    #
+    #   logger.info "TEST Counter: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
+    #   Counter.increment_invites
+    #
+    #   Counter.increment_disconnects
+    #
+    #   logger.info "Counter AFTER: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
+    #
+    # else
+    #   logger.info "TEST Counter: DO NOT exists"
+    # end
 
 
 
