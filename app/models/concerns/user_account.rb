@@ -3,10 +3,10 @@ module UserAccount
 
   module ClassMethods
 
-    def create_user_account_with_json_data(data)
+    def create_user_account_with_json_data(data, password)
 
       # Create author
-      user = User.create_with_email( data["author"]["email"] )
+      user = User.create_with_email_and_password( data["author"]["email"], password )
       user.profile = create_profile( data["author"].merge({tree_id: user.id}.as_json) )
 
       # Create base relation

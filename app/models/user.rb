@@ -191,14 +191,20 @@ class User < ActiveRecord::Base
 
 
 
-  private
+  # private
 
-  def self.create_with_email(email)
-    self.create(email: email, password: User.generate_password, password_confirmation: User.generate_password)
+  # def self.create_with_email(email)
+  #   password = User.generate_password
+  #   self.new(email: email, password: password, password_confirmation: password)
+  # end
+
+
+  def self.create_with_email_and_password(email, password)
+    self.create(email: email, password: password, password_confirmation: password)
   end
 
   def self.generate_password
-    SecureRandom.hex(2)
+    Array.new(4).map { rand(0...9)}.join
   end
 
 
