@@ -199,7 +199,11 @@ class User < ActiveRecord::Base
   end
 
   def self.generate_password
-    Array.new(4).map { rand(0...9)}.join
+    if Rails.env =~ /development/
+      '1111'
+    else
+      Array.new(4).map { rand(0...9)}.join
+    end
   end
 
 
