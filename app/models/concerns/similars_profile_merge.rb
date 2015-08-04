@@ -13,7 +13,7 @@ module SimilarsProfileMerge
       profiles_to_rewrite = connection_data[:profiles_to_rewrite]
       profiles_to_destroy = connection_data[:profiles_to_destroy]
       # connected_users_arr = connection_data[:connected_users_arr]
-      logger.info "Starting merge profile: profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy}"
+      logger.info "Starting merge profile - cleaned arrays: profiles_to_rewrite = #{profiles_to_rewrite},  profiles_to_destroy = #{profiles_to_destroy}"
 
       log_profiles_connection = []
 
