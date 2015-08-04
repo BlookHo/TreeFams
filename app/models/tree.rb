@@ -34,7 +34,7 @@ class Tree < ActiveRecord::Base
 
       users_tree_data = User.get_users_male_female(connected_users)
 
-      profiles = Tree.where(user_id: connected_users).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
+      profiles = Tree.where(user_id: connected_users, deleted: 0).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
 
       # all tree profiles
       tree_is_profiles = profiles.map {|p| p.is_profile_id }.uniq.sort

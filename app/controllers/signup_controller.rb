@@ -36,10 +36,11 @@ class SignupController < ApplicationController
 
 
   def create_regular_user
-    user = User.new( email: @data["author"]["email"] )
+    password =  User.generate_password
+    user = User.new( email: @data["author"]["email"], password: password, password_confirmation: password)
     user.valid? # нужно дернуть метод, чтобы получить ошибки
     if user.errors.messages[:email].nil?
-      user = User.create_user_account_with_json_data(@data)
+      user = User.create_user_account_with_json_data(@data, password)
       # Send welcome email
       UserMailer.welcome_mail(user).deliver
       session[:user_id] = user.id
