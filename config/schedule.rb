@@ -16,15 +16,15 @@
 
 
 # every 5.minutes do
-every 1.hour do
-
-  runner "WeafamStat.create_stats_row"    #, environment: :development
-
-  # runner "Counter.increment_invites"     , environment: :development
-  # runner "Counter.increment_disconnects" , environment: :development
-  runner "WeafamStat.create_stats_row"   , environment: :development
-
-end
+# every 1.hour do
+#
+#   runner "WeafamStat.create_stats_row"    #, environment: :development
+#
+#   # runner "Counter.increment_invites"     , environment: :development
+#   # runner "Counter.increment_disconnects" , environment: :development
+#   runner "WeafamStat.create_stats_row"   , environment: :development
+#
+# end
 
 # Rails.env
 
