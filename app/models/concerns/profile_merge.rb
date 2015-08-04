@@ -15,8 +15,10 @@ module ProfileMerge
 
       profiles_to_rewrite.each_with_index do |profile_id, index|
 
-        main_profile     = Profile.find(profile_id)
-        opposite_profile = Profile.find(profiles_to_destroy[index])
+        main_profile      = Profile.where(id: profile_id, deleted: 0)[0]
+        opposite_profile  = Profile.where(id: profiles_to_destroy[index], deleted: 0)[0]
+        # main_profile     = Profile.find(profile_id)
+        # opposite_profile = Profile.find(profiles_to_destroy[index])
 
         logger.info "Данные из профиля  #{opposite_profile.id} будут перенесены в профиль #{main_profile.id}"
 

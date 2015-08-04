@@ -115,23 +115,23 @@ class HomeController < ApplicationController
 
     # TEST
 
-    profiles_to_rewrite = [122,233,455,677,899]
-    profiles_to_destroy = [122,234,455,677,899]
-
-    def clean_profiles_arrs(profiles_to_rewrite, profiles_to_destroy)
-      clean_to_rewrite = []
-      clean_to_destroy = []
-      profiles_to_rewrite.each_with_index do |profile_id, index|
-        if profile_id != profiles_to_destroy[index]
-          clean_to_rewrite << profile_id
-          clean_to_destroy << profiles_to_destroy[index]
-        end
-      end
-      return clean_to_rewrite, clean_to_destroy
-    end
-
-    clean_to_rewrite, clean_to_destroy = clean_profiles_arrs(profiles_to_rewrite, profiles_to_destroy)
-    logger.info "TEST clean_profiles_arrs: clean_to_rewrite = #{clean_to_rewrite} , clean_to_destroy = #{clean_to_destroy} "
+    # profiles_to_rewrite = [122,233,455,677,899]
+    # profiles_to_destroy = [122,234,455,677,899]
+    #
+    # def clean_profiles_arrs(profiles_to_rewrite, profiles_to_destroy)
+    #   clean_to_rewrite = []
+    #   clean_to_destroy = []
+    #   profiles_to_rewrite.each_with_index do |profile_id, index|
+    #     if profile_id != profiles_to_destroy[index]
+    #       clean_to_rewrite << profile_id
+    #       clean_to_destroy << profiles_to_destroy[index]
+    #     end
+    #   end
+    #   return clean_to_rewrite, clean_to_destroy
+    # end
+    #
+    # clean_to_rewrite, clean_to_destroy = clean_profiles_arrs(profiles_to_rewrite, profiles_to_destroy)
+    # logger.info "TEST clean_profiles_arrs: clean_to_rewrite = #{clean_to_rewrite} , clean_to_destroy = #{clean_to_destroy} "
 
 
     similars_data = current_user.start_similars

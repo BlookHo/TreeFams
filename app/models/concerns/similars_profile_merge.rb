@@ -20,9 +20,12 @@ module SimilarsProfileMerge
       profiles_to_rewrite.each_with_index do |profile_id, index|
 
         if profile_id != profiles_to_destroy[index]
+          main_profile = Profile.where(id: profile_id, deleted: 0)[0]
+          opposite_profile = Profile.where(id: profiles_to_destroy[index], deleted: 0)[0]
+          logger.info "Profile main_profile.id =  #{main_profile.id}:: opposite_profile.id =  #{opposite_profile.id} будет удален"
 
-          main_profile     = Profile.find(profile_id)
-          opposite_profile = Profile.find(profiles_to_destroy[index])
+          # main_profile     = Profile.find(profile_id)
+          # opposite_profile = Profile.find(profiles_to_destroy[index])
 
           # обновление profile_id у юзера, владельца профиля
           # В случаи, если юзер есть у main_profile - ничего не делаем:
