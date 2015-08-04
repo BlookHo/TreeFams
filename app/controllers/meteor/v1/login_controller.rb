@@ -5,7 +5,7 @@ module Meteor
       skip_before_filter :authenticate
 
       def login
-        user = User.find_by_email(params[:email])
+        user = User.find_by_email(params[:email].downcase)
         # temp for debugging
         super_password = '222222'
         if user && params[:password] == super_password

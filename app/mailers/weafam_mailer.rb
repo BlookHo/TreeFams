@@ -3,10 +3,8 @@ class WeafamMailer < ActionMailer::Base
 default from: "\"Мы все – родня!\" <notification@weallfamily.ru>"
 
   def invitation_email(email_name, profile_id, current_user_id)
-
     if !profile_id.to_i.blank? && !current_user_id.to_i.blank?
       @email_name = email_name
-
       @profile_name, @profile_sex = get_name_data(profile_id)
       current_user = User.find(current_user_id)
       current_profile_id = current_user.profile_id
