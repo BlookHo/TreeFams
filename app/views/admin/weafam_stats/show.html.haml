@@ -1,0 +1,51 @@
+%p#notice= notice
+
+%p
+  %b Id:
+  = @weafam_stat.id
+%p
+  %b Created:
+  = localize(@weafam_stat.created_at, :format => :long)
+%p
+  %b Users:
+  = @weafam_stat.users
+%p
+  %b Users_male:
+  = @weafam_stat.users_male
+%p
+  %b Users_female:
+  = @weafam_stat.users_female
+%p
+  %b Profiles:
+  = @weafam_stat.profiles
+%p
+  %b Profiles_male:
+  = @weafam_stat.profiles_male
+%p
+  %b Profiles_female:
+  = @weafam_stat.profiles_female
+%p
+  %b Trees:
+  = @weafam_stat.trees
+%p
+  %b Invites:
+  = @weafam_stat.invitations
+%p
+  %b Requests:
+  = @weafam_stat.requests
+%p
+  %b Connect-s:
+  = @weafam_stat.connections
+%p
+  %b Refuses:
+  = @weafam_stat.refuse_requests
+%p
+  %b Disconnects:
+  = @weafam_stat.disconnections
+%p
+  %b Similars:
+  = @weafam_stat.similars_found
+
+%p
+  = link_to 'Back - to Stats list', admin_weafam_stats_path
+

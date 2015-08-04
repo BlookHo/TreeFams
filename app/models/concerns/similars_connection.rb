@@ -7,8 +7,16 @@ module SimilarsConnection
   def similars_connection(first_profile_connecting, second_profile_connecting)
 
     #################################################
-    profiles_to_rewrite, profiles_to_destroy, init_hash = self.similars_complete_search(first_profile_connecting, second_profile_connecting)
+    rewrite_to_clean, destroy_to_clean, init_hash = self.similars_complete_search(first_profile_connecting, second_profile_connecting)
     #################################################
+    logger.info "TEST similars_connection : clean_profiles_arrs: rewrite_to_clean = #{rewrite_to_clean} , destroy_to_clean = #{destroy_to_clean} "
+
+    #### update profiles arrays ###########
+    profiles_to_rewrite, profiles_to_destroy = clean_profiles_arrs(rewrite_to_clean, destroy_to_clean)
+    logger.info "TEST similars_connection : clean_profiles_arrs: profiles_to_rewrite = #{profiles_to_rewrite} , profiles_to_destroy = #{profiles_to_destroy} "
+
+    # Перезапись profile_data при объединении профилей
+    ProfileData.connect_profiles_data(profiles_to_rewrite, profiles_to_destroy)
 
     last_log_id = SimilarsLog.last.connected_at unless SimilarsLog.all.empty?
     # logger.info "*** In connect_similars last_log_id = #{last_log_id.inspect}"
@@ -31,6 +39,19 @@ module SimilarsConnection
 
   end
 
+
+
+  def clean_profiles_arrs(profiles_to_rewrite, profiles_to_destroy)
+    clean_to_rewrite = []
+    clean_to_destroy = []
+    profiles_to_rewrite.each_with_index do |profile_id, index|
+      if profile_id != profiles_to_destroy[index]
+        clean_to_rewrite << profile_id
+        clean_to_destroy << profiles_to_destroy[index]
+      end
+    end
+    return clean_to_rewrite, clean_to_destroy
+  end
 
 
   # Перезапись профилей в таблицах

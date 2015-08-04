@@ -11,6 +11,8 @@ default from: "\"Мы все – родня!\" <notification@weallfamily.ru>"
       @current_user_name, @current_user_sex = get_name_data(current_profile_id)
       @current_user_email = current_user.email
 
+      logger.info "In invitation_email:  @profile_name = #{@profile_name}, @current_user_name = #{@current_user_name} " #
+
       mail(to: email_name, subject: "Приглашение на сайт < Мы все - родня >", reply_to: 'notification@weallfamily.ru')
     else
       flash[:alert] = "Не определены адресат и/или отправитель электронной почты. Почтовое сообщение не отправлено. "

@@ -316,6 +316,11 @@ Weafam::Application.routes.draw do
       get 'pending', to: "names#pending", on: :collection, as: :pending
     end
 
+    resources :weafam_stats
+
+
+
+
     resources :subnames
 
     root "users#index"

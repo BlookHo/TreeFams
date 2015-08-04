@@ -23,6 +23,8 @@ module DisconnectionTrees
 
     log_connection_deletion(log_to_redo)
 
+    Counter.increment_disconnects
+
     ##########  UPDATES FEEDS - № 17  ############## В обоих направлениях: Кто с Кем и Обратно
     # Before CommonLog destroy_connection
     one_common_log = CommonLog.find(common_log_id)
