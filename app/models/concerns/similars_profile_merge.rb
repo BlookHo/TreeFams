@@ -19,32 +19,30 @@ module SimilarsProfileMerge
 
       profiles_to_rewrite.each_with_index do |profile_id, index|
 
-        main_profile     = Profile.find(profile_id)
-        opposite_profile = Profile.find(profiles_to_destroy[index])
+        if profile_id != profiles_to_destroy[index]
 
-        logger.info "Данный из профиля  #{opposite_profile.id} будут перенесены в профиль #{main_profile.id}, т.к. профиль #{opposite_profile.id} - overwritten."
-        # перенос profile_datas
-        ######################################
-        # todo: Организовать перезапись Profile_datas - или см. в файле SimilarsConnection.rb строки 15 ?
-     #    main_profile.profile_datas << opposite_profile.profile_datas
+          main_profile     = Profile.find(profile_id)
+          opposite_profile = Profile.find(profiles_to_destroy[index])
 
-        # обновление profile_id у юзера, владельца профиля
-        # В случаи, если юзер есть у main_profile - ничего не делаем:
-        # у этого юзера profile_id остается тем же
-        # Если юзер есть у opposite_profile, котрый будет удален,
-        # то линкуем юзера к новому профилю
-        if opposite_profile.user.present?
+          # обновление profile_id у юзера, владельца профиля
+          # В случаи, если юзер есть у main_profile - ничего не делаем:
+          # у этого юзера profile_id остается тем же
+          # Если юзер есть у opposite_profile, котрый будет удален,
+          # то линкуем юзера к новому профилю
+          if opposite_profile.user.present?
 
-          link_data = { main_profile: main_profile,
-                        opposite_profile: opposite_profile,
-                        current_user_id: connection_data[:current_user_id],
-                        connected_at: connection_data[:connection_id] }
-          log_profiles_connection = make_user_profile_link(link_data)
+            link_data = { main_profile: main_profile,
+                          opposite_profile: opposite_profile,
+                          current_user_id: connection_data[:current_user_id],
+                          connected_at: connection_data[:connection_id] }
+            log_profiles_connection = make_user_profile_link(link_data)
+
+          end
+          #logger.info "Профиля  #{opposite_profile.id} будет удален"
+          ## Удаление opposite_profile
+          # profiles_to_delete << opposite_profile
 
         end
-        #logger.info "Профиля  #{opposite_profile.id} будет удален"
-        ## Удаление opposite_profile
-        # profiles_to_delete << opposite_profile
 
       end
       #logger.info "Профиля  #{opposite_profile.id} будет удален"

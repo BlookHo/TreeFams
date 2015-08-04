@@ -89,9 +89,6 @@ class HomeController < ApplicationController
     #   logger.info "########## In home/index: check_profiles_exists: - NO"
     # end
 
-
-
-
     # TEST
 
     # if WeafamStat.exists?
@@ -108,22 +105,33 @@ class HomeController < ApplicationController
 
     # if Counter.exists?
     #   logger.info "TEST Counter: exists"
-    #
-    #   logger.info "TEST Counter: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
+    #    #   logger.info "TEST Counter: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
     #   Counter.increment_invites
-    #
-    #   Counter.increment_disconnects
-    #
-    #   logger.info "Counter AFTER: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
-    #
-    # else
+    #    #   Counter.increment_disconnects
+    #    #   logger.info "Counter AFTER: increment_invites = #{Counter.first.invites}, increment_disconnects = #{Counter.first.disconnects}"
+    #    # else
     #   logger.info "TEST Counter: DO NOT exists"
     # end
 
+    # TEST
 
+    profiles_to_rewrite = [122,233,455,677,899]
+    profiles_to_destroy = [122,234,455,677,899]
 
+    def clean_profiles_arrs(profiles_to_rewrite, profiles_to_destroy)
+      clean_to_rewrite = []
+      clean_to_destroy = []
+      profiles_to_rewrite.each_with_index do |profile_id, index|
+        if profile_id != profiles_to_destroy[index]
+          clean_to_rewrite << profile_id
+          clean_to_destroy << profiles_to_destroy[index]
+        end
+      end
+      return clean_to_rewrite, clean_to_destroy
+    end
 
-
+    clean_to_rewrite, clean_to_destroy = clean_profiles_arrs(profiles_to_rewrite, profiles_to_destroy)
+    logger.info "TEST clean_profiles_arrs: clean_to_rewrite = #{clean_to_rewrite} , clean_to_destroy = #{clean_to_destroy} "
 
 
     similars_data = current_user.start_similars

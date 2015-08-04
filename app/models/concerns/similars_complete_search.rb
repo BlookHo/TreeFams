@@ -12,8 +12,8 @@ module SimilarsCompleteSearch
   def similars_complete_search(first_profile_connecting, second_profile_connecting)
 
     init_connection_hash = { first_profile_connecting => second_profile_connecting}
-    # logger.info "** IN similars_complete_search *** "
-    #logger.info " init_connection_hash = #{init_connection_hash}"
+    logger.info "** IN similars_complete_search *** "
+    logger.info " init_connection_hash = #{init_connection_hash}"
     final_profiles_to_rewrite = []
     final_profiles_to_destroy = []
     final_connection_hash = {}
