@@ -8,7 +8,7 @@ require 'bundler/capistrano' # Для работы bundler.
 # whenever integration
 # set :whenever_environment, defer { staging }
 # set :whenever_identifier, defer { "#{application}_#{staging}" }
-require "whenever/capistrano"
+# require "whenever/capistrano"
 
 
 
