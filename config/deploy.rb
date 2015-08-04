@@ -5,6 +5,13 @@ set :rails_root, "#{File.dirname(__FILE__)}/.."
 require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
 
+# whenever integration
+# set :whenever_environment, defer { staging }
+# set :whenever_identifier, defer { "#{application}_#{staging}" }
+require "whenever/capistrano"
+
+
+
 
 set :application, "weafam"
 set :user, "weafam"
@@ -55,7 +62,6 @@ namespace :db do
       pool: 5
       timeout: 5000
       host: 127.0.0.1
-
 
 
 

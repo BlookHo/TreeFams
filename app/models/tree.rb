@@ -72,7 +72,7 @@ class Tree < ActiveRecord::Base
   # Получение массива дерева соединенных Юзеров из Tree
   # На входе - массив соединенных Юзеров
   def self.get_connected_tree(connected_users_arr)
-    tree_arr = Tree.where(:user_id => connected_users_arr).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
+    tree_arr = Tree.where(user_id: connected_users_arr, deleted: 0).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
     return tree_arr
   end
 

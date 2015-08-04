@@ -71,4 +71,5 @@ class WeafamSettingsController < ApplicationController
     def weafam_setting_params
       params.require(:weafam_setting).permit(:certain_koeff)
     end
+
 end

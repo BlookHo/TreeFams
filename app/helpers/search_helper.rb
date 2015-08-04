@@ -221,8 +221,9 @@ module SearchHelper
   # Взять Бл.круг одного профиля
   # получить массивы триад для дальнейшего сравнения
   # показать в Логгере
-  def have_profile_circle(profile_id)
-    profile_user_id = Profile.find(profile_id).tree_id
+  def have_profile_circle(profile_id) # , deleted: 0
+    # profile_user_id = Profile.find(profile_id).tree_id
+    profile_user_id = Profile.where(id: profile_id, deleted: 0)[0].tree_id
     profile_circle = get_one_profile_circle(profile_id, profile_user_id)
     logger.info "=== КРУГ ПРОФИЛЯ = #{profile_id} "
     show_in_logger(profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
