@@ -5,6 +5,7 @@
       %th Имя
       %th Email
       %th
+      %th
   %tbody
     - @users.each do |user|
       %tr
@@ -13,3 +14,5 @@
         %td= user.email
         %td
           = link_to "Войти как #{user.email.split('@').first}@...", admin_user_login_as_user_path(user.id), data: {confirm: "Войти как #{user.name}?"}, method: :post
+        %td
+          = link_to "Удалить дерево", admin_user_path(user), data: {confirm: "Будут удалены все связанные данные, вы уверены?"}, method: :delete

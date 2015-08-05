@@ -18,4 +18,19 @@ class Admin::UsersController < Admin::AdminController
     redirect_to :home
   end
 
+
+  def destroy
+    user = User.where(id: params[:id]).first
+    if (user)
+      ids = user.connected_users
+      ids.each do |user_id|
+        User.find(user_id).destroy
+      end
+      flash[:notice] = "Удалено #{ids.size} пользователей"
+    else
+      flash[:alert] = "Пользователь не найден"
+    end
+    redirect_to :back
+  end
+
 end

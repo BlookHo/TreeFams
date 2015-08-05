@@ -295,8 +295,11 @@ Weafam::Application.routes.draw do
 
 
     resources :admins
+
+
     resources :users do
       post 'login_as/:user_id', to: 'users#login_as', as: :login_as_user
+      
     end
 
     resources :resets, only: [:new, :create]
