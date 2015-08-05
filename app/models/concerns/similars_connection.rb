@@ -209,7 +209,6 @@ module SimilarsConnection
 
           if other_field_val == profiles_to_rewrite[arr_ind]
             # Generate deleted = 1 log
-            # rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
             rewrite_row.update_attributes(:deleted => 1, :updated_at => Time.now)
             one_connection_data = { connected_at: connection_id,              # int
                                     current_user_id: current_user_id,        # int
@@ -222,7 +221,6 @@ module SimilarsConnection
 
           else
 
-            # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
             rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
             one_connection_data = { connected_at: connection_id,              # int
                                     current_user_id: current_user_id,        # int
