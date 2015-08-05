@@ -134,6 +134,20 @@ class HomeController < ApplicationController
     # logger.info "TEST clean_profiles_arrs: clean_to_rewrite = #{clean_to_rewrite} , clean_to_destroy = #{clean_to_destroy} "
 
 
+    # TEST
+    profile_id = 455
+    is_profile_id = 468
+
+    res = Profile.check_profiles_exists?(profile_id, is_profile_id)
+    logger.info "*** In module Profile.check_profiles_exists: res = #{res.inspect} "
+    # logger.info "*** In module Profile.check_profiles_exists: 1ex = #{self.where(id: profile_id, deleted: 0).exists?.inspect} "
+    # logger.info "*** In module Profile.check_profiles_exists: 2ex = #{self.where(id: is_profile_id, deleted: 0).exists?.inspect} "
+
+
+
+
+
+
     similars_data = current_user.start_similars
     @tree_info = similars_data[:tree_info]
     # new_sims = similars_data[:new_sims]

@@ -171,6 +171,7 @@ module SimilarsConnection
     connection_data[:table_name] = table.table_name
     ['profile_id', 'is_profile_id'].each do |table_field|
       table_update_data = { table: table, table_field: table_field}
+      logger.info "*** In module SimilarsConnection update_table: table_update_data = #{table_update_data.inspect} "
       log_connection = update_field(connection_data, table_update_data , log_connection)
     end
     log_connection
@@ -194,18 +195,45 @@ module SimilarsConnection
     for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
       rows_to_update = table.where(:user_id => connected_users_arr).
                              where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
+      logger.info "*** In module SimilarsConnection update_field: rows_to_update = #{rows_to_update.inspect} "
+
       unless rows_to_update.blank?
         rows_to_update.each do |rewrite_row|
 
-          # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-          rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
-          one_connection_data = { connected_at: connection_id,              # int
-                                  current_user_id: current_user_id,        # int
-                                  table_name: table_name,                  # string
-                                  table_row: rewrite_row.id,            # int
-                                  field: table_field,                 # string
-                                  written: profiles_to_rewrite[arr_ind],        # int
-                                  overwritten: profiles_to_destroy[arr_ind] }        # int
+          if table_field == 'profile_id'
+            other_field_val = rewrite_row.is_profile_id
+          else
+            other_field_val = rewrite_row.profile_id
+          end
+          logger.info "*** In module SimilarsConnection update_field: other_field_val = #{other_field_val.inspect} "
+
+          if other_field_val == profiles_to_rewrite[arr_ind]
+            # Generate deleted = 1 log
+            # rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
+            rewrite_row.update_attributes(:deleted => 1, :updated_at => Time.now)
+            one_connection_data = { connected_at: connection_id,              # int
+                                    current_user_id: current_user_id,        # int
+                                    table_name: table_name,                  # string
+                                    table_row: rewrite_row.id,            # int
+                                    field: 'deleted',                 # string
+                                    written: 1,        # int
+                                    overwritten: 0 }        # int
+            logger.info "*** In module update_field: Deleted log "
+
+          else
+
+            # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
+            rewrite_row.update_attributes(:"#{table_field}" => profiles_to_rewrite[arr_ind], :updated_at => Time.now)
+            one_connection_data = { connected_at: connection_id,              # int
+                                    current_user_id: current_user_id,        # int
+                                    table_name: table_name,                  # string
+                                    table_row: rewrite_row.id,            # int
+                                    field: table_field,                 # string
+                                    written: profiles_to_rewrite[arr_ind],        # int
+                                    overwritten: profiles_to_destroy[arr_ind] }        # int
+            logger.info "*** In module update_field: Field update log "
+
+          end
 
           log_connection << SimilarsLog.new(one_connection_data)
 

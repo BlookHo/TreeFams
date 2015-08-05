@@ -24,9 +24,6 @@ module ProfileMerge
 
         logger.info "Данные из профиля  #{opposite_profile.id} будут перенесены в профиль #{main_profile.id}"
 
-        # перенос profile_datas
-        # todo: Организовать перезапись Profile_datas - или см. в файле SimilarsConnection.rb строки 15 ?
-        # main_profile.profile_datas << opposite_profile.profile_datas
 
         # обновление profile_id у юзера, владельца профиля
         # В случаи, если юзер есть у main_profile - ничего не делаем:

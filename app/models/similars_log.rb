@@ -5,7 +5,7 @@ class SimilarsLog < ActiveRecord::Base
                         :message => "Должно присутствовать в SimilarsLog"
 
   validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
-  validates_numericality_of :written, :overwritten,:greater_than => 0, :unless => :writtens_can_be_nil?
+  validates_numericality_of :written, :overwritten,:greater_than_or_equal_to => 0, :unless => :writtens_can_be_nil?
   validates_numericality_of :written, :overwritten, :only_integer => true, :unless => :writtens_can_be_nil?
   validate :written_fields_are_not_equal, :unless => :writtens_can_be_equal? # :written AND :overwritten
 
@@ -15,8 +15,8 @@ class SimilarsLog < ActiveRecord::Base
                             :message => "Должны быть больше 0 в SimilarsLog"
 
   validates_inclusion_of :field, :in => ["profile_id"], :if => :table_users?
-  validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
-  validates_inclusion_of :field, :in => ["tree_id", "user_id"], :if => :table_profiles?
+  validates_inclusion_of :field, :in => ["profile_id", "is_profile_id", 'deleted'], :if => :table_trees_pr_keys?
+  validates_inclusion_of :field, :in => ["tree_id", "user_id", 'deleted'], :if => :table_profiles?
   validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
   validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
                                                                     # - тогда поле table_row д.б.uniq

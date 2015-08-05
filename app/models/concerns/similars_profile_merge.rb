@@ -39,11 +39,27 @@ module SimilarsProfileMerge
                           current_user_id: connection_data[:current_user_id],
                           connected_at: connection_data[:connection_id] }
             log_profiles_connection = make_user_profile_link(link_data)
+          else
+
+            ## Удаление opposite_profile   - OLD
+            # profiles_to_delete << opposite_profile
+
+            # Mark opposite_profile as deleted
+            opposite_profile.update_attribute('deleted', 1)
+            logger.info "## Профил:  #{opposite_profile.id}  -  #{opposite_profile.deleted} after update"
+
+            one_connection_data = { connected_at: connection_data[:connection_id],
+                                    current_user_id: connection_data[:current_user_id],
+                                    table_name: 'profiles',
+                                    table_row: opposite_profile.id,
+                                    field: 'deleted',
+                                    written: 1,
+                                    overwritten: 0 }
+            log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
 
           end
-          #logger.info "Профиля  #{opposite_profile.id} будет удален"
-          ## Удаление opposite_profile
-          # profiles_to_delete << opposite_profile
+
+
 
         end
 

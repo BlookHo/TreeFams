@@ -147,19 +147,21 @@ module ProfileKeysGeneration
     # @param admin_page [Integer] опциональный номер страницы
     # @see News
     def add_profile_key_row(add_row_data)
-      new_profile_key_row = ProfileKey.new
-      new_profile_key_row.user_id             = add_row_data[:base_tree_id]  # @current_user_id
-      new_profile_key_row.profile_id          = add_row_data[:left_profile_id]
-      new_profile_key_row.name_id             = add_row_data[:left_name_id]
-      new_profile_key_row.display_name_id     = add_row_data[:left_display_name_id]
-      new_profile_key_row.relation_id         = add_row_data[:new_relation_id]
-      new_profile_key_row.is_profile_id       = add_row_data[:rigth_profile_id]
-      new_profile_key_row.is_name_id          = add_row_data[:rigth_profile_name_id]
-      new_profile_key_row.is_display_name_id  = add_row_data[:rigth_display_name_id]
-      ########################
-      new_profile_key_row.save
-      # puts "= add_row = #{add_row_data.inspect}" # Для показа в Тесте
 
+      if Profile.check_profiles_exists?(add_row_data[:left_profile_id], add_row_data[:rigth_profile_id])
+        new_profile_key_row = ProfileKey.new
+        new_profile_key_row.user_id             = add_row_data[:base_tree_id]  # @current_user_id
+        new_profile_key_row.profile_id          = add_row_data[:left_profile_id]
+        new_profile_key_row.name_id             = add_row_data[:left_name_id]
+        new_profile_key_row.display_name_id     = add_row_data[:left_display_name_id]
+        new_profile_key_row.relation_id         = add_row_data[:new_relation_id]
+        new_profile_key_row.is_profile_id       = add_row_data[:rigth_profile_id]
+        new_profile_key_row.is_name_id          = add_row_data[:rigth_profile_name_id]
+        new_profile_key_row.is_display_name_id  = add_row_data[:rigth_display_name_id]
+        ########################
+        new_profile_key_row.save
+        # puts "= add_row = #{add_row_data.inspect}" # Для показа в Тесте
+      end
     end
 
     # Добавление 2-x новых БАЗОВЫХ рядов в таблицу ProfileKey
