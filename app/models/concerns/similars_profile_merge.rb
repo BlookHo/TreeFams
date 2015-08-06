@@ -23,7 +23,6 @@ module SimilarsProfileMerge
           main_profile = Profile.where(id: profile_id, deleted: 0)[0]
           opposite_profile = Profile.where(id: profiles_to_destroy[index], deleted: 0)[0]
           logger.info "Profile main_profile.id =  #{main_profile.id}:: opposite_profile.id =  #{opposite_profile.id} будет удален"
-
           # main_profile     = Profile.find(profile_id)
           # opposite_profile = Profile.find(profiles_to_destroy[index])
 
@@ -39,33 +38,29 @@ module SimilarsProfileMerge
                           current_user_id: connection_data[:current_user_id],
                           connected_at: connection_data[:connection_id] }
             log_profiles_connection = make_user_profile_link(link_data)
-          else
-
-            ## Удаление opposite_profile   - OLD
-            # profiles_to_delete << opposite_profile
-
-            # Mark opposite_profile as deleted
-            opposite_profile.update_attribute('deleted', 1)
-            logger.info "## Профил:  #{opposite_profile.id}  -  #{opposite_profile.deleted} after update"
-
-            one_connection_data = { connected_at: connection_data[:connection_id],
-                                    current_user_id: connection_data[:current_user_id],
-                                    table_name: 'profiles',
-                                    table_row: opposite_profile.id,
-                                    field: 'deleted',
-                                    written: 1,
-                                    overwritten: 0 }
-            log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
-
           end
 
+          ## Удаление opposite_profile   - OLD
+          # profiles_to_delete << opposite_profile
 
+          # Mark opposite_profile as deleted = Удаление opposite_profile
+          opposite_profile.update_attribute('deleted', 1)
+          logger.info "## Профил:  #{opposite_profile.id}  -  #{opposite_profile.deleted} after update"
+
+          one_connection_data = { connected_at: connection_data[:connection_id],
+                                  current_user_id: connection_data[:current_user_id],
+                                  table_name: 'profiles',
+                                  table_row: opposite_profile.id,
+                                  field: 'deleted',
+                                  written: 1,
+                                  overwritten: 0 }
+          log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
 
         end
 
       end
-      #logger.info "Профиля  #{opposite_profile.id} будет удален"
-      # НЕ Удаление opposite_profile
+
+      # Удаление opposite_profile's    - OLD
       #   profiles_to_delete.uniq.map(&:destroy)
 
       log_profiles_connection
@@ -92,12 +87,9 @@ module SimilarsProfileMerge
 
       # 1 link #################################
 
-  #     name_of_table = User.table_name
-  #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect} "
   #     name_of_table = Profile.table_name
-  #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect} "
   #     model = name_of_table.classify.constantize
-  #     logger.info "*** In module SimilarsConnection update_table: model = #{model.inspect} "
+  #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect}, model = #{model.inspect} "
 
       one_connection_data = { connected_at: connection_id,
                               current_user_id: current_user_id,
@@ -108,7 +100,7 @@ module SimilarsProfileMerge
                               overwritten: opposite_profile.id }
       log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
       ######################################
-           logger.info "#* In module SimilarsConnection make_user_profile_link: main_profile.id = #{main_profile.id.inspect} "
+      logger.info "#* In module SimilarsConnection make_user_profile_link: main_profile.id = #{main_profile.id.inspect} "
       logger.info "#* In module SimilarsConnection make_user_profile_link: opposite_profile = #{opposite_profile.inspect} "
       logger.info "#* In module SimilarsConnection make_user_profile_link: opposite_profile.user = #{opposite_profile.user.inspect} "
       logger.info "#* In module SimilarsConnection make_user_profile_link: opposite_profile.user.profile_id = #{opposite_profile.user.profile_id.inspect} "

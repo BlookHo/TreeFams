@@ -62,13 +62,6 @@ module SimilarsConnection
     connected_users_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
     connection_data[:connected_users_arr] = connected_users_arr
 
-    # tree_info = get_tree_info(self)
-    # logger.info "CCCCC In similars_connect_tree : tree_info[:tree_is_profiles] = #{tree_info[:tree_is_profiles]}, @tree_info[:connected_users] = #{tree_info[:connected_users]}"#", tree_info = #{tree_info},  "
-
-    # todo: Сделать логирование перезаписи Profile_datas - или см. в файле SimilarsProfileMerge.rb строки 28 ?
-    # Перезапись profile_data при объединении профилей
-    #  ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)
-
     #########  перезапись profile_id's & update User
      log_connection_user_profile = Profile.profiles_merge(connection_data)
   #  log_connection_user_profile = []
