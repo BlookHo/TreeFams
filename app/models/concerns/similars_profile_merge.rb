@@ -87,9 +87,6 @@ module SimilarsProfileMerge
 
       # 1 link #################################
 
-  #     name_of_table = Profile.table_name
-  #     model = name_of_table.classify.constantize
-  #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect}, model = #{model.inspect} "
 
       one_connection_data = { connected_at: connection_id,
                               current_user_id: current_user_id,

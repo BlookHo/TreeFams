@@ -90,7 +90,6 @@ class HomeController < ApplicationController
     # end
 
     # TEST
-
     # if WeafamStat.exists?
     #   logger.info "TEST WeafamStat: last.exists"
     #   # if (Time.current - 1.day) > WeafamStat.last.created_at
@@ -114,7 +113,6 @@ class HomeController < ApplicationController
     # end
 
     # TEST
-
     # profiles_to_rewrite = [122,233,455,677,899]
     # profiles_to_destroy = [122,234,455,677,899]
     #
@@ -133,15 +131,17 @@ class HomeController < ApplicationController
     # clean_to_rewrite, clean_to_destroy = clean_profiles_arrs(profiles_to_rewrite, profiles_to_destroy)
     # logger.info "TEST clean_profiles_arrs: clean_to_rewrite = #{clean_to_rewrite} , clean_to_destroy = #{clean_to_destroy} "
 
+    # TEST
+    #     name_of_table = Profile.table_name
+    #     model = name_of_table.classify.constantize
+    #     logger.info "*** In module SimilarsProfileMerge make_user_profile_link: name_of_table = #{name_of_table.inspect}, model = #{model.inspect} "
 
     # TEST
-    profile_id = 455
-    is_profile_id = 468
-
-    res = Profile.check_profiles_exists?(profile_id, is_profile_id)
-    logger.info "*** In module Profile.check_profiles_exists: res = #{res.inspect} "
-    # logger.info "*** In module Profile.check_profiles_exists: 1ex = #{self.where(id: profile_id, deleted: 0).exists?.inspect} "
-    # logger.info "*** In module Profile.check_profiles_exists: 2ex = #{self.where(id: is_profile_id, deleted: 0).exists?.inspect} "
+    # profile_id = 455
+    # is_profile_id = 468
+    #
+    # res = Profile.check_profiles_exists?(profile_id, is_profile_id)
+    # logger.info "*** In module Profile.check_profiles_exists: res = #{res.inspect} "
 
 
 
