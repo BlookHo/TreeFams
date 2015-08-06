@@ -276,7 +276,7 @@ module SearchHelper
     relations_arr = []
     bk_rows.each do |row|
       bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
-      bk_arr_w_profiles << row.attributes.except('id','user_id','profile_id','created_at','updated_at') # for further analyze
+      bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
       is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
       #relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze
     end
@@ -386,28 +386,38 @@ module SearchHelper
   #    .... ]
   # На выходе: field_arr = [28, 29, 30, 24]
   def get_fields_arr_from_circles(bk_arr_searched, bk_arr_found)
-    #logger.info "search_bk_profiles_arr = #{bk_arr_searched} "
-    #logger.info "found_bk_profiles_arr = #{bk_arr_found}     "
+    logger.info "search_bk_profiles_arr = #{bk_arr_searched} "
+    logger.info "found_bk_profiles_arr = #{bk_arr_found}     "
     new_connection_hash = {}
 
+    # unless bk_arr_searched.blank?
     bk_arr_searched.each do |one_searched_row|
       #logger.info "one_searched_row = #{one_searched_row} "
       name_id_s = one_searched_row.values_at('name_id')
+      profile_id_s = one_searched_row.values_at('profile_id')
       relation_id_s = one_searched_row.values_at('relation_id')
       is_name_id_s = one_searched_row.values_at('is_name_id')
+      is_profile_id_s = one_searched_row.values_at('is_profile_id')
       bk_arr_found.each do |one_found_row|
         #logger.info "one_found_row = #{one_found_row} "
         name_id_f = one_found_row.values_at('name_id')
+        profile_id_f = one_found_row.values_at('profile_id')
         relation_id_f = one_found_row.values_at('relation_id')
         is_name_id_f = one_found_row.values_at('is_name_id')
+        is_profile_id_f = one_found_row.values_at('is_profile_id')
 
         if name_id_s == name_id_f && relation_id_s == relation_id_f && is_name_id_s == is_name_id_f
-        # make new el-t of new_connection_hash
-         new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]})
+          if is_profile_id_s != is_profile_id_f
+            if (profile_id_s != is_profile_id_f) && (profile_id_f != is_profile_id_s)# Одинаковые профили не заносим в хэш объединения (они и так одинаковые)
+          # make new el-t of new_connection_hash
+           new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]})
+            end
+          end
         end
 
       end
 
+    # end
     end
     return new_connection_hash
   end

@@ -271,9 +271,9 @@ module SimilarsInitSearch
           logger.info "*** compare hashes: data_a_to_compare (is_name, is_sex): #{data_a_to_compare},  - data_b_to_compare: #{data_b_to_compare}"
           # сравниваемые хэши кругов профилей и определение их общей части кругов профилей
           common_hash = intersection(tree_circles[a_profile_id], tree_circles[b_profile_id])
-          logger.info "*** compare hashes: tree_circles[a_profile_id]: #{tree_circles[a_profile_id]}"
-          logger.info "*** compare hashes: tree_circles[b_profile_id]: #{tree_circles[b_profile_id]}"
-          logger.info "*** compare hashes: common_hash: #{common_hash}"
+          # logger.info "*** compare hashes: tree_circles[a_profile_id]: #{tree_circles[a_profile_id]}"
+          # logger.info "*** compare hashes: tree_circles[b_profile_id]: #{tree_circles[b_profile_id]}"
+          # logger.info "*** compare hashes: common_hash: #{common_hash}"
           # logger.info "*** compare hashes: common_hash: #{common_hash}"
           # logger.warn "*** compare hashes: common_hash: #{common_hash}"
           # logger.error "*** compare hashes: common_hash: #{common_hash}"
@@ -330,17 +330,10 @@ module SimilarsInitSearch
         end
         ) }
 
-      logger.info "In compare_tree_circles 9: similars = #{similars}"
-      logger.info "In compare_tree_circles 10: similars.size = #{similars.size}" unless similars.empty?
+      logger.info "In compare_tree_circles : similars = #{similars}"
+      logger.info "In compare_tree_circles : similars.size = #{similars.size}" unless similars.empty?
 
       similars
-    end
-
-    # No use
-    def self.collect_unsimilars(a_profile_id, b_profile_id, unsimilars)
-      unsimilars << [a_profile_id, b_profile_id]
-      # logger.info "In compare_tree_circles 8: unsimilars = #{unsimilars}"
-      unsimilars
     end
 
 
@@ -371,22 +364,19 @@ module SimilarsInitSearch
       one_similars_pair.merge!(:inter_relations => common_data[:inter_relations])
 
       one_similars_pair
-
     end
+
 
     # todo: перенести этот метод в SimilarsHelper - для нескольких моделей
     # Формируем отображение для View Общих отношений 2-х профилей, кот-е Похожие
     def create_display_common(common_hash)
 
-
-
       display_common_relations = common_hash
-
-
 
       logger.info "In  self.make_view_data: display_common_relations.size = #{display_common_relations.size}" if !display_common_relations.empty?
       return display_common_relations
     end
+
 
     # todo: перенести этот метод в Operational - для нескольких моделей
     # Извлечение имени профиля
@@ -395,7 +385,6 @@ module SimilarsInitSearch
       #name_id = profile.name_id
       #Name.find(name_id).name
       Name.find(Profile.find(profile_id).name_id).name
-
     end
 
     # todo: перенести этот метод в CommonViewHelper - для нескольких моделей

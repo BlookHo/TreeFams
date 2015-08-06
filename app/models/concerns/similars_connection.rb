@@ -9,7 +9,7 @@ module SimilarsConnection
     #################################################
     rewrite_to_clean, destroy_to_clean, init_hash = self.similars_complete_search(first_profile_connecting, second_profile_connecting)
     #################################################
-    logger.info "TEST similars_connection : clean_profiles_arrs: rewrite_to_clean = #{rewrite_to_clean} , destroy_to_clean = #{destroy_to_clean} "
+    # logger.info "TEST similars_connection : clean_profiles_arrs: rewrite_to_clean = #{rewrite_to_clean} , destroy_to_clean = #{destroy_to_clean} "
 
     #### update profiles arrays ###########
     profiles_to_rewrite, profiles_to_destroy = clean_profiles_arrs(rewrite_to_clean, destroy_to_clean)
