@@ -7,9 +7,9 @@ module Meteor
 
         def connecting_similars
           # roll = { status: true }
-          first_profile_connecting = params[:first_sim_profile_id]
+          first_profile_connecting = params[:first_sim_profile_id].to_i
           logger.info "In SimilarsConnectionController: first_profile_connecting = #{first_profile_connecting}"
-          second_profile_connecting = params[:second_sim_profile_id]
+          second_profile_connecting = params[:second_sim_profile_id].to_i
           logger.info "In SimilarsConnectionController: second_profile_connecting = #{second_profile_connecting}"
 
           logger.info "In SimilarsConnectionController: @current_user.id = #{@current_user.id}  "
