@@ -38,11 +38,9 @@ module ProfileMerge
                         user_id:          connection_data[:user_id],
                         connected_at:     connection_data[:connection_id] }
           log_profiles_connection = user_profile_connection_link(link_data)
-
    #Если не удаляем opposite_profile профили, то убрать из поля user_id прежний номер user_id - просто nil
    # Чтобы не было 2-х профилей с одинак. полем user_id/
    #        opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
-
         end
 
       end
