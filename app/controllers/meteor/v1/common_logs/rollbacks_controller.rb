@@ -21,7 +21,6 @@ module Meteor
           else
             respond_with(status:200)
           end
-
         end
 
 
