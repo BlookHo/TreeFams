@@ -24,6 +24,23 @@ class Admin::UsersController < Admin::AdminController
     if (user)
       ids = user.connected_users
       ids.each do |user_id|
+        # delete ConnectionRequest
+        ConnectionRequest.where("user_id = ? OR with_user_id = ?", user_id, user_id).destroy_all
+        # delete SearchResults
+        SearchResults.where("user_id = ? OR found_user_id = ?", user_id, user_id).destroy_all
+        # delete SimilarsFound
+        SimilarsFound.where("user_id = ?", user_id).destroy_all
+        # delete UpdateFeeds
+        UpdatesFeed.where("user_id = ? OR agent_user_id = ?", user_id, user_id).destroy_all
+        # delete ConnectionLogs
+        ConnectionLog.where("current_user_id = ? OR with_user_id = ?", user_id, user_id).destroy_all
+        # delete SimilarsLog
+        SimilarsLog.where("current_user_id = ?", user_id).destroy_all
+        # delete CommonLog
+        CommonLog.where("user_id = ?", user_id).destroy_all
+        # delete Profiles
+        Profile.where("tree_id = ?", user_id).destroy_all
+        # all others
         User.find(user_id).destroy
       end
       flash[:notice] = "Удалено #{ids.size} пользователей"

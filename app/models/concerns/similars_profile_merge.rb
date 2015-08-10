@@ -22,7 +22,7 @@ module SimilarsProfileMerge
         if profile_id != profiles_to_destroy[index]
           main_profile = Profile.where(id: profile_id, deleted: 0)[0]
           opposite_profile = Profile.where(id: profiles_to_destroy[index], deleted: 0)[0]
-          logger.info "Profile main_profile.id =  #{main_profile.id}:: opposite_profile.id =  #{opposite_profile.id} будет удален"
+          # logger.info "Profile main_profile.id =  #{main_profile.id}:: opposite_profile.id =  #{opposite_profile.id} будет удален"
           # main_profile     = Profile.find(profile_id)
           # opposite_profile = Profile.find(profiles_to_destroy[index])
 
