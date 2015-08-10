@@ -1,4 +1,4 @@
-describe SimilarsController, :type => :controller  , focus: true  do  # , focus: true  #, similars: true
+describe SimilarsController, :type => :controller  , disable: true  do  # , focus: true  #, similars: true
 
 
     let(:current_user) { create(:user) }   # User = 1. Tree = 1. profile_id = 63
