@@ -79,14 +79,6 @@ class Admin::ResetsController < Admin::AdminController
     SearchResults.reset_pk_sequence
     SearchResults.create([])
 
-    Counter.delete_all
-    Counter.reset_pk_sequence
-    Counter.create([])
-
-    WeafamStat.delete_all
-    WeafamStat.reset_pk_sequence
-    WeafamStat.create([])
-
     DeletionLog.delete_all
     DeletionLog.reset_pk_sequence
     DeletionLog.create([])

@@ -4,23 +4,21 @@ class ConnectionLog < ActiveRecord::Base
   validates_presence_of :connected_at, :current_user_id, :with_user_id, :table_name, :table_row, :field,
                         :message => "Должно присутствовать в ConnectionLog"
 
-  validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
-  # validates_numericality_of :written, :overwritten,:greater_than => 0, :unless => :writtens_can_be_nil?
-  validates_numericality_of :written, :overwritten, :only_integer => true, :unless => :writtens_can_be_nil?
-  validate :written_fields_are_not_equal, :unless => :writtens_can_be_equal? # :written AND :overwritten
+  # validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
+  # validates_numericality_of :written, :overwritten, :only_integer => true, :unless => :writtens_can_be_nil?
+  # validate :written_fields_are_not_equal, :unless => :writtens_can_be_equal? # :written AND :overwritten
 
   validates_numericality_of :connected_at, :current_user_id, :with_user_id, :table_row, :only_integer => true,
                             :message => "Должны быть целым числом в ConnectionLog"
   validates_numericality_of :connected_at, :current_user_id, :with_user_id, :table_row, :greater_than => 0,
                             :message => "Должны быть больше 0 в ConnectionLog"
 
-  # validates_inclusion_of :field, :in => ["deleted"], :if => :table_profiles?
-  validates_inclusion_of :field, :in => ["profile_id"], :if => :table_users?
-  validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
-  validates_inclusion_of :field, :in => ["tree_id", "user_id", "deleted"], :if => :table_profiles?
-  validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
-  validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
-  # - тогда поле table_row д.б.uniq
+  # validates_inclusion_of :field, :in => ["profile_id"], :if => :table_users?
+  # validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
+  # validates_inclusion_of :field, :in => ["tree_id", "user_id", "deleted"], :if => :table_profiles?
+  # validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
+  # validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
+      # - тогда поле table_row д.б.uniq
 
   # custom validations
   def written_fields_are_not_equal
