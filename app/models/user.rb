@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
 
   before_create :generate_access_token
   after_create :update_connected_users!
+  before_save :downcase_email
 
 
   validates :email,
@@ -192,6 +193,11 @@ class User < ActiveRecord::Base
 
 
   private
+
+
+  def downcase_email
+    self.email = self.email.downcase
+  end
 
 
   def self.create_with_email_and_password(email, password)
