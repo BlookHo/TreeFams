@@ -12,7 +12,7 @@ module ProfileMerge
       # puts "In Profiles merge"
 
       log_profiles_connection = []
-
+      log_merge_profiles_connection = []
       profiles_to_rewrite.each_with_index do |profile_id, index|
 
         # main_profile      = Profile.where(id: profile_id, deleted: 0)[0]
@@ -31,17 +31,22 @@ module ProfileMerge
         # Если юзер есть у opposite_profile, котрый будет удален,
         # то линкуем юзера к новому профилю
         if opposite_profile.user.present?
+          new_log_merge_profiles = []
           # logger.info "Юзер  #{opposite_profile.user.id} будут перелинкован на профиль #{main_profile.id}"
           link_data = { main_profile:     main_profile,
                         opposite_profile: opposite_profile,
                         current_user_id:  connection_data[:current_user_id],
                         user_id:          connection_data[:user_id],
                         connected_at:     connection_data[:connection_id] }
-          log_profiles_connection = user_profile_connection_link(link_data)
+          new_log_merge_profiles = user_profile_connection_link(link_data)
    #Если не удаляем opposite_profile профили, то убрать из поля user_id прежний номер user_id - просто nil
    # Чтобы не было 2-х профилей с одинак. полем user_id/
    #        opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
+          log_profiles_connection = log_profiles_connection + new_log_merge_profiles
+
+
         end
+
 
       end
       #logger.info "Профиля  #{opposite_profile.id} будет удален"
@@ -51,6 +56,7 @@ module ProfileMerge
       log_profiles_connection
 
     end
+
 
     # Поочередное линкование Юзера и Профиля
     # 4 update_column

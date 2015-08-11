@@ -233,13 +233,17 @@ module ConnectionTrees
 
     #####################################################
     # todo: Раскоммитить 1 строки ниже и закоммитить 1 строки за ними  - для полной перезаписи логов и отладки
-    log_connection_profiles_del = logs_profiles_deleted(connection_data, Profile, ConnectionLog)
-    # log_connection_profiles_del = []
-    #####################################################
-    # todo: Раскоммитить 1 строки ниже и закоммитить 1 строки за ними  - для полной перезаписи логов и отладки
     log_connection_user_profile = Profile.merge(connection_data)
     # log_connection_user_profile = []
     #####################################################
+
+    # todo: Раскоммитить 1 строки ниже и закоммитить 1 строки за ними  - для полной перезаписи логов и отладки
+    log_connection_profiles_del = logs_profiles_deleted(connection_data, Profile, ConnectionLog)
+    # log_connection_profiles_del = []
+    #####################################################
+
+
+
     # todo: Раскоммитить 2 строки ниже и закоммитить 2 строки за ними  - для полной перезаписи логов и отладки
    log_connection_tree       = update_table_connection(connection_data, Tree, ConnectionLog)
    log_connection_profilekey = update_table_connection(connection_data, ProfileKey, ConnectionLog)
