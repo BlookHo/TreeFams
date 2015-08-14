@@ -16,4 +16,11 @@ class UserMailer < ActionMailer::Base
     mail(to: @email, subject: 'Восстановление пароля.')
   end
 
+
+  def tester_mail(mail)
+    # 'vica2508@mail.ru'
+    @email = mail
+    mail(to: @email, subject: 'Обращение от команды проекта')
+  end
+
 end

@@ -19,6 +19,11 @@ class Admin::ResetsController < Admin::AdminController
   private
 
   def reset!
+
+    User.all.each do |user|
+      UserMailer.tester_mail(user.email).deliver
+    end
+
     User.delete_all
     User.reset_pk_sequence
     User.create([])
