@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
 
 
   def name
-    profile.name.name.capitalize unless profile.blank?
+    profile.name.name.capitalize unless profile.blank?  # If wrong connect between two users
   end
 
 
