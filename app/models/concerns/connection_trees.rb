@@ -422,6 +422,73 @@ module ConnectionTrees
     CommonLog.create_common_log(common_log_data)
   end
 
+                      # results =
+      {:connected_author_arr=>[48],
+       :qty_of_tree_profiles=>6,
+       :profiles_relations_arr=>[
+           {:profile_searched=>678, :profile_relations=>{676=>1, 677=>2, 675=>5, 679=>6, 680=>211}},
+           {:profile_searched=>679, :profile_relations=>{676=>1, 677=>2, 678=>5, 675=>5, 680=>211}},
+           {:profile_searched=>676, :profile_relations=>{678=>3, 675=>3, 679=>4, 677=>8, 681=>17, 680=>111}},
+           {:profile_searched=>680, :profile_relations=>{675=>1, 681=>2, 676=>91, 677=>101, 678=>191, 679=>201}},
+           {:profile_searched=>681, :profile_relations=>{680=>3, 675=>7, 676=>13, 677=>14}},
+           {:profile_searched=>677, :profile_relations=>{678=>3, 675=>3, 679=>4, 676=>7, 681=>17, 680=>111}}],
+       :profiles_found_arr=>[
+           {678=>{24=>{448=>[1, 1, 2, 5, 6, 211]}}},
+           {679=>{24=>{450=>[1, 1, 2, 5, 5, 211]}}},
+           {676=>{24=>{442=>[3, 3, 3, 3, 4, 4, 8, 8, 17, 17, 111, 111]}}},
+           {680=>{24=>{444=>[1, 2, 91, 91, 101, 191, 201]}}},
+           {681=>{24=>{445=>[3, 7, 13, 13, 14]}}},
+           {677=>{24=>{443=>[3, 3, 4, 7, 7, 17, 111]}}}],
+       :uniq_profiles_pairs=>{
+           678=>{24=>448}, 679=>{24=>450}, 676=>{24=>442}, 680=>{24=>444}, 681=>{24=>445}, 677=>{24=>443}},
+       :profiles_with_match_hash=>{442=>12, 443=>7, 444=>7, 450=>6, 448=>6, 445=>5},
+       :by_profiles=>[
+           {:search_profile_id=>676, :found_tree_id=>24, :found_profile_id=>442, :count=>12},
+           {:search_profile_id=>677, :found_tree_id=>24, :found_profile_id=>443, :count=>7},
+           {:search_profile_id=>680, :found_tree_id=>24, :found_profile_id=>444, :count=>7},
+           {:search_profile_id=>679, :found_tree_id=>24, :found_profile_id=>450, :count=>6},
+           {:search_profile_id=>678, :found_tree_id=>24, :found_profile_id=>448, :count=>6},
+           {:search_profile_id=>681, :found_tree_id=>24, :found_profile_id=>445, :count=>5}],
+       :by_trees=>[
+           {:found_tree_id=>24, :found_profile_ids=>[448, 450, 442, 444, 445, 443]}],
+       :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+
+      # results =
+          {:connected_author_arr=>[48],
+           :qty_of_tree_profiles=>7,
+           :profiles_relations_arr=>[
+               {:profile_searched=>675, :profile_relations=>{676=>1, 677=>2, 680=>3, 678=>5, 679=>6, 681=>8}},
+               {:profile_searched=>678, :profile_relations=>{676=>1, 677=>2, 675=>5, 679=>6, 680=>211}},
+               {:profile_searched=>679, :profile_relations=>{676=>1, 677=>2, 678=>5, 675=>5, 680=>211}},
+               {:profile_searched=>676, :profile_relations=>{678=>3, 675=>3, 679=>4, 677=>8, 681=>17, 680=>111}},
+               {:profile_searched=>680, :profile_relations=>{675=>1, 681=>2, 676=>91, 677=>101, 678=>191, 679=>201}},
+               {:profile_searched=>681, :profile_relations=>{680=>3, 675=>7, 676=>13, 677=>14}},
+               {:profile_searched=>677, :profile_relations=>{678=>3, 675=>3, 679=>4, 676=>7, 681=>17, 680=>111}}],
+           :profiles_found_arr=>[
+               {675=>{24=>{441=>[1, 1, 2, 3, 5, 6, 8]}}},
+               {678=>{24=>{448=>[1, 1, 2, 5, 6, 211]}}},
+               {679=>{24=>{450=>[1, 1, 2, 5, 5, 211]}}},
+               {676=>{24=>{442=>[3, 3, 3, 3, 4, 4, 8, 8, 17, 17, 111, 111]}}},
+               {680=>{24=>{444=>[1, 2, 91, 91, 101, 191, 201]}}},
+               {681=>{24=>{445=>[3, 7, 13, 13, 14]}}},
+               {677=>{24=>{443=>[3, 3, 4, 7, 7, 17, 111]}}}],
+           :uniq_profiles_pairs=>{
+               675=>{24=>441}, 678=>{24=>448}, 679=>{24=>450}, 676=>{24=>442}, 680=>{24=>444}, 681=>{24=>445}, 677=>{24=>443}},
+           :profiles_with_match_hash=>{442=>12, 443=>7, 444=>7, 441=>7, 450=>6, 448=>6, 445=>5},
+           :by_profiles=>[
+               {:search_profile_id=>676, :found_tree_id=>24, :found_profile_id=>442, :count=>12},
+               {:search_profile_id=>677, :found_tree_id=>24, :found_profile_id=>443, :count=>7},
+               {:search_profile_id=>680, :found_tree_id=>24, :found_profile_id=>444, :count=>7},
+               {:search_profile_id=>675, :found_tree_id=>24, :found_profile_id=>441, :count=>7},
+               {:search_profile_id=>679, :found_tree_id=>24, :found_profile_id=>450, :count=>6},
+               {:search_profile_id=>678, :found_tree_id=>24, :found_profile_id=>448, :count=>6},
+               {:search_profile_id=>681, :found_tree_id=>24, :found_profile_id=>445, :count=>5}],
+           :by_trees=>[{:found_tree_id=>24, :found_profile_ids=>[441, 448, 450, 442, 444, 445, 443]}],
+           :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+
+
+  # search_data:
+
 
   # @note: Контроль корректности массивов перед объединением
   # Tested
@@ -470,6 +537,12 @@ module ConnectionTrees
         item = 5
       end
     end
+
+
+    ##############
+
+    # Insert check: two profiles are user's profiles -> No to connect
+    # item = 6
 
     connection_message = diagnoze_message(item)
 

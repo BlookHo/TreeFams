@@ -15,6 +15,7 @@ module Search
     #profile_id_searched    = author_tree_arr.is_profile_id  # Поиск по ID К_Профиля
     ###################################
 
+    # tree_is_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
     tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
     qty_of_tree_profiles = tree_is_profiles.size unless tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
     # Задание на поиск от Дерева Юзера: tree_is_profiles =
@@ -23,7 +24,8 @@ module Search
     # puts "======================= RUN start_search ========================= "
     logger.info "======================= RUN start_search ========================= "
     logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
-    logger.info "Задание на поиск от Дерева Юзера: tree_is_profiles = #{tree_is_profiles} "
+    show_in_logger(author_tree_arr, "=== результат" )  # DEBUGG_TO_LOGG
+    logger.info "Задание на поиск от Дерева Юзера:  author_tree_arr.size = #{author_tree_arr.size}, tree_is_profiles = #{tree_is_profiles} "
     logger.info "Коэффициент достоверности: certain_koeff = #{certain_koeff}"
 
     ############### ПОИСК ######## NEW LAST METHOD ############

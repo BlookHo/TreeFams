@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
 
 
   def name
-    profile.name.name.capitalize
+    profile.name.name.capitalize unless profile.blank?
   end
 
 

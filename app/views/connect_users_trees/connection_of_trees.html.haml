@@ -14,8 +14,9 @@
           .green= fa_icon "check"
 
       %td.to
-        = image_tag @to_user.profile.icon_path
-        %h2= @to_user.name
+        - unless @to_user.profile.blank?
+          = image_tag @to_user.profile.icon_path
+          %h2= @to_user.name
 
 
 

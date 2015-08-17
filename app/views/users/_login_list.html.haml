@@ -6,6 +6,7 @@
         %td
           \#
           = user.id
-        %td= user.profile.name.name.mb_chars.capitalize
+        - unless user.profile.blank?
+          %td= user.profile.name.name.mb_chars.capitalize
         %td= user.email
         %td= link_to "Войти под этим пользователем", login_as_user_path(user.id)
