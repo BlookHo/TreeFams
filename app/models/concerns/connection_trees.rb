@@ -13,7 +13,7 @@ module ConnectionTrees
     connection_results = {}
 
     # Проверка 1 - уже объединены
-    connection_message = "Нельзя объединить ваши деревья, т.к. есть информация, что они уже объединены!"
+    connection_message = "Проверка 1 Нельзя объединить ваши деревья, т.к. есть информация, что они уже объединены!"
     # Проверка: может быть дерево автора уже было соединено с выбранным юзером?
     if who_connect_users_arr.include?(user_id.to_i) # check IF NOT CONNECTED
       logger.info "=== IN check_connection_switch: уже объединены"
@@ -64,7 +64,7 @@ module ConnectionTrees
     # На вьюхе проверяем: продолжать ли объединение.
     # Чтобы протестировать check_connection_permit: в модуле search.rb, после запуска метода
     # search_profiles_from_tree - раскомментить одну или обе строки с # for DEBUGG ONLY!!!
-    connection_message = "Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
+    connection_message = "Проверка 2 Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
     if (!duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?)
       logger.info "=== IN check_connection_switch: ЕСТЬ дубликаты!!"
       connection_results[:stop_connection] = true # STOP connection
@@ -94,7 +94,8 @@ module ConnectionTrees
     end_search_time = Time.now   # Конец отсечки времени поиска
     elapsed_search_time = (end_search_time - beg_search_time).round(5)
     # Длительность полного поиска - для инфы
-
+    # profiles_to_rewrite = [ 443, 441,445, 450, 442, 444, 448 ]
+    # profiles_to_destroy = [ 677, 675,681, 679, 676, 680, 678 ]
     connection_results = {
         who_connect_arr:          who_connect_users_arr, #
         with_whom_connect_arr:    with_whom_connect_users_arr, #
@@ -125,7 +126,7 @@ module ConnectionTrees
     # Чтобы протестировать check_connection_permit: в модуле connection_trees.rb, в конце метода
     # check_duplications - раскомментить одну строку с complete_dubles_hash = {11=>[25, 26]} # for DEBUGG ONLY!!!
     if stop_by_arrs
-      logger.info "=== Проверка 3: дублирования в массивах"
+      logger.info "=== Проверка 3: дублирования в массивах Или попытка объединить Юзеров"
       logger.info " stop_by_arrs = #{stop_by_arrs}, connection_message = #{connection_message} "
 
       connection_results[:stop_connection] = true # STOP connection
@@ -490,6 +491,7 @@ module ConnectionTrees
   # search_data:
 
 
+
   # @note: Контроль корректности массивов перед объединением
   # Tested
   # @param: connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
@@ -538,11 +540,14 @@ module ConnectionTrees
       end
     end
 
-
-    ##############
-
-    # Insert check: two profiles are user's profiles -> No to connect
-    # item = 6
+    if item == 1  # До этой проверки все было Ок с массивами
+      # Проверка: Если перезаписываются два юзера в массивах  # 6
+      # two profiles are user's profiles -> No to connect
+      if check_profiles_users?(profiles_to_rewrite, profiles_to_destroy)
+        stop_by_arrs = true #
+        item = 6
+      end
+    end
 
     connection_message = diagnoze_message(item)
 
@@ -551,6 +556,21 @@ module ConnectionTrees
       diag_connection_message: connection_message,
       common_profiles:         commons,
       complete_dubles_hash:    complete_dubles_hash  }
+  end
+
+  # @note: Проверка: Если перезаписываются два юзера в массивах   #
+  # two profiles are user's profiles -> No to connect
+  def check_profiles_users?(profiles_to_rewrite, profiles_to_destroy)
+    profiles_to_rewrite.each_with_index do |profile_id, index|
+      main_profile     = Profile.find(profile_id)
+      opposite_profile = Profile.find(profiles_to_destroy[index])
+      if User.where(profile_id: main_profile).exists? && User.where(profile_id: opposite_profile).exists?
+        logger.info "In check_profiles_users = true"
+        return true
+      end
+    end
+    logger.info "In check_profiles_users = false"
+    false
   end
 
 
@@ -569,6 +589,9 @@ module ConnectionTrees
       when 5
         connection_message =
             "Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! ЕСТЬ дублирования в массивах"  # Tested
+      when 6
+        connection_message =
+            "Нельзя объединить ваши деревья, т.к. объединяются два Юзера! Их нельзя объединять"  # Tested
       else
         connection_message = "Внимание: Диагноз массивов объединения деревьев - не был поставлен"  # Tested
     end

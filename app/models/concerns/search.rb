@@ -15,8 +15,8 @@ module Search
     #profile_id_searched    = author_tree_arr.is_profile_id  # Поиск по ID К_Профиля
     ###################################
 
-    # tree_is_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
-    tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
+    tree_is_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
+    # tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
     qty_of_tree_profiles = tree_is_profiles.size unless tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
     # Задание на поиск от Дерева Юзера: tree_is_profiles =
     # [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18]
