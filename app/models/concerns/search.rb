@@ -152,7 +152,7 @@ module Search
     # cty_rows = SearchResults.all.count
     # puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, cty_rows = #{cty_rows.inspect} "
 
-    logger.info "= found_tree_ids = #{found_tree_ids.inspect} "
+    # logger.info "= found_tree_ids = #{found_tree_ids.inspect} "
     if !previous_results.blank?
       previous_results.each(&:destroy)
       store_results(found_tree_ids, by_profiles, current_user_tree_ids)
