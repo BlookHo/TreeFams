@@ -57,6 +57,12 @@ module Search
       store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
     end
 
+
+    # TEST start double_users_search(results)
+    self.double_users_search(results[:profiles_relations_arr], results[:by_trees], certain_koeff)
+
+
+
     logger.info "== END OF start_search ===  results = #{results.inspect}"
     # puts "== END OF start_search === "
     results
@@ -110,7 +116,7 @@ module Search
     #  :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
     #
 
-    end # END OF start_search
+  end # END OF start_search
 
 
   # @note запись рез-тов поиска в отдельную таблицу - для Метеора
@@ -466,12 +472,6 @@ module Search
     return by_profiles, by_trees
   end
 
-  # # @note Получить массивы профилей упорядоченных по count для каждого дерева
-  # def get_found_profile_ids(by_profiles)
-  #
-  #
-  # end
-
 
   # make final sorted by_trees search results
   def make_by_trees_results(filling_hash)
@@ -484,17 +484,6 @@ module Search
     end
     return by_trees
   end
-
-  # # Служебный метод для отладки - для LOGGER
-  # # todo: перенести этот метод в Operational - для нескольких моделей
-  # # Показывает массив в logger
-  # def show_in_logger(arr_to_log, string_to_add)
-  #   row_no = 0  # DEBUGG_TO_LOGG
-  #   arr_to_log.each do |row| # DEBUGG_TO_LOGG
-  #     row_no += 1
-  #     logger.debug "#{string_to_add} № #{row_no.inspect}: #{row.attributes.inspect} " # DEBUGG_TO_LOGG
-  #   end  # DEBUGG_TO_LOGG
-  # end
 
 
 

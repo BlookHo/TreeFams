@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
   include UserLock # вроде бы не используется
   include UserAccount
 
+  include DoubleUsersSearch
+
 
 
   before_create :generate_access_token
