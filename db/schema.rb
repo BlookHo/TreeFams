@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150803133526) do
+ActiveRecord::Schema.define(version: 20150820082648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,8 +139,8 @@ ActiveRecord::Schema.define(version: 20150803133526) do
     t.string   "birthday"
     t.string   "country"
     t.string   "city"
-    t.string   "avatar_mongo_id"
     t.integer  "deleted",         default: 0
+    t.string   "avatar_mongo_id"
   end
 
   create_table "profile_keys", force: true do |t|
@@ -279,6 +279,7 @@ ActiveRecord::Schema.define(version: 20150803133526) do
     t.boolean  "is_locked",              default: false
     t.string   "access_token"
     t.integer  "connected_users",        default: [],                 array: true
+    t.integer  "double",                 default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

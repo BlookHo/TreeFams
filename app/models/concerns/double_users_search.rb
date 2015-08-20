@@ -14,7 +14,7 @@ module DoubleUsersSearch
 
     complete_users_relations = collect_relations(users_relations, found_users, certain_koeff)
 
-    find_matches(complete_users_relations)
+    find_double(complete_users_relations)
     #
     # mark_double_user(user)
   end
@@ -38,7 +38,6 @@ module DoubleUsersSearch
 
   # @note:
   def init_profile_relations(profiles_relations, self_profile_id)
-    # logger.info "In double_users_search: init_profile_relations: self_profile_id = #{self_profile_id}, profiles_relations_arr = #{profiles_relations} "
             [{:profile_searched=>441, :profile_relations=>{442=>1, 443=>2, 444=>3, 448=>5, 450=>6, 445=>8}},
             {:profile_searched=>443, :profile_relations=>{448=>3, 441=>3, 450=>4, 442=>7, 445=>17, 444=>111}},
             {:profile_searched=>445, :profile_relations=>{444=>3, 441=>7, 442=>13, 443=>14}},
@@ -54,8 +53,6 @@ module DoubleUsersSearch
       end
     end
     users_relations = []
-    # logger.info "In double_users_search: init_profile_relations: init_relations_hash = #{init_relations_hash} "
-    # logger.info "In double_users_search: init_profile_relations: init profile_relations = #{init_relations_hash[:profile_relations]} "
     init_relations_hash.merge!(init_user_name: Profile.find(self_profile_id).name_id)
     logger.info "In double_users_search: init_profile_relations: users_relations = #{users_relations} "
     users_relations << init_relations_hash
@@ -110,8 +107,8 @@ module DoubleUsersSearch
     else
       logger.info "Double Users: ERROR in search_match: В искомом дереве - НЕТ искомого профиля!?? "
     end
-    logger.info "Double Users: one_user_relations_hash = #{one_user_relations_hash} " # DEBUGG_TO_LOGG
-    logger.info "Double Users: one_user_names_hash = #{one_user_names_hash} " # DEBUGG_TO_LOGG
+    # logger.info "Double Users: one_user_relations_hash = #{one_user_relations_hash} " # DEBUGG_TO_LOGG
+    # logger.info "Double Users: one_user_names_hash = #{one_user_names_hash} " # DEBUGG_TO_LOGG
 
     # СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА со всеми данными:
     make_user_relations(user_profile_id, one_user_name(user_profile_id), one_user_relations_hash, one_user_names_hash)
@@ -140,7 +137,7 @@ module DoubleUsersSearch
 
 
   # @note:
-  def find_matches(users_relations)
+  def find_double(users_relations)
     logger.info "Double Users: find_matches: users_relations = #{users_relations} " # DEBUGG_TO_LOGG
      # users_relations =
 
@@ -155,13 +152,25 @@ module DoubleUsersSearch
 
     # make similars keys?
 
+    # compare users names
+    # no - exit
+    # yes -> compare relation=1
+    # no - exit
+    # yes -> compare relation=2
+    # no - exit
+    # yes -> compare 3 any relations
+    # if all match == 6 - mark double_user
 
-    
+
+
+
+
+
 
   end
 
   # @note:
-  def mark_double_user(user)
+  def mark_double_user(user_id)
 
 
   end
