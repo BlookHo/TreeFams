@@ -14,12 +14,7 @@ module DoubleUsersSearch
 
     complete_users_relations = collect_relations(users_relations, found_users, certain_koeff)
 
-    if find_double(complete_users_relations).blank?
-      logger.info "In double_users_search: after unless NO find_double: self.id = #{self.id} "
-    else
-      logger.info "In double_users_search: after unless Find_double: self.id = #{self.id} "
-      mark_double_user(self.id)
-    end
+    find_double(complete_users_relations) unless complete_users_relations.blank?
 
   end
 
@@ -111,13 +106,11 @@ module DoubleUsersSearch
     else
       logger.info "Double Users: ERROR in search_match: В искомом дереве - НЕТ искомого профиля!?? "
     end
-    # logger.info "Double Users: one_user_relations_hash = #{one_user_relations_hash} " # DEBUGG_TO_LOGG
-    # logger.info "Double Users: one_user_names_hash = #{one_user_names_hash} " # DEBUGG_TO_LOGG
 
     # СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА со всеми данными:
     make_user_relations(one_found_user, user_profile_id, one_user_name(user_profile_id), one_user_relations_hash, one_user_names_hash)
 
-  end # End of search_match
+  end
 
 
   # @note: Делаем Имя юзера по его профилю
@@ -141,7 +134,7 @@ module DoubleUsersSearch
   end
 
 
-  # @note:
+  # @note: поиск совпадений отношений тек.Юзера с найденными Юзерами
   def find_double(users_relations)
     logger.info "Double Users: find_double: users_relations = #{users_relations} " # DEBUGG_TO_LOGG
      # users_relations =
@@ -158,57 +151,27 @@ module DoubleUsersSearch
           :user_name=>123, :found_user_id=>49,
           :user_relations_names=>{683=>162, 684=>219, 687=>461, 685=>123, 686=>2, 688=>9}}]
 
-     # make similars keys?
-
     # take init user = current
     init_user_hash = users_relations[0]
-    logger.info "Double Users: find_double: init_user_hash = #{init_user_hash} " # DEBUGG_TO_LOGG
-    {:profile_searched=>441, :profile_relations=>{442=>1, 443=>2, 444=>3, 448=>5, 450=>6, 445=>8},
-     :init_user_name=>252, :init_user_id=>24,
-     :init_relations_names=>{442=>162, 443=>219, 444=>461, 448=>123, 450=>2, 445=>9}}
+    logger.info "Double Users: find_double: init_user_hash = #{init_user_hash} "
 
-    for ind in 1 .. users_relations.size-1 do
-      qty_matched_relations = 0
-      logger.info "Double Users: match_users_names?:  #{match_users_names?(init_user_hash[:init_user_name], users_relations[ind][:user_name])}" # DEBUGG_TO_LOGG
-
-      if match_users_names?(init_user_hash[:init_user_name], users_relations[ind][:user_name])
-        qty_matched_relations += 1
-
-        [1,2].each do |relation|
-          if match_relations?(init_user_hash, users_relations[ind], relation)
-            qty_matched_relations += 1
-            return init_user_hash[:init_user_id] if check_matches_qty?(qty_matched_relations)
-          else
-            return nil
-          end
-        end
-
-        relations_arr = init_user_hash[:profile_relations].values - [1,2]
-        logger.info "Double Users: match_users_names?: relations_arr = #{relations_arr} "
-        relations_arr = [4,4,91]
-        relations_arr.each do |relation|
-          if match_relations?(init_user_hash, users_relations[ind], relation)
-            qty_matched_relations += 1
-            return init_user_hash[:init_user_id] if check_matches_qty?(qty_matched_relations)
-          end
-        end
-
+    unless users_relations.size < 2
+      for ind in 1 .. users_relations.size-1 do
+        mark_double_user(users_relations[ind][:found_user_id]) unless check_one_double?(init_user_hash, users_relations[ind]).blank?
       end
-
-
     end
-    nil
   end
 
 
-  # @note:
-  def check_one_double?(matched_relations)
-    logger.info "Double Users: check_matches_qty: matched_relations = #{matched_relations} "
-    if match_users_names?(init_user_hash[:init_user_name], users_relations[ind][:user_name])
+  # @note: Проверка на совпадение отношений с одним из Юзеров
+  def check_one_double?(init_user_hash, one_user_relations)
+    logger.info "Double Users: check_matches_qty: one_user_relations = #{one_user_relations} "
+    qty_matched_relations = 0
+    if match_users_names?(init_user_hash[:init_user_name], one_user_relations[:user_name])
       qty_matched_relations += 1
 
       [1,2].each do |relation|
-        if match_relations?(init_user_hash, users_relations[ind], relation)
+        if match_relations?(init_user_hash, one_user_relations, relation)
           qty_matched_relations += 1
           return init_user_hash[:init_user_id] if check_matches_qty?(qty_matched_relations)
         else
@@ -218,20 +181,21 @@ module DoubleUsersSearch
 
       relations_arr = init_user_hash[:profile_relations].values - [1,2]
       logger.info "Double Users: match_users_names?: relations_arr = #{relations_arr} "
-      relations_arr = [4,4,91]
+      # relations_arr = [4,4,91]
       relations_arr.each do |relation|
-        if match_relations?(init_user_hash, users_relations[ind], relation)
+        if match_relations?(init_user_hash, one_user_relations, relation)
           qty_matched_relations += 1
           return init_user_hash[:init_user_id] if check_matches_qty?(qty_matched_relations)
         end
       end
 
     end
-    # matched_relations >= 6 ? true : false
+    nil
+
   end
 
 
-  # @note:
+  # @note: Проверка накапливания кол-ва совпадений отношений ( больше или равно 6)
   def check_matches_qty?(matched_relations)
     logger.info "Double Users: check_matches_qty: matched_relations = #{matched_relations} "
     matched_relations >= 6 ? true : false
@@ -239,21 +203,13 @@ module DoubleUsersSearch
 
 
   # @note: Совпали отношения у Юзеров?
+  # совпадение отношений - это когда у одного типа отношений(например, 3 = сын) , совпадают и имена профиля
+  # т.е Сын - Борис == Сын Борис
   # если да - то true
   # если нет - то false
+  # @return: false - нет совпадений , true - есть
   def match_relations?(init_user_hash, one_user_relations, relation)
     logger.info "Double Users: match_relations?: relation = #{relation} "
-# "", init_user_hash = #{init_user_hash},
-    # one_user_relations = #{one_user_relations}  "
-        # relation = 3,
-        #     init_user_hash = {:profile_searched=>441,
-        #                       :profile_relations=>{442=>1, 443=>2, 444=>3, 448=>5, 450=>6, 445=>8},
-        #                       :init_user_name=>252, :init_user_id=>24,
-        #                       :init_relations_names=>{442=>162, 443=>219, 444=>461, 448=>123, 450=>2, 445=>9}},
-        #     one_user_relations = {:profile_searched=>675,
-        #                           :profile_relations=>{676=>1, 677=>2, 680=>3, 678=>5, 679=>6, 681=>8},
-        #                           :user_name=>252, :found_user_id=>48,
-        #                           :user_relations_names=>{676=>162, 677=>219, 680=>461, 678=>123, 679=>2, 681=>9}}
     init_relation_profile = init_user_hash[:profile_relations].key(relation)
     logger.info "Double Users: match_relations?: init_relation_profile = #{init_relation_profile.inspect} "
 
@@ -277,6 +233,7 @@ module DoubleUsersSearch
 
   end
 
+
   # @note: Совпали имена Юзеров?
   # если да - то продолжаем проверку
   # если нет - то берем след. юзер
@@ -287,9 +244,9 @@ module DoubleUsersSearch
 
 
   # @note:
-  def mark_double_user(self_id)
-    logger.info "Double Users: mark_double_user: YES - double! self_id = #{self_id} "
-
+  def mark_double_user(ind)
+    self.update_attributes(:double => 1, :updated_at => Time.now)
+    logger.info "Double Users: mark_double_user: YES - double! self.id = #{self.id}, ind = #{ind}  "
   end
 
 

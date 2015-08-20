@@ -59,7 +59,7 @@ module Search
 
 
     # TEST start double_users_search(results)
-    self.double_users_search(results[:profiles_relations_arr], results[:by_trees], certain_koeff)
+    self.double_users_search(results[:profiles_relations_arr], results[:by_trees], certain_koeff) unless results[:by_trees].blank?
 
 
 
