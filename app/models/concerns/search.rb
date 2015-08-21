@@ -60,12 +60,14 @@ module Search
 
    # Start double_users_search(results) - only first time after registration
 
-   unless results[:by_trees].blank?
-     if self.double == 0
-       logger.info "Start double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
-       self.double_users_search(results[:profiles_relations_arr], results[:by_trees], certain_koeff)
+   if self.double == 0
+     if results[:by_trees].blank?
+       self.update_attributes(:double => 1, :updated_at => Time.now)
+       logger.info "Start + No search: double => 1: self.double = #{self.double} " # DEBUGG_TO_LOGG
      else
-       logger.info "double_users_search Allready started: self.double = #{self.double} " # DEBUGG_TO_LOGG
+       logger.info "Start + Search: double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
+       self.double_users_search(results[:profiles_relations_arr], results[:by_trees], certain_koeff)
+       logger.info "After double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
      end
    end
 
