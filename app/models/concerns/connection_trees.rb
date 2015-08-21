@@ -13,7 +13,7 @@ module ConnectionTrees
     connection_results = {}
 
     # Проверка 1 - уже объединены
-    connection_message = "Нельзя объединить ваши деревья, т.к. есть информация, что они уже объединены!"
+    connection_message = "Проверка 1 Нельзя объединить ваши деревья, т.к. есть информация, что они уже объединены!"
     # Проверка: может быть дерево автора уже было соединено с выбранным юзером?
     if who_connect_users_arr.include?(user_id.to_i) # check IF NOT CONNECTED
       logger.info "=== IN check_connection_switch: уже объединены"
@@ -64,7 +64,7 @@ module ConnectionTrees
     # На вьюхе проверяем: продолжать ли объединение.
     # Чтобы протестировать check_connection_permit: в модуле search.rb, после запуска метода
     # search_profiles_from_tree - раскомментить одну или обе строки с # for DEBUGG ONLY!!!
-    connection_message = "Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
+    connection_message = "Проверка 2 Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
     if (!duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?)
       logger.info "=== IN check_connection_switch: ЕСТЬ дубликаты!!"
       connection_results[:stop_connection] = true # STOP connection
@@ -94,7 +94,8 @@ module ConnectionTrees
     end_search_time = Time.now   # Конец отсечки времени поиска
     elapsed_search_time = (end_search_time - beg_search_time).round(5)
     # Длительность полного поиска - для инфы
-
+    # profiles_to_rewrite = [ 443, 441,445, 450, 442, 444, 448 ]
+    # profiles_to_destroy = [ 677, 675,681, 679, 676, 680, 678 ]
     connection_results = {
         who_connect_arr:          who_connect_users_arr, #
         with_whom_connect_arr:    with_whom_connect_users_arr, #
@@ -125,7 +126,7 @@ module ConnectionTrees
     # Чтобы протестировать check_connection_permit: в модуле connection_trees.rb, в конце метода
     # check_duplications - раскомментить одну строку с complete_dubles_hash = {11=>[25, 26]} # for DEBUGG ONLY!!!
     if stop_by_arrs
-      logger.info "=== Проверка 3: дублирования в массивах"
+      logger.info "=== Проверка 3: дублирования в массивах Или попытка объединить Юзеров"
       logger.info " stop_by_arrs = #{stop_by_arrs}, connection_message = #{connection_message} "
 
       connection_results[:stop_connection] = true # STOP connection
@@ -422,8 +423,149 @@ module ConnectionTrees
     CommonLog.create_common_log(common_log_data)
   end
 
+   # results =
+      {:connected_author_arr=>[49], :qty_of_tree_profiles=>7,
+       :profiles_relations_arr=>[
+           {:profile_searched=>682, :profile_relations=>{683=>1, 684=>2, 687=>3, 685=>5, 686=>6, 688=>8}},
+           {:profile_searched=>683, :profile_relations=>{682=>3, 685=>3, 686=>4, 684=>8, 688=>17, 687=>111}},
+           {:profile_searched=>685, :profile_relations=>{683=>1, 684=>2, 682=>5, 686=>6, 687=>211}},
+           {:profile_searched=>687, :profile_relations=>{682=>1, 688=>2, 683=>91, 684=>101, 685=>191, 686=>201}},
+           {:profile_searched=>688, :profile_relations=>{687=>3, 682=>7, 683=>13, 684=>14}},
+           {:profile_searched=>684, :profile_relations=>{682=>3, 685=>3, 686=>4, 683=>7, 688=>17, 687=>111}},
+           {:profile_searched=>686, :profile_relations=>{683=>1, 684=>2, 682=>5, 685=>5, 687=>211}}],
+       :profiles_found_arr=>[
+           {682=>{24=>{448=>[1, 1, 2, 6]}, 48=>{678=>[1, 2, 6]}}},
+           {683=>{24=>{442=>[3, 3, 3, 3, 4, 4, 8, 8, 17, 17, 111, 111]}, 48=>{676=>[3, 3, 4, 8, 17, 111]}}},
+           {685=>{24=>{448=>[1, 1, 2, 6, 211]}, 48=>{678=>[1, 2, 6, 211]}}},
+           {687=>{24=>{444=>[2, 91, 91, 101, 191, 201]}, 48=>{680=>[2, 91, 101, 191, 201]}}},
+           {688=>{24=>{445=>[3, 13, 13, 14]}, 48=>{681=>[3, 13, 14]}}},
+           {684=>{24=>{443=>[3, 3, 4, 7, 7, 17, 111]}, 48=>{677=>[3, 3, 4, 7, 17, 111]}}},
+           {686=>{24=>{450=>[1, 1, 2, 5, 5, 211]}, 48=>{679=>[1, 2, 5, 5, 211]}}}],
+       :uniq_profiles_pairs=>{683=>{24=>442, 48=>676}, 685=>{48=>678}, 687=>{24=>444, 48=>680}, 688=>{24=>445}, 684=>{24=>443, 48=>677}, 686=>{24=>450, 48=>679}},
+       :profiles_with_match_hash=>{442=>12, 443=>7, 450=>6, 677=>6, 444=>6, 676=>6, 679=>5, 680=>5, 448=>5, 445=>4, 678=>4},
+       :by_profiles=>[
+           {:search_profile_id=>683, :found_tree_id=>24, :found_profile_id=>442, :count=>12},
+           {:search_profile_id=>684, :found_tree_id=>24, :found_profile_id=>443, :count=>7},
+           {:search_profile_id=>686, :found_tree_id=>24, :found_profile_id=>450, :count=>6},
+           {:search_profile_id=>684, :found_tree_id=>48, :found_profile_id=>677, :count=>6},
+           {:search_profile_id=>687, :found_tree_id=>24, :found_profile_id=>444, :count=>6},
+           {:search_profile_id=>683, :found_tree_id=>48, :found_profile_id=>676, :count=>6},
+           {:search_profile_id=>686, :found_tree_id=>48, :found_profile_id=>679, :count=>5},
+           {:search_profile_id=>687, :found_tree_id=>48, :found_profile_id=>680, :count=>5},
+           {:search_profile_id=>688, :found_tree_id=>24, :found_profile_id=>445, :count=>4},
+           {:search_profile_id=>685, :found_tree_id=>48, :found_profile_id=>678, :count=>4}],
+       :by_trees=>[
+           {:found_tree_id=>24, :found_profile_ids=>[442, 444, 445, 443, 450]},
+           {:found_tree_id=>48, :found_profile_ids=>[676, 678, 680, 677, 679]}],
+       :duplicates_one_to_many=>{},
+       :duplicates_many_to_one=>{685=>{24=>448}, 682=>{24=>448}}}
 
-  # @note: Контроль корректности массивов перед объединением
+
+   #  results =
+      {:connected_author_arr=>[24], :qty_of_tree_profiles=>7,
+       :profiles_relations_arr=>[
+           {:profile_searched=>441, :profile_relations=>{442=>1, 443=>2, 444=>3, 448=>5, 450=>6, 445=>8}},
+           {:profile_searched=>443, :profile_relations=>{448=>3, 441=>3, 450=>4, 442=>7, 445=>17, 444=>111}},
+           {:profile_searched=>445, :profile_relations=>{444=>3, 441=>7, 442=>13, 443=>14}},
+           {:profile_searched=>450, :profile_relations=>{442=>1, 443=>2, 448=>5, 441=>5, 444=>211}},
+           {:profile_searched=>442, :profile_relations=>{448=>3, 441=>3, 450=>4, 443=>8, 445=>17, 444=>111}},
+           {:profile_searched=>444, :profile_relations=>{441=>1, 445=>2, 442=>91, 443=>101, 448=>191, 450=>201}},
+           {:profile_searched=>448, :profile_relations=>{442=>1, 443=>2, 441=>5, 450=>6, 444=>211}}],
+       :profiles_found_arr=>[{441=>{48=>{675=>[1, 2, 3, 5, 6, 8]}}},
+                             {443=>{48=>{677=>[3, 3, 4, 7, 17, 111]}, 49=>{684=>[3, 3, 4, 7, 17, 111]}}},
+                             {445=>{48=>{681=>[3, 7, 13, 14]}, 49=>{688=>[3, 13, 14]}}},
+                             {450=>{48=>{679=>[1, 2, 5, 5, 211]}, 49=>{686=>[1, 2, 5, 5, 211]}}},
+                             {442=>{48=>{676=>[3, 3, 4, 8, 17, 111]}, 49=>{683=>[3, 3, 4, 8, 17, 111]}}},
+                             {444=>{48=>{680=>[1, 2, 91, 101, 191, 201]}, 49=>{687=>[2, 91, 101, 191, 201]}}},
+                             {448=>{48=>{678=>[1, 2, 5, 6, 211]}, 49=>{682=>[1, 2, 6], 685=>[1, 2, 6, 211]}}}],
+       :uniq_profiles_pairs=>{441=>{48=>675}, 443=>{48=>677, 49=>684}, 445=>{48=>681}, 450=>{48=>679, 49=>686}, 442=>{48=>676, 49=>683}, 444=>{48=>680, 49=>687}, 448=>{48=>678, 49=>685}},
+       :profiles_with_match_hash=>{680=>6, 683=>6, 676=>6, 684=>6, 677=>6, 675=>6, 678=>5, 687=>5, 686=>5, 679=>5, 685=>4, 681=>4},
+       :by_profiles=>[{:search_profile_id=>444, :found_tree_id=>48, :found_profile_id=>680, :count=>6},
+                      {:search_profile_id=>442, :found_tree_id=>49, :found_profile_id=>683, :count=>6},
+                      {:search_profile_id=>442, :found_tree_id=>48, :found_profile_id=>676, :count=>6},
+                      {:search_profile_id=>443, :found_tree_id=>49, :found_profile_id=>684, :count=>6},
+                      {:search_profile_id=>443, :found_tree_id=>48, :found_profile_id=>677, :count=>6},
+                      {:search_profile_id=>441, :found_tree_id=>48, :found_profile_id=>675, :count=>6},
+                      {:search_profile_id=>448, :found_tree_id=>48, :found_profile_id=>678, :count=>5},
+                      {:search_profile_id=>444, :found_tree_id=>49, :found_profile_id=>687, :count=>5},
+                      {:search_profile_id=>450, :found_tree_id=>49, :found_profile_id=>686, :count=>5},
+                      {:search_profile_id=>450, :found_tree_id=>48, :found_profile_id=>679, :count=>5},
+                      {:search_profile_id=>448, :found_tree_id=>49, :found_profile_id=>685, :count=>4},
+                      {:search_profile_id=>445, :found_tree_id=>48, :found_profile_id=>681, :count=>4}],
+       :by_trees=>[{:found_tree_id=>48, :found_profile_ids=>[675, 677, 681, 679, 676, 680, 678]},
+                   {:found_tree_id=>49, :found_profile_ids=>[684, 686, 683, 687, 685]}],
+       :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+
+
+
+  # results =
+      {:connected_author_arr=>[48],
+       :qty_of_tree_profiles=>7,
+       :profiles_relations_arr=>[
+           {:profile_searched=>675, :profile_relations=>{676=>1, 677=>2, 680=>3, 678=>5, 679=>6, 681=>8}},
+           {:profile_searched=>678, :profile_relations=>{676=>1, 677=>2, 675=>5, 679=>6, 680=>211}},
+           {:profile_searched=>679, :profile_relations=>{676=>1, 677=>2, 678=>5, 675=>5, 680=>211}},
+           {:profile_searched=>676, :profile_relations=>{678=>3, 675=>3, 679=>4, 677=>8, 681=>17, 680=>111}},
+           {:profile_searched=>681, :profile_relations=>{680=>3, 675=>7, 676=>13, 677=>14}},
+           {:profile_searched=>680, :profile_relations=>{675=>1, 681=>2, 676=>91, 677=>101, 678=>191, 679=>201}},
+           {:profile_searched=>677, :profile_relations=>{678=>3, 675=>3, 679=>4, 676=>7, 681=>17, 680=>111}}],
+       :profiles_found_arr=>[
+           {675=>{24=>{441=>[1, 1, 2, 3, 5, 6, 8]}}},
+           {678=>{24=>{448=>[1, 1, 2, 5, 6, 211]}, 49=>{682=>[1, 2, 6], 685=>[1, 2, 6, 211]}}},
+           {679=>{24=>{450=>[1, 1, 2, 5, 5, 211]}, 49=>{686=>[1, 2, 5, 5, 211]}}},
+           {676=>{24=>{442=>[3, 3, 3, 3, 4, 4, 8, 8, 17, 17, 111, 111]}, 49=>{683=>[3, 3, 4, 8, 17, 111]}}},
+           {681=>{24=>{445=>[3, 7, 13, 13, 14]}, 49=>{688=>[3, 13, 14]}}},
+           {680=>{24=>{444=>[1, 2, 91, 91, 101, 191, 201]}, 49=>{687=>[2, 91, 101, 191, 201]}}},
+           {677=>{24=>{443=>[3, 3, 4, 7, 7, 17, 111]}, 49=>{684=>[3, 3, 4, 7, 17, 111]}}}],
+       :uniq_profiles_pairs=>{675=>{24=>441}, 678=>{24=>448, 49=>685}, 679=>{24=>450, 49=>686}, 676=>{24=>442, 49=>683}, 681=>{24=>445}, 680=>{24=>444, 49=>687}, 677=>{24=>443, 49=>684}},
+       :profiles_with_match_hash=>{442=>12, 443=>7, 444=>7, 441=>7, 684=>6, 683=>6, 450=>6, 448=>6, 687=>5, 445=>5, 686=>5, 685=>4},
+       :by_profiles=>[{:search_profile_id=>676, :found_tree_id=>24, :found_profile_id=>442, :count=>12},
+                      {:search_profile_id=>677, :found_tree_id=>24, :found_profile_id=>443, :count=>7},
+                      {:search_profile_id=>680, :found_tree_id=>24, :found_profile_id=>444, :count=>7},
+                      {:search_profile_id=>675, :found_tree_id=>24, :found_profile_id=>441, :count=>7},
+                      {:search_profile_id=>677, :found_tree_id=>49, :found_profile_id=>684, :count=>6},
+                      {:search_profile_id=>676, :found_tree_id=>49, :found_profile_id=>683, :count=>6},
+                      {:search_profile_id=>679, :found_tree_id=>24, :found_profile_id=>450, :count=>6},
+                      {:search_profile_id=>678, :found_tree_id=>24, :found_profile_id=>448, :count=>6},
+                      {:search_profile_id=>680, :found_tree_id=>49, :found_profile_id=>687, :count=>5},
+                      {:search_profile_id=>681, :found_tree_id=>24, :found_profile_id=>445, :count=>5},
+                      {:search_profile_id=>679, :found_tree_id=>49, :found_profile_id=>686, :count=>5},
+                      {:search_profile_id=>678, :found_tree_id=>49, :found_profile_id=>685, :count=>4}],
+       :by_trees=>[{:found_tree_id=>24, :found_profile_ids=>[441, 448, 450, 442, 445, 444, 443]},
+                   {:found_tree_id=>49, :found_profile_ids=>[685, 686, 683, 687, 684]}],
+       :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+
+
+
+  #
+  # current_user = 49
+  # collect found users: from search_results
+  # :by_trees=>[
+  #     {:found_tree_id=>24, :found_profile_ids=>[442, 444, 445, 443, 450]},
+  #     {:found_tree_id=>48, :found_profile_ids=>[676, 678, 680, 677, 679]}],
+  # [24, 48]
+  # collect user's profiles
+  # for each user_profile_id start method (modified!) = simplified + add profiles names
+  #
+  # To collect profiles_relations hashes:
+
+  # unless tree_is_profiles.blank?
+  #   tree_is_profiles.each do |profile_id_searched|
+  #     logger.info " "
+  #     logger.info "***** Цикл ПОИСКa: #{i+1}-я ИТЕРАЦИЯ - Ищем профиль: #{profile_id_searched.inspect};"
+  #     ###### ЗАПУСК ПОИСКА ОДНОГО ПРОФИЛЯ
+  #     search_match(connected_users_arr, profile_id_searched, certain_koeff)
+  #     ###################################
+  #     i += 1  # DEBUGG_TO_LOGG
+  #   end
+  # end
+  # Compare user's_profiles relation's hashes:
+  # Criteria: Find an collect Matches. Match- is: Profile_name + Relation name
+  # If Match amount >= 5 => current_user and user - double_users
+
+
+
+# @note: Контроль корректности массивов перед объединением
   # Tested
   # @param: connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
   #   :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
@@ -471,6 +613,15 @@ module ConnectionTrees
       end
     end
 
+    if item == 1  # До этой проверки все было Ок с массивами
+      # Проверка: Если перезаписываются два юзера в массивах  # 6
+      # two profiles are user's profiles -> No to connect
+      if check_profiles_users?(profiles_to_rewrite, profiles_to_destroy)
+        stop_by_arrs = true #
+        item = 6
+      end
+    end
+
     connection_message = diagnoze_message(item)
 
     { stop_by_arrs:            stop_by_arrs,
@@ -478,6 +629,21 @@ module ConnectionTrees
       diag_connection_message: connection_message,
       common_profiles:         commons,
       complete_dubles_hash:    complete_dubles_hash  }
+  end
+
+  # @note: Проверка: Если перезаписываются два юзера в массивах   #
+  # two profiles are user's profiles -> No to connect
+  def check_profiles_users?(profiles_to_rewrite, profiles_to_destroy)
+    profiles_to_rewrite.each_with_index do |profile_id, index|
+      main_profile     = Profile.find(profile_id)
+      opposite_profile = Profile.find(profiles_to_destroy[index])
+      if User.where(profile_id: main_profile).exists? && User.where(profile_id: opposite_profile).exists?
+        logger.info "In check_profiles_users = true"
+        return true
+      end
+    end
+    logger.info "In check_profiles_users = false"
+    false
   end
 
 
@@ -496,6 +662,9 @@ module ConnectionTrees
       when 5
         connection_message =
             "Нельзя объединить ваши деревья, т.к. данные для объединения - некорректны! ЕСТЬ дублирования в массивах"  # Tested
+      when 6
+        connection_message =
+            "Нельзя объединить ваши деревья, т.к. объединяются два Юзера! Их нельзя объединять"  # Tested
       else
         connection_message = "Внимание: Диагноз массивов объединения деревьев - не был поставлен"  # Tested
     end

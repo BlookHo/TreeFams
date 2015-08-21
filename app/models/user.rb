@@ -21,6 +21,8 @@ class User < ActiveRecord::Base
   include UserLock # вроде бы не используется
   include UserAccount
 
+  include DoubleUsersSearch
+
 
 
   before_create :generate_access_token
@@ -48,7 +50,7 @@ class User < ActiveRecord::Base
 
 
   def name
-    profile.name.name.capitalize
+    profile.name.name.capitalize unless profile.blank?  # If wrong connect between two users
   end
 
 

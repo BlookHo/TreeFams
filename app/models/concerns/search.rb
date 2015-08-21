@@ -15,7 +15,8 @@ module Search
     #profile_id_searched    = author_tree_arr.is_profile_id  # Поиск по ID К_Профиля
     ###################################
 
-    tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
+    tree_is_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
+    # tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
     qty_of_tree_profiles = tree_is_profiles.size unless tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
     # Задание на поиск от Дерева Юзера: tree_is_profiles =
     # [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18]
@@ -23,7 +24,8 @@ module Search
     # puts "======================= RUN start_search ========================= "
     logger.info "======================= RUN start_search ========================= "
     logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
-    logger.info "Задание на поиск от Дерева Юзера: tree_is_profiles = #{tree_is_profiles} "
+    show_in_logger(author_tree_arr, "=== результат" )  # DEBUGG_TO_LOGG
+    logger.info "Задание на поиск от Дерева Юзера:  author_tree_arr.size = #{author_tree_arr.size}, tree_is_profiles = #{tree_is_profiles} "
     logger.info "Коэффициент достоверности: certain_koeff = #{certain_koeff}"
 
     ############### ПОИСК ######## NEW LAST METHOD ############
@@ -54,6 +56,18 @@ module Search
       # Store new results ONLY IF there are NO BOTH duplicates
       store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
     end
+
+
+    # Start double_users_search(results) - only first time after registration
+    unless results[:by_trees].blank?
+      if self.double == 0
+        logger.info "Start double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
+        self.double_users_search(results[:profiles_relations_arr], results[:by_trees], certain_koeff)
+      else
+        logger.info "double_users_search Allready started: self.double = #{self.double} " # DEBUGG_TO_LOGG
+      end
+    end
+
 
     logger.info "== END OF start_search ===  results = #{results.inspect}"
     # puts "== END OF start_search === "
@@ -108,7 +122,7 @@ module Search
     #  :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
     #
 
-    end # END OF start_search
+  end # END OF start_search
 
 
   # @note запись рез-тов поиска в отдельную таблицу - для Метеора
@@ -144,7 +158,7 @@ module Search
     # cty_rows = SearchResults.all.count
     # puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, cty_rows = #{cty_rows.inspect} "
 
-    logger.info "= found_tree_ids = #{found_tree_ids.inspect} "
+    # logger.info "= found_tree_ids = #{found_tree_ids.inspect} "
     if !previous_results.blank?
       previous_results.each(&:destroy)
       store_results(found_tree_ids, by_profiles, current_user_tree_ids)
@@ -464,12 +478,6 @@ module Search
     return by_profiles, by_trees
   end
 
-  # # @note Получить массивы профилей упорядоченных по count для каждого дерева
-  # def get_found_profile_ids(by_profiles)
-  #
-  #
-  # end
-
 
   # make final sorted by_trees search results
   def make_by_trees_results(filling_hash)
@@ -482,17 +490,6 @@ module Search
     end
     return by_trees
   end
-
-  # # Служебный метод для отладки - для LOGGER
-  # # todo: перенести этот метод в Operational - для нескольких моделей
-  # # Показывает массив в logger
-  # def show_in_logger(arr_to_log, string_to_add)
-  #   row_no = 0  # DEBUGG_TO_LOGG
-  #   arr_to_log.each do |row| # DEBUGG_TO_LOGG
-  #     row_no += 1
-  #     logger.debug "#{string_to_add} № #{row_no.inspect}: #{row.attributes.inspect} " # DEBUGG_TO_LOGG
-  #   end  # DEBUGG_TO_LOGG
-  # end
 
 
 
