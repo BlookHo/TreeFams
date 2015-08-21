@@ -58,9 +58,15 @@ module Search
     end
 
 
-    # TEST start double_users_search(results)
-    self.double_users_search(results[:profiles_relations_arr], results[:by_trees], certain_koeff) unless results[:by_trees].blank?
-
+    # Start double_users_search(results) - only first time after registration
+    unless results[:by_trees].blank?
+      if self.double == 0
+        logger.info "Start double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
+        self.double_users_search(results[:profiles_relations_arr], results[:by_trees], certain_koeff)
+      else
+        logger.info "double_users_search Allready started: self.double = #{self.double} " # DEBUGG_TO_LOGG
+      end
+    end
 
 
     logger.info "== END OF start_search ===  results = #{results.inspect}"
