@@ -51,7 +51,7 @@ module Search
         duplicates_many_to_one: @duplicates_many_to_one
     }
 
-    logger.info "= Before store_search_results ========================= "
+    logger.info "= Before store_search_results ========== results = #{results} "
     if (results[:duplicates_one_to_many].empty? && results[:duplicates_many_to_one].empty?)
       # Store new results ONLY IF there are NO BOTH duplicates
       store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
@@ -60,6 +60,7 @@ module Search
 
    # Start double_users_search(results) - only first time after registration
 
+   ############# SWITCHED OFF - double_users_search
    if self.double == 0
      if results[:by_trees].blank?
        self.update_attributes(:double => 1, :updated_at => Time.now)

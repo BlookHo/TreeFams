@@ -85,7 +85,9 @@ module SearchComplete
 
           # накапливание нового доп.хаша по всему циклу
           logger.info " after delete_if in new_connection_hash = #{new_connection_hash} "
-          add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.empty?
+          # add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.empty?
+          add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.blank?
+          # check if new_connection_hash != nil?
           logger.info " add_connection_hash = #{add_connection_hash} "
         end
 
