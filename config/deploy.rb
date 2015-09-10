@@ -12,7 +12,7 @@ require 'bundler/capistrano' # Для работы bundler.
 require "whenever/capistrano"
 # set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 set :whenever_roles,        ->{ :application }
-
+set :whenever_identifier,   ->{ fetch :application }
 
 
 set :application, "weafam"
