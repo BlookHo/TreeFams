@@ -5,14 +5,7 @@ set :rails_root, "#{File.dirname(__FILE__)}/.."
 require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
 
-### whenever integration
-# set :whenever_environment, defer { staging }
-# set :whenever_identifier, defer { "#{application}_#{staging}" }
-
 require "whenever/capistrano"
-# set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
-set :whenever_roles,        ->{ :application }
-set :whenever_identifier,   ->{ fetch :application }
 
 
 set :application, "weafam"
@@ -99,3 +92,14 @@ end
 
 before  "deploy:setup", :db
 after   "deploy:update_code", "db:symlink"
+
+
+
+### whenever integration
+# set :whenever_environment, defer { staging }
+# set :whenever_identifier, defer { "#{application}_#{staging}" }
+
+# set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+set :whenever_roles,        ->{ :application }
+set :whenever_identifier,   ->{ fetch :application }
+

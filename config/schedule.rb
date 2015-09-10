@@ -26,6 +26,16 @@ every 5.minutes do
 #
 end
 
+
+
+# namespace :whenever do
+#   task :start, :roles => :app do
+#     run "cd #{release_path} && bundle exec whenever --update-crontab"
+#   end
+# end
+
+
+
 # Rails.env
 
 
