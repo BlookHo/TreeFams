@@ -181,7 +181,7 @@ class User < ActiveRecord::Base
      { users: all_users, users_male: users_sex[:users_male], users_female: users_sex[:users_female] }
   end
 
-
+  # @note: Call from collect_user_stats - to User stats -  on site
   def self.collect_sex_users
     users_male = 0
     users_female = 0

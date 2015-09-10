@@ -399,7 +399,7 @@ module SearchHelper
       is_name_id_s = one_searched_row.values_at('is_name_id')
       is_profile_id_s = one_searched_row.values_at('is_profile_id')
       bk_arr_found.each do |one_found_row|
-        #logger.info "one_found_row = #{one_found_row} "
+        logger.info "one_found_row = #{one_found_row} of new_connection_hash"
         name_id_f = one_found_row.values_at('name_id')
         profile_id_f = one_found_row.values_at('profile_id')
         relation_id_f = one_found_row.values_at('relation_id')

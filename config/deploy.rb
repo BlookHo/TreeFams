@@ -5,10 +5,12 @@ set :rails_root, "#{File.dirname(__FILE__)}/.."
 require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
 
-# whenever integration
+### whenever integration
 # set :whenever_environment, defer { staging }
 # set :whenever_identifier, defer { "#{application}_#{staging}" }
-# require "whenever/capistrano"
+
+require "whenever/capistrano"
+# set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 
 
 

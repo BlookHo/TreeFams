@@ -60,7 +60,7 @@ class WeafamStat < ActiveRecord::Base
       similars_found: similars_found
     }
 
-    logger.info "In WeafamStat site_stats: all_stat_data = #{all_stat_data}"
+    logger.info "In WeafamStat.rb#collect_site_stats: all_stat_data = #{all_stat_data}"
     logger.info ""
     all_stat_data
   end
