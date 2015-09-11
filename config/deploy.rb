@@ -103,3 +103,8 @@ after   "deploy:update_code", "db:symlink"
 set :whenever_roles,        ->{ :application }
 set :whenever_identifier,   ->{ fetch :application }
 
+namespace :whenever do
+  task :start, :roles => :app do
+    run "cd #{release_path} && bundle exec whenever --update-crontab"
+  end
+end

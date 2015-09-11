@@ -15,7 +15,7 @@ set :output, "log/cron_log.log"
 #
 
 
-every 5.minutes do
+every 2.minutes do
 # every 1.hour do
 #
   run "cd #{rails_root} && bundle exec whenever --update-crontab"
