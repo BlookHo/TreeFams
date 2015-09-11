@@ -92,9 +92,6 @@ end
 
 ### whenever integration
 # set :whenever_environment, defer { staging }
-# set :whenever_identifier, defer { "#{application}_#{staging}" }
-
-# set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 set :whenever_roles,        ->{ :application }
 set :whenever_identifier,   ->{ fetch :application }
 
@@ -103,7 +100,6 @@ namespace :whenever do
     run "cd #{release_path} && bundle exec whenever --update-crontab"
   end
 end
-
 
 
 
