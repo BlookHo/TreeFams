@@ -15,12 +15,11 @@ set :output, "log/cron_log.log"
 #
 
 
-every 2.minutes do
-# every 1.hour do
-#
-  # run "cd #{rails_root} && bundle exec whenever --update-crontab"
+# every 2.minutes do
+every 1.hour do
+
   runner "WeafamStat.create_stats_row"  #  , environment: :development
-#
+
 #   # runner "Counter.increment_invites"     , environment: :development
 #   # runner "Counter.increment_disconnects" , environment: :development
 #   runner "WeafamStat.create_stats_row"   , environment: :development
