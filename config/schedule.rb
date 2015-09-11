@@ -5,7 +5,7 @@
 
 # Example:
 ### Logs - to cron
-#set :output, "log/cron_log.log"
+set :output, "log/cron_log.log"
 
 # every 2.hours do
 #   command "/usr/bin/some_great_command"
@@ -18,6 +18,7 @@
 every 5.minutes do
 # every 1.hour do
 #
+  run "cd #{rails_root} && bundle exec whenever --update-crontab"
   runner "WeafamStat.create_stats_row"  #  , environment: :development
 #
 #   # runner "Counter.increment_invites"     , environment: :development
