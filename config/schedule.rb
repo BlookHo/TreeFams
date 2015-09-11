@@ -15,13 +15,13 @@ set :output, "log/cron_log.log"
 #
 
 
-every 2.minutes do
-# every 1.hour do
+# every 2.minutes do
+every 1.hour do
 
   runner "WeafamStat.create_stats_row"  #  , environment: :development
 
-  runner "Counter.increment_invites"    # , environment: :development
-  runner "Counter.increment_disconnects"# , environment: :development
+  # runner "Counter.increment_invites"    # , environment: :development
+  # runner "Counter.increment_disconnects"# , environment: :development
 
 end
 
