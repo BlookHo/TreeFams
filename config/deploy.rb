@@ -90,11 +90,6 @@ namespace :deploy do
   end
 end
 
-before  "deploy:setup", :db
-after   "deploy:update_code", "db:symlink"
-
-
-
 ### whenever integration
 # set :whenever_environment, defer { staging }
 # set :whenever_identifier, defer { "#{application}_#{staging}" }
@@ -108,3 +103,12 @@ namespace :whenever do
     run "cd #{release_path} && bundle exec whenever --update-crontab"
   end
 end
+
+
+
+
+before  "deploy:setup", :db
+after   "deploy:update_code", "db:symlink", "whenever:start"
+
+
+
