@@ -29,8 +29,10 @@ class WeafamStat < ActiveRecord::Base
   #                 :disconnections, :similars_found
 
   # @note: to generate the CSV data
-  def self.to_csv
-    CSV.generate do |csv|
+  # def self.to_csv
+  #   CSV.generate do |csv|
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
       csv << column_names
       all.each do |stat|
         csv << stat.attributes.values_at(*column_names)

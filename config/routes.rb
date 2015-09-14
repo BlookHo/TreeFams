@@ -293,13 +293,10 @@ Weafam::Application.routes.draw do
     get '/login'  => 'sessions#new',      :as => :login
     get '/logout' => 'sessions#destroy',  :as => :logout
 
-
     resources :admins
-
 
     resources :users do
       post 'login_as/:user_id', to: 'users#login_as', as: :login_as_user
-      
     end
 
     resources :resets, only: [:new, :create]
@@ -312,17 +309,15 @@ Weafam::Application.routes.draw do
       post 'approve',   to: 'pending_users#approve',    as: :approve
     end
 
-
     resources :names do
       get 'males',   to: "names#males",   on: :collection, as: :males
       get 'females', to: "names#females", on: :collection, as: :females
       get 'pending', to: "names#pending", on: :collection, as: :pending
     end
 
-    resources :weafam_stats
-
-
-
+    resources :weafam_stats do
+      get 'we_all_family_stats', to: "weafam_stats#we_all_family_stats", as: :we_all_family_stats, on: :collection
+    end
 
     resources :subnames
 
