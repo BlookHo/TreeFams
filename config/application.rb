@@ -5,6 +5,9 @@ Encoding.default_external = "UTF-8"
 
 require File.expand_path('../boot', __FILE__)
 
+require 'csv' # to CommaSeparatedValues and Excel
+
+
 require 'rails/all'
 require 'date'
 require 'time'

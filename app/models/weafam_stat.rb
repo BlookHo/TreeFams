@@ -22,6 +22,22 @@ class WeafamStat < ActiveRecord::Base
                             :greater_than_or_equal_to => 0,
                             :message => "ID автора сообщения или получателя сообщения должны быть больше или равно 0 в WeafamStat"
 
+  # attr_accessible :users, :users_male, :users_female,
+  #                 :profiles, :profiles_male, :profiles_female,
+  #                 :trees, :invitations,
+  #                 :requests, :connections, :refuse_requests,
+  #                 :disconnections, :similars_found
+
+  # @note: to generate the CSV data
+  def self.to_csv
+    CSV.generate do |csv|
+      csv << column_names
+      all.each do |stat|
+        csv << stat.attributes.values_at(*column_names)
+      end
+    end
+  end
+
 
 
   def self.create_stats_row

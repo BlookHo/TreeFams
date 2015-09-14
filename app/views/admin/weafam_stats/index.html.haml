@@ -2,6 +2,9 @@
   %h2
     Статистика сайта
     %small= User.count
+    Download:
+    = link_to "CSV", admin_weafam_stats_path(format: "csv")
+    -#= link_to "Excel", weafam_stats_path(format: "xls")
 
 = paginate @weafam_stats, :theme => 'admin'
 = render 'table'

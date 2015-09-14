@@ -7,6 +7,10 @@ class Admin::WeafamStatsController < Admin::AdminController
   # GET /weafam_stats.json
   def index
     @weafam_stats = WeafamStat.order('id').page params[:page] # DESC
+    respond_to do |format|
+      format.html
+      format.csv { render text: @weafam_stats.to_csv }
+    end
   end
 
   # GET /weafam_stats/1
@@ -30,5 +34,12 @@ class Admin::WeafamStatsController < Admin::AdminController
     @weafam_stat = WeafamStat.find(params[:id])
   end
 
+  def weafam_stat_params
+    params.require(:weafam_stat).permit(:users, :users_male, :users_female,
+                                        :profiles, :profiles_male, :profiles_female,
+                                        :trees, :invitations,
+                                        :requests, :connections, :refuse_requests,
+                                        :disconnections, :similars_found)
+  end
 
 end
