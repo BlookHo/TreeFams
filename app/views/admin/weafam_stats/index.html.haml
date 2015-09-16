@@ -1,7 +1,9 @@
 .page-header
   %h2
     Статистика сайта
+    (Кол-во users =
     %small= User.count
+    )
   %h4
     Скачать файл статистики 'we_all_family_stats.xls':
     = link_to "Upload To Excel", we_all_family_stats_admin_weafam_stats_path(format: "xls")
