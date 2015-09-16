@@ -3,8 +3,8 @@
     Статистика сайта
     %small= User.count
   %h4
-    Файл статистики we_all_family_stats.xls:
-    = link_to "To Excel", we_all_family_stats_admin_weafam_stats_path(format: "xls")
+    Скачать файл статистики 'we_all_family_stats.xls':
+    = link_to "Upload To Excel", we_all_family_stats_admin_weafam_stats_path(format: "xls")
 
 = paginate @weafam_stats, :theme => 'admin'
 = render 'table'
