@@ -15,7 +15,7 @@ set :output, "log/cron_log.log"
 #
 
 
-every 1.day, :at => '12:25 pm' do
+every 1.day, :at => '12:28 pm' do
 # every 2.minutes do
 # every 1.hour do
 
