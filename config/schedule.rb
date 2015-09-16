@@ -15,7 +15,8 @@ set :output, "log/cron_log.log"
 #
 
 
-every 1.day, :at => '11:21 pm' do
+every 1.day, :at => '4:00 am' do   # 4 () + 7 = 11 MSK
+
 # every 2.minutes do
 # every 1.hour do
 
