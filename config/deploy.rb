@@ -4,7 +4,6 @@ set :rails_root, "#{File.dirname(__FILE__)}/.."
 
 require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
-
 require "whenever/capistrano"
 
 
@@ -72,7 +71,6 @@ namespace :db do
   desc "Make symlink for database yaml"
   task :symlink do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
-    run "ln -nfs #{shared_path}/config/schedule.rb  #{release_path}/config/schedule.rb"
   end
 
 
@@ -93,8 +91,20 @@ end
 
 ### whenever integration
 # set :whenever_environment, defer { staging }
-set :whenever_roles,        ->{ :application }
-set :whenever_identifier,   ->{ fetch :application }
+# set :whenever_roles,        ->{ :application }
+# set :whenever_identifier,   ->{ fetch :application }
+
+set :whenever_environment, defer { 'production' }
+set :whenever_identifier,  defer { "#{application}_#{stage}" }
+# require "whenever/capistrano"
+
+puts "test"
+puts "#{application}_#{stage}"
+
+
+
+
+
 
 namespace :whenever do
   task :start, :roles => :app do
@@ -110,6 +120,3 @@ end
 
 before  "deploy:setup", :db
 after   "deploy:update_code", "db:symlink", "whenever:start"
-
-
-

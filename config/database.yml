@@ -8,6 +8,11 @@
 # weafam_admin
 # password for it
 # rake db:setup
+
+# '/Applications/Postgres.app/Contents/Versions/9.4/bin'/psql weafam_development -U weafam_admin < weafamdb.sql
+# 
+
+
 development:  # my version
   adapter: postgresql
   database: weafam_development
