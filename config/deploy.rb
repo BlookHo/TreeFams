@@ -4,7 +4,7 @@ set :rails_root, "#{File.dirname(__FILE__)}/.."
 
 require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
-require "whenever/capistrano"
+# require "whenever/capistrano"
 
 
 set :application, "weafam"
@@ -97,7 +97,8 @@ end
 set :whenever_roles,        ->{ :application }
 set :whenever_environment, defer { 'production' }
 set :whenever_identifier,  defer { "#{application}_production" }
-# require "whenever/capistrano"
+require "whenever/capistrano"
+
 
 puts "test"
 puts "#{application}_production"
@@ -107,17 +108,17 @@ puts "#{application}_production"
 
 
 
-namespace :whenever do
-  task :start, :roles => :app do
-    # run "cd #{release_path}"
-    # run "crontab -r"
-    # run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
-    run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
-    # run "bundle exec whenever --update-crontab"
-  end
-end
+# namespace :whenever do
+#   task :start, :roles => :app do
+#     # run "cd #{release_path}"
+#     # run "crontab -r"
+#     # run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
+#     run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
+#     # run "bundle exec whenever --update-crontab"
+#   end
+# end
 
 
 
 before  "deploy:setup", :db
-after   "deploy:update_code", "db:symlink", "whenever:start"
+after   "deploy:update_code", "db:symlink"
