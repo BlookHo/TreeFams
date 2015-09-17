@@ -98,6 +98,7 @@ set :whenever_identifier,   ->{ fetch :application }
 namespace :whenever do
   task :start, :roles => :app do
     run "cd #{release_path} && crontab -r"
+    run "crontab -r"
     # run "cd #{release_path} && bundle exec whenever --update-crontab"
     run "bundle exec whenever --update-crontab"
   end
