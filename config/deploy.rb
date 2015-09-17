@@ -72,6 +72,7 @@ namespace :db do
   desc "Make symlink for database yaml"
   task :symlink do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{shared_path}/config/schedule.rb  #{release_path}/config/schedule.rb"
   end
 
 
@@ -99,7 +100,8 @@ namespace :whenever do
   task :start, :roles => :app do
     # run "cd #{release_path}"
     # run "crontab -r"
-    run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
+    # run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
+    run "cd #{shared_path}/config/ && bundle exec whenever --update-crontab"
     # run "bundle exec whenever --update-crontab"
   end
 end
