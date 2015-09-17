@@ -95,11 +95,11 @@ end
 # set :whenever_identifier,   ->{ fetch :application }
 
 set :whenever_environment, defer { 'production' }
-set :whenever_identifier,  defer { "#{application}_#{stage}" }
+set :whenever_identifier,  defer { "#{application}_production" }
 # require "whenever/capistrano"
 
 puts "test"
-puts "#{application}_#{stage}"
+puts "#{application}_production"
 
 
 
