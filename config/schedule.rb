@@ -3,28 +3,17 @@
 # It's helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
 
-# Example:
+
 ### Logs - to cron
 set :output, "log/cron_log.log"
 
-# every 2.hours do
-#   command "/usr/bin/some_great_command"
-#   runner "MyModel.some_method"
-#   rake "some:great:rake:task"
-# end
-#
 
-
-every 1.day, :at => '4:00 am' do   # 4 () + 7 = 11 MSK
-
+every 1.day, :at => '4:00 am' do   # 4 () + 7 = 11 MSK, at 8 - in Rails
 # every 2.minutes do
 # every 1.hour do
-
   runner "WeafamStat.create_stats_row"  #  , environment: :development
-
   # runner "Counter.increment_invites"    # , environment: :development
   # runner "Counter.increment_disconnects"# , environment: :development
-
 end
 
 
@@ -35,12 +24,12 @@ end
 #   end
 # end
 
-
-
-# Rails.env
-
-
-
+# every 2.hours do
+#   command "/usr/bin/some_great_command"
+#   runner "MyModel.some_method"
+#   rake "some:great:rake:task"
+# end
+#
 
 # Learn more: http://github.com/javan/whenever
 
