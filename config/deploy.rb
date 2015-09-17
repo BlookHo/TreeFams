@@ -101,7 +101,7 @@ namespace :whenever do
     # run "cd #{release_path}"
     # run "crontab -r"
     # run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
-    run "cd #{shared_path}/config/ && bundle exec whenever --update-crontab"
+    run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
     # run "bundle exec whenever --update-crontab"
   end
 end
