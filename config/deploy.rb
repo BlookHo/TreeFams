@@ -4,6 +4,9 @@ set :rails_root, "#{File.dirname(__FILE__)}/.."
 
 require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
+
+
+
 # require "whenever/capistrano"
 
 
@@ -95,7 +98,8 @@ end
 # set :whenever_identifier,   ->{ fetch :application }
 
 # set :whenever_roles,        ->{ :application }
-set :whenever_environment, defer { 'production' }
+# set :whenever_environment, defer { 'production' }
+set :whenever_command, "bundle exec whenever"
 set :whenever_identifier,  defer { "#{application}_production" }
 require "whenever/capistrano"
 
