@@ -10,11 +10,6 @@ set :whenever_identifier,  defer { "#{application}_production" }
 require "whenever/capistrano"
 
 
-
-
-# require "whenever/capistrano"
-
-
 set :application, "weafam"
 set :user, "weafam"
 set :rails_env, "production"
