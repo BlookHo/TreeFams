@@ -5,6 +5,11 @@ set :rails_root, "#{File.dirname(__FILE__)}/.."
 require 'rvm/capistrano' # Для работы rvm
 require 'bundler/capistrano' # Для работы bundler.
 
+set :whenever_command, "bundle exec whenever"
+set :whenever_identifier,  defer { "#{application}_production" }
+require "whenever/capistrano"
+
+
 
 
 # require "whenever/capistrano"
@@ -91,37 +96,6 @@ namespace :deploy do
     run "touch #{current_path}/tmp/restart.txt"
   end
 end
-
-### whenever integration
-# set :whenever_environment, defer { staging }
-# set :whenever_roles,        ->{ :application }
-# set :whenever_identifier,   ->{ fetch :application }
-
-# set :whenever_roles,        ->{ :application }
-# set :whenever_environment, defer { 'production' }
-set :whenever_command, "bundle exec whenever"
-set :whenever_identifier,  defer { "#{application}_production" }
-require "whenever/capistrano"
-
-
-puts "test"
-puts "#{application}_production"
-
-
-
-
-
-
-# namespace :whenever do
-#   task :start, :roles => :app do
-#     # run "cd #{release_path}"
-#     # run "crontab -r"
-#     # run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
-#     run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
-#     # run "bundle exec whenever --update-crontab"
-#   end
-# end
-
 
 
 before  "deploy:setup", :db
