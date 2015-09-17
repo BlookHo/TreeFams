@@ -99,7 +99,7 @@ namespace :whenever do
   task :start, :roles => :app do
     # run "cd #{release_path}"
     # run "crontab -r"
-    run "cd #{deploy_to}/current && bundle exec whenever --update-crontab"
+    run "cd /home/weafam/www/weafam/current && bundle exec whenever --update-crontab"
     # run "bundle exec whenever --update-crontab"
   end
 end
