@@ -885,7 +885,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                              "connection_id"=>7, "pending_connect"=>1}  )
       end
 
-      # it '- check SearchResults Third row - exist? previously Deleted  - Ok' do # , focus: true
+      # it ' - check SearchResults Third row - exist? previously Deleted  - Ok' do # , focus: true
       #   search_results_fields = SearchResults.third.exist?
       #   puts "check SearchResults Third row - exist? previously Deleted  - Ok"   # 0
       #   expect(search_results_fields).to eq(false)
