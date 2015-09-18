@@ -75,6 +75,7 @@ FactoryGirl.define do
       profile_id 17
       email "alexey@al.al"
       password '11111'
+      double 0
     end
     trait :user_2_connected do        # For [1, 2] connected trees test
       profile_id 11

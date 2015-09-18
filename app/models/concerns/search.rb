@@ -6,10 +6,10 @@ module Search
   #   Значение certain_koeff - из вьюхи/
   def start_search(certain_koeff)
 
-    tree_data =  Tree.tree_profiles(self) # collect tree info
+    tree_data =  Tree.tree_main_data(self) # collect tree info
 
     author_tree_arr      = tree_data[:author_tree_arr]
-    tree_is_profiles     = tree_data[:tree_is_profiles]
+    tree_profiles        = tree_data[:tree_profiles]
     qty_of_tree_profiles = tree_data[:qty_of_tree_profiles]
     connected_author_arr = tree_data[:connected_author_arr]
 
@@ -26,30 +26,31 @@ module Search
     logger.info "======================= RUN start_search ========================= "
     logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
     show_in_logger(author_tree_arr, "=== результат" )  # DEBUGG_TO_LOGG
-    logger.info "Задание на поиск от Дерева Юзера:  author_tree_arr.size = #{author_tree_arr.size}, tree_is_profiles = #{tree_is_profiles} "
+    logger.info "Задание на поиск от Дерева Юзера:  author_tree_arr.size = #{author_tree_arr.size}, tree_profiles = #{tree_profiles} "
     logger.info "Коэффициент достоверности: certain_koeff = #{certain_koeff}"
 
     ############### ПОИСК ######## NEW LAST METHOD ############
-    search_profiles_from_tree(certain_koeff, connected_author_arr, tree_is_profiles) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
+    search_profiles_from_tree(certain_koeff, connected_author_arr, tree_profiles) # Основной поиск по дереву Автора среди деревьев в ProfileKeys.
 
     # TEST CONNECTION FAILS
     # @duplicates_one_to_many = { 3=> [2, 4]}     # for DEBUGG ONLY!!!
     # @duplicates_many_to_one = { 4=> 2, 3 => 2}  # for DEBUGG ONLY!!!
 
     results = {
-        connected_author_arr: connected_author_arr, # where use? - in View
-        qty_of_tree_profiles: qty_of_tree_profiles, # where use? - in View
+        tree_profiles:            tree_data[:tree_profiles],        # where use? - in RSpec, View
+        connected_author_arr:     tree_data[:connected_author_arr], # where use? - in RSpec, View
+        qty_of_tree_profiles:     tree_data[:qty_of_tree_profiles], # where use? - in RSpec, View
         ############### РЕЗУЛЬТАТЫ ПОИСКА ######## NEW METHOD ############
-        profiles_relations_arr: @profiles_relations_arr, #  DEBUGG_TO_LOGG
-        profiles_found_arr: @profiles_found_arr, #  DEBUGG_TO_LOGG
-        uniq_profiles_pairs: @uniq_profiles_pairs,
+        profiles_relations_arr:   @profiles_relations_arr, #  DEBUGG_TO_LOGG
+        profiles_found_arr:       @profiles_found_arr, #  DEBUGG_TO_LOGG
+        uniq_profiles_pairs:      @uniq_profiles_pairs,
         profiles_with_match_hash: @profiles_with_match_hash, #  DEBUGG_TO_LOGG
         ############# РЕЗУЛЬТАТЫ ПОИСКА для отображения на Главной ##########################################
-        by_profiles: @by_profiles,
-        by_trees: @by_trees,
+        by_profiles:              @by_profiles,
+        by_trees:                 @by_trees,
         ############### ДУБЛИКАТЫ ПОИСКА ######## NEW METHOD ############
-        duplicates_one_to_many: @duplicates_one_to_many,
-        duplicates_many_to_one: @duplicates_many_to_one
+        duplicates_one_to_many:   @duplicates_one_to_many,
+        duplicates_many_to_one:   @duplicates_many_to_one
     }
 
     # From 46 - > in 45 .. 47
@@ -219,16 +220,22 @@ module Search
     # previous_results_count = SearchResults.where(user_id: self, found_user_id: found_tree_ids).count
     previous_results = SearchResults.where(user_id: self, found_user_id: found_tree_ids)
 
-    # cty_rows = SearchResults.all.count
-    # puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, cty_rows = #{cty_rows.inspect} "
+    prev_cty_rows = SearchResults.all.count
+    puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, prev_cty_rows = #{prev_cty_rows.inspect} "
 
     # logger.info "= found_tree_ids = #{found_tree_ids.inspect} "
-    if !previous_results.blank?
-      previous_results.each(&:destroy)
-      store_results(found_tree_ids, by_profiles, current_user_tree_ids)
-    else
-      store_results(found_tree_ids, by_profiles, current_user_tree_ids)
-    end
+
+    # if !previous_results.blank?
+    #   previous_results.each(&:destroy)
+    #   store_results(found_tree_ids, by_profiles, current_user_tree_ids)
+    # else
+    #   store_results(found_tree_ids, by_profiles, current_user_tree_ids)
+    # end
+
+    previous_results.each(&:destroy) unless previous_results.blank?
+    store_results(found_tree_ids, by_profiles, current_user_tree_ids)
+
+
   end
   # by_profiles = [{:search_profile_id=>340, :found_tree_id=>17, :found_profile_id=>350, :count=>7},
   # {:search_profile_id=>342, :found_tree_id=>17, :found_profile_id=>349, :count=>7},
@@ -286,7 +293,7 @@ module Search
     end
 
     qty_rows = SearchResults.all.count
-    puts "In store_results - SearchResults created: qty_rows = #{qty_rows.inspect} "
+    puts "In store_results - SearchResults created: All qty_rows = #{qty_rows.inspect} "
 
   end
 

@@ -24,7 +24,19 @@ FactoryGirl.define do
       counts [5,5]
       connection_id 7
       pending_connect 1
+    end
 
+    trait :correct3 do
+      user_id 1
+      found_user_id 3
+      profile_id 11
+      found_profile_id 25
+      count 7
+      found_profile_ids [22, 23, 24, 25, 26, 27, 28, 29]
+      searched_profile_ids [11, 12, 13, 14, 18, 19, 20, 21]
+      counts [7, 7, 7, 7, 5, 5, 5, 5]
+      connection_id 3
+      pending_connect 0
     end
 
     trait :big_IDs do

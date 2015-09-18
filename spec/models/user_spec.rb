@@ -161,6 +161,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
       # SearchResults
       FactoryGirl.create(:search_results)
       FactoryGirl.create(:search_results, :correct2)
+      FactoryGirl.create(:search_results, :correct3)
 
       #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
@@ -593,7 +594,13 @@ RSpec.describe User, :type => :model    do  # , focus: true
         expect(connected_users).to eq([1,2])
       end
     end
-    context '- before actions - check tables values ', focus: true  do   #   , focus: true
+    context '- before actions - check tables values ' , focus: true  do   #   , focus: true
+      describe '- check User have double == 0 before - Ok' do
+        it "- current_user.double == 0 check" do
+          puts "Let created: current_user_1.double = #{current_user_1.double} \n"   # 0
+          expect(current_user_1.double).to eq(0)
+        end
+      end
       describe '- check Profile have rows count before - Ok' do
         let(:rows_qty) {27}
         it_behaves_like :successful_profiles_rows_count
@@ -610,6 +617,10 @@ RSpec.describe User, :type => :model    do  # , focus: true
         let(:rows_qty) {2}
         it_behaves_like :successful_connected_users_rows_count
       end
+      describe '- check SearchResults have rows count before - Ok' do
+        let(:rows_qty) {3}
+        it_behaves_like :successful_search_results_rows_count
+      end
     end
 
     describe '- check User model Method <Search> - Ok' , focus: true do  # , focus: true
@@ -625,6 +636,10 @@ RSpec.describe User, :type => :model    do  # , focus: true
       it "- Check certain_koeff_for_connect before start_search" do
         puts "In User model: certain_koeff_for_connect = #{certain_koeff_for_connect} \n"   # 4
         expect(certain_koeff_for_connect).to eq(4)
+      end
+      it "- Check search_results[:tree_profiles] after start_search" do
+        puts "In User model - SEARCH TASK : search_results[:tree_profiles] = #{search_results[:tree_profiles]} \n"
+        expect(search_results[:tree_profiles].sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
       end
       it "- Check search_results[:connected_author_arr] after start_search" do
         puts "In User model: search_results[:connected_author_arr] = #{search_results[:connected_author_arr]} \n"
@@ -838,7 +853,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
       # {:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}],
       # :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
 
-
     end
 
     context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
@@ -848,6 +862,14 @@ RSpec.describe User, :type => :model    do  # , focus: true
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
       end
+
+      describe '- check User have double == 1 after <search> - Ok' do
+        it "- current_user.double == 1 check" do
+          puts "Check User have double == 1: current_user_1.double = #{current_user_1.double} \n"   # 0
+          expect(current_user_1.double).to eq(1)
+        end
+      end
+
       it '- check SearchResults First Factory row - Ok' do # , focus: true
         search_results_fields = SearchResults.first.attributes.except('created_at','updated_at')
         expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
@@ -861,6 +883,11 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                              "found_profile_id"=>1444, "count"=>5, "found_profile_ids"=>[1444, 22222],
                                              "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
                                              "connection_id"=>7, "pending_connect"=>1}  )
+      end
+      it '- check SearchResults Third row - exist? previously Deleted  - Ok' do # , focus: true
+        search_results_fields = SearchResults.third.exist?
+        puts "check SearchResults Third row - exist? previously Deleted  - Ok"   # 0
+        expect(search_results_fields).to eq(false)
       end
       it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
         search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
