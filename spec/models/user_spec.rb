@@ -884,11 +884,13 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                              "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
                                              "connection_id"=>7, "pending_connect"=>1}  )
       end
-      it '- check SearchResults Third row - exist? previously Deleted  - Ok' do # , focus: true
-        search_results_fields = SearchResults.third.exist?
-        puts "check SearchResults Third row - exist? previously Deleted  - Ok"   # 0
-        expect(search_results_fields).to eq(false)
-      end
+
+      # it '- check SearchResults Third row - exist? previously Deleted  - Ok' do # , focus: true
+      #   search_results_fields = SearchResults.third.exist?
+      #   puts "check SearchResults Third row - exist? previously Deleted  - Ok"   # 0
+      #   expect(search_results_fields).to eq(false)
+      # end
+
       it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
         search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
                                                                       'searched_profile_ids')
