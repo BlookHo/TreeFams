@@ -2,20 +2,53 @@ module DoubleUsersSearch
   extend ActiveSupport::Concern
 
   # @note: Запуск поиска дублей юзеров
-  def double_users_search(profiles_relations, by_trees, certain_koeff)
-
+  def double_users_search(doubles_search_data, certain_koeff)
+    profiles_relations = doubles_search_data[:relations_arr]
+    by_trees      = doubles_search_data[:by_trees]
     found_users = collect_users(by_trees)
-    logger.info "1 In double_users_search: after collect_users: found_users = #{found_users} "
+    # logger.info "1 In double_users_search: after collect_users: found_users = #{found_users} "
+    # puts "  1 In double_users_search: profiles_relations = #{profiles_relations}  "
+    # puts "  1 In double_users_search: found_users = #{found_users}  "
     users_relations = init_profile_relations(profiles_relations, self.profile_id)
+    # puts "  2 In double_users_search: profiles_relations = #{profiles_relations}  "
+    # puts "  2 In double_users_search: users_relations = #{users_relations}  "
     logger.info "2 In double_users_search: after init_profile_relations: users_relations = #{users_relations} "
     users_relations[0].merge!(init_user_id: self.id, init_relations_names: init_find_names(users_relations))
     logger.info "3 Ok In double_users_search: after init_find_names: users_relations = #{users_relations} "
+    # puts "  3 In double_users_search: profiles_relations = #{profiles_relations}  "
+    # puts "  3 In double_users_search: users_relations = #{users_relations}  "
 
     complete_users_relations = collect_relations(users_relations, found_users, certain_koeff)
     logger.info "4 Ok In double_users_search: after collect_relations: complete_users_relations = #{complete_users_relations} "
+    # puts "  4 In double_users_search: profiles_relations = #{profiles_relations}  "
+    # puts "  4 In double_users_search: complete_users_relations = #{complete_users_relations}  "
 
     find_double(complete_users_relations) unless complete_users_relations.blank?
 
+  end
+
+  # @note: создание хэша отношений для self
+  def init_profile_relations(profiles_relations, self_profile_id)
+    init_relations_hash = {}
+    # puts "  1 In init_profile_relations: profiles_relations = #{profiles_relations}  "
+    # puts "  1 In init_profile_relations: init_relations_hash = #{init_relations_hash}  "
+    profiles_relations.each do |one_hash|
+      one_hash.each do |key,val|
+        init_relations_hash.merge!(one_hash) if key == :profile_searched && val == self_profile_id
+        # puts "  2 In init_profile_relations: profiles_relations = #{profiles_relations}  "
+        # puts "  2 In init_profile_relations: one_hash = #{one_hash}  "
+        # puts "  2 In init_profile_relations: init_relations_hash = #{init_relations_hash}  "
+
+      end
+    end
+    users_relations = []
+    # puts "  3 In init_profile_relations: users_relations = #{users_relations}  "
+    logger.info "  3 before: init_profile_relations: init_relations_hash = #{init_relations_hash} "
+    logger.info "  3 before: init_profile_relations: profiles_relations = #{profiles_relations} "
+    init_relations_hash.merge!(init_user_name: Profile.find(self_profile_id).name_id)
+    logger.info "  3 after: init_profile_relations: init_relations_hash = #{init_relations_hash} "
+    logger.info "  3 after: init_profile_relations: profiles_relations = #{profiles_relations} "
+    users_relations << init_relations_hash
   end
 
 
@@ -28,21 +61,6 @@ module DoubleUsersSearch
     end
     logger.info "In double_users_search: init_find_names: init_names_hash = #{init_names_hash} "
     init_names_hash
-  end
-
-
-  # @note: создание хэша отношений для self
-  def init_profile_relations(profiles_relations, self_profile_id)
-    init_relations_hash = {}
-    profiles_relations.each do |one_hash|
-      one_hash.each do |key,val|
-        init_relations_hash = one_hash if key == :profile_searched && val == self_profile_id
-      end
-    end
-    users_relations = []
-    init_relations_hash.merge!(init_user_name: Profile.find(self_profile_id).name_id)
-    # logger.info "In double_users_search: init_profile_relations: init_relations_hash = #{init_relations_hash} "
-    users_relations << init_relations_hash
   end
 
 

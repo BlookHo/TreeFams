@@ -1,25 +1,26 @@
 module Search
   extend ActiveSupport::Concern
 
-  def start_search(certain_koeff)    # Запуск мягкого поиска для объединения
-                                     # Значение certain_koeff - из вьюхи/
 
-    connected_author_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
-    author_tree_arr = Tree.get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
-    ###################################
+  # @note: Запуск мягкого поиска для объединения
+  #   Значение certain_koeff - из вьюхи/
+  def start_search(certain_koeff)
+
+    tree_data =  Tree.tree_profiles(self) # collect tree info
+
+    author_tree_arr      = tree_data[:author_tree_arr]
+    tree_is_profiles     = tree_data[:tree_is_profiles]
+    qty_of_tree_profiles = tree_data[:qty_of_tree_profiles]
+    connected_author_arr = tree_data[:connected_author_arr]
+
     #from_profile_searching = author_tree_arr.profile_id     # От какого профиля осущ-ся Поиск DEBUGG_TO_LOGG
     #name_id_searched       = author_tree_arr.name_id        # Имя Профиля DEBUGG_TO_LOGG
     #relation_id_searched   = author_tree_arr.relation_id    # Искомое relation_id К_Профиля DEBUGG_TO_LOGG
     #is_name_id_searched    = author_tree_arr.is_name_id     # Искомое Имя К_Профиля DEBUGG_TO_LOGG
-    #
     #profile_id_searched    = author_tree_arr.is_profile_id  # Поиск по ID К_Профиля
-    ###################################
 
-    tree_is_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
-    # tree_is_profiles = author_tree_arr.map {|p| p.is_profile_id }.uniq
-    qty_of_tree_profiles = tree_is_profiles.size unless tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве - для отображения на Главной
-    # Задание на поиск от Дерева Юзера: tree_is_profiles =
-    # [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18]
+    # Задание на поиск от Дерева Юзера:
+    # tree_is_profiles = [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18] - in RSpec user_spec.rb
 
     # puts "======================= RUN start_search ========================= "
     logger.info "======================= RUN start_search ========================= "
@@ -51,6 +52,62 @@ module Search
         duplicates_many_to_one: @duplicates_many_to_one
     }
 
+    # From 46 - > in 45 .. 47
+
+    # by_profiles
+     [{:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7},
+      {:search_profile_id=>657, :found_tree_id=>47, :found_profile_id=>667, :count=>7},
+      {:search_profile_id=>664, :found_tree_id=>45, :found_profile_id=>646, :count=>7},
+      {:search_profile_id=>658, :found_tree_id=>47, :found_profile_id=>668, :count=>7},
+      {:search_profile_id=>658, :found_tree_id=>45, :found_profile_id=>645, :count=>7},
+      {:search_profile_id=>659, :found_tree_id=>47, :found_profile_id=>666, :count=>7},
+      {:search_profile_id=>659, :found_tree_id=>45, :found_profile_id=>650, :count=>7},
+      {:search_profile_id=>656, :found_tree_id=>47, :found_profile_id=>669, :count=>7},
+      {:search_profile_id=>656, :found_tree_id=>45, :found_profile_id=>649, :count=>7},
+      {:search_profile_id=>665, :found_tree_id=>47, :found_profile_id=>673, :count=>5},
+      {:search_profile_id=>662, :found_tree_id=>47, :found_profile_id=>670, :count=>5},
+      {:search_profile_id=>662, :found_tree_id=>34, :found_profile_id=>540, :count=>5},
+      {:search_profile_id=>657, :found_tree_id=>45, :found_profile_id=>651, :count=>5},
+      {:search_profile_id=>657, :found_tree_id=>34, :found_profile_id=>539, :count=>5},
+      {:search_profile_id=>664, :found_tree_id=>47, :found_profile_id=>672, :count=>5},
+      {:search_profile_id=>658, :found_tree_id=>34, :found_profile_id=>544, :count=>5},
+      {:search_profile_id=>659, :found_tree_id=>34, :found_profile_id=>543, :count=>5},
+      {:search_profile_id=>663, :found_tree_id=>47, :found_profile_id=>671, :count=>5},
+      {:search_profile_id=>663, :found_tree_id=>34, :found_profile_id=>541, :count=>5},
+      {:search_profile_id=>656, :found_tree_id=>34, :found_profile_id=>542, :count=>5}]
+
+    # by_trees
+     [{:found_tree_id=>34, :found_profile_ids=>[542, 541, 543, 544, 539, 540]},
+      {:found_tree_id=>45, :found_profile_ids=>[649, 650, 645, 646, 651, 647]},
+      {:found_tree_id=>47, :found_profile_ids=>[669, 671, 666, 668, 672, 667, 670, 673]}]
+
+    # duplicates_one_to_many
+     {711=>{45=>{648=>5, 710=>5}}}
+
+
+    # From 45 - > in 46 .. 47
+    # [inf] by_profiles =
+        [{:search_profile_id=>649, :found_tree_id=>46, :found_profile_id=>656, :count=>7},
+         {:search_profile_id=>646, :found_tree_id=>46, :found_profile_id=>664, :count=>7},
+         {:search_profile_id=>647, :found_tree_id=>46, :found_profile_id=>665, :count=>7},
+         {:search_profile_id=>650, :found_tree_id=>46, :found_profile_id=>659, :count=>7},
+         {:search_profile_id=>645, :found_tree_id=>46, :found_profile_id=>658, :count=>7},
+         {:search_profile_id=>649, :found_tree_id=>47, :found_profile_id=>669, :count=>5},
+         {:search_profile_id=>646, :found_tree_id=>47, :found_profile_id=>672, :count=>5},
+         {:search_profile_id=>651, :found_tree_id=>47, :found_profile_id=>667, :count=>5},
+         {:search_profile_id=>651, :found_tree_id=>46, :found_profile_id=>657, :count=>5},
+         {:search_profile_id=>647, :found_tree_id=>47, :found_profile_id=>673, :count=>5},
+         {:search_profile_id=>650, :found_tree_id=>47, :found_profile_id=>666, :count=>5},
+         {:search_profile_id=>645, :found_tree_id=>47, :found_profile_id=>668, :count=>5}]
+
+    # [inf] by_trees =
+        [{:found_tree_id=>46, :found_profile_ids=>[658, 659, 665, 657, 664, 656]},
+         {:found_tree_id=>47, :found_profile_ids=>[668, 666, 673, 667, 672, 669]}]
+
+    # duplicates_Many_to_One =
+        {648=>{46=>711}, 710=>{46=>711}}
+
+
     logger.info "= Before store_search_results ========== results = #{results} "
     if (results[:duplicates_one_to_many].empty? && results[:duplicates_many_to_one].empty?)
       # Store new results ONLY IF there are NO BOTH duplicates
@@ -59,7 +116,6 @@ module Search
 
 
    # Start double_users_search(results) - only first time after registration
-
    ############# SWITCHED OFF - double_users_search
    if self.double == 0
      if results[:by_trees].blank?
@@ -67,7 +123,9 @@ module Search
        logger.info "Start + No search: double => 1: self.double = #{self.double} " # DEBUGG_TO_LOGG
      else
        logger.info "Start + Search: double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
-       self.double_users_search(results[:profiles_relations_arr], results[:by_trees], certain_koeff)
+       doubles_search_data = { relations_arr: results[:profiles_relations_arr],
+                               by_trees: results[:by_trees] }
+       self.double_users_search(doubles_search_data, certain_koeff)
        logger.info "After double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
      end
    end
@@ -127,6 +185,8 @@ module Search
     #
 
   end # END OF start_search
+
+
 
 
   # @note запись рез-тов поиска в отдельную таблицу - для Метеора

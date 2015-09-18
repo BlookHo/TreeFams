@@ -1,5 +1,5 @@
 
-RSpec.describe User, :type => :model  , focus: true  do  # , focus: true
+RSpec.describe User, :type => :model    do  # , focus: true
 
   describe '- validation' do
     before do
@@ -152,6 +152,9 @@ RSpec.describe User, :type => :model  , focus: true  do  # , focus: true
   describe '- Check methods in User model'   do # , focus: true
     # create model data
     before {
+      #Counters
+      FactoryGirl.create(:counter)    #
+
       #Weafam_settings
       FactoryGirl.create(:weafam_setting)    #
 
@@ -286,6 +289,8 @@ RSpec.describe User, :type => :model  , focus: true  do  # , focus: true
       FactoryGirl.create(:connect_profile, :connect_profile_27)  # 27
       FactoryGirl.create(:connect_profile, :connect_profile_28)  # 28
       FactoryGirl.create(:connect_profile, :connect_profile_29)  # 29
+
+      FactoryGirl.create(:connect_profile, :connect_profile_124)  # 124
 
       # Tree
       FactoryGirl.create(:connection_trees)                        # 17 pr2
@@ -588,9 +593,9 @@ RSpec.describe User, :type => :model  , focus: true  do  # , focus: true
         expect(connected_users).to eq([1,2])
       end
     end
-    context '- before actions - check tables values ' do   #   , focus: true
+    context '- before actions - check tables values ', focus: true  do   #   , focus: true
       describe '- check Profile have rows count before - Ok' do
-        let(:rows_qty) {26}
+        let(:rows_qty) {27}
         it_behaves_like :successful_profiles_rows_count
       end
       describe '- check Tree have rows count before - Ok' do
@@ -607,7 +612,7 @@ RSpec.describe User, :type => :model  , focus: true  do  # , focus: true
       end
     end
 
-    describe '- check User model Method <Search> - Ok'  do  # , focus: true
+    describe '- check User model Method <Search> - Ok' , focus: true do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -836,7 +841,7 @@ RSpec.describe User, :type => :model  , focus: true  do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
+    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
       describe '- check SearchResults have rows count after <search> - Ok' do

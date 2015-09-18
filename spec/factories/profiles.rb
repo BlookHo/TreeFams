@@ -717,6 +717,17 @@ FactoryGirl.define do
       end
       # 29;;"2015-01-23 07:48:01.321049";"2015-01-23 07:48:01.321049";249;0;3;249
 
+      trait :connect_profile_124 do   # 124
+        id 124
+        user_id   nil
+        name_id   446
+        sex_id    0
+        tree_id   3
+        deleted  0
+      end
+
+
+
   end
 
 

@@ -25,6 +25,32 @@ class Tree < ActiveRecord::Base
   belongs_to :name, foreign_key: "is_name_id"
   belongs_to :relation
 
+
+  # @note: Считаем кол-во профилей в дереве (объединенном)
+  #   с добавлением профиля current_user:
+  #   Исп-ся в search.rb
+  # Задание на поиск от Дерева Юзера: tree_is_profiles =
+  # [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18] - in RSpec
+  def self.tree_profiles(current_user)
+    connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
+    author_tree_arr = get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
+
+    # Задание на поиск от Дерева Юзера:
+    tree_is_profiles = [current_user.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
+    tree_is_profiles = tree_is_profiles.uniq
+    puts "All tree_profiles =  #{tree_is_profiles} "
+
+    qty_of_tree_profiles = 0
+    qty_of_tree_profiles = tree_is_profiles.size unless tree_is_profiles.blank? # Кол-во профилей в объед-ном дереве
+    # - для отображения на Главной
+
+    {   author_tree_arr: author_tree_arr,
+        tree_is_profiles: tree_is_profiles,
+        qty_of_tree_profiles: qty_of_tree_profiles,
+        connected_author_arr: connected_author_arr  }
+  end
+
+
   # Считаем кол-во профилей в дереве:
   # Кол-во рядов объединеннного дерева + кол-во Юзеров в объед-м дереве
   # т.к. у них (авторов) нет своих рядов в Tree
