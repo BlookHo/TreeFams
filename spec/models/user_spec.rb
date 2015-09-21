@@ -885,30 +885,30 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                              "connection_id"=>7, "pending_connect"=>1}  )
       end
 
-      # it ' - check SearchResults Third row - exist? previously Deleted  - Ok' do # , focus: true
-      #   search_results_fields = SearchResults.third.exist?
-      #   puts "check SearchResults Third row - exist? previously Deleted  - Ok"   # 0
-      #   expect(search_results_fields).to eq(false)
-      # end
+      it ' - check SearchResults Third row - exist? previously Deleted  - Ok' do # , focus: true
+        puts "check SearchResults Third row - NOT exist? previously Deleted  - Ok"   # 0
+        expect(SearchResults.exists?(id: 3, user_id: 1, found_user_id: 3, profile_id: 11)).to eq(false)
+      end
 
+      let(:search_results_fourth_row) { SearchResults.find(4) }  # 4
       it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
-        search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
+        search_results_fields = search_results_fourth_row.attributes.except('created_at','updated_at','found_profile_ids',
                                                                       'searched_profile_ids')
-        expect(search_results_fields).to eq({"id"=>3, "user_id"=>1, "found_user_id"=>3, "profile_id"=>11,
+        expect(search_results_fields).to eq({"id"=>4, "user_id"=>1, "found_user_id"=>3, "profile_id"=>11,
                                              "found_profile_id"=>25, "count"=>7,
                                              "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3,
                                              "pending_connect"=>0} )
       end
       it '- check SearchResults Third row.found_profile_ids - made by Method Search - Ok' do
-        search_results_fields = SearchResults.third.found_profile_ids.sort
+        search_results_fields = search_results_fourth_row.found_profile_ids.sort
         expect(search_results_fields).to eq( [22, 23, 24, 25, 26, 27, 28, 29])
       end
       it '- check SearchResults Third row.searched_profile_ids - made by Method Search - Ok' do
-        search_results_fields = SearchResults.third.searched_profile_ids.sort
+        search_results_fields = search_results_fourth_row.searched_profile_ids.sort
         expect(search_results_fields).to eq( [11, 12, 13, 14, 18, 19, 20, 21])
       end
       it '- check SearchResults Third row.counts - made by Method Search - Ok' do
-        search_results_fields = SearchResults.third.counts.sort
+        search_results_fields = search_results_fourth_row.counts.sort
         expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7, 7])
       end
 

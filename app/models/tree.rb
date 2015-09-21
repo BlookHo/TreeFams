@@ -60,7 +60,9 @@ class Tree < ActiveRecord::Base
 
       users_tree_data = User.get_users_male_female(connected_users)
 
-      profiles = Tree.where(user_id: connected_users, deleted: 0).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
+      profiles = Tree.where(user_id: connected_users, deleted: 0).
+          select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).
+          distinct
 
       # all tree profiles
       tree_is_profiles = profiles.map {|p| p.is_profile_id }.uniq.sort
@@ -98,10 +100,10 @@ class Tree < ActiveRecord::Base
   # Получение массива дерева соединенных Юзеров из Tree
   # На входе - массив соединенных Юзеров
   def self.get_connected_tree(connected_users_arr)
-    tree_arr = Tree.where(user_id: connected_users_arr, deleted: 0).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
-    return tree_arr
+    Tree.where(user_id: connected_users_arr, deleted: 0).
+        select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).
+        distinct
   end
-
 
 
   # Кол-во профилей в дереве
@@ -161,9 +163,12 @@ class Tree < ActiveRecord::Base
   def self.collect_tree_profiles(tree_arr)
     profiles = {}
     tree_arr.map {|p|
-      ( one_profile_data = { :is_name_id => p.is_name_id, :is_sex_id => p.is_sex_id , :profile_id => p.profile_id, :relation_id => p.relation_id}
-      profiles.merge!( p.is_profile_id => one_profile_data )  unless one_profile_data.empty?
-      ) }
+      ( one_profile_data = { :is_name_id => p.is_name_id,
+                             :is_sex_id => p.is_sex_id ,
+                             :profile_id => p.profile_id,
+                             :relation_id => p.relation_id }
+        profiles.merge!( p.is_profile_id => one_profile_data ) unless one_profile_data.empty? )
+    }
     profiles
   end
 

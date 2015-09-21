@@ -43,6 +43,56 @@ class HomeController < ApplicationController
   # All profiles in user's tree
   def index
 
+    # class Hash
+    #   def include?(other)
+    #     self.merge(other) == self
+    #   end
+    # end
+
+    def exclude_doubles_results(by_trees_arr, arr_to_exclude)
+      new_arr = []
+      new_by_trees_arr = []
+      arr_to_exclude.each do |tree_id_with_double|
+        tree_id_with_double
+        # by_trees_arr.delete_if {|one_hash| one_hash.include?({found_tree_id:  tree_id_with_double })  }
+
+        by_trees_arr.each do |one_hash|
+          logger.info " In home/index: exclude_doubles_results: one_hash = #{one_hash}, tree_id_with_double = #{tree_id_with_double} "
+          # logger.info " In home/index: exclude_doubles_results: include? = #{one_hash.include?({found_tree_id:  tree_id_with_double })} "
+          if one_hash.merge({found_tree_id: tree_id_with_double }) == one_hash
+            logger.info " In home/index: one_hash = #{one_hash} "
+            new_by_trees_arr = by_trees_arr - [one_hash]
+          end
+        end
+        logger.info " In home/index: exclude_doubles_results: new_by_trees_arr = #{new_by_trees_arr} "
+        # by_trees_arr.each do |one_hash|
+        #   one_hash
+        # end
+      end
+      logger.info "########## In home/index: exclude_doubles_results: - YES"
+      new_arr
+    end
+
+   ########## In home/index: exclude_doubles_results:
+   # by_trees_arr = [{:found_tree_id=>34, :found_profile_ids=>[542, 541, 543, 544, 539, 540]},
+   # {:found_tree_id=>45, :found_profile_ids=>[649, 650, 645, 646, 651, 647]},
+   # {:found_tree_id=>47, :found_profile_ids=>[669, 671, 666, 668, 672, 667, 670, 673]}]
+
+
+
+
+    # TEST
+    by_trees_arr =
+    [{:found_tree_id=>34, :found_profile_ids=>[542, 541, 543, 544, 539, 540]},
+     {:found_tree_id=>45, :found_profile_ids=>[649, 650, 645, 646, 651, 647]},
+     {:found_tree_id=>47, :found_profile_ids=>[669, 671, 666, 668, 672, 667, 670, 673]}]
+
+    arr_to_exclude = [45]
+
+    new_arr = exclude_doubles_results(by_trees_arr, arr_to_exclude)
+    logger.info "########## In home/index: after exclude_doubles_results: new_arr = #{new_arr}"
+
+
     # TEST
     # work!
     # os = OpenStruct.new @attributes

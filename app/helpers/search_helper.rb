@@ -504,7 +504,7 @@ module SearchHelper
     end
 
     #logger.info "In fill_arrays_in_hash: one_hash = #{one_hash} "
-    return one_hash
+    one_hash
 
   end
 
@@ -515,8 +515,7 @@ module SearchHelper
   # Получение массива дерева соединенных Юзеров из Tree
   # На входе - массив соединенных Юзеров
   def get_connected_tree(connected_users_arr)
-    tree_arr = Tree.where(:user_id => connected_users_arr).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
-    return tree_arr
+    Tree.where(:user_id => connected_users_arr).select(:profile_id,:name_id,:relation_id,:is_profile_id,:is_name_id,:is_sex_id).distinct
   end
 
 
@@ -536,7 +535,7 @@ module SearchHelper
       final_merged_hash = merged_hash
     end
     #@all_match_hash = final_merged_hash  # DEBUGG TO VIEW
-    return final_merged_hash
+    final_merged_hash
   end
 
   # No USE
@@ -555,7 +554,7 @@ module SearchHelper
       final_hash_arr = new_hash_merging
       ind += 1
     end
-    return final_hash_arr
+    final_hash_arr
   end
 
 
@@ -569,7 +568,7 @@ module SearchHelper
     input_arr_hash.each do |k|
       amount_found = amount_found + k.values.flatten.size
     end
-    return amount_found
+    amount_found
   end
 
   # No USE
@@ -585,7 +584,7 @@ module SearchHelper
     @users_ids_arr = []
     for ind in 0 .. all_profiles_arr.length - 1
       user_found_id = User.find_by_profile_id(all_profiles_arr[ind])
-      if !user_found_id.blank?
+      unless user_found_id.blank?
         @count += 1
         @users_ids_arr << user_found_id.id  # user_id среди найденных профилей
       end

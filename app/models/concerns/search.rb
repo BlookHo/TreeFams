@@ -217,24 +217,13 @@ module Search
 
     # logger.info "= in store_search_results: by_profiles = #{by_profiles.inspect},\n by_trees = #{by_trees.inspect}"
     found_tree_ids = collect_tree_ids(by_trees)
-    # previous_results_count = SearchResults.where(user_id: self, found_user_id: found_tree_ids).count
+
     previous_results = SearchResults.where(user_id: self, found_user_id: found_tree_ids)
-
-    prev_cty_rows = SearchResults.all.count
-    puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, prev_cty_rows = #{prev_cty_rows.inspect} "
-
-    # logger.info "= found_tree_ids = #{found_tree_ids.inspect} "
-
-    # if !previous_results.blank?
-    #   previous_results.each(&:destroy)
-    #   store_results(found_tree_ids, by_profiles, current_user_tree_ids)
-    # else
-    #   store_results(found_tree_ids, by_profiles, current_user_tree_ids)
-    # end
+    previous_results_count = previous_results.count
+    puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, previous_results_count = #{previous_results_count.inspect} "
 
     previous_results.each(&:destroy) unless previous_results.blank?
     store_results(found_tree_ids, by_profiles, current_user_tree_ids)
-
 
   end
   # by_profiles = [{:search_profile_id=>340, :found_tree_id=>17, :found_profile_id=>350, :count=>7},
@@ -559,7 +548,7 @@ module Search
       one_tree_hash.merge!(:found_profile_ids => profiles_ids)
       by_trees << one_tree_hash
     end
-    return by_trees
+    by_trees
   end
 
 
