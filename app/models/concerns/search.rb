@@ -109,6 +109,7 @@ module Search
         {648=>{46=>711}, 710=>{46=>711}}
 
 
+
     logger.info "= Before store_search_results ========== results = #{results} "
     if (results[:duplicates_one_to_many].empty? && results[:duplicates_many_to_one].empty?)
       # Store new results ONLY IF there are NO BOTH duplicates
@@ -188,7 +189,44 @@ module Search
   end # END OF start_search
 
 
+  # @note: Check and delete_if: if one_hash contains {found_tree_id: tree_id_with_double} - tree w/doubles results
+  #   If No -> leave this one_hash in by_trees_arr of hashes
+  # @params: by_trees_arr - from search results
+  #   tree_ids_to_exclude - arr of tree ids where doubles were found
+  def exclude_doubles_results(by_trees_arr, tree_ids_to_exclude)
+    tree_ids_to_exclude.each do |tree_id_with_double|
+      by_trees_arr.delete_if { |one_hash| one_hash.merge({found_tree_id: tree_id_with_double }) == one_hash }
+    end
+    by_trees_arr
+  end
 
+  # @note: Find tree ids, which contains doubles, for one type double
+  #   and make an array of this ids
+  # @params: one_type_doubles - from search results - hash with one type double
+  # @input: results[:duplicates_one_to_many] =
+  {711=>{45=>{648=>5, 710=>5}}}
+  # @input: results[:duplicates_Many_to_One =
+  {648=>{46=>711}, 710=>{46=>711}}
+  def collect_one_doubles_ids(one_type_doubles)
+    tree_ids_with_doubles = []
+    one_type_doubles.each_value do |val|
+      val.each_key do |key|
+        tree_ids_with_doubles << key
+      end
+    end
+    tree_ids_with_doubles.uniq
+  end
+
+
+  # @note: collect ids of trees, which contains doubles, for each type of doubles,
+  #   and make an ids array
+  def collect_doubles_tree_ids(results)
+    tree_ids_one_to_many = []
+    tree_ids_many_to_one = []
+    tree_ids_one_to_many = collect_one_doubles_ids(results[:duplicates_one_to_many]) unless results[:duplicates_one_to_many].empty?
+    tree_ids_many_to_one = collect_one_doubles_ids(results[:duplicates_many_to_one]) unless results[:duplicates_many_to_one].empty?
+    (tree_ids_one_to_many + tree_ids_many_to_one).uniq
+  end
 
   # @note запись рез-тов поиска в отдельную таблицу - для Метеора
   def store_search_results(results)
@@ -196,8 +234,13 @@ module Search
     by_trees = results[:by_trees]
     current_user_tree_ids = results[:connected_author_arr]
 
-    # puts " In store_search_results ========================= "
+    tree_ids_to_exclude = collect_doubles_tree_ids(results)
+    unless tree_ids_to_exclude.blank?
+      by_trees = exclude_doubles_results(results[:by_trees], tree_ids_to_exclude)
+    end
+    logger.info "# In home/index: after exclude_doubles_results: tree_ids_to_exclude = #{tree_ids_to_exclude}, by_trees = #{by_trees}"
 
+    # puts " In store_search_results ========================= "
     # by_profiles =
     # [{:search_profile_id=>18, :found_tree_id=>2, :found_profile_id=>9, :count=>5},
     #  {:search_profile_id=>18, :found_tree_id=>1, :found_profile_id=>19, :count=>5},

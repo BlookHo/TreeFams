@@ -43,54 +43,64 @@ class HomeController < ApplicationController
   # All profiles in user's tree
   def index
 
-    # class Hash
-    #   def include?(other)
-    #     self.merge(other) == self
-    #   end
-    # end
 
-    def exclude_doubles_results(by_trees_arr, arr_to_exclude)
-      new_arr = []
-      new_by_trees_arr = []
-      arr_to_exclude.each do |tree_id_with_double|
-        tree_id_with_double
-        # by_trees_arr.delete_if {|one_hash| one_hash.include?({found_tree_id:  tree_id_with_double })  }
-
-        by_trees_arr.each do |one_hash|
-          logger.info " In home/index: exclude_doubles_results: one_hash = #{one_hash}, tree_id_with_double = #{tree_id_with_double} "
-          # logger.info " In home/index: exclude_doubles_results: include? = #{one_hash.include?({found_tree_id:  tree_id_with_double })} "
-          if one_hash.merge({found_tree_id: tree_id_with_double }) == one_hash
-            logger.info " In home/index: one_hash = #{one_hash} "
-            new_by_trees_arr = by_trees_arr - [one_hash]
-          end
-        end
-        logger.info " In home/index: exclude_doubles_results: new_by_trees_arr = #{new_by_trees_arr} "
-        # by_trees_arr.each do |one_hash|
-        #   one_hash
-        # end
-      end
-      logger.info "########## In home/index: exclude_doubles_results: - YES"
-      new_arr
-    end
-
-   ########## In home/index: exclude_doubles_results:
-   # by_trees_arr = [{:found_tree_id=>34, :found_profile_ids=>[542, 541, 543, 544, 539, 540]},
-   # {:found_tree_id=>45, :found_profile_ids=>[649, 650, 645, 646, 651, 647]},
-   # {:found_tree_id=>47, :found_profile_ids=>[669, 671, 666, 668, 672, 667, 670, 673]}]
-
+  # @note: Check and delete_if: if one_hash contains {found_tree_id: tree_id_with_double} - tree w/doubles results
+  #   If No -> leave this one_hash in by_trees_arr of hashes
+  # @params: by_trees_arr - from search results
+  #   arr_to_exclude - arr of tree ids where doubles were found
+  # def exclude_doubles_results(by_trees_arr, arr_to_exclude)
+  #   arr_to_exclude.each do |tree_id_with_double|
+  #     by_trees_arr.delete_if { |one_hash| one_hash.merge({found_tree_id: tree_id_with_double }) == one_hash }
+  #   end
+  #   by_trees_arr
+  # end
 
 
 
     # TEST
-    by_trees_arr =
-    [{:found_tree_id=>34, :found_profile_ids=>[542, 541, 543, 544, 539, 540]},
-     {:found_tree_id=>45, :found_profile_ids=>[649, 650, 645, 646, 651, 647]},
-     {:found_tree_id=>47, :found_profile_ids=>[669, 671, 666, 668, 672, 667, 670, 673]}]
+  # duplicates_one_to_many = {711=>{45=>{648=>5, 710=>5}}, 712=>{49=>{648=>5, 710=>5}}, 713=>{45=>{648=>5, 710=>5}} }
+  # duplicates_one_to_many = {}
+  # duplicates_many_to_one = {648=>{46=>711}, 710=>{46=>711}, 649=>{45=>711}, 711=>{45=>711}}
+  # duplicates_many_to_one = {}
 
-    arr_to_exclude = [45]
+  # def collect_one_doubles_ids(one_type_doubles)
+  #   tree_ids_with_doubles = []
+  #   one_type_doubles.each_value do |val|
+  #     val.each_key do |key|
+  #       tree_ids_with_doubles << key
+  #     end
+  #   end
+  #   tree_ids_with_doubles.uniq
+  # end
 
-    new_arr = exclude_doubles_results(by_trees_arr, arr_to_exclude)
-    logger.info "########## In home/index: after exclude_doubles_results: new_arr = #{new_arr}"
+
+  # def collect_doubles_tree_ids(results)
+  #   tree_ids_one_to_many = []
+  #   tree_ids_many_to_one = []
+  #   tree_ids_one_to_many = collect_one_doubles_ids(results[:duplicates_one_to_many]) unless results[:duplicates_one_to_many].empty?
+  #   tree_ids_many_to_one = collect_one_doubles_ids(results[:duplicates_many_to_one]) unless results[:duplicates_many_to_one].empty?
+  #   tree_ids_one_to_many + tree_ids_many_to_one
+  # end
+  #
+  # tree_ids_to_exclude = collect_doubles_tree_ids(results)
+ #  tree_ids_one_to_many = collect_one_doubles_ids(duplicates_one_to_many) unless duplicates_one_to_many.empty?
+ #  tree_ids_many_to_one = collect_one_doubles_ids(duplicates_many_to_one) unless duplicates_many_to_one.empty?
+ #  logger.info "# In home/index: collect_doubles_tree_ids :
+ # tree_ids_one_to_many = #{tree_ids_one_to_many}, tree_ids_many_to_one = #{tree_ids_many_to_one} "
+ #  (tree_ids_one_to_many + tree_ids_many_to_one).uniq
+ #  logger.info "# In home/index: collect_doubles_tree_ids : +++ = #{(tree_ids_one_to_many + tree_ids_many_to_one).uniq} "
+
+
+    # TEST
+    # by_trees_arr =
+    # [{:found_tree_id=>34, :found_profile_ids=>[542, 541, 543, 544, 539, 540]},
+    #  {:found_tree_id=>45, :found_profile_ids=>[649, 650, 645, 646, 651, 647]},
+    #  {:found_tree_id=>47, :found_profile_ids=>[669, 671, 666, 668, 672, 667, 670, 673]}]
+    #
+    # arr_to_exclude =  [45, 47, 34]
+    #
+    # no_doubles_by_trees_arr = exclude_doubles_results(by_trees_arr, arr_to_exclude)
+    # logger.info "########## In home/index: after exclude_doubles_results: no_doubles_by_trees_arr = #{no_doubles_by_trees_arr}"
 
 
     # TEST
