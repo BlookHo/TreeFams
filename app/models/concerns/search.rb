@@ -109,32 +109,23 @@ module Search
         {648=>{46=>711}, 710=>{46=>711}}
 
 
-
     logger.info "= Before store_search_results ========== results = #{results} "
-    # if (results[:duplicates_one_to_many].empty? && results[:duplicates_many_to_one].empty?)
-      # Store new results ONLY IF there are NO BOTH duplicates
-      store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
-    # end
+    store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
 
-
-   # Start double_users_search(results) - only first time after registration
-   ############# SWITCHED OFF - double_users_search
-   if self.double == 0
-     if results[:by_trees].blank?
-       self.update_attributes(:double => 1, :updated_at => Time.now)
-       logger.info "Start + No search: double => 1: self.double = #{self.double} " # DEBUGG_TO_LOGG
-     else
-       logger.info "Start + Search: double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
-       doubles_search_data = { relations_arr: results[:profiles_relations_arr],
-                               by_trees: results[:by_trees] }
-       self.double_users_search(doubles_search_data, certain_koeff)
-       logger.info "After double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
-     end
-   end
-
+    # Start double_users_search(results) - only first time after registration
+    if self.double == 0
+      if results[:by_trees].blank?
+        self.update_attributes(:double => 1, :updated_at => Time.now)
+        logger.info "Start + No search: double => 1: self.double = #{self.double} " # DEBUGG_TO_LOGG
+      else
+        logger.info "Start + Search: double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
+        doubles_search_data = { relations_arr: results[:profiles_relations_arr], by_trees: results[:by_trees] }
+        self.double_users_search(doubles_search_data, certain_koeff)
+        logger.info "After double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
+      end
+    end
 
     logger.info "== END OF start_search ===  results = #{results.inspect}"
-    # puts "== END OF start_search === "
     results
 
     # {:connected_author_arr=>[1, 2], :qty_of_tree_profiles=>16,
@@ -189,10 +180,9 @@ module Search
   end # END OF start_search
 
 
+  # @note: Clear previous search results before save new ones
   def clear_prev_results(by_trees)
     previous_results = SearchResults.where(user_id: self, found_user_id: collect_tree_ids(by_trees))
-    # previous_results_count = previous_results.count
-    # puts "In store_search_results = found_tree_ids = #{collect_tree_ids(by_trees).inspect}, previous_results_count = #{previous_results_count.inspect} "
     previous_results.each(&:destroy) unless previous_results.blank?
   end
 
@@ -235,6 +225,7 @@ module Search
   end
 
   # @note запись рез-тов поиска в отдельную таблицу
+  #   Store new results ONLY IF there are NO BOTH TYPEs duplicates
   #   Вначале - удаление предыд-х рез-тов: clear_prev_results
   #   Далее: сбор ИД деревьев, в кот-х есть дубликаты: collect_doubles_tree_ids
   #   Далее: Если такие деревья есть, то сокращение массивов рез-тов поиска (для сохранения): exclude_doubles_results
@@ -282,15 +273,15 @@ module Search
 
 
   # @note - запись результатов поиска
-  def store_results(found_tree_ids, by_profiles, current_user_tree_ids)
+  def store_results(found_tree_ids, by_profiles, current_tree_ids)
 
     found_tree_ids.each do |tree_id|
       searched_profile_ids, found_profile_ids, counts = collect_search_profile_ids(by_profiles, tree_id)
 
       connected_tree_id = User.find(tree_id).get_connected_users # Состав объединенного дерева в виде массива id
 
-      connection_id = counter_request_exist(connected_tree_id, current_user_tree_ids)
-      value = my_request_exist(connected_tree_id, current_user_tree_ids)
+      connection_id = counter_request_exist(connected_tree_id, current_tree_ids)
+      value = my_request_exist(connected_tree_id, current_tree_ids)
 
       SearchResults.create(user_id: self.id, found_user_id: tree_id, profile_id: searched_profile_ids[0],
                            found_profile_id: found_profile_ids[0], count: counts[0],
@@ -299,15 +290,16 @@ module Search
     end
 
     # qty_rows = SearchResults.all.count  # for RSpec
-    # puts "In store_results - SearchResults created: All qty_rows = #{qty_rows.inspect} "
+    # puts "In store_results - SearchResults created: All qty_rows = #{qty_rows.inspect} "  # for RSpec
 
   end
 
 
   # @note Если запрос текущего юзера существует, то устанавливаем в 1 его рез-тов поиска
-  def my_request_exist(connected_tree_id, current_user_tree_ids)
-    my_request = ConnectionRequest.where("with_user_id in (?)", connected_tree_id).where(:done => false )
-                                  .where("user_id in (?)", current_user_tree_ids)
+  def my_request_exist(connected_tree_id, current_tree_ids)
+    my_request = ConnectionRequest.where("with_user_id in (?)", connected_tree_id)
+                                  .where("user_id in (?)", current_tree_ids)
+                                  .where(:done => false )
     value = 0
     unless my_request.blank?
       value = 1
@@ -318,18 +310,18 @@ module Search
 
 
   # @note Если встречный запрос существует, то получаем его connection_id
-  def counter_request_exist(connected_tree_id, current_user_tree_ids)
+  def counter_request_exist(connected_tree_id, current_tree_ids)
     request = ConnectionRequest.where("user_id in (?)", connected_tree_id)
-                               .where("with_user_id in (?)", current_user_tree_ids).where(:done => false )
+                               .where("with_user_id in (?)", current_tree_ids)
+                               .where(:done => false )
     unless request.blank?
       connection_id = request[0].connection_id
     end
-    # puts "In request_exist: connection_id = #{connection_id.inspect} "
     connection_id
   end
 
 
-    # Основной поиск по дереву Автора - Юзера.
+  # Основной поиск по дереву Автора - Юзера.
   # @note GET /
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
@@ -369,8 +361,7 @@ module Search
       logger.info ""
 
       ##### Удаление дубликатов типа duplicates_many_to_one # duplicates_out - метод в hasher.rb
-      uniq_profiles_pairs, duplicates_many_to_one =
-          duplicates_out(max_power_profiles_pairs_hash)  # Ok
+      uniq_profiles_pairs, duplicates_many_to_one = duplicates_out(max_power_profiles_pairs_hash)  # Ok
       ##### Удаление пустых хэшей из результатов # Exclude empty hashes
       uniq_profiles_pairs.delete_if { |k,v|  v == {} }
       logger.info "== Pезультат поиска (После duplicates_out): uniq_profiles_pairs = #{uniq_profiles_pairs}"
@@ -389,7 +380,6 @@ module Search
       logger.info " by_trees = #{by_trees} "
       @by_profiles = by_profiles # DEBUGG_TO_VIEW
       @by_trees = by_trees # DEBUGG_TO_VIEW
-
 
     else
       logger.info "** NO SEARCH RESULTS **"
@@ -447,7 +437,6 @@ module Search
       logger.info " "
       logger.info "=== НЕТ результата! В деревьях сайта ничего не найдено! === "
     end
-
     found_profiles_hash
   end
 
@@ -464,7 +453,11 @@ module Search
     profiles_hash = Hash.new
     one_profile_relations_hash = Hash.new
 
-    all_profile_rows = ProfileKey.where(:user_id => connected_users).where(:profile_id => profile_id_searched, deleted: 0).order('relation_id','is_name_id').select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
+    all_profile_rows = ProfileKey.where(:user_id => connected_users)
+                           .where(:profile_id => profile_id_searched, deleted: 0)
+                           .order('relation_id','is_name_id')
+                           .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
+                           .distinct
     # поиск массива записей искомого круга для каждого профиля в дереве Юзера
     logger.info "Круг ИСКОМОГО ПРОФИЛЯ = #{profile_id_searched.inspect} в (объединенном) дереве #{connected_users} зарег-го Юзера"      # :user_id, , :id
     show_in_logger(all_profile_rows, "all_profile_rows - запись" )  # DEBUGG_TO_LOGG
@@ -500,7 +493,7 @@ module Search
 
     # ОСНОВНОЙ РЕЗ-ТАТ ПОИСКА - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив):
     # {профиль искомый -> дерево -> профиль найденный -> [ массив совпавших отношений с искомым профилем ]
-    @profiles_found_arr << found_profiles_hash if !found_profiles_hash.empty? # Заполнение выходного массива хэшей
+    @profiles_found_arr << found_profiles_hash unless found_profiles_hash.empty? # Заполнение выходного массива хэшей
     logger.info "Где что найдено: Для искомого профиля #{profile_id_searched} - в конце этого Хэша @profiles_found_arr:"
     logger.info "#{@profiles_found_arr} " # DEBUGG_TO_LOGG
 
@@ -512,8 +505,9 @@ module Search
 
   # make final sorted by_trees search results
   def fill_hash_w_val_arr(filling_hash, input_key, input_val)
-    test = filling_hash.key?(input_key) # Is elem w/input_key in filling_hash?
-    if test == false #  "NOT Found in hash"
+    # test = filling_hash.key?(input_key) # Is elem w/input_key in filling_hash?
+    # if test == false #  "NOT Found in hash"
+    if !filling_hash.key?(input_key) #  "NOT Found in hash"
       filling_hash.merge!({input_key => [input_val]}) # include new elem in hash
     else  #  "Found in hash"
       ids_arr = filling_hash.values_at(input_key)[0]
@@ -537,7 +531,7 @@ module Search
         one_result_hash.merge!(:search_profile_id => search_profile_id)
         one_result_hash.merge!(:found_tree_id => found_tree_id)
         one_result_hash.merge!(:found_profile_id => found_profile_id)
-        count = profiles_match_hash.values_at(found_profile_id)[0] if !profiles_match_hash.empty?
+        count = profiles_match_hash.values_at(found_profile_id)[0] unless profiles_match_hash.empty?
         one_result_hash.merge!(:count => count)
 
         by_profiles << one_result_hash
