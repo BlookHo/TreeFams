@@ -111,10 +111,10 @@ module Search
 
 
     logger.info "= Before store_search_results ========== results = #{results} "
-    if (results[:duplicates_one_to_many].empty? && results[:duplicates_many_to_one].empty?)
+    # if (results[:duplicates_one_to_many].empty? && results[:duplicates_many_to_one].empty?)
       # Store new results ONLY IF there are NO BOTH duplicates
       store_search_results(results) # запись рез-тов поиска в отдельную таблицу - для Метеора
-    end
+    # end
 
 
    # Start double_users_search(results) - only first time after registration
@@ -189,6 +189,14 @@ module Search
   end # END OF start_search
 
 
+  def clear_prev_results(by_trees)
+    previous_results = SearchResults.where(user_id: self, found_user_id: collect_tree_ids(by_trees))
+    # previous_results_count = previous_results.count
+    # puts "In store_search_results = found_tree_ids = #{collect_tree_ids(by_trees).inspect}, previous_results_count = #{previous_results_count.inspect} "
+    previous_results.each(&:destroy) unless previous_results.blank?
+  end
+
+
   # @note: Check and delete_if: if one_hash contains {found_tree_id: tree_id_with_double} - tree w/doubles results
   #   If No -> leave this one_hash in by_trees_arr of hashes
   # @params: by_trees_arr - from search results
@@ -203,10 +211,8 @@ module Search
   # @note: Find tree ids, which contains doubles, for one type double
   #   and make an array of this ids
   # @params: one_type_doubles - from search results - hash with one type double
-  # @input: results[:duplicates_one_to_many] =
-  {711=>{45=>{648=>5, 710=>5}}}
-  # @input: results[:duplicates_Many_to_One =
-  {648=>{46=>711}, 710=>{46=>711}}
+  # @input: results[:duplicates_one_to_many] = {711=>{45=>{648=>5, 710=>5}}}
+  # @input: results[:duplicates_Many_to_One =  {648=>{46=>711}, 710=>{46=>711}}
   def collect_one_doubles_ids(one_type_doubles)
     tree_ids_with_doubles = []
     one_type_doubles.each_value do |val|
@@ -228,55 +234,25 @@ module Search
     (tree_ids_one_to_many + tree_ids_many_to_one).uniq
   end
 
-  # @note запись рез-тов поиска в отдельную таблицу - для Метеора
+  # @note запись рез-тов поиска в отдельную таблицу
+  #   Вначале - удаление предыд-х рез-тов: clear_prev_results
+  #   Далее: сбор ИД деревьев, в кот-х есть дубликаты: collect_doubles_tree_ids
+  #   Далее: Если такие деревья есть, то сокращение массивов рез-тов поиска (для сохранения): exclude_doubles_results
+  #   Сохранение рез-тов, не имеющих дубликатов: store_results
   def store_search_results(results)
     by_profiles = results[:by_profiles]
     by_trees = results[:by_trees]
     current_user_tree_ids = results[:connected_author_arr]
 
+    clear_prev_results(by_trees)
     tree_ids_to_exclude = collect_doubles_tree_ids(results)
+    logger.info "# In home/index: after exclude_doubles_results: tree_ids_to_exclude = #{tree_ids_to_exclude}, by_trees = #{by_trees}"
     unless tree_ids_to_exclude.blank?
       by_trees = exclude_doubles_results(results[:by_trees], tree_ids_to_exclude)
     end
-    logger.info "# In home/index: after exclude_doubles_results: tree_ids_to_exclude = #{tree_ids_to_exclude}, by_trees = #{by_trees}"
-
-    # puts " In store_search_results ========================= "
-    # by_profiles =
-    # [{:search_profile_id=>18, :found_tree_id=>2, :found_profile_id=>9, :count=>5},
-    #  {:search_profile_id=>18, :found_tree_id=>1, :found_profile_id=>19, :count=>5},
-    #  {:search_profile_id=>17, :found_tree_id=>2, :found_profile_id=>8, :count=>5},
-    #  {:search_profile_id=>17, :found_tree_id=>1, :found_profile_id=>18, :count=>5},
-    #  {:search_profile_id=>19, :found_tree_id=>1, :found_profile_id=>17, :count=>5},
-    #  {:search_profile_id=>62, :found_tree_id=>1, :found_profile_id=>111, :count=>5},
-    #  {:search_profile_id=>19, :found_tree_id=>2, :found_profile_id=>7, :count=>5},
-    #  {:search_profile_id=>62, :found_tree_id=>2, :found_profile_id=>11, :count=>5},
-    #  {:search_profile_id=>20, :found_tree_id=>2, :found_profile_id=>13, :count=>4},
-    #  {:search_profile_id=>20, :found_tree_id=>1, :found_profile_id=>113, :count=>4}]
-    #
-    # by_trees =
-    # [{:found_tree_id=>1, :found_profile_ids=>[13, 7, 11, 8, 9]},
-    #  {:found_tree_id=>2, :found_profile_ids=>[13, 7, 11, 8, 9]}]
-
-
-    # logger.info "= in store_search_results: by_profiles = #{by_profiles.inspect},\n by_trees = #{by_trees.inspect}"
-    found_tree_ids = collect_tree_ids(by_trees)
-
-    previous_results = SearchResults.where(user_id: self, found_user_id: found_tree_ids)
-    previous_results_count = previous_results.count
-    puts "In store_search_results = found_tree_ids = #{found_tree_ids.inspect}, previous_results_count = #{previous_results_count.inspect} "
-
-    previous_results.each(&:destroy) unless previous_results.blank?
-    store_results(found_tree_ids, by_profiles, current_user_tree_ids)
-
+    logger.info "# In home/index: after exclude_doubles_results: by_trees = #{by_trees}"
+    store_results(collect_tree_ids(by_trees), by_profiles, current_user_tree_ids)
   end
-  # by_profiles = [{:search_profile_id=>340, :found_tree_id=>17, :found_profile_id=>350, :count=>7},
-  # {:search_profile_id=>342, :found_tree_id=>17, :found_profile_id=>349, :count=>7},
-  # {:search_profile_id=>341, :found_tree_id=>17, :found_profile_id=>351, :count=>7},
-  # {:search_profile_id=>346, :found_tree_id=>17, :found_profile_id=>356, :count=>5},
-  # {:search_profile_id=>345, :found_tree_id=>17, :found_profile_id=>355, :count=>5},
-  # {:search_profile_id=>348, :found_tree_id=>17, :found_profile_id=>358, :count=>5},
-  # {:search_profile_id=>347, :found_tree_id=>17, :found_profile_id=>357, :count=>5}]
-  # by_trees = [{:found_tree_id=>17, :found_profile_ids=>[357, 351, 349, 358, 350, 355, 356]}]
 
 
   # @note - сбор tree_ids всех найденных деревьев
@@ -307,13 +283,11 @@ module Search
 
   # @note - запись результатов поиска
   def store_results(found_tree_ids, by_profiles, current_user_tree_ids)
-    # puts "In store_results = by_profiles = #{by_profiles.inspect} "
 
     found_tree_ids.each do |tree_id|
       searched_profile_ids, found_profile_ids, counts = collect_search_profile_ids(by_profiles, tree_id)
 
       connected_tree_id = User.find(tree_id).get_connected_users # Состав объединенного дерева в виде массива id
-      # puts "In store_results - after create: connected_tree_id = #{connected_tree_id.inspect} "
 
       connection_id = counter_request_exist(connected_tree_id, current_user_tree_ids)
       value = my_request_exist(connected_tree_id, current_user_tree_ids)
@@ -324,8 +298,8 @@ module Search
                            counts: counts, connection_id: connection_id, pending_connect: value  )
     end
 
-    qty_rows = SearchResults.all.count
-    puts "In store_results - SearchResults created: All qty_rows = #{qty_rows.inspect} "
+    # qty_rows = SearchResults.all.count  # for RSpec
+    # puts "In store_results - SearchResults created: All qty_rows = #{qty_rows.inspect} "
 
   end
 
