@@ -288,10 +288,6 @@ module Search
                            found_profile_ids: found_profile_ids, searched_profile_ids: searched_profile_ids,
                            counts: counts, connection_id: connection_id, pending_connect: value  )
     end
-
-    # qty_rows = SearchResults.all.count  # for RSpec
-    # puts "In store_results - SearchResults created: All qty_rows = #{qty_rows.inspect} "  # for RSpec
-
   end
 
 
