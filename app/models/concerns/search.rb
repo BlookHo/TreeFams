@@ -291,7 +291,7 @@ module Search
 
     # qty_rows = SearchResults.all.count  # for RSpec
     # puts "In store_results - SearchResults created: All qty_rows = #{qty_rows.inspect} "  # for RSpec
-
+ 
   end
 
 
