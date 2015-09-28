@@ -300,7 +300,7 @@ module Search
     unless my_request.blank?
       value = 1
     end
-    logger.info "In my_request_exist: value = #{value.inspect} "
+    # logger.info "In my_request_exist: value = #{value.inspect} "
     value
   end
 
