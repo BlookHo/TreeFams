@@ -58,12 +58,15 @@ module Meteor
             #    @profile.update_attribute('deleted', 1)
             #
             # end
-            # # response = @error ? {status: 403, message: @error} : {status: 200, message: "Профиль удален"}
+            # # response = @error ? {errorCode: 403, message: @error} : {status: 200, message: "Профиль удален"}
             # # logger.info "=================="
             # # logger.info response
 
             if response[:status] == 403
-              respond_with response[:message]
+              # resp = {status: 403, message: response[:message]}
+              respond_with(errorCode: 403, message: response[:message])
+              # respond_with response[:message]
+              # respond_with {status: 403, message: @error}
             else
               respond_with(status:200)
             end
