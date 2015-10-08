@@ -54,29 +54,24 @@ class User < ActiveRecord::Base
 
     # delete ConnectedUser
     ConnectedUser.where("user_id = ? OR with_user_id = ?", self.id, self.id).destroy_all
-    # # delete DeletionLog
-    # DeletionLog.where("current_user_id = ?", self.id).destroy_all
-    #
-    # # delete SearchResults
-    # SearchResults.where("user_id = ? OR found_user_id = ?", self.id, self.id).destroy_all
-    # # delete SimilarsFound
-    # SimilarsFound.where("user_id = ?", self.id).destroy_all
-    # # delete ConnectionLogs
-    # ConnectionLog.where("current_user_id = ? OR with_user_id = ?", self.id, self.id).destroy_all
-    # # delete SimilarsLog
-    # SimilarsLog.where("current_user_id = ?", self.id).destroy_all
-    # # delete CommonLog
-    # CommonLog.where("user_id = ?", self.id).destroy_all
-    # # delete Profiles
-    # Profile.where("tree_id = ?", self.id).destroy_all
-    #
-    # # all others: trees, profile_keys, connection_requests, updates_feeds - TO CHECK DESTROYING
-    # User.find(self.id).destroy
+    # delete DeletionLog
+    DeletionLog.where("current_user_id = ?", self.id).destroy_all
+    # delete SearchResults
+    SearchResults.where("user_id = ? OR found_user_id = ?", self.id, self.id).destroy_all
+    # delete SimilarsFound
+    SimilarsFound.where("user_id = ?", self.id).destroy_all
+    # delete ConnectionLogs
+    ConnectionLog.where("current_user_id = ? OR with_user_id = ?", self.id, self.id).destroy_all
+    # delete SimilarsLog
+    SimilarsLog.where("current_user_id = ?", self.id).destroy_all
+    # delete CommonLog
+    CommonLog.where("user_id = ?", self.id).destroy_all
+    # delete Profiles
+    Profile.where("tree_id = ?", self.id).destroy_all
 
-      # # delete ConnectionRequest
-      # ConnectionRequest.where("user_id = ? OR with_user_id = ?", self.id, self.id).destroy_all
-      # # delete UpdateFeeds
-      # UpdatesFeed.where("user_id = ? OR agent_user_id = ?", self.id, self.id).destroy_all
+    # all others: trees, profile_keys, connection_requests, updates_feeds - TO CHECK DESTROYING
+    User.find(self.id).destroy
+
     logger.info  "Удален #{self.id} пользователь" # ??
 
   end
