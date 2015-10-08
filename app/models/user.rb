@@ -48,6 +48,34 @@ class User < ActiveRecord::Base
   has_many :updates_feeds, dependent: :destroy
 
 
+  # @note: delete one user by his ID
+  def delete_one_user
+    logger.info "In self.delete_one_user  Это дерево является дубликатом: #{self.id}  - будем удалять ! "
+
+    # delete ConnectedUser
+    ConnectedUser.where("user_id = ? OR with_user_id = ?", self.id, self.id).destroy_all
+    # delete DeletionLog
+    DeletionLog.where("current_user_id = ?", self.id).destroy_all
+    # delete SearchResults
+    SearchResults.where("user_id = ? OR found_user_id = ?", self.id, self.id).destroy_all
+    # delete SimilarsFound
+    SimilarsFound.where("user_id = ?", self.id).destroy_all
+    # delete ConnectionLogs
+    ConnectionLog.where("current_user_id = ? OR with_user_id = ?", self.id, self.id).destroy_all
+    # delete SimilarsLog
+    SimilarsLog.where("current_user_id = ?", self.id).destroy_all
+    # delete CommonLog
+    CommonLog.where("user_id = ?", self.id).destroy_all
+    # delete Profiles
+    Profile.where("tree_id = ?", self.id).destroy_all
+
+    # all others: trees, profile_keys, connection_requests, updates_feeds - TO CHECK DESTROYING
+    User.find(self.id).destroy
+
+    logger.info  "Удален #{self.id} пользователь" # ??
+
+  end
+
 
   def name
     profile.name.name.capitalize unless profile.blank?  # If wrong connect between two users

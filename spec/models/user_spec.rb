@@ -1,5 +1,5 @@
 
-RSpec.describe User, :type => :model    do  # , focus: true
+RSpec.describe User, :type => :model   do  # , focus: true
 
   describe '- validation' do
     before do
@@ -594,7 +594,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
         expect(connected_users).to eq([1,2])
       end
     end
-    context '- before actions - check tables values ' , focus: true  do   #   , focus: true
+    context '- before actions - check tables values '   do   #   , focus: true
       describe '- check User have double == 0 before - Ok' do
         it "- current_user.double == 0 check" do
           puts "Let created: current_user_1.double = #{current_user_1.double} \n"   # 0
@@ -623,6 +623,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
       end
     end
 
+    #############################################################################################
     describe '- check User model Method <Search> - Ok' , focus: true do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
@@ -914,7 +915,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     end
 
-
+    ############################################################################################
     describe '- check User model Method <complete_search> - Ok'    do  # , focus: true
 
       # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
