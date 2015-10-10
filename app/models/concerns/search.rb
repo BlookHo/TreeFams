@@ -291,7 +291,7 @@ module Search
   end
 
 
-  # @note Если запрос текущего юзера существует, то устанавливаем в 1 его рез-тов поиска
+  # @note Если запрос текущего юзера существует, то устанавливаем pending_connect в 1 его рез-тов поиска
   def my_request_exist(connected_tree_id, current_tree_ids)
     my_request = ConnectionRequest.where("with_user_id in (?)", connected_tree_id)
                                   .where("user_id in (?)", current_tree_ids)
@@ -300,7 +300,7 @@ module Search
     unless my_request.blank?
       value = 1
     end
-    # logger.info "In my_request_exist: value = #{value.inspect} "
+    # logger.info "In my_request_exist: pending_connect value = #{value.inspect} "
     value
   end
 
