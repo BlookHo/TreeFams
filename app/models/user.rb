@@ -24,7 +24,6 @@ class User < ActiveRecord::Base
   include DoubleUsersSearch
 
 
-
   before_create :generate_access_token
   after_create :update_connected_users!
   before_save :downcase_email
