@@ -224,6 +224,8 @@ module Search
     (tree_ids_one_to_many + tree_ids_many_to_one).uniq
   end
 
+
+
   # @note запись рез-тов поиска в отдельную таблицу
   #   Store new results ONLY IF there are NO BOTH TYPEs duplicates
   #   Вначале - удаление предыд-х рез-тов: clear_prev_results

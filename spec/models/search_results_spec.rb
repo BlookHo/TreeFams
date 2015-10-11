@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SearchResults, type: :model   do  #, focus: true
+RSpec.describe SearchResults, type: :model , focus: true  do  #, focus: true
 
   describe '- Validation' do
     describe '- on create' do

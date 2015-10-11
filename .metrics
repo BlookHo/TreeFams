@@ -1,0 +1,22 @@
+MetricFu.report_name = 'Weafam MetricFu Results'
+
+# Reconfigure all metrics
+MetricFu.configuration.configure_metrics.each do |metric|
+#  if [:rails_best_practices, :cane, :stats, :churn, :reek, :flay, :flog, :saikuro, :roodi, :hotspots ].include?(metric.name)
+  if [ :reek, :flay, :flog ].include?(metric.name)
+   metric.enabled = true
+  else
+    metric.enabled = false
+  end
+end
+
+# To configure individual metrics...
+#MetricFu::Configuration.run do |config|
+#  config.configure_metric(:cane) do |cane|
+#    cane.enabled = true
+#    cane.abc_max = 15
+#    cane.line_length = 80
+#    cane.no_doc = 'y'
+#    cane.no_readme = 'y'
+#  end
+#end
