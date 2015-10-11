@@ -1,7 +1,0 @@
-%h3 Ввод информации о МАТЕРИ
-= form_tag(store_mother_path, remote: true, id: 'mother_form' ) do
-  %div
-    = label_tag 'Введи имя Матери:'
-    %div
-      = select_tag :mother_name_select, options_for_select(@sel_names_female, selected = @mother_name), :prompt => 'Выбери имя'
-  = submit_tag 'Ввод'

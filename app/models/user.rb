@@ -214,8 +214,7 @@ class User < ActiveRecord::Base
     users_male = 0
     users_female = 0
     all.each do |user|
-      users_male += 1 if user.profile.sex_id == 1
-      users_female += 1 if user.profile.sex_id == 0
+      user.profile.sex_id == 1 ? users_male += 1 : users_female += 1
     end
     { users_male: users_male, users_female: users_female}
   end

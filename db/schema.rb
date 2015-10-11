@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150820082648) do
+ActiveRecord::Schema.define(version: 20151010102848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,9 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.integer  "relation_id"
   end
 
+  add_index "common_logs", ["profile_id"], name: "index_common_logs_on_profile_id", using: :btree
+  add_index "common_logs", ["user_id"], name: "index_common_logs_on_user_id", using: :btree
+
   create_table "connected_users", force: true do |t|
     t.integer  "user_id"
     t.integer  "with_user_id"
@@ -45,6 +48,9 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.integer  "rewrite_profile_id"
     t.integer  "overwrite_profile_id"
   end
+
+  add_index "connected_users", ["user_id"], name: "index_connected_users_on_user_id", using: :btree
+  add_index "connected_users", ["with_user_id"], name: "index_connected_users_on_with_user_id", using: :btree
 
   create_table "connection_logs", force: true do |t|
     t.integer  "connected_at"
@@ -59,6 +65,9 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.datetime "updated_at"
   end
 
+  add_index "connection_logs", ["current_user_id"], name: "index_connection_logs_on_current_user_id", using: :btree
+  add_index "connection_logs", ["with_user_id"], name: "index_connection_logs_on_with_user_id", using: :btree
+
   create_table "connection_requests", force: true do |t|
     t.integer  "user_id"
     t.integer  "with_user_id"
@@ -68,6 +77,9 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.datetime "updated_at"
     t.integer  "connection_id"
   end
+
+  add_index "connection_requests", ["user_id"], name: "index_connection_requests_on_user_id", using: :btree
+  add_index "connection_requests", ["with_user_id"], name: "index_connection_requests_on_with_user_id", using: :btree
 
   create_table "counters", force: true do |t|
     t.integer  "invites",     default: 0
@@ -88,12 +100,17 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.datetime "updated_at"
   end
 
+  add_index "deletion_logs", ["current_user_id"], name: "index_deletion_logs_on_current_user_id", using: :btree
+  add_index "deletion_logs", ["log_number"], name: "index_deletion_logs_on_log_number", using: :btree
+
   create_table "log_types", force: true do |t|
     t.integer  "type_number"
     t.string   "table_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "log_types", ["type_number"], name: "index_log_types_on_type_number", using: :btree
 
   create_table "messages", force: true do |t|
     t.text     "text"
@@ -139,9 +156,11 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.string   "birthday"
     t.string   "country"
     t.string   "city"
-    t.string   "avatar_mongo_id"
     t.integer  "deleted",         default: 0
+    t.string   "avatar_mongo_id"
   end
+
+  add_index "profile_data", ["profile_id"], name: "index_profile_data_on_profile_id", using: :btree
 
   create_table "profile_keys", force: true do |t|
     t.integer  "user_id"
@@ -171,6 +190,7 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.integer  "deleted",         default: 0
   end
 
+  add_index "profiles", ["name_id"], name: "index_profiles_on_name_id", using: :btree
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "relations", force: true do |t|
@@ -183,6 +203,8 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.string   "reverse_relation",      default: ""
     t.integer  "origin_profile_sex_id"
   end
+
+  add_index "relations", ["relation_id"], name: "index_relations_on_relation_id", using: :btree
 
   create_table "search_results", force: true do |t|
     t.integer  "user_id"
@@ -199,6 +221,9 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.integer  "pending_connect",      default: 0
   end
 
+  add_index "search_results", ["profile_id"], name: "index_search_results_on_profile_id", using: :btree
+  add_index "search_results", ["user_id"], name: "index_search_results_on_user_id", using: :btree
+
   create_table "similars_founds", force: true do |t|
     t.integer  "user_id",           null: false
     t.integer  "first_profile_id",  null: false
@@ -207,6 +232,7 @@ ActiveRecord::Schema.define(version: 20150820082648) do
     t.datetime "updated_at"
   end
 
+  add_index "similars_founds", ["first_profile_id"], name: "index_similars_founds_on_first_profile_id", using: :btree
   add_index "similars_founds", ["user_id"], name: "index_similars_founds_on_user_id", using: :btree
 
   create_table "similars_logs", force: true do |t|
