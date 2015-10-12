@@ -582,7 +582,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
     let(:currentuser_id) {current_user_1.id}  # id = 1
     let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
 
-    context '- before actions - check connected_users' do
+    context '- before actions - check connected_users'    do
       it "- Return proper connected_users Array result for current_user_id = 1" do
         puts "Let created: currentuser_id = #{currentuser_id} \n"   # 1
         puts "Check ConnectedUser Model methods \n"
@@ -594,7 +594,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
         expect(connected_users).to eq([1,2])
       end
     end
-    context '- before actions - check tables values '   do   #   , focus: true
+    context '- before actions - check tables values '  do   #   , focus: true
       describe '- check User have double == 0 before - Ok' do
         it "- current_user.double == 0 check" do
           puts "Let created: current_user_1.double = #{current_user_1.double} \n"   # 0
@@ -621,6 +621,11 @@ RSpec.describe User, :type => :model   do  # , focus: true
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
       end
+      describe '- check ConnectionRequest have rows count before - Ok' do
+        let(:rows_qty) {4}
+        it_behaves_like :successful_connection_request_rows_count
+      end
+
     end
 
     #############################################################################################
@@ -856,7 +861,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
+    context '- check SearchResults model after run <search> module' , focus: true  do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
       describe '- check SearchResults have rows count after <search> - Ok' do
@@ -916,7 +921,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check User model Method <complete_search> - Ok'  , focus: true  do  # , focus: true
+    describe '- check User model Method <complete_search> - Ok'    do  # , focus: true
 
       # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
       context '- when valid complete_search_data' do

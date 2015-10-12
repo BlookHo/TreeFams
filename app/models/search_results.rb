@@ -1,8 +1,8 @@
 class SearchResults < ActiveRecord::Base
 
-  validates_presence_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count, :found_profile_ids,
-                        :searched_profile_ids, :counts,
-                        :message => "Должно присутствовать в SearchResults"
+  # validates_presence_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count, :found_profile_ids,
+  #                       :searched_profile_ids, :counts,
+  #                       :message => "Должно присутствовать в SearchResults"
   validates_numericality_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count, :pending_connect,
                             :only_integer => true,
                             :message => "Должны быть целым числом в SearchResults"
@@ -14,7 +14,7 @@ class SearchResults < ActiveRecord::Base
   validates_inclusion_of :pending_connect, :in => [0, 1],
                          :message => ":pending_connect должно быть [0, 1] в SearchResults"
 
-  # custom validation
+  # custom validations
 
   validate :count_value_more_certain  # :count
 
@@ -69,28 +69,35 @@ class SearchResults < ActiveRecord::Base
     by_profiles =           results[:by_profiles]
     by_trees =              results[:by_trees]
     current_user_tree_ids = results[:connected_author_arr]
+    puts "in store_search_results: current_user_id = #{current_user_id.inspect} \n"
 
-    # found_tree_ids = SearchResults.collect_tree_ids(by_trees)
-    SearchResults.clear_prev_results(by_trees, current_user_id)
+    clear_prev_results(by_trees, current_user_id)
     tree_ids_to_exclude = collect_doubles_tree_ids(results)
-    # logger.info "# In home/index: after exclude_doubles_results: tree_ids_to_exclude = #{tree_ids_to_exclude}, by_trees = #{by_trees}"
+    puts "# In store_search_results: after exclude_doubles_results: tree_ids_to_exclude = #{tree_ids_to_exclude}, current_user_id = #{current_user_id}, by_trees = #{by_trees}"
     unless tree_ids_to_exclude.blank?
       by_trees = exclude_doubles_results(results[:by_trees], tree_ids_to_exclude)
       # found_tree_ids = SearchResults.collect_tree_ids(by_trees)
     end
+    # puts "# In store_search_results: after exclude_doubles_results: by_trees = #{by_trees}"
+
     # logger.info "# In home/index: after exclude_doubles_results: by_trees = #{by_trees}"
-    SearchResults.store_results(SearchResults.collect_tree_ids(by_trees), by_profiles, current_user_tree_ids, current_user_id)
-    # store_results(found_tree_ids, by_profiles, current_user_tree_ids)
+    store_data = {  tree_ids: collect_tree_ids(by_trees),
+                    by_profiles: by_profiles,
+                    current_user_tree_ids: current_user_tree_ids,
+                    current_user_id: current_user_id }
+    store_results(store_data)
   end
 
   # @note: collect ids of trees, which contains doubles, for each type of doubles,
   #   and make an ids array
   def self.collect_doubles_tree_ids(results)
-    tree_ids_one_to_many = []
-    tree_ids_many_to_one = []
-    tree_ids_one_to_many = collect_one_doubles_ids(results[:duplicates_one_to_many]) unless results[:duplicates_one_to_many].empty?
-    tree_ids_many_to_one = collect_one_doubles_ids(results[:duplicates_many_to_one]) unless results[:duplicates_many_to_one].empty?
-    (tree_ids_one_to_many + tree_ids_many_to_one).uniq
+    tree_ids_duplication = []
+    final_ids = []
+    [results[:duplicates_one_to_many], results[:duplicates_many_to_one]].each do |duplication|
+      tree_ids_duplication = collect_one_doubles_ids(duplication) unless duplication.empty?
+      final_ids << tree_ids_duplication
+    end
+    final_ids.flatten.uniq
   end
 
   # @note: Find tree ids, which contains doubles, for one type double
@@ -101,14 +108,22 @@ class SearchResults < ActiveRecord::Base
   def self.collect_one_doubles_ids(one_type_doubles)
     tree_ids_with_doubles = []
     one_type_doubles.each_value do |val|
-      val.each_key do |key|
-        tree_ids_with_doubles << key
-      end
+      collect_doubles_ids(tree_ids_with_doubles, val)
+      # val.each_key do |key|
+      #   tree_ids_with_doubles << key
+      # end
     end
     tree_ids_with_doubles.uniq
   end
 
-  # @note: Check and delete_if: if one_hash contains {found_tree_id: tree_id_with_double} - tree w/doubles results
+  def self.collect_doubles_ids(tree_id_with_doubles, val)
+    val.each_key do |key|
+      tree_id_with_doubles << key
+    end
+    # tree_id_with_doubles
+  end
+
+    # @note: Check and delete_if: if one_hash contains {found_tree_id: tree_id_with_double} - tree w/doubles results
   #   If No -> leave this one_hash in by_trees_arr of hashes
   # @params: by_trees_arr - from search results
   #   tree_ids_to_exclude - arr of tree ids where doubles were found
@@ -132,23 +147,28 @@ class SearchResults < ActiveRecord::Base
     by_trees.each do |one_found_tree|
       found_tree_ids << one_found_tree[:found_tree_id]
     end
+    # puts "In collect_tree_ids: found_tree_ids = #{found_tree_ids.inspect} "
     found_tree_ids
   end
 
   # @note: Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
   # @params: who_connect, with_whom_connect - arrs of ids
   def self.destroy_previous_results(who_connect, with_whom_connect)
-    previous_results1 = self.where("user_id in (?)", who_connect).where("found_user_id in (?)", with_whom_connect)
+    previous_results1 = where("user_id in (?)", who_connect).where("found_user_id in (?)", with_whom_connect)
     previous_results1.each(&:destroy) unless previous_results1.blank?
-    previous_results2 = self.where("user_id in (?)", with_whom_connect).where("found_user_id in (?)", who_connect)
+    previous_results2 = where("user_id in (?)", with_whom_connect).where("found_user_id in (?)", who_connect)
     previous_results2.each(&:destroy) unless previous_results2.blank?
   end
 
   # @note - запись результатов поиска
-  def self.store_results(found_tree_ids, by_profiles, current_tree_ids, current_user_id)
+  def self.store_results(store_data)
+
+    found_tree_ids    =  store_data[:tree_ids]
+    by_profiles       =  store_data[:by_profiles]
+    current_tree_ids  =  store_data[:current_user_tree_ids]
+    current_user_id   =  store_data[:current_user_id]
 
     found_tree_ids.each do |tree_id|
-      # searched_profile_ids, found_profile_ids, counts = collect_search_profile_ids(by_profiles, tree_id)
       results_arrs = collect_search_profile_ids(by_profiles, tree_id)
       searched_profile_ids = results_arrs[:search_profile_id]
       found_profile_ids    = results_arrs[:found_profile_id]
@@ -158,6 +178,9 @@ class SearchResults < ActiveRecord::Base
 
       connection_id = counter_request_exist(connected_tree_id, current_tree_ids)
       value = my_request_exist(connected_tree_id, current_tree_ids)
+      puts "In store_results: connection_id = #{connection_id.inspect}, value = #{value.inspect}"
+      # puts "In store_results: searched_profile_ids[0] = #{searched_profile_ids[0].inspect}, found_profile_ids[0] = #{found_profile_ids[0].inspect}, counts[0] = #{counts[0].inspect}, value = #{value.inspect}"
+      # puts "counts = #{counts.inspect}, value = #{value.inspect}"
 
       SearchResults.create(user_id: current_user_id, found_user_id: tree_id, profile_id: searched_profile_ids[0],
                            found_profile_id: found_profile_ids[0], count: counts[0],
@@ -168,10 +191,14 @@ class SearchResults < ActiveRecord::Base
 
   # @note Если встречный запрос существует, то получаем его connection_id
   def self.counter_request_exist(connected_tree_id, current_tree_ids)
-    connection_id = 0
+    connection_id = nil
+    puts "In counter_request_exist: connected_tree_id = #{connected_tree_id.inspect}, current_tree_ids = #{current_tree_ids.inspect}"
+
     request = ConnectionRequest.where("user_id in (?)", connected_tree_id)
                   .where("with_user_id in (?)", current_tree_ids)
                   .where(:done => false )
+    puts "In counter_request_exist: request = #{request.inspect}"
+
     unless request.blank?
       connection_id = request[0].connection_id
     end

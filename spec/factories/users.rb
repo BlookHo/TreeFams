@@ -121,14 +121,47 @@ FactoryGirl.define do
       id 210
       profile_id 22111
       email "andrew@an.an"
-      password '11111'
+      password '1111'
     end
-
-
-
 
   end
 
+  # For Search_results
+  factory :user_search_results, class: User do #
+
+    trait :user_34 do
+      id 34
+      profile_id 539
+      email "aleksei@aa.aa"
+      password '1111'
+      connected_users [34]
+    end
+
+    trait :user_45 do
+      id 45
+      profile_id 645
+      email "anna@an.an"
+      password '1111'
+      connected_users [45]
+    end
+
+    trait :user_46 do
+      id 46
+      profile_id 656
+      email "petr_iva@pe.pe"
+      password '1111'
+      connected_users [46]
+    end
+
+    trait :user_47 do
+      id 47
+      profile_id 666
+      email "fedor_iva@fe.fe"
+      password '1111'
+      connected_users [47]
+    end
+
+  end
 
 
 end
@@ -155,4 +188,6 @@ end
 # Before Add new Profile
 # 9;85;FALSE;0
 # 10;93;FALSE;0
+
+
 
