@@ -1,9 +1,13 @@
 class SearchResults < ActiveRecord::Base
 
+  #############################################################
+  # Иванищев А.В. 2015
+  # Результаты поиска
+  #############################################################
+  # Расчет параметров результатов и сохранение в БД
   # @note: Here is the storage of SearchResults class methods
-  # to evaluate data to be stored
+  #   to evaluate data to be stored
   #   as proper results
-
 
   validates_presence_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count, :found_profile_ids,
                         :searched_profile_ids, :counts,
@@ -20,7 +24,6 @@ class SearchResults < ActiveRecord::Base
                          :message => ":pending_connect должно быть [0, 1] в SearchResults"
 
   # custom validations
-
   validate :count_value_more_certain  # :count
 
   def count_value_more_certain
@@ -29,13 +32,11 @@ class SearchResults < ActiveRecord::Base
   end
 
   validate :searched_n_found_users_unequal  # :user_id  AND :found_user_id
-
   def searched_n_found_users_unequal
     self.errors.add(:search_results, 'Юзеры в одном ряду не должны быть равны в SearchResults.') if self.user_id == self.found_user_id
   end
 
   validate :search_found_profiles_unequal  # :profile_id  AND :found_profile_id
-
   def search_found_profiles_unequal
     self.errors.add(:search_results, 'Профили в одном ряду не должны быть равны в SearchResults.') if self.profile_id == self.found_profile_id
   end
@@ -44,7 +45,6 @@ class SearchResults < ActiveRecord::Base
   validate :validate_found_profile_ids
   validate :validate_searched_profile_ids
   validate :validate_counts
-
   def validate_found_profile_ids
     unless found_profile_ids.is_a?(Array) # || wdays.detect{|d| !(0..6).include?(d)}
       errors.add(:found_profile_ids, :invalid)
@@ -80,7 +80,24 @@ class SearchResults < ActiveRecord::Base
     by_trees_to_store = update_by_trees(results)
     store_data = { tree_ids: collect_tree_ids_by_trees(by_trees_to_store), by_profiles: results[:by_profiles],
                    current_user_tree_ids: results[:connected_author_arr], current_user_id: current_user_id }
-    store_results(store_data)
+    search_results_arr = make_results(store_data)
+    # puts "search_results_arr = #{search_results_arr}"
+    create_search_results(search_results_arr)
+  end
+
+  # @note: Clear previous search results before save new ones
+  def self.clear_prev_results(by_trees, current_user_id)
+    previous_results = where(user_id: current_user_id, found_user_id: collect_tree_ids_by_trees(by_trees))
+    previous_results.each(&:destroy) unless previous_results.blank?
+  end
+
+  # @note - сбор tree_ids всех найденных деревьев по by_trees
+  def self.collect_tree_ids_by_trees(by_trees)
+    found_tree_ids = []
+    by_trees.each do |one_found_tree|
+      found_tree_ids << one_found_tree[:found_tree_id]
+    end
+    found_tree_ids
   end
 
   # @note: update trees ids: exclude trees ids with duplicates of both types
@@ -105,7 +122,7 @@ class SearchResults < ActiveRecord::Base
 
   # @note: reduce by_trees_arr to one tree with doubles results
   def self.one_double_tree_exclude(by_trees_arr, tree_id_with_double)
-    by_trees_arr.delete_if { |one_hash| one_hash.merge({found_tree_id: tree_id_with_double }) == one_hash }
+    by_trees_arr.delete_if {|one_hash| one_hash.merge({found_tree_id: tree_id_with_double}) == one_hash }
   end
 
   # @note: collect ids of trees, which contains doubles, for each type of doubles,
@@ -139,21 +156,6 @@ class SearchResults < ActiveRecord::Base
     end
   end
 
-  # @note: Clear previous search results before save new ones
-  def self.clear_prev_results(by_trees, current_user_id)
-    previous_results = where(user_id: current_user_id, found_user_id: collect_tree_ids_by_trees(by_trees))
-    previous_results.each(&:destroy) unless previous_results.blank?
-  end
-
-  # @note - сбор tree_ids всех найденных деревьев по by_trees
-  def self.collect_tree_ids_by_trees(by_trees)
-    found_tree_ids = []
-    by_trees.each do |one_found_tree|
-      found_tree_ids << one_found_tree[:found_tree_id]
-    end
-    found_tree_ids
-  end
-
   # @note: Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
   # @params: who_connect, with_whom_connect - arrs of ids
   def self.destroy_previous_results(who_connect, with_whom_connect)
@@ -167,23 +169,49 @@ class SearchResults < ActiveRecord::Base
     results.each(&:destroy) unless results.blank?
   end
 
-  # @note - запись результатов поиска
-  def self.store_results(store_data)
+  # @note - prepare data for результатов поиска and search arrays
+  def self.make_results(store_data)
+    search_results_arr = []
     store_data[:tree_ids].each do |tree_id|
-      results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
+      results_arrs, parems_to_store = make_results_arrs(store_data, tree_id)
       searched_profile_ids = results_arrs[:search_profile_id]
       found_profile_ids    = results_arrs[:found_profile_id]
       counts               = results_arrs[:count]
-      parems_to_store = get_results_params(tree_id, store_data[:current_user_tree_ids])
-      create(user_id: store_data[:current_user_id], found_user_id: tree_id,
-                           profile_id: searched_profile_ids[0],
-                           found_profile_id: found_profile_ids[0],
-                           count: counts[0],
-                           found_profile_ids: found_profile_ids,
-                           searched_profile_ids: searched_profile_ids,
-                           counts: counts,
-                           connection_id: parems_to_store[:connection_id],
-                           pending_connect: parems_to_store[:pending_value])
+      one_result = { user_id: store_data[:current_user_id],
+                     found_user_id: tree_id,
+                     profile_id: searched_profile_ids[0],
+                     found_profile_id: found_profile_ids[0],
+                     count: counts[0],
+                     found_profile_ids: found_profile_ids,
+                     searched_profile_ids: searched_profile_ids,
+                     counts: counts,
+                     connection_id: parems_to_store[:connection_id],
+                     pending_connect: parems_to_store[:pending_value]}
+      search_results_arr << one_result
+    end
+    search_results_arr
+  end
+
+  # @note: make more search_results params
+  def self.make_results_arrs(store_data, tree_id)
+    results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
+    parems_to_store = get_results_params(tree_id, store_data[:current_user_tree_ids])
+    return results_arrs, parems_to_store
+  end
+
+  # Сохранение массива search_results_arr в таблицу SearchResults
+  def self.create_search_results(search_results_arr)
+    search_results_arr.each do |one_result|
+      create(user_id:              one_result[:user_id],
+             found_user_id:        one_result[:found_user_id],
+             profile_id:           one_result[:profile_id],
+             found_profile_id:     one_result[:found_profile_id],
+             count:                one_result[:count],
+             found_profile_ids:    one_result[:found_profile_ids],
+             searched_profile_ids: one_result[:searched_profile_ids],
+             counts:               one_result[:counts],
+             connection_id:        one_result[:connection_id],
+             pending_connect:      one_result[:pending_connect])
     end
   end
 
@@ -207,7 +235,8 @@ class SearchResults < ActiveRecord::Base
     connection_id
   end
 
-  # @note Если запрос текущего юзера существует, то устанавливаем pending_connect в 1 его рез-тов поиска
+  # @note Если запрос текущего юзера существует, то устанавливаем
+  # pending_connect в 1 его рез-тов поиска
   def self.my_request_exist(connected_tree_id, current_tree_ids)
     my_request = ConnectionRequest.where("with_user_id in (?)", connected_tree_id)
                      .where("user_id in (?)", current_tree_ids)
@@ -223,7 +252,6 @@ class SearchResults < ActiveRecord::Base
   # :by_profiles=>
   #     [{:search_profile_id=>18, :found_tree_id=>2, :found_profile_id=>9, :count=>5},
   #      {:search_profile_id=>18, :found_tree_id=>1, :found_profile_id=>9, :count=>5},
-  #      {:search_profile_id=>17, :found_tree_id=>2, :found_profile_id=>8, :count=>5},
   def self.collect_search_profile_ids(by_profiles, tree_id)
     results_arrs = { search_profile_id: [], found_profile_id: [], count: [] }
     by_profiles.each do |one_profiles_hash|
