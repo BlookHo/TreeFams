@@ -24,6 +24,8 @@ class ConnectedUser < ActiveRecord::Base
 
   belongs_to :user
 
+  # @note: used in User.get_connected_users
+  #  EX.: first_users_arr = ConnectedUser.connected_users_ids(self).uniq
   scope :connected_users_ids, -> (connected_user) {where(user_id: connected_user.id).pluck(:with_user_id)}
   scope :connected_with_users_ids, -> (connected_user) {where(with_user_id: connected_user.id).pluck(:user_id)}
 
