@@ -3,7 +3,7 @@ MetricFu.report_name = 'Weafam MetricFu Results'
 # Reconfigure all metrics
 MetricFu.configuration.configure_metrics.each do |metric|
 #  if [:rails_best_practices, :cane, :stats, :churn, :reek, :flay, :flog, :saikuro, :roodi, :hotspots ].include?(metric.name)
-  if [ :reek ].include?(metric.name)
+  if [ :reek, :roodi ].include?(metric.name)
    metric.enabled = true
   else
     metric.enabled = false

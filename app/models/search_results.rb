@@ -69,7 +69,6 @@ class SearchResults < ActiveRecord::Base
   scope :one_way_result, -> (user_id, found_user_id) {where("user_id in (?)", user_id).
                                                       where("found_user_id in (?)", found_user_id)}
 
-
   # @note запись рез-тов поиска в отдельную таблицу
   #   Store new results ONLY IF there are NO BOTH TYPEs duplicates
   #   Вначале - удаление предыд-х рез-тов: clear_prev_results
@@ -79,7 +78,6 @@ class SearchResults < ActiveRecord::Base
   def self.store_search_results(results, current_user_id)
     clear_prev_results(results[:by_trees], current_user_id)
     by_trees_to_store = update_by_trees(results)
-    puts "In store_search_results: by_trees_to_store = #{by_trees_to_store.inspect} "
     store_data = { tree_ids: collect_tree_ids_by_trees(by_trees_to_store), by_profiles: results[:by_profiles],
                    current_user_tree_ids: results[:connected_author_arr], current_user_id: current_user_id }
     store_results(store_data)
@@ -90,9 +88,7 @@ class SearchResults < ActiveRecord::Base
     by_trees_to_store = results[:by_trees]
     tree_ids_to_exclude = collect_doubles_tree_ids(results)
     puts "In update_by_trees: tree_ids_to_exclude = #{tree_ids_to_exclude.inspect} "
-
     by_trees_to_store = exclude_doubles_results(by_trees_to_store, tree_ids_to_exclude) unless tree_ids_to_exclude.blank?
-
     by_trees_to_store
   end
 
@@ -142,7 +138,6 @@ class SearchResults < ActiveRecord::Base
       tree_id_with_doubles << key
     end
   end
-
 
   # @note: Clear previous search results before save new ones
   def self.clear_prev_results(by_trees, current_user_id)
@@ -237,13 +232,11 @@ class SearchResults < ActiveRecord::Base
     results_arrs
   end
 
-
   # @note: collect_tree_results
   def self.collect_tree_results(one_profiles_hash, results_arrs)
     one_result = get_one_result(one_profiles_hash)
     collect_result_arrs(results_arrs, one_result) unless one_result.empty?
   end
-
 
   # @note: collect one result
   def self.get_one_result(one_profiles_hash)
@@ -263,9 +256,5 @@ class SearchResults < ActiveRecord::Base
     results_arrs[:count]             << one_result[:count]
     results_arrs
   end
-
-
-
-
 
 end
