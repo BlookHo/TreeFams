@@ -77,29 +77,69 @@ class SearchResults < ActiveRecord::Base
     by_profiles = []
     filling_hash = {}
     uniq_hash.each do |search_profile_id, found_hash|
-      found_hash.each do |found_tree_id, found_profile_id|
-        # make fill_hash for by_trees search results
-        HashWork.fill_hash_w_val_arr(filling_hash, found_tree_id, found_profile_id)
-        # make fill_hash for by_profiles search results
-        one_result_hash = {}
-        count = 0
-        one_result_hash.merge!(:search_profile_id => search_profile_id)
-        one_result_hash.merge!(:found_tree_id => found_tree_id)
-        one_result_hash.merge!(:found_profile_id => found_profile_id)
-        count = profiles_match_hash.values_at(found_profile_id)[0] unless profiles_match_hash.empty?
-        one_result_hash.merge!(:count => count)
-
-        by_profiles << one_result_hash
-      end
+      hash_results_data = {
+          search_profile_id: search_profile_id,
+          found_hash: found_hash,
+          filling_hash: filling_hash,
+          profiles_match_hash: profiles_match_hash,
+          by_profiles: by_profiles
+      }
+      by_profiles = filling_by_profiles(hash_results_data)
     end
-    # make final sorted by_profiles search results
-    by_profiles = by_profiles.sort_by {|h| [ h[:count] ]}.reverse
-    # make final by_trees search results
-    by_trees = HashWork.make_by_trees_results(filling_hash)
-
-    return by_profiles, by_trees
+    return make_final_bys(filling_hash, by_profiles)
   end
 
+  # @note подготовка рез-тов поиска - по профилям (by_profiles)
+  def self.filling_by_profiles(hash_results_data)
+    search_profile_id   = hash_results_data[:search_profile_id]
+    found_hash          = hash_results_data[:found_hash]
+    filling_hash        = hash_results_data[:filling_hash]
+    profiles_match_hash = hash_results_data[:profiles_match_hash]
+    by_profiles         = hash_results_data[:by_profiles]
+
+    found_hash.each do |found_tree_id, found_profile_id|
+      # make fill_hash for by_trees search results
+      HashWork.fill_hash_w_val_arr(filling_hash, found_tree_id, found_profile_id)
+      one_result_data = {
+          search_profile_id:    search_profile_id,
+          found_tree_id:        found_tree_id,
+          found_profile_id:     found_profile_id,
+          profiles_match_hash:  profiles_match_hash
+      }
+      by_profiles << collect_result_hush(one_result_data)
+    end
+    by_profiles
+  end
+
+
+  # @note подготовка of One Hash of рез-тов поиска
+  def self.collect_result_hush(one_result_data)
+
+    search_profile_id   = one_result_data[:search_profile_id]
+    found_tree_id       = one_result_data[:found_tree_id]
+    found_profile_id    = one_result_data[:found_profile_id]
+    profiles_match_hash = one_result_data[:profiles_match_hash]
+
+    one_result_hash = {}
+    count = 0
+    one_result_hash.merge!(:search_profile_id => search_profile_id)
+    one_result_hash.merge!(:found_tree_id => found_tree_id)
+    one_result_hash.merge!(:found_profile_id => found_profile_id)
+    count = profiles_match_hash.values_at(found_profile_id)[0] unless profiles_match_hash.empty?
+    one_result_hash.merge!(:count => count)
+
+    one_result_hash
+  end
+
+
+    # @note подготовка частей рез-тов поиска - по профилям (by_profiles) и по деревьям (by_trees)
+  def self.make_final_bys(filling_hash, by_profiles)
+    # make final sorted by_profiles search results
+    by_profiles = by_profiles.sort_by {|one_hash| [ one_hash[:count] ]}.reverse
+    # make final by_trees search results
+    by_trees = HashWork.make_by_trees_results(filling_hash)
+    return by_profiles, by_trees
+  end
 
   # @note запись рез-тов поиска в отдельную таблицу
   #   Store new results ONLY IF there are NO BOTH TYPEs duplicates

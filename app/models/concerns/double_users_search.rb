@@ -11,6 +11,7 @@ module DoubleUsersSearch
   #############################################################
 
   # @note: Запуск поиска дублей юзеров
+  #   only first time after registration
   def start_check_double(results, certain_koeff)
     if results[:by_trees].blank?
       self.update_attributes(:double => 1, :updated_at => Time.now)
