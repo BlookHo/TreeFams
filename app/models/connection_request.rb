@@ -1,7 +1,15 @@
 class ConnectionRequest < ActiveRecord::Base
 
-  #belongs_to :user
-  #attr_accessor :user_id, :with_user_id, :connection_id, :confirm, :done, :created_at
+  #############################################################
+  # Иванищев А.В. 2014-2015
+  # Запрос на объединение
+  #############################################################
+  # Расчет параметров запросов на объединение и сохранение их в БД
+  # @note: Here is the storage of ConnectionRequest class methods
+  #   to evaluate data to be stored
+  #   as proper requests
+  #############################################################
+
   validates_presence_of :user_id, :with_user_id, :connection_id,
                         :message => "Должно присутствовать в ConnectionRequest"
   validates_numericality_of :user_id, :with_user_id, :connection_id, :only_integer => true,
@@ -24,21 +32,17 @@ class ConnectionRequest < ActiveRecord::Base
   validates_inclusion_of :done, :in => [true, false],
                          :message => "done должно быть [true, false] в ConnectionRequest"
 
-
   # @note: Определение кол-ва совершенных объединений
   #   От всех Юзеров
   def self.connections_amount
     where(done: true, confirm: 1).count
   end
 
-
   # @note: Определение кол-ва совершенных объединений
   #   От всех Юзеров
   def self.connections_refuses
     where(done: true, confirm: 0).count
   end
-
-
 
   # @note: Формирование нового запроса на объединение деревьев
   #   От кого - от текущего Юзера
@@ -51,8 +55,6 @@ class ConnectionRequest < ActiveRecord::Base
 
       # определение Юзеров - участников объединения деревьев
       who_connect_ids, with_whom_connect_ids = find_users_connectors(current_user, with_user_id) if current_user
-      # logger.info "In make_request: who_connect_ids = #{who_connect_ids},
-      #             with_whom_connect_users_arr = #{with_whom_connect_ids} "
 
       # Если деревья еще не объединялись?
       if !who_connect_ids.include?(with_user_id.to_i) # check_connection: IF NOT CONNECTED
@@ -65,7 +67,6 @@ class ConnectionRequest < ActiveRecord::Base
 
           # формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
           create_requests(with_whom_connect_ids, connection_id, current_user.id)
-
 
         else
           logger.info "Warning:: Встречный запрос на объединение! "
@@ -105,7 +106,6 @@ class ConnectionRequest < ActiveRecord::Base
                          agent_profile_id: profile_user_to_connect,  who_made_event: current_user_id, read: false)
       # logger.info "In create_requests: UpdatesFeed.create"
       ##############################################
-
     end
 
     # todo: to SearchResults model
@@ -115,11 +115,7 @@ class ConnectionRequest < ActiveRecord::Base
     current_user_results = SearchResults.where(user_id: current_user_id).where("found_user_id in (?)", with_whom_connect_ids)
     current_user_results.update_all({pending_connect: 1}) unless current_user_results.blank?
     # end
-
-
   end
-
-
 
 
   # @note: определение Юзеров - участников объединения деревьев
@@ -272,7 +268,6 @@ class ConnectionRequest < ActiveRecord::Base
     end
 
   end
-
 
 
 

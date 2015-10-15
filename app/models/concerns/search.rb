@@ -1,9 +1,19 @@
 module Search
   extend ActiveSupport::Concern
 
+  #############################################################
+  # Иванищев А.В. 2014
+  # Метод поиска
+  #############################################################
+  # Осуществляет поиск совпадений в деревьях, расчет результатов и сохранение в БД
+  # @note: Here is the storage of Search class methods
+  #   to evaluate data to be stored
+  #   as proper search results and update search data
+  #############################################################
+
 
   # @note: Запуск мягкого поиска для объединения
-  #   Значение certain_koeff - из вьюхи/
+  #   Значение certain_koeff - из DB
   def start_search(certain_koeff)
 
     tree_data =  Tree.tree_main_data(self) # collect tree info
@@ -52,6 +62,7 @@ module Search
         duplicates_one_to_many:   @duplicates_one_to_many,
         duplicates_many_to_one:   @duplicates_many_to_one
     }
+
 
     # From 46 - > in 45 .. 47
 
@@ -110,7 +121,7 @@ module Search
 
 
     logger.info "= Before store_search_results ========== results = #{results} "
-    SearchResults.store_search_results(results, self.id) # запись рез-тов поиска в отдельную таблицу - для Метеора
+    SearchResults.store_search_results(results, self.id) # запись рез-тов поиска в таблицу - для Метеора
 
     # Start double_users_search(results) - only first time after registration
     if self.double == 0
@@ -313,7 +324,7 @@ module Search
   ###### МЕТОДЫ ДЛЯ ИЗГОТОВЛЕНИЯ РЕЗУЛЬТАТОВ ПОИСКА (by_profiles, by_trees)
   ###### - для отображения на Главной
 
-  # make final sorted by_trees search results
+  # @note: make final sorted by_trees search results
   def fill_hash_w_val_arr(filling_hash, input_key, input_val)
     # test = filling_hash.key?(input_key) # Is elem w/input_key in filling_hash?
     # if test == false #  "NOT Found in hash"

@@ -8,6 +8,7 @@ class SearchResults < ActiveRecord::Base
   # @note: Here is the storage of SearchResults class methods
   #   to evaluate data to be stored
   #   as proper results
+  #############################################################
 
   validates_presence_of :user_id, :found_user_id, :profile_id, :found_profile_id, :count, :found_profile_ids,
                         :searched_profile_ids, :counts,
@@ -81,7 +82,6 @@ class SearchResults < ActiveRecord::Base
     store_data = { tree_ids: collect_tree_ids_by_trees(by_trees_to_store), by_profiles: results[:by_profiles],
                    current_user_tree_ids: results[:connected_author_arr], current_user_id: current_user_id }
     search_results_arr = make_results(store_data)
-    # puts "search_results_arr = #{search_results_arr}"
     create_search_results(search_results_arr)
   end
 
