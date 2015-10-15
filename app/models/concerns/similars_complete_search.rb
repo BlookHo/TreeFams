@@ -97,7 +97,7 @@ module SimilarsCompleteSearch
 
         # Наращивание финального хэша пар профилей для объединения, если есть чем наращивать
         unless add_connection_hash.empty?
-          add_to_hash(final_connection_hash, add_connection_hash)
+          HashWork.add_to_hash(final_connection_hash, add_connection_hash)
           logger.info "@@@@@ final_connection_hash = #{final_connection_hash} "
         end
         # Подготовка к следующему циклу

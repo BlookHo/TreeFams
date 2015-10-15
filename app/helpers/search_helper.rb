@@ -4,45 +4,45 @@ module SearchHelper
 
   ############################# NEW METHODS ############
 
-  # todo: перенести этот метод в Operational - для нескольких моделей
-  # "EXCLUDE Many_to_One DUPLICATES"
-  # Extract duplicates hashes from input hash
-  def duplicates_out(start_hash)
-    # Initaialize empty hash
-    duplicates_Many_to_One = {}
-    uniqs = start_hash
-
-    # Collect duplicates
-    start_hash.each_with_index do |(k, v), index|
-      start_hash.each do |key, value|
-        next if k == key
-        # logger.info "=========== SEARCH DEBUG ========"
-        # logger.info "=========== KEY"
-        # logger.info key
-        # logger.info start_hash[key]
-        # logger.info "=========== K"
-        # logger.info k
-        # logger.info start_hash[k]
-        # logger.info "=========== END SEARCH DEBUG ========"
-        intersection = start_hash[key] & start_hash[k]
-        if duplicates_Many_to_One.has_key?(key)
-          duplicates_Many_to_One[key][intersection.keys.first] = intersection[intersection.keys.first] if !intersection.empty?
-        else
-          duplicates_Many_to_One[key] = intersection if !intersection.empty?
-        end
-      end
-    end
-
-    # Collect uniqs
-    duplicates_Many_to_One.each do |key, value|
-      value.each do |k, v|
-        uniqs[key].delete_if { |kk,vv|  kk == k && vv = v }
-      end
-    end
-    logger.info "** In  duplicates_out: duplicates_Many_to_One = #{duplicates_Many_to_One}"
-
-     return uniqs, duplicates_Many_to_One
-  end
+  # # todo: перенести этот метод в Operational - для нескольких моделей
+  # # "EXCLUDE Many_to_One DUPLICATES"
+  # # Extract duplicates hashes from input hash
+  # def duplicates_out(start_hash)
+  #   # Initaialize empty hash
+  #   duplicates_Many_to_One = {}
+  #   uniqs = start_hash
+  #
+  #   # Collect duplicates
+  #   start_hash.each_with_index do |(k, v), index|
+  #     start_hash.each do |key, value|
+  #       next if k == key
+  #       # logger.info "=========== SEARCH DEBUG ========"
+  #       # logger.info "=========== KEY"
+  #       # logger.info key
+  #       # logger.info start_hash[key]
+  #       # logger.info "=========== K"
+  #       # logger.info k
+  #       # logger.info start_hash[k]
+  #       # logger.info "=========== END SEARCH DEBUG ========"
+  #       intersection = start_hash[key] & start_hash[k]
+  #       if duplicates_Many_to_One.has_key?(key)
+  #         duplicates_Many_to_One[key][intersection.keys.first] = intersection[intersection.keys.first] if !intersection.empty?
+  #       else
+  #         duplicates_Many_to_One[key] = intersection if !intersection.empty?
+  #       end
+  #     end
+  #   end
+  #
+  #   # Collect uniqs
+  #   duplicates_Many_to_One.each do |key, value|
+  #     value.each do |k, v|
+  #       uniqs[key].delete_if { |kk,vv|  kk == k && vv = v }
+  #     end
+  #   end
+  #   logger.info "** In  duplicates_out: duplicates_Many_to_One = #{duplicates_Many_to_One}"
+  #
+  #    return uniqs, duplicates_Many_to_One
+  # end
 
 
 
@@ -151,21 +151,21 @@ module SearchHelper
   end # End of method
 
 
-  # todo: перенести этот метод в Operational - для нескольких моделей
-  # ИСПОЛЬЗУЕТСЯ В NEW METHOD complete_search
-  # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
-  #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
-  #new_conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 79=>62}
-  # hash_1 -does not change
-  # 79=>62 - найти те эл-ты in hash_2, кот-е отс-ют в hash_1
-  # add 79=>62 to hash_1
-  # Result: {72=>58, 75=>59, 76=>61, 77=>60, 78=>57, 79=>62} /
-  def add_to_hash(hash_1,hash_2)
-    arr_key1 = hash_1.keys
-    hash_2.each do |k,v|
-      hash_1 = hash_1.merge!( k => v) if !arr_key1.include?(k)
-    end
-  end
+  # # todo: перенести этот метод в Operational - для нескольких моделей
+  # # ИСПОЛЬЗУЕТСЯ В NEW METHOD complete_search
+  # # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
+  # #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
+  # #new_conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 79=>62}
+  # # hash_1 -does not change
+  # # 79=>62 - найти те эл-ты in hash_2, кот-е отс-ют в hash_1
+  # # add 79=>62 to hash_1
+  # # Result: {72=>58, 75=>59, 76=>61, 77=>60, 78=>57, 79=>62} /
+  # def add_to_hash(hash_1,hash_2)
+  #   arr_key1 = hash_1.keys
+  #   hash_2.each do |k,v|
+  #     hash_1 = hash_1.merge!( k => v) if !arr_key1.include?(k)
+  #   end
+  # end
 
 
   # todo: перенести этот метод в CirclesMethods - для нескольких моделей
@@ -367,40 +367,6 @@ module SearchHelper
     end  # DEBUGG_TO_LOGG
   end
 
-
-  # todo: перенести этот метод в Operational - для нескольких моделей
-  # NEW SEARCH method
-  # Автоматическое наполнение хэша сущностями и
-  # количестpвом появлений каждой сущности.
-  # @note GET /
-  # @param admin_page [Integer] опциональный номер страницы
-  # @see Place = main_contrl.,
-  ################# FILLING OF HASH WITH KEYS AND/OR VALUES
-  def fill_arrays_in_hash(one_hash, tree, profile, relation) # Filling of hash with keys and values, according to key occurance
-    test_tree = one_hash.key?(tree) # Is profile_searched in one_hash?
-    if test_tree == false #  "key = profile_searched YET NOT in hash - make new hash in hash"
-      one_hash.merge!(tree => { profile => [relation] } ) # include new profile_searched with new profile with new array in hash
-    else
-      current_hash = one_hash.fetch(tree) # get hash for tree
-      #logger.info " current_hash = #{current_hash} "
-      test_profile_found = current_hash.key?(profile) # Is  elem in one_hash?
-      if test_profile_found == false #  "key=profile NOT Found in hash"
-        current_hash.merge!({profile => [relation]}) # include profile with new array in hash
-        #logger.info " new current_hash = #{current_hash} "
-        one_hash.merge!(tree => current_hash ) # наполнение хэша соответствиями найденных профилей и найденных отношений
-        #logger.info " one_hash = #{one_hash} "
-      else  #  "Found in hash"
-        value_array = current_hash.values_at(profile)
-        value_array << relation
-        value_array = value_array.flatten(1)
-        current_hash.merge!(profile => value_array ) # наполнение хэша соответствиями найденных профилей и найденных отношений
-        one_hash.merge!(tree => current_hash ) # наполнение хэша соответствиями найденных профилей и найденных отношений
-      end
-    end
-
-    one_hash
-
-  end
 
 
 

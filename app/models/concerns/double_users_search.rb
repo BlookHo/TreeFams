@@ -1,7 +1,30 @@
 module DoubleUsersSearch
   extend ActiveSupport::Concern
 
+  #############################################################
+  # Иванищев А.В. 2015
+  # Метод определения дублей среди пользователей - по стартовому дереву
+  #############################################################
+  # @note: Осуществляет поиск совпадений в деревьях на основе нового введенного дерева
+  #   Если вновь введенный пользователь является дублем для одного из существующих, то
+  #   дубль - удаляется из всех БД.
+  #############################################################
+
   # @note: Запуск поиска дублей юзеров
+  def start_check_double(results, certain_koeff)
+    if results[:by_trees].blank?
+      self.update_attributes(:double => 1, :updated_at => Time.now)
+      logger.info "Start + No search: double => 1: self.double = #{self.double} " # DEBUGG_TO_LOGG
+    else
+      logger.info "Start + Search: double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
+      doubles_search_data = { relations_arr: results[:profiles_relations_arr], by_trees: results[:by_trees] }
+      self.double_users_search(doubles_search_data, certain_koeff)
+      logger.info "After double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
+    end
+  end
+
+
+  # @note: Поиск дублей юзеров
   def double_users_search(doubles_search_data, certain_koeff)
     profiles_relations = doubles_search_data[:relations_arr]
     by_trees      = doubles_search_data[:by_trees]

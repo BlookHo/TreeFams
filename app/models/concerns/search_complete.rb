@@ -1,6 +1,17 @@
 module SearchComplete
   extend ActiveSupport::Concern
 
+  #############################################################
+  # Иванищев А.В. 2014 -2015
+  # Метод Полного поиска
+  #############################################################
+  # Осуществляет поиск совпадений в деревьях, расчет результатов и сохранение в БД
+  # @note: Here is the storage of SearchComplete class methods
+  #   to evaluate data to be stored
+  #   as proper search results and update search data
+  #############################################################
+
+
   # @note: NEW METHOD "HARD COMPLETE SEARCH"- TO DO
   #   сбор полных достоверных пар профилей для объединения
   #   Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
@@ -93,7 +104,7 @@ module SearchComplete
 
         # Наращивание финального хэша пар профилей для объединения, если есть чем наращивать
         unless add_connection_hash.empty?
-          add_to_hash(final_connection_hash, add_connection_hash)
+          HashWork.add_to_hash(final_connection_hash, add_connection_hash)
           logger.info "@@@@@ final_connection_hash = #{final_connection_hash} "
         end
 
