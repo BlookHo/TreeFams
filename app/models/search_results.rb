@@ -70,6 +70,37 @@ class SearchResults < ActiveRecord::Base
   scope :one_way_result, -> (user_id, found_user_id) {where("user_id in (?)", user_id).
                                                       where("found_user_id in (?)", found_user_id)}
 
+
+  # @note: МЕТОДЫ ДЛЯ ИЗГОТОВЛЕНИЯ РЕЗУЛЬТАТОВ ПОИСКА (by_profiles, by_trees)
+  #   make final search results to store
+  def self.make_search_results(uniq_hash, profiles_match_hash)
+    by_profiles = []
+    filling_hash = {}
+    uniq_hash.each do |search_profile_id, found_hash|
+      found_hash.each do |found_tree_id, found_profile_id|
+        # make fill_hash for by_trees search results
+        HashWork.fill_hash_w_val_arr(filling_hash, found_tree_id, found_profile_id)
+        # make fill_hash for by_profiles search results
+        one_result_hash = {}
+        count = 0
+        one_result_hash.merge!(:search_profile_id => search_profile_id)
+        one_result_hash.merge!(:found_tree_id => found_tree_id)
+        one_result_hash.merge!(:found_profile_id => found_profile_id)
+        count = profiles_match_hash.values_at(found_profile_id)[0] unless profiles_match_hash.empty?
+        one_result_hash.merge!(:count => count)
+
+        by_profiles << one_result_hash
+      end
+    end
+    # make final sorted by_profiles search results
+    by_profiles = by_profiles.sort_by {|h| [ h[:count] ]}.reverse
+    # make final by_trees search results
+    by_trees = HashWork.make_by_trees_results(filling_hash)
+
+    return by_profiles, by_trees
+  end
+
+
   # @note запись рез-тов поиска в отдельную таблицу
   #   Store new results ONLY IF there are NO BOTH TYPEs duplicates
   #   Вначале - удаление предыд-х рез-тов: clear_prev_results

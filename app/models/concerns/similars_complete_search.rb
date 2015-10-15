@@ -104,8 +104,6 @@ module SimilarsCompleteSearch
         init_connection_hash = add_connection_hash
     end
 
-
-
       # logger.info "final_connection_hash = #{final_connection_hash} "
       # logger.info " "
       final_profiles_to_rewrite = final_connection_hash.keys

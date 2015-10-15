@@ -352,7 +352,7 @@ module SearchHelper
 
     # end
     end
-    return new_connection_hash
+    new_connection_hash
   end
 
 
