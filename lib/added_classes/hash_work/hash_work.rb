@@ -86,7 +86,14 @@ class HashWork
   # @param admin_page [Integer] опциональный номер страницы
   # @see Place = main_contrl.,
   ################# FILLING OF HASH WITH KEYS AND/OR VALUES
-  def self.fill_arrays_in_hash(one_hash, tree, profile, relation) # Filling of hash with keys and values, according to key occurance
+  # def self.fill_arrays_in_hash(one_hash, tree, profile, relation) # Filling of hash with keys and values, according to key occurance
+  def self.fill_arrays_in_hash(fill_arrays_data) # Filling of hash with keys and values, according to key occurance
+
+    one_hash = fill_arrays_data[:profiles_hash]
+    tree     = fill_arrays_data[:tree_user_id]
+    profile  = fill_arrays_data[:tree_profile_id]
+    relation = fill_arrays_data[:row_relation_id]
+
     test_tree = one_hash.key?(tree) # Is profile_searched in one_hash?
     if test_tree == false #  "key = profile_searched YET NOT in hash - make new hash in hash"
       one_hash.merge!(tree => { profile => [relation] } ) # include new profile_searched with new profile with new array in hash
