@@ -14,11 +14,11 @@ module Search
 
   # @note: Запуск мягкого поиска для объединения
   #   Значение certain_koeff - из DB, WeafamSettings
-  #from_profile_searching = author_tree_arr.profile_id     # От какого профиля осущ-ся Поиск DEBUGG_TO_LOGG
-  #name_id_searched       = author_tree_arr.name_id        # Имя Профиля DEBUGG_TO_LOGG
-  #relation_id_searched   = author_tree_arr.relation_id    # Искомое relation_id К_Профиля DEBUGG_TO_LOGG
-  #is_name_id_searched    = author_tree_arr.is_name_id     # Искомое Имя К_Профиля DEBUGG_TO_LOGG
-  #profile_id_searched    = author_tree_arr.is_profile_id  # Поиск по ID К_Профиля
+  # from_profile_searching = author_tree_arr.profile_id     # От какого профиля осущ-ся Поиск DEBUGG_TO_LOGG
+  # name_id_searched       = author_tree_arr.name_id        # Имя Профиля DEBUGG_TO_LOGG
+  # relation_id_searched   = author_tree_arr.relation_id    # Искомое relation_id К_Профиля DEBUGG_TO_LOGG
+  # is_name_id_searched    = author_tree_arr.is_name_id     # Искомое Имя К_Профиля DEBUGG_TO_LOGG
+  # profile_id_searched    = author_tree_arr.is_profile_id  # Поиск по ID К_Профиля
   # Задание на поиск от Дерева Юзера:
   # tree_is_profiles = [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18] - in RSpec user_spec.rb
   # TO TEST CONNECTION TO FAIL
@@ -27,37 +27,31 @@ module Search
   def start_search(certain_koeff)
 
     tree_data =  Tree.tree_main_data(self) # collect tree info
-    author_tree_arr      = tree_data[:author_tree_arr]
     tree_profiles        = tree_data[:tree_profiles]
     qty_of_tree_profiles = tree_data[:qty_of_tree_profiles]
     connected_author_arr = tree_data[:connected_author_arr]
-
-    # puts "======================= RUN start_search ========================= "
-    logger.info "======================= RUN start_search ========================= "
-    logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
-    show_in_logger(author_tree_arr, "=== результат" )  # DEBUGG_TO_LOGG
-    logger.info "Задание на поиск от Дерева Юзера:  author_tree_arr.size = #{author_tree_arr.size}, tree_profiles = #{tree_profiles} "
-    logger.info "Коэффициент достоверности: certain_koeff = #{certain_koeff}"
+    debug_tree_data_logger(tree_data, certain_koeff) # Debug
 
     init_vars
 
-    profiles_search_data = { certain_koeff: certain_koeff,
-                          connected_author_arr: connected_author_arr,
-                          tree_profiles: tree_profiles }
+    profiles_search_data = {
+      certain_koeff:        certain_koeff,
+      connected_author_arr: connected_author_arr,
+      tree_profiles:        tree_profiles }
     all_profiles_search(profiles_search_data) unless tree_profiles.blank?
 
     search_profiles_from_tree(certain_koeff)
 
     results = {
-      tree_profiles:            tree_profiles,        # where use? - in RSpec, View
-      connected_author_arr:     connected_author_arr, # where use? - in RSpec, View
-      qty_of_tree_profiles:     qty_of_tree_profiles, # where use? - in RSpec, View
+      tree_profiles:            tree_profiles,        # use? - in RSpec, View
+      connected_author_arr:     connected_author_arr, # use? - in RSpec, View
+      qty_of_tree_profiles:     qty_of_tree_profiles, # use? - in RSpec, View
       ############### РЕЗУЛЬТАТЫ ПОИСКА ######## NEW METHOD ############
-      profiles_relations_arr:   @profiles_relations_arr, #  DEBUGG_TO_LOGG
-      profiles_found_arr:       @profiles_found_arr, #  DEBUGG_TO_LOGG
+      profiles_relations_arr:   @profiles_relations_arr,
+      profiles_found_arr:       @profiles_found_arr,
       uniq_profiles_pairs:      @uniq_profiles_pairs,
-      profiles_with_match_hash: @profiles_with_match_hash, #  DEBUGG_TO_LOGG
-      ############# РЕЗУЛЬТАТЫ ПОИСКА для отображения на Главной ##########################################
+      profiles_with_match_hash: @profiles_with_match_hash,
+      ############# РЕЗУЛЬТАТЫ ПОИСКА для save & display in Meteor ##########################################
       by_profiles:              @by_profiles,
       by_trees:                 @by_trees,
       ############### ДУБЛИКАТЫ ПОИСКА ######## NEW METHOD ############
@@ -70,8 +64,22 @@ module Search
 
     logger.info "== END OF start_search ===  results = #{results.inspect}"
     results
+  end
 
-  end # END OF start_search
+
+  # @note: Logger tree data  # Debug
+  def debug_tree_data_logger(tree_data, certain_koeff)
+    author_tree_arr      = tree_data[:author_tree_arr]
+    tree_profiles        = tree_data[:tree_profiles]
+    qty_of_tree_profiles = tree_data[:qty_of_tree_profiles]
+    connected_author_arr = tree_data[:connected_author_arr]
+    logger.info "======================= RUN start_search ========================= "
+    logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
+    show_in_logger(author_tree_arr, "=== результат" )  # DEBUGG_TO_LOGG
+    logger.info "Задание на поиск от Дерева Юзера:  author_tree_arr.size = #{author_tree_arr.size}, tree_profiles = #{tree_profiles} "
+    logger.info "Коэффициент достоверности: certain_koeff = #{certain_koeff}"
+  end
+
 
   # @note: init vars to be in results
   def init_vars
@@ -80,8 +88,9 @@ module Search
     @profiles_relations_arr = []      #
   end
 
+
   # @note: поиск для каждого профиля дерева
-  # Запуск Циклов поиска по tree_arr "
+  #   Запуск Циклов поиска по tree_arr "
   def all_profiles_search(profiles_search_data)
     certain_koeff        = profiles_search_data[:certain_koeff]
     connected_author_arr = profiles_search_data[:connected_author_arr]
@@ -97,7 +106,7 @@ module Search
   end
 
 
-  #  @note: Поиск совпадений для одного из профилей
+  # @note: Поиск совпадений для одного из профилей
   #   Берем параметр: profile_id из массива  = profiles_tree_arr[i][6].
   def search_match(connected_users, profile_id_searched, certain_koeff)
     found_profiles_hash = Hash.new  #
@@ -112,36 +121,33 @@ module Search
     # поиск массива записей искомого круга для каждого профиля в дереве Юзера
     logger.info "Круг ИСКОМОГО ПРОФИЛЯ = #{profile_id_searched.inspect} в (объединенном) дереве #{connected_users} зарег-го Юзера"      # :user_id, , :id
     show_in_logger(all_profile_rows, "all_profile_rows - запись" )  # DEBUGG_TO_LOGG
-    all_profile_rows_no = 1 # DEBUGG_TO_LOGG
-    if !all_profile_rows.blank?
-      # logger.info "all_profile_rows.size = #{all_profile_rows.size} " # DEBUGG_TO_LOGG
+
+    if all_profile_rows.blank?
+      logger.info "ERROR in search_match: В искомом дереве - НЕТ искомого профиля!?? "
+    else
       # допускаем до поиска те круги искомых профилей, размер кот-х (кругов) больше или равно коэфф-та достоверности
       if all_profile_rows.size >= certain_koeff
+        all_profile_rows_no = 1 # DEBUGG_TO_LOGG
         all_profile_rows.each do |relation_row|
-          one_profile_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
           found_profiles_data = {
-              profiles_hash: profiles_hash,
-              relation_row: relation_row,
-              connected_users: connected_users,
-              profile_id_searched: profile_id_searched
+            profiles_hash:       profiles_hash,
+            relation_row:        relation_row,
+            connected_users:     connected_users,
+            profile_id_searched: profile_id_searched
           }
+          one_profile_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
           # Получение РЕЗ-ТАТа ПОИСКА для одной записи Kруга искомого профиля - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
-          # found_profiles_hash = get_found_profiles(profiles_hash, relation_row, connected_users, profile_id_searched)
           found_profiles_hash = get_found_profiles(found_profiles_data)
-
-          logger.info " "
-          logger.info "=== После ПОИСКА по записи № #{all_profile_rows_no}" # DEBUGG_TO_LOGG
-          logger.info "one_profile_relations_hash = #{one_profile_relations_hash} " # DEBUGG_TO_LOGG
-          logger.info "profiles_hash = #{profiles_hash} " # DEBUGG_TO_LOGG
-          logger.info "found_profiles_hash = #{found_profiles_hash} " # DEBUGG_TO_LOGG
-
+          logger_data = {
+            all_profile_rows_no:        all_profile_rows_no,
+            one_profile_relations_hash: one_profile_relations_hash,
+            profiles_hash:              profiles_hash,
+            found_profiles_hash:        found_profiles_hash
+          }
+          debug_logger(logger_data) # Debug
           all_profile_rows_no += 1 # Подсчет номера по порядку очередной записи об искомом профиле  # DEBUGG_TO_LOGG
         end
       end
-
-    else
-      logger.info " "
-      logger.info "ERROR in search_match: В искомом дереве - НЕТ искомого профиля!?? "
     end
     # ДОПОЛНИТЕЛЬНЫЙ РЕЗ-ТАТ ПОИСКА - СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
     @profiles_relations_arr = HashWork.make_profile_relations(profile_id_searched, one_profile_relations_hash, @profiles_relations_arr)
@@ -154,12 +160,19 @@ module Search
   end # End of search_match
 
 
+  # @note: DEBUG LOGGER LIST  # Debug
+  def debug_logger(logger_data)
+    logger.info " "
+    logger.info "=== После ПОИСКА по записи № #{logger_data[:all_profile_rows_no]}" # DEBUGG_TO_LOGG
+    logger.info "one_profile_relations_hash = #{logger_data[:one_profile_relations_hash]} " # DEBUGG_TO_LOGG
+    logger.info "profiles_hash = #{logger_data[:profiles_hash]} " # DEBUGG_TO_LOGG
+    logger.info "found_profiles_hash = #{logger_data[:found_profiles_hash]} " # DEBUGG_TO_LOGG
+  end
 
   #  @note: Получение РЕЗ-ТАТа ПОИСКА - found_profiles_hash - для одной записи круга искомого профиля
   #   found_profiles_hash - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
   #   Если вставлять деревья, кот-е надо исключить для поиска, то - это здесь: where.not(user_id: search_exclude_users)
   #   search_exclude_users = [22,134,...]
-  # def get_found_profiles(profiles_hash, relation_row, connected_users, profile_id_searched)
   def get_found_profiles(found_profiles_data)
 
     connected_users     = found_profiles_data[:connected_users]
@@ -175,12 +188,13 @@ module Search
                                      :relation_id, :is_profile_id, :is_name_id)
                              .distinct
     profiles_data = {
-        row_relation_id: row_relation_id,
-        profiles_hash: found_profiles_data[:profiles_hash],
-        profile_id_searched: found_profiles_data[:profile_id_searched]
+      row_relation_id:      row_relation_id,
+      profiles_hash:        found_profiles_data[:profiles_hash],
+      profile_id_searched:  found_profiles_data[:profile_id_searched]
     }
     collect_profiles_hash(profiles_data, relation_match_arr)
   end
+
 
   # @note: Collect found_profiles_hash in depence of relations match in ProfileKey
   def collect_profiles_hash(profiles_data, relation_match_arr)
@@ -197,10 +211,10 @@ module Search
       show_in_logger(relation_match_arr, "=== результат" )  # DEBUGG_TO_LOGG
       relation_match_arr.each do |tree_row|
         fill_arrays_data = {
-            profiles_hash:    profiles_hash,
-            tree_user_id:     tree_row.user_id,
-            tree_profile_id:  tree_row.profile_id,
-            row_relation_id:  row_relation_id
+          profiles_hash:    profiles_hash,
+          tree_user_id:     tree_row.user_id,
+          tree_profile_id:  tree_row.profile_id,
+          row_relation_id:  row_relation_id
         }
         found_profiles_hash.merge!( profile_id_searched  => HashWork.fill_arrays_in_hash(fill_arrays_data) ) # наполнение хэша соответствиями найденных профилей и найденных отношений
       end
@@ -208,58 +222,69 @@ module Search
     found_profiles_hash
   end
 
+
   # @note: Основной поиск по дереву Автора - Юзера.
   # @param admin_page [Integer] опциональный номер страницы
   # @see News
   def search_profiles_from_tree(certain_koeff) #certain_koeff, connected_users_arr, tree_profiles)
-
-    if !@profiles_found_arr.blank?
-      ######## Запуск метода выбора пар профилей с максимальной мощностью множеств совпадений отношений
+    if @profiles_found_arr.blank?
+      init_class_vars
+    else
+      # Запуск метода выбора пар профилей с максимальной мощностью множеств совпадений отношений
       max_power_profiles_pairs_hash, duplicates_one_to_many, profiles_with_match_hash =
           get_certain_profiles_pairs(@profiles_found_arr, certain_koeff)
-      ###################################
-
-      logger.info ""
-      logger.info "== После get_certain_profiles_pairs - результат поиска: max_power_profiles_pairs_hash = #{max_power_profiles_pairs_hash}"
-      logger.info ""
-      logger.info "== После get_certain_profiles_pairs - duplicates_one_to_many = #{duplicates_one_to_many}"
-      logger.info ""
-      logger.info "== После get_certain_profiles_pairs - profiles_with_match_hash = #{profiles_with_match_hash}"
-      logger.info ""
-
-      ##### Удаление дубликатов типа duplicates_many_to_one # duplicates_out - метод в hasher.rb
+      # Удаление дубликатов типа duplicates_many_to_one # duplicates_out - метод в hasher.rb
       uniq_profiles_pairs, duplicates_many_to_one = HashWork.duplicates_out(max_power_profiles_pairs_hash)  # Ok
-      ##### Удаление пустых хэшей из результатов # Exclude empty hashes
+      # Удаление пустых хэшей из результатов # Exclude empty hashes
       uniq_profiles_pairs.delete_if { |key,val|  val == {} }
-      logger.info "== Pезультат поиска (После duplicates_out): uniq_profiles_pairs = #{uniq_profiles_pairs}"
-      logger.info "duplicates_many_to_one = #{duplicates_many_to_one}"
-
-      ##### ПРОМЕЖУТОЧНЫЕ РЕЗУЛЬТАТЫ ПОИСКА - DEBUGG_TO_VIEW #####
-      @uniq_profiles_pairs = uniq_profiles_pairs # DEBUGG_TO_VIEW
-      @profiles_with_match_hash = profiles_with_match_hash # DEBUGG_TO_VIEW
-      @duplicates_one_to_many = duplicates_one_to_many # DEBUGG_TO_VIEW
-      @duplicates_many_to_one = duplicates_many_to_one # DEBUGG_TO_VIEW
-
-      ##### РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ #####
+      # РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ #####
       by_profiles, by_trees = SearchResults.make_search_results(uniq_profiles_pairs, profiles_with_match_hash)
-
-      logger.info " by_profiles = #{by_profiles} "
-      logger.info " by_trees = #{by_trees} "
-      @by_profiles = by_profiles # DEBUGG_TO_VIEW
-      @by_trees = by_trees # DEBUGG_TO_VIEW
-
-    else
-      logger.info "** NO SEARCH RESULTS **"
-      @uniq_profiles_pairs = {}
-
-      @by_profiles = {}
-      @by_trees = {}
-
-      logger.info "** NO DUBLICATES **"
-      @duplicates_one_to_many = {}
-      @duplicates_many_to_one = {}
+      search_results_data = {
+        uniq_profiles_pairs:      uniq_profiles_pairs,
+        profiles_with_match_hash: profiles_with_match_hash,
+        duplicates_one_to_many:   duplicates_one_to_many,
+        duplicates_many_to_one:   duplicates_many_to_one,
+        by_profiles:              by_profiles,
+        by_trees:                 by_trees
+      }
+      get_search_results(search_results_data)
     end
+  end
 
+
+  # @note: collect results vars
+  #  Logger of ПРОМЕЖУТОЧНЫЕ РЕЗУЛЬТАТЫ ПОИСКА
+  def logger_search_results(search_results_data)
+    logger.info "- duplicates_one_to_many = #{search_results_data[:duplicates_one_to_many]}"
+    logger.info "- profiles_with_match_hash = #{search_results_data[:profiles_with_match_hash]}"
+    logger.info "- (После duplicates_out): uniq_profiles_pairs = #{search_results_data[:uniq_profiles_pairs]}"
+    logger.info "- duplicates_many_to_one = #{search_results_data[:duplicates_many_to_one]}"
+  end
+
+
+  # @note: collect results vars
+  #  ПРОМЕЖУТОЧНЫЕ РЕЗУЛЬТАТЫ ПОИСКА
+  def get_search_results(search_results_data)
+    @uniq_profiles_pairs      = search_results_data[:uniq_profiles_pairs]
+    @profiles_with_match_hash = search_results_data[:profiles_with_match_hash]
+    @duplicates_one_to_many   = search_results_data[:duplicates_one_to_many]
+    @duplicates_many_to_one   = search_results_data[:duplicates_many_to_one]
+    @by_profiles              = search_results_data[:by_profiles]
+    @by_trees                 = search_results_data[:by_trees]
+    logger_search_results(search_results_data)
+    logger.info " by_profiles = #{@by_profiles} "
+    logger.info " by_trees = #{@by_trees} "
+  end
+
+
+  # @note: init vars of Class to be in results
+  def init_class_vars
+    logger.info "** NO SEARCH RESULTS & NO DUBLICATES**"
+    @uniq_profiles_pairs = {}
+    @by_profiles = {}
+    @by_trees = {}
+    @duplicates_one_to_many = {}
+    @duplicates_many_to_one = {}
   end
 
 
