@@ -29,10 +29,10 @@ class HashWork
     uniqs = start_hash
 
     # Collect duplicates
-    start_hash.each_with_index do |(k, v), index|
+    start_hash.each_with_index do |(start_k, start_v), index|
       start_hash.each do |key, value|
-        next if k == key
-        intersection = start_hash[key] & start_hash[k]
+        next if start_k == key
+        intersection = start_hash[key] & start_hash[start_k]
         if duplicates_many_to_one.has_key?(key)
           first_key = intersection.keys.first
           duplicates_many_to_one[key][first_key] = intersection[first_key] unless intersection.empty?
@@ -44,8 +44,8 @@ class HashWork
 
     # Collect uniqs
     duplicates_many_to_one.each do |dup_key, value|
-      value.each do |k, value_v|
-        uniqs[dup_key].delete_if { |kk,vv|  kk == k && vv = value_v }
+      value.each do |value_k, value_v|
+        uniqs[dup_key].delete_if { |kk,vv|  kk == value_k && vv = value_v }
       end
     end
     return uniqs, duplicates_many_to_one

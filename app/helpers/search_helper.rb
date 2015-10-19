@@ -46,20 +46,21 @@ module SearchHelper
 
 
 
-  # ИСПОЛЬЗУЕТСЯ В NEW METHOD "SEARCH.rb"
-  # ИЗЪЯТИЕ ПРОФИЛЕЙ С МАЛОЙ МОЩНОСТЬЮ НАЙДЕННЫХ ОТНОШЕНИЙ
-  def reduce_profile_relations(profile_relations_hash, certainty_koeff)      ###################
-    reduced_profile_relations_hash = profile_relations_hash.select {|k,v| v.size >= certainty_koeff }
-    logger.info " reduced_profile_relations_hash = #{reduced_profile_relations_hash} "
+  # @note: ИСПОЛЬЗУЕТСЯ В NEW METHOD "SEARCH.rb"
+  #   ИЗЪЯТИЕ ПРОФИЛЕЙ С МАЛОЙ МОЩНОСТЬЮ НАЙДЕННЫХ ОТНОШЕНИЙ
+  def reduce_profile_relations(relations_hash, certainty_koeff)      ###################
+    reduced_relations_hash = relations_hash.select {|key,val| val.size >= certainty_koeff }
+    logger.info " reduced_profile_relations_hash = #{reduced_relations_hash} "
     ###############
-    return reduced_profile_relations_hash
+    reduced_relations_hash
   end
 
-  # ИСПОЛЬЗУЕТСЯ В NEW METHOD "SEARCH.rb"
+  # @note: ИСПОЛЬЗУЕТСЯ В NEW METHOD "SEARCH.rb"
   # ПРЕВРАЩЕНИЕ ХЭША ПРОФИЛЕЙ С НАЙДЕННЫМИ ОТНОШЕНИЯМИ В ХЭШ ПРОФИЛЕЙ С МОЩНОСТЯМИ ОТНОШЕНИЙ
-  def make_profiles_power_hash(reduced_profile_relations_hash)
+  # @param: Input - reduced_relations_hash
+  def make_profiles_power_hash(reduced_rels_hash)
     profiles_powers_hash = {}
-    reduced_profile_relations_hash.each { |k, v_arr | profiles_powers_hash.merge!( k => v_arr.size) }
+    reduced_rels_hash.each { |key, v_arr | profiles_powers_hash.merge!( key => v_arr.size) }
     logger.info " profiles_powers_hash = #{profiles_powers_hash} "
     profiles_powers_hash
   end
