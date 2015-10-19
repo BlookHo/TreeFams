@@ -92,26 +92,31 @@ module Search
   # @note: поиск для каждого профиля дерева
   #   Запуск Циклов поиска по tree_arr "
   def all_profiles_search(profiles_search_data)
-    certain_koeff        = profiles_search_data[:certain_koeff]
-    connected_author_arr = profiles_search_data[:connected_author_arr]
-    tree_profiles        = profiles_search_data[:tree_profiles]
+    # certain_koeff        = profiles_search_data[:certain_koeff]
+    # connected_author_arr = profiles_search_data[:connected_author_arr]
+    # tree_profiles        = profiles_search_data[:tree_profiles]
     iteration = 0 # DEBUGG_TO_LOGG
-    tree_profiles.each do |profile_id_searched|
+    profiles_search_data[:tree_profiles].each do |profile_id_searched|
       logger.info "***** Цикл ПОИСКa: #{iteration+1}-я ИТЕРАЦИЯ - Ищем профиль: #{profile_id_searched.inspect};"
       ###### ЗАПУСК ПОИСКА ОДНОГО ПРОФИЛЯ
-      search_match(connected_author_arr, profile_id_searched, certain_koeff)
-      ###################################
+      search_match_data = {
+          certain_koeff:        profiles_search_data[:certain_koeff],
+          connected_author_arr: profiles_search_data[:connected_author_arr],
+          profile_id_searched:  profile_id_searched
+      }
+      search_match(search_match_data)
+
       iteration += 1  # DEBUGG_TO_LOGG
     end
   end
 
 
   # @note: Поиск совпадений для одного из профилей
-  #   Берем параметр: profile_id из массива  = profiles_tree_arr[i][6].
-  def search_match(connected_users, profile_id_searched, certain_koeff)
-    found_profiles_hash = Hash.new  #
-    profiles_hash = Hash.new
-    one_profile_relations_hash = Hash.new
+  #   Берем параметр: profile_id из массива  = profiles_search_data[:tree_profiles]
+  def search_match(search_match_data)
+    connected_users     = search_match_data[:connected_author_arr]
+    profile_id_searched = search_match_data[:profile_id_searched]
+    found_profiles_hash, profiles_hash, one_profile_relations_hash = {}, {}, {}  # init local hashes
 
     all_profile_rows = ProfileKey.where(:user_id => connected_users)
                            .where(:profile_id => profile_id_searched, deleted: 0)
@@ -126,25 +131,18 @@ module Search
       logger.info "ERROR in search_match: В искомом дереве - НЕТ искомого профиля!?? "
     else
       # допускаем до поиска те круги искомых профилей, размер кот-х (кругов) больше или равно коэфф-та достоверности
-      if all_profile_rows.size >= certain_koeff
+      if all_profile_rows.size >= search_match_data[:certain_koeff]
         all_profile_rows_no = 1 # DEBUGG_TO_LOGG
         all_profile_rows.each do |relation_row|
-          found_profiles_data = {
-            profiles_hash:       profiles_hash,
-            relation_row:        relation_row,
-            connected_users:     connected_users,
-            profile_id_searched: profile_id_searched
-          }
-          one_profile_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
-          # Получение РЕЗ-ТАТа ПОИСКА для одной записи Kруга искомого профиля - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
-          found_profiles_hash = get_found_profiles(found_profiles_data)
-          logger_data = {
-            all_profile_rows_no:        all_profile_rows_no,
-            one_profile_relations_hash: one_profile_relations_hash,
+          search_data = {
             profiles_hash:              profiles_hash,
-            found_profiles_hash:        found_profiles_hash
+            relation_row:               relation_row,
+            connected_users:            connected_users,
+            profile_id_searched:        profile_id_searched,
+            all_profile_rows_no:        all_profile_rows_no,
+            one_profile_relations_hash: one_profile_relations_hash
           }
-          debug_logger(logger_data) # Debug
+          found_profiles_hash = search_profile_relations(search_data)
           all_profile_rows_no += 1 # Подсчет номера по порядку очередной записи об искомом профиле  # DEBUGG_TO_LOGG
         end
       end
@@ -158,6 +156,34 @@ module Search
     logger.info "Где что найдено: Для искомого профиля #{profile_id_searched} - в конце этого Хэша @profiles_found_arr:"
     logger.info "#{@profiles_found_arr} " # DEBUGG_TO_LOGG
   end # End of search_match
+
+
+  # @note: main search method
+  def search_profile_relations(search_data)
+    profiles_hash = search_data[:profiles_hash]
+    relation_row  = search_data[:relation_row]
+    one_profile_relations_hash = search_data[:one_profile_relations_hash]
+
+    found_profiles_data = {
+        profiles_hash:       profiles_hash,
+        relation_row:        relation_row,
+        connected_users:     search_data[:connected_users],
+        profile_id_searched: search_data[:profile_id_searched]
+    }
+    one_profile_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
+    # Получение РЕЗ-ТАТа ПОИСКА для одной записи Kруга искомого профиля - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
+    found_profiles_hash = get_found_profiles(found_profiles_data)
+
+    logger_data = {
+        all_profile_rows_no:        search_data[:all_profile_rows_no],
+        one_profile_relations_hash: one_profile_relations_hash,
+        profiles_hash:              profiles_hash,
+        found_profiles_hash:        found_profiles_hash
+    }
+    debug_logger(logger_data) # Debug
+
+    found_profiles_hash
+  end
 
 
   # @note: DEBUG LOGGER LIST  # Debug
