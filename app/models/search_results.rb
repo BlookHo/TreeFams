@@ -47,7 +47,7 @@ class SearchResults < ActiveRecord::Base
   validate :validate_searched_profile_ids
   validate :validate_counts
   def validate_found_profile_ids
-    unless found_profile_ids.is_a?(Array) # || wdays.detect{|d| !(0..6).include?(d)}
+    unless found_profile_ids.is_a?(Array)
       errors.add(:found_profile_ids, :invalid)
     end
   end
@@ -99,7 +99,7 @@ class SearchResults < ActiveRecord::Base
 
     found_hash.each do |found_tree_id, found_profile_id|
       # make fill_hash for by_trees search results
-      HashWork.fill_hash_w_val_arr(filling_hash, found_tree_id, found_profile_id)
+      SearchWork.fill_hash_w_val_arr(filling_hash, found_tree_id, found_profile_id)
       one_result_data = {
           search_profile_id:    search_profile_id,
           found_tree_id:        found_tree_id,
@@ -137,7 +137,7 @@ class SearchResults < ActiveRecord::Base
     # make final sorted by_profiles search results
     by_profiles = by_profiles.sort_by {|one_hash| [ one_hash[:count] ]}.reverse
     # make final by_trees search results
-    by_trees = HashWork.make_by_trees_results(filling_hash)
+    by_trees = SearchWork.make_by_trees_results(filling_hash)
     return by_profiles, by_trees
   end
 

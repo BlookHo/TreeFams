@@ -104,7 +104,7 @@ module SearchComplete
 
         # Наращивание финального хэша пар профилей для объединения, если есть чем наращивать
         unless add_connection_hash.empty?
-          HashWork.add_to_hash(final_connection_hash, add_connection_hash)
+          SearchWork.add_to_hash(final_connection_hash, add_connection_hash)
           logger.info "@@@@@ final_connection_hash = #{final_connection_hash} "
         end
 

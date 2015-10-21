@@ -1,11 +1,11 @@
-class HashWork
+class SearchWork
 
   #############################################################
   # Иванищев А.В. 2014
   # @note: Методы обработки данных поиска в виде Hash
   #############################################################
 
-  # ИСПОЛЬЗУЕТСЯ В NEW METHODS complete_search & similars_complete_search
+  # ИСПОЛЬЗУЮТСЯ В NEW METHODS "SEARCH.rb" (complete_search & similars_complete_search)
   # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
   #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
   #new_conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 79=>62}
@@ -173,13 +173,118 @@ class HashWork
   #   (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
   #   [ {profile_searched: -> профиль искомый, profile_relations: -> все отношения к искомому профилю } ]
   # @see:
-  def self.make_profile_relations(profile_id_searched, one_profile_relations, profiles_relations_arr)
+  def self.make_profile_relations(profile_id_searched, profile_relations, relations_arr)
     profile_relations_hash = Hash.new
-    one_profile_relations_hash = { profile_searched: profile_id_searched, profile_relations: one_profile_relations}
+    one_profile_relations_hash = { profile_searched: profile_id_searched, profile_relations: profile_relations}
     profile_relations_hash.merge!(one_profile_relations_hash)
-    profiles_relations_arr << profile_relations_hash unless profile_relations_hash.empty? # Заполнение выходного массива хэшей
-    profiles_relations_arr
+    relations_arr << profile_relations_hash unless profile_relations_hash.empty? # Заполнение выходного массива хэшей
+    relations_arr
   end
+
+
+  # @note: ИСПОЛЬЗУЕТСЯ В NEW METHOD "SEARCH.rb"
+  # ПРЕВРАЩЕНИЕ ХЭША ПРОФИЛЕЙ С НАЙДЕННЫМИ ОТНОШЕНИЯМИ В ХЭШ ПРОФИЛЕЙ С МОЩНОСТЯМИ ОТНОШЕНИЙ
+  # @param: Input - reduced_relations_hash
+  def self.make_profiles_power_hash(reduced_rels_hash)
+    profiles_powers_hash = {}
+    reduced_rels_hash.each { |key, v_arr | profiles_powers_hash.merge!( key => v_arr.size) }
+    # logger.info " profiles_powers_hash = #{profiles_powers_hash} "
+    profiles_powers_hash
+  end
+
+
+  # @note: ПОЛУЧЕНИЕ ПАР СООТВЕТСТВИЙ ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ МНОЖЕСТВ СОВПАДЕНИЙ ОТНОШЕНИЙ
+  # Вход
+  # Выход
+  def self.get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
+    # puts "=== IN get_certain_profiles_pairs "
+    # puts " profiles_found_arr = #{profiles_found_arr} "
+    max_power_profiles_pairs_hash = {}  # Профили с макс-м кол-вом совпадений для одного соответствия в дереве
+    profiles_with_match_hash = {} # Порофили, отсортир-е по кол-ву совпадений
+    new_profiles_with_match_hash = {}
+    duplicates_pairs_one_to_many = {}  # Дубликаты ТИПА 1 К 2 - One_to_Many пар профилей
+    profiles_found_arr.each do |hash_in_arr|
+      hash_in_arr.each do |searched_profile, profile_trees_relations|
+        max_power_pairs_hash = {}
+        duplicates_one_to_many_hash = {}
+        profile_trees_relations.each do |key_tree, profile_relations_hash|
+          # puts " profile_relations_hash = #{profile_relations_hash} "
+          reduced_profile_relations_hash = reduce_profile_relations(profile_relations_hash, certainty_koeff)
+          unless reduced_profile_relations_hash.empty?
+            profiles_powers_hash = make_profiles_power_hash(reduced_profile_relations_hash)
+            max_profiles_powers_hash, max_power = get_max_power_profiles_hash(profiles_powers_hash)
+            # Выявление дубликатов ТИПА 1 К 2 - One_to_Many
+            if max_profiles_powers_hash.size == 1 # один профиль с максимальной мощностью
+              # НАРАЩИВАНИЕ ХЭША ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ certain_max_power_pairs_hash
+              profile_selected = max_profiles_powers_hash.key(max_power)
+              max_power_pairs_hash.merge!(key_tree => profile_selected )
+              new_profiles_with_match_hash = get_profiles_match_hash(profiles_with_match_hash, max_profiles_powers_hash)
+            else # больше одного профиля с максимальной мощностью
+              # НАРАЩИВАНИЕ ХЭША ПРОФИЛЕЙ-ДУПЛИКАТОВ duplicates_one_to_many_hash
+              # ЕСЛИ НАЙДЕНО БОЛЬШЕ 1 ПАРЫ ПРОФИЛЕЙ С ОДИНАК. МАКС. МОЩНОСТЬЮ
+              # Т.Е. ДУПЛИКАТ ТИПА 1 К 2 - One_to_Many, => ЗАНОСИМ В ХЭШ ДУПЛИКАТОВ.
+              duplicates_one_to_many_hash.merge!(key_tree => max_profiles_powers_hash )
+            end
+
+          end
+
+        end
+
+        new_profiles_with_match_hash = Hash[new_profiles_with_match_hash.sort_by { |key_match, val_match| val_match }.reverse] #  Ok Sorting of input hash by values Descend
+
+        max_power_profiles_pairs_hash.merge!(searched_profile => max_power_pairs_hash ) unless max_power_pairs_hash.empty?
+
+        duplicates_pairs_one_to_many.merge!(searched_profile => duplicates_one_to_many_hash ) unless duplicates_one_to_many_hash.empty?
+
+      end
+
+    end
+    return max_power_profiles_pairs_hash, duplicates_pairs_one_to_many, new_profiles_with_match_hash
+
+  end # End of method get_certain_profiles_pairs
+
+
+  # @note:
+  #   ИЗЪЯТИЕ ПРОФИЛЕЙ С МАЛОЙ МОЩНОСТЬЮ НАЙДЕННЫХ ОТНОШЕНИЙ
+  def self.reduce_profile_relations(relations_hash, certainty_koeff)
+    reduced_relations_hash = relations_hash.select {|key,val| val.size >= certainty_koeff }
+    # puts " reduced_profile_relations_hash = #{reduced_relations_hash} "
+    reduced_relations_hash
+  end
+
+  # @note:ПРЕВРАЩЕНИЕ ХЭША ПРОФИЛЕЙ С МОЩНОСТЯМИ ОТНОШЕНИЙ В ХЭШ ПРОФИЛЯ(ЕЙ) С МАКСИМАЛЬНОЙ(МИ) МОЩНОСТЬЮ
+  def self.get_max_power_profiles_hash(profiles_powers_hash)
+    max_power = profiles_powers_hash.values.max # определение значения макс-й мощности
+    max_profiles_powers_hash = profiles_powers_hash.select { |k_power, v_power| v_power == max_power} # выбор эл-тов хэша с макс-й мощностью
+    # puts " max profiles_powers_hash = #{max_profiles_powers_hash} "
+    return max_profiles_powers_hash, max_power
+  end
+
+
+  # @note:Получение хэша профилей с максимальными значениями совпадений
+  def self.get_profiles_match_hash(profiles_match_hash, max_profiles_powers)
+    new_profiles_with_match_hash = profiles_match_hash
+    profiles_arr = new_profiles_with_match_hash.keys
+    if max_profiles_powers.size == 1
+      one_profile = max_profiles_powers.keys[0]
+      one_match = max_profiles_powers.values_at(one_profile)[0]
+      # puts " IN get_profiles_match_hash:: new_profiles_with_match_hash = #{new_profiles_with_match_hash}, profiles_arr = #{profiles_arr}, one_profile = #{one_profile}, one_match = #{one_match},  "
+      if profiles_arr.include?(one_profile)
+        match_in_hash = new_profiles_with_match_hash.values_at(one_profile)[0]
+        if one_match > match_in_hash
+          new_profiles_with_match_hash = profiles_match_hash.merge!(max_profiles_powers ) unless max_profiles_powers.empty?
+        end
+      else
+        new_profiles_with_match_hash = profiles_match_hash.merge!(max_profiles_powers ) unless max_profiles_powers.empty?
+      end
+    else
+      # puts "ERROR IN get_profiles_match_hash profiles_arr: max_profiles_powers_hash.size != 1 "
+    end
+    new_profiles_with_match_hash
+  end
+
+
+
 
 
 

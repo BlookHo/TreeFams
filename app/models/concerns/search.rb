@@ -67,20 +67,6 @@ module Search
   end
 
 
-  # @note: Logger tree data  # Debug
-  def debug_tree_data_logger(tree_data, certain_koeff)
-    author_tree_arr      = tree_data[:author_tree_arr]
-    tree_profiles        = tree_data[:tree_profiles]
-    qty_of_tree_profiles = tree_data[:qty_of_tree_profiles]
-    connected_author_arr = tree_data[:connected_author_arr]
-    logger.info "======================= RUN start_search ========================= "
-    logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
-    show_in_logger(author_tree_arr, "=== результат" )  # DEBUGG_TO_LOGG
-    logger.info "Задание на поиск от Дерева Юзера:  author_tree_arr.size = #{author_tree_arr.size}, tree_profiles = #{tree_profiles} "
-    logger.info "Коэффициент достоверности: certain_koeff = #{certain_koeff}"
-  end
-
-
   # @note: init vars to be in results
   def init_vars
     @profiles_found_arr = []     #
@@ -92,9 +78,6 @@ module Search
   # @note: поиск для каждого профиля дерева
   #   Запуск Циклов поиска по tree_arr "
   def all_profiles_search(profiles_search_data)
-    # certain_koeff        = profiles_search_data[:certain_koeff]
-    # connected_author_arr = profiles_search_data[:connected_author_arr]
-    # tree_profiles        = profiles_search_data[:tree_profiles]
     iteration = 0 # DEBUGG_TO_LOGG
     profiles_search_data[:tree_profiles].each do |profile_id_searched|
       logger.info "***** Цикл ПОИСКa: #{iteration+1}-я ИТЕРАЦИЯ - Ищем профиль: #{profile_id_searched.inspect};"
@@ -148,7 +131,7 @@ module Search
       end
     end
     # ДОПОЛНИТЕЛЬНЫЙ РЕЗ-ТАТ ПОИСКА - СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
-    @profiles_relations_arr = HashWork.make_profile_relations(profile_id_searched, one_profile_relations_hash, @profiles_relations_arr)
+    @profiles_relations_arr = SearchWork.make_profile_relations(profile_id_searched, one_profile_relations_hash, @profiles_relations_arr)
 
     # ОСНОВНОЙ РЕЗ-ТАТ ПОИСКА - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив):
     # {профиль искомый -> дерево -> профиль найденный -> [ массив совпавших отношений с искомым профилем ]
@@ -185,15 +168,6 @@ module Search
     found_profiles_hash
   end
 
-
-  # @note: DEBUG LOGGER LIST  # Debug
-  def debug_logger(logger_data)
-    logger.info " "
-    logger.info "=== После ПОИСКА по записи № #{logger_data[:all_profile_rows_no]}" # DEBUGG_TO_LOGG
-    logger.info "one_profile_relations_hash = #{logger_data[:one_profile_relations_hash]} " # DEBUGG_TO_LOGG
-    logger.info "profiles_hash = #{logger_data[:profiles_hash]} " # DEBUGG_TO_LOGG
-    logger.info "found_profiles_hash = #{logger_data[:found_profiles_hash]} " # DEBUGG_TO_LOGG
-  end
 
   #  @note: Получение РЕЗ-ТАТа ПОИСКА - found_profiles_hash - для одной записи круга искомого профиля
   #   found_profiles_hash - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
@@ -242,7 +216,7 @@ module Search
           tree_profile_id:  tree_row.profile_id,
           row_relation_id:  row_relation_id
         }
-        found_profiles_hash.merge!( profile_id_searched  => HashWork.fill_arrays_in_hash(fill_arrays_data) ) # наполнение хэша соответствиями найденных профилей и найденных отношений
+        found_profiles_hash.merge!( profile_id_searched  => SearchWork.fill_arrays_in_hash(fill_arrays_data) ) # наполнение хэша соответствиями найденных профилей и найденных отношений
       end
     end
     found_profiles_hash
@@ -258,9 +232,9 @@ module Search
     else
       # Запуск метода выбора пар профилей с максимальной мощностью множеств совпадений отношений
       max_power_profiles_pairs_hash, duplicates_one_to_many, profiles_with_match_hash =
-          get_certain_profiles_pairs(@profiles_found_arr, certain_koeff)
+          SearchWork.get_certain_profiles_pairs(@profiles_found_arr, certain_koeff)
       # Удаление дубликатов типа duplicates_many_to_one # duplicates_out - метод в hasher.rb
-      uniq_profiles_pairs, duplicates_many_to_one = HashWork.duplicates_out(max_power_profiles_pairs_hash)  # Ok
+      uniq_profiles_pairs, duplicates_many_to_one = SearchWork.duplicates_out(max_power_profiles_pairs_hash)  # Ok
       # Удаление пустых хэшей из результатов # Exclude empty hashes
       uniq_profiles_pairs.delete_if { |key,val|  val == {} }
       # РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ #####
@@ -275,16 +249,6 @@ module Search
       }
       get_search_results(search_results_data)
     end
-  end
-
-
-  # @note: collect results vars
-  #  Logger of ПРОМЕЖУТОЧНЫЕ РЕЗУЛЬТАТЫ ПОИСКА
-  def logger_search_results(search_results_data)
-    logger.info "- duplicates_one_to_many = #{search_results_data[:duplicates_one_to_many]}"
-    logger.info "- profiles_with_match_hash = #{search_results_data[:profiles_with_match_hash]}"
-    logger.info "- (После duplicates_out): uniq_profiles_pairs = #{search_results_data[:uniq_profiles_pairs]}"
-    logger.info "- duplicates_many_to_one = #{search_results_data[:duplicates_many_to_one]}"
   end
 
 
