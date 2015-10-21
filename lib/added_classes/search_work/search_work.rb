@@ -271,18 +271,20 @@ class SearchWork
       # puts " IN get_profiles_match_hash:: new_profiles_with_match_hash = #{new_profiles_with_match_hash}, profiles_arr = #{profiles_arr}, one_profile = #{one_profile}, one_match = #{one_match},  "
       if profiles_arr.include?(one_profile)
         match_in_hash = new_profiles_with_match_hash.values_at(one_profile)[0]
-        if one_match > match_in_hash
-          new_profiles_with_match_hash = profiles_match_hash.merge!(max_profiles_powers ) unless max_profiles_powers.empty?
-        end
+        new_profiles_with_match_hash = collect_profiles_match_hash(profiles_match_hash, max_profiles_powers) if one_match > match_in_hash
       else
-        new_profiles_with_match_hash = profiles_match_hash.merge!(max_profiles_powers ) unless max_profiles_powers.empty?
+        new_profiles_with_match_hash = collect_profiles_match_hash(profiles_match_hash, max_profiles_powers)
       end
     else
-      # puts "ERROR IN get_profiles_match_hash profiles_arr: max_profiles_powers_hash.size != 1 "
+      puts "ERROR IN get_profiles_match_hash profiles_arr: max_profiles_powers_hash.size != 1 "
     end
     new_profiles_with_match_hash
   end
 
+  # @note:Collect of хэша профилей с максимальными значениями совпадений
+  def self.collect_profiles_match_hash(profiles_match_hash, max_profiles_powers)
+    profiles_match_hash.merge!(max_profiles_powers ) unless max_profiles_powers.empty?
+  end
 
 
 
