@@ -95,7 +95,7 @@ module Search
 
 
   # @note: Поиск совпадений для одного из профилей
-  #   Берем параметр: profile_id из массива  = profiles_search_data[:tree_profiles]
+  #  Берем параметр: profile_id из массива  = profiles_search_data[:tree_profiles]
   def search_match(search_match_data)
     connected_users     = search_match_data[:connected_author_arr]
     profile_id_searched = search_match_data[:profile_id_searched]
