@@ -211,8 +211,9 @@ class SearchWork
           # puts " profile_relations_hash = #{profile_relations_hash} "
           reduced_profile_relations_hash = reduce_profile_relations(profile_relations_hash, certainty_koeff)
           unless reduced_profile_relations_hash.empty?
-            profiles_powers_hash = make_profiles_power_hash(reduced_profile_relations_hash)
-            max_profiles_powers_hash, max_power = get_max_power_profiles_hash(profiles_powers_hash)
+            max_profiles_powers_hash, max_power = get_max_power(reduced_profile_relations_hash)
+            # profiles_powers_hash = make_profiles_power_hash(reduced_profile_relations_hash)
+            # max_profiles_powers_hash, max_power = get_max_power_profiles_hash(profiles_powers_hash)
             # Выявление дубликатов ТИПА 1 К 2 - One_to_Many
             if max_profiles_powers_hash.size == 1 # один профиль с максимальной мощностью
               # НАРАЩИВАНИЕ ХЭША ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ certain_max_power_pairs_hash
@@ -243,6 +244,13 @@ class SearchWork
 
   end # End of method get_certain_profiles_pairs
 
+
+  # @note: get_max_power from reduced_relations_hash
+  def get_max_power(reduced_relations)
+    profiles_powers_hash = make_profiles_power_hash(reduced_relations)
+    max_profiles_powers_hash, max_power = get_max_power_profiles_hash(profiles_powers_hash)
+    return max_profiles_powers_hash, max_power
+  end
 
   # @note:
   #   ИЗЪЯТИЕ ПРОФИЛЕЙ С МАЛОЙ МОЩНОСТЬЮ НАЙДЕННЫХ ОТНОШЕНИЙ
