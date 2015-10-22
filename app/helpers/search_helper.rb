@@ -36,11 +36,10 @@ module SearchHelper
     logger.info "- duplicates_many_to_one = #{search_results_data[:duplicates_many_to_one]}"
   end
 
-
-
   ###################### END OF SEARCH.RB methods ##########################################################
 
   # todo: перенести этот метод в CirclesMethods - для нескольких моделей
+  # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Метод получения НЕ общей части 2-х БК профилей
   def get_circles_delta(first_bk, second_bk, common_circle_arr)
@@ -52,7 +51,7 @@ module SearchHelper
   end
 
 
-  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
+  # todo: doubled in Search_Circles.rb lib
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # Взять Бл.круг одного профиля
   # получить массивы триад для дальнейшего сравнения
@@ -70,7 +69,7 @@ module SearchHelper
     return circle_arr, circle_profiles_arr, circle_is_profiles_arr #, circle_relations_arr
   end
 
-  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
+  # todo: doubled in Search_Circles.rb lib
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # NB !! ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ? - проверить действие order('user_id',??
   # МЕТОД Получения БК для любого одного профиля из дерева
@@ -91,7 +90,7 @@ module SearchHelper
     end
   end
 
-  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
+  # todo: doubled in Search_Circles.rb lib
   # ИСПОЛЬЗУЕТСЯ В NEW METHOD "HARD COMPLETE SEARCH"
   # МЕТОД Получения массива Хэшей по аттрибутам для любого БК одного профиля из дерева
   # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord

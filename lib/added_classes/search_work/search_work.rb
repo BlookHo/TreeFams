@@ -5,10 +5,10 @@ class SearchWork
   # @note: Методы обработки данных поиска в виде Hash
   #############################################################
 
-  # ИСПОЛЬЗУЮТСЯ В NEW METHODS "SEARCH.rb" (complete_search & similars_complete_search)
-  # Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
-  #conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
-  #new_conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 79=>62}
+  # @note: ИСПОЛЬЗУЮТСЯ В NEW METHODS "SEARCH.rb" & search_complete # & similars_complete_search)
+  #   Наращивание (пополнение) Хэша1 новыми значениями из другого Хэша2
+  # conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 78=>57}
+  # new_conn_hash = {72=>58, 75=>59, 76=>61, 77=>60, 79=>62}
   # hash_1 -does not change
   # 79=>62 - найти те эл-ты in hash_2, кот-е отс-ют в hash_1
   # add 79=>62 to hash_1
@@ -18,6 +18,16 @@ class SearchWork
     hash_two.each do |key,val|
       hash_one = hash_one.merge!( key => val ) unless arr_key.include?(key)
     end
+  end
+
+  # @note: Наращивание финального хэша пар профилей для объединения, если есть чем наращивать
+  def self.collect_final_connection(add_to_hash_data)
+    add_connection_hash   = add_to_hash_data[:add_connection_hash]
+    final_connection_hash = add_to_hash_data[:final_connection_hash]
+    unless add_connection_hash.empty?
+      add_to_hash(final_connection_hash, add_connection_hash)
+    end
+    final_connection_hash
   end
 
 
