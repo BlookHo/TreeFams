@@ -544,10 +544,6 @@ RSpec.describe User, :type => :model   do  # , focus: true
       FactoryGirl.create(:connection_request, :conn_request_3_1)    #
       FactoryGirl.create(:connection_request, :conn_request_3_2)    #
 
-      #     FactoryGirl.create(:common_log, :log_delete_profile_89)    #
-      #     FactoryGirl.create(:common_log, :log_delete_profile_90)    #
-      #     FactoryGirl.create(:common_log, :log_add_profile_172)    #
-      #     FactoryGirl.create(:common_log, :log_add_profile_173)    #
     }
 
     after {
@@ -563,8 +559,6 @@ RSpec.describe User, :type => :model   do  # , focus: true
       Profile.reset_pk_sequence
       ProfileKey.delete_all
       ProfileKey.reset_pk_sequence
-      # WeafamSetting.delete_all
-      # WeafamSetting.reset_pk_sequence
       Name.delete_all
       Name.reset_pk_sequence
       ConnectionLog.delete_all
@@ -629,7 +623,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
     end
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok' , focus: true do  # , focus: true
+    describe '- check User model Method <Search> - Ok'  do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -861,7 +855,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module' , focus: true  do #  ,  focus: true
+    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
       describe '- check SearchResults have rows count after <search> - Ok' do
@@ -936,11 +930,19 @@ RSpec.describe User, :type => :model   do  # , focus: true
 
         let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
+        # let(:compare_circles_data) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Valid Complete search result: final_connection_hash after <complete_search>" do
           puts "In User model: final_connection_hash = #{final_connection_hash} \n"
           expect(final_connection_hash).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
         end
+
+        # it "- Check Valid Complete search result: compare_circles_data after <complete_search>" do
+        #   puts "In User model: compare_circles_data = #{compare_circles_data} \n"
+        #   expect(compare_circles_data).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
+        # end
+
+
       end
 
       context '- when Invalid complete_search_data - with_whom_connect: wrong = [4]' do

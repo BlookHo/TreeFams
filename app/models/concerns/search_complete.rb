@@ -3,7 +3,7 @@ module SearchComplete
 
   #############################################################
   # Иванищев А.В. 2014 -2015
-  # Метод Полного поиска
+  # Метод Полного поиска - перед объединением
   #############################################################
   # Осуществляет поиск совпадений в деревьях, расчет результатов и сохранение в БД
   # @note: Here is the storage of SearchComplete class methods
@@ -84,6 +84,8 @@ module SearchComplete
               search_is_profiles_arr: search_is_profiles_arr,
               new_connection_hash: new_connection_hash
           }
+          puts " После сравнения Кругов: compare_circles_data = #{compare_circles_data} "
+
           new_connection_hash = SearchCircles.proceed_compare_circles(compare_circles_data)
 
           logger.info " После сравнения Кругов: new_connection_hash = #{new_connection_hash} "
@@ -114,7 +116,7 @@ module SearchComplete
       end
 
       logger.info "final_connection_hash = #{final_connection_hash} "
-      # final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} (pid:4353)
+      # final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} # In Spec
     end
 
     final_connection_hash

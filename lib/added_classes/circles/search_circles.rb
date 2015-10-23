@@ -65,9 +65,9 @@ class SearchCircles
     is_profiles_arr = []
     # relations_arr = []  # for next demand
     bk_rows.each do |row|
-      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
-      bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
-      is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
+      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','display_name_id','is_display_name_id','created_at','updated_at')
+      bk_arr_w_profiles << row.attributes.except('id','user_id','display_name_id','is_display_name_id','created_at','updated_at') # for further analyze
+      is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','display_name_id','is_display_name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
       #relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze
     end
     is_profiles_arr = is_profiles_arr.flatten(1)
@@ -91,10 +91,13 @@ class SearchCircles
 
     # Сравнение двух Кругов пары профилей Если: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
     puts " compare_two_circles: ИСКОМОГО ПРОФИЛЯ = #{profile_searched} и НАЙДЕННОГО ПРОФИЛЯ = #{profile_found}:"
+    # puts " compare_two_circles:
+    #   found_bk_arr = #{found_bk_arr}
+    #   search_bk_arr = #{search_bk_arr}:"
     compare_rezult, common_circle_arr, delta = compare_two_circles(found_bk_arr, search_bk_arr)
-    puts " compare_rezult = #{compare_rezult}"
-    puts " ПЕРЕСЕЧЕНИЕ двух Кругов: common_circle_arr = #{common_circle_arr}"
-    puts " РАЗНОСТЬ двух Кругов: delta = #{delta}"
+    # puts " compare_rezult = #{compare_rezult}"
+    # puts " ПЕРЕСЕЧЕНИЕ двух Кругов: common_circle_arr = #{common_circle_arr}"
+    # puts " РАЗНОСТЬ двух Кругов: delta = #{delta}"
 
     # Анализ результата сравнения двух Кругов
     if !common_circle_arr.blank? # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
@@ -131,19 +134,19 @@ class SearchCircles
         if found_bk_arr.size.inspect == search_bk_arr.size.inspect
           common_circle_arr = found_bk_arr - search_bk_arr
           if common_circle_arr == []
-            compare_rezult = true
+            compare_equal_rezult = true
             puts " circles Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_circle_arr = #{common_circle_arr}"
           else
-
-            common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
-            compare_rezult = false
+            common_circle_arr, compare_equal_rezult = circles_intersection(found_bk_arr, search_bk_arr)
+            # common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
+            # compare_equal_rezult = false
             puts "circles Sizes = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
             delta = get_circles_delta(found_bk_arr, search_bk_arr, common_circle_arr)
           end
 
         else
           common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
-          compare_rezult = false
+          compare_equal_rezult = false
           puts "BKs - SIZE = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х circles - НЕ != [])"
           delta = get_circles_delta(found_bk_arr, search_bk_arr, common_circle_arr)
         end
@@ -154,18 +157,28 @@ class SearchCircles
     else
       puts "Error in compare_two_BK. Нет БК для Профиля: found_bk_arr = #{found_bk_arr}"
     end
+    puts "### delta = #{delta}"
+    puts "### common_circle_arr = #{common_circle_arr}"
 
-    return compare_rezult, common_circle_arr, delta
+    return compare_equal_rezult, common_circle_arr, delta
+  end
+
+
+  # @note: Пересечение двух кругов
+  #   ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
+  # Метод получения общей части 2-х БК профилей
+  def self.circles_intersection(found_bk_arr, search_bk_arr)
+    common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
+    return common_circle_arr, false # == compare_equal_rezult
   end
 
 
   # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
   # Метод получения НЕ общей части 2-х БК профилей
   def self.get_circles_delta(first_bk, second_bk, common_circle_arr)
-    one = (first_bk - common_circle_arr)
-    two = (second_bk - common_circle_arr)
-    puts " get_delta_bk: one = #{one}, two = #{two}"
-    # circles_delta = (first_bk - common_circle_arr) + (second_bk - common_circle_arr)
+    # one = (first_bk - common_circle_arr)
+    # two = (second_bk - common_circle_arr)
+    # puts " get_delta_bk: one = #{one}, two = #{two}"
     (first_bk - common_circle_arr) + (second_bk - common_circle_arr)
   end
 
@@ -179,6 +192,45 @@ class SearchCircles
   #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>29, "is_name_id"=>125},
   #    .... ]
   # На выходе: field_arr = [28, 29, 30, 24]
+  # def self.get_fields_arr_from_circles(bk_arr_searched, bk_arr_found)
+  #   puts "search_bk_profiles_arr = #{bk_arr_searched} "
+  #   puts "found_bk_profiles_arr = #{bk_arr_found}     "
+  #   new_connection_hash = {}
+  #
+  #   # unless bk_arr_searched.blank?
+  #   bk_arr_searched.each do |one_searched_row|
+  #     puts "#### one_searched_row = #{one_searched_row} "
+  #     name_id_s = one_searched_row.values_at('name_id')
+  #     profile_id_s = one_searched_row.values_at('profile_id')
+  #     relation_id_s = one_searched_row.values_at('relation_id')
+  #     is_name_id_s = one_searched_row.values_at('is_name_id')
+  #     is_profile_id_s = one_searched_row.values_at('is_profile_id')
+  #
+  #     bk_arr_found.each do |one_found_row|
+  #       puts "@ one_found_row = #{one_found_row} of new_connection_hash"
+  #       name_id_f = one_found_row.values_at('name_id')
+  #       profile_id_f = one_found_row.values_at('profile_id')
+  #       relation_id_f = one_found_row.values_at('relation_id')
+  #       is_name_id_f = one_found_row.values_at('is_name_id')
+  #       is_profile_id_f = one_found_row.values_at('is_profile_id')
+  #
+  #       if name_id_s == name_id_f && relation_id_s == relation_id_f && is_name_id_s == is_name_id_f
+  #         if is_profile_id_s != is_profile_id_f
+  #           if (profile_id_s != is_profile_id_f) && (profile_id_f != is_profile_id_s)# Одинаковые профили не заносим в хэш объединения (они и так одинаковые)
+  #             # make new el-t of new_connection_hash
+  #             new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]})
+  #             puts "$$$$ new_connection_hash = #{new_connection_hash} "
+  #           end
+  #         end
+  #       end
+  #
+  #     end
+  #
+  #     # end
+  #   end
+  #   new_connection_hash
+  # end
+
   def self.get_fields_arr_from_circles(bk_arr_searched, bk_arr_found)
     puts "search_bk_profiles_arr = #{bk_arr_searched} "
     puts "found_bk_profiles_arr = #{bk_arr_found}     "
@@ -186,34 +238,89 @@ class SearchCircles
 
     # unless bk_arr_searched.blank?
     bk_arr_searched.each do |one_searched_row|
-      puts "one_searched_row = #{one_searched_row} "
-      name_id_s = one_searched_row.values_at('name_id')
-      profile_id_s = one_searched_row.values_at('profile_id')
-      relation_id_s = one_searched_row.values_at('relation_id')
-      is_name_id_s = one_searched_row.values_at('is_name_id')
-      is_profile_id_s = one_searched_row.values_at('is_profile_id')
-      bk_arr_found.each do |one_found_row|
-        puts "one_found_row = #{one_found_row} of new_connection_hash"
-        name_id_f = one_found_row.values_at('name_id')
-        profile_id_f = one_found_row.values_at('profile_id')
-        relation_id_f = one_found_row.values_at('relation_id')
-        is_name_id_f = one_found_row.values_at('is_name_id')
-        is_profile_id_f = one_found_row.values_at('is_profile_id')
+      puts "#### one_searched_row = #{one_searched_row} "
+      profile_data_s = {
+        name_id_s: one_searched_row.values_at('name_id'),
+        profile_id_s: one_searched_row.values_at('profile_id'),
+        relation_id_s: one_searched_row.values_at('relation_id'),
+        is_name_id_s: one_searched_row.values_at('is_name_id'),
+        is_profile_id_s: one_searched_row.values_at('is_profile_id')
+      }
 
-        if name_id_s == name_id_f && relation_id_s == relation_id_f && is_name_id_s == is_name_id_f
-          if is_profile_id_s != is_profile_id_f
-            if (profile_id_s != is_profile_id_f) && (profile_id_f != is_profile_id_s)# Одинаковые профили не заносим в хэш объединения (они и так одинаковые)
-              # make new el-t of new_connection_hash
-              new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]})
-            end
-          end
-        end
+      collect_data = {
+        new_connection_hash: new_connection_hash,
+        one_profile: one_searched_row.values_at('is_profile_id')[0]
+      }
 
-      end
+      new_connection_hash = bk_found_cycle(bk_arr_found, profile_data_s, collect_data)
 
       # end
     end
     new_connection_hash
+  end
+
+
+  # # @note: check & find the SAME profiles found
+  # def self.collect_connect_hash(collect_data)
+  #   new_connection_hash = collect_data[:new_connection_hash]
+  #   one_profile = collect_data[:one_profile]
+  #   to_profile = collect_data[:to_profile]
+  #
+  #   new_connection_hash.merge!({one_profile => to_profile})
+  #   puts "$$$$ new_connection_hash = #{new_connection_hash} "
+  # end
+
+  # @note: check & find the SAME profiles found
+  def self.bk_found_cycle(bk_arr_found, profile_data_s, collect_data)
+    new_connection_hash = collect_data[:new_connection_hash]
+
+
+    bk_arr_found.each do |one_found_row|
+      puts "@ one_found_row = #{one_found_row} of new_connection_hash"
+      profile_data_f = {
+          name_id_f: one_found_row.values_at('name_id'),
+          profile_id_f: one_found_row.values_at('profile_id'),
+          relation_id_f: one_found_row.values_at('relation_id'),
+          is_profile_id_f: one_found_row.values_at('is_profile_id'),
+          is_name_id_f: one_found_row.values_at('is_name_id')
+      }
+      collect_data[:to_profile] = one_found_row.values_at('is_profile_id')[0]
+      new_connection_hash = find_profiles_connect(profile_data_s, profile_data_f, collect_data)
+    end
+    new_connection_hash
+  end
+
+
+    # @note: check & find the SAME profiles found
+  def self.find_profiles_connect(profile_data_s, profile_data_f, collect_data)
+    name_id_s = profile_data_s[:name_id_s]
+    profile_id_s = profile_data_s[:profile_id_s]
+    relation_id_s = profile_data_s[:relation_id_s]
+    is_name_id_s = profile_data_s[:is_name_id_s]
+    is_profile_id_s = profile_data_s[:is_profile_id_s]
+
+    name_id_f = profile_data_f[:name_id_f]
+    profile_id_f = profile_data_f[:profile_id_f]
+    relation_id_f = profile_data_f[:relation_id_f]
+    is_profile_id_f = profile_data_f[:is_profile_id_f]
+    is_name_id_f = profile_data_f[:is_name_id_f]
+
+    new_connection_hash = collect_data[:new_connection_hash]
+    one_profile = collect_data[:one_profile]
+    to_profile = collect_data[:to_profile]
+
+    if name_id_s == name_id_f && relation_id_s == relation_id_f && is_name_id_s == is_name_id_f
+      if is_profile_id_s != is_profile_id_f
+        if (profile_id_s != is_profile_id_f) && (profile_id_f != is_profile_id_s)# Одинаковые профили не заносим в хэш объединения (они и так одинаковые)
+          # make new el-t of new_connection_hash
+          new_connection_hash.merge!({one_profile => to_profile})
+          puts "$$$$ new_connection_hash = #{new_connection_hash} "
+        end
+      end
+    end
+
+    new_connection_hash
+
   end
 
 
