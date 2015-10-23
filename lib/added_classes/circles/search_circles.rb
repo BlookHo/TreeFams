@@ -184,7 +184,7 @@ class SearchCircles
 
 
 
-  # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
+  # PREV VERSION @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
   # метод получения массива значений одного поля = key в массиве хэшей
   # без необходимости предварительной сортировки, кот-я может исказить рез-т/
   # На входе:         bk_arr_w_profiles  = [
@@ -249,7 +249,7 @@ class SearchCircles
 
       collect_data = {
         new_connection_hash: new_connection_hash,
-        one_profile: one_searched_row.values_at('is_profile_id')[0]
+        one_profile: profile_data_s[:is_profile_id_s][0]
       }
 
       new_connection_hash = bk_found_cycle(bk_arr_found, profile_data_s, collect_data)
@@ -260,20 +260,9 @@ class SearchCircles
   end
 
 
-  # # @note: check & find the SAME profiles found
-  # def self.collect_connect_hash(collect_data)
-  #   new_connection_hash = collect_data[:new_connection_hash]
-  #   one_profile = collect_data[:one_profile]
-  #   to_profile = collect_data[:to_profile]
-  #
-  #   new_connection_hash.merge!({one_profile => to_profile})
-  #   puts "$$$$ new_connection_hash = #{new_connection_hash} "
-  # end
-
   # @note: check & find the SAME profiles found
   def self.bk_found_cycle(bk_arr_found, profile_data_s, collect_data)
     new_connection_hash = collect_data[:new_connection_hash]
-
 
     bk_arr_found.each do |one_found_row|
       puts "@ one_found_row = #{one_found_row} of new_connection_hash"
@@ -284,7 +273,7 @@ class SearchCircles
           is_profile_id_f: one_found_row.values_at('is_profile_id'),
           is_name_id_f: one_found_row.values_at('is_name_id')
       }
-      collect_data[:to_profile] = one_found_row.values_at('is_profile_id')[0]
+      collect_data[:to_profile] = profile_data_f[:is_profile_id_f][0]
       new_connection_hash = find_profiles_connect(profile_data_s, profile_data_f, collect_data)
     end
     new_connection_hash
