@@ -181,53 +181,6 @@ class SearchCircles
   end
 
 
-  # PREV VERSION @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
-  # метод получения массива значений одного поля = key в массиве хэшей
-  # без необходимости предварительной сортировки, кот-я может исказить рез-т/
-  # На входе:         bk_arr_w_profiles  = [
-  #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>28, "is_name_id"=>123},
-  #    {"profile_id"=>27, "name_id"=>123, "relation_id"=>3, "is_profile_id"=>29, "is_name_id"=>125},
-  #    .... ]
-  # На выходе: field_arr = [28, 29, 30, 24]
-  # def self.get_fields_arr_from_circles(bk_arr_searched, bk_arr_found)
-  #   puts "search_bk_profiles_arr = #{bk_arr_searched} "
-  #   puts "found_bk_profiles_arr = #{bk_arr_found}     "
-  #   new_connection_hash = {}
-  #
-  #   # unless bk_arr_searched.blank?
-  #   bk_arr_searched.each do |one_searched_row|
-  #     puts "#### one_searched_row = #{one_searched_row} "
-  #     name_id_s = one_searched_row.values_at('name_id')
-  #     profile_id_s = one_searched_row.values_at('profile_id')
-  #     relation_id_s = one_searched_row.values_at('relation_id')
-  #     is_name_id_s = one_searched_row.values_at('is_name_id')
-  #     is_profile_id_s = one_searched_row.values_at('is_profile_id')
-  #
-  #     bk_arr_found.each do |one_found_row|
-  #       puts "@ one_found_row = #{one_found_row} of new_connection_hash"
-  #       name_id_f = one_found_row.values_at('name_id')
-  #       profile_id_f = one_found_row.values_at('profile_id')
-  #       relation_id_f = one_found_row.values_at('relation_id')
-  #       is_name_id_f = one_found_row.values_at('is_name_id')
-  #       is_profile_id_f = one_found_row.values_at('is_profile_id')
-  #
-  #       if name_id_s == name_id_f && relation_id_s == relation_id_f && is_name_id_s == is_name_id_f
-  #         if is_profile_id_s != is_profile_id_f
-  #           if (profile_id_s != is_profile_id_f) && (profile_id_f != is_profile_id_s)# Одинаковые профили не заносим в хэш объединения (они и так одинаковые)
-  #             # make new el-t of new_connection_hash
-  #             new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]})
-  #             puts "$$$$ new_connection_hash = #{new_connection_hash} "
-  #           end
-  #         end
-  #       end
-  #
-  #     end
-  #
-  #     # end
-  #   end
-  #   new_connection_hash
-  # end
-
   def self.get_fields_arr_from_circles(bk_arr_searched, bk_arr_found)
     puts "search_bk_profiles_arr = #{bk_arr_searched} "
     puts "found_bk_profiles_arr = #{bk_arr_found}     "
