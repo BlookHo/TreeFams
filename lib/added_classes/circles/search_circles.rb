@@ -91,13 +91,8 @@ class SearchCircles
 
     # Сравнение двух Кругов пары профилей Если: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
     puts " compare_two_circles: ИСКОМОГО ПРОФИЛЯ = #{profile_searched} и НАЙДЕННОГО ПРОФИЛЯ = #{profile_found}:"
-    # puts " compare_two_circles:
-    #   found_bk_arr = #{found_bk_arr}
-    #   search_bk_arr = #{search_bk_arr}:"
-    compare_rezult, common_circle_arr, delta = compare_two_circles(found_bk_arr, search_bk_arr)
-    # puts " compare_rezult = #{compare_rezult}"
-    # puts " ПЕРЕСЕЧЕНИЕ двух Кругов: common_circle_arr = #{common_circle_arr}"
-    # puts " РАЗНОСТЬ двух Кругов: delta = #{delta}"
+    # common_circle_arr, compare_rezult, delta = compare_two_circles(found_bk_arr, search_bk_arr)
+    common_circle_arr = compare_two_circles(found_bk_arr, search_bk_arr)
 
     # Анализ результата сравнения двух Кругов
     if !common_circle_arr.blank? # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
@@ -119,48 +114,50 @@ class SearchCircles
 
 
   # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
-  # todo: перенести этот метод в CirclesMethods - для нескольких моделей
   # Метод сравнения 2-х БК профилей
   # этот метод требует развития - что делать, когда два БК не равны?
   # Означает ли это, что надо давать сразу отрицат-й ответ?.
   # На входе - два массива Хэшей = 2 БК
   # На выходе: compare_rezult = false or true.
   def self.compare_two_circles(found_bk_arr, search_bk_arr)
-
+    common_circle_arr = []
     if !found_bk_arr.blank?
       if !search_bk_arr.blank?
         delta = []
-        puts "in compare_two_circles: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
-        if found_bk_arr.size.inspect == search_bk_arr.size.inspect
-          common_circle_arr = found_bk_arr - search_bk_arr
-          if common_circle_arr == []
-            compare_equal_rezult = true
-            puts " circles Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_circle_arr = #{common_circle_arr}"
-          else
-            common_circle_arr, compare_equal_rezult = circles_intersection(found_bk_arr, search_bk_arr)
-            # common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
-            # compare_equal_rezult = false
-            puts "circles Sizes = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
-            delta = get_circles_delta(found_bk_arr, search_bk_arr, common_circle_arr)
-          end
-
-        else
-          common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
-          compare_equal_rezult = false
-          puts "BKs - SIZE = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х circles - НЕ != [])"
-          delta = get_circles_delta(found_bk_arr, search_bk_arr, common_circle_arr)
-        end
-
+        common_circle_arr, compare_equal_rezult, delta = get_compare_results(found_bk_arr, search_bk_arr)
       else
         puts "Error in compare_two_BK. Нет БК для Профиля: search_bk_arr = #{search_bk_arr}"
       end
     else
       puts "Error in compare_two_BK. Нет БК для Профиля: found_bk_arr = #{found_bk_arr}"
     end
-    puts "### delta = #{delta}"
-    puts "### common_circle_arr = #{common_circle_arr}"
+    puts " ПЕРЕСЕЧЕНИЕ двух Кругов: common_circle_arr = #{common_circle_arr}"
+    # puts " compare_equal_rezult = #{compare_equal_rezult}"
+    # puts " РАЗНОСТЬ двух Кругов: delta = #{delta}"
 
-    return compare_equal_rezult, common_circle_arr, delta
+    return common_circle_arr #, compare_equal_rezult, delta
+  end
+
+
+  # @note: form result of comparing of two circles
+  def self.get_compare_results(found_bk_arr, search_bk_arr)
+    puts "in get_compare_results: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
+    delta = []
+    if found_bk_arr.size.inspect == search_bk_arr.size.inspect
+      common_circle_arr = found_bk_arr - search_bk_arr
+      if common_circle_arr == []
+        compare_equal_rezult = true
+        puts " circles Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_circle_arr = #{common_circle_arr}"
+      else
+        puts "circles Sizes = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
+        common_circle_arr, delta, compare_equal_rezult = circles_intersection(found_bk_arr, search_bk_arr)
+      end
+    else
+      puts "BKs - SIZE = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х circles - НЕ != [])"
+      common_circle_arr, delta, compare_equal_rezult = circles_intersection(found_bk_arr, search_bk_arr)
+    end
+
+    return common_circle_arr, compare_equal_rezult, delta
   end
 
 
@@ -169,7 +166,8 @@ class SearchCircles
   # Метод получения общей части 2-х БК профилей
   def self.circles_intersection(found_bk_arr, search_bk_arr)
     common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
-    return common_circle_arr, false # == compare_equal_rezult
+    delta = get_circles_delta(found_bk_arr, search_bk_arr, common_circle_arr)
+    return common_circle_arr, delta, false  # == compare_equal_rezult
   end
 
 
