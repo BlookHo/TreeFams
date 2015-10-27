@@ -1,10 +1,8 @@
 class Admin::UsersController < Admin::AdminController
 
-
   def index
     @users = User.order('id DESC').page params[:page]
   end
-
 
 
   def login_as

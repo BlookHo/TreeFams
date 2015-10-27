@@ -6,8 +6,6 @@ module Meteor
           before_filter :authenticate
 
           def destroy
-
-            puts "From Meteor - in Rails destroy: destroying_profile: params[:profile_id] = #{params[:profile_id]}"
             response = @current_user.destroying_profile(params[:profile_id])
 
             # ПРЕДЫДУЩАЯ ВЕРСИЯ
@@ -63,10 +61,7 @@ module Meteor
             # # logger.info response
 
             if response[:status] == 403
-              # resp = {status: 403, message: response[:message]}
               respond_with(errorCode: 403, message: response[:message])
-              # respond_with response[:message]
-              # respond_with {status: 403, message: @error}
             else
               respond_with(status:200)
             end

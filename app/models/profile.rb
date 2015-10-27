@@ -19,9 +19,9 @@ class Profile < ActiveRecord::Base
   validates_presence_of :name_id, :tree_id, :deleted, :message => "Должно присутствовать в Profile"
   validates_inclusion_of :deleted, :in => [0, 1],
                          :message => ":deleted должно быть [0, 1] в Profile"
-  validates_numericality_of  :name_id, :tree_id, #:display_name_id,
+  validates_numericality_of :name_id, :tree_id,
                             :greater_than => 0, :message => "Должны быть больше 0 в Profile"
-  validates_numericality_of  :name_id,  :tree_id, :deleted, #:display_name_id, :sex_id,
+  validates_numericality_of :name_id,  :tree_id, :deleted,
                             :only_integer => true,  :message => "Должны быть целым числом в Profile"
   # validates_inclusion_of :sex_id, :in => [1,0], :message => "Должны быть [1,0] в Profile"
   validates_presence_of :user_id, :allow_nil => true
@@ -38,7 +38,6 @@ class Profile < ActiveRecord::Base
   belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key: :display_name_id
   has_many   :trees
 
-  # has_many   :profile_datas#, dependent: :destroy - не удаляются, но переписываются
   has_one :profile_data, dependent: :destroy
   accepts_nested_attributes_for :profile_data
 
@@ -51,20 +50,15 @@ class Profile < ActiveRecord::Base
   end
 
   def last_name
-    # profile_data.try(:first).try(:last_name)
     profile_data.try(:last_name)
   end
 
   def middle_name
-    # profile_data.try(:first).try(:middle_name)
     profile_data.try(:middle_name)
   end
 
   def full_name
-    # [self.display_name.name, self.last_name].join(' ')
     [self.display_name.name].join(' ')
-    # self.to_name
-    # self.to_name
   end
 
   def icon_path
@@ -76,8 +70,6 @@ class Profile < ActiveRecord::Base
   end
 
   def avatars
-    # ProfileData.where(profile_id: self.id).where.not(avatar_file_name: nil)
-    # self.profile_data.where.not(avatar_file_name: nil)
     return []
   end
 
@@ -85,14 +77,13 @@ class Profile < ActiveRecord::Base
   # Эксперименты по выводу кругов в объедененных деревьях
   # получает на вход id деревьев из которых надо собрать ближний круг
   def circle(user_ids)
-      results = ProfileKey.where(user_id: user_ids, profile_id: self.id).order('relation_id').includes(:name).to_a.uniq(&:is_profile_id)
-      return results
+    ProfileKey.where(user_id: user_ids, profile_id: self.id, deleted: 0).order('relation_id').includes(:name).to_a.uniq(&:is_profile_id)
   end
 
   # На выходе ближний круг для профиля в дереве user_id
   # по записям в Tree
   def tree_circle(user_ids, profile_id)
-    Tree.where(user_id: user_ids, profile_id: profile_id).order('relation_id').includes(:name)
+    Tree.where(user_id: user_ids, profile_id: profile_id, deleted: 0).order('relation_id').includes(:name)
   end
 
   # На выходе - массив, аналогичный tree, который у нас сейчас формируется на старте.
@@ -130,8 +121,6 @@ class Profile < ActiveRecord::Base
   def mothers_hash(user_id)
     hash = {}
     mothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    # puts " in Profile model: user_id = #{user_id.inspect}"
-    # puts " in Profile model: mothers_hash = #{hash.inspect}"
     return hash
   end
 
@@ -201,7 +190,6 @@ class Profile < ActiveRecord::Base
   def brothers_hash(user_id)
     hash = {}
     brothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    logger.info "== in brothers_hash: hash = #{hash} "
     return hash
   end
 
@@ -339,8 +327,6 @@ class Profile < ActiveRecord::Base
       profiles_female: all_profiles.where(sex_id: 0).count
     }
   end
-
-
 
 
 

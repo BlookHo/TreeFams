@@ -6,7 +6,9 @@ module ProfileDestroying
   # @note: Основной метод удаления профиля
   def destroying_profile(profile_id)
     profile = Profile.where(id: profile_id).first
-    if profile.user.present?
+    if !profile
+      error = "Профиль не найден"
+    elsif profile.user.present?
       error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"
     elsif profile.tree_circle(self.get_connected_users, profile.id).size > 0
       error = "Вы можете удалить только последнего родственника в цепочке"
