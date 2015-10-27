@@ -855,7 +855,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
+    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
       describe '- check SearchResults have rows count after <search> - Ok' do
@@ -921,8 +921,8 @@ RSpec.describe User, :type => :model   do  # , focus: true
       context '- when valid complete_search_data' do
         let(:complete_search_data) { {
             :with_whom_connect => [3],
-            :uniq_profiles_pairs => { #15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
-                                      # 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
+            :uniq_profiles_pairs => { 15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
+                                      11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
                                      20=>{3=>28} }#,
                                      # 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} }  #,
                                      # 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
