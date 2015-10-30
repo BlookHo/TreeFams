@@ -167,19 +167,20 @@ module DoubleUsersSearch
 
   # @note: поиск совпадений отношений тек.Юзера с найденными Юзерами
   def find_double(users_relations)
-    logger.info "Double Users: find_double: users_relations = #{users_relations} " # DEBUGG_TO_LOGG
-
+    # logger.info "Double Users: find_double: users_relations = #{users_relations} " # DEBUGG_TO_LOGG
+    users_relations_size = users_relations.size
+    self_double = self.double
     # take init user = current
     init_user_hash = users_relations[0]
-    logger.info "Double Users: find_double: init_user_hash = #{init_user_hash} "
 
-    unless users_relations.size < 2
-      for ind in 1 .. users_relations.size-1 do
-        if self.double == 0 || self.double == 1 # только если еще self Юзер не помечен как Дубль
+    unless users_relations_size < 2
+      for ind in 1 .. users_relations_size-1 do
+        if self_double == 0 || self_double == 1 # только если еще self Юзер не помечен как Дубль
           # mark self.value = 1 as 'No doubles' OR mark self.value = 2 as 'Double'
-          check_one_double?(init_user_hash, users_relations[ind]).blank? ?
-            mark_user(1, users_relations[ind][:found_user_id]) :
-            mark_user(2, users_relations[ind][:found_user_id])
+          users_relations_ind =  users_relations[ind]
+          check_one_double?(init_user_hash, users_relations_ind).blank? ?
+              double_mark = 1 : double_mark = 2
+          mark_user(double_mark, users_relations_ind[:found_user_id])
         end
       end
     end
@@ -195,6 +196,14 @@ module DoubleUsersSearch
 
       [1,2].each do |relation|
         if match_relations?(init_user_hash, one_user_relations, relation)
+          # init_hash_data = {
+          #     qty_matched_relations: qty_matched_relations,
+          #     init_user_hash: init_user_hash,
+          #     one_user_relations: one_user_relations,
+          #     relation: relation,
+          #
+          # }
+          # qty_matched_relations, init_user_id = return_init_user_id(init_hash_data)
           qty_matched_relations += 1
           return init_user_hash[:init_user_id] if check_matches_qty?(qty_matched_relations)
         else
@@ -215,6 +224,24 @@ module DoubleUsersSearch
     nil
 
   end
+
+
+  # @note:
+  def return_init_user_id(init_hash_data)
+    qty_matched_relations = init_hash_data[:qty_matched_relations]
+    init_user_hash = init_hash_data[:init_user_hash]
+    one_user_relations = init_hash_data[:one_user_relations]
+    relation = init_hash_data[:relation]
+    # # init_user_hash = init_hash_data[:init_user_hash]
+    if match_relations?(init_user_hash, one_user_relations, relation)
+      qty_matched_relations += 1
+      return qty_matched_relations, init_user_hash[:init_user_id] if check_matches_qty?(qty_matched_relations)
+    else
+      return qty_matched_relations, nil
+    end
+
+  end
+
 
 
   # @note: Проверка накапливания кол-ва совпадений отношений ( больше или равно 6)

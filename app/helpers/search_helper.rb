@@ -223,7 +223,8 @@ module SearchHelper
           if is_profile_id_s != is_profile_id_f
             if (profile_id_s != is_profile_id_f) && (profile_id_f != is_profile_id_s)# Одинаковые профили не заносим в хэш объединения (они и так одинаковые)
           # make new el-t of new_connection_hash
-           new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]})
+          #  new_connection_hash.merge!({one_searched_row.values_at('is_profile_id')[0] => one_found_row.values_at('is_profile_id')[0]})
+              new_connection_hash.merge!({is_profile_id_s[0] => is_profile_id_f[0]})
             end
           end
         end

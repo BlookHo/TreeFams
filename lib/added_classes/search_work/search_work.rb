@@ -24,6 +24,7 @@ class SearchWork
   def self.collect_final_connection(add_to_hash_data)
     add_connection_hash   = add_to_hash_data[:add_connection_hash]
     final_connection_hash = add_to_hash_data[:final_connection_hash]
+    # unless add_connection_hash.blank?
     unless add_connection_hash.empty?
       add_to_hash(final_connection_hash, add_connection_hash)
     end

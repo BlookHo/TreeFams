@@ -107,10 +107,7 @@ class SearchCircles
     puts " После сравнения Кругов: new_connection_hash = #{new_connection_hash} "
 
     new_connection_hash
-
   end
-
-
 
 
   # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
@@ -205,13 +202,10 @@ class SearchCircles
 
 
   def self.get_fields_arr_from_circles(bk_arr_searched, bk_arr_found)
-    puts "search_bk_profiles_arr = #{bk_arr_searched} "
-    puts "found_bk_profiles_arr = #{bk_arr_found}     "
     new_connection_hash = {}
 
     # unless bk_arr_searched.blank?
     bk_arr_searched.each do |one_searched_row|
-      puts "#### one_searched_row = #{one_searched_row} "
       profile_data_s = {
         name_id_s: one_searched_row.values_at('name_id'),
         profile_id_s: one_searched_row.values_at('profile_id'),
@@ -220,14 +214,10 @@ class SearchCircles
         is_profile_id_s: one_searched_row.values_at('is_profile_id')
       }
 
-      collect_data = {
-        new_connection_hash: new_connection_hash,
-        one_profile: profile_data_s[:is_profile_id_s][0]
-      }
-
+      collect_data = { new_connection_hash: new_connection_hash, one_profile: profile_data_s[:is_profile_id_s][0] }
       new_connection_hash = bk_found_cycle(bk_arr_found, profile_data_s, collect_data)
 
-      # end
+    # end
     end
     new_connection_hash
   end
@@ -238,7 +228,6 @@ class SearchCircles
     new_connection_hash = collect_data[:new_connection_hash]
 
     bk_arr_found.each do |one_found_row|
-      puts "@ one_found_row = #{one_found_row} of new_connection_hash"
       profile_data_f = {
           name_id_f: one_found_row.values_at('name_id'),
           profile_id_f: one_found_row.values_at('profile_id'),
