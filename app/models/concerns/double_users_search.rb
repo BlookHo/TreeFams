@@ -15,14 +15,15 @@ module DoubleUsersSearch
   #   If search_results == blank, then - no doubles
   #   else - start search doubles among search_results
   def start_check_double(results, certain_koeff)
-    if results[:by_trees].blank?
+    results_by_trees = results[:by_trees]
+    if results_by_trees.blank?
       self.update_attributes(:double => 1, :updated_at => Time.now)
-      logger.info "Start + No search: double => 1: self.double = #{self.double} " # DEBUGG_TO_LOGG
+      # logger.info "Start + No search: double => 1: self.double = #{self.double} " # DEBUGG_TO_LOGG
     else
-      logger.info "Start + Search: double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
-      doubles_search_data = { relations_arr: results[:profiles_relations_arr], by_trees: results[:by_trees] }
+      # logger.info "Start + Search: double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
+      doubles_search_data = { relations_arr: results[:profiles_relations_arr], by_trees: results_by_trees }
       self.double_users_search(doubles_search_data, certain_koeff)
-      logger.info "After double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
+      # logger.info "After double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
     end
   end
 
@@ -97,10 +98,9 @@ module DoubleUsersSearch
     # logger.info "In collect_users: by_trees = #{by_trees} "
     found_users = []
     by_trees.each do |one_found_tree|
-      # logger.info "In collect_users: one_found_tree[:found_tree_id] = #{one_found_tree[:found_tree_id]} "
-      found_user_profile = User.find(one_found_tree[:found_tree_id]).profile_id
-      # logger.info "In collect_users: self.profile_id = #{self.profile_id}, found_user_profile = #{found_user_profile} "
-      found_users << one_found_tree[:found_tree_id] if check_users_names?(found_user_profile)
+      one_found_tree_id = one_found_tree[:found_tree_id]
+      found_user_profile = User.find(one_found_tree_id).profile_id
+      found_users << one_found_tree_id if check_users_names?(found_user_profile)
     end
     found_users
   end
@@ -146,8 +146,9 @@ module DoubleUsersSearch
       # допускаем до поиска те круги искомых профилей, размер кот-х (кругов) больше или равно коэфф-та достоверности
       if user_circle_rows.size >= certain_koeff
         user_circle_rows.each do |relation_row|
-          one_user_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
-          one_user_names_hash.merge!(relation_row.is_profile_id => relation_row.is_name_id)
+          row_is_profile_id = relation_row.is_profile_id
+          one_user_relations_hash.merge!(row_is_profile_id => relation_row.relation_id)
+          one_user_names_hash.merge!(row_is_profile_id => relation_row.is_name_id)
         end
       end
     else
