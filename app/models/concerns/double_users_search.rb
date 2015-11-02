@@ -18,12 +18,9 @@ module DoubleUsersSearch
     results_by_trees = results[:by_trees]
     if results_by_trees.blank?
       self.update_attributes(:double => 1, :updated_at => Time.now)
-      # logger.info "Start + No search: double => 1: self.double = #{self.double} " # DEBUGG_TO_LOGG
     else
-      # logger.info "Start + Search: double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
       doubles_search_data = { relations_arr: results[:profiles_relations_arr], by_trees: results_by_trees }
       self.double_users_search(doubles_search_data, certain_koeff)
-      # logger.info "After double_users_search: self.double = #{self.double} " # DEBUGG_TO_LOGG
     end
   end
 
@@ -34,7 +31,6 @@ module DoubleUsersSearch
     by_trees      = doubles_search_data[:by_trees]
     found_users = collect_users(by_trees)
     logger.info "1 In double_users_search: after collect_users: found_users = #{found_users} "
-    # puts "  1 In double_users_search: profiles_relations = #{profiles_relations}  "
     puts "  1 In double_users_search: found_users = #{found_users}  "
     if found_users.blank? # no doubles for new user
       self.update_attributes(:double => 1, :updated_at => Time.now)
@@ -42,17 +38,11 @@ module DoubleUsersSearch
     end
 
     users_relations = init_profile_relations(profiles_relations, self.profile_id)
-    # puts "  2 In double_users_search: profiles_relations = #{profiles_relations}  "
-    # puts "  2 In double_users_search: users_relations = #{users_relations}  "
     logger.info "2 In double_users_search: after init_profile_relations: users_relations = #{users_relations} "
     users_relations[0].merge!(init_user_id: self.id, init_relations_names: init_find_names(users_relations))
     logger.info "3 Ok In double_users_search: after init_find_names: users_relations = #{users_relations} "
-    # puts "  3 In double_users_search: profiles_relations = #{profiles_relations}  "
-    # puts "  3 In double_users_search: users_relations = #{users_relations}  "
     complete_users_relations = collect_relations(users_relations, found_users, certain_koeff)
     logger.info "4 Ok In double_users_search: after collect_relations: complete_users_relations = #{complete_users_relations} "
-    # puts "  4 In double_users_search: profiles_relations = #{profiles_relations}  "
-    # puts "  4 In double_users_search: complete_users_relations = #{complete_users_relations}  "
 
     find_double(complete_users_relations) unless complete_users_relations.blank?
   end
@@ -60,26 +50,24 @@ module DoubleUsersSearch
   # @note: создание хэша отношений для self
   def init_profile_relations(profiles_relations, self_profile_id)
     init_relations_hash = {}
-    # puts "  1 In init_profile_relations: profiles_relations = #{profiles_relations}  "
-    # puts "  1 In init_profile_relations: init_relations_hash = #{init_relations_hash}  "
     profiles_relations.each do |one_hash|
-      one_hash.each do |key,val|
-        init_relations_hash.merge!(one_hash) if key == :profile_searched && val == self_profile_id
-        # puts "  2 In init_profile_relations: profiles_relations = #{profiles_relations}  "
-        # puts "  2 In init_profile_relations: one_hash = #{one_hash}  "
-        # puts "  2 In init_profile_relations: init_relations_hash = #{init_relations_hash}  "
-      end
+      init_relations_hash = collect_init_relations(one_hash, init_relations_hash, self_profile_id)
     end
     users_relations = []
-    # puts "  3 In init_profile_relations: users_relations = #{users_relations}  "
-    logger.info "  3 before: init_profile_relations: init_relations_hash = #{init_relations_hash} "
-    logger.info "  3 before: init_profile_relations: profiles_relations = #{profiles_relations} "
     init_relations_hash.merge!(init_user_name: Profile.find(self_profile_id).name_id)
     logger.info "  3 after: init_profile_relations: init_relations_hash = #{init_relations_hash} "
     logger.info "  3 after: init_profile_relations: profiles_relations = #{profiles_relations} "
     users_relations << init_relations_hash
   end
 
+
+  # @note: collect init relations hash
+  def collect_init_relations(one_hash, init_relations_hash, self_profile_id)
+    one_hash.each do |key,val|
+      init_relations_hash.merge!(one_hash) if key == :profile_searched && val == self_profile_id
+    end
+    init_relations_hash
+  end
 
   # @note: добавление хэша имен отношений для self
   def init_find_names(users_relations)
@@ -95,7 +83,6 @@ module DoubleUsersSearch
 
   # @note: сбор user-id из search results
   def collect_users(by_trees)
-    # logger.info "In collect_users: by_trees = #{by_trees} "
     found_users = []
     by_trees.each do |one_found_tree|
       one_found_tree_id = one_found_tree[:found_tree_id]
@@ -109,10 +96,8 @@ module DoubleUsersSearch
   # @note: Check, whether new user has the same name with user from search_results
   # if Yes - it should be tested for double
   def check_users_names?(found_user_profile)
-    # Profile.find(self.profile_id).name_id == Profile.find(found_user_profile).name_id
     one_user_name(self.profile_id) == one_user_name(found_user_profile)
   end
-
 
 
   # @note: To collect profiles_relations hashes
@@ -128,7 +113,6 @@ module DoubleUsersSearch
     logger.info "After search_relations: complete_users_relations = #{complete_users_relations} "
     complete_users_relations
   end
-
 
 
   # @note поиск массива записей искомого круга для профиля Юзера
@@ -156,7 +140,13 @@ module DoubleUsersSearch
     end
 
     # СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА со всеми данными:
-    make_user_relations(one_found_user, user_profile_id, one_user_name(user_profile_id), one_user_relations_hash, one_user_names_hash)
+    # ХЭШ профилей-отношений для искомого дерева.
+    { profile_searched:     user_profile_id,
+      profile_relations:    one_user_relations_hash,
+      user_name:            one_user_name(user_profile_id),
+      found_user_id:        one_found_user,
+      user_relations_names: one_user_names_hash
+    }
 
   end
 
@@ -167,18 +157,6 @@ module DoubleUsersSearch
   # @see:
   def one_user_name(profile_id)
     Profile.find(profile_id).name_id
-  end
-
-
-  # @note: Делаем ХЭШ профилей-отношений для искомого дерева. - пригодится.
-  # @param:
-  # @return: СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА
-  #   (массив ХЭШей ПАР ПРОФИЛЕЙ-ОТНОШЕНИЙ):
-  #   [ {profile_searched: -> профиль искомый, profile_relations: -> все отношения к искомому профилю } ]
-  # @see:
-  def make_user_relations(one_found_user, profile_id_searched, name_id, one_user_relations, one_user_names_hash)
-    { profile_searched: profile_id_searched, profile_relations: one_user_relations,
-      user_name: name_id, found_user_id: one_found_user, user_relations_names: one_user_names_hash}
   end
 
 
@@ -229,12 +207,13 @@ module DoubleUsersSearch
   # @note:
   def return_init_user_id(init_hash_data)
     qty_matched_relations = init_hash_data[:qty_matched_relations]
-    init_user_hash = init_hash_data[:init_user_hash]
-    one_user_relations = init_hash_data[:one_user_relations]
+    init_user_hash        = init_hash_data[:init_user_hash]
+    one_user_relations    = init_hash_data[:one_user_relations]
+    init_user_id          = init_user_hash[:init_user_id]
     [1,2].each do |relation|
       if match_relations?(init_user_hash, one_user_relations, relation)
          qty_matched_relations += 1
-        return init_user_hash[:init_user_id] if check_matches_qty?(qty_matched_relations)
+        return init_user_id if check_matches_qty?(qty_matched_relations)
       else
         return nil
       end
@@ -245,12 +224,11 @@ module DoubleUsersSearch
     relations_arr.each do |relation|
       if match_relations?(init_user_hash, one_user_relations, relation)
         qty_matched_relations += 1
-        return init_user_hash[:init_user_id] if check_matches_qty?(qty_matched_relations)
+        return init_user_id if check_matches_qty?(qty_matched_relations)
       end
     end
 
   end
-
 
 
   # @note: Проверка накапливания кол-ва совпадений отношений ( больше или равно 6)
@@ -315,7 +293,7 @@ module DoubleUsersSearch
       logger.info " Пожалуйста, при повторном заходе на сайт - уточните Ваш логин, состав родственников... Иначе для Вас многое будет невозможно на сайте. "
       # delete one user by his ID
       ##########################################
-  #   self.delete_one_user
+        self.delete_one_user
       ##########################################
       # flash.now[:alarm] = " Внимание! У вашего дерева уже есть дубликат! Пожалуйста, уточните Ваш логин, состав родственников... Иначе для Вас многое будет невозможно на сайте. "
     end
