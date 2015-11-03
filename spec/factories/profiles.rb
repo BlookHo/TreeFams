@@ -9,6 +9,9 @@ FactoryGirl.define   do
     f.tree_id  { Faker::Number.number(5) }
     f.display_name_id  { Faker::Number.number(5) }
     f.deleted  {Faker::Number.between(0, 1)}
+
+    # association :name, factory: :test_model_name, name: "Writely"
+
   end
 
 
