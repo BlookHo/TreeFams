@@ -131,6 +131,10 @@ group :test do
 
   # Auto cleans test db after each test run
   gem 'database_cleaner'
+
+  # Faker, a port of Data::Faker from Perl,
+  # is used to easily generate fake data: names, addresses, phone numbers, etc.
+  gem 'faker', '~> 1.5'
 end
 
 # Disable assets logging

@@ -1,4 +1,17 @@
+require 'faker'
+
 FactoryGirl.define do
+
+
+  factory :test_model, class: Name do |f|
+    f.user_id { Faker::Number.number(5) }
+    f.name_id { Faker::Number.number(5) }
+    f.sex_id  {Faker::Number.between(0, 1)}
+    f.tree_id  { Faker::Number.number(5) }
+    f.display_name_id  { Faker::Number.number(5) }
+    f.deleted  {Faker::Number.between(0, 1)}
+  end
+
 
   factory :name  do
 

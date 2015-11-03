@@ -2,6 +2,39 @@ require 'rails_helper'
 
 RSpec.describe Profile, :type => :model   do # , focus: true
 
+  describe 'Model Profile Before methods validation test' , focus: true  do
+    it "has a valid factory" do
+      puts " Model Profile validation - has a valid factory"
+      expect(FactoryGirl.create(:test_model_profile)).to be_valid
+    end
+
+    it "is invalid without a name_id" do
+      puts " Model Profile validation - invalid without a name_id"
+      expect(FactoryGirl.build(:test_model_profile, name_id: nil)).to_not be_valid
+    end
+
+    it "is invalid without a tree_id" do
+      puts " Model Profile validation - invalid without a tree_id"
+      expect(FactoryGirl.build(:test_model_profile, tree_id: nil)).to_not be_valid
+    end
+
+    context "test for correct values pair: name_id.sex_id & profile.sex_id " do
+      let(:row) {FactoryGirl.create(:test_model_profile)}
+      it "is invalid with name_id.sex_id == 1 and profile.sex_id == 0" do
+        # puts " Model Profile validation - invalid with name_id.sex_id == 1 and profile.sex_id == 0"
+        puts " Model Profile validation - row.user_id = #{row.user_id}"
+        puts " Model Profile validation - row.name_id = #{row.name_id}"
+        puts " Model Profile validation - row.tree_id = #{row.tree_id}"
+        puts " Model Profile validation - row.sex_id = #{row.sex_id}"
+        puts " Model Profile validation - row.deleted = #{row.deleted}"
+      end
+
+    end
+
+    it "returns a valid name_id: name_id.sex_id == 1 and profile.sex_id == 1 as a integer"
+  end
+
+
   describe '- validation' do
     describe '- on create' do
       context '- valid profiles' do
@@ -45,8 +78,6 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         #Name - for profile = 85
         FactoryGirl.create(:name, :name_370)   # Петр
       }
-
-
 
       let(:base_profile_85) { create(:add_profile, :add_profile_85) }  # User = 9. Tree = 9. profile_id = 85
 
