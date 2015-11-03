@@ -19,16 +19,20 @@ RSpec.describe Profile, :type => :model   do # , focus: true
     end
 
     context "test for correct values pair: name_id.sex_id & profile.sex_id " do
-      let(:row) {FactoryGirl.create(:test_model_profile)}
+      # let(:row_name) {FactoryGirl.create(:test_model_name)}
+      let(:row_profile) {FactoryGirl.create(:test_model_profile)}
       it "is invalid with name_id.sex_id == 1 and profile.sex_id == 0" do
-        # puts " Model Profile validation - invalid with name_id.sex_id == 1 and profile.sex_id == 0"
-        puts " Model Profile validation - row.user_id = #{row.user_id}"
-        puts " Model Profile validation - row.name_id = #{row.name_id}"
-        puts " Model Profile validation - row.tree_id = #{row.tree_id}"
-        puts " Model Profile validation - row.sex_id = #{row.sex_id}"
-        puts " Model Profile validation - row.deleted = #{row.deleted}"
-      end
+        # puts " Model Name validation - name.id = #{row_name.id}"
+        # puts " Model Name validation - name.name = #{row_name.name}"
 
+        # puts " Model Profile validation - invalid with name_id.sex_id == 1 and profile.sex_id == 0"
+        # puts " Model Profile validation - profile.user_id = #{row.row}"
+        puts " Model Profile validation - profile.user_id = #{row_profile.user_id}"
+        puts  " Model Profile validation - profile.name_id = #{row_profile.name_id}"
+        puts " Model Profile validation - profile.sex_id = #{row_profile.sex_id}"
+        # puts " Model Profile validation - profile.deleted = #{row_profile.deleted}"
+        # puts " Model Profile validation - profile.tree_id = #{row_profile.tree_id}"
+      end
     end
 
     it "returns a valid name_id: name_id.sex_id == 1 and profile.sex_id == 1 as a integer"

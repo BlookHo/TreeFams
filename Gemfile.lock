@@ -461,7 +461,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   coveralls
   database_cleaner
-  factory_girl_rails
+  factory_girl_rails (~> 4.0)
   faker (~> 1.5)
   fb_graph
   flay
