@@ -158,14 +158,7 @@ RSpec.describe ConnectionLog, type: :model  do  # , focus: true
       FactoryGirl.create(:connection_log, :connections_log_4, current_user_id: third_user_id)
       FactoryGirl.create(:connection_log, :connections_log_5, current_user_id: third_user_id)
     end
-    #<SimilarsLog id: 754, connected_at: 25, current_user_id: 5, table_name: "users", table_row: 5, field: "profile_id", written: 52, overwritten: 34, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
-    #<SimilarsLog id: 755, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 52, field: "user_id", written: 5, overwritten: nil, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
-    #<SimilarsLog id: 756, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 52, field: "tree_id", written: 5, overwritten: 4, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
-    #<SimilarsLog id: 757, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 34, field: "user_id", written: nil, overwritten: 5, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">
 
-    # from similars_start.rb#start_similars
-    # from similars_controller.rb#internal_similars_search
-    # from home_controller.rb#index
     describe '* current_tree_log_id *' do
 
       context '- test log_connection_id' do

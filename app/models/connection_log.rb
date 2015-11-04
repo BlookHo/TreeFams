@@ -4,10 +4,6 @@ class ConnectionLog < ActiveRecord::Base
   validates_presence_of :connected_at, :current_user_id, :with_user_id, :table_name, :table_row, :field,
                         :message => "Должно присутствовать в ConnectionLog"
 
-  # validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
-  # validates_numericality_of :written, :overwritten, :only_integer => true, :unless => :writtens_can_be_nil?
-  # validate :written_fields_are_not_equal, :unless => :writtens_can_be_equal? # :written AND :overwritten
-
   validates_numericality_of :connected_at, :current_user_id, :with_user_id, :table_row, :only_integer => true,
                             :message => "Должны быть целым числом в ConnectionLog"
   validates_numericality_of :connected_at, :current_user_id, :with_user_id, :table_row, :greater_than => 0,
@@ -20,7 +16,11 @@ class ConnectionLog < ActiveRecord::Base
   validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
       # - тогда поле table_row д.б.uniq
 
-  # custom validations
+  # validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
+  # validates_numericality_of :written, :overwritten, :only_integer => true, :unless => :writtens_can_be_nil?
+  # validate :written_fields_are_not_equal, :unless => :writtens_can_be_equal? # :written AND :overwritten
+
+      # custom validations
   # def written_fields_are_not_equal
   #   self.errors.add(:similars_logs,
   #                   'Значения полей в одном ряду не должны быть равны в ConnectionLog.') if self.written == self.overwritten
