@@ -81,7 +81,7 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
 
     end
 
-    context '- check SearchResults methods' ,  focus: true  do #  ,  focus: true
+    context '- check SearchResults methods'   do #  ,  focus: true
       # create model data
       before {
         # Users

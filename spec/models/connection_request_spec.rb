@@ -543,36 +543,37 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
           ConnectionRequest.create_requests(with_whom_connect_ids, max_connection_id, current_user_id )
         }
 
-        describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok' do
+        describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok'   do
           let(:rows_qty) {6}
           it_behaves_like :successful_connection_request_rows_count
         end
 
-        describe '- check SearchResults have rows count after <search> - Ok' do
+        describe '- check SearchResults have rows count after <search> - Ok'  do
           let(:rows_qty) {3}
           it_behaves_like :successful_search_results_rows_count
         end
 
-        it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
-          search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
-                                                                        'searched_profile_ids')
-          expect(search_results_fields).to eq({"id"=>3, "user_id"=>3, "found_user_id"=>2, "profile_id"=>23,
-                                               "found_profile_id"=>12, "count"=>7, "counts"=>[7, 7, 7, 5, 5, 5, 5],
-                                               "connection_id"=>nil, "pending_connect"=>1} )
+        context '- Check SearchResults after <start_search> - ' ,  focus: true  do
+          it '- check SearchResults Third row - made by Method Search - Ok'  do # , focus: true
+            search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
+                                                                          'searched_profile_ids')
+            expect(search_results_fields).to eq({"id"=>3, "user_id"=>3, "found_user_id"=>2, "profile_id"=>23,
+                                                 "found_profile_id"=>12, "count"=>7, "counts"=>[7, 7, 7, 5, 5, 5, 5],
+                                                 "connection_id"=>nil, "pending_connect"=>1} )
+          end
+          it '- check SearchResults Third row.found_profile_ids - made by Method Search - Ok' do
+            search_results_fields = SearchResults.third.found_profile_ids.sort
+            expect(search_results_fields).to eq( [11, 12, 13, 18, 19, 20, 21])
+          end
+          it '- check SearchResults Third row.searched_profile_ids - made by Method Search - Ok' do
+            search_results_fields = SearchResults.third.searched_profile_ids.sort
+            expect(search_results_fields).to eq( [23, 24, 25, 26, 27, 28, 29])
+          end
+          it '- check SearchResults Third row.counts - made by Method Search - Ok' do
+            search_results_fields = SearchResults.third.counts.sort
+            expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7])
+          end
         end
-        it '- check SearchResults Third row.found_profile_ids - made by Method Search - Ok' do
-          search_results_fields = SearchResults.third.found_profile_ids.sort
-          expect(search_results_fields).to eq( [11, 12, 13, 18, 19, 20, 21])
-        end
-        it '- check SearchResults Third row.searched_profile_ids - made by Method Search - Ok' do
-          search_results_fields = SearchResults.third.searched_profile_ids.sort
-          expect(search_results_fields).to eq( [23, 24, 25, 26, 27, 28, 29])
-        end
-        it '- check SearchResults Third row.counts - made by Method Search - Ok' do
-          search_results_fields = SearchResults.third.counts.sort
-          expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7])
-        end
-
     end
 
   end

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Name, :type => :model  do # , focus: true
 
-  describe 'Model Name Before methods validation test' , focus: true  do
+  describe 'Model Name Before methods validation test'   do  # , focus: true
     it "has a valid factory" do
       puts " Model Name validation - has a valid factory"
       expect(FactoryGirl.create(:test_model_name)).to be_valid

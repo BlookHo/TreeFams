@@ -2,7 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Profile, :type => :model   do # , focus: true
 
-  describe 'Model Profile Before methods validation test' , focus: true  do
+  describe 'Model Profile Before methods validation test'   do # , focus: true
+    after {
+      Profile.delete_all
+      Profile.reset_pk_sequence
+    }
+
     it "has a valid factory" do
       puts " Model Profile validation - has a valid factory"
       expect(FactoryGirl.create(:test_model_profile)).to be_valid
@@ -36,6 +41,8 @@ RSpec.describe Profile, :type => :model   do # , focus: true
     end
 
     it "returns a valid name_id: name_id.sex_id == 1 and profile.sex_id == 1 as a integer"
+
+
   end
 
 
