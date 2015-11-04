@@ -21,7 +21,15 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+
+
 RSpec.configure do |config|
+
+  ActiveRecord::Base.logger.level = Logger::INFO
+  ActionController::Base.logger.level = Logger::ERROR
+  Rails.logger.level = Logger::ERROR
+
+
   config.infer_spec_type_from_file_location!
   config.include FactoryGirl::Syntax::Methods
 

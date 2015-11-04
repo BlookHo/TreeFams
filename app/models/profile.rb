@@ -42,9 +42,15 @@ class Profile < ActiveRecord::Base
   has_one :profile_data, dependent: :destroy
   accepts_nested_attributes_for :profile_data
 
-  before_save do
-    self.sex_id = name.try(:sex_id)
-  end
+
+  # require 'pry'
+
+  # before_save do
+  #   puts "Before save"
+  #   self.sex_id = name.try(:sex_id)
+  #   # puts "self.sex_id = #{self.sex_id}"
+  #   # binding.pry          # Execution will stop here.
+  # end
 
   def to_name
     name.try(:name).try(:mb_chars).try(:capitalize)

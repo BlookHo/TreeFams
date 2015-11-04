@@ -87,6 +87,7 @@ group :development do
 
   #gem 'mailcatcher' # mail
 
+
   #gem 'reek'
 
   # Automagically launches tests for changed files
@@ -108,6 +109,9 @@ group :development, :test do
   # gem 'rspec-support', '~> 3.2.1'
   # For active record imitation in tests
   gem 'factory_girl_rails', "~> 4.0"
+
+  # gem 'pry'
+
 end
 
 group :test do

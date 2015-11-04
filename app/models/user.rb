@@ -77,6 +77,7 @@ class User < ActiveRecord::Base
 
 
   def name
+    # p 'name'
     profile.name.name.capitalize unless profile.blank?  # If wrong connect between two users
   end
 
@@ -112,6 +113,7 @@ class User < ActiveRecord::Base
 
 
   def generate_access_token
+    # p 'generate_access_token'
     begin
       self.access_token = SecureRandom.hex
     end while self.class.exists?(access_token: access_token)
@@ -130,6 +132,7 @@ class User < ActiveRecord::Base
 
   # Определение имени юзера
   def get_user_name
+    # p 'get_user_name'
     Name.find(Profile.find(self.profile_id).name_id).name
   end
 
@@ -146,6 +149,7 @@ class User < ActiveRecord::Base
 
 
   def update_connected_users!
+    # p 'update_connected_users!'
     connected_user_ids = self.get_connected_users
     cids = connected_user_ids.size > 0 ? connected_user_ids : [self.id]
     connected_user_ids.each do |connected_user_id|
@@ -156,6 +160,7 @@ class User < ActiveRecord::Base
 
 
   def update_disconnected_users!
+    # p 'update_disconnected_users!!'
     self.connected_users.each do |connected_user_id|
       user = User.find(connected_user_id)
       user.update_attribute(:connected_users, user.get_connected_users)

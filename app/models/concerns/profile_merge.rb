@@ -43,8 +43,6 @@ module ProfileMerge
    # Чтобы не было 2-х профилей с одинак. полем user_id/
    #        opposite_profile.update_column(:user_id, nil) # ONLY SO!!!
           log_profiles_connection = log_profiles_connection + new_log_merge_profiles
-
-
         end
 
 

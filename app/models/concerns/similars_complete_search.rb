@@ -92,7 +92,18 @@ module SimilarsCompleteSearch
           # и действия
           final_connection_hash.each do |profiles_s, profile_f|
             new_connection_hash.delete_if { |k,v|  k == profiles_s && v == profile_f }
+            # new_connection_hash.delete_if { |k,v|  k == profiles_f && v == profile_s }
+
           end
+
+          # todo: delete if a: b and b: a
+
+          # final_connection_hash.each do |profiles_s, profile_f|
+          #   # new_connection_hash.delete_if { |k,v|  k == profiles_s && v == profile_f }
+          #   new_connection_hash.delete_if { |k,v|  k == profile_f && v == profiles_s }
+          #
+          # end
+
           logger.info " После сокращение нового хэша: new_connection_hash = #{new_connection_hash} "
 
           # накапливание нового доп.хаша по всему циклу
