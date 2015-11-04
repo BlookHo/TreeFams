@@ -26,6 +26,7 @@ module Search
   # @duplicates_many_to_one = { 4=> 2, 3 => 2}  # for DEBUGG ONLY!!!
   def start_search(certain_koeff)
 
+    start_search_time = Time.now
     tree_data =  Tree.tree_main_data(self) # collect tree info
     tree_profiles        = tree_data[:tree_profiles]
     qty_of_tree_profiles = tree_data[:qty_of_tree_profiles]
@@ -62,7 +63,11 @@ module Search
 
     self.start_check_double(results, certain_koeff) if self.double == 0
 
-    logger.info "== END OF start_search ===  results = #{results.inspect}"
+    end_search_time = Time.now
+
+    search_time = end_search_time - start_search_time
+    logger.info "== END OF start_search === Search_time = #{search_time.round(3)} sec; results = #{results.inspect}"
+
     results
   end
 

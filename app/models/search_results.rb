@@ -115,15 +115,13 @@ class SearchResults < ActiveRecord::Base
   # @note подготовка of One Hash of рез-тов поиска
   def self.collect_result_hush(one_result_data)
 
-    search_profile_id   = one_result_data[:search_profile_id]
-    found_tree_id       = one_result_data[:found_tree_id]
     found_profile_id    = one_result_data[:found_profile_id]
     profiles_match_hash = one_result_data[:profiles_match_hash]
 
     one_result_hash = {}
     count = 0
-    one_result_hash.merge!(:search_profile_id => search_profile_id)
-    one_result_hash.merge!(:found_tree_id => found_tree_id)
+    one_result_hash.merge!(:search_profile_id => one_result_data[:search_profile_id])
+    one_result_hash.merge!(:found_tree_id => one_result_data[:found_tree_id])
     one_result_hash.merge!(:found_profile_id => found_profile_id)
     count = profiles_match_hash.values_at(found_profile_id)[0] unless profiles_match_hash.empty?
     one_result_hash.merge!(:count => count)
@@ -132,7 +130,7 @@ class SearchResults < ActiveRecord::Base
   end
 
 
-    # @note подготовка частей рез-тов поиска - по профилям (by_profiles) и по деревьям (by_trees)
+  # @note подготовка частей рез-тов поиска - по профилям (by_profiles) и по деревьям (by_trees)
   def self.make_final_bys(filling_hash, by_profiles)
     # make final sorted by_profiles search results
     by_profiles = by_profiles.sort_by {|one_hash| [ one_hash[:count] ]}.reverse
@@ -150,8 +148,15 @@ class SearchResults < ActiveRecord::Base
   def self.store_search_results(results, current_user_id)
     clear_prev_results(results[:by_trees], current_user_id)
     by_trees_to_store = update_by_trees(results)
-    store_data = { tree_ids: collect_tree_ids_by_trees(by_trees_to_store), by_profiles: results[:by_profiles],
-                   current_user_tree_ids: results[:connected_author_arr], current_user_id: current_user_id }
+    unless by_trees_to_store.blank?
+      store_data = { tree_ids: collect_tree_ids_by_trees(by_trees_to_store), by_profiles: results[:by_profiles],
+                     current_user_tree_ids: results[:connected_author_arr], current_user_id: current_user_id }
+      store_results_no_doubles(store_data)
+    end
+  end
+
+  # @note: prepare and store new search results if there were no doublicates
+  def self.store_results_no_doubles(store_data)
     search_results_arr = make_results(store_data)
     create_search_results(search_results_arr)
   end
