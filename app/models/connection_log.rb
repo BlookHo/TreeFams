@@ -13,29 +13,29 @@ class ConnectionLog < ActiveRecord::Base
   validates_numericality_of :connected_at, :current_user_id, :with_user_id, :table_row, :greater_than => 0,
                             :message => "Должны быть больше 0 в ConnectionLog"
 
-  # validates_inclusion_of :field, :in => ["profile_id"], :if => :table_users?
-  # validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
-  # validates_inclusion_of :field, :in => ["tree_id", "user_id", "deleted"], :if => :table_profiles?
-  # validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
-  # validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
+  validates_inclusion_of :field, :in => ["profile_id"], :if => :table_users?
+  validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
+  validates_inclusion_of :field, :in => ["tree_id", "user_id", "deleted"], :if => :table_profiles?
+  validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
+  validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
       # - тогда поле table_row д.б.uniq
 
   # custom validations
-  def written_fields_are_not_equal
-    self.errors.add(:similars_logs,
-                    'Значения полей в одном ряду не должны быть равны в ConnectionLog.') if self.written == self.overwritten
-  end
+  # def written_fields_are_not_equal
+  #   self.errors.add(:similars_logs,
+  #                   'Значения полей в одном ряду не должны быть равны в ConnectionLog.') if self.written == self.overwritten
+  # end
 
-  def writtens_can_be_equal?
-    self.table_name == "profiles" && self.field == "tree_id"
-  end
+  # def writtens_can_be_equal?
+  #   self.table_name == "profiles" && self.field == "tree_id"
+  # end
 
-  def writtens_can_be_nil?
-    # puts "In ConnectionLog Model valid:  table_name = #{self.table_name}, written = #{self.written}, field = #{self.field} "
-    # puts "In ConnectionLog Model valid:  table_name? = #{self.table_name == "profiles"} "
-    # puts "In ConnectionLog Model valid:  table_name && field? = #{self.table_name == "profiles" && self.field == "user_id"} "
-    self.table_name == "profiles" && self.field == "user_id"
-  end
+  # def writtens_can_be_nil?
+  #   # puts "In ConnectionLog Model valid:  table_name = #{self.table_name}, written = #{self.written}, field = #{self.field} "
+  #   # puts "In ConnectionLog Model valid:  table_name? = #{self.table_name == "profiles"} "
+  #   # puts "In ConnectionLog Model valid:  table_name && field? = #{self.table_name == "profiles" && self.field == "user_id"} "
+  #   self.table_name == "profiles" && self.field == "user_id"
+  # end
 
   def table_users?
     self.table_name == "users"
@@ -49,9 +49,9 @@ class ConnectionLog < ActiveRecord::Base
     self.table_name == "profiles"
   end
 
-  def field_tree?
-    self.field == "tree_id"
-  end
+  # def field_tree?
+  #   self.field == "tree_id"
+  # end
 
 
   # for RSpec - in User_spec.rb
