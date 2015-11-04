@@ -10,6 +10,7 @@ class Profile < ActiveRecord::Base
                 :allow_destroy,
                 :allow_invite,
                 :allow_conversation
+  # may be: attr_accessible instead attr_accessor
 
   include ProfileQuestions
   include ProfileMerge
