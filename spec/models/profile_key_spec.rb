@@ -408,7 +408,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
           let(:exclusions_hash) {{}}
           let(:tree_ids) {connected_users}
 
-          context '- before action <add_new_profile> - check input params values ' , focus: true  do
+          context '- before action <add_new_profile> - check input params values '   do  # , focus: true
             it "- check: base_profile" do
               puts "Check Add Father \n"  # 1
               expect(base_profile.id).to eq(85)
@@ -470,7 +470,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
 
           end
 
-          context '- After ADD Father - action <add_new_profile>:' , focus: true  do
+          context '- After ADD Father - action <add_new_profile>:'   do
             # Add Father
             before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_86, new_relation_id,
                                 exclusions_hash: exclusions_hash_empty, tree_ids: tree_ids_conn ) }
@@ -519,6 +519,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
               # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
               expect(new_is_sex_id).to eq(1) #
             end
+
             describe '- Profile check have rows count & ids before - Ok' do
               let(:rows_qty) {8}
               let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91, 92]}
@@ -530,6 +531,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
               let(:rows_qty) {50}
               it_behaves_like :successful_profile_keys_rows_count
             end
+
             describe '- check all relations generated in ProfileKey rows - Ok' do
               let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5,
                                             6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 101, 101, 111, 121, 121, 191, 191,
@@ -537,9 +539,11 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
               let(:relations_arr_all_size) {50}
               let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7,
                                         8, 8, 13, 14, 17, 17, 91, 101, 121, 121, 191, 201, 221, 221]}
-              # 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 8, 14, 17, 101, 121,
-              #     191, 201, 221, 221
-              let(:relations_arr_size) {42}
+              # ProfileKey rows for 90 profile marked :deleted => 1, from before{ ... FactoryGirls ...}
+              # - therefore: @sons_hash = {} in add_profile (ProfileKey generation Module)
+              # That is why ProfileKey rows for Author's son, when Author's Father was added,  - did not generated.
+              # There count = 2. That is why 40 instead 42
+              let(:relations_arr_size) {40}
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
@@ -550,7 +554,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
           end
         end
 
-        describe '- Added Mother - ' do
+        describe '- Added Mother - '   do  # , focus: true
           before {
             # Tree
             FactoryGirl.create(:tree, :add_tree9_1)   # 86
@@ -734,7 +738,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             end
 
             describe '- check new ProfileKey rows - Ok' do
-              let(:rows_qty) {52}
+              let(:rows_qty) {50}
               it_behaves_like :successful_profile_keys_rows_count
             end
 
@@ -747,10 +751,13 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do
-              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6,
-                                        6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101, 101, 111, 111, 121, 121, 191,
-                                        191, 201, 201, 211, 211, 221, 221]}
-              let(:relations_arr_size) {52}
+              let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5,
+                                            6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101, 111, 121, 121, 191, 191,
+                                            201, 201, 211, 211, 221, 221]}
+              let(:relations_arr_all_size) {50}
+              let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7,
+                                        8, 8, 13, 14, 17, 17, 91, 101, 121, 121, 191, 201, 221, 221]}
+              let(:relations_arr_size) {40}
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
@@ -761,7 +768,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
           end
         end
 
-        describe '- Added Son - ' do
+        describe '- Added Son - '   do  # , focus: true
           before {
             # Tree
             FactoryGirl.create(:tree, :add_tree9_1)   # 86
@@ -940,25 +947,29 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             end
 
             describe '- check new ProfileKey rows - Ok' do
-              let(:rows_qty) {68}
+              let(:rows_qty) {66}
               it_behaves_like :successful_profile_keys_rows_count
             end
 
             describe '- check all profiles_ids generated in ProfileKey rows - Ok' do  # , focus: true
-              let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87,
-                                       87, 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89, 89,
-                                       90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91, 92, 92, 92,
-                                       92, 92, 92, 101, 101, 101, 101, 101, 101, 101, 101]}
-              let(:profiles_ids_arr_size) {68}
+              let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87,
+                                       87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89, 89, 90, 90,
+                                       90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91, 92, 92, 92, 92, 92, 92, 101,
+                                       101, 101, 101, 101, 101, 101]}
+              let(:profiles_ids_arr_size) {66}
               it_behaves_like :successful_profile_keys_profile_ids
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do
-              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5,
-                                        5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 91, 101,
-                                        101, 101, 111, 111, 111, 111, 121, 121, 191, 191, 191, 201, 201, 201, 211,
-                                        211, 211, 211, 221, 221]}
-              let(:relations_arr_size) {68}
+              let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5,
+                                            5, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 91, 101,
+                                            101, 101, 111, 111, 111, 111, 121, 121, 191, 191, 191, 201, 201, 201,
+                                            211, 211, 211, 211, 221, 221]}
+              let(:relations_arr_all_size) {66}
+              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5,
+                                        5, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101, 101, 111, 111, 121, 121,
+                                        191, 191, 201, 201, 211, 211, 221, 221]}
+              let(:relations_arr_size) {54}
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
@@ -969,7 +980,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
           end
         end
 
-        describe '- Added Son_to_Author - ' do
+        describe '- Added Son_to_Author - '    do  # , focus: true
           before {
             # Tree
             FactoryGirl.create(:tree, :add_tree9_1)   # 86
@@ -997,10 +1008,10 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             FactoryGirl.create(:profile_key, :profile_key9_add_16)   # 86
             FactoryGirl.create(:profile_key, :profile_key9_add_17)   # 87
             FactoryGirl.create(:profile_key, :profile_key9_add_18)   # 87
-            FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86
-            FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 86
-            FactoryGirl.create(:profile_key, :profile_key9_add_25)   # 87
-            FactoryGirl.create(:profile_key, :profile_key9_add_26)   # 87
+            FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86-90 # deleted: 1
+            FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 90-86 # deleted: 1
+            FactoryGirl.create(:profile_key, :profile_key9_add_25)   # 87-90 # deleted: 1
+            FactoryGirl.create(:profile_key, :profile_key9_add_26)   # 90-87 # deleted: 1
             FactoryGirl.create(:profile_key, :profile_key9_add_35)   # 86
             FactoryGirl.create(:profile_key, :profile_key9_add_36)   # 86
             FactoryGirl.create(:profile_key, :profile_key9_add_37)   # 87
@@ -1109,7 +1120,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             let(:new_profile_101) { create(:add_profile, :add_profile_101) }  # User = nil. Tree = 9. profile_id = 87
             # name_id   419   sex_id    1
             let(:new_relation_id) {3} # Son_to_Author  Семен
-            let(:exclusions_hash_exist) {{"92" => '0'}} # Добавляемый Сын - не явл. сыном Жены
+            let(:exclusions_hash_exist) {{"92" => '0'}} # Добавляемый Сын 101 - не явл. сыном Жены 92
             let(:tree_ids_conn) {connected_users}
 
             it '- check new Tree row - Ok' do
@@ -1150,25 +1161,29 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             end
 
             describe '- check new ProfileKey rows - Ok' do
-              let(:rows_qty) {66}
+              let(:rows_qty) {64}
               it_behaves_like :successful_profile_keys_rows_count
             end
 
             describe '- check all profile_ids generated in ProfileKey rows - Ok' do
-              let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87,
-                                       87, 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89, 89,
-                                       90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91, 92, 92, 92,
-                                       92, 92, 101, 101, 101, 101, 101, 101, 101]}
-              let(:profiles_ids_arr_size) {66}
+              let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87,
+                                       87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89, 89, 90, 90,
+                                       90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91, 92, 92, 92, 92, 92, 101,
+                                       101, 101, 101, 101, 101]}
+              let(:profiles_ids_arr_size) {64}
               it_behaves_like :successful_profile_keys_profile_ids
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do
-              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5,
-                                        5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 91, 101, 101,
-                                        101, 111, 111, 111, 111, 121, 121, 191, 191, 191, 201, 201, 201, 211, 211,
-                                        211, 211, 221, 221]}
-              let(:relations_arr_size) {66}
+              let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5,
+                                            5, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 91, 101, 101, 101,
+                                            111, 111, 111, 111, 121, 121, 191, 191, 191, 201, 201, 201, 211, 211, 211,
+                                            211, 221, 221]}
+              let(:relations_arr_all_size) {64}
+              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6,
+                                        6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101, 101, 111, 111, 121, 121, 191,
+                                        191, 201, 201, 211, 211, 221, 221]}
+              let(:relations_arr_size) {52}
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
@@ -1179,7 +1194,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
           end
         end
 
-        describe '- Added Daughter - ' do
+        describe '- Added Daughter - '    do  # , focus: true
 
           before {
             # Tree
@@ -1302,6 +1317,11 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             end
 
             describe '- check ProfileKey count & ids values before - Ok' do
+              let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5,
+                                            5, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 91, 101,
+                                            101, 101, 111, 111, 111, 111, 121, 121, 191, 191, 191, 201, 201, 201,
+                                            211, 211, 211, 211, 221, 221]}
+              let(:relations_arr_all_size) {66}
               let(:rows_qty) {52}
               let(:rows_ids_arr) {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
                                    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
@@ -1360,29 +1380,33 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             end
 
             describe '- check new ProfileKey rows - Ok' do
-              let(:rows_qty) {68}
+              let(:rows_qty) {66}
               it_behaves_like :successful_profile_keys_rows_count
             end
 
             it '- check all name_ids generated in ProfileKey rows - Ok' do
               all_name_ids =  ProfileKey.all.pluck(:name_id).sort
               puts "After ADD Daughter Check ProfileKey \n"
-               expect(all_name_ids).to eq([28, 28, 28, 28, 28, 28, 28, 28, 48, 48, 48, 48, 48, 48, 48, 48, 147, 147, 147,
-                                          147, 147, 147, 343, 343, 343, 343, 343, 343, 343, 343, 345, 345, 345, 345,
-                                          345, 345, 345, 370, 370, 370, 370, 370, 370, 370, 370, 412, 412, 412, 412,
-                                          412, 412, 412, 412, 446, 446, 446, 446, 446, 446, 446, 446, 465, 465, 465,
-                                          465, 465, 465, 465])
+               expect(all_name_ids).to eq([28, 28, 28, 28, 28, 28, 28, 28, 48, 48, 48, 48, 48, 48, 48, 48, 147, 147,
+                                           147, 147, 147, 147, 343, 343, 343, 343, 343, 343, 343, 345, 345, 345, 345,
+                                           345, 345, 345, 370, 370, 370, 370, 370, 370, 370, 370, 412, 412, 412, 412,
+                                           412, 412, 412, 446, 446, 446, 446, 446, 446, 446, 446, 465, 465, 465, 465,
+                                           465, 465, 465])
               # got all_name_ids for all rows of ProfileKey
               puts "In check ProfileKey: all_name_ids = #{all_name_ids.size} \n"
-              expect(all_name_ids.size).to eq(68)
+              expect(all_name_ids.size).to eq(66)
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
-              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5,
-                                        5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 91, 101,
-                                        101, 101, 111, 111, 121, 121, 121, 121, 191, 191, 191, 201, 201, 201, 211,
-                                        211, 221, 221, 221, 221]}
-              let(:relations_arr_size) {68}
+              let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5,
+                                            5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 91, 101,
+                                            101, 101, 111, 111, 121, 121, 121, 121, 191, 191, 191, 201, 201, 201, 211,
+                                            211, 221, 221, 221, 221]}
+              let(:relations_arr_all_size) {66}
+              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5,
+                                        6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101, 101, 121, 121, 121, 121,
+                                        191, 191, 201, 201, 221, 221, 221, 221]}
+              let(:relations_arr_size) {54}
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
@@ -1393,7 +1417,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
           end
         end
 
-        describe '- Added Brother - ' do
+        describe '- Added Brother - '   do # , focus: true
           before {
             # Tree
             FactoryGirl.create(:tree, :add_tree9_1)   # 86
@@ -1575,7 +1599,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             end
 
             describe '- check new ProfileKey rows - Ok' do
-              let(:rows_qty) {66}
+              let(:rows_qty) {64}
               it_behaves_like :successful_profile_keys_rows_count
             end
 
@@ -1584,19 +1608,23 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
               puts "After ADD Brother Check ProfileKey \n"
               expect(all_is_profile_ids).to eq([85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87,
                                                 87, 87, 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89,
-                                                89, 89, 90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91,
-                                                92, 92, 92, 92, 92, 101, 101, 101, 101, 101, 101, 101])
+                                                89, 89, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91, 92,
+                                                92, 92, 92, 92, 101, 101, 101, 101, 101, 101])
               # got all_is_profile_ids for all rows of ProfileKey
               puts "In check ProfileKey: all_is_profile_ids = #{all_is_profile_ids.size} \n"
-              expect(all_is_profile_ids.size).to eq(66)
+              expect(all_is_profile_ids.size).to eq(64)
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do   # , focus: true
-              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5,
-                                        5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101,
-                                        101, 111, 111, 121, 121, 191, 191, 191, 191, 201, 201, 211, 211, 211, 221,
-                                        221, 221]}
-              let(:relations_arr_size) {66}
+              let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5,
+                                            5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91,
+                                            101, 101, 111, 111, 121, 121, 191, 191, 191, 201, 201, 211, 211, 221,
+                                            221, 221]}
+              let(:relations_arr_all_size) {64}
+              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5,
+                                        5, 5, 5, 5, 5, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 101, 121, 121, 191,
+                                        191, 201, 221, 221, 221]}
+              let(:relations_arr_size) {52}
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
@@ -1608,7 +1636,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
 
         end
 
-        describe '- Added Sister - ' do
+        describe '- Added Sister - '   do # , focus: true
           before {
             # Tree
             FactoryGirl.create(:tree, :add_tree9_1)   # 86
@@ -1791,28 +1819,32 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             end
 
             describe '- check new ProfileKey rows - Ok' do
-              let(:rows_qty) {66}
+              let(:rows_qty) {64}
               it_behaves_like :successful_profile_keys_rows_count
             end
             it '- check all is_name_ids generated in ProfileKey rows - Ok' do
               all_is_name_ids =  ProfileKey.all.pluck(:is_name_id).sort
               puts "After ADD Sister Check ProfileKey \n"
               expect(all_is_name_ids).to eq([28, 28, 28, 28, 28, 28, 28, 28, 48, 48, 48, 48, 48, 48, 48, 48, 147, 147,
-                                             147, 147, 147, 343, 343, 343, 343, 343, 343, 343, 343, 345, 345, 345, 345,
-                                             345, 345, 345, 370, 370, 370, 370, 370, 370, 370, 370, 412, 412, 412, 412,
-                                             412, 412, 412, 446, 446, 446, 446, 446, 446, 446, 446, 465, 465, 465, 465,
-                                             465, 465, 465])
+                                             147, 147, 147, 343, 343, 343, 343, 343, 343, 343, 345, 345, 345, 345, 345,
+                                             345, 345, 370, 370, 370, 370, 370, 370, 370, 370, 412, 412, 412, 412, 412,
+                                             412, 446, 446, 446, 446, 446, 446, 446, 446, 465, 465, 465, 465, 465,
+                                             465, 465])
               # got all_is_name_ids for all rows of ProfileKey
               puts "In check ProfileKey: all_is_name_ids = #{all_is_name_ids.size} \n"
-              expect(all_is_name_ids.size).to eq(66)
+              expect(all_is_name_ids.size).to eq(64)
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do
-              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5,
-                                        5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101,
-                                        101, 111, 111, 121, 121, 191, 191, 201, 201, 201, 201, 211, 211, 211, 221,
-                                        221, 221]}
-              let(:relations_arr_size) {66}
+              let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5,
+                                            5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91,
+                                            101, 101, 111, 111, 121, 121, 191, 191, 201, 201, 201, 211, 211, 221,
+                                            221, 221]}
+              let(:relations_arr_all_size) {64}
+              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5,
+                                        5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 101, 121, 121, 191,
+                                        201, 201, 221, 221, 221]}
+              let(:relations_arr_size) {52}
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
@@ -1824,7 +1856,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
 
         end
 
-        describe '- Added Wife - ' do
+        describe '- Added Wife - '   do #  , focus: true
           before {
             # Tree
             FactoryGirl.create(:tree, :add_tree9_2)   # 87
@@ -2008,15 +2040,18 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             end
 
             describe '- check new ProfileKey rows - Ok' do
-              let(:rows_qty) {52}
+              let(:rows_qty) {50}
               it_behaves_like :successful_profile_keys_rows_count
             end
 
             describe '- check all relations generated in ProfileKey rows - Ok' do
-              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6,
-                                        6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101, 101, 111, 111, 121, 121, 191,
-                                        191, 201, 201, 211, 211, 221, 221]}
-              let(:relations_arr_size) {52}
+              let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6,
+                                            6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101, 101, 111, 111, 121, 121, 191,
+                                            191, 201, 201, 211, 211, 221, 221]}
+              let(:relations_arr_all_size) {50}
+              let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7, 8, 8,
+                                        13, 14, 17, 17, 91, 101, 121, 121, 191, 201, 221, 221]}
+              let(:relations_arr_size) {38}
               it_behaves_like :successful_profile_keys_relation_ids
             end
 

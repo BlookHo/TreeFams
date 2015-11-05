@@ -262,6 +262,9 @@ module ProfileKeysGeneration
     # @note GET /
     # @see News
     def add_father_p_keys(base_sex_id, base_profile_tree_id, add_relation_data ) #new_profile_id, new_profile_name_id)
+      # puts "== In add_father_to_ProfileKeys:: @daughters_hash = #{@daughters_hash.inspect}"
+      # puts "== In add_father_to_ProfileKeys:: @sons_hash = #{@sons_hash.inspect}"
+      # puts "== In add_father_to_ProfileKeys:: @brothers_hash = #{@brothers_hash.inspect}"
 
       #new_profile_id          = add_relation_data[:new_profile_id]
       #new_profile_name_id     = add_relation_data[:new_profile_name_id]
@@ -476,7 +479,7 @@ module ProfileKeysGeneration
     # Получит хэши имен ближнего круга
     # вокруг базового профиля с учетом хэша исключений - от нестандартных ответов.
     def get_bk_relative_names(tree_ids, base_profile_id, exclusions_hash)
-      # puts "============ In get_bk_relative_names ================= DDDDDDDD"
+      # puts "============ In get_bk_relative_names ==== exclusions_hash: #{exclusions_hash}"
 
       @fathers_hash = Profile.find(base_profile_id).fathers_hash(tree_ids)
       # puts "== @fathers_hash = #{@fathers_hash}"

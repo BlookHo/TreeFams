@@ -366,6 +366,9 @@ RSpec.describe Profile, :type => :model   do # , focus: true
           expect(common_log_forth.id).to eq(4)
         end
         describe '- check all relations generated in ProfileKey rows: start state - Ok'  do  # , focus: true
+          let(:relations_ids_arr_all) {[1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 7, 8, 14,
+                                        17, 101, 101, 111, 121, 191, 191, 201, 201, 211, 211, 221, 221]}
+          let(:relations_arr_all_size) {38}
           let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
                                     14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121,
                                     191, 221]}

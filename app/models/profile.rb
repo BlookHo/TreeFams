@@ -81,8 +81,8 @@ class Profile < ActiveRecord::Base
   end
 
 
-  # Эксперименты по выводу кругов в объедененных деревьях
-  # получает на вход id деревьев из которых надо собрать ближний круг
+  # @note: получает на вход id деревьев из которых надо собрать ближний круг -
+  #   using in make hashes in add_profile ProfileKey generation
   def circle(user_ids)
     ProfileKey.where(user_id: user_ids, profile_id: self.id, deleted: 0).order('relation_id').includes(:name).to_a.uniq(&:is_profile_id)
   end
