@@ -40,7 +40,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
       end
     end
 
-    it "returns a valid name_id: name_id.sex_id == 1 and profile.sex_id == 1 as a integer"
+    # it "returns a valid name_id: name_id.sex_id == 1 and profile.sex_id == 1 as a integer"
 
 
   end
