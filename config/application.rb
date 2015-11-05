@@ -41,6 +41,9 @@ module Weafam
 
     # Load abstract class in rails_root/app/models
     config.autoload_paths += Dir[Rails.root.join('app', 'models', 'abstracts')]
+    config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'search_work')]
+    config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'circles')]
+    config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'service')]
 
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.

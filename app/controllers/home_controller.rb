@@ -245,7 +245,8 @@ class HomeController < ApplicationController
       flash.now[:warning] = "Warning from server! Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно..."
       unless new_sims==""   #.empty?  #  т.е. есть новые похожие - отлич. от ранее записанных
         view_tree_similars(@tree_info, @similars) unless @tree_info.empty?
-        render :template => 'similars/show_similars_data' # показываем инфу о похожих
+        # render :template => 'similars/show_similars_data' # показываем инфу о похожих
+        render 'similars/show_similars_data' # показываем инфу о похожих
       end
     end
 

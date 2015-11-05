@@ -2,6 +2,12 @@ module SimilarsCompleteSearch
   extend ActiveSupport::Concern
   # in User model
 
+  #############################################################
+  # Иванищев А.В. 2014 - 2015
+  # @note: Методы полного поиска - перед объединением Похожих
+  #############################################################
+
+
   # Input: start tree No, tree No to connect
   # сбор полного хэша достоверных пар профилей для объединения
   # Output:
@@ -86,7 +92,18 @@ module SimilarsCompleteSearch
           # и действия
           final_connection_hash.each do |profiles_s, profile_f|
             new_connection_hash.delete_if { |k,v|  k == profiles_s && v == profile_f }
+            # new_connection_hash.delete_if { |k,v|  k == profiles_f && v == profile_s }
+
           end
+
+          # todo: delete if a: b and b: a
+
+          # final_connection_hash.each do |profiles_s, profile_f|
+          #   # new_connection_hash.delete_if { |k,v|  k == profiles_s && v == profile_f }
+          #   new_connection_hash.delete_if { |k,v|  k == profile_f && v == profiles_s }
+          #
+          # end
+
           logger.info " После сокращение нового хэша: new_connection_hash = #{new_connection_hash} "
 
           # накапливание нового доп.хаша по всему циклу
@@ -97,14 +114,12 @@ module SimilarsCompleteSearch
 
         # Наращивание финального хэша пар профилей для объединения, если есть чем наращивать
         unless add_connection_hash.empty?
-          add_to_hash(final_connection_hash, add_connection_hash)
+          SearchWork.add_to_hash(final_connection_hash, add_connection_hash)
           logger.info "@@@@@ final_connection_hash = #{final_connection_hash} "
         end
         # Подготовка к следующему циклу
         init_connection_hash = add_connection_hash
     end
-
-
 
       # logger.info "final_connection_hash = #{final_connection_hash} "
       # logger.info " "

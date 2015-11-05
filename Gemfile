@@ -87,6 +87,7 @@ group :development do
 
   #gem 'mailcatcher' # mail
 
+
   #gem 'reek'
 
   # Automagically launches tests for changed files
@@ -107,7 +108,10 @@ group :development, :test do
   gem 'rspec-support'
   # gem 'rspec-support', '~> 3.2.1'
   # For active record imitation in tests
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', "~> 4.0"
+
+  # gem 'pry'
+
 end
 
 group :test do
@@ -131,6 +135,10 @@ group :test do
 
   # Auto cleans test db after each test run
   gem 'database_cleaner'
+
+  # Faker, a port of Data::Faker from Perl,
+  # is used to easily generate fake data: names, addresses, phone numbers, etc.
+  gem 'faker', '~> 1.5'
 end
 
 # Disable assets logging
@@ -178,3 +186,5 @@ gem "ruby-growl"
 #gem "squeel" - sql
 
 gem 'whenever' , :require => false # v 0.9.4
+
+

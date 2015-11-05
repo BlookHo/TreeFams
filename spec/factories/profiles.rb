@@ -1,4 +1,22 @@
-FactoryGirl.define do
+require 'faker'
+
+FactoryGirl.define   do
+
+  factory :test_model_profile, class: Profile do |f|
+    # let(:row) { FactoryGirl.create(:test_model_name).id }
+    f.user_id { Faker::Number.number(5) }
+    f.name_id { Faker::Number.number(5) }
+
+    # f.name_id { row.id }
+    f.sex_id  {Faker::Number.between(0, 1)}
+    f.tree_id  { Faker::Number.number(5) }
+    f.display_name_id  { Faker::Number.number(5) }
+    f.deleted  {Faker::Number.between(0, 1)}
+
+    association :name, factory: :test_model_name, name: "Федор"
+
+  end
+
 
   factory :profile_one, class: Profile do
     user_id 1

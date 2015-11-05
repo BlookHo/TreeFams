@@ -1,4 +1,4 @@
-describe SimilarsController, :type => :controller  , disable: true  do  # , focus: true  #, similars: true
+describe SimilarsController, :type => :controller    do  # , focus: true  #, similars: true
 
 
     let(:current_user) { create(:user) }   # User = 1. Tree = 1. profile_id = 63
@@ -23,8 +23,8 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
       FactoryGirl.create(:user, :user_3)  # User = 3. Tree = 3. profile_id = 333
       FactoryGirl.create(:user, :user_4)  # User = 4. Tree = 4. profile_id = 444
       # puts "before All: User.last.id = #{User.last.id} \n" # id = 2
-      # puts "before All: User.find(2).profile_id = #{User.find(2).profile_id} \n" # id = 2
-      # puts "before All: user_2.profile_id = #{user_2.profile_id} \n" # id = 2   profile_id = 66
+      # puts "before All: User.find(2).profile_id = #{User.find(2).profile_id} \n" # id = 2    profile_id = 66
+      # puts "before All: user_2.profile_id = #{user_2.profile_id} \n" # id = 2
 
       FactoryGirl.create(:connected_user, :correct)      # 1  2
       FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
@@ -80,7 +80,11 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
       # puts "before All: Profile.last.name_id = #{Profile.last.name_id} \n"  # name_id = 90
       # puts "before All: Profile.count = #{Profile.all.count} \n" # 2
 
-      #Profile_Key
+      # a = FactoryGirl.create(:something)
+      # a.update()
+      # a.reload
+
+       #Profile_Key
       FactoryGirl.create(:profile_key, :profile_key_w_sims_1)
       FactoryGirl.create(:profile_key, :profile_key_w_sims_2)
       FactoryGirl.create(:profile_key, :profile_key_w_sims_3)
@@ -230,7 +234,7 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
   describe 'CHECK SimilarsController methods'   do # , focus: true
     let(:connected_users) { current_user.get_connected_users }
 
-    context '- before actions - check connected_users'  do  # , focus: true
+    context '- before actions - check connected_users'   do  # , focus: true
       # let(:connected_users) { current_user.get_connected_users }
       it "- Return proper connected_users Array result for current_user_id = 1" do
         puts "Check SimilarsController \n"
@@ -246,7 +250,7 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
 
      describe 'GET #internal_similars_search'  do # , focus: true
 
-      context '- after action <internal_similars_search> - check render_template & response status' do
+      context '- after action <internal_similars_search> - check render_template & response status'  do
         subject { get :internal_similars_search }
         it "- render_template internal_similars_search" do
           puts "Check #internal_similars_search\n"
@@ -263,7 +267,7 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
         end
       end
 
-      context '- In action <internal_similars_search> - check instances  ' do
+      context '- In action <internal_similars_search> - check instances  '  do
         it "- got values: log_connection_id, connected_users, current_user_id" do
           get :internal_similars_search
           # puts "In check instances :  currentuser_id = #{currentuser_id} \n"  # 1
@@ -273,7 +277,7 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
         end
       end
 
-      context '- After action <internal_similars_search>: check results got' do
+      context '- After action <internal_similars_search>: check results got'   do
         before {get :internal_similars_search}
 
         it '- tree_info: tree_is_profiles, tree_profiles_amount - Ok' do
@@ -310,7 +314,7 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
 
       end
 
-      context '- After action <internal_similars_search>: check SimilarsFound' do
+      context '- After action <internal_similars_search>: check SimilarsFound'   do
         it '- in SimilarsFound stored 2 rows of good sims pairs & first row - Ok' do
           get :internal_similars_search
           sims_count =  SimilarsFound.all.count
@@ -333,12 +337,12 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
 
     end
 
-    describe 'GET #connect_similars'   do # ,focus: true
+    describe 'GET #connect_similars'  do # ,focus: true
       let(:first_init_profile) {81}
       let(:second_init_profile) {70}
       let(:log_connection_id) {1}
 
-      describe '- Before action #connect_similars'    do # , focus: true
+      describe '- Before action #connect_similars'   do # , focus: true
         # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
         # profiles_to_destroy = connection_data[:profiles_to_destroy]
         # who_connect         = connection_data[:who_connect]
@@ -346,7 +350,7 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
         # current_user_id     = connection_data[:current_user_id]
         # user_id             = connection_data[:user_id]
         # connection_id       = connection_data[:connection_id]
-        context '- check User ' do
+        context '- check User '  do
           it '- in User_2 profile_id before changed - Ok' do
             puts "Check before #connect_similars \n"
             puts "check User \n"
@@ -357,7 +361,7 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
           end
         end
 
-        context '- check Profile' do
+        context '- check Profile'  do
           # let(:connected_users) { current_user.get_connected_users }
           it '- in Profile - before profiles rows changed - Ok' do
             user_2 = User.find(connected_users[1])
@@ -370,7 +374,7 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
           end
         end
 
-        context '- check SimilarsLog for Tree' do
+        context '- check SimilarsLog for Tree'  do
           let(:table_name) { Tree.table_name }
           it '- before action <connect_similars> got Empty array of [rows_ids] from Tree logs - Ok' do
             puts "check SimilarsLog for Tree\n"
@@ -406,15 +410,18 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
 
       end
 
-      describe '- After action #connect_similars'   do  # , focus: true
-        before { get :internal_similars_search
-        get :connect_similars,
-            first_profile_id: first_init_profile, second_profile_id: second_init_profile,
-            :format => 'js' }
-        after { get :disconnect_similars, log_connection_id: log_connection_id, :format => 'js' }
+      describe '- After action #connect_similars'   do  # , focus: true   , disable: true
+        before {
+          get :internal_similars_search
+          get :connect_similars,
+              first_profile_id: first_init_profile, second_profile_id: second_init_profile,
+              :format => 'js'
+        }
+        after { get :disconnect_similars, log_connection_id: log_connection_id,
+        :format => 'js' }
 
-        context '- check instances '  do
-          it "- got values: init_hash" do
+        context '- check instances '   do
+          it "- got values: init_hash"    do
             puts "After #connect_similars check instances\n"
             puts "check init_hash \n"
             expect(assigns(:init_hash)).to eq( {81=>70, 82=>79, 83=>80, 67=>78, 84=>66} )
@@ -424,17 +431,17 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
             # puts "in check instances After: Profile.find(84).name_id = #{Profile.find(84).name_id.inspect} \n"  # id = 84
           end
 
-          it "- got values: profiles_to_rewrite, profiles_to_destroy" do
+          it "- got values: profiles_to_rewrite, profiles_to_destroy"   do
             puts "check: profiles_to_rewrite, profiles_to_destroy \n"
             expect(assigns(:profiles_to_rewrite)).to eq( [81, 82, 83, 67, 84] )
             expect(assigns(:profiles_to_destroy)).to eq( [70, 79, 80, 78, 66] )
           end
 
-          it '- SimilarsLog got rows count - Ok' do
+          it '- SimilarsLog got rows count - Ok'   do
             logs_count =  SimilarsLog.all.count
             puts "check: SimilarsLog \n"
             # puts "After action <connect_similars> check SimilarsLog count rows: logs_count = #{logs_count.inspect} \n"
-            expect(logs_count).to eq(82) # got 82 rows of similars connecting logs
+            expect(logs_count).to eq(83) # got 82 rows of similars connecting logs
           end
 
           it '- log connected_at in SimilarsLog - Ok' do
@@ -473,7 +480,7 @@ describe SimilarsController, :type => :controller  , disable: true  do  # , focu
 
       end
 
-      context '- After action <connect_similars>: check User' do
+      context '- After action <connect_similars>: check User'  do
         let(:user_2) {User.find(2)}
         before { get :internal_similars_search
         get :connect_similars,

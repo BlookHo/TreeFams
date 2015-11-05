@@ -2,53 +2,53 @@ require 'rails_helper'
 
 RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disabled=>true
 
-#   describe '- Validation' do
-#     describe '- on create' do  #  , focus: true
-#
-#       context '- valid connected_users' do
-#         let(:good_connected_users) {FactoryGirl.build(:connected_user, :correct)}
-#         it '- 1. Saves a valid good_connected_users pair' do
-#           puts " Model ConnectedUser validation "
-#           expect(good_connected_users).to be_valid
-#         end
-#         let(:good_connected_users_2) {FactoryGirl.build(:connected_user, :big_IDs)}
-#         it '- 2. Saves a valid connected_users pair - big IDs' do
-#           expect(good_connected_users_2).to be_valid
-#         end
-#       end
-#
-#       context '- Invalid connected_users pairs' do
-#         let(:bad_connected_users_1) {FactoryGirl.build(:connected_user, :user_id_nil)}
-#         it '- 1. Does not save an invalid connected_users pair - user_id_nil' do
-#           expect(bad_connected_users_1).to_not be_valid
-#         end
-#         let(:bad_connected_users_2) {FactoryGirl.build(:connected_user, :ids_equal)}
-#         it '- 2. Does not save an invalid connected_users pair - equal Profile_IDs' do
-#           expect(bad_connected_users_2).to_not be_valid
-#         end
-#         let(:bad_connected_users_3) {FactoryGirl.build(:connected_user, :one_id_less_zero)}
-#         it '- 3. Does not save an invalid connected_users pair - one_id_less_zero' do
-#           expect(bad_connected_users_3).to_not be_valid
-#         end
-#         let(:bad_connected_users_4) {FactoryGirl.build(:connected_user, :other_id_less_zero)}
-#         it '- 4. Does not save an invalid connected_users pair - other_id_less_zero' do
-#           expect(bad_connected_users_4).to_not be_valid
-#         end
-#         let(:bad_connected_users_5) {FactoryGirl.build(:connected_user, :one_id_Uninteger)}
-#         it '- 5. Does not save an invalid connected_users pair - one_id_Uninteger' do
-#           expect(bad_connected_users_5).to_not be_valid
-#         end
-#       end
-#
-#       context '- invalid connected_users rows' do
-#         let(:bad_profiles_fields_are_equal) {FactoryGirl.build(:connected_user, :bad_profiles_fields_eual)}
-#         it '- 1 Dont save: - bad_profiles_fields - equal' do
-#           expect(bad_profiles_fields_are_equal).to_not be_valid
-#         end
-#       end
-#     end
-#   end
-#
+  describe '- Validation'   do
+    describe '- on create' do  #  , focus: true
+
+      context '- valid connected_users' do
+        let(:good_connected_users) {FactoryGirl.build(:connected_user, :correct)}
+        it '- 1. Saves a valid good_connected_users pair' do
+          puts " Model ConnectedUser validation "
+          expect(good_connected_users).to be_valid
+        end
+        let(:good_connected_users_2) {FactoryGirl.build(:connected_user, :big_IDs)}
+        it '- 2. Saves a valid connected_users pair - big IDs' do
+          expect(good_connected_users_2).to be_valid
+        end
+      end
+
+      context '- Invalid connected_users pairs' do
+        let(:bad_connected_users_1) {FactoryGirl.build(:connected_user, :user_id_nil)}
+        it '- 1. Does not save an invalid connected_users pair - user_id_nil' do
+          expect(bad_connected_users_1).to_not be_valid
+        end
+        let(:bad_connected_users_2) {FactoryGirl.build(:connected_user, :ids_equal)}
+        it '- 2. Does not save an invalid connected_users pair - equal Profile_IDs' do
+          expect(bad_connected_users_2).to_not be_valid
+        end
+        let(:bad_connected_users_3) {FactoryGirl.build(:connected_user, :one_id_less_zero)}
+        it '- 3. Does not save an invalid connected_users pair - one_id_less_zero' do
+          expect(bad_connected_users_3).to_not be_valid
+        end
+        let(:bad_connected_users_4) {FactoryGirl.build(:connected_user, :other_id_less_zero)}
+        it '- 4. Does not save an invalid connected_users pair - other_id_less_zero' do
+          expect(bad_connected_users_4).to_not be_valid
+        end
+        let(:bad_connected_users_5) {FactoryGirl.build(:connected_user, :one_id_Uninteger)}
+        it '- 5. Does not save an invalid connected_users pair - one_id_Uninteger' do
+          expect(bad_connected_users_5).to_not be_valid
+        end
+      end
+
+      context '- invalid connected_users rows' do
+        let(:bad_profiles_fields_are_equal) {FactoryGirl.build(:connected_user, :bad_profiles_fields_eual)}
+        it '- 1 Dont save: - bad_profiles_fields - equal' do
+          expect(bad_profiles_fields_are_equal).to_not be_valid
+        end
+      end
+    end
+  end
+
   describe '- CHECK in ConnectedUser Model methods'   do  # , focus: true
 
     # create model data
@@ -543,36 +543,37 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
           ConnectionRequest.create_requests(with_whom_connect_ids, max_connection_id, current_user_id )
         }
 
-        describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok' do
+        describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok'   do
           let(:rows_qty) {6}
           it_behaves_like :successful_connection_request_rows_count
         end
 
-        describe '- check SearchResults have rows count after <search> - Ok' do
+        describe '- check SearchResults have rows count after <search> - Ok'  do
           let(:rows_qty) {3}
           it_behaves_like :successful_search_results_rows_count
         end
 
-        it '- check SearchResults Third row - made by Method Search - Ok' do # , focus: true
-          search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
-                                                                        'searched_profile_ids')
-          expect(search_results_fields).to eq({"id"=>3, "user_id"=>3, "found_user_id"=>2, "profile_id"=>23,
-                                               "found_profile_id"=>12, "count"=>7, "counts"=>[7, 7, 7, 5, 5, 5, 5],
-                                               "connection_id"=>nil, "pending_connect"=>1} )
+        context '- Check SearchResults after <start_search> - '   do
+          it '- check SearchResults Third row - made by Method Search - Ok'  do # , focus: true
+            search_results_fields = SearchResults.third.attributes.except('created_at','updated_at','found_profile_ids',
+                                                                          'searched_profile_ids')
+            expect(search_results_fields).to eq({"id"=>3, "user_id"=>3, "found_user_id"=>2, "profile_id"=>23,
+                                                 "found_profile_id"=>12, "count"=>7, "counts"=>[7, 7, 7, 7, 5, 5, 5, 5],
+                                                 "connection_id"=>nil, "pending_connect"=>1} )
+          end
+          it '- check SearchResults Third row.found_profile_ids - made by Method Search - Ok' do
+            search_results_fields = SearchResults.third.found_profile_ids.sort
+            expect(search_results_fields).to eq( [11, 12, 13, 14, 18, 19, 20, 21])
+          end
+          it '- check SearchResults Third row.searched_profile_ids - made by Method Search - Ok' do
+            search_results_fields = SearchResults.third.searched_profile_ids.sort
+            expect(search_results_fields).to eq( [22, 23, 24, 25, 26, 27, 28, 29])
+          end
+          it '- check SearchResults Third row.counts - made by Method Search - Ok' do
+            search_results_fields = SearchResults.third.counts.sort
+            expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7, 7])
+          end
         end
-        it '- check SearchResults Third row.found_profile_ids - made by Method Search - Ok' do
-          search_results_fields = SearchResults.third.found_profile_ids.sort
-          expect(search_results_fields).to eq( [11, 12, 13, 18, 19, 20, 21])
-        end
-        it '- check SearchResults Third row.searched_profile_ids - made by Method Search - Ok' do
-          search_results_fields = SearchResults.third.searched_profile_ids.sort
-          expect(search_results_fields).to eq( [23, 24, 25, 26, 27, 28, 29])
-        end
-        it '- check SearchResults Third row.counts - made by Method Search - Ok' do
-          search_results_fields = SearchResults.third.counts.sort
-          expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7])
-        end
-
     end
 
   end

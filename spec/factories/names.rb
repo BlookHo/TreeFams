@@ -1,4 +1,18 @@
+require 'faker'
+
 FactoryGirl.define do
+
+  factory :test_model_name, class: Name do |f|
+    f.id {Faker::Number.number(3)}
+    f.name { Faker::Name.first_name }
+    f.only_male { [true, false].sample }
+    f.name_freq { Faker::Number.number(6) }
+    f.is_approved { [true, false].sample }
+    f.sex_id {Faker::Number.between(0, 1)}
+    # f.parent_name_id { Faker::Number.number(3) }
+    # f.search_name_id {Faker::Number.number(3)}
+  end
+
 
   factory :name  do
 

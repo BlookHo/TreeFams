@@ -1,7 +1,8 @@
 FactoryGirl.define do
-  factory :counter do
-    invites 1
-    disconnects 1
+
+  factory :counter, class: Counter  do |f|
+    f.invites { Faker::Number.number(5) }
+    f.disconnects { Faker::Number.number(5) }
   end
 
 end

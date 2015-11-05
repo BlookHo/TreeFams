@@ -1,18 +1,20 @@
 FactoryGirl.define do
-  factory :weafam_stat do
-    users 1
-users_male 1
-users_female 1
-profiles 1
-profiles_male 1
-profiles_female 1
-trees 1
-invitations 1
-requests 1
-connections 1
-refuse_requests 1
-disconnections 1
-similars_found 1
+
+  factory :weafam_stat, class: WeafamStat  do |f|
+    f.users { Faker::Number.number(5) }
+    f.users_male { Faker::Number.number(5) }
+    f.users_female { Faker::Number.number(5) }
+    f.profiles { Faker::Number.number(5) }
+    f.profiles_male { Faker::Number.number(5) }
+    f.profiles_female { Faker::Number.number(5) }
+    f.trees { Faker::Number.number(5) }
+    f.invitations { Faker::Number.number(5) }
+    f.requests { Faker::Number.number(5) }
+    f.connections { Faker::Number.number(5) }
+    f.refuse_requests { Faker::Number.number(5) }
+    f.disconnections { Faker::Number.number(5) }
+    f.similars_found { Faker::Number.number(5) }
   end
+
 
 end

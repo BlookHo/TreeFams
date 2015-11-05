@@ -544,10 +544,6 @@ RSpec.describe User, :type => :model   do  # , focus: true
       FactoryGirl.create(:connection_request, :conn_request_3_1)    #
       FactoryGirl.create(:connection_request, :conn_request_3_2)    #
 
-      #     FactoryGirl.create(:common_log, :log_delete_profile_89)    #
-      #     FactoryGirl.create(:common_log, :log_delete_profile_90)    #
-      #     FactoryGirl.create(:common_log, :log_add_profile_172)    #
-      #     FactoryGirl.create(:common_log, :log_add_profile_173)    #
     }
 
     after {
@@ -563,8 +559,6 @@ RSpec.describe User, :type => :model   do  # , focus: true
       Profile.reset_pk_sequence
       ProfileKey.delete_all
       ProfileKey.reset_pk_sequence
-      # WeafamSetting.delete_all
-      # WeafamSetting.reset_pk_sequence
       Name.delete_all
       Name.reset_pk_sequence
       ConnectionLog.delete_all
@@ -582,7 +576,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
     let(:currentuser_id) {current_user_1.id}  # id = 1
     let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
 
-    context '- before actions - check connected_users' do
+    context '- before actions - check connected_users'    do
       it "- Return proper connected_users Array result for current_user_id = 1" do
         puts "Let created: currentuser_id = #{currentuser_id} \n"   # 1
         puts "Check ConnectedUser Model methods \n"
@@ -594,7 +588,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
         expect(connected_users).to eq([1,2])
       end
     end
-    context '- before actions - check tables values '   do   #   , focus: true
+    context '- before actions - check tables values '  do   #   , focus: true
       describe '- check User have double == 0 before - Ok' do
         it "- current_user.double == 0 check" do
           puts "Let created: current_user_1.double = #{current_user_1.double} \n"   # 0
@@ -621,10 +615,15 @@ RSpec.describe User, :type => :model   do  # , focus: true
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
       end
+      describe '- check ConnectionRequest have rows count before - Ok' do
+        let(:rows_qty) {4}
+        it_behaves_like :successful_connection_request_rows_count
+      end
+
     end
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok' , focus: true do  # , focus: true
+    describe '- check User model Method <Search> - Ok'  do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -856,7 +855,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
+    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
       describe '- check SearchResults have rows count after <search> - Ok' do
@@ -916,14 +915,14 @@ RSpec.describe User, :type => :model   do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check User model Method <complete_search> - Ok'    do  # , focus: true
+    describe '- check User model Method <complete_search> - Ok'   do  # , focus: true
 
       # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
       context '- when valid complete_search_data' do
         let(:complete_search_data) { {
             :with_whom_connect => [3],
-            :uniq_profiles_pairs => { #15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
-                                      # 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
+            :uniq_profiles_pairs => { 15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
+                                      11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
                                      20=>{3=>28} }#,
                                      # 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} }  #,
                                      # 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
@@ -931,11 +930,19 @@ RSpec.describe User, :type => :model   do  # , focus: true
 
         let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
+        # let(:compare_circles_data) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Valid Complete search result: final_connection_hash after <complete_search>" do
           puts "In User model: final_connection_hash = #{final_connection_hash} \n"
           expect(final_connection_hash).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
         end
+
+        # it "- Check Valid Complete search result: compare_circles_data after <complete_search>" do
+        #   puts "In User model: compare_circles_data = #{compare_circles_data} \n"
+        #   expect(compare_circles_data).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
+        # end
+
+
       end
 
       context '- when Invalid complete_search_data - with_whom_connect: wrong = [4]' do
@@ -965,7 +972,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
     #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
     # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
     # :current_user_id=>1, :user_id=>3, :connection_id=>3}
-    describe '- check User model Method < check_connection_arrs(connection_data )>'  do  # , focus: true
+    describe '- check User model Method < check_connection_arrs(connection_data )>'   do  # , focus: true
       context '- when valid connection_data' do
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
@@ -1215,9 +1222,12 @@ RSpec.describe User, :type => :model   do  # , focus: true
           it_behaves_like :successful_connection_logs_rows_count
         end
 
-        describe '- check ConnectionLog fields AFTER <connect_trees>'  do # , focus: true
-          let(:rewrite) {[14, 12, 13, 21, 19, 11, 20, 18]}
-          let(:overwrite) {[22, 23, 24, 29, 27, 25, 28, 26]}
+        describe '- check ConnectionLog fields AFTER <connect_trees>'   do # , focus: true
+          # let(:rewrite) {[14, 12, 13, 21, 19, 11, 20, 18]}
+          # let(:overwrite) {[22, 23, 24, 29, 27, 25, 28, 26]}
+          # todo: ??? organize arrays to be sorted before check ???
+          let(:rewrite) {[18, 13, 12, 20, 11, 19, 21, 14]}
+          let(:overwrite) {[26, 24, 23, 28, 25, 27, 29, 22]}
           let(:deleted) {[1,1,1,1,1,1,1,1]}
           it_behaves_like :successful_rewrite_arrays_logs_after_connect
         end

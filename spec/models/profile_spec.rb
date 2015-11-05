@@ -2,6 +2,50 @@ require 'rails_helper'
 
 RSpec.describe Profile, :type => :model   do # , focus: true
 
+  describe 'Model Profile Before methods validation test'   do # , focus: true
+    after {
+      Profile.delete_all
+      Profile.reset_pk_sequence
+    }
+
+    it "has a valid factory" do
+      puts " Model Profile validation - has a valid factory"
+      expect(FactoryGirl.create(:test_model_profile)).to be_valid
+    end
+
+    it "is invalid without a name_id" do
+      puts " Model Profile validation - invalid without a name_id"
+      expect(FactoryGirl.build(:test_model_profile, name_id: nil)).to_not be_valid
+    end
+
+    it "is invalid without a tree_id" do
+      puts " Model Profile validation - invalid without a tree_id"
+      expect(FactoryGirl.build(:test_model_profile, tree_id: nil)).to_not be_valid
+    end
+
+    context "test for correct values pair: name_id.sex_id & profile.sex_id " do
+      # let(:row_name) {FactoryGirl.create(:test_model_name)}
+      let(:row_profile) {FactoryGirl.create(:test_model_profile)}
+      it "is invalid with name_id.sex_id == 1 and profile.sex_id == 0" do
+        # puts " Model Name validation - name.id = #{row_name.id}"
+        # puts " Model Name validation - name.name = #{row_name.name}"
+
+        # puts " Model Profile validation - invalid with name_id.sex_id == 1 and profile.sex_id == 0"
+        # puts " Model Profile validation - profile.user_id = #{row.row}"
+        puts " Model Profile validation - profile.user_id = #{row_profile.user_id}"
+        puts  " Model Profile validation - profile.name_id = #{row_profile.name_id}"
+        puts " Model Profile validation - profile.sex_id = #{row_profile.sex_id}"
+        # puts " Model Profile validation - profile.deleted = #{row_profile.deleted}"
+        # puts " Model Profile validation - profile.tree_id = #{row_profile.tree_id}"
+      end
+    end
+
+    # it "returns a valid name_id: name_id.sex_id == 1 and profile.sex_id == 1 as a integer"
+
+
+  end
+
+
   describe '- validation' do
     describe '- on create' do
       context '- valid profiles' do
@@ -45,8 +89,6 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         #Name - for profile = 85
         FactoryGirl.create(:name, :name_370)   # Петр
       }
-
-
 
       let(:base_profile_85) { create(:add_profile, :add_profile_85) }  # User = 9. Tree = 9. profile_id = 85
 

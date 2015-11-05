@@ -1,7 +1,18 @@
 module SearchComplete
   extend ActiveSupport::Concern
 
-  # @note: NEW METHOD "HARD COMPLETE SEARCH"- TO DO
+  #############################################################
+  # Иванищев А.В. 2014 -2015
+  # Метод Полного поиска - перед объединением
+  #############################################################
+  # Осуществляет поиск совпадений в деревьях, расчет результатов и сохранение в БД
+  # @note: Here is the storage of SearchComplete class methods
+  #   to evaluate data to be stored
+  #   as proper search results and update search data
+  #############################################################
+
+
+  # @note: METHOD " SEARCH COMPLETE "
   #   сбор полных достоверных пар профилей для объединения
   #   Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
   # @param:
@@ -13,9 +24,9 @@ module SearchComplete
   #   12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156},
   #   124=>{9=>91}, 18=>{3=>26}}
   # Output:
-  #  profiles_to_rewrite = [14, 21, 19, 11, 20, 12, 13, 18]
-  #  profiles_to_destroy = [22, 29, 27, 25, 28, 23, 24, 26]
-
+  #  final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} (pid:4353)
+  #   ( profiles_to_rewrite = [14, 21, 19, 11, 20, 12, 13, 18]
+  #   profiles_to_destroy = [22, 29, 27, 25, 28, 23, 24, 26] )
   def complete_search(complete_search_data)
     logger.info "** IN complete_search Module *** "
     with_whom_connect_users_arr = complete_search_data[:with_whom_connect]
@@ -26,111 +37,144 @@ module SearchComplete
     # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}
 
     final_connection_hash = {}
-    if !init_connection_hash.empty?
-
-      final_connection_hash = init_connection_hash
-
-      # начало сбора полного хэша достоверных пар профилей для объединения
-      until init_connection_hash.empty?
-        logger.info "** IN UNTIL top: init_connection_hash = #{init_connection_hash}"
-
-        # get new_hash for connection
-        add_connection_hash = {}
-        init_connection_hash.each do |profile_searched, profile_found|
-
-          new_connection_hash = {}
-          # Получение Кругов для пары профилей - для последующего сравнения и анализа
-          search_bk_arr, search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
-          found_bk_arr, found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
-          logger.info " "
-          logger.info " search_is_profiles_arr = #{search_is_profiles_arr}, found_is_profiles_arr = #{found_is_profiles_arr} "
-
-          ## Проверка Кругов на дубликаты
-          #search_diplicates_hash = find_circle_duplicates(search_bk_profiles_arr)
-          #found_diplicates_hash = find_circle_duplicates(found_bk_profiles_arr)
-          ## Действия в случае выявления дубликатов в Круге
-          #if !search_diplicates_hash.empty?
-          #
-          #end
-          #if !found_diplicates_hash.empty?
-          #
-          #end
-
-          # Сравнение двух Кругов пары профилей Если: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
-          logger.info " compare_two_circles: ИСКОМОГО ПРОФИЛЯ = #{profile_searched} и НАЙДЕННОГО ПРОФИЛЯ = #{profile_found}:"
-          compare_rezult, common_circle_arr, delta = compare_two_circles(found_bk_arr, search_bk_arr)
-          logger.info " compare_rezult = #{compare_rezult}"
-          logger.info " ПЕРЕСЕЧЕНИЕ двух Кругов: common_circle_arr = #{common_circle_arr}"
-          logger.info " РАЗНОСТЬ двух Кругов: delta = #{delta}"
-
-          # Анализ результата сравнения двух Кругов
-          if !common_circle_arr.blank? # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
-            new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
-          else
-            # @@@@@ NB !! Вставить проверку: Если Круги равны, И: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
-            # то формируем новый хэш из их профилей, КОТ-Е ТОЖЕ РАВНЫ
-            search_is_profiles_arr.each_with_index do | is_profile, index |
-              new_connection_hash.merge!(is_profile => found_is_profiles_arr[index])
-            end
-          end
-          logger.info " После сравнения Кругов: new_connection_hash = #{new_connection_hash} "
-
-          # сокращение нового хэша если его эл-ты уже есть в финальном хэше
-          # NB !! Вставить проверку: Если нет такой комбинации: k == profiles_s && v == profile_f
-          # а есть: k == profiles_s && v != profile_f (?) возможно ли это? Что возвратит delete_if?.
-          # и действия
-          final_connection_hash.each do |profiles_s, profile_f|
-            new_connection_hash.delete_if { |k,v|  k == profiles_s && v == profile_f }
-          end
-
-          # накапливание нового доп.хаша по всему циклу
-          logger.info " after delete_if in new_connection_hash = #{new_connection_hash} "
-          # add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.empty?
-          add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.blank?
-          # check if new_connection_hash != nil?
-          logger.info " add_connection_hash = #{add_connection_hash} "
-        end
-
-        # Наращивание финального хэша пар профилей для объединения, если есть чем наращивать
-        unless add_connection_hash.empty?
-          add_to_hash(final_connection_hash, add_connection_hash)
-          logger.info "@@@@@ final_connection_hash = #{final_connection_hash} "
-        end
-
-        # Подготовка к следующему циклу
-        init_connection_hash = add_connection_hash
-      end
-
-      logger.info "final_connection_hash = #{final_connection_hash} "
-      logger.info " "
-      # final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} (pid:4353)
+    unless init_connection_hash.empty?
+      final_connection_hash = init_connection_modify(init_connection_hash)
+      puts "final_connection_hash = #{final_connection_hash} "
     end
-
     final_connection_hash
   end
 
 
-  # Получение стартового Хэша для объединения профилей на основе:
+  # @note: init_hash iterate to collect final_connection_hash
+  # final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} # In Spec
+  def init_connection_modify(init_connection_hash)
+    final_connection_hash = init_connection_hash
+    # начало сбора полного хэша достоверных пар профилей для объединения
+    until init_connection_hash.empty?
+      logger.info "** IN UNTIL top: init_connection_hash = #{init_connection_hash}"
+      add_connection_hash = collect_add_connection(init_connection_hash, final_connection_hash)
+
+      add_to_hash_data = { add_connection_hash: add_connection_hash, final_connection_hash: final_connection_hash }
+      final_connection_hash = SearchWork.collect_final_connection(add_to_hash_data)
+      puts "@@@@@ final_connection_hash = #{final_connection_hash} "
+
+      # Подготовка к следующему циклу
+      init_connection_hash = add_connection_hash
+    end
+    final_connection_hash
+  end
+
+
+  # @note: init_hash iterate to collect_add_connection
+  def collect_add_connection(init_connection_hash, final_connect_hash)
+    add_connection_hash = {}
+
+    init_connection_hash.each do |profile_searched, profile_found|
+      new_connection_hash = {}
+
+      # Получение Кругов для пары профилей - для последующего сравнения и анализа
+      logger.info "=== КРУГИ ПРОФИЛЕЙ: profile_searched = #{profile_searched}, profile_found = #{profile_found}"
+      circles_arrs_data = SearchCircles.find_circles_arrs(profile_searched, profile_found)
+      search_bk_arr          = circles_arrs_data[:search_bk_arr]
+      search_bk_profiles_arr = circles_arrs_data[:search_bk_profiles_arr]
+      search_is_profiles_arr = circles_arrs_data[:search_is_profiles_arr]
+      found_bk_arr           = circles_arrs_data[:found_bk_arr]
+      found_bk_profiles_arr  = circles_arrs_data[:found_bk_profiles_arr]
+      found_is_profiles_arr  = circles_arrs_data[:found_is_profiles_arr]
+
+      ## Проверка Кругов на дубликаты
+      # search_diplicates_hash = find_circle_duplicates(search_bk_profiles_arr)
+      #found_diplicates_hash = find_circle_duplicates(found_bk_profiles_arr)
+      ## Действия в случае выявления дубликатов в Круге
+      #if !search_diplicates_hash.empty?
+      #
+      #end
+      #if !found_diplicates_hash.empty?
+      #
+      #end
+
+      compare_circles_data = {
+          profile_searched: profile_searched,
+          profile_found: profile_found,
+          found_bk_arr: found_bk_arr,
+          search_bk_arr: search_bk_arr,
+          found_bk_profiles_arr: found_bk_profiles_arr,
+          search_bk_profiles_arr: search_bk_profiles_arr,
+          found_is_profiles_arr: found_is_profiles_arr,
+          search_is_profiles_arr: search_is_profiles_arr,
+          final_connection_hash: final_connect_hash,
+          new_connection_hash: new_connection_hash
+      }
+      # puts " После сравнения Кругов: compare_circles_data = #{compare_circles_data} "
+      new_connection_hash = collect_new_connection_hash(compare_circles_data)
+
+      # накапливание нового доп.хаша по всему циклу
+      # add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.blank?
+      add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.empty?
+      logger.info " add_connection_hash = #{add_connection_hash} "
+    end
+    add_connection_hash
+  end
+
+
+  # @note: Collect new_connection_hash
+  def collect_new_connection_hash(compare_circles_data)
+    final_connection_hash = compare_circles_data[:final_connection_hash]
+    new_connection_hash = sequest_connection_hash(final_connection_hash,
+                                                  SearchCircles.proceed_compare_circles(compare_circles_data))
+    puts " after sequest_connection_hash: new_connection_hash = #{new_connection_hash} "
+    new_connection_hash
+  end
+
+
+  # @note: Collect new_connection_hash
+  # сокращение нового хэша если его эл-ты уже есть в финальном хэше
+  # NB !! Вставить проверку: Если нет такой комбинации: k == profiles_s && v == profile_f
+  # а есть: k == profiles_s && v != profile_f (?) возможно ли это? Что возвратит delete_if?.
+  # и действия
+  def sequest_connection_hash(final_conn_hash, new_connection_hash)
+    final_conn_hash.each do |profiles_s, profile_f|
+      new_connection_hash.delete_if { |k_conn,v_conn| k_conn == profiles_s && v_conn == profile_f }
+    end
+    new_connection_hash
+  end
+
+
+  # @note: Получение стартового Хэша для объединения профилей на основе:
   # uniq_profiles_pairs - хэша уникальных достоверных пар профилей,
   # полученных в рез-те отработки start_search
-  # connected_user - дерева(деревьев), с котороыми собираемся объединяться
+  # with_whom_connect_users - array дерева(деревьев), с котороыми собираемся объединяться
   # На выходе - init_connection_hash - Хэш достоверных пар профилей,
   # с которых начинается процесс жесткого определения полного набора соответствий между всеми профилями
   # объединяемых деревьев.
-  def init_connection_data(with_whom_connect_users_arr, uniq_profiles_pairs)
-    logger.info "with_whom_connect_users_arr = #{with_whom_connect_users_arr}, uniq_profiles_pairs = #{uniq_profiles_pairs}"
+  def init_connection_data(with_whom_connect_users, uniq_profiles_pairs)
+    logger.info "with_whom_connect_users_arr = #{with_whom_connect_users}, uniq_profiles_pairs = #{uniq_profiles_pairs}"
     init_connection_hash = {} # hash to work with
     uniq_profiles_pairs.each do |searched_profile, trees_hash|
-      #logger.info " searched_profile = #{searched_profile}, trees_hash = #{trees_hash}"
-      trees_hash.each do |tree_key, found_profile|
-        #logger.info " tree_key = #{tree_key}, found_profile = #{found_profile}"
-        # выбор результатов для дерева из with_whom_connect_users_arr
-        # перезапись в хэше под key = searched_profile
-        if with_whom_connect_users_arr.include?(tree_key) #
-          init_connection_hash.merge!( searched_profile => found_profile )
-          #logger.info " init_connection_hash = #{init_connection_hash}"
-        end
-      end
+    init_hash_data = {
+      trees_hash:              trees_hash,
+      init_connection_hash:    init_connection_hash,
+      searched_profile:        searched_profile,
+      with_whom_connect_users: with_whom_connect_users
+    }
+
+    init_connection_hash = collect_init_hash(init_hash_data)
+
+    end
+    init_connection_hash
+  end
+
+  # @note: выбор результатов для дерева из with_whom_connect_users_arr
+  # перезапись в хэше под key = searched_profile
+  def collect_init_hash(init_hash_data)
+
+    trees_hash              = init_hash_data[:trees_hash]
+    init_connection_hash    = init_hash_data[:init_connection_hash]
+    searched_profile        = init_hash_data[:searched_profile]
+    with_whom_connect_users = init_hash_data[:with_whom_connect_users]
+
+    trees_hash.each do |tree_key, found_profile|
+      init_connection_hash.merge!( searched_profile => found_profile ) if with_whom_connect_users.include?(tree_key)
     end
     init_connection_hash
   end

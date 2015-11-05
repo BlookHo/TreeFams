@@ -32,7 +32,7 @@ RSpec.describe ConnectionLog, type: :model  do  # , focus: true
   describe '- Validation' do
     describe '- on create' do
 
-      context '- valid connection_log'  do  # , focus: true
+      context '- valid connection_log'   do  # , focus: true
 
         let(:good_connections_log) {FactoryGirl.build(:connection_log)}
         it '- 1 Saves a valid connection_log' do
@@ -80,25 +80,25 @@ RSpec.describe ConnectionLog, type: :model  do  # , focus: true
           expect(good_connections_overwritten_nil).to be_valid
         end
 
-
-
       end
-      context '- invalid connection_log'  do  # , focus: true
 
-        let(:bad_connections_written_equal_overwritten) {FactoryGirl.build(:connection_log, :bad_written_and_overwritten)}
-        it '- 1 Dont save: - written_and_overwritten - equal' do
-          expect(bad_connections_written_equal_overwritten).to_not be_valid
-        end
 
-        let(:bad_connections_written_nil_table) {FactoryGirl.build(:connection_log, :bad_written_nil_table)}
-        it '- 2 Dont save: - written = nil: table = trees, user_id' do
-          expect(bad_connections_written_nil_table).to_not be_valid
-        end
+      context '- invalid connection_log'   do  # , focus: true
 
-        let(:bad_connections_written_nil_field) {FactoryGirl.build(:connection_log, :bad_written_nil_field)}
-        it '- 3 Dont save: - written = nil: table = profiles, wrong field = profile_id' do
-          expect(bad_connections_written_nil_field).to_not be_valid
-        end
+        # let(:bad_connections_written_equal_overwritten) {FactoryGirl.build(:connection_log, :bad_written_and_overwritten)}
+        # it '- 1 Dont save: - written_and_overwritten - equal' , focus: true do
+        #   expect(bad_connections_written_equal_overwritten).to_not be_valid
+        # end
+        #
+        # let(:bad_connections_written_nil_table) {FactoryGirl.build(:connection_log, :bad_written_nil_table)}
+        # it '- 2 Dont save: - written = nil: table = trees, user_id' do
+        #   expect(bad_connections_written_nil_table).to_not be_valid
+        # end
+        #
+        # let(:bad_connections_written_nil_field) {FactoryGirl.build(:connection_log, :bad_written_nil_field)}
+        # it '- 3 Dont save: - written = nil: table = profiles, wrong field = profile_id' do
+        #   expect(bad_connections_written_nil_field).to_not be_valid
+        # end
 
         let(:bad_connections_table_tree_wrong_field) {FactoryGirl.build(:connection_log, :bad_table_tree_and_field)}
         it '- 4 Dont save: - wrong_field for table tree' do
@@ -130,14 +130,13 @@ RSpec.describe ConnectionLog, type: :model  do  # , focus: true
           expect(bad_connections_overwritten_nil_field).to_not be_valid
         end
 
-
       end
 
     end
 
   end
 
-  describe '- Model ConnectionLog methods' do
+  describe '- Model ConnectionLog methods'    do
 
     # create users
     let(:user) {FactoryGirl.create(:user)}
@@ -159,14 +158,7 @@ RSpec.describe ConnectionLog, type: :model  do  # , focus: true
       FactoryGirl.create(:connection_log, :connections_log_4, current_user_id: third_user_id)
       FactoryGirl.create(:connection_log, :connections_log_5, current_user_id: third_user_id)
     end
-    #<SimilarsLog id: 754, connected_at: 25, current_user_id: 5, table_name: "users", table_row: 5, field: "profile_id", written: 52, overwritten: 34, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
-    #<SimilarsLog id: 755, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 52, field: "user_id", written: 5, overwritten: nil, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
-    #<SimilarsLog id: 756, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 52, field: "tree_id", written: 5, overwritten: 4, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">,
-    #<SimilarsLog id: 757, connected_at: 25, current_user_id: 5, table_name: "profiles", table_row: 34, field: "user_id", written: nil, overwritten: 5, created_at: "2015-01-26 18:08:49", updated_at: "2015-01-26 18:08:49">
 
-    # from similars_start.rb#start_similars
-    # from similars_controller.rb#internal_similars_search
-    # from home_controller.rb#index
     describe '* current_tree_log_id *' do
 
       context '- test log_connection_id' do
@@ -201,7 +193,7 @@ RSpec.describe ConnectionLog, type: :model  do  # , focus: true
 
     end
 
-    describe '* store connection logs* - valid build' do
+    describe '* store connection logs* - valid build'   do # , focus: true
 
       before do
         ConnectionLog.delete_all
@@ -210,20 +202,20 @@ RSpec.describe ConnectionLog, type: :model  do  # , focus: true
       end
       let(:first_row) { ConnectionLog.first}
       context '- Check table_row to be stored' do
-        let(:second_row) { FactoryGirl.build(:connection_log, :connections_log_table_row_2, current_user_id: current_user_id)}
+        let(:one_second_row) { FactoryGirl.build(:connection_log, :connections_log_table_row_2, current_user_id: current_user_id)}
         it '- table_rows CAN BE equal for two specific rows' do
           # puts "1. first_row = #{first_row.inspect} \n"
-          # puts "2. second_row = #{second_row.inspect} "
-          expect(second_row).to be_valid #
+          # puts "2. second_row = #{one_second_row.inspect} "
+          expect(one_second_row).to be_valid #
         end
       end
 
       context '- Check table_row to be stored' do
-        let(:third_row) { FactoryGirl.build(:connection_log, :connections_log_table_row_3, current_user_id: current_user_id)}
+        let(:other_second_row) { FactoryGirl.build(:connection_log, :connections_log_table_row_3, current_user_id: current_user_id)}
         it '- table_rows CAN NOT BE equal for two specific rows' do
-          # puts "1. first_row = #{first_row.inspect} \n"
-          # puts "3. third_row = #{third_row.inspect} "
-          expect(third_row).to_not be_valid #
+          puts "1. first_row = #{first_row[:table_row].inspect} \n"
+          puts "3. other_row = #{other_second_row[:table_row].inspect} "
+          expect(other_second_row).to_not be_valid #
         end
       end
 

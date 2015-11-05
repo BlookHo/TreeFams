@@ -86,8 +86,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 #{user_id: 1, profile_id: 6, name_id: 295, relation_id: 13, is_profile_id: 2, is_name_id: 75 },
 #{user_id: 1, profile_id: 6, name_id: 295, relation_id: 14, is_profile_id: 3, is_name_id: 362 },
 
-
-
 # Tree 2, Pfoile 7 - Author - Денис - 
 # NearCircle
 {user_id: 2, profile_id: 7, name_id: 97, relation_id: 1, is_profile_id: 8, is_name_id: 45 },
@@ -245,9 +243,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 
 #{user_id: 4, profile_id: 85 , name_id: 352, relation_id: 1, is_profile_id: 25, is_name_id: 97 },
 #{user_id: 4, profile_id: 85 , name_id: 352, relation_id: 2, is_profile_id: 84, is_name_id: 371 },
-
-
-
 
 # Tree 5, Pfoile 27 - Author - Виктория
 # NearCircle
@@ -441,8 +436,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 8, profile_id: 58, name_id: 521, relation_id: 5, is_profile_id: 55, is_name_id: 45 },
 {user_id: 8, profile_id: 58, name_id: 521, relation_id: 6, is_profile_id: 57, is_name_id: 453 },
 
-
-
 # Tree 9, Pfoile 59 - Author - Анна
 {user_id: 9, profile_id: 59, name_id: 352, relation_id: 1, is_profile_id: 60, is_name_id: 97 },
 {user_id: 9, profile_id: 59, name_id: 352, relation_id: 2, is_profile_id: 61, is_name_id: 371 },
@@ -459,8 +452,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 9, profile_id: 62, name_id: 477, relation_id: 1, is_profile_id: 60, is_name_id: 97 },
 {user_id: 9, profile_id: 62, name_id: 477, relation_id: 2, is_profile_id: 61, is_name_id: 371 },
 {user_id: 9, profile_id: 62, name_id: 477, relation_id: 6, is_profile_id: 59, is_name_id: 352 },
-
-
 
 # Tree 10, Pfoile 63 - Author - Ольга
 {user_id: 10, profile_id: 63, name_id: 477, relation_id: 1, is_profile_id: 64, is_name_id: 102 },
@@ -486,8 +477,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 10, profile_id: 68, name_id: 371, relation_id: 2, is_profile_id: 63, is_name_id: 477 },
 {user_id: 10, profile_id: 68, name_id: 371, relation_id: 1, is_profile_id: 66, is_name_id: 123 },
 {user_id: 10, profile_id: 68, name_id: 371, relation_id: 5, is_profile_id: 67, is_name_id: 265 },
-
-
 
 # Tree 11, Pfoile 69 - Author - Сергей
 {user_id: 11, profile_id: 69, name_id: 265, relation_id: 1, is_profile_id: 70, is_name_id: 123 },
@@ -530,8 +519,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 11, profile_id: 76, name_id: 453, relation_id: 5, is_profile_id: 74, is_name_id: 97 },
 {user_id: 11, profile_id: 76, name_id: 453, relation_id: 5, is_profile_id: 75, is_name_id: 212 },
 
-
-
 # Tree 12, Pfoile 77 - Author - Елена
 {user_id: 12, profile_id: 77, name_id: 395, relation_id: 1, is_profile_id: 78, is_name_id: 98 },
 {user_id: 12, profile_id: 77, name_id: 395, relation_id: 2, is_profile_id: 79, is_name_id: 467 },
@@ -565,8 +552,6 @@ ProfileKey.create!([          # create! - для сообщений об оши�
 {user_id: 12, profile_id: 83, name_id: 453, relation_id: 1, is_profile_id: 80, is_name_id: 265 },
 {user_id: 12, profile_id: 83, name_id: 453, relation_id: 5, is_profile_id: 81, is_name_id: 97 },
 {user_id: 12, profile_id: 83, name_id: 453, relation_id: 5, is_profile_id: 82, is_name_id: 212 }
-
-
 
                    ])
 
