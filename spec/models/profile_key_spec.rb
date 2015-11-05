@@ -237,20 +237,20 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
       # FactoryGirl.create(:profile_key, :profile_key9_add_18)   # 87
       FactoryGirl.create(:profile_key, :profile_key9_add_19) # before
       FactoryGirl.create(:profile_key, :profile_key9_add_20) # before
-      FactoryGirl.create(:profile_key, :profile_key9_add_21) # before
-      FactoryGirl.create(:profile_key, :profile_key9_add_22) # before
-      # FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86
-      # FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 86
-      # FactoryGirl.create(:profile_key, :profile_key9_add_25)   # 87
-      # FactoryGirl.create(:profile_key, :profile_key9_add_26)   # 87
-      FactoryGirl.create(:profile_key, :profile_key9_add_27) # before
-      FactoryGirl.create(:profile_key, :profile_key9_add_28) # before
-      FactoryGirl.create(:profile_key, :profile_key9_add_29) # before
-      FactoryGirl.create(:profile_key, :profile_key9_add_30) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_21) # before # deleted: 1 85-90
+      FactoryGirl.create(:profile_key, :profile_key9_add_22) # before # deleted: 1 90-85
+      # FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86 # deleted: 1
+      # FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 86 # deleted: 1
+      # FactoryGirl.create(:profile_key, :profile_key9_add_25)   # 87 # deleted: 1
+      # FactoryGirl.create(:profile_key, :profile_key9_add_26)   # 87 # deleted: 1
+      FactoryGirl.create(:profile_key, :profile_key9_add_27) # before # deleted: 1 88-90
+      FactoryGirl.create(:profile_key, :profile_key9_add_28) # before # deleted: 1
+      FactoryGirl.create(:profile_key, :profile_key9_add_29) # before # deleted: 1 89-90
+      FactoryGirl.create(:profile_key, :profile_key9_add_30) # before # deleted: 1
       FactoryGirl.create(:profile_key, :profile_key9_add_31) # before
       FactoryGirl.create(:profile_key, :profile_key9_add_32) # before
-      FactoryGirl.create(:profile_key, :profile_key9_add_33) # before
-      FactoryGirl.create(:profile_key, :profile_key9_add_34) # before
+      FactoryGirl.create(:profile_key, :profile_key9_add_33) # before # deleted: 1
+      FactoryGirl.create(:profile_key, :profile_key9_add_34) # before # deleted: 1
       # FactoryGirl.create(:profile_key, :profile_key9_add_35)   # 86
       # FactoryGirl.create(:profile_key, :profile_key9_add_36)   # 86
       # FactoryGirl.create(:profile_key, :profile_key9_add_37)   # 87
@@ -259,12 +259,12 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
       FactoryGirl.create(:profile_key, :profile_key9_add_40) # before
       FactoryGirl.create(:profile_key, :profile_key9_add_41) # before
       FactoryGirl.create(:profile_key, :profile_key9_add_42) # before
-      # FactoryGirl.create(:profile_key, :profile_key9_add_43)   # 92
+      # FactoryGirl.create(:profile_key, :profile_key9_add_43)   # 85 92
       # FactoryGirl.create(:profile_key, :profile_key9_add_44)   # 92
       # FactoryGirl.create(:profile_key, :profile_key9_add_45)   # 92
       # FactoryGirl.create(:profile_key, :profile_key9_add_46)   # 92
       # FactoryGirl.create(:profile_key, :profile_key9_add_47)   # 92
-      # FactoryGirl.create(:profile_key, :profile_key9_add_48)   # 92
+      # FactoryGirl.create(:profile_key, :profile_key9_add_48)   # 92 91
       # FactoryGirl.create(:profile_key, :profile_key9_add_49)   # 92 86
       # FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
       # FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
@@ -273,6 +273,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
       # puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
       # puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
 
+      # Here - 20 rows to be loaded Before each test
     }
 
 
@@ -343,10 +344,13 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             # FactoryGirl.create(:profile_key, :profile_key9_add_16)   # 86
             FactoryGirl.create(:profile_key, :profile_key9_add_17)   # 87
             FactoryGirl.create(:profile_key, :profile_key9_add_18)   # 87
-            # FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86
-            # FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 86
-            FactoryGirl.create(:profile_key, :profile_key9_add_25)   # 87
-            FactoryGirl.create(:profile_key, :profile_key9_add_26)   # 87
+            # FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86  # deleted: 1
+            # FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 86  # deleted: 1
+
+            FactoryGirl.create(:profile_key, :profile_key9_add_25)   # 87-90  # deleted: 1
+            FactoryGirl.create(:profile_key, :profile_key9_add_26)   # 90-87  # deleted: 1
+            # @note: Two rows above  are marked as deleted in Factory (for other test)
+
             # FactoryGirl.create(:profile_key, :profile_key9_add_35)   # 86
             # FactoryGirl.create(:profile_key, :profile_key9_add_36)   # 86
             FactoryGirl.create(:profile_key, :profile_key9_add_37)   # 87
@@ -361,6 +365,11 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             # FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
             FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
             FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
+
+            # @note: Here - 18 rows of ProfileKey to be loaded Before THIS test
+            #   Plus 20 rows loaded Before. Total rows qty = 38
+            #   See test '- check ProfileKey count & ids values before - Ok'
+            # @note: Method count does not mention: deleted: 1
 
           }
 
@@ -383,7 +392,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             Relation.reset_pk_sequence
           }
 
-          context '- before action <add_new_profile> - check created data' do
+          context '- before action <add_new_profile> - check created data'   do
             puts "Before action Add Father- data created \n"  #
             it "- Return proper connected_users Array result for current_user_id = 1" do
               expect(connected_users).to eq([9])
@@ -392,13 +401,14 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
 
           let(:base_profile) {Profile.find(85)}
           let(:base_sex_id) {base_profile.sex_id}
+          # create Father
           let(:new_profile_86) { create(:add_profile, :add_profile_86) } # User = nil. Tree = 9. profile_id = 86
                                                                          # name_id   370   sex_id    1
           let(:new_relation_id) {1} # Father
           let(:exclusions_hash) {{}}
           let(:tree_ids) {connected_users}
 
-          context '- before action <add_new_profile> - check input params values ' do
+          context '- before action <add_new_profile> - check input params values ' , focus: true  do
             it "- check: base_profile" do
               puts "Check Add Father \n"  # 1
               expect(base_profile.id).to eq(85)
@@ -446,14 +456,28 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
               it_behaves_like :successful_profile_keys_ids
             end
 
+            describe '- check all relations stored in ProfileKey rows - Ok' do
+              let(:relations_ids_arr_all) {[1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 7, 8, 14,
+                                            17, 101, 101, 111, 121, 191, 191, 201, 201, 211, 211, 221, 221]}
+              let(:relations_arr_all_size) {38}
+              let(:relations_ids_arr) {[1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 8, 14, 17, 101, 121,
+                                        191, 201, 221, 221]}
+              let(:relations_arr_size) {28}
+              # @note: 10 rows in ProfileKey - deleted: 1
+              # profile_key9_add_21,22, 25 .. 34 , deleted in Factory for profile_id = 90
+              it_behaves_like :successful_profile_keys_relation_ids
+            end
+
           end
 
-          context '- After ADD Father - action <add_new_profile>:' do
+          context '- After ADD Father - action <add_new_profile>:' , focus: true  do
+            # Add Father
             before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_86, new_relation_id,
                                 exclusions_hash: exclusions_hash_empty, tree_ids: tree_ids_conn ) }
 
             let(:base_profile) {Profile.find(85)}
             let(:base_sex_id) {base_profile.sex_id}
+            # create Father
             let(:new_profile_86) { create(:add_profile, :add_profile_86) }  # User = nil. Tree = 9. profile_id = 86
             # name_id   370   sex_id    1
             let(:new_relation_id) {1} # Father
@@ -495,17 +519,27 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
               # puts "In check results: new_is_sex_id = #{new_is_sex_id} \n"
               expect(new_is_sex_id).to eq(1) #
             end
-
-            describe '- check new ProfileKey rows - Ok' do
-              let(:rows_qty) {52}
-              it_behaves_like :successful_profile_keys_rows_count
+            describe '- Profile check have rows count & ids before - Ok' do
+              let(:rows_qty) {8}
+              let(:rows_ids_arr) {[85, 86, 87, 88, 89, 90, 91, 92]}
+              it_behaves_like :successful_profiles_count_and_ids
             end
 
+            describe '- check new ProfileKey rows - Ok' do
+              # including deleted: 1
+              let(:rows_qty) {50}
+              it_behaves_like :successful_profile_keys_rows_count
+            end
             describe '- check all relations generated in ProfileKey rows - Ok' do
-              let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6,
-                                        6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 91, 101, 101, 111, 111, 121, 121, 191,
-                                        191, 201, 201, 211, 211, 221, 221]}
-              let(:relations_arr_size) {52}
+              let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5,
+                                            6, 6, 6, 7, 7, 8, 8, 13, 14, 17, 17, 91, 101, 101, 111, 121, 121, 191, 191,
+                                            201, 201, 211, 211, 221, 221]}
+              let(:relations_arr_all_size) {50}
+              let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7,
+                                        8, 8, 13, 14, 17, 17, 91, 101, 121, 121, 191, 201, 221, 221]}
+              # 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 8, 14, 17, 101, 121,
+              #     191, 201, 221, 221
+              let(:relations_arr_size) {42}
               it_behaves_like :successful_profile_keys_relation_ids
             end
 
@@ -544,8 +578,8 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             FactoryGirl.create(:profile_key, :profile_key9_add_16)   # 86
             # FactoryGirl.create(:profile_key, :profile_key9_add_17)   # 87
             # FactoryGirl.create(:profile_key, :profile_key9_add_18)   # 87
-            FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86
-            FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 86
+            FactoryGirl.create(:profile_key, :profile_key9_add_23)   # 86  # deleted: 1
+            FactoryGirl.create(:profile_key, :profile_key9_add_24)   # 86  # deleted: 1
             # FactoryGirl.create(:profile_key, :profile_key9_add_25)   # 87
             # FactoryGirl.create(:profile_key, :profile_key9_add_26)   # 87
             FactoryGirl.create(:profile_key, :profile_key9_add_35)   # 86
@@ -593,6 +627,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
 
           let(:base_profile) {Profile.find(85)}
           let(:base_sex_id) {base_profile.sex_id}
+          # Add Mother
           let(:new_profile_87) { create(:add_profile, :add_profile_87) } # User = nil. Tree = 9. profile_id = 87
           # name_id   370   sex_id    1
           let(:new_relation_id) {2} # Mother
@@ -655,6 +690,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
 
             let(:base_profile) {Profile.find(85)}
             let(:base_sex_id) {base_profile.sex_id}
+            # Add Mother
             let(:new_profile_87) { create(:add_profile, :add_profile_87) }  # User = nil. Tree = 9. profile_id = 87
             # name_id   48   sex_id    0
             let(:new_relation_id) {2} # Mother
@@ -908,7 +944,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
               it_behaves_like :successful_profile_keys_rows_count
             end
 
-            describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
+            describe '- check all profiles_ids generated in ProfileKey rows - Ok' do  # , focus: true
               let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87,
                                        87, 87, 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 89, 89, 89, 89, 89,
                                        90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91, 92, 92, 92,
@@ -1280,7 +1316,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
                                                  exclusions_hash: exclusions_hash_empty, tree_ids: tree_ids_conn ) }
             let(:base_profile) {Profile.find(85)}
             let(:base_sex_id) {base_profile.sex_id}
-            # ADD Son
+            # ADD Daughter
             let(:new_profile_102) { create(:add_profile, :add_profile_102) }  # User = nil. Tree = 9. profile_id = 102
             # name_id   412   sex_id    1
             let(:new_relation_id) {4} # Daughter
@@ -1493,7 +1529,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
                                                  exclusions_hash: exclusions_hash_empty, tree_ids: tree_ids_conn ) }
             let(:base_profile) {Profile.find(85)}
             let(:base_sex_id) {base_profile.sex_id}
-            # ADD Son
+            # ADD Brother
             let(:new_profile_101) { create(:add_profile, :add_profile_101) }  # User = nil. Tree = 9. profile_id = 101
             # name_id   419   sex_id    1
             let(:new_relation_id) {5} # Brother
@@ -1646,6 +1682,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
 
           let(:base_profile) {Profile.find(85)}
           let(:base_sex_id) {base_profile.sex_id}
+          # create Sister
           let(:new_profile_102) { create(:add_profile, :add_profile_102) } # User = nil. Tree = 9. profile_id = 102
           # name_id   412   sex_id    0
           let(:new_relation_id) {6} # Sister Светлана
@@ -1704,14 +1741,16 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
           end
 
           context '- After Added Sister - action <add_new_profile>:' do
+
+            # ADD Sister
             before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_102, new_relation_id,
                                                  exclusions_hash: exclusions_hash_empty, tree_ids: tree_ids_conn ) }
             let(:base_profile) {Profile.find(85)}
             let(:base_sex_id) {base_profile.sex_id}
-            # ADD Son
+            # create Sister
             let(:new_profile_102) { create(:add_profile, :add_profile_102) }  # User = nil. Tree = 9. profile_id = 102
             # name_id   412   sex_id    0
-            let(:new_relation_id) {6} # Brother
+            let(:new_relation_id) {6} # Sister
             let(:exclusions_hash_empty) {{}}
             let(:tree_ids_conn) {connected_users}
 
@@ -1859,6 +1898,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
 
           let(:base_profile) {Profile.find(85)}
           let(:base_sex_id) {base_profile.sex_id}
+          # create Wife
           let(:new_profile_92) { create(:add_profile, :add_profile_92) } # User = nil. Tree = 9. profile_id = 92
           # name_id   147   sex_id    1
           let(:new_relation_id) {8} # Wife
@@ -1916,12 +1956,13 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
           end
 
           context '- After ADD Wife - action <add_new_profile>:' do
+            # ADD Wife
             before { ProfileKey.add_new_profile( base_sex_id, base_profile, new_profile_92, new_relation_id,
                                                  exclusions_hash: exclusions_hash_empty, tree_ids: tree_ids_conn ) }
 
             let(:base_profile) {Profile.find(85)}
             let(:base_sex_id) {base_profile.sex_id}
-            # ADD Wife
+            # create Wife
             let(:new_profile_92) { create(:add_profile, :add_profile_92) }  # User = nil. Tree = 9. profile_id = 92
             # name_id   147   sex_id    0
             let(:new_relation_id) {8} # Wife

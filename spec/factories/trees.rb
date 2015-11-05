@@ -366,7 +366,7 @@ FactoryGirl.define do
       is_profile_id   90
       is_name_id      343
       is_sex_id       1
-      deleted         1 # ###############################  for rollback destroy profile in CommonLog Spec
+      deleted         1 # ## 1 #############################  for rollback destroy profile in CommonLog Spec
     end
     trait :add_tree9_6 do # before  # 91
       user_id         9
