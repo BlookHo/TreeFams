@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe CommonLog, type: :model  do # , focus: true
+RSpec.describe CommonLog, type: :model   do # , focus: true
 
   describe '- validation' do
     describe '- on create' do
@@ -328,6 +328,10 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
         expect(common_log_forth.id).to eq(4)
       end
       describe '- check all relations generated in ProfileKey rows: start state - Ok'  do  # , focus: true
+        let(:relations_ids_arr_all) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13,
+                                      14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121,
+                                      121, 191, 221]}
+        let(:relations_arr_all_size) {46}
         let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
                                   14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121,
                                   191, 221]}
@@ -383,6 +387,9 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
+          let(:relations_ids_arr_all) {[1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 13, 14, 17,
+                                        17, 17, 91, 91, 91, 101, 111, 111, 121, 121, 191, 221]}
+          let(:relations_arr_all_size) {36}
           let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 13, 14, 17, 17, 17,
                                     91, 91, 91, 101, 111, 111, 121, 121, 191, 221]}
           let(:relations_arr_size) {36}
@@ -433,6 +440,9 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
+          let(:relations_ids_arr_all) {[1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 14, 14, 17,
+                                        17, 17, 91, 101, 101, 101, 111, 111, 121, 121, 191, 221]}
+          let(:relations_arr_all_size) {36}
           let(:relations_ids_arr) {[1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 8, 8, 13, 14, 14, 17, 17, 17,
                                     91, 101, 101, 101, 111, 111, 121, 121, 191, 221]}
           let(:relations_arr_size) {36}
@@ -532,10 +542,14 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check all relations generated in ProfileKey rows - Ok' do  # , focus: true
-          let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 5, 6, 7, 7, 7, 8, 8, 8,
-                                    13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 91, 101, 101, 101, 101, 111, 111, 111,
-                                    111, 111, 111, 121, 121, 191, 191, 201, 211, 211, 221]}
-          let(:relations_arr_size) {58}
+          let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 5, 6, 7, 7, 7, 8,
+                                        8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 91, 101, 101, 101, 101,
+                                        111, 111, 111, 111, 111, 111, 121, 121, 191, 191, 201, 211, 211, 221]}
+          let(:relations_arr_all_size) {58}
+          let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 5, 6, 7, 7, 7, 8, 8, 8, 13,
+                                    13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121,
+                                    121, 191, 201, 211, 221]}
+          let(:relations_arr_size) {50}
           it_behaves_like :successful_profile_keys_relation_ids
         end
         describe '- check all profile_ids generated in ProfileKey rows - Ok' do
@@ -623,10 +637,14 @@ RSpec.describe CommonLog, type: :model  do # , focus: true
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check all relations generated in ProfileKey rows - Ok'  do  # , focus: true
+          let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6,
+                                        7, 7, 7, 8, 8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101,
+                                        111, 111, 111, 111, 121, 121, 191, 201, 201, 211, 221, 221]}
+          let(:relations_arr_all_size) {58}
           let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 7,
                                     7, 8, 8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111,
-                                    111, 111, 121, 121, 191, 201, 201, 211, 221, 221]}
-          let(:relations_arr_size) {58}
+                                    111, 111, 121, 121, 191, 201, 221, 221]}
+          let(:relations_arr_size) {56}
           it_behaves_like :successful_profile_keys_relation_ids
         end
         describe '- check all profile_ids generated in ProfileKey rows - Ok' do
