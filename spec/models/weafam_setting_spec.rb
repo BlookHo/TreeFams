@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe WeafamSetting, type: :model do   # , focus: true
 
-  describe 'Model Counter Before methods validation test'   do # , focus: true
+  describe 'Model WeafamSetting Before methods validation test'   do # , focus: true
     after {
       WeafamSetting.delete_all
       WeafamSetting.reset_pk_sequence
