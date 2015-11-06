@@ -30,7 +30,14 @@ class Tree < ActiveRecord::Base
   # @note: rename one profile in this model
   def self.rename_in_tree(profile_id, new_name_id)
     p "In model Before rename:  profile_id = #{profile_id}, new_name_id = #{new_name_id}"
-    find(profile_id).update_attributes(:name_id => new_name_id, updated_at: Time.now)
+
+    tree_rows = Tree.where(profile_id: profile_id)
+
+    tree_rows.each do |one_row|
+      one_row.update_attributes(:name_id => new_name_id, updated_at: Time.now)
+      # name_ids_arr << one_row.name_id
+    end
+    # name_ids_arr
   end
 
 

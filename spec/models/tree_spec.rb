@@ -59,12 +59,12 @@ RSpec.describe Tree, :type => :model do  # , focus: true
         FactoryGirl.create(:tree, :add_tree9_6)   # 85 - 91, name_id = 446
         FactoryGirl.create(:tree, :add_tree9_7)   # 85 - 92, name_id = 147
       }
-      after {
+       after {
         Tree.delete_all
         Tree.reset_pk_sequence
       }
       # let(:row_profile) {FactoryGirl.create(:test_model_tree)}
-      let(:profile_id) {row_profile.id}
+      let(:profile_id) {85}
       let(:new_name_id) {150}
 
       context "- Before check Method -"  , focus: true  do
@@ -82,22 +82,20 @@ RSpec.describe Tree, :type => :model do  # , focus: true
       end
 
 
-      context "- Check Method -"   do  #  , focus: true
+      context "- Check Method -" , focus: true  do  #  , focus: true
+        before {  Tree.rename_in_tree(profile_id, new_name_id) }
 
         it "- profiles in Tree Renamed - Ok " do
-        p " Model Tree: before rename - row_profile.name_id = #{row_profile.name_id}"
-        Tree.rename_in_tree(profile_id, new_name_id)#.attributes.except('created_at','updated_at', 'sex_id')
-        # puts  " Model Profil: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
-        expect(name_id).to eq(150)
-      end
+          # p " Model Tree: before rename - row_profile.name_id = #{row_profile.name_id}"
+          # puts  " Model Profil: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
+          expect(Tree.where(profile_id: profile_id).first.name_id).to eq(150)
+        end
 
+        describe '- check Tree have name_ids array before - Ok' do
+          let(:array_of_name_ids) {[150, 150, 150, 150, 150, 150, 150]}
+          it_behaves_like :successful_tree_name_ids_arr
+        end
 
-      it "- profiles in Tree Renamed - Ok " do
-        p " Model Tree: before rename - row_profile.name_id = #{row_profile.name_id}"
-        Tree.rename_in_tree(profile_id, new_name_id)#.attributes.except('created_at','updated_at', 'sex_id')
-        # puts  " Model Profil: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
-        expect(name_id).to eq(150)
-      end
       end
 
     end
