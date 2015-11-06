@@ -402,7 +402,7 @@ FactoryGirl.define do
 # 81;9;85;3;"2015-03-05 17:52:18.944942";"2015-03-05 17:52:18.944942";370;90;343;1
 # 82;9;85;4;"2015-03-05 17:52:19.319636";"2015-03-05 17:52:19.319636";370;91;446;0
 
-    trait :add_tree9_7 do  # 92
+    trait :add_tree9_7 do  # 85 - 8 - 92
       user_id         9
       profile_id      85
       relation_id     8
@@ -412,6 +412,19 @@ FactoryGirl.define do
       is_sex_id       0
     end
 # 83;9;85;8;"2015-03-05 17:52:19.772189";"2015-03-05 17:52:19.772189";370;92;147;0
+
+    ######### USED ONLY IN RSPEC RENAME PROFILE IN: TREE-SPEC.RB AND PROFILE_KEY_SPEC.RB
+    trait :add_tree9_8 do  # 92 - 7 - 85
+      user_id         9
+      profile_id      92
+      relation_id     7
+      name_id         147
+      is_profile_id   85
+      is_name_id      370
+      is_sex_id       1
+    end
+
+
 
     # For Common_Logs Tree 9
     # 77;9;85;1;"2015-03-05 17:52:17.773019";"2015-03-05 17:52:17.773019";370;86;28;1;370;28

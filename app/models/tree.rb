@@ -32,14 +32,35 @@ class Tree < ActiveRecord::Base
     p "In model Before rename:  profile_id = #{profile_id}, new_name_id = #{new_name_id}"
 
     tree_rows = Tree.where(profile_id: profile_id)
+    # unless tree_rows.blank?
+    #   tree_rows.each do |one_row|
+    #     one_row.update_attributes(:name_id => new_name_id, updated_at: Time.now)
+    #   end
+    # end
+    change_name_in_tree(tree_rows, 'name_id', new_name_id)
+    tree_rows = Tree.where(is_profile_id: profile_id)
+    change_name_in_tree(tree_rows, 'is_name_id', new_name_id)
 
-    tree_rows.each do |one_row|
-      one_row.update_attributes(:name_id => new_name_id, updated_at: Time.now)
-      # name_ids_arr << one_row.name_id
-    end
-    # name_ids_arr
+
+    # unless tree_rows.blank?
+    #   tree_rows.each do |one_row|
+    #     one_row.update_attributes(:is_name_id => new_name_id, updated_at: Time.now)
+    #   end
+    # end
+
   end
 
+  # @note: change name_id in one column
+  def self.change_name_in_tree(tree_rows, field_name, new_name_id)
+
+    unless tree_rows.blank?
+      tree_rows.each do |one_row|
+        one_row.update_attributes(field_name => new_name_id, updated_at: Time.now)
+      end
+    end
+
+
+  end
 
 
 

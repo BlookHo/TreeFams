@@ -45,7 +45,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
 
   end
 
-  describe 'Method Rename Profile test' , focus: true  do # , focus: true
+  describe 'Method Rename Profile test'   do # , focus: true
     after {
       Profile.delete_all
       Profile.reset_pk_sequence

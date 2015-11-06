@@ -5,7 +5,7 @@ RSpec.describe Tree, :type => :model do  # , focus: true
 
   describe '- validation' do
 
-    describe 'Validation test Before Model Tree methods ' , focus: true  do # , focus: true
+    describe 'Validation test Before Model Tree methods '  do # , focus: true
       after {
         Tree.delete_all
         Tree.reset_pk_sequence
@@ -51,34 +51,36 @@ RSpec.describe Tree, :type => :model do  # , focus: true
     describe '- Method Rename of profile in Tree test - '  do # , focus: true
       before {
         # Tree, 85 - name_id = 370.
-        FactoryGirl.create(:tree, :add_tree9_1)   # 85 - 86, name_id = 28
-        FactoryGirl.create(:tree, :add_tree9_2)   # 85 - 87, name_id = 48
-        FactoryGirl.create(:tree, :add_tree9_3)   # 85 - 88, name_id = 465
-        FactoryGirl.create(:tree, :add_tree9_4)   # 85 - 89, name_id = 345
-        FactoryGirl.create(:tree, :add_tree9_5)   # 85 - 90, name_id = 343
-        FactoryGirl.create(:tree, :add_tree9_6)   # 85 - 91, name_id = 446
-        FactoryGirl.create(:tree, :add_tree9_7)   # 85 - 92, name_id = 147
+        FactoryGirl.create(:tree, :add_tree9_1)   # 85 - 86, is_name_id = 28
+        FactoryGirl.create(:tree, :add_tree9_2)   # 85 - 87, is_name_id = 48
+        FactoryGirl.create(:tree, :add_tree9_3)   # 85 - 88, is_name_id = 465
+        FactoryGirl.create(:tree, :add_tree9_4)   # 85 - 89, is_name_id = 345
+        FactoryGirl.create(:tree, :add_tree9_5)   # 85 - 90, is_name_id = 343
+        FactoryGirl.create(:tree, :add_tree9_6)   # 85 - 91, is_name_id = 446
+        FactoryGirl.create(:tree, :add_tree9_7)   # 85 - 92, is_name_id = 147
+        # Tree, 92 - name_id = 147.
+        FactoryGirl.create(:tree, :add_tree9_8)   # 92 - 85, is_name_id = 370
       }
        after {
         Tree.delete_all
         Tree.reset_pk_sequence
       }
-      # let(:row_profile) {FactoryGirl.create(:test_model_tree)}
       let(:profile_id) {85}
       let(:new_name_id) {150}
 
       context "- Before check Method -"  , focus: true  do
         describe '- check Tree have rows count before - Ok' do
-          let(:rows_qty) {7}
+          let(:rows_qty) {8}
           it_behaves_like :successful_tree_rows_count
         end
-
         describe '- check Tree have name_ids array before - Ok' do
-          let(:profile_id) {85}
           let(:array_of_name_ids) {[370, 370, 370, 370, 370, 370, 370]}
           it_behaves_like :successful_tree_name_ids_arr
         end
-
+        describe '- check Tree have name_ids array before - Ok' do
+          let(:array_of_is_name_ids) {[370]}
+          it_behaves_like :successful_tree_is_name_ids_arr
+        end
       end
 
 
@@ -86,25 +88,19 @@ RSpec.describe Tree, :type => :model do  # , focus: true
         before {  Tree.rename_in_tree(profile_id, new_name_id) }
 
         it "- profiles in Tree Renamed - Ok " do
-          # p " Model Tree: before rename - row_profile.name_id = #{row_profile.name_id}"
-          # puts  " Model Profil: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
           expect(Tree.where(profile_id: profile_id).first.name_id).to eq(150)
         end
-
         describe '- check Tree have name_ids array before - Ok' do
           let(:array_of_name_ids) {[150, 150, 150, 150, 150, 150, 150]}
           it_behaves_like :successful_tree_name_ids_arr
         end
-
+        describe '- check Tree have is_name_ids array before - Ok' do
+          let(:array_of_is_name_ids) {[150]}
+          it_behaves_like :successful_tree_is_name_ids_arr
+        end
       end
 
     end
-
-
-
-
-
-
 
     describe '- on create' do
 
