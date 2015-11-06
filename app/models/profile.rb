@@ -43,6 +43,13 @@ class Profile < ActiveRecord::Base
   accepts_nested_attributes_for :profile_data
 
 
+  # @note: rename one profile in this model
+  def self.rename_in_profile(profile_id, new_name_id)
+    # p "In model Before rename:  profile_id = #{profile_id}, new_name_id = #{new_name_id}"
+    find(profile_id).update_attributes(:name_id => new_name_id, updated_at: Time.now)
+  end
+
+
   # require 'pry'
 
   # before_save do

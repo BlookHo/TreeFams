@@ -45,8 +45,26 @@ RSpec.describe Profile, :type => :model   do # , focus: true
 
   end
 
+  describe 'Method Rename Profile test' , focus: true  do # , focus: true
+    after {
+      Profile.delete_all
+      Profile.reset_pk_sequence
+    }
+    let(:row_profile) {FactoryGirl.create(:test_model_profile)}
+    let(:profile_id) {row_profile.id}
+    let(:new_name_id) {150}
 
-  describe '- validation' do
+    it "- profile Renamed - Ok " do
+      p " Model Profile: before rename - row_profile.name_id = #{row_profile.name_id}"
+      Profile.rename_in_profile(profile_id, new_name_id)#.attributes.except('created_at','updated_at', 'sex_id')
+      puts  " Model Profil: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
+      expect(Profile.find(row_profile.id).name_id).to eq(150)
+    end
+
+  end
+
+
+    describe '- validation' do
     describe '- on create' do
       context '- valid profiles' do
         let(:first_profile) {FactoryGirl.create(:profile_one)}
