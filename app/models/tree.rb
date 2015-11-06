@@ -26,6 +26,18 @@ class Tree < ActiveRecord::Base
   belongs_to :relation
 
 
+
+  # @note: rename one profile in this model
+  def self.rename_in_tree(profile_id, new_name_id)
+    p "In model Before rename:  profile_id = #{profile_id}, new_name_id = #{new_name_id}"
+    find(profile_id).update_attributes(:name_id => new_name_id, updated_at: Time.now)
+  end
+
+
+
+
+
+
   # @note: Считаем кол-во профилей в дереве (объединенном)
   #   с добавлением профиля current_user:
   #   Исп-ся в search.rb

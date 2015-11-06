@@ -4,6 +4,110 @@ require 'rails_helper'
 RSpec.describe Tree, :type => :model do  # , focus: true
 
   describe '- validation' do
+
+    describe 'Validation test Before Model Tree methods ' , focus: true  do # , focus: true
+      after {
+        Tree.delete_all
+        Tree.reset_pk_sequence
+      }
+
+      it "has a valid factory" do
+        puts " Model Tree validation - has a valid factory"
+        expect(FactoryGirl.create(:test_model_tree)).to be_valid
+      end
+
+      it "is invalid without a user_id" do
+        puts " Model Tree validation - invalid without a user_id"
+        expect(FactoryGirl.build(:test_model_tree, user_id: nil)).to_not be_valid
+      end
+
+      it "is invalid without a profile_id" do
+        puts " Model Tree validation - invalid without a profile_id"
+        expect(FactoryGirl.build(:test_model_tree, profile_id: nil)).to_not be_valid
+      end
+
+      it "is invalid without a name_id" do
+        puts " Model Tree validation - invalid without a name_id"
+        expect(FactoryGirl.build(:test_model_tree, name_id: nil)).to_not be_valid
+      end
+
+      it "is invalid without a relation_id" do
+        puts " Model Tree validation - invalid without a relation_id"
+        expect(FactoryGirl.build(:test_model_tree, relation_id: nil)).to_not be_valid
+      end
+
+      it "is invalid without a is_profile_id" do
+        puts " Model Tree validation - invalid without a is_profile_id"
+        expect(FactoryGirl.build(:test_model_tree, is_profile_id: nil)).to_not be_valid
+      end
+
+      it "is invalid without a is_name_id" do
+        puts " Model Tree validation - invalid without a is_name_id"
+        expect(FactoryGirl.build(:test_model_tree, is_name_id: nil)).to_not be_valid
+      end
+
+    end
+
+    describe '- Method Rename of profile in Tree test - '  do # , focus: true
+      before {
+        # Tree, 85 - name_id = 370.
+        FactoryGirl.create(:tree, :add_tree9_1)   # 85 - 86, name_id = 28
+        FactoryGirl.create(:tree, :add_tree9_2)   # 85 - 87, name_id = 48
+        FactoryGirl.create(:tree, :add_tree9_3)   # 85 - 88, name_id = 465
+        FactoryGirl.create(:tree, :add_tree9_4)   # 85 - 89, name_id = 345
+        FactoryGirl.create(:tree, :add_tree9_5)   # 85 - 90, name_id = 343
+        FactoryGirl.create(:tree, :add_tree9_6)   # 85 - 91, name_id = 446
+        FactoryGirl.create(:tree, :add_tree9_7)   # 85 - 92, name_id = 147
+      }
+      after {
+        Tree.delete_all
+        Tree.reset_pk_sequence
+      }
+      # let(:row_profile) {FactoryGirl.create(:test_model_tree)}
+      let(:profile_id) {row_profile.id}
+      let(:new_name_id) {150}
+
+      context "- Before check Method -"  , focus: true  do
+        describe '- check Tree have rows count before - Ok' do
+          let(:rows_qty) {7}
+          it_behaves_like :successful_tree_rows_count
+        end
+
+        describe '- check Tree have name_ids array before - Ok' do
+          let(:profile_id) {85}
+          let(:array_of_name_ids) {[370, 370, 370, 370, 370, 370, 370]}
+          it_behaves_like :successful_tree_name_ids_arr
+        end
+
+      end
+
+
+      context "- Check Method -"   do  #  , focus: true
+
+        it "- profiles in Tree Renamed - Ok " do
+        p " Model Tree: before rename - row_profile.name_id = #{row_profile.name_id}"
+        Tree.rename_in_tree(profile_id, new_name_id)#.attributes.except('created_at','updated_at', 'sex_id')
+        # puts  " Model Profil: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
+        expect(name_id).to eq(150)
+      end
+
+
+      it "- profiles in Tree Renamed - Ok " do
+        p " Model Tree: before rename - row_profile.name_id = #{row_profile.name_id}"
+        Tree.rename_in_tree(profile_id, new_name_id)#.attributes.except('created_at','updated_at', 'sex_id')
+        # puts  " Model Profil: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
+        expect(name_id).to eq(150)
+      end
+      end
+
+    end
+
+
+
+
+
+
+
     describe '- on create' do
 
       context '- valid tree_row' do

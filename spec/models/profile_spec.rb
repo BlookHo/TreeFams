@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Profile, :type => :model   do # , focus: true
 
-  describe 'Model Profile Before methods validation test'   do # , focus: true
+  describe 'Validation test Before Model Profile methods '   do # , focus: true
     after {
       Profile.delete_all
       Profile.reset_pk_sequence

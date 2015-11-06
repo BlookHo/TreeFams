@@ -1,4 +1,24 @@
 FactoryGirl.define do
+
+  factory :test_model_tree, class: Tree do |f|
+    # let(:row) { FactoryGirl.create(:test_model_name).id }
+    f.user_id { Faker::Number.number(5) }
+    f.profile_id { Faker::Number.number(5) }
+    f.name_id { Faker::Number.number(5) }
+    f.relation_id { [1,2,3,4,5,6,7,8,91,92,101,102,111,112,121,122,13,14,15,16,17,18,191,192,
+                     201,202,211,212,221,222].sample }
+
+    # f.name_id { row.id }
+    f.is_sex_id  {Faker::Number.between(0, 1)}
+    f.is_profile_id  { Faker::Number.number(5) }
+    f.is_name_id  { Faker::Number.number(5) }
+    f.deleted  {Faker::Number.between(0, 1)}
+
+    # association :name, factory: :test_model_name, name: "Федор"
+
+  end
+
+
   factory :tree, class: Tree  do
     user_id         1
     profile_id      63
