@@ -29,39 +29,25 @@ class Tree < ActiveRecord::Base
 
   # @note: rename one profile in this model
   def self.rename_in_tree(profile_id, new_name_id)
-    p "In model Before rename:  profile_id = #{profile_id}, new_name_id = #{new_name_id}"
+    p "In model Tree profile rename:  profile_id = #{profile_id}, new_name_id = #{new_name_id}"
+    rename_data_1 = {
+        model:          Tree,
+        profile_field: 'profile_id',
+        profile_id:     profile_id,
+        name_field:     'name_id',
+        new_name_id:    new_name_id
+    }
+    TreeAndProfilekey.change_name(rename_data_1)
 
-    tree_rows = Tree.where(profile_id: profile_id)
-    # unless tree_rows.blank?
-    #   tree_rows.each do |one_row|
-    #     one_row.update_attributes(:name_id => new_name_id, updated_at: Time.now)
-    #   end
-    # end
-    change_name_in_tree(tree_rows, 'name_id', new_name_id)
-    tree_rows = Tree.where(is_profile_id: profile_id)
-    change_name_in_tree(tree_rows, 'is_name_id', new_name_id)
-
-
-    # unless tree_rows.blank?
-    #   tree_rows.each do |one_row|
-    #     one_row.update_attributes(:is_name_id => new_name_id, updated_at: Time.now)
-    #   end
-    # end
-
+    rename_data_2 = {
+        model:          Tree,
+        profile_field: 'is_profile_id',
+        profile_id:     profile_id,
+        name_field:     'is_name_id',
+        new_name_id:    new_name_id
+    }
+    TreeAndProfilekey.change_name(rename_data_2)
   end
-
-  # @note: change name_id in one column
-  def self.change_name_in_tree(tree_rows, field_name, new_name_id)
-
-    unless tree_rows.blank?
-      tree_rows.each do |one_row|
-        one_row.update_attributes(field_name => new_name_id, updated_at: Time.now)
-      end
-    end
-
-
-  end
-
 
 
 

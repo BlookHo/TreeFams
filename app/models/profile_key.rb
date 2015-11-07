@@ -33,11 +33,32 @@ class ProfileKey < ActiveRecord::Base
 
   # todo: set index to model: user_id, profile_id
 
-
   def full_name
     [self.display_name.name, self.is_profile.last_name].join(' ')
   end
 
+
+  # @note: rename one profile in this model
+  def self.rename_in_profile_key(profile_id, new_name_id)
+    p "In model ProfileKey profile rename:  profile_id = #{profile_id}, new_name_id = #{new_name_id}"
+    rename_data_1 = {
+        model:          ProfileKey,
+        profile_field: 'profile_id',
+        profile_id:     profile_id,
+        name_field:     'name_id',
+        new_name_id:    new_name_id
+    }
+    TreeAndProfilekey.change_name(rename_data_1)
+
+    rename_data_2 = {
+        model:          ProfileKey,
+        profile_field: 'is_profile_id',
+        profile_id:     profile_id,
+        name_field:     'is_name_id',
+        new_name_id:    new_name_id
+    }
+    TreeAndProfilekey.change_name(rename_data_2)
+  end
 
 
 

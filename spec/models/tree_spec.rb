@@ -102,6 +102,8 @@ RSpec.describe Tree, :type => :model do  # , focus: true
 
     end
 
+
+
     describe '- on create' do
 
       context '- valid tree_row' do
@@ -170,6 +172,7 @@ RSpec.describe Tree, :type => :model do  # , focus: true
       end
 
     end
+
   end
 
   describe '- Model Tree methods' do

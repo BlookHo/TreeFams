@@ -2,6 +2,81 @@ require 'rails_helper'
 
 RSpec.describe ProfileKey, :type => :model  do # , focus: true
 
+  describe '- Method Rename of profile in ProfileKey test - '  do # , focus: true
+    before {
+      FactoryGirl.create(:profile_key, :profile_key9_add_1) # 85 - 86, name_id = 370, is_name_id = 28
+      FactoryGirl.create(:profile_key, :profile_key9_add_2) # 86 - 85, name_id = 28,  is_name_id = 370
+
+      FactoryGirl.create(:profile_key, :profile_key9_add_3) # 85 - 87, name_id = 370, is_name_id = 48
+      FactoryGirl.create(:profile_key, :profile_key9_add_4) # 87 - 85, name_id = 48,  is_name_id = 370
+
+      FactoryGirl.create(:profile_key, :profile_key9_add_5) # 86 - 87, name_id = 28,  is_name_id = 48
+      FactoryGirl.create(:profile_key, :profile_key9_add_6) # 87 - 86, name_id = 48,  is_name_id = 28
+
+      FactoryGirl.create(:profile_key, :profile_key9_add_7) # 85 - 88, name_id = 370, is_name_id = 465
+      FactoryGirl.create(:profile_key, :profile_key9_add_8) # 88 - 85, name_id = 465, is_name_id = 370
+
+      FactoryGirl.create(:profile_key, :profile_key9_add_9)  # 86 - 88, name_id = 28, is_name_id = 465
+      FactoryGirl.create(:profile_key, :profile_key9_add_10) # 88 - 86, name_id = 465, is_name_id = 28
+
+      FactoryGirl.create(:profile_key, :profile_key9_add_11) # 87 - 88, name_id = 48, is_name_id = 465
+      FactoryGirl.create(:profile_key, :profile_key9_add_12) # 88 - 87, name_id = 465, is_name_id = 48
+
+      FactoryGirl.create(:profile_key, :profile_key9_add_13) # 85 - 89, name_id = 370, is_name_id = 345
+      FactoryGirl.create(:profile_key, :profile_key9_add_14) # 89 - 85, name_id = 345, is_name_id = 370
+
+      FactoryGirl.create(:profile_key, :profile_key9_add_15) # 86 - 89, name_id = 28, is_name_id = 345
+      FactoryGirl.create(:profile_key, :profile_key9_add_16) # 89 - 86, name_id = 345, is_name_id = 28
+
+    }
+    after {
+      ProfileKey.delete_all
+      ProfileKey.reset_pk_sequence
+    }
+    let(:profile_id) {85}
+    let(:new_name_id) {150}
+
+    context "- Before check Method -"  , focus: true  do
+      describe '- check ProfileKey have rows count before - Ok' do
+        let(:rows_qty) {16}
+        it_behaves_like :successful_profile_keys_rows_count
+      end
+      describe '- check ProfileKey have name_ids array before - Ok' do
+        let(:array_of_name_ids) {[370, 370, 370, 370]}
+        it_behaves_like :successful_profile_keys_name_ids_arr
+      end
+      describe '- check ProfileKey have name_ids array before - Ok' do
+        let(:array_of_is_name_ids) {[370, 370, 370, 370]}
+        it_behaves_like :successful_profile_keys_is_name_ids_arr
+      end
+    end
+
+
+    context "- Check Method -" , focus: true  do  #  , focus: true
+      before {  ProfileKey.rename_in_profile_key(profile_id, new_name_id) }
+
+      it "- profiles in ProfileKey Renamed - Ok " do
+        expect(ProfileKey.where(profile_id: profile_id).first.name_id).to eq(150)
+      end
+      describe '- check ProfileKey have name_ids array before - Ok' do
+        let(:array_of_name_ids) {[150, 150, 150, 150]}
+        it_behaves_like :successful_profile_keys_name_ids_arr
+      end
+      describe '- check ProfileKey have is_name_ids array before - Ok' do
+        let(:array_of_is_name_ids) {[150, 150, 150, 150]}
+        it_behaves_like :successful_profile_keys_is_name_ids_arr
+      end
+    end
+
+  end
+
+
+
+
+
+
+
+
   describe '- validation' do
     describe '- on create' do
 

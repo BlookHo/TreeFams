@@ -2320,7 +2320,7 @@ FactoryGirl.define do
       is_profile_id   87
       is_name_id      48
     end
-    trait :profile_key9_add_6 do   # 86, 87
+    trait :profile_key9_add_6 do   # 87, 86
       user_id         9
       profile_id      87
       name_id         48
