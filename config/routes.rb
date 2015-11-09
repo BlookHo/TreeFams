@@ -138,6 +138,10 @@ Weafam::Application.routes.draw do
     get '/edit/data', to: 'profiles#edit', as: :edit_data
     get '/version/:profile_data_id', to: 'profiles#show', as: :profile_data_version
   end
+  match 'rename' => 'profiles#rename', via:  [:get, :post]
+  # match 'rename' => 'profiles#rename', via: :post
+
+
 
   match '/profiles/avatar', to: 'avatar#upload', as: :upload_avatar, via: [:get, :post]
 

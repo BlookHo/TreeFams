@@ -20,9 +20,10 @@
 
   -# Добавить в избранное
   %li= link_to "Добавить в избранные", '#', class: :grey
+  %h2 Выбранный @profile: #{@profile.inspect}
 
   -# Переименовать профиль во всех моделях
-  %li= link_to "Переименовать profiles/context/_menu", '#', class: :grey
+  %li= link_to "Переименовать profiles/context/_menu", rename_path(profile_to_rename: @profile.id), method: :get, remote: true, class: :grey
 
   -# Страница профиля
   %li= link_to "О нём", profile_path(@profile), class: :grey

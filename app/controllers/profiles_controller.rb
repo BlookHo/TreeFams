@@ -69,6 +69,31 @@ class ProfilesController < ApplicationController
 
 
 
+  # @note: rename profile
+  def rename
+    got_profile = params[:profile_to_rename].to_i
+    @profile = Profile.find(params[:profile_to_rename].to_i)
+    puts "In Profiles_controller: rename: got_profile = #{got_profile.inspect} "
+    puts "In Profiles_controller: rename: @profile = #{@profile.inspect} "
+    prev_name = Name.find(@profile.name_id)
+    @new_name_id = 465
+    puts "In Profiles_controller: rename: @new_name_id = #{@new_name_id.inspect} "
+
+    @profile.rename(@new_name_id)
+    new_name = Name.find(@new_name_id)
+
+    # if @profile.errors.messages.nil?
+    #   flash.now[:notice] = "Профиль успешно переименован с имени #{prev_name} на имя #{new_name}  ."
+    #   render json: { status: 'ok', redirect: '/home' }
+    # else
+    #   render json: { errors: @profile.errors.messages }
+    # end
+
+    flash.now[:notice] = "Профиль успешно переименован с имени #{prev_name} на имя #{new_name}  ."
+
+  end
+
+
   # Старый метод - не исп-ся!!!
   def show_dropdown_menu
     @author_profile_id = params[:author_profile_id]
