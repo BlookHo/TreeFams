@@ -32,18 +32,18 @@ class Tree < ActiveRecord::Base
     p "In model Tree profile rename:  profile_id = #{profile_id}, new_name_id = #{new_name_id}"
     rename_data_1 = {
         model:          Tree,
-        profile_field: 'profile_id',
-        profile_id:     profile_id,
+        profile_field:  'profile_id',
         name_field:     'name_id',
+        profile_id:     profile_id,
         new_name_id:    new_name_id
     }
     TreeAndProfilekey.change_name(rename_data_1)
 
     rename_data_2 = {
         model:          Tree,
-        profile_field: 'is_profile_id',
-        profile_id:     profile_id,
+        profile_field:  'is_profile_id',
         name_field:     'is_name_id',
+        profile_id:     profile_id,
         new_name_id:    new_name_id
     }
     TreeAndProfilekey.change_name(rename_data_2)

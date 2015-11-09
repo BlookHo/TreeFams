@@ -17,6 +17,7 @@ class TreeAndProfilekey
     new_name_id   = rename_data[:new_name_id]
 
     rows = model.where(profile_field => profile_id)
+    # p " Model TreeAndProfilekey: change_name - rows.size = #{rows.size}" unless rows.blank?
     rows.each {|one_row| one_row.update_attributes(name_field => new_name_id, updated_at: Time.now)} unless rows.blank?
 
   end

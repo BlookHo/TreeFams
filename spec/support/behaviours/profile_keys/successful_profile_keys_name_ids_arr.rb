@@ -4,6 +4,9 @@ shared_examples :successful_profile_keys_name_ids_arr do
     name_ids_arr =  ProfileKey.where(profile_id: profile_id).pluck(:name_id).sort
     puts "In Check ProfileKey name_ids_arr: name_ids_arr = #{name_ids_arr.inspect} \n"
     expect(name_ids_arr).to eq(array_of_name_ids)
+    ids_arr =  ProfileKey.where(profile_id: profile_id).pluck(:id).sort
+    puts "In Check ProfileKey ids_arr: ids_arr = #{ids_arr.inspect} \n"
+    expect(ids_arr).to eq(array_of_ids)
   end
 end
 

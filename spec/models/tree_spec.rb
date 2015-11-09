@@ -90,11 +90,11 @@ RSpec.describe Tree, :type => :model do  # , focus: true
         it "- profiles in Tree Renamed - Ok " do
           expect(Tree.where(profile_id: profile_id).first.name_id).to eq(150)
         end
-        describe '- check Tree have name_ids array before - Ok' do
+        describe '- check Tree have name_ids array after rename_in_tree  - Ok' do
           let(:array_of_name_ids) {[150, 150, 150, 150, 150, 150, 150]}
           it_behaves_like :successful_tree_name_ids_arr
         end
-        describe '- check Tree have is_name_ids array before - Ok' do
+        describe '- check Tree have is_name_ids array after rename_in_tree  - Ok' do
           let(:array_of_is_name_ids) {[150]}
           it_behaves_like :successful_tree_is_name_ids_arr
         end

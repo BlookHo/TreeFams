@@ -44,10 +44,24 @@ class Profile < ActiveRecord::Base
 
 
   # @note: rename one profile in this model
-  def self.rename_in_profile(profile_id, new_name_id)
-    # p "In model Before rename:  profile_id = #{profile_id}, new_name_id = #{new_name_id}"
-    find(profile_id).update_attributes(:name_id => new_name_id, updated_at: Time.now)
+  def rename_in_profile(new_name_id)
+    p "In model Profile - rename_in_profile:  profile_id = #{self.id}, new_name_id = #{new_name_id}"
+    self.update_attributes(:name_id => new_name_id, updated_at: Time.now)
   end
+
+
+  # @note: rename one profile in this model
+  def rename(new_name_id)
+
+    p "In model Profile - rename: profile_id = #{self.id}, new_name_id = #{new_name_id}"
+    self.rename_in_profile(new_name_id)
+    Tree.rename_in_tree(self.id, new_name_id)
+    ProfileKey.rename_in_profile_key(self.id, new_name_id)
+
+  end
+
+
+
 
 
   # require 'pry'

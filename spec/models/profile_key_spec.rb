@@ -37,15 +37,16 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
     let(:new_name_id) {150}
 
     context "- Before check Method -"  , focus: true  do
-      describe '- check ProfileKey have rows count before - Ok' do
+      describe '- check ProfileKey have rows count before rename_in_profile_key - Ok' do
         let(:rows_qty) {16}
         it_behaves_like :successful_profile_keys_rows_count
       end
-      describe '- check ProfileKey have name_ids array before - Ok' do
+      describe '- check ProfileKey have name_ids array before rename_in_profile_key - Ok' do
+        let(:array_of_ids) {[1, 3, 7, 13]}
         let(:array_of_name_ids) {[370, 370, 370, 370]}
         it_behaves_like :successful_profile_keys_name_ids_arr
       end
-      describe '- check ProfileKey have name_ids array before - Ok' do
+      describe '- check ProfileKey have name_ids array before rename_in_profile_key - Ok' do
         let(:array_of_is_name_ids) {[370, 370, 370, 370]}
         it_behaves_like :successful_profile_keys_is_name_ids_arr
       end
@@ -58,11 +59,12 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
       it "- profiles in ProfileKey Renamed - Ok " do
         expect(ProfileKey.where(profile_id: profile_id).first.name_id).to eq(150)
       end
-      describe '- check ProfileKey have name_ids array before - Ok' do
+      describe '- check ProfileKey have name_ids array after rename_in_profile_key - Ok' do
+        let(:array_of_ids) {[1, 3, 7, 13]}
         let(:array_of_name_ids) {[150, 150, 150, 150]}
         it_behaves_like :successful_profile_keys_name_ids_arr
       end
-      describe '- check ProfileKey have is_name_ids array before - Ok' do
+      describe '- check ProfileKey have is_name_ids array after rename_in_profile_key - Ok' do
         let(:array_of_is_name_ids) {[150, 150, 150, 150]}
         it_behaves_like :successful_profile_keys_is_name_ids_arr
       end

@@ -23,6 +23,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
       expect(FactoryGirl.build(:test_model_profile, tree_id: nil)).to_not be_valid
     end
 
+    # todo: test association in Model
     context "test for correct values pair: name_id.sex_id & profile.sex_id " do
       # let(:row_name) {FactoryGirl.create(:test_model_name)}
       let(:row_profile) {FactoryGirl.create(:test_model_profile)}
@@ -33,35 +34,185 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         # puts " Model Profile validation - invalid with name_id.sex_id == 1 and profile.sex_id == 0"
         # puts " Model Profile validation - profile.user_id = #{row.row}"
         puts " Model Profile validation - profile.user_id = #{row_profile.user_id}"
-        puts  " Model Profile validation - profile.name_id = #{row_profile.name_id}"
+        puts " Model Profile validation - profile.name_id = #{row_profile.name_id}"
         puts " Model Profile validation - profile.sex_id = #{row_profile.sex_id}"
         # puts " Model Profile validation - profile.deleted = #{row_profile.deleted}"
         # puts " Model Profile validation - profile.tree_id = #{row_profile.tree_id}"
       end
     end
 
-    # it "returns a valid name_id: name_id.sex_id == 1 and profile.sex_id == 1 as a integer"
-
-
   end
 
-  describe 'Method Rename Profile test'   do # , focus: true
-    after {
-      Profile.delete_all
-      Profile.reset_pk_sequence
-    }
-    let(:row_profile) {FactoryGirl.create(:test_model_profile)}
-    let(:profile_id) {row_profile.id}
-    let(:new_name_id) {150}
 
-    it "- profile Renamed - Ok " do
-      p " Model Profile: before rename - row_profile.name_id = #{row_profile.name_id}"
-      Profile.rename_in_profile(profile_id, new_name_id)#.attributes.except('created_at','updated_at', 'sex_id')
-      puts  " Model Profil: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
-      expect(Profile.find(row_profile.id).name_id).to eq(150)
+  describe 'Method Rename Profile test'   do # , focus: true
+
+    context "- Check Method Rename Profile random created  -"    do  # , focus: true
+      let(:row_profile) {FactoryGirl.create(:test_model_profile)}
+      let(:profile_id) {row_profile.id}
+      let(:new_name_id) {150}
+
+      it "- profile Renamed - Ok " do
+        p " Check Method Rename Profile random created"
+        p " Check Before: row_profile.id = #{row_profile.id}, row_profile.name_id = #{row_profile.name_id}"
+        row_profile.rename(new_name_id)#.attributes.except('created_at','updated_at', 'sex_id')
+        puts " Model Profile: After rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
+        expect(Profile.find(row_profile.id).name_id).to eq(150)
+      end
+
+      context "- Check Before Method Rename in Tree & ProfileKey - No Renames "    do  #
+        describe '- check Tree have rows count before - Ok' do
+          let(:rows_qty) {0}
+          it_behaves_like :successful_tree_rows_count
+        end
+
+        describe '- check ProfileKey have rows count before - Ok' do
+          let(:rows_qty) {0}
+          it_behaves_like :successful_profile_keys_rows_count
+        end
+      end
+
+    end
+
+    context "- Check Method Rename Profile for Models content created  -"    do  #
+
+      before {
+        # Profile, 85 - name_id = 370.
+        FactoryGirl.create(:add_profile, :add_profile_85)   # 85
+
+        # Tree, 85 - name_id = 370.
+        FactoryGirl.create(:tree, :add_tree9_1)   # 85 - 86, is_name_id = 28
+        FactoryGirl.create(:tree, :add_tree9_2)   # 85 - 87, is_name_id = 48
+        FactoryGirl.create(:tree, :add_tree9_3)   # 85 - 88, is_name_id = 465
+        FactoryGirl.create(:tree, :add_tree9_4)   # 85 - 89, is_name_id = 345
+        FactoryGirl.create(:tree, :add_tree9_5)   # 85 - 90, is_name_id = 343
+        FactoryGirl.create(:tree, :add_tree9_6)   # 85 - 91, is_name_id = 446
+        FactoryGirl.create(:tree, :add_tree9_7)   # 85 - 92, is_name_id = 147
+        # Tree, 92 - name_id = 147.
+        FactoryGirl.create(:tree, :add_tree9_8)   # 92 - 85, is_name_id = 370
+
+        # ProfileKey
+        FactoryGirl.create(:profile_key, :profile_key9_add_1) # 85 - 86, name_id = 370, is_name_id = 28
+        FactoryGirl.create(:profile_key, :profile_key9_add_2) # 86 - 85, name_id = 28,  is_name_id = 370
+
+        FactoryGirl.create(:profile_key, :profile_key9_add_3) # 85 - 87, name_id = 370, is_name_id = 48
+        FactoryGirl.create(:profile_key, :profile_key9_add_4) # 87 - 85, name_id = 48,  is_name_id = 370
+
+        FactoryGirl.create(:profile_key, :profile_key9_add_5) # 86 - 87, name_id = 28,  is_name_id = 48
+        FactoryGirl.create(:profile_key, :profile_key9_add_6) # 87 - 86, name_id = 48,  is_name_id = 28
+
+        FactoryGirl.create(:profile_key, :profile_key9_add_7) # 85 - 88, name_id = 370, is_name_id = 465
+        FactoryGirl.create(:profile_key, :profile_key9_add_8) # 88 - 85, name_id = 465, is_name_id = 370
+
+        FactoryGirl.create(:profile_key, :profile_key9_add_9)  # 86 - 88, name_id = 28, is_name_id = 465
+        FactoryGirl.create(:profile_key, :profile_key9_add_10) # 88 - 86, name_id = 465, is_name_id = 28
+
+        FactoryGirl.create(:profile_key, :profile_key9_add_11) # 87 - 88, name_id = 48, is_name_id = 465
+        FactoryGirl.create(:profile_key, :profile_key9_add_12) # 88 - 87, name_id = 465, is_name_id = 48
+
+        FactoryGirl.create(:profile_key, :profile_key9_add_13) # 85 - 89, name_id = 370, is_name_id = 345
+        FactoryGirl.create(:profile_key, :profile_key9_add_14) # 89 - 85, name_id = 345, is_name_id = 370
+
+        FactoryGirl.create(:profile_key, :profile_key9_add_15) # 86 - 89, name_id = 28, is_name_id = 345
+        FactoryGirl.create(:profile_key, :profile_key9_add_16) # 89 - 86, name_id = 345, is_name_id = 28
+      }
+
+      after {
+        Profile.delete_all
+        Profile.reset_pk_sequence
+
+        Tree.delete_all
+        Tree.reset_pk_sequence
+
+        ProfileKey.delete_all
+        ProfileKey.reset_pk_sequence
+      }
+
+
+      context "- Before check Method Rename -"   do  # , focus: true
+        let(:profile_id) {85}
+        let(:new_name_id) {150}
+        describe '- check Profile have rows count before profile.rename - Ok' do
+          let(:rows_qty) {1}
+          let(:rows_ids_arr) {[85]}
+          it_behaves_like :successful_profiles_count_and_ids
+        end
+        describe '- check Tree have rows count before profile.rename - Ok' do
+          let(:rows_qty) {8}
+          it_behaves_like :successful_tree_rows_count
+        end
+        describe '- check Tree have name_ids array before profile.rename - Ok' do
+          let(:array_of_name_ids) {[370, 370, 370, 370, 370, 370, 370]}
+          it_behaves_like :successful_tree_name_ids_arr
+        end
+
+        describe '- check ProfileKey have rows count before profile.rename - Ok' do
+          let(:rows_qty) {16}
+          it_behaves_like :successful_profile_keys_rows_count
+        end
+        describe '- check ProfileKey have name_ids array before profile.rename - Ok' do
+          let(:array_of_name_ids) {[370, 370, 370, 370]}
+          it_behaves_like :successful_profile_keys_name_ids_arr
+        end
+      end
+
+      context "- After check Method Rename -"  , focus: true  do  #
+
+        let(:profile_id) {85}
+        let(:row_profile) {Profile.find(profile_id)}
+        let(:new_name_id) {150}
+        before { row_profile.rename(new_name_id) }
+
+        it "- profile Renamed - Ok " do
+          p "Check After Rename Profile for Models content created "
+          p "After Profile rename; row_profile.id = #{row_profile.id}, row_profile.name_id = #{row_profile.name_id}"
+          puts  " Model Profile: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
+          expect(Profile.find(row_profile.id).name_id).to eq(150)
+        end
+
+        describe '- check ProfileKey have name_ids array After profile.rename - Ok' do
+          let(:array_of_ids) {[1, 3, 7, 13]}
+          let(:array_of_name_ids) {[150, 150, 150, 150]}
+          it_behaves_like :successful_profile_keys_name_ids_arr
+        end
+        describe '- check ProfileKey have is_name_ids array After profile.rename - Ok' do
+          let(:array_of_is_name_ids) {[150, 150, 150, 150]}
+          it_behaves_like :successful_profile_keys_is_name_ids_arr
+        end
+
+        describe '- check Tree have name_ids array After rename_in_tree  - Ok' do
+          let(:array_of_name_ids) {[150, 150, 150, 150, 150, 150, 150]}
+          it_behaves_like :successful_tree_name_ids_arr
+        end
+        describe '- check Tree have is_name_ids array After rename_in_tree  - Ok' do
+          let(:array_of_is_name_ids) {[150]}
+          it_behaves_like :successful_tree_is_name_ids_arr
+        end
+
+      end
+
     end
 
   end
+
+
+
+  # describe 'Method Rename Profile test'   do # , focus: true
+  #   after {
+  #     Profile.delete_all
+  #     Profile.reset_pk_sequence
+  #   }
+  #   let(:row_profile) {FactoryGirl.create(:test_model_profile)}
+  #   let(:profile_id) {row_profile.id}
+  #   let(:new_name_id) {150}
+  #
+  #   it "- profile Renamed - Ok " do
+  #     p " Model Profile: before rename - row_profile.name_id = #{row_profile.name_id}"
+  #     Profile.rename_in_profile(profile_id, new_name_id)#.attributes.except('created_at','updated_at', 'sex_id')
+  #     puts  " Model Profil: after rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
+  #     expect(Profile.find(row_profile.id).name_id).to eq(150)
+  #   end
+  #
+  # end
 
 
     describe '- validation' do
