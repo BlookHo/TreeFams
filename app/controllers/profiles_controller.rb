@@ -76,7 +76,7 @@ class ProfilesController < ApplicationController
     puts "In Profiles_controller: rename: got_profile = #{got_profile.inspect} "
     puts "In Profiles_controller: rename: @profile = #{@profile.inspect} "
     prev_name = Name.find(@profile.name_id)
-    @new_name_id = 465
+    @new_name_id = 465 # 465 # 203 = name_id Илья  465=Федор
     puts "In Profiles_controller: rename: @new_name_id = #{@new_name_id.inspect} "
 
     @profile.rename(@new_name_id)
@@ -110,6 +110,7 @@ class ProfilesController < ApplicationController
     @profile.allow_destroy = !@profile.user.present?  && !(@profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0) && (@profile.owner_user.get_connected_users.include? current_user.id)
     @profile.allow_invite = !@profile.user.present?
     @profile.allow_conversation = @profile.user.present? && @profile.user.id != current_user.id
+    @profile.allow_rename = !@profile.user.present?
   end
 
 

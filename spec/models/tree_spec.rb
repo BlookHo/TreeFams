@@ -68,7 +68,7 @@ RSpec.describe Tree, :type => :model do  # , focus: true
       let(:profile_id) {85}
       let(:new_name_id) {150}
 
-      context "- Before check Method -"  , focus: true  do
+      context "- Before check Method -"    do
         describe '- check Tree have rows count before - Ok' do
           let(:rows_qty) {8}
           it_behaves_like :successful_tree_rows_count
@@ -84,7 +84,7 @@ RSpec.describe Tree, :type => :model do  # , focus: true
       end
 
 
-      context "- Check Method -" , focus: true  do  #  , focus: true
+      context "- Check Method -"  do  #  , focus: true
         before {  Tree.rename_in_tree(profile_id, new_name_id) }
 
         it "- profiles in Tree Renamed - Ok " do

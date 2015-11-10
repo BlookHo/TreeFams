@@ -128,7 +128,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
       }
 
 
-      context "- Before check Method Rename -"   do  # , focus: true
+      context "- Before check Method Rename -" , focus: true   do  # , focus: true
         let(:profile_id) {85}
         let(:new_name_id) {150}
         describe '- check Profile have rows count before profile.rename - Ok' do
@@ -150,12 +150,13 @@ RSpec.describe Profile, :type => :model   do # , focus: true
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check ProfileKey have name_ids array before profile.rename - Ok' do
+          let(:array_of_ids) {[1, 3, 7, 13]}
           let(:array_of_name_ids) {[370, 370, 370, 370]}
           it_behaves_like :successful_profile_keys_name_ids_arr
         end
       end
 
-      context "- After check Method Rename -"  , focus: true  do  #
+      context "- After check Method Rename -"    do  # , focus: true
 
         let(:profile_id) {85}
         let(:row_profile) {Profile.find(profile_id)}

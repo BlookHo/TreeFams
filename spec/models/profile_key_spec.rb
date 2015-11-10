@@ -36,7 +36,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
     let(:profile_id) {85}
     let(:new_name_id) {150}
 
-    context "- Before check Method -"  , focus: true  do
+    context "- Before check Method -"   do  #  , focus: true
       describe '- check ProfileKey have rows count before rename_in_profile_key - Ok' do
         let(:rows_qty) {16}
         it_behaves_like :successful_profile_keys_rows_count
@@ -53,7 +53,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
     end
 
 
-    context "- Check Method -" , focus: true  do  #  , focus: true
+    context "- Check Method -"   do  #  , focus: true
       before {  ProfileKey.rename_in_profile_key(profile_id, new_name_id) }
 
       it "- profiles in ProfileKey Renamed - Ok " do
@@ -71,12 +71,6 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
     end
 
   end
-
-
-
-
-
-
 
 
   describe '- validation' do

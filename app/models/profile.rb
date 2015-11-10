@@ -9,7 +9,8 @@ class Profile < ActiveRecord::Base
   attr_accessor :allow_add_relation,
                 :allow_destroy,
                 :allow_invite,
-                :allow_conversation
+                :allow_conversation,
+                :allow_rename
   # may be: attr_accessible instead attr_accessor
 
   include ProfileQuestions

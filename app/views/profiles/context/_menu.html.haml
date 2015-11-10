@@ -22,8 +22,23 @@
   %li= link_to "Добавить в избранные", '#', class: :grey
   %h2 Выбранный @profile: #{@profile.inspect}
 
-  -# Переименовать профиль во всех моделях
-  %li= link_to "Переименовать profiles/context/_menu", rename_path(profile_to_rename: @profile.id), method: :get, remote: true, class: :grey
+  -# Переименовать профиль во всех моделях if not user &
+  - if @profile.allow_rename
+    %li= link_to "Переименовать profiles/context/_menu", rename_path(profile_to_rename: @profile.id), method: :get, remote: true, class: :grey
+    -#%li= link_to "Переименовать profiles/context/_menu", '#', class: :grey
+    -#= form_for @name, url: names_path, html:{role: :form, class: "form-horizontal"} do |f|
+    -#  = render 'ui/errors', :objekt => @name
+    -#  = render 'form', f: f
+    -#.form-group.form-group-lgs
+    -#  = label :name, "Имя", class: "col-sm-2 control-label"
+    -#  .col-sm-6
+    -#    = text_field :name, class: "form-control"
+    -#  -#.control
+    -#  = text_field_tag "author[name]", current_author.name.mb_chars.capitalize, class: [:autocomplete_field], placeholder: "Ваше имя...", data:{names: Name.approved.map{|n| n.name.mb_chars.capitalize } }
+    -#.help-text
+    -#Ваше официальное имя как в паспорте, чтобы ваши родственники смогли вас найти.
+    -#Не нужно вводить фамилию и отчество.
+
 
   -# Страница профиля
   %li= link_to "О нём", profile_path(@profile), class: :grey
