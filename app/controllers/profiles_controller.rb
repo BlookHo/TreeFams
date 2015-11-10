@@ -70,7 +70,7 @@ class ProfilesController < ApplicationController
 
 
   # @note: rename profile
-  def rename
+  def rename_profile
     got_profile = params[:profile_to_rename].to_i
     @profile = Profile.find(params[:profile_to_rename].to_i)
     puts "In Profiles_controller: rename: got_profile = #{got_profile.inspect} "
