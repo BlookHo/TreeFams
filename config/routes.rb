@@ -245,6 +245,7 @@ Weafam::Application.routes.draw do
       namespace :profiles do
         get :destroy, to: "profiles_destroy#destroy"
         get :create,  to: "profiles_create#create"
+        get :rename,  to: "profiles_rename#rename"
       end
 
 
