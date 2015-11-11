@@ -62,13 +62,32 @@
 }
 
 
+#profile-context-menu h2 {
+  color:green;
+}
 
+#profile-context-menu {
 
-#profile-context-menu ul{
-  li{
+  #context-get-names{
     display:block;
+    height: 100px;
+
+    h2 {
+      color:red;
+    }
+
+    #one_name{
+      display:block;
+//      color:black;
+
+      h2 {
+        color:black;
+      }
+
+    }
   }
 }
+
 
 
 // nested list
@@ -78,6 +97,7 @@
   a{
     padding-left:24px;
     border-radius:0 0 0 0 !important;}
+  color:red;
 }
 
 

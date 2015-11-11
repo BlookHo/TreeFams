@@ -76,6 +76,9 @@ RSpec.describe Profile, :type => :model   do # , focus: true
     context "- Check Method Rename Profile for Models content created  -"    do  #
 
       before {
+        # Name
+        FactoryGirl.create(:name, :name_150)   # 150  Демьян
+
         # Profile, 85 - name_id = 370.
         FactoryGirl.create(:add_profile, :add_profile_85)   # 85
 
@@ -156,7 +159,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         end
       end
 
-      context "- After check Method Rename -"    do  # , focus: true
+      context "- After check Method Rename -" , focus: true   do  # , focus: true
 
         let(:profile_id) {85}
         let(:row_profile) {Profile.find(profile_id)}

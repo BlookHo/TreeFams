@@ -53,11 +53,21 @@ class Profile < ActiveRecord::Base
 
   # @note: rename one profile in this model
   def rename(new_name_id)
+    new_name = Name.find(new_name_id)
+    p "In model Profile - rename: profile_id = #{self.id}, new_name_id = #{new_name_id}, new_name.sex_id = #{new_name.sex_id}"
 
-    p "In model Profile - rename: profile_id = #{self.id}, new_name_id = #{new_name_id}"
-    self.rename_in_profile(new_name_id)
-    Tree.rename_in_tree(self.id, new_name_id)
-    ProfileKey.rename_in_profile_key(self.id, new_name_id)
+    if new_name.sex_id == self.sex_id
+      self.rename_in_profile(new_name_id)
+      Tree.rename_in_tree(self.id, new_name_id)
+      ProfileKey.rename_in_profile_key(self.id, new_name_id)
+      puts "Профиль успешно переименован: с имени #{self.name_id} на имя #{new_name}."
+      # render json: { status: 'ok', redirect: '/home' }
+    else
+      puts "Error:400 Выбрано имя не того пола, что Профиль: с имени #{self.name_id} на имя #{new_name}."
+      # render json: { errors: @profile.errors.messages, redirect: '/home' }
+      # render json: { errors: "Error:400 Выбрано имя не того пола, что Профиль", redirect: '/home' }
+    end
+
 
   end
 

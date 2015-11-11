@@ -71,25 +71,28 @@ class ProfilesController < ApplicationController
 
   # @note: rename profile
   def rename_profile
-    got_profile = params[:profile_to_rename].to_i
+    # got_profile = params[:profile_to_rename].to_i
     @profile = Profile.find(params[:profile_to_rename].to_i)
-    puts "In Profiles_controller: rename: got_profile = #{got_profile.inspect} "
+    # puts "In Profiles_controller: rename: got_profile = #{got_profile.inspect} "
     puts "In Profiles_controller: rename: @profile = #{@profile.inspect} "
-    prev_name = Name.find(@profile.name_id)
-    @new_name_id = 465 # 465 # 203 = name_id Илья  465=Федор
+    # prev_name = Name.find(@profile.name_id)
+    @new_name_id = params[:new_name_id]
+    # @new_name_id = 465 # 465 # 203 = name_id Илья  465=Федор  293=Мария
     puts "In Profiles_controller: rename: @new_name_id = #{@new_name_id.inspect} "
 
-    @profile.rename(@new_name_id)
-    new_name = Name.find(@new_name_id)
+    # new_name = Name.find(@new_name_id)
 
-    # if @profile.errors.messages.nil?
-    #   flash.now[:notice] = "Профиль успешно переименован с имени #{prev_name} на имя #{new_name}  ."
-    #   render json: { status: 'ok', redirect: '/home' }
-    # else
-    #   render json: { errors: @profile.errors.messages }
-    # end
-
-    flash.now[:notice] = "Профиль успешно переименован с имени #{prev_name} на имя #{new_name}  ."
+  #  if new_name.sex_id == @profile.sex_id
+      @profile.rename(@new_name_id)
+  #    puts "Профиль успешно переименован: с имени #{prev_name} на имя #{new_name}."
+   #   flash.now[:notice] = "Профиль успешно переименован с имени #{prev_name} на имя #{new_name}  ."
+      # render json: { status: 'ok', redirect: '/home' }
+  #  else
+  #    puts "Error:400 Выбрано имя не того пола, что Профиль: с имени #{prev_name} на имя #{new_name}."
+  #    flash.now[:error] = "Error:400 Выбрано имя не того пола, что Профиль: с имени #{prev_name} на имя #{new_name}  ."
+      # render json: { errors: @profile.errors.messages, redirect: '/home' }
+      # render json: { errors: "Error:400 Выбрано имя не того пола, что Профиль", redirect: '/home' }
+  #  end
 
   end
 

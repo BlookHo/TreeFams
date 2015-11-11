@@ -61,6 +61,11 @@ FactoryGirl.define do
       name    "Дарья"
       sex_id  0
     end
+    trait :name_150 do
+      id      150
+      name    "Демьян"
+      sex_id  1
+    end
     trait :name_173 do
       id      173
       name    "Елена"

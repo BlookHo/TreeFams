@@ -20,11 +20,21 @@
 
   -# Добавить в избранное
   %li= link_to "Добавить в избранные", '#', class: :grey
-  %h2 Выбранный @profile: #{@profile.inspect}
+  %h2 Выбранный @profile.id: #{@profile.id.inspect}
 
   -# Переименовать профиль во всех моделях if not user &
   - if @profile.allow_rename
-    %li= link_to "Переименовать profiles/context/_menu", rename_profile_path(profile_to_rename: @profile.id), method: :get, remote: true, class: :grey
+    -#%li= link_to "Переименовать profiles/context/_menu", rename_profile_path(profile_to_rename: @profile.id), method: :get, remote: true, class: :grey
+    %li
+      = link_to "Переименовать",  '#', onclick: "$('#context-get-names').slideToggle('fast')"
+      %ul#context-get-names{style:'display:none;'}
+        %h2 Name of @profile.id: #{@profile.name_id.inspect}
+        - Name.all.each do |name|
+          %li#one_name{style:'display:block;'}
+            = link_to name.name, rename_profile_path(profile_to_rename: @profile.id, new_name_id: name.id),
+                remote: true, class: :grey
+            -#%h2 Выбраннoе name: #{name.name.inspect}
+
 
 
   -# Страница профиля
