@@ -128,12 +128,13 @@ module SearchHelper
         delta = []
         logger.info "in compare_two_circles: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
         if found_bk_arr.size.inspect == search_bk_arr.size.inspect
-          common_circle_arr = found_bk_arr - search_bk_arr
-          if common_circle_arr == []
+          distinct1 = found_bk_arr - search_bk_arr
+          distinct2 = search_bk_arr - found_bk_arr
+          if distinct1 == [] && distinct2 == []
             compare_rezult = true
+            common_circle_arr = []
             logger.info " circles Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_circle_arr = #{common_circle_arr}"
           else
-
             common_circle_arr = found_bk_arr & search_bk_arr # ПЕРЕСЕЧЕНИЕ 2-х БК
             compare_rezult = false
             logger.info "circles Sizes = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
