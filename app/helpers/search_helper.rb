@@ -61,11 +61,13 @@ module SearchHelper
     profile_user_id = Profile.where(id: profile_id, deleted: 0)[0].tree_id
     profile_circle = get_one_profile_circle(profile_id, profile_user_id)
     logger.info "=== КРУГ ПРОФИЛЯ = #{profile_id} "
-    show_in_logger(profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
+    # show_in_logger(profile_circle, "= ряд " )  # DEBUGG_TO_LOGG
     #circle_arr, circle_profiles_arr, circle_is_profiles_arr, circle_relations_arr =
     circle_arr, circle_profiles_arr, circle_is_profiles_arr =
         make_arrays_from_circle(profile_circle)
     circle_is_profiles_arr = circle_is_profiles_arr.uniq
+    logger.info "=== In have_profile_circle: circle_arr = #{circle_arr} "
+
     return circle_arr, circle_profiles_arr, circle_is_profiles_arr #, circle_relations_arr
   end
 
@@ -101,7 +103,7 @@ module SearchHelper
     is_profiles_arr = []
     relations_arr = []
     bk_rows.each do |row|
-      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
+      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at','display_name_id', 'is_display_name_id')
       bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
       is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
       #relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze
@@ -122,6 +124,7 @@ module SearchHelper
   # На входе - два массива Хэшей = 2 БК
   # На выходе: compare_rezult = false or true.
   def  compare_two_circles(found_bk_arr, search_bk_arr)
+    logger.info "found_bk_arr = #{found_bk_arr}, search_bk_arr = #{search_bk_arr} "
 
     if !found_bk_arr.blank?
       if !search_bk_arr.blank?
