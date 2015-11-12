@@ -66,7 +66,7 @@ module SimilarsCompleteSearch
           logger.info " compare_two_circles: ИСКОМОГО ПРОФИЛЯ = #{profile_searched} и НАЙДЕННОГО ПРОФИЛЯ = #{profile_found}:"
           logger.info " search_bk_arr = #{search_bk_arr}, found_bk_arr = #{found_bk_arr} "
           compare_rezult, common_circle_arr, delta = compare_two_circles(found_bk_arr, search_bk_arr)
-          # logger.info " compare_rezult = #{compare_rezult}"
+          logger.info " compare_rezult = #{compare_rezult}"
           logger.info " ПЕРЕСЕЧЕНИЕ двух Кругов: common_circle_arr = #{common_circle_arr}"
           # logger.info " РАЗНОСТЬ двух Кругов: delta = #{delta}"
 
