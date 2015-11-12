@@ -42,14 +42,17 @@ module SimilarsCompleteSearch
           # для последующего сравнения и анализа
           search_bk_arr, search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
           found_bk_arr, found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
-          logger.info " search_is_profiles_arr = #{search_is_profiles_arr}, found_is_profiles_arr = #{found_is_profiles_arr} "
+          logger.info " search_is_profiles_arr = #{search_is_profiles_arr}"
+          logger.info " found_is_profiles_arr = #{found_is_profiles_arr} "
 
           logger.info " "
           # Очистка полученных кругов от исходных профилей (init) - для искл-я зацикливания
           search_is_profiles_arr = search_is_profiles_arr - [profile_found] - [profile_searched]
           found_is_profiles_arr = found_is_profiles_arr - [profile_found] - [profile_searched]
 
-          logger.info " search_is_profiles_arr = #{search_is_profiles_arr}, found_is_profiles_arr = #{found_is_profiles_arr} "
+          logger.info " After clean profiles_arrs"
+          logger.info " search_is_profiles_arr = #{search_is_profiles_arr}"
+          logger.info " found_is_profiles_arr = #{found_is_profiles_arr} "
 
           ## todo: Проверка Кругов на дубликаты
           #search_diplicates_hash = find_circle_duplicates(search_bk_profiles_arr)
@@ -66,9 +69,8 @@ module SimilarsCompleteSearch
           logger.info " compare_two_circles: ИСКОМОГО ПРОФИЛЯ = #{profile_searched} и НАЙДЕННОГО ПРОФИЛЯ = #{profile_found}:"
           logger.info " search_bk_arr = #{search_bk_arr}, found_bk_arr = #{found_bk_arr} "
           compare_rezult, common_circle_arr, delta = compare_two_circles(found_bk_arr, search_bk_arr)
-          logger.info " compare_rezult = #{compare_rezult}"
+          logger.info " After compare circles: compare_rezult = #{compare_rezult}"
           logger.info " ПЕРЕСЕЧЕНИЕ двух Кругов: common_circle_arr = #{common_circle_arr}"
-          # logger.info " РАЗНОСТЬ двух Кругов: delta = #{delta}"
 
           # Анализ результата сравнения двух Кругов
           unless common_circle_arr.blank? # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов

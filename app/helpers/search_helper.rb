@@ -101,7 +101,7 @@ module SearchHelper
     bk_arr = []
     bk_arr_w_profiles = []
     is_profiles_arr = []
-    relations_arr = []
+    # relations_arr = []
     bk_rows.each do |row|
       bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at','display_name_id', 'is_display_name_id')
       bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
