@@ -6,6 +6,16 @@ module Meteor
         before_filter :authenticate
 
         def search
+          Thread.new do
+            certain_koeff = WeafamSetting.first.certain_koeff
+            @current_user.start_search(certain_koeff)
+          end
+          respond_with(status:200)
+        end
+
+
+
+        def search_old
           # roll = { status: true }
           # rollback_id = params[:id]
           # logger.info "In SearchResultsController: rollback_id = #{rollback_id}"
