@@ -13,6 +13,7 @@ module Meteor
               puts "Start AR connection"
               certain_koeff = WeafamSetting.first.certain_koeff
               @current_user.start_search(certain_koeff)
+              puts "End AR connection"
             end
           end
           respond_with(status:200)
