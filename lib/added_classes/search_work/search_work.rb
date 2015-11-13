@@ -204,10 +204,172 @@ class SearchWork
   end
 
 
+  # 34 Aleksei local
+  {:tree_profiles=>[539, 548, 542, 541, 545, 546, 543, 547, 544, 540],
+   :connected_author_arr=>[34], :qty_of_tree_profiles=>10,
+   :profiles_relations_arr=>[
+       {:profile_searched=>539,
+        :profile_relations=>{540=>1, 541=>2, 542=>3, 543=>3, 544=>8, 545=>91, 547=>92, 546=>101, 548=>102}},
+       {:profile_searched=>548,
+        :profile_relations=>{541=>4, 547=>7, 540=>18, 539=>112}},
+       {:profile_searched=>542,
+        :profile_relations=>{539=>1, 544=>2, 543=>5, 540=>91, 541=>101}},
+       {:profile_searched=>541,
+        :profile_relations=>{547=>1, 548=>2, 539=>3, 540=>7, 545=>13, 546=>14, 544=>17, 542=>111, 543=>111}},
+       {:profile_searched=>545,
+        :profile_relations=>{540=>3, 546=>8, 541=>17, 539=>111}},
+       {:profile_searched=>546,
+        :profile_relations=>{540=>3, 545=>7, 541=>17, 539=>111}},
+       {:profile_searched=>543,
+        :profile_relations=>{539=>1, 544=>2, 542=>5, 540=>91, 541=>101}},
+       {:profile_searched=>547,
+        :profile_relations=>{541=>4, 548=>8, 540=>18, 539=>112}},
+       {:profile_searched=>544,
+        :profile_relations=>{542=>3, 543=>3, 539=>7, 540=>13, 541=>14}},
+       {:profile_searched=>540,
+        :profile_relations=>{545=>1, 546=>2, 539=>3, 541=>8, 547=>15, 548=>16, 544=>17, 542=>111, 543=>111}}],
+   :profiles_found_arr=>[
+       # Aleksei
+       {539=>{46=>{657=>[1, 2, 3, 3, 8]},
+              47=>{667=>[1, 2, 3, 3, 8]},
+              45=>{651=>[3, 3, 8]}}},  # Aleksei
+       {548=>{}},
+       # Petr
+       {542=>{45=>{649=>[1, 2, 5]}, # Petr
+              46=>{656=>[1, 2, 5, 91, 101]},
+              47=>{669=>[1, 2, 5, 91, 101]}}},
+       {541=>{19=>{383=>[1]},
+              46=>{663=>[3, 7, 17, 111, 111]},
+              47=>{671=>[3, 7, 17, 111, 111]}}},
+       {545=>{55=>{753=>[8]},
+              56=>{753=>[8]}}},
+       {546=>{55=>{754=>[7]},
+              56=>{754=>[7]}}},
+       # Fedor
+       {543=>{45=>{650=>[1, 2, 5]}, # Fedor
+              46=>{659=>[1, 2, 5, 91, 101]},
+              47=>{666=>[1, 2, 5, 91, 101]}}},
+       {547=>{19=>{367=>[4]}}},
+       # Anna
+       {544=>{45=>{645=>[3, 3, 7]}, # Anna
+              46=>{658=>[3, 3, 7, 13, 14]},
+              47=>{668=>[3, 3, 7, 13, 14]}}},
+       {540=>{46=>{662=>[3, 8, 17, 111, 111]},
+              47=>{670=>[3, 8, 17, 111, 111]}}}],
+   :uniq_profiles_pairs=>
+       {539=>{46=>657, 47=>667},
+        542=>{46=>656, 47=>669},
+        541=>{46=>663, 47=>671},
+        543=>{46=>659, 47=>666},
+        544=>{46=>658, 47=>668},
+        540=>{46=>662, 47=>670}},
+   :profiles_with_match_hash=>{670=>5, 662=>5, 668=>5, 658=>5, 666=>5, 659=>5, 671=>5, 663=>5, 669=>5, 656=>5, 667=>5, 657=>5},
+   :by_profiles=>[
+       {:search_profile_id=>540, :found_tree_id=>47, :found_profile_id=>670, :count=>5},
+       {:search_profile_id=>540, :found_tree_id=>46, :found_profile_id=>662, :count=>5},
+       {:search_profile_id=>544, :found_tree_id=>47, :found_profile_id=>668, :count=>5},
+       {:search_profile_id=>544, :found_tree_id=>46, :found_profile_id=>658, :count=>5},
+       {:search_profile_id=>543, :found_tree_id=>47, :found_profile_id=>666, :count=>5},
+       {:search_profile_id=>543, :found_tree_id=>46, :found_profile_id=>659, :count=>5},
+       {:search_profile_id=>541, :found_tree_id=>47, :found_profile_id=>671, :count=>5},
+       {:search_profile_id=>541, :found_tree_id=>46, :found_profile_id=>663, :count=>5},
+       {:search_profile_id=>542, :found_tree_id=>47, :found_profile_id=>669, :count=>5},
+       {:search_profile_id=>542, :found_tree_id=>46, :found_profile_id=>656, :count=>5},
+       {:search_profile_id=>539, :found_tree_id=>47, :found_profile_id=>667, :count=>5},
+       {:search_profile_id=>539, :found_tree_id=>46, :found_profile_id=>657, :count=>5}],
+   :by_trees=>[{:found_tree_id=>46, :found_profile_ids=>[657, 656, 663, 659, 658, 662]},
+               {:found_tree_id=>47, :found_profile_ids=>[667, 669, 671, 666, 668, 670]}],
+   :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+
+
+  # 45 Anna local
+  {:tree_profiles=>[645, 650, 654, 653, 647, 652, 655, 651, 646, 649, 648],
+   :connected_author_arr=>[45], :qty_of_tree_profiles=>11,
+   :profiles_relations_arr=>[
+       {:profile_searched=>645, # Anna
+        :profile_relations=>{646=>1, 647=>2, 649=>3, 650=>3, 648=>6, 651=>7, 652=>91, 654=>92, 653=>101, 655=>102}},
+       {:profile_searched=>650,  # Fedor
+        :profile_relations=>{651=>1, 645=>2, 649=>5, 646=>92, 647=>102, 648=>202}},
+       {:profile_searched=>654,
+        :profile_relations=>{647=>4, 655=>8, 646=>18, 645=>122, 648=>122}},
+       {:profile_searched=>653,
+        :profile_relations=>{646=>3, 652=>7, 647=>17, 645=>121, 648=>121}},
+       {:profile_searched=>647,
+        :profile_relations=>{654=>1, 655=>2, 645=>4, 648=>4, 646=>7, 652=>13, 653=>14, 651=>18, 649=>112, 650=>112}},
+       {:profile_searched=>652,
+        :profile_relations=>{646=>3, 653=>8, 647=>17, 645=>121, 648=>121}},
+       {:profile_searched=>655,
+        :profile_relations=>{647=>4, 654=>7, 646=>18, 645=>122, 648=>122}},
+       {:profile_searched=>651, # Aleksei
+        :profile_relations=>{649=>3, 650=>3, 645=>8, 646=>15, 647=>16}},
+       {:profile_searched=>646,
+        :profile_relations=>{652=>1, 653=>2, 645=>4, 648=>4, 647=>8, 654=>15, 655=>16, 651=>18, 649=>112, 650=>112}},
+       {:profile_searched=>649, # Petr
+        :profile_relations=>{651=>1, 645=>2, 650=>5, 646=>92, 647=>102, 648=>202}},
+       {:profile_searched=>648,
+        :profile_relations=>{646=>1, 647=>2, 645=>6, 652=>91, 654=>92, 653=>101, 655=>102, 649=>212, 650=>212}}],
+   :profiles_found_arr=>[
+       # Anna
+       {645=>{46=>{658=>[1, 2, 3, 3, 7]},
+              47=>{668=>[1, 2, 3, 3, 6, 7]},
+              34=>{544=>[3, 3, 7]}}}, # Anna
+       # Fedor
+       {650=>{34=>{543=>[1, 2, 5]},  # Fedor
+              46=>{659=>[1, 2, 5, 92, 102]},
+              47=>{666=>[1, 2, 5, 92, 102, 202]}}},
+       {654=>{}},
+       {653=>{}},
+       {647=>{46=>{665=>[4, 7, 18, 112, 112]},
+              47=>{673=>[4, 4, 7, 18, 112, 112]}}},
+       {652=>{}},
+       {655=>{}},
+       # Aleksei
+       {651=>{34=>{539=>[3, 3, 8]}, # Aleksei
+              46=>{657=>[3, 3, 8, 15, 16]},
+              47=>{667=>[3, 3, 8, 15, 16]}}},
+       {646=>{46=>{664=>[4, 8, 18, 112, 112]},
+              47=>{672=>[4, 4, 8, 18, 112, 112]}}},
+       # Petr
+       {649=>{34=>{542=>[1, 2, 5]}, # Petr
+              46=>{656=>[1, 2, 5, 92, 102]},
+              47=>{669=>[1, 2, 5, 92, 102, 202]}}},
+       {648=>{47=>{721=>[1, 2, 6, 212, 212]}}}],
+   :uniq_profiles_pairs=>
+       {645=>{46=>658, 47=>668},
+        650=>{46=>659, 47=>666},
+        647=>{46=>665, 47=>673},
+        651=>{46=>657, 47=>667},
+        646=>{46=>664, 47=>672},
+        649=>{46=>656, 47=>669},
+        648=>{47=>721}},
+   :profiles_with_match_hash=>{669=>6, 672=>6, 673=>6, 666=>6, 668=>6, 721=>5, 656=>5, 664=>5, 667=>5, 657=>5, 665=>5, 659=>5, 658=>5},
+   :by_profiles=>[
+       {:search_profile_id=>649, :found_tree_id=>47, :found_profile_id=>669, :count=>6},
+       {:search_profile_id=>646, :found_tree_id=>47, :found_profile_id=>672, :count=>6},
+       {:search_profile_id=>647, :found_tree_id=>47, :found_profile_id=>673, :count=>6},
+       {:search_profile_id=>650, :found_tree_id=>47, :found_profile_id=>666, :count=>6},
+       {:search_profile_id=>645, :found_tree_id=>47, :found_profile_id=>668, :count=>6},
+       {:search_profile_id=>648, :found_tree_id=>47, :found_profile_id=>721, :count=>5},
+       {:search_profile_id=>649, :found_tree_id=>46, :found_profile_id=>656, :count=>5},
+       {:search_profile_id=>646, :found_tree_id=>46, :found_profile_id=>664, :count=>5},
+       {:search_profile_id=>651, :found_tree_id=>47, :found_profile_id=>667, :count=>5},
+       {:search_profile_id=>651, :found_tree_id=>46, :found_profile_id=>657, :count=>5},
+       {:search_profile_id=>647, :found_tree_id=>46, :found_profile_id=>665, :count=>5},
+       {:search_profile_id=>650, :found_tree_id=>46, :found_profile_id=>659, :count=>5},
+       {:search_profile_id=>645, :found_tree_id=>46, :found_profile_id=>658, :count=>5}],
+   :by_trees=>[{:found_tree_id=>46, :found_profile_ids=>[658, 659, 665, 657, 664, 656]},
+               {:found_tree_id=>47, :found_profile_ids=>[668, 666, 673, 667, 672, 669, 721]}],
+   :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+
+
+
+
+
+
   # @note: ПОЛУЧЕНИЕ ПАР СООТВЕТСТВИЙ ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ МНОЖЕСТВ СОВПАДЕНИЙ ОТНОШЕНИЙ
   def self.get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
-    # puts "=== IN get_certain_profiles_pairs "
-    # puts " profiles_found_arr = #{profiles_found_arr} "
+    puts "=== IN get_certain_profiles_pairs "
+    puts " profiles_found_arr = #{profiles_found_arr} "
     max_power_profiles_pairs_hash = {}  # Профили с макс-м кол-вом совпадений для одного соответствия в дереве
     profiles_with_match_hash = {} # Профили, отсортир-е по кол-ву совпадений
     new_profiles_with_match_hash = {}
