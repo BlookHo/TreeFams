@@ -99,7 +99,7 @@ class SearchWork
   # @see Place = main_contrl.,
   ################# FILLING OF HASH WITH KEYS AND/OR VALUES
   def self.fill_arrays_in_hash(fill_arrays_data) # Filling of hash with keys and values, according to key occurance
-    # logger.info "In  fill_arrays_in_hash: fill_arrays_data = #{fill_arrays_data}"
+    puts "In  fill_arrays_in_hash: fill_arrays_data = #{fill_arrays_data}"
     one_hash = fill_arrays_data[:profiles_hash]
     tree     = fill_arrays_data[:tree_user_id]
     profile  = fill_arrays_data[:tree_profile_id]

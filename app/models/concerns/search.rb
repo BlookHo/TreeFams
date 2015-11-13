@@ -223,13 +223,13 @@ module Search
       logger.info "In ELSE  collect_profiles_hash: relation_match_arr.SIZE = #{relation_match_arr.size}"
 
       relation_match_arr.each do |tree_row|
-        logger.info "In  collect_profiles_hash: tree_row = #{tree_row}"
         fill_arrays_data = {
           profiles_hash:    profiles_hash,
           tree_user_id:     tree_row.user_id,
           tree_profile_id:  tree_row.profile_id,
           row_relation_id:  row_relation_id
         }
+        logger.info "In  collect_profiles_hash: fill_arrays_data = #{fill_arrays_data}"
         found_profiles_hash.merge!( profile_id_searched  => SearchWork.fill_arrays_in_hash(fill_arrays_data) ) # наполнение хэша соответствиями найденных профилей и найденных отношений
       end
     end

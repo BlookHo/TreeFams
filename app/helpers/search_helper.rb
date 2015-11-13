@@ -250,7 +250,7 @@ module SearchHelper
     row_no = 0  # DEBUGG_TO_LOGG
     arr_to_log.each do |row| # DEBUGG_TO_LOGG
       row_no += 1
-      logger.debug "#{string_to_add} № #{row_no.inspect}: #{row.attributes.inspect} " # DEBUGG_TO_LOGG
+      logger.info "#{string_to_add} № #{row_no.inspect}: #{row.attributes.inspect} " # DEBUGG_TO_LOGG
     end  # DEBUGG_TO_LOGG
   end
 
