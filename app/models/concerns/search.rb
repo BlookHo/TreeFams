@@ -208,6 +208,7 @@ module Search
   # @note: Collect found_profiles_hash in depence of relations match in ProfileKey
   def collect_profiles_hash(profiles_data, relation_match_arr)
     logger.info "In  collect_profiles_hash: profiles_data = #{profiles_data}"
+    logger.info "In  collect_profiles_hash: relation_match_arr = #{relation_match_arr}"
 
     row_relation_id     = profiles_data[:row_relation_id]
     profiles_hash       = profiles_data[:profiles_hash]
@@ -222,6 +223,7 @@ module Search
       logger.info "In ELSE  collect_profiles_hash: relation_match_arr.SIZE = #{relation_match_arr.size}"
 
       relation_match_arr.each do |tree_row|
+        logger.info "In  collect_profiles_hash: tree_row = #{tree_row}"
         fill_arrays_data = {
           profiles_hash:    profiles_hash,
           tree_user_id:     tree_row.user_id,
