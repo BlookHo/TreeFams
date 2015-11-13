@@ -151,7 +151,7 @@ module Search
     profiles_hash = search_data[:profiles_hash]
     relation_row  = search_data[:relation_row]
     one_profile_relations_hash = search_data[:one_profile_relations_hash]
-    logger.info "In  search_profile_relations: search_data = #{search_data}"
+    # logger.info "In  search_profile_relations: search_data = #{search_data}"
 
     found_profiles_data = {
         profiles_hash:       profiles_hash,
@@ -160,7 +160,7 @@ module Search
         profile_id_searched: search_data[:profile_id_searched]
     }
     one_profile_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
-    logger.info "## In  search_profile_relations: one_profile_relations_hash = #{one_profile_relations_hash}"
+    # logger.info "## In  search_profile_relations: one_profile_relations_hash = #{one_profile_relations_hash}"
     # Получение РЕЗ-ТАТа ПОИСКА для одной записи Kруга искомого профиля - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
     found_profiles_hash = get_found_profiles(found_profiles_data)
     logger.info "## In  search_profile_relations, after : found_profiles_hash = #{found_profiles_hash}"
@@ -207,8 +207,8 @@ module Search
 
   # @note: Collect found_profiles_hash in depence of relations match in ProfileKey
   def collect_profiles_hash(profiles_data, relation_match_arr)
-    logger.info "In  collect_profiles_hash: profiles_data = #{profiles_data}"
-    logger.info "In  collect_profiles_hash: relation_match_arr = #{relation_match_arr}"
+    # logger.info "In  collect_profiles_hash: profiles_data = #{profiles_data}"
+    # logger.info "In  collect_profiles_hash: relation_match_arr = #{relation_match_arr}"
 
     row_relation_id     = profiles_data[:row_relation_id]
     profiles_hash       = profiles_data[:profiles_hash]
@@ -217,10 +217,10 @@ module Search
     found_profiles_hash = Hash.new  #
     if relation_match_arr.blank?
       found_profiles_hash.merge!( profile_id_searched  => profiles_hash ) # наполнение хэша соответствиями найденных профилей и найденных отношений
-      logger.info "=== НЕТ результата! В деревьях сайта ничего не найдено! === "
+      # logger.info "=== НЕТ результата! В деревьях сайта ничего не найдено! === "
     else
       show_in_logger(relation_match_arr, "=== результат" )  # DEBUGG_TO_LOGG
-      logger.info "In ELSE  collect_profiles_hash: relation_match_arr.SIZE = #{relation_match_arr.size}"
+      # logger.info "In ELSE  collect_profiles_hash: relation_match_arr.SIZE = #{relation_match_arr.size}"
 
       relation_match_arr.each do |tree_row|
         fill_arrays_data = {
@@ -229,11 +229,11 @@ module Search
           tree_profile_id:  tree_row.profile_id,
           row_relation_id:  row_relation_id
         }
-        logger.info "In  collect_profiles_hash: fill_arrays_data = #{fill_arrays_data}"
+        # logger.info "In  collect_profiles_hash: fill_arrays_data = #{fill_arrays_data}"
         found_profiles_hash.merge!( profile_id_searched  => SearchWork.fill_arrays_in_hash(fill_arrays_data) ) # наполнение хэша соответствиями найденных профилей и найденных отношений
       end
     end
-    logger.info "In  collect_profiles_hash: found_profiles_hash = #{found_profiles_hash}"
+    # logger.info "In  collect_profiles_hash: found_profiles_hash = #{found_profiles_hash}"
 
     found_profiles_hash
   end
