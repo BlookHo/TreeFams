@@ -160,10 +160,10 @@ module Search
         profile_id_searched: search_data[:profile_id_searched]
     }
     one_profile_relations_hash.merge!(relation_row.is_profile_id => relation_row.relation_id)
-    puts "## In  search_profile_relations: one_profile_relations_hash = #{one_profile_relations_hash}"
+    logger.info "## In  search_profile_relations: one_profile_relations_hash = #{one_profile_relations_hash}"
     # Получение РЕЗ-ТАТа ПОИСКА для одной записи Kруга искомого профиля - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
     found_profiles_hash = get_found_profiles(found_profiles_data)
-    puts "## In  search_profile_relations, after : found_profiles_hash = #{found_profiles_hash}"
+    logger.info "## In  search_profile_relations, after : found_profiles_hash = #{found_profiles_hash}"
 
     logger_data = {
         all_profile_rows_no:        search_data[:all_profile_rows_no],
@@ -182,6 +182,7 @@ module Search
   #   Если вставлять деревья, кот-е надо исключить для поиска, то - это здесь: where.not(user_id: search_exclude_users)
   #   search_exclude_users = [22,134,...]
   def get_found_profiles(found_profiles_data)
+    logger.info "In  get_found_profiles: found_profiles_data = #{found_profiles_data}"
 
     connected_users     = found_profiles_data[:connected_users]
     relation_row        = found_profiles_data[:relation_row]
@@ -217,7 +218,7 @@ module Search
       logger.info "=== НЕТ результата! В деревьях сайта ничего не найдено! === "
     else
       show_in_logger(relation_match_arr, "=== результат" )  # DEBUGG_TO_LOGG
-      puts "In ELSE  collect_profiles_hash: relation_match_arr.SIZE = #{relation_match_arr.size}"
+      logger.info "In ELSE  collect_profiles_hash: relation_match_arr.SIZE = #{relation_match_arr.size}"
 
       relation_match_arr.each do |tree_row|
         fill_arrays_data = {
@@ -229,7 +230,7 @@ module Search
         found_profiles_hash.merge!( profile_id_searched  => SearchWork.fill_arrays_in_hash(fill_arrays_data) ) # наполнение хэша соответствиями найденных профилей и найденных отношений
       end
     end
-    puts "In  collect_profiles_hash: found_profiles_hash = #{found_profiles_hash}"
+    logger.info "In  collect_profiles_hash: found_profiles_hash = #{found_profiles_hash}"
 
     found_profiles_hash
   end
