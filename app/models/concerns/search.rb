@@ -207,6 +207,7 @@ module Search
 
   # @note: Collect found_profiles_hash in depence of relations match in ProfileKey
   def collect_profiles_hash(profiles_data, relation_match_arr)
+    logger.info "In  collect_profiles_hash: profiles_data = #{profiles_data}"
 
     row_relation_id     = profiles_data[:row_relation_id]
     profiles_hash       = profiles_data[:profiles_hash]

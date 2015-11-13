@@ -99,6 +99,7 @@ class SearchWork
   # @see Place = main_contrl.,
   ################# FILLING OF HASH WITH KEYS AND/OR VALUES
   def self.fill_arrays_in_hash(fill_arrays_data) # Filling of hash with keys and values, according to key occurance
+    logger.info "In  fill_arrays_in_hash: fill_arrays_data = #{fill_arrays_data}"
     one_hash = fill_arrays_data[:profiles_hash]
     tree     = fill_arrays_data[:tree_user_id]
     profile  = fill_arrays_data[:tree_profile_id]
@@ -131,14 +132,18 @@ class SearchWork
       #   # current_hash.merge!(profile => value_array )
       #   # one_hash.merge!(tree => current_hash )
       # end
+      logger.info "In IF : test_profile_found = #{test_profile_found}, collect_hash_data = #{collect_hash_data}"
 
       new_collect_hash_data = proceed_hash_data(test_profile_found, collect_hash_data)
+      logger.info "In IF : new_collect_hash_data = #{new_collect_hash_data}"
       # наполнение хэша соответствиями найденных профилей и найденных отношений
       one_hash = collect_one_hash(new_collect_hash_data)
+      logger.info "In IF : one_hash = #{one_hash}"
     else  # if !test_tree # == false
       # "key = profile_searched YET NOT in hash - make new hash in hash"
       # include new profile_searched with new profile with new array in hash
       one_hash.merge!(tree => { profile => [relation] } )
+      logger.info "In ELSE : one_hash = #{one_hash}"
     end
     one_hash
   end
