@@ -157,13 +157,113 @@ class SearchResults < ActiveRecord::Base
 
   # @note: prepare and store new search results if there were no doublicates
   def self.store_results_no_doubles(store_data)
+    logger.info "#### In  store_results_no_doubles: store_data = #{store_data}"
     search_results_arr = make_results(store_data)
-    create_search_results(search_results_arr)
+    # logger.info "#### In  store_results_no_doubles: search_results_arr = #{search_results_arr}"
+    search_opp_results_arr = make_opposite_results(store_data)
+    # logger.info "#### In  store_results_no_doubles: search_opp_results_arr = #{search_opp_results_arr}"
+    search_results_both_dir = search_results_arr + search_opp_results_arr
+    # logger.info "#### In  store_results_no_doubles: search_results_both_dir = #{search_results_both_dir}"
+    create_search_results(search_results_both_dir)
+
   end
+
+  # search_results_arr =
+      [{:user_id=>34, :found_user_id=>46, :profile_id=>540, :found_profile_id=>662, :count=>5,
+        :found_profile_ids=>[662, 658, 659, 663, 656, 657], :searched_profile_ids=>[540, 544, 543, 541, 542, 539],
+        :counts=>[5, 5, 5, 5, 5, 5], :connection_id=>nil, :pending_connect=>0},
+       {:user_id=>34, :found_user_id=>47, :profile_id=>540, :found_profile_id=>670, :count=>5,
+        :found_profile_ids=>[670, 668, 666, 671, 669, 667], :searched_profile_ids=>[540, 544, 543, 541, 542, 539],
+        :counts=>[5, 5, 5, 5, 5, 5], :connection_id=>nil, :pending_connect=>0}]
+
+  # In  search_opp_results_arr =
+    [{:user_id=>46, :found_user_id=>34, :profile_id=>662, :found_profile_id=>540, :count=>5,
+      :found_profile_ids=>[540, 544, 543, 541, 542, 539], :searched_profile_ids=>[662, 658, 659, 663, 656, 657],
+      :counts=>[5, 5, 5, 5, 5, 5], :connection_id=>nil, :pending_connect=>0},
+     {:user_id=>47, :found_user_id=>34, :profile_id=>670, :found_profile_id=>540, :count=>5,
+      :found_profile_ids=>[540, 544, 543, 541, 542, 539], :searched_profile_ids=>[670, 668, 666, 671, 669, 667],
+      :counts=>[5, 5, 5, 5, 5, 5], :connection_id=>nil, :pending_connect=>0}]
+
+
+  # @note - prepare data for результатов поиска and search arrays
+  def self.make_results(store_data)
+    search_results_arr = []
+    store_data[:tree_ids].each do |tree_id|
+      results_arrs, params_to_store = make_results_arrs(store_data, tree_id)
+      searched_profile_ids = results_arrs[:search_profile_id]
+      found_profile_ids    = results_arrs[:found_profile_id]
+      counts               = results_arrs[:count]
+      one_result = { user_id: store_data[:current_user_id],
+                     found_user_id: tree_id,
+                     profile_id: searched_profile_ids[0],
+                     found_profile_id: found_profile_ids[0],
+                     count: counts[0],
+                     found_profile_ids: found_profile_ids,
+                     searched_profile_ids: searched_profile_ids,
+                     counts: counts,
+                     connection_id: params_to_store[:connection_id],
+                     pending_connect: params_to_store[:pending_value]}
+      search_results_arr << one_result
+    end
+    search_results_arr
+  end
+
+  # @note: make more search_results params
+  def self.make_results_arrs(store_data, tree_id)
+    results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
+    # logger.info "#### In  make_results_arrs: results_arrs = #{results_arrs}"
+    params_to_store = get_results_params(tree_id, store_data[:current_user_tree_ids])
+    # logger.info "#### In  make_results_arrs: params_to_store = #{params_to_store}"
+    return results_arrs, params_to_store
+  end
+
+  # Сохранение массива search_results_arr в таблицу SearchResults
+  def self.create_search_results(search_results_arr)
+    search_results_arr.each do |one_result|
+      logger.info "#### In  create_search_results: one_result = #{one_result}"
+      create(user_id:              one_result[:user_id],
+             found_user_id:        one_result[:found_user_id],
+             profile_id:           one_result[:profile_id],
+             found_profile_id:     one_result[:found_profile_id],
+             count:                one_result[:count],
+             found_profile_ids:    one_result[:found_profile_ids],
+             searched_profile_ids: one_result[:searched_profile_ids],
+             counts:               one_result[:counts],
+             connection_id:        one_result[:connection_id],
+             pending_connect:      one_result[:pending_connect])
+    end
+  end
+
+
+  # @note - prepare data for opposite результатов поиска and search arrays
+  def self.make_opposite_results(store_data)
+    search_opp_results_arr = []
+    store_data[:tree_ids].each do |tree_id|
+      results_arrs, parems_to_store = make_results_arrs(store_data, tree_id)
+      searched_profile_ids = results_arrs[:search_profile_id]
+      found_profile_ids    = results_arrs[:found_profile_id]
+      counts               = results_arrs[:count]
+      one_result = { user_id: tree_id, # store_data[:current_user_id],
+                     found_user_id: store_data[:current_user_id], # tree_id,
+                     profile_id: found_profile_ids[0], # searched_profile_ids[0],
+                     found_profile_id: searched_profile_ids[0], # found_profile_ids[0],
+                     count: counts[0],
+                     found_profile_ids: searched_profile_ids, # found_profile_ids,
+                     searched_profile_ids: found_profile_ids, # searched_profile_ids,
+                     counts: counts,
+                     connection_id: parems_to_store[:connection_id],
+                     pending_connect: parems_to_store[:pending_value]}
+      search_opp_results_arr << one_result
+    end
+    search_opp_results_arr
+  end
+
 
   # @note: Clear previous search results before save new ones
   def self.clear_prev_results(by_trees, current_user_id)
-    previous_results = where(user_id: current_user_id, found_user_id: collect_tree_ids_by_trees(by_trees))
+    previous_to_results = where(user_id: current_user_id, found_user_id: collect_tree_ids_by_trees(by_trees))
+    previous_opp_results = where(user_id: collect_tree_ids_by_trees(by_trees), found_user_id: current_user_id )
+    previous_results = previous_to_results + previous_opp_results
     previous_results.each(&:destroy) unless previous_results.blank?
   end
 
@@ -243,52 +343,6 @@ class SearchResults < ActiveRecord::Base
   def self.one_result_destroy(user_id, found_user_id)
     results = one_way_result(user_id, found_user_id)
     results.each(&:destroy) unless results.blank?
-  end
-
-  # @note - prepare data for результатов поиска and search arrays
-  def self.make_results(store_data)
-    search_results_arr = []
-    store_data[:tree_ids].each do |tree_id|
-      results_arrs, parems_to_store = make_results_arrs(store_data, tree_id)
-      searched_profile_ids = results_arrs[:search_profile_id]
-      found_profile_ids    = results_arrs[:found_profile_id]
-      counts               = results_arrs[:count]
-      one_result = { user_id: store_data[:current_user_id],
-                     found_user_id: tree_id,
-                     profile_id: searched_profile_ids[0],
-                     found_profile_id: found_profile_ids[0],
-                     count: counts[0],
-                     found_profile_ids: found_profile_ids,
-                     searched_profile_ids: searched_profile_ids,
-                     counts: counts,
-                     connection_id: parems_to_store[:connection_id],
-                     pending_connect: parems_to_store[:pending_value]}
-      search_results_arr << one_result
-    end
-    search_results_arr
-  end
-
-  # @note: make more search_results params
-  def self.make_results_arrs(store_data, tree_id)
-    results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
-    parems_to_store = get_results_params(tree_id, store_data[:current_user_tree_ids])
-    return results_arrs, parems_to_store
-  end
-
-  # Сохранение массива search_results_arr в таблицу SearchResults
-  def self.create_search_results(search_results_arr)
-    search_results_arr.each do |one_result|
-      create(user_id:              one_result[:user_id],
-             found_user_id:        one_result[:found_user_id],
-             profile_id:           one_result[:profile_id],
-             found_profile_id:     one_result[:found_profile_id],
-             count:                one_result[:count],
-             found_profile_ids:    one_result[:found_profile_ids],
-             searched_profile_ids: one_result[:searched_profile_ids],
-             counts:               one_result[:counts],
-             connection_id:        one_result[:connection_id],
-             pending_connect:      one_result[:pending_connect])
-    end
   end
 
   # @note: determine search_results prams to be stored
