@@ -10,9 +10,10 @@ var buildPath = function(data){
 
     // console.log(data[index]);
 
-    path_item = {}
-    path_item.name          = data[index].display_name;
-    path_item.id            = data[index].id;
+      path_item = {}
+    //path_item.name          = data[index].display_name;
+      path_item.name          = data[index].name;
+      path_item.id            = data[index].id;
 
     // next_index = index + 1;
 
