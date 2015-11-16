@@ -99,7 +99,7 @@ module ApplicationHelper
     if data.keys.first == current_user.profile_id
       relation_to_human(data.values.first, prefix: true)
     else
-      [relation_to_human(data.values.first), YandexInflect.inflections(Profile.find( data.keys.first ).full_name)[1]["__content__"] ].join(' ')
+      # [relation_to_human(data.values.first), YandexInflect.inflections(Profile.find( data.keys.first ).full_name)[1]["__content__"] ].join(' ')
     end
   end
 

@@ -33,10 +33,10 @@ class ProfileKey < ActiveRecord::Base
 
   # todo: set index to model: user_id, profile_id
 
-  def full_name
-    # [self.display_name.name, self.is_profile.last_name].join(' ')
-    [self.display_name.name, self.is_profile.last_name].join(' ')
-  end
+  # def full_name
+  #   # [self.display_name.name, self.is_profile.last_name].join(' ')
+  #   [self.name.name, self.is_profile.last_name].join(' ')
+  # end
 
 
   # @note: rename one profile in this model

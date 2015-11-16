@@ -97,9 +97,9 @@ class Profile < ActiveRecord::Base
     profile_data.try(:middle_name)
   end
 
-  def full_name
-    [self.display_name.name].join(' ')
-  end
+  # def full_name
+  #   [self.display_name.name].join(' ')
+  # end
 
   def icon_path
     self.name.sex_id == 1 ? '/assets/man.svg' : '/assets/woman.svg'

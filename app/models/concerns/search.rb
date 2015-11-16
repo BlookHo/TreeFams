@@ -193,9 +193,10 @@ module Search
                                     :relation_id => row_relation_id,
                                     :is_name_id => relation_row.is_name_id, deleted: 0)
                              .order('user_id','relation_id','is_name_id')
-                             .select(:id, :user_id, :profile_id, :name_id,
+                             .select(:user_id, :profile_id, :name_id,
                                      :relation_id, :is_profile_id, :is_name_id)
                              .distinct
+                            # .select(:id, :user_id, :profile_id, :name_id,
     profiles_data = {
       row_relation_id:      row_relation_id,
       profiles_hash:        found_profiles_data[:profiles_hash],
