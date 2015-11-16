@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151116093726) do
+ActiveRecord::Schema.define(version: 20151116134835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -217,6 +217,8 @@ ActiveRecord::Schema.define(version: 20151116093726) do
     t.integer  "counts",                           array: true
     t.integer  "connection_id"
     t.integer  "pending_connect",      default: 0
+    t.integer  "searched_connected",               array: true
+    t.integer  "founded_connected",                array: true
   end
 
   add_index "search_results", ["profile_id"], name: "index_search_results_on_profile_id", using: :btree

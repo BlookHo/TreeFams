@@ -860,7 +860,7 @@ RSpec.describe User, :type => :model   do  # , focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
       describe '- check SearchResults have rows count after <search> - Ok' do
-        let(:rows_qty) {3}
+        let(:rows_qty) {4}
         it_behaves_like :successful_search_results_rows_count
       end
 
