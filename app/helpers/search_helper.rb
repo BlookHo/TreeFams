@@ -13,7 +13,7 @@ module SearchHelper
     connected_author_arr = tree_data[:connected_author_arr]
     logger.info "======================= RUN start_search ========================= "
     logger.info "B Искомом дереве #{connected_author_arr} - kол-во профилей:  #{qty_of_tree_profiles}"
-    show_in_logger(author_tree_arr, "=== результат" )  # DEBUGG_TO_LOGG
+    # show_in_logger(author_tree_arr, "=== результат" )  # DEBUGG_TO_LOGG
     logger.info "Задание на поиск от Дерева Юзера:  author_tree_arr.size = #{author_tree_arr.size}, tree_profiles = #{tree_profiles} "
     logger.info "Коэффициент достоверности: certain_koeff = #{certain_koeff}"
   end
@@ -103,7 +103,8 @@ module SearchHelper
     is_profiles_arr = []
     # relations_arr = []
     bk_rows.each do |row|
-      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at','display_name_id', 'is_display_name_id')
+      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
+      # bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at','display_name_id', 'is_display_name_id')
       bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
       is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
       #relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze

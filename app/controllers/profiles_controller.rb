@@ -128,8 +128,8 @@ class ProfilesController < ApplicationController
 
   def profile_params
     params[:profile].permit(:profile_name,
-                            :relation_id,
-                            :display_name_id)
+                            :relation_id)
+                            # :display_name_id)
   end
 
 

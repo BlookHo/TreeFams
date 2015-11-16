@@ -23,7 +23,7 @@ FactoryGirl.define   do
     name_id 354 # Ольга
     sex_id  1
     tree_id  5
-    display_name_id  354
+    # display_name_id  354
     deleted  0
 
     trait :big_IDs do
@@ -53,7 +53,7 @@ FactoryGirl.define   do
     name_id 354  # Ольга
     sex_id  0
     tree_id  4
-    display_name_id  354
+    # display_name_id  354
     deleted  0
   end
 
@@ -62,7 +62,7 @@ FactoryGirl.define   do
     name_id 351  # Олeг
     sex_id  1
     tree_id  4
-    display_name_id  351
+    # display_name_id  351
     deleted  0
   end
 
@@ -71,7 +71,7 @@ FactoryGirl.define   do
     name_id 351  # Олeг
     sex_id  1
     tree_id  5
-    display_name_id  351
+    # display_name_id  351
     deleted  0
   end
 

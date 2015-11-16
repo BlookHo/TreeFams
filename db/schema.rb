@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151010102848) do
+ActiveRecord::Schema.define(version: 20151116093726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "adminpack"
 
   create_table "admins", force: true do |t|
     t.string   "email"
@@ -172,9 +171,7 @@ ActiveRecord::Schema.define(version: 20151010102848) do
     t.integer  "is_name_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "display_name_id"
-    t.integer  "is_display_name_id"
-    t.integer  "deleted",            default: 0
+    t.integer  "deleted",       default: 0
   end
 
   add_index "profile_keys", ["profile_id"], name: "index_profile_keys_on_profile_id", using: :btree

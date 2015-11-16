@@ -36,7 +36,7 @@ module UserAccount
     def create_profile(data)
       Profile.create({
         name_id:          data['search_name_id'],
-        display_name_id:  data['id'],
+        # display_name_id:  data['id'],
         sex_id:           data['sex_id'],
         tree_id:          data['tree_id']
         })

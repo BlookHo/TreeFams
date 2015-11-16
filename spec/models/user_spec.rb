@@ -7,7 +7,8 @@ RSpec.describe User, :type => :model   do  # , focus: true
       @user.save
       @user_profile = @user.profile_id
 
-      @profile = Profile.new( user_id: @user_profile, profile_name: 45, relation_id: 2, display_name_id:  45)
+      # @profile = Profile.new( user_id: @user_profile, profile_name: 45, relation_id: 2, display_name_id:  45)
+      @profile = Profile.new( user_id: @user_profile, profile_name: 45, relation_id: 2)
       @profile.save
     end
 

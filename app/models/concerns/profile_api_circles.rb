@@ -65,7 +65,8 @@ module ProfileApiCircles
                     .where(deleted: 0)
                     .order('relation_id')
                     .includes(:name, :display_name, :is_profile, :relation)
-                    .select(:profile_id, :is_profile_id, :relation_id, :name_id, :is_name_id, :is_display_name_id, :deleted).distinct
+                    .select(:profile_id, :is_profile_id, :relation_id, :name_id, :is_name_id, :deleted).distinct
+              # .select(:profile_id, :is_profile_id, :relation_id, :name_id, :is_name_id, :is_display_name_id, :deleted).distinct :display_name_id
     @except_ids << pks.map {|r| r.is_profile_id }
     return pks
   end

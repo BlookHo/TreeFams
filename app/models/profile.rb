@@ -37,7 +37,8 @@ class Profile < ActiveRecord::Base
               class_name: User
 
   belongs_to :name
-  belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key: :display_name_id
+  # belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key: :display_name_id
+  # belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key:
   has_many   :trees
 
   has_one :profile_data, dependent: :destroy
