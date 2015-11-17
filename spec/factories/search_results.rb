@@ -12,6 +12,8 @@ FactoryGirl.define do
     counts [4,4]
     connection_id nil
     pending_connect 0
+    searched_connected [15]
+    founded_connected [35]
 
     trait :correct2 do
       user_id 2
@@ -24,6 +26,9 @@ FactoryGirl.define do
       counts [5,5]
       connection_id 7
       pending_connect 1
+      searched_connected [2]
+      founded_connected [3]
+
     end
 
     trait :correct3 do
@@ -37,6 +42,9 @@ FactoryGirl.define do
       counts [7, 7, 7, 7, 5, 5, 5, 5]
       connection_id 3
       pending_connect 0
+      searched_connected [1]
+      founded_connected [3]
+
     end
 
     trait :big_IDs do
