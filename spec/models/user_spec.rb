@@ -856,7 +856,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module' ,  focus: true  do #  ,  focus: true
+    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
       describe '- check SearchResults have rows count after <search> - Ok' do
@@ -909,7 +909,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                              "searched_profile_ids"=>[25, 22, 24, 23, 27, 26, 29, 28],
                                              "found_profile_ids"=>[11, 14, 13, 12, 19, 18, 21, 20],
                                              "counts"=>[7, 7, 7, 7, 5, 5, 5, 5],
-                                             "connection_id"=>3, "pending_connect"=>0,
+                                             "connection_id"=>nil, "pending_connect"=>1,
                                              "searched_connected"=>[3], "founded_connected"=>[1,2] } )
       end
 
@@ -1190,7 +1190,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
       ################ CONNECTION  ###########################
 
 
-      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'  do # , focus: true
+      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'   do # , focus: true
         # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
         # profiles_to_destroy = connection_data[:profiles_to_destroy]
         # who_connect         = connection_data[:who_connect]
@@ -1206,7 +1206,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
         context '- check SearchResults model AFTER <connect_trees> module'  do #  ,  focus: true
           describe '- check SearchResults have rows count AFTER <connect_trees> - Ok' do
-            let(:rows_qty) {1}
+            let(:rows_qty) {3}
             it_behaves_like :successful_search_results_rows_count
           end
           it '- check SearchResults First Factory row - Ok' do # , focus: true
@@ -1214,7 +1214,17 @@ RSpec.describe User, :type => :model    do  # , focus: true
             expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
                                                  "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
                                                  "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
-                                                 "connection_id"=>nil, "pending_connect"=>0} )
+                                                 "connection_id"=>nil, "pending_connect"=>0,
+                                                 "searched_connected"=>[15], "founded_connected"=>[35]} )
+          end
+          it '- check SearchResults Second Factory row - Ok' do # , focus: true
+            search_results_fields = SearchResults.second.attributes.except('created_at','updated_at')
+            expect(search_results_fields).to eq({"id"=>2, "user_id"=>2, "found_user_id"=>3, "profile_id"=>1555,
+                                                 "found_profile_id"=>1444, "count"=>5,
+                                                 "found_profile_ids"=>[1444, 22222],
+                                                 "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
+                                                 "connection_id"=>7, "pending_connect"=>1,
+                                                 "searched_connected"=>[2], "founded_connected"=>[3]} )
           end
         end
 
@@ -1255,8 +1265,8 @@ RSpec.describe User, :type => :model    do  # , focus: true
           # let(:rewrite) {[14, 12, 13, 21, 19, 11, 20, 18]}
           # let(:overwrite) {[22, 23, 24, 29, 27, 25, 28, 26]}
           # todo: ??? organize arrays to be sorted before check ???
-          let(:rewrite) {[18, 13, 12, 20, 11, 19, 21, 14]}
-          let(:overwrite) {[26, 24, 23, 28, 25, 27, 29, 22]}
+          let(:rewrite) {[11, 12, 13, 14, 18, 19, 20, 21]}
+          let(:overwrite) {[22, 23, 24, 25, 26, 27, 28, 29]}
           let(:deleted) {[1,1,1,1,1,1,1,1]}
           it_behaves_like :successful_rewrite_arrays_logs_after_connect
         end

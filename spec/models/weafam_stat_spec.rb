@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe WeafamStat, type: :model do
+RSpec.describe WeafamStat, type: :model  do
   describe 'Model WeafamStat Before methods validation test'   do # , focus: true
     after {
       WeafamStat.delete_all

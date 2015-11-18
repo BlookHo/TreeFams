@@ -8,7 +8,7 @@ FactoryGirl.define   do
     f.name_id { Faker::Number.number(5) }
 
     # f.name_id { row.id }
-    f.sex_id  {Faker::Number.between(0, 1)}
+    f.sex_id  { 1 }
     f.tree_id  { Faker::Number.number(5) }
     f.display_name_id  { Faker::Number.number(5) }
     f.deleted  {Faker::Number.between(0, 1)}

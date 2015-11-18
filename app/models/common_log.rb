@@ -66,7 +66,7 @@ class CommonLog < ActiveRecord::Base
     # log_id       = rollback_add_log_data[:common_log_id]
 
     @profile = Profile.find(profile_id)
-    if @profile.tree_circle(current_user.get_connected_users, @profile.id).size > 0
+    if @profile.tree_circle(current_user.connected_users, @profile.id).size > 0
       @error = "Вы можете удалить только последнего родственника в цепочке"
     elsif @profile.user.present?
       @error = "Вы не можете удалить профиль у которого есть реальный владелец (юзер)"

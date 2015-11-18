@@ -1,4 +1,4 @@
-describe ProfilesController, :type => :controller   do  # , focus: true  #, similars: true
+describe ProfilesController, :type => :controller    do  # , focus: true  #, similars: true
 
   before {
 
