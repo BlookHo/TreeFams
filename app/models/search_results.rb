@@ -73,6 +73,7 @@ class SearchResults < ActiveRecord::Base
   scope :one_opp_way_result, -> (connected_users) {where("found_user_id in (?)", connected_users)}
 
 
+
   # @note: МЕТОДЫ ДЛЯ ИЗГОТОВЛЕНИЯ РЕЗУЛЬТАТОВ ПОИСКА (by_profiles, by_trees)
   #   make final search results to store
   def self.make_search_results(uniq_hash, profiles_match_hash)
@@ -163,11 +164,11 @@ class SearchResults < ActiveRecord::Base
     # logger.info "#### In  store_results_no_doubles: store_data = #{store_data}"
     search_results_arr = make_results(store_data)
     # logger.info "#### In  store_results_no_doubles: search_results_arr = #{search_results_arr}"
-    search_opp_results_arr = make_opposite_results(store_data)
+ #   search_opp_results_arr = make_opposite_results(store_data)
     # logger.info "#### In  store_results_no_doubles: search_opp_results_arr = #{search_opp_results_arr}"
-    search_results_both_dir = search_results_arr + search_opp_results_arr
+ #   search_results_both_dir = search_results_arr + search_opp_results_arr
     # logger.info "#### In  store_results_no_doubles: search_results_both_dir = #{search_results_both_dir}"
-    create_search_results(search_results_both_dir)
+    create_search_results(search_results_arr)
 
   end
 
@@ -194,38 +195,154 @@ class SearchResults < ActiveRecord::Base
     # logger.info "#### In  make_results: store_data[:tree_ids] = #{store_data[:tree_ids]}"
     store_data[:tree_ids].each do |tree_id|
       # logger.info "#### In  make_results.each: tree_id = #{tree_id}, store_data[:tree_ids] = #{store_data[:tree_ids]}"
-
-      results_arrs, params_to_store = make_results_arrs(store_data, tree_id)
+      results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
+      found_tree_ids = User.find(tree_id).get_connected_users # Состав объединенного дерева в виде массива id
+      conn_id = set_connection_id(store_data[:current_user_tree_ids], found_tree_ids)
+      opp_conn_id = set_connection_id(found_tree_ids, store_data[:current_user_tree_ids])
+      params_to_store = get_results_params(found_tree_ids, store_data[:current_user_tree_ids])
+      opp_params_to_store = get_results_params(store_data[:current_user_tree_ids], found_tree_ids)
+      # params_to_store = make_results_arrs(store_data, tree_id)
+      results_arrs[:tree_id] = tree_id
       searched_profile_ids = results_arrs[:search_profile_id]
       found_profile_ids    = results_arrs[:found_profile_id]
       counts               = results_arrs[:count]
+
       one_result = { user_id: store_data[:current_user_id],
-                     found_user_id: tree_id,
+                     found_user_id: results_arrs[:tree_id],
                      profile_id: searched_profile_ids[0],
                      found_profile_id: found_profile_ids[0],
                      count: counts[0],
                      found_profile_ids: found_profile_ids,
                      searched_profile_ids: searched_profile_ids,
                      counts: counts,
-                     connection_id: params_to_store[:connection_id],
+                     # connection_id: params_to_store[:connection_id],
+                     connection_id: conn_id,
                      pending_connect: params_to_store[:pending_value],
                      searched_connected: params_to_store[:current_tree_ids],
                      founded_connected: params_to_store[:connected_tree_ids] }
       search_results_arr << one_result
+
+      one_opp_result = { user_id: tree_id, # store_data[:current_user_id],
+                     found_user_id: store_data[:current_user_id], # tree_id,
+                     profile_id: found_profile_ids[0], # searched_profile_ids[0],
+                     found_profile_id: searched_profile_ids[0], # found_profile_ids[0],
+                     count: counts[0],
+                     found_profile_ids: searched_profile_ids, # found_profile_ids,
+                     searched_profile_ids: found_profile_ids, # searched_profile_ids,
+                     counts: counts,
+                     # connection_id: opp_params_to_store[:connection_id],
+                     connection_id: opp_conn_id,
+                     pending_connect: opp_params_to_store[:pending_value],
+                     searched_connected: opp_params_to_store[:current_tree_ids],
+                     founded_connected: opp_params_to_store[:connected_tree_ids] }
+      search_results_arr << one_opp_result
+
+
+
       # logger.info "#### In  make_results.IN each: search_results_arr = #{search_results_arr}"
     end
     search_results_arr
   end
 
-  # @note: make more search_results params
-  def self.make_results_arrs(store_data, tree_id)
-    results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
-    # logger.info "#### In  make_results_arrs: results_arrs = #{results_arrs}"
-    # logger.info "#### In  make_results_arrs: tree_id = #{tree_id}, store_data[:current_user_tree_ids] = #{store_data[:current_user_tree_ids]}"
-    params_to_store = get_results_params(tree_id, store_data[:current_user_tree_ids])
-    # logger.info "#### In  make_results_arrs: params_to_store = #{params_to_store}"
-    return results_arrs, params_to_store
+
+  # @note: determine search_results prams to be stored
+  def self.get_results_params(connected_one_tree, connected_other_tree)
+    # puts "In get_results_params: tree_id = #{tree_id.inspect}, connected_tree_ids = #{connected_tree_ids.inspect} "
+    connection_id = set_connection_id(connected_one_tree, connected_other_tree)
+    value = set_pending_request(connected_one_tree, connected_other_tree)
+    { connection_id: connection_id, pending_value: value, current_tree_ids: connected_other_tree, connected_tree_ids: connected_one_tree }
   end
+
+  # @note Если встречный запрос существует (if counter_request_exist), то получаем его connection_id
+  # if request.blank? AND
+  # if connected_other_tree = current tree ids, then connection_id should have value
+  def self.set_connection_id(connected_one_tree, connected_other_tree)
+    p " In set_connection_id: connected_one_tree = #{connected_one_tree}, connected_other_tree = #{connected_other_tree} "
+    conn_request = ConnectionRequest
+                  .where("user_id in (?)", connected_one_tree)
+                  .where("with_user_id in (?)", connected_other_tree)
+                  .where(:done => false )
+    connection_id = nil
+    connection_id = conn_request[0].connection_id unless conn_request.blank?
+    p " In set_connection_id:  connection_id = #{connection_id.inspect}, conn_request.count = #{conn_request.count}"
+    connection_id
+  end
+
+  # @note Если запрос текущего юзера существует, то устанавливаем
+  # pending_connect в 1 его рез-тов поиска if my_request_exist
+  def self.set_pending_request(connected_one_tree, connected_other_tree)
+    p " In set_pending_request: connected_one_tree = #{connected_one_tree}, connected_other_tree = #{connected_other_tree} "
+    pending_request = ConnectionRequest
+                     .where("user_id in (?)", connected_other_tree)
+                     .where("with_user_id in (?)", connected_one_tree)
+                     .where(:done => false )
+    value = 0
+    value = 1 unless pending_request.blank?
+    p " In set_pending_request:  pending_value = #{value}, pending_request.count = #{pending_request.count}"
+    value
+  end
+
+  # # @note - prepare data for opposite результатов поиска and search arrays
+  # def self.make_opposite_results(store_data)
+  #   # logger.info "#### In  make_opposite_results: store_data[:tree_ids] = #{store_data[:tree_ids]}"
+  #   search_opp_results_arr = []
+  #   store_data[:tree_ids].each do |tree_id|
+  #     results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
+  #     connected_tree_ids = User.find(tree_id).get_connected_users # Состав объединенного дерева в виде массива id
+  #     # params_to_store = get_opp_results_params(connected_tree_ids, store_data[:current_user_tree_ids])
+  #     params_to_store = get_opp_results_params(store_data[:current_user_tree_ids], connected_tree_ids)
+  #     # params_to_store = make_opp_results_arrs(store_data, tree_id)
+  #
+  #     searched_profile_ids = results_arrs[:search_profile_id]
+  #     found_profile_ids    = results_arrs[:found_profile_id]
+  #     counts               = results_arrs[:count]
+  #     one_result = { user_id: tree_id, # store_data[:current_user_id],
+  #                    found_user_id: store_data[:current_user_id], # tree_id,
+  #                    profile_id: found_profile_ids[0], # searched_profile_ids[0],
+  #                    found_profile_id: searched_profile_ids[0], # found_profile_ids[0],
+  #                    count: counts[0],
+  #                    found_profile_ids: searched_profile_ids, # found_profile_ids,
+  #                    searched_profile_ids: found_profile_ids, # searched_profile_ids,
+  #                    counts: counts,
+  #                    connection_id: params_to_store[:connection_id],
+  #                    pending_connect: params_to_store[:pending_value],
+  #                    searched_connected: params_to_store[:connected_tree_ids],
+  #                    founded_connected: params_to_store[:current_tree_ids] }
+  #     search_opp_results_arr << one_result
+  #   end
+  #   search_opp_results_arr
+  # end
+
+
+  # # @note: make more search_results params
+  # def self.make_results_arrs(store_data, tree_id)
+  #   # results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
+  #   # logger.info "#### In  make_results_arrs: results_arrs = #{results_arrs}"
+  #   # logger.info "#### In  make_results_arrs: tree_id = #{tree_id}, store_data[:current_user_tree_ids] = #{store_data[:current_user_tree_ids]}"
+  #   params_to_store = get_results_params(tree_id, store_data[:current_user_tree_ids])
+  #   # logger.info "#### In  make_results_arrs: params_to_store = #{params_to_store}"
+  #   return params_to_store
+  # end
+
+  # # @note: make more search_results params
+  # def self.make_opp_results_arrs(store_data, tree_id)
+  #   # results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
+  #   # logger.info "#### In  make_results_arrs: results_arrs = #{results_arrs}"
+  #   # logger.info "#### In  make_results_arrs: tree_id = #{tree_id}, store_data[:current_user_tree_ids] = #{store_data[:current_user_tree_ids]}"
+  #   params_to_store = get_results_params(tree_id, store_data[:current_user_tree_ids])
+  #   # logger.info "#### In  make_results_arrs: params_to_store = #{params_to_store}"
+  #   return params_to_store
+  # end
+
+
+  # # @note: determine search_results prams to be stored
+  # def self.get_opp_results_params(connected_tree_ids, current_tree_ids)
+  #   # connected_tree_ids = User.find(tree_id).get_connected_users # Состав объединенного дерева в виде массива id
+  #   # puts "In get_results_params: tree_id = #{tree_id.inspect}, connected_tree_ids = #{connected_tree_ids.inspect} "
+  #   connection_id = counter_request_exist(connected_tree_ids, current_tree_ids)
+  #   value = my_request_exist(connected_tree_ids, current_tree_ids)
+  #   { connection_id: connection_id, pending_value: value, current_tree_ids: current_tree_ids, connected_tree_ids: connected_tree_ids }
+  # end
 
   # Сохранение массива search_results_arr в таблицу SearchResults
   def self.create_search_results(search_results_arr)
@@ -246,32 +363,6 @@ class SearchResults < ActiveRecord::Base
     end
   end
 
-
-  # @note - prepare data for opposite результатов поиска and search arrays
-  def self.make_opposite_results(store_data)
-    # logger.info "#### In  make_opposite_results: store_data[:tree_ids] = #{store_data[:tree_ids]}"
-    search_opp_results_arr = []
-    store_data[:tree_ids].each do |tree_id|
-      results_arrs, params_to_store = make_results_arrs(store_data, tree_id)
-      searched_profile_ids = results_arrs[:search_profile_id]
-      found_profile_ids    = results_arrs[:found_profile_id]
-      counts               = results_arrs[:count]
-      one_result = { user_id: tree_id, # store_data[:current_user_id],
-                     found_user_id: store_data[:current_user_id], # tree_id,
-                     profile_id: found_profile_ids[0], # searched_profile_ids[0],
-                     found_profile_id: searched_profile_ids[0], # found_profile_ids[0],
-                     count: counts[0],
-                     found_profile_ids: searched_profile_ids, # found_profile_ids,
-                     searched_profile_ids: found_profile_ids, # searched_profile_ids,
-                     counts: counts,
-                     connection_id: params_to_store[:connection_id],
-                     pending_connect: params_to_store[:pending_value],
-                     searched_connected: params_to_store[:connected_tree_ids],
-                     founded_connected: params_to_store[:current_tree_ids] }
-      search_opp_results_arr << one_result
-    end
-    search_opp_results_arr
-  end
 
 
   # @note: Clear all previous results for curent tree
@@ -385,39 +476,6 @@ class SearchResults < ActiveRecord::Base
   #   results.each(&:destroy) unless results.blank?
   # end
 
-  # @note: determine search_results prams to be stored
-  def self.get_results_params(tree_id, current_tree_ids)
-    connected_tree_ids = User.find(tree_id).get_connected_users # Состав объединенного дерева в виде массива id
-    # puts "In get_results_params: tree_id = #{tree_id.inspect}, connected_tree_ids = #{connected_tree_ids.inspect} "
-    connection_id = counter_request_exist(connected_tree_ids, current_tree_ids)
-    value = my_request_exist(connected_tree_ids, current_tree_ids)
-    { connection_id: connection_id, pending_value: value, current_tree_ids: current_tree_ids, connected_tree_ids: connected_tree_ids }
-  end
-
-  # @note Если встречный запрос существует, то получаем его connection_id
-  def self.counter_request_exist(connected_tree_ids, current_tree_ids)
-    connection_id = nil
-    request = ConnectionRequest.where("user_id in (?)", connected_tree_ids)
-                  .where("with_user_id in (?)", current_tree_ids)
-                  .where(:done => false )
-    unless request.blank?
-      connection_id = request[0].connection_id
-    end
-    connection_id
-  end
-
-  # @note Если запрос текущего юзера существует, то устанавливаем
-  # pending_connect в 1 его рез-тов поиска
-  def self.my_request_exist(connected_tree_id, current_tree_ids)
-    my_request = ConnectionRequest.where("with_user_id in (?)", connected_tree_id)
-                     .where("user_id in (?)", current_tree_ids)
-                     .where(:done => false )
-    value = 0
-    unless my_request.blank?
-      value = 1
-    end
-    value
-  end
 
   # @note - сбор данных о профилях из рез-тов поиска в виде массивов
   # :by_profiles=>

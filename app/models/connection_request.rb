@@ -32,6 +32,9 @@ class ConnectionRequest < ActiveRecord::Base
   validates_inclusion_of :done, :in => [true, false],
                          :message => "done должно быть [true, false] в ConnectionRequest"
 
+
+
+
   # @note: Определение кол-ва совершенных объединений
   #   От всех Юзеров
   def self.connections_amount
