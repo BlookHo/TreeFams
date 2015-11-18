@@ -51,7 +51,7 @@ class ConnectionRequest < ActiveRecord::Base
   #   От кого - от текущего Юзера
   #   С кем - из формы просмотра рез-тов поиска
   def self.make_request(current_user, with_user_id)
-    logger.info "In make_request: current_user.id = #{current_user.id}, with_user_id = #{with_user_id} "
+    puts "In make_request: current_user.id = #{current_user.id}, with_user_id = #{with_user_id} "
     msg = ""
     msg_code = 1
     if  !ConnectionRequest.exists?(:user_id => current_user.id , :with_user_id => with_user_id, :done => false )
@@ -69,20 +69,20 @@ class ConnectionRequest < ActiveRecord::Base
           connection_id = get_connection_id
 
           # формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
-          create_requests(with_whom_connect_ids, connection_id, current_user.id)
+          create_requests(who_connect_ids, with_whom_connect_ids, connection_id, current_user.id)
 
         else
-          logger.info "Warning:: Встречный запрос на объединение! "
+          puts "Warning:: Встречный запрос на объединение! "
           msg = "Уже существует встречный запрос на объединение! "
           msg_code = 2
         end
       else
-        logger.info "Warning:: Current_user &  with_user_id - Already connected! "
+        puts "Warning:: Current_user &  with_user_id - Already connected! "
         msg = "Деревья уже объединены! "
         msg_code = 3
       end
     else
-      logger.info "Запрос уже существует! "
+      puts "Запрос уже существует! "
       msg = "Запрос уже существует! "
       msg_code = 4
     end
@@ -92,7 +92,7 @@ class ConnectionRequest < ActiveRecord::Base
 
   # @note: формируется запрос для каждого из Юзеров в дереве, с кот-м объединяемся
   #   Присваиваем текущий Номер для connection_id
-  def self.create_requests(with_whom_connect_ids, max_connection_id, current_user_id)
+  def self.create_requests(who_connect_ids, with_whom_connect_ids, max_connection_id, current_user_id)
     with_whom_connect_ids.each do |user_to_connect|
       new_connection_request = ConnectionRequest.new
       new_connection_request.connection_id = max_connection_id
@@ -101,32 +101,31 @@ class ConnectionRequest < ActiveRecord::Base
       ##########################################
       new_connection_request.save
       #########################################
-      profile_user_to_connect = User.find(user_to_connect).profile_id unless user_to_connect.blank?
+      profile_user_to_conn = User.find(user_to_connect).profile_id unless user_to_connect.blank?
       ##########  UPDATES - № 1  ####################
       # logger.info "In create_requests:  user_id = #{current_user_id}, agent_user_id = #{user_to_connect},
       #              agent_profile_id = #{profile_user_to_connect} " #
       UpdatesFeed.create(user_id: current_user_id, update_id: 1, agent_user_id: user_to_connect,
-                         agent_profile_id: profile_user_to_connect,  who_made_event: current_user_id, read: false)
-      # logger.info "In create_requests: UpdatesFeed.create"
-      ##############################################
-    end
+                         agent_profile_id: profile_user_to_conn,  who_made_event: current_user_id, read: false)
 
-    # todo: to SearchResults model
-    # @note: При создании запроса на объединение,
-    #   соответствующие рез-ты поиска получают признак pending_connect = 1
-    # def make_pending_results
-    current_user_results = SearchResults.where(user_id: current_user_id).where("found_user_id in (?)", with_whom_connect_ids)
-    current_user_results.update_all({pending_connect: 1}) unless current_user_results.blank?
-    # end
+    end
+    puts "In create_requests: New requests created"
+
+    # update pending & connection_id in SearchResults
+    SearchResults.make_results_pending(who_connect_ids, with_whom_connect_ids)
+    SearchResults.set_connection_id_results(who_connect_ids, with_whom_connect_ids, max_connection_id)
+
   end
 
 
   # @note: определение Юзеров - участников объединения деревьев
   #   who_connect_users_arr:   кто объединяется = инициатор
-  #   with_whom_connect_users_arr:  с кем объединяется = ответчик
+  #   with_whom_connect_users_arr:  с кем объединяется = ответчик connected_users
   def self.find_users_connectors(current_user, with_user_id)
-    who_connect_users_arr = current_user.get_connected_users
-    with_whom_connect_users_arr = User.find(with_user_id).get_connected_users
+    who_connect_users_arr = User.find(current_user).connected_users
+    with_whom_connect_users_arr = User.find(with_user_id).connected_users
+    # who_connect_users_arr = current_user.get_connected_users
+    # with_whom_connect_users_arr = User.find(with_user_id).get_connected_users
     return who_connect_users_arr, with_whom_connect_users_arr
   end
 

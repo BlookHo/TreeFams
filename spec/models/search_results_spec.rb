@@ -81,7 +81,7 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
 
     end
 
-    context '- check SearchResults methods'   do #  ,  focus: true
+    context '- check SearchResults methods'  , focus: true  do #  ,  focus: true
       # create model data
       before {
         # Users
@@ -145,7 +145,7 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
         end
       end
 
-      context 'check Action <store_search_results> with duplicates_one_to_many' , focus: true   do   #   , focus: true
+      context 'check Action <store_search_results> with duplicates_one_to_many'    do   #   , focus: true
         let(:search_results)  {
            {  connected_author_arr: [46],
               by_profiles:      [{:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7},
@@ -190,8 +190,10 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
                                                "found_profile_id"=>540, "count"=>5,
                                                "found_profile_ids"=>[540, 539, 544, 543, 541, 542],
                                                "searched_profile_ids"=>[662, 657, 658, 659, 663, 656],
-                                               "counts"=>[5, 5, 5, 5, 5, 5], "connection_id"=>nil,
-                                               "pending_connect"=>0,
+                                               "counts"=>[5, 5, 5, 5, 5, 5],
+
+                                               "connection_id"=>888, "pending_connect"=>0,
+
                                                "searched_connected"=>[46], "founded_connected"=>[34] } )
         end
         it '- check SearchResults Fifth  Factory row - Ok' do # , focus: true
@@ -200,10 +202,8 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
                                                "found_profile_id"=>662, "count"=>5,
                                                "found_profile_ids"=>[662, 657, 658, 659, 663, 656],
                                                "searched_profile_ids"=>[540, 539, 544, 543, 541, 542],
-                                               "counts"=>[5, 5, 5, 5, 5, 5], "connection_id"=>888,
-
-
-                                               "pending_connect"=>1,
+                                               "counts"=>[5, 5, 5, 5, 5, 5],
+                                               "connection_id"=>nil, "pending_connect"=>1,
                                                "searched_connected"=>[34], "founded_connected"=>[46] } )
         end
         it '- check SearchResults Sixth Factory row - Ok' do # , focus: true
@@ -212,8 +212,8 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
                                                "found_profile_id"=>667, "count"=>7,
                                                "found_profile_ids"=>[667, 668, 666, 669, 673, 670, 672, 671],
                                                "searched_profile_ids"=>[657, 658, 659, 656, 665, 662, 664, 663],
-                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>nil,
-                                               "pending_connect"=>0,
+                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5],
+                                               "connection_id"=>nil, "pending_connect"=>0,
                                                "searched_connected"=>[46], "founded_connected"=>[47] } )
         end
         it '- check SearchResults Seventh Factory row - Ok' do # , focus: true
@@ -222,13 +222,13 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
                                                "found_profile_id"=>657, "count"=>7,
                                                "found_profile_ids"=>[657, 658, 659, 656, 665, 662, 664, 663],
                                                "searched_profile_ids"=>[667, 668, 666, 669, 673, 670, 672, 671],
-                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>nil,
-                                               "pending_connect"=>0,
+                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5],
+                                               "connection_id"=>nil, "pending_connect"=>0,
                                                "searched_connected"=>[47], "founded_connected"=>[46] } )
         end
       end
 
-      context ' - check Action <store_search_results> with BOTH types duplicates' , focus: true  do   #   , focus: true
+      context ' - check Action <store_search_results> with BOTH types duplicates'   do   #   , focus: true
         let(:search_results)  {
           {  connected_author_arr: [46],
              by_profiles:      [{:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7},
@@ -274,10 +274,8 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
                                                "found_profile_id"=>540, "count"=>5,
                                                "found_profile_ids"=>[540, 539, 544, 543, 541, 542],
                                                "searched_profile_ids"=>[662, 657, 658, 659, 663, 656],
-                                               "counts"=>[5, 5, 5, 5, 5, 5], "connection_id"=>nil,
-
-
-                                               "pending_connect"=>0,
+                                               "counts"=>[5, 5, 5, 5, 5, 5],
+                                               "connection_id"=>888, "pending_connect"=>0,
                                                "searched_connected"=>[46], "founded_connected"=>[34] } )
         end
         it ' - check SearchResults Five Factory row - Ok' do # , focus: true
@@ -289,10 +287,8 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
                                                "found_profile_id"=>662, "count"=>5,
                                                "found_profile_ids"=>[662, 657, 658, 659, 663, 656],
                                                "searched_profile_ids"=>[540, 539, 544, 543, 541, 542],
-                                               "counts"=>[5, 5, 5, 5, 5, 5], "connection_id"=>888,
-
-
-                                               "pending_connect"=>1,
+                                               "counts"=>[5, 5, 5, 5, 5, 5],
+                                               "connection_id"=>nil, "pending_connect"=>1,
                                                "searched_connected"=>[34], "founded_connected"=>[46] } )
         end
 

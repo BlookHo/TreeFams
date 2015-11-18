@@ -196,12 +196,11 @@ class SearchResults < ActiveRecord::Base
     store_data[:tree_ids].each do |tree_id|
       # logger.info "#### In  make_results.each: tree_id = #{tree_id}, store_data[:tree_ids] = #{store_data[:tree_ids]}"
       results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
-      found_tree_ids = User.find(tree_id).get_connected_users # Состав объединенного дерева в виде массива id
-      conn_id = set_connection_id(store_data[:current_user_tree_ids], found_tree_ids)
-      opp_conn_id = set_connection_id(found_tree_ids, store_data[:current_user_tree_ids])
-      params_to_store = get_results_params(found_tree_ids, store_data[:current_user_tree_ids])
-      opp_params_to_store = get_results_params(store_data[:current_user_tree_ids], found_tree_ids)
-      # params_to_store = make_results_arrs(store_data, tree_id)
+      found_tree_ids = User.find(tree_id).connected_users # Состав объединенного дерева в виде массива id
+      conn_id = get_connection_id(store_data[:current_user_tree_ids], found_tree_ids)
+      opp_conn_id = get_connection_id(found_tree_ids, store_data[:current_user_tree_ids])
+      pending_value = get_pending_request(found_tree_ids, store_data[:current_user_tree_ids])
+      opp_pending_value = get_pending_request(store_data[:current_user_tree_ids], found_tree_ids)
       results_arrs[:tree_id] = tree_id
       searched_profile_ids = results_arrs[:search_profile_id]
       found_profile_ids    = results_arrs[:found_profile_id]
@@ -215,11 +214,10 @@ class SearchResults < ActiveRecord::Base
                      found_profile_ids: found_profile_ids,
                      searched_profile_ids: searched_profile_ids,
                      counts: counts,
-                     # connection_id: params_to_store[:connection_id],
                      connection_id: conn_id,
-                     pending_connect: params_to_store[:pending_value],
-                     searched_connected: params_to_store[:current_tree_ids],
-                     founded_connected: params_to_store[:connected_tree_ids] }
+                     pending_connect: pending_value,
+                     searched_connected: store_data[:current_user_tree_ids],
+                     founded_connected: found_tree_ids }
       search_results_arr << one_result
 
       one_opp_result = { user_id: tree_id, # store_data[:current_user_id],
@@ -230,11 +228,10 @@ class SearchResults < ActiveRecord::Base
                      found_profile_ids: searched_profile_ids, # found_profile_ids,
                      searched_profile_ids: found_profile_ids, # searched_profile_ids,
                      counts: counts,
-                     # connection_id: opp_params_to_store[:connection_id],
                      connection_id: opp_conn_id,
-                     pending_connect: opp_params_to_store[:pending_value],
-                     searched_connected: opp_params_to_store[:current_tree_ids],
-                     founded_connected: opp_params_to_store[:connected_tree_ids] }
+                     pending_connect: opp_pending_value,
+                     searched_connected: found_tree_ids,
+                     founded_connected: store_data[:current_user_tree_ids] }
       search_results_arr << one_opp_result
 
 
@@ -244,34 +241,34 @@ class SearchResults < ActiveRecord::Base
     search_results_arr
   end
 
-
-  # @note: determine search_results prams to be stored
-  def self.get_results_params(connected_one_tree, connected_other_tree)
-    # puts "In get_results_params: tree_id = #{tree_id.inspect}, connected_tree_ids = #{connected_tree_ids.inspect} "
-    connection_id = set_connection_id(connected_one_tree, connected_other_tree)
-    value = set_pending_request(connected_one_tree, connected_other_tree)
-    { connection_id: connection_id, pending_value: value, current_tree_ids: connected_other_tree, connected_tree_ids: connected_one_tree }
-  end
+  #
+  # # @note: determine search_results prams to be stored
+  # def self.get_results_params(connected_one_tree, connected_other_tree)
+  #   # puts "In get_results_params: tree_id = #{tree_id.inspect}, connected_tree_ids = #{connected_tree_ids.inspect} "
+  #   connection_id = set_connection_id(connected_one_tree, connected_other_tree)
+  #   value = set_pending_request(connected_one_tree, connected_other_tree)
+  #   { connection_id: connection_id, pending_value: value, current_tree_ids: connected_other_tree, connected_tree_ids: connected_one_tree }
+  # end
 
   # @note Если встречный запрос существует (if counter_request_exist), то получаем его connection_id
   # if request.blank? AND
   # if connected_other_tree = current tree ids, then connection_id should have value
-  def self.set_connection_id(connected_one_tree, connected_other_tree)
-    p " In set_connection_id: connected_one_tree = #{connected_one_tree}, connected_other_tree = #{connected_other_tree} "
+  def self.get_connection_id(connected_one_tree, connected_other_tree)
+    # p " In set_connection_id: connected_one_tree = #{connected_one_tree}, connected_other_tree = #{connected_other_tree} "
     conn_request = ConnectionRequest
-                  .where("user_id in (?)", connected_one_tree)
-                  .where("with_user_id in (?)", connected_other_tree)
+                  .where("user_id in (?)", connected_other_tree )
+                  .where("with_user_id in (?)", connected_one_tree)
                   .where(:done => false )
     connection_id = nil
-    connection_id = conn_request[0].connection_id unless conn_request.blank?
+    connection_id = conn_request.first.connection_id unless conn_request.blank?
     p " In set_connection_id:  connection_id = #{connection_id.inspect}, conn_request.count = #{conn_request.count}"
     connection_id
   end
 
   # @note Если запрос текущего юзера существует, то устанавливаем
   # pending_connect в 1 его рез-тов поиска if my_request_exist
-  def self.set_pending_request(connected_one_tree, connected_other_tree)
-    p " In set_pending_request: connected_one_tree = #{connected_one_tree}, connected_other_tree = #{connected_other_tree} "
+  def self.get_pending_request(connected_one_tree, connected_other_tree)
+    # p " In set_pending_request: connected_one_tree = #{connected_one_tree}, connected_other_tree = #{connected_other_tree} "
     pending_request = ConnectionRequest
                      .where("user_id in (?)", connected_other_tree)
                      .where("with_user_id in (?)", connected_one_tree)
@@ -280,6 +277,24 @@ class SearchResults < ActiveRecord::Base
     value = 1 unless pending_request.blank?
     p " In set_pending_request:  pending_value = #{value}, pending_request.count = #{pending_request.count}"
     value
+  end
+
+  # @note: При создании запроса на объединение,
+  #   соответствующие рез-ты поиска получают признак pending_connect = 1
+  def self.make_results_pending(who_conn_ids, with_whom_conn_ids)
+    current_user_results = SearchResults
+                               .where("user_id in (?)", who_conn_ids)
+                               .where("found_user_id in (?)", with_whom_conn_ids)
+    current_user_results.update_all({pending_connect: 1}) unless current_user_results.blank?
+  end
+
+  # @note: При создании запроса на объединение,
+  #   соответствующие рез-ты поиска получают value connection_id
+  def self.set_connection_id_results(who_conn_ids, with_whom_conn_ids, connection_id)
+    opp_user_results = SearchResults
+                           .where("user_id in (?)", with_whom_conn_ids)
+                           .where("found_user_id in (?)", who_conn_ids)
+    opp_user_results.update_all({connection_id: connection_id}) unless opp_user_results.blank?
   end
 
   # # @note - prepare data for opposite результатов поиска and search arrays

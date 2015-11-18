@@ -196,7 +196,6 @@ module Search
                              .select(:user_id, :profile_id, :name_id,
                                      :relation_id, :is_profile_id, :is_name_id)
                              .distinct
-                            # .select(:id, :user_id, :profile_id, :name_id,
     profiles_data = {
       row_relation_id:      row_relation_id,
       profiles_hash:        found_profiles_data[:profiles_hash],
