@@ -75,7 +75,7 @@ class SearchResults < ActiveRecord::Base
 
   # @note Check if results already exists - so don't start search!
   def self.results_exists?(current_user_id)
-    puts "In results_exists?: current_user_id = #{current_user_id}"
+    # puts "In results_exists?: current_user_id = #{current_user_id}"
     where("#{current_user_id} = ANY (searched_connected)").exists?
   end
 
