@@ -6,12 +6,14 @@ module Api
 
       # Глобальный поиск
       def index
-        certain_koeff = get_certain_koeff #3
+        certain_koeff = get_certain_koeff #4
         logger.info "== in index search api: api_current_user.id = #{api_current_user.id},  certain_koeff = #{certain_koeff}"
         if !SearchResults.results_exists?(api_current_user.id)
           search_data = api_current_user.start_search(certain_koeff)
+          logger.info "== in index search api: No results -> search start"
           respond_with collect_search_results(search_data)
         else
+          logger.info "== in index search api: search results exists! "
           msg = "Results already exists! No search start!"
           respond_with msg
         end
@@ -20,7 +22,7 @@ module Api
 
       # Поиск похожих внутри одного дерева
       def iternal
-        certain_koeff = get_certain_koeff #3
+        certain_koeff = get_certain_koeff #4
         tree_info, sim_data, similars = current_user.start_similars
         result = {similars_founds: similars, sim_data: sim_data}
         respond_with result
