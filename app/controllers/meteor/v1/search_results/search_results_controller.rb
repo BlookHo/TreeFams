@@ -6,14 +6,12 @@ module Meteor
         before_filter :authenticate
 
         def search
-          puts "Start search by api request"
           Thread.new do
-            puts "Start search Thread"
             ActiveRecord::Base.connection_pool.with_connection do
-              puts "Start AR connection"
               certain_koeff = WeafamSetting.first.certain_koeff
-              @current_user.start_search(certain_koeff)
-              puts "End AR connection"
+              if @current_user.start_similars[:similars].blank?
+                @current_user.start_search(certain_koeff)
+              end
             end
           end
           respond_with(status:200)
