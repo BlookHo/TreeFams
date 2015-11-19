@@ -73,6 +73,12 @@ class SearchResults < ActiveRecord::Base
   scope :one_opp_way_result, -> (connected_users) {where("found_user_id in (?)", connected_users)}
 
 
+  # @note Check if results already exists - so don't start search!
+  def self.results_exists?(current_user_id)
+    puts "In results_exists?: current_user_id = #{current_user_id}"
+    where("#{current_user_id} = ANY (searched_connected)").exists?
+  end
+
 
   # @note: МЕТОДЫ ДЛЯ ИЗГОТОВЛЕНИЯ РЕЗУЛЬТАТОВ ПОИСКА (by_profiles, by_trees)
   #   make final search results to store

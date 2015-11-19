@@ -7,9 +7,14 @@ module Api
       # Глобальный поиск
       def index
         certain_koeff = get_certain_koeff #3
-        logger.info "== in index search api:  certain_koeff = #{certain_koeff}"
-        search_data = api_current_user.start_search(certain_koeff)
-        respond_with collect_search_results(search_data)
+        logger.info "== in index search api: api_current_user.id = #{api_current_user.id},  certain_koeff = #{certain_koeff}"
+        if !SearchResults.results_exists?(api_current_user.id)
+          search_data = api_current_user.start_search(certain_koeff)
+          respond_with collect_search_results(search_data)
+        else
+          msg = "Results already exists! No search start!"
+          respond_with msg
+        end
       end
 
 
