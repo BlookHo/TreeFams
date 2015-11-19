@@ -191,6 +191,13 @@ class SearchResults < ActiveRecord::Base
 
   # @note - prepare data for результатов поиска and search arrays
   def self.make_results(store_data)
+
+    # # update :tree_ids - to collect connected_users ??
+    # store_data[:tree_ids].each do |tree_id|
+    #   connected_tree_ids = User.find(tree_id).connected_users # Состав объединенного дерева в виде массива id
+    #
+    # end
+      
     search_results_arr = []
     # logger.info "#### In  make_results: store_data[:tree_ids] = #{store_data[:tree_ids]}"
     store_data[:tree_ids].each do |tree_id|
