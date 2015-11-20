@@ -15,7 +15,7 @@ module Meteor
           status_code = 200 # status Ok
           msg, msg_code = ConnectionRequest.make_request(@current_user, with_user_id)
 
-          start_counter_search(with_user_id)
+          # start_counter_search(with_user_id)
 
           # respond_with yes_con
           logger.info "In MakeRequestController: After connect:  msg_code = #{msg_code}, msg = #{msg} "

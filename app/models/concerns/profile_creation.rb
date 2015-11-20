@@ -51,7 +51,7 @@ module ProfileCreation
   def create_one_profile(name, user_id)
     Profile.create({
                        name_id:          name.search_name_id,
-                       display_name_id:  name.id,
+                       # display_name_id:  name.id,
                        sex_id:           name.sex_id,
                        tree_id:          user_id
                    })

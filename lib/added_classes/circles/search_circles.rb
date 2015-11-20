@@ -65,10 +65,14 @@ class SearchCircles
     is_profiles_arr = []
     # relations_arr = []  # for next demand
     bk_rows.each do |row|
-      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','display_name_id','is_display_name_id','created_at','updated_at')
-      bk_arr_w_profiles << row.attributes.except('id','user_id','display_name_id','is_display_name_id','created_at','updated_at') # for further analyze
-      is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','display_name_id','is_display_name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
-      #relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze
+      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
+      bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at') # for further analyze
+      is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
+
+      # bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','display_name_id','is_display_name_id','created_at','updated_at')
+      # bk_arr_w_profiles << row.attributes.except('id','user_id','display_name_id','is_display_name_id','created_at','updated_at') # for further analyze
+      # is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','display_name_id','is_display_name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id') # for further analyze
+        #relations_arr << row.attributes.except('id','user_id','profile_id','name_id','is_profile_id','is_name_id','created_at','updated_at').values_at('relation_id') # for further analyze
     end
     is_profiles_arr = is_profiles_arr.flatten(1)
     #relations_arr = relations_arr.flatten(1)

@@ -564,7 +564,7 @@ RSpec.describe CommonLog, type: :model   do # , focus: true
           puts "after rollback_destroy_one_profile: ProfileKey last row - Ok\n"
           expect(profile_keys_row_fields).to eq({"id"=>58, "user_id"=>9, "profile_id"=>91, "name_id"=>446,
                                                  "relation_id"=>5, "is_profile_id"=>90, "is_name_id"=>343,
-                                                 "display_name_id"=>nil, "is_display_name_id"=>nil, "deleted"=>0} )
+                                                 "deleted"=>0} )
         end
 
         describe '- check DeletionLog have rows count after - Ok' do

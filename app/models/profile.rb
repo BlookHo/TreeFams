@@ -37,7 +37,8 @@ class Profile < ActiveRecord::Base
               class_name: User
 
   belongs_to :name
-  belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key: :display_name_id
+  # belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key: :display_name_id
+  # belongs_to :display_name, class_name: Name, primary_key: :id, foreign_key:
   has_many   :trees
 
   has_one :profile_data, dependent: :destroy
@@ -96,9 +97,9 @@ class Profile < ActiveRecord::Base
     profile_data.try(:middle_name)
   end
 
-  def full_name
-    [self.display_name.name].join(' ')
-  end
+  # def full_name
+  #   [self.display_name.name].join(' ')
+  # end
 
   def icon_path
     self.name.sex_id == 1 ? '/assets/man.svg' : '/assets/woman.svg'

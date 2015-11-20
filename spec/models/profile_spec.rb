@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Profile, :type => :model   do # , focus: true
 
-  describe 'Validation test Before Model Profile methods '   do # , focus: true
+  describe 'Validation test Before Model Profile methods '    do # , focus: true
     after {
       Profile.delete_all
       Profile.reset_pk_sequence
@@ -46,14 +46,27 @@ RSpec.describe Profile, :type => :model   do # , focus: true
 
   describe 'Method Rename Profile test'   do # , focus: true
 
-    context "- Check Method Rename Profile random created  -"    do  # , focus: true
+    context "- Check Method Rename Profile random created  -"   do  # , focus: true
+      before {     # Name
+        FactoryGirl.create(:name, :name_150)   # 150  Демьян
+      }
       let(:row_profile) {FactoryGirl.create(:test_model_profile)}
       let(:profile_id) {row_profile.id}
       let(:new_name_id) {150}
 
+      describe '- check Name have name 150 - Ok' do
+        it "- Have correct Name 150 - Ok " do
+
+        name_150_fields = Name.find(150).attributes.except('created_at','updated_at')
+        expect(name_150_fields).to eq({"id"=>150, "name"=>"Демьян", "only_male"=>nil, "name_freq"=>0,
+                                       "is_approved"=>false, "sex_id"=>1, "parent_name_id"=>nil,
+                                       "search_name_id"=>150})
+        end
+      end
+
       it "- profile Renamed - Ok " do
         p " Check Method Rename Profile random created"
-        p " Check Before: row_profile.id = #{row_profile.id}, row_profile.name_id = #{row_profile.name_id}"
+        p " Check Before: row_profile.id = #{row_profile.id}, row_profile.sex_id = #{row_profile.sex_id}, row_profile.name_id = #{row_profile.name_id}"
         row_profile.rename(new_name_id)#.attributes.except('created_at','updated_at', 'sex_id')
         puts " Model Profile: After rename - new_name_id = #{Profile.find(row_profile.id).name_id}"
         expect(Profile.find(row_profile.id).name_id).to eq(150)
@@ -131,7 +144,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
       }
 
 
-      context "- Before check Method Rename -" , focus: true   do  # , focus: true
+      context "- Before check Method Rename -"   do  # , focus: true
         let(:profile_id) {85}
         let(:new_name_id) {150}
         describe '- check Profile have rows count before profile.rename - Ok' do
@@ -159,7 +172,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         end
       end
 
-      context "- After check Method Rename -" , focus: true   do  # , focus: true
+      context "- After check Method Rename -"    do  # , focus: true
 
         let(:profile_id) {85}
         let(:row_profile) {Profile.find(profile_id)}
@@ -219,7 +232,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
   # end
 
 
-    describe '- validation' do
+    describe '- validation'     do
     describe '- on create' do
       context '- valid profiles' do
         let(:first_profile) {FactoryGirl.create(:profile_one)}
@@ -227,9 +240,9 @@ RSpec.describe Profile, :type => :model   do # , focus: true
 
           puts " Model Profile validation "
           expect(first_profile).to be_valid
-          profile_fields = Profile.first.attributes.except('created_at','updated_at', 'sex_id')
+          profile_fields = Profile.first.attributes.except('created_at','updated_at', 'sex_id', 'display_name_id')
           expect(profile_fields).to eq({"id"=>1, "user_id"=>1, "name_id"=>354,
-                                        "tree_id"=>5, "display_name_id"=>354, "deleted"=>0} )
+                                        "tree_id"=>5, "deleted"=>0} )
         end
 
         let(:second_profile) {FactoryGirl.create(:profile_two)}
@@ -275,7 +288,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
     end
   end
 
-  describe '- Model methods' do
+  describe '- Model methods'   do
     describe '- #' do
       # create model data
       before {
@@ -560,10 +573,6 @@ RSpec.describe Profile, :type => :model   do # , focus: true
       end
 
       context '- After actions - create profile ' do
-
-
-
-
 
       end
 

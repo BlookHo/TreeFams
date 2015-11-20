@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 # describe Tree do
-RSpec.describe Tree, :type => :model do  # , focus: true
+RSpec.describe Tree, :type => :model do   # , focus: true
 
   describe '- validation' do
 

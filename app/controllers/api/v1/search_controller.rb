@@ -6,16 +6,43 @@ module Api
 
       # Глобальный поиск
       def index
-        certain_koeff = get_certain_koeff #3
-        logger.info "== in index search api:  certain_koeff = #{certain_koeff}"
-        search_data = api_current_user.start_search(certain_koeff)
-        respond_with collect_search_results(search_data)
+        certain_koeff = get_certain_koeff #4
+        logger.info "== in index search api: api_current_user.id = #{api_current_user.id},  certain_koeff = #{certain_koeff}"
+
+
+        if !SearchResults.results_exists?(api_current_user.id)
+          search_data = api_current_user.start_search(certain_koeff)
+          logger.info "== in index search api: No results -> search start"
+          respond_with collect_search_results(search_data)
+        else
+          logger.info "== in index search api: search results already exists! "
+          search_results = SearchResults.where("#{current_user.id} = ANY (searched_connected)")
+          unless search_results.blank?
+            # :by_trees=>[{:found_tree_id=>45, :found_profile_ids=>[649, 650, 646, 645, 651, 648, 647]}]
+            logger.info "== in index search api: make search results from already exists! "
+            respond_with make_results_data(search_results)
+          end
+        end
+      end
+
+      # @note make search_results when search method DID NOT started
+      #   results - from model SearchResults
+      def make_results_data(search_results)
+        total_profiles = 0
+        trees = []
+        search_results.each do |one_result|
+          total_profiles = total_profiles + one_result.found_profile_ids.size
+          trees << {tree_id: one_result[:found_user_id], profile_ids: one_result[:found_profile_ids]}
+        end
+        { total_profiles: total_profiles,
+          total_trees: search_results.size,
+          trees: trees }
       end
 
 
       # Поиск похожих внутри одного дерева
       def iternal
-        certain_koeff = get_certain_koeff #3
+        certain_koeff = get_certain_koeff #4
         tree_info, sim_data, similars = current_user.start_similars
         result = {similars_founds: similars, sim_data: sim_data}
         respond_with result

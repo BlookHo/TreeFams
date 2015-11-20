@@ -24,7 +24,7 @@ class ProfileKey < ActiveRecord::Base
   belongs_to :is_profile, foreign_key: :is_profile_id, class_name: Profile
   belongs_to :user
   belongs_to :name, foreign_key: :is_name_id
-  belongs_to :display_name, class_name: Name, foreign_key: :is_display_name_id
+  # belongs_to :display_name, class_name: Name, foreign_key: :is_display_name_id
 
   # todo: разобраться здесь с relation_id
   belongs_to :relation, primary_key: :relation_id
@@ -33,10 +33,10 @@ class ProfileKey < ActiveRecord::Base
 
   # todo: set index to model: user_id, profile_id
 
-  def full_name
-    # [self.display_name.name, self.is_profile.last_name].join(' ')
-    [self.display_name.name, self.is_profile.last_name].join(' ')
-  end
+  # def full_name
+  #   # [self.display_name.name, self.is_profile.last_name].join(' ')
+  #   [self.name.name, self.is_profile.last_name].join(' ')
+  # end
 
 
   # @note: rename one profile in this model

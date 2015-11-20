@@ -64,8 +64,10 @@ module ProfileApiCircles
                     .where.not(is_profile_id: @except_ids.flatten.uniq)
                     .where(deleted: 0)
                     .order('relation_id')
-                    .includes(:name, :display_name, :is_profile, :relation)
-                    .select(:profile_id, :is_profile_id, :relation_id, :name_id, :is_name_id, :is_display_name_id, :deleted).distinct
+                    .includes(:name, :is_profile, :relation)
+                    .select(:profile_id, :is_profile_id, :relation_id, :name_id, :is_name_id, :deleted).distinct
+    # .includes(:name, :display_name, :is_profile, :relation)
+    # .select(:profile_id, :is_profile_id, :relation_id, :name_id, :is_name_id, :is_display_name_id, :deleted).distinct :display_name_id
     @except_ids << pks.map {|r| r.is_profile_id }
     return pks
   end
@@ -77,7 +79,7 @@ module ProfileApiCircles
     {
       id: self.id,
       name: self.to_name,
-      display_name: self.full_name,
+      # display_name: self.full_name,
       relation: "Центр круга",
       relation_id: 0,
       is_relation: nil,
@@ -100,7 +102,7 @@ module ProfileApiCircles
       results << {
         id: key.is_profile_id,
         name: key.name.name,
-        display_name: key.full_name,
+        # display_name: key.full_name,
         sex_id: key.name.sex_id,
         relation: key.relation.relation,
         relation_id: key.relation_id,

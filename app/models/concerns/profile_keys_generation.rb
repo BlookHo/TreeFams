@@ -26,15 +26,6 @@ module ProfileKeysGeneration
 
     make_profilekeys_rows(base_sex_id, base_profile.tree_id, save_new_tree_row(base_profile, new_relation_id, new_profile))
 
-      # # logger.info "In add_new_profile: Before create_add_log"
-      # current_log_type = 1  #  # add: rollback == delete. Тип = добавление нового профиля при rollback
-      # new_log_number = CommonLog.new_log_id(base_profile.tree_id, current_log_type)
-      # # logger.info "In add_new_profile: Before common_log_data   new_log_number = #{new_log_number}"
-      # common_log_data = { user_id: base_profile.tree_id, log_type: current_log_type,
-      #                     log_id:  new_log_number, profile_id: new_profile.id,
-      #                     base_profile_id: base_profile.id,
-      #                     new_relation_id: new_relation_id }
-      # CommonLog.create_common_log(common_log_data)
 
     end
 
@@ -48,7 +39,6 @@ module ProfileKeysGeneration
 
       base_profile_id       = base_profile.id
       base_sex_id           = base_profile.sex_id
-      base_display_name_id  = base_profile.display_name_id
       base_name_id          = base_profile.name_id
 
       tree_id               = base_profile.tree_id   # было base_profile до 29.6.15
@@ -56,7 +46,6 @@ module ProfileKeysGeneration
       new_profile_id        = new_profile.id
       new_profile_name_id   = new_profile.name_id
       new_profile_sex       = new_profile.sex_id
-      new_prf_disp_name_id  = new_profile.display_name_id
 
       new_tree = Tree.new
         # Базовый профиль = base_profile - профиль, к которому добавляем новый профиль
@@ -64,56 +53,48 @@ module ProfileKeysGeneration
         # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый (user_id ID От_Профиля (From_Profile))
         new_tree.profile_id         = base_profile_id  # base_profile.id - profile_id базового профиля # От_Профиля
         new_tree.name_id            = base_name_id     # base_profile.name_id   # name_id базового профиля # От_Профиля
-        new_tree.display_name_id    = base_display_name_id     # base_profile.display_name_id   # name_id базового профиля # От_Профиля
 
         new_tree.relation_id        = new_relation_id  # ID добавляемого Родства - кого добавляем (отца, сына, жену и т.д.) От_Профиля с К_Профилю
 
         new_tree.is_profile_id      = new_profile_id      # is_profile_id нового К_Профиля
         new_tree.is_name_id         = new_profile_name_id # is_name_id нового К_Профиля
         new_tree.is_sex_id          = new_profile_sex     # is_sex_id нового К_Профиля
-        new_tree.is_display_name_id = new_prf_disp_name_id     # is_display_name_id   # name_id базового профиля # От_Профиля
     #########################
       new_tree.save
     #########################
       # puts "In save_new_tree_row: new_relation_id = #{new_relation_id}"
 
-      [ base_profile_id, base_sex_id, base_name_id, base_display_name_id, # 0, 1, 2, 3
-         new_relation_id.to_i,                                             # 4,
-         new_profile_id, new_profile_name_id, new_prf_disp_name_id  ]      # 5, 6, 7
+      { base_profile_id: base_profile_id,
+        base_sex_id: base_sex_id,
+        base_name_id: base_name_id,
+        new_relation_id: new_relation_id.to_i,
+        new_profile_id: new_profile_id,
+        new_profile_name_id: new_profile_name_id }
+
     end
 
 
-    # Добавление новых рядов по профилю в таблицу ProfileKey
-    # @note GET /
-    #add_row_to_tree = [
-    #    base_profile_id, base_sex_id, base_name_id, base_display_name_id, # 0, 1, 2, 3
-    #    new_relation_id.to_i,                                             # 4,
-    #    new_profile_id, new_profile_name_id, new_prf_display_name_id         # 5, 6, 7
-    #]
+    # @note Добавление новых рядов по профилю в таблицу ProfileKey
     # base_profile.tree_id - id дерева, которому принадлежит профиль, к которому добавляем новый
     # base_sex_id - исп-ся для определения обратного relation в завис-ти от пола базового профиля, к кому добавляем
+    # todo: уточнить с sex_id == base_sex_id ??
     def  make_profilekeys_rows(base_sex_id, base_profile_tree_id, add_row_to_tree)
 
-      profile_id              = add_row_to_tree[0] # base_profile_id
-      sex_id                  = add_row_to_tree[1] # base_sex_id  ?
-      # todo: уточнить с sex_id == base_sex_id ??
-      name_id                 = add_row_to_tree[2] # base_name_id
-      display_name_id         = add_row_to_tree[3]
-      new_relation_id         = add_row_to_tree[4]
-      new_profile_id          = add_row_to_tree[5]
-      new_profile_name_id     = add_row_to_tree[6]
-      new_prf_display_name_id = add_row_to_tree[7]
+      profile_id              = add_row_to_tree[:base_profile_id] # base_profile_id
+      sex_id                  = add_row_to_tree[:base_sex_id] # base_sex_id  ?
+      name_id                 = add_row_to_tree[:base_name_id] # base_name_id
+      new_relation_id         = add_row_to_tree[:new_relation_id]
+      new_profile_id          = add_row_to_tree[:new_profile_id]
+      new_profile_name_id     = add_row_to_tree[:new_profile_name_id]
 
-      add_data = { sex_id:            sex_id,                # add_row_to_tree[1]
+      add_data = { sex_id:            sex_id,
                    base_tree_id:      base_profile_tree_id,
-                   left_profile_id:   profile_id,            # add_row_to_tree[0]
-                   left_name_id:      name_id,               # add_row_to_tree[2]
-                   new_relation_id:   new_relation_id }      # add_row_to_tree[4]
+                   left_profile_id:   profile_id,
+                   left_name_id:      name_id,
+                   new_relation_id:   new_relation_id }
 
-      add_relation_data = { new_profile_id:          new_profile_id,            # add_row_to_tree[5]
-                            new_profile_name_id:     new_profile_name_id,       # add_row_to_tree[6]
-                            display_name_id:         display_name_id,           # add_row_to_tree[3]
-                            new_prf_display_name_id: new_prf_display_name_id }  # add_row_to_tree[7]
+      add_relation_data = { new_profile_id:      new_profile_id,
+                            new_profile_name_id: new_profile_name_id }
 
       add_main_pkeys_rows(add_data, add_relation_data)
 
@@ -153,14 +134,11 @@ module ProfileKeysGeneration
         new_profile_key_row.user_id             = add_row_data[:base_tree_id]  # @current_user_id
         new_profile_key_row.profile_id          = add_row_data[:left_profile_id]
         new_profile_key_row.name_id             = add_row_data[:left_name_id]
-        new_profile_key_row.display_name_id     = add_row_data[:left_display_name_id]
         new_profile_key_row.relation_id         = add_row_data[:new_relation_id]
         new_profile_key_row.is_profile_id       = add_row_data[:rigth_profile_id]
         new_profile_key_row.is_name_id          = add_row_data[:rigth_profile_name_id]
-        new_profile_key_row.is_display_name_id  = add_row_data[:rigth_display_name_id]
         ########################
         new_profile_key_row.save
-        # puts "= add_row = #{add_row_data.inspect}" # Для показа в Тесте
       end
     end
 
@@ -177,8 +155,8 @@ module ProfileKeysGeneration
 
       new_profile_id          = add_relation_data[:new_profile_id]
       new_profile_name_id     = add_relation_data[:new_profile_name_id]
-      display_name_id         = add_relation_data[:display_name_id]
-      new_prf_display_name_id = add_relation_data[:new_prf_display_name_id]
+      # display_name_id         = add_relation_data[:display_name_id]
+      # new_prf_display_name_id = add_relation_data[:new_prf_display_name_id]
 
       @reverse_relation_id = Relation.where(:relation_id => new_relation_id, :origin_profile_sex_id => sex_id)[0].reverse_relation_id
       # Отношение_Обратное_Новому
@@ -187,22 +165,18 @@ module ProfileKeysGeneration
       add_data_1row = {  base_tree_id: base_profile_tree_id,
                          left_profile_id: profile_id,
                          left_name_id: name_id,
-                         left_display_name_id: display_name_id,
                          new_relation_id: new_relation_id,
                          rigth_profile_id: new_profile_id,
-                         rigth_profile_name_id: new_profile_name_id,
-                         rigth_display_name_id: new_prf_display_name_id  }
+                         rigth_profile_name_id: new_profile_name_id }
       add_profile_key_row(add_data_1row)
 
       # Добавить ряд Новый_профиль - Отношение_Обратное_Новому - Профиль_К_Кому_Добавили
       add_data_2row = { base_tree_id: base_profile_tree_id,
                         left_profile_id: new_profile_id,
                         left_name_id: new_profile_name_id,
-                        left_display_name_id: new_prf_display_name_id,
                         new_relation_id: @reverse_relation_id,
                         rigth_profile_id: profile_id,
-                        rigth_profile_name_id: name_id,
-                        rigth_display_name_id: display_name_id  }
+                        rigth_profile_name_id: name_id }
       add_profile_key_row(add_data_2row)
 
     end
@@ -223,18 +197,17 @@ module ProfileKeysGeneration
           for arr_ind in 0 .. names_arr.length - 1
 
             # извлечение полей display_name_id для обоих профилей
-            disp_name_id = Profile.find(profiles_arr[arr_ind]).display_name_id
-            is_disp_name_id = Profile.find(new_profile_id).display_name_id
+            # disp_name_id = Profile.find(profiles_arr[arr_ind]).display_name_id
+            # is_disp_name_id = Profile.find(new_profile_id).display_name_id
 
             # запись с прямым отношением
             add_data_1row = {  base_tree_id: base_profile_tree_id,
                                left_profile_id: profiles_arr[arr_ind],
                                left_name_id: names_arr[arr_ind],
-                               left_display_name_id: disp_name_id,
                                new_relation_id: relation_id,
                                rigth_profile_id: new_profile_id,
-                               rigth_profile_name_id: new_profile_name_id,
-                               rigth_display_name_id: is_disp_name_id  }
+                               rigth_profile_name_id: new_profile_name_id
+                               }
             add_profile_key_row(add_data_1row)
 
             # извлечение обратного отношения
@@ -244,11 +217,10 @@ module ProfileKeysGeneration
             add_data_2row = { base_tree_id: base_profile_tree_id,
                               left_profile_id: new_profile_id,
                               left_name_id: new_profile_name_id,
-                              left_display_name_id: is_disp_name_id,
                               new_relation_id: current_reverse_relation_id,
                               rigth_profile_id: profiles_arr[arr_ind],
-                              rigth_profile_name_id: names_arr[arr_ind],
-                              rigth_display_name_id: disp_name_id  }
+                              rigth_profile_name_id: names_arr[arr_ind]
+                              }
             add_profile_key_row(add_data_2row)
 
           end

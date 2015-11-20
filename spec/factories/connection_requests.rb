@@ -95,6 +95,14 @@ FactoryGirl.define do
   #     rewrite_profile_id    85
   #     overwrite_profile_id  85
   #   end
+    trait :conn_request_34_46 do
+      user_id         34
+      with_user_id    46
+      connection_id   888
+      confirm         nil
+      done            false
+    end
+
 
     trait :conn_request_1_2 do
       user_id         1

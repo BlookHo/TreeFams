@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SearchResults, type: :model   do  #, focus: true
+RSpec.describe SearchResults, type: :model , focus: true  do  #, focus: true
 
   describe '- Validation' do
     describe '- on create' do
@@ -81,7 +81,7 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
 
     end
 
-    context '- check SearchResults methods'   do #  ,  focus: true
+    context '- check SearchResults methods'    do #  , focus: true
       # create model data
       before {
         # Users
@@ -94,6 +94,13 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
         FactoryGirl.create(:search_results)
         FactoryGirl.create(:search_results, :correct2)
         FactoryGirl.create(:search_results, :correct3)
+
+        FactoryGirl.create(:connection_request, :conn_request_1_2)    #
+        FactoryGirl.create(:connection_request, :conn_request_7_8)    #
+        FactoryGirl.create(:connection_request, :conn_request_3_1)    #
+        FactoryGirl.create(:connection_request, :conn_request_3_2)    #
+        FactoryGirl.create(:connection_request, :conn_request_34_46)    #
+
       }
 
       after {
@@ -101,9 +108,11 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
         User.reset_pk_sequence
         SearchResults.delete_all
         SearchResults.reset_pk_sequence
+        ConnectionRequest.delete_all
+        ConnectionRequest.reset_pk_sequence
       }
 
-      context '- before actions - check table values '   do   #   , focus: true
+      context '- Before actions - check table values '  do   #   , focus: true
         describe '- check SearchResults have rows count Before <store_search_results> - Ok' do
           let(:rows_qty) {3}
           it_behaves_like :successful_search_results_rows_count
@@ -113,14 +122,16 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
           expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
                                                "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
                                                "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
-                                               "connection_id"=>nil, "pending_connect"=>0} )
+                                               "connection_id"=>nil, "pending_connect"=>0,
+                                               "searched_connected"=>[15], "founded_connected"=>[35] } )
         end
         it '- check SearchResults Second Factory row - Ok' do # , focus: true
           search_results_fields = SearchResults.second.attributes.except('created_at','updated_at')
           expect(search_results_fields).to eq({"id"=>2, "user_id"=>2, "found_user_id"=>3, "profile_id"=>1555,
                                                "found_profile_id"=>1444, "count"=>5, "found_profile_ids"=>[1444, 22222],
                                                "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
-                                               "connection_id"=>7, "pending_connect"=>1}  )
+                                               "connection_id"=>7, "pending_connect"=>1,
+                                               "searched_connected"=>[2], "founded_connected"=>[3] } )
         end
         it '- check SearchResults Second Factory row - Ok' do # , focus: true
           search_results_fields = SearchResults.third.attributes.except('created_at','updated_at')
@@ -129,11 +140,12 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
                                                "found_profile_ids"=>[22, 23, 24, 25, 26, 27, 28, 29],
                                                "searched_profile_ids"=>[11, 12, 13, 14, 18, 19, 20, 21],
                                                "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>3,
-                                               "pending_connect"=>0}  )
+                                               "pending_connect"=>0,
+                                               "searched_connected"=>[1], "founded_connected"=>[3] } )
         end
       end
 
-      context 'check Action <store_search_results> with duplicates_one_to_many'   do   #   , focus: true
+      context 'check Action <store_search_results> with duplicates_one_to_many'    do   #   , focus: true
         let(:search_results)  {
            {  connected_author_arr: [46],
               by_profiles:      [{:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7},
@@ -166,8 +178,8 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
         let(:current_user_id) { 46 }
         before { SearchResults.store_search_results(search_results, current_user_id) }
 
-        describe ' - check SearchResults have rows count After <store_search_results> with duplicates_one_to_many - Ok' do
-          let(:rows_qty) {5}
+        describe ' - check SearchResults have rows count After <store_search_results> with duplicates_one_to_many - Ok'   do
+          let(:rows_qty) {7}
           it_behaves_like :successful_search_results_rows_count
         end
         it '- check SearchResults Fourth Factory row - Ok' do # , focus: true
@@ -178,17 +190,41 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
                                                "found_profile_id"=>540, "count"=>5,
                                                "found_profile_ids"=>[540, 539, 544, 543, 541, 542],
                                                "searched_profile_ids"=>[662, 657, 658, 659, 663, 656],
-                                               "counts"=>[5, 5, 5, 5, 5, 5], "connection_id"=>nil,
-                                               "pending_connect"=>0} )
+                                               "counts"=>[5, 5, 5, 5, 5, 5],
+
+                                               "connection_id"=>888, "pending_connect"=>0,
+
+                                               "searched_connected"=>[46], "founded_connected"=>[34] } )
         end
-        it '- check SearchResults Fifth Factory row - Ok' do # , focus: true
+        it '- check SearchResults Fifth  Factory row - Ok' do # , focus: true
           search_results_fields = SearchResults.find(5).attributes.except('created_at','updated_at')
-          expect(search_results_fields).to eq({"id"=>5, "user_id"=>46, "found_user_id"=>47, "profile_id"=>657,
+          expect(search_results_fields).to eq({"id"=>5, "user_id"=>34, "found_user_id"=>46, "profile_id"=>540,
+                                               "found_profile_id"=>662, "count"=>5,
+                                               "found_profile_ids"=>[662, 657, 658, 659, 663, 656],
+                                               "searched_profile_ids"=>[540, 539, 544, 543, 541, 542],
+                                               "counts"=>[5, 5, 5, 5, 5, 5],
+                                               "connection_id"=>nil, "pending_connect"=>1,
+                                               "searched_connected"=>[34], "founded_connected"=>[46] } )
+        end
+        it '- check SearchResults Sixth Factory row - Ok' do # , focus: true
+          search_results_fields = SearchResults.find(6).attributes.except('created_at','updated_at')
+          expect(search_results_fields).to eq({"id"=>6, "user_id"=>46, "found_user_id"=>47, "profile_id"=>657,
                                                "found_profile_id"=>667, "count"=>7,
                                                "found_profile_ids"=>[667, 668, 666, 669, 673, 670, 672, 671],
                                                "searched_profile_ids"=>[657, 658, 659, 656, 665, 662, 664, 663],
-                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>nil,
-                                               "pending_connect"=>0} )
+                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5],
+                                               "connection_id"=>nil, "pending_connect"=>0,
+                                               "searched_connected"=>[46], "founded_connected"=>[47] } )
+        end
+        it '- check SearchResults Seventh Factory row - Ok' do # , focus: true
+          search_results_fields = SearchResults.find(7).attributes.except('created_at','updated_at')
+          expect(search_results_fields).to eq({"id"=>7, "user_id"=>47, "found_user_id"=>46, "profile_id"=>667,
+                                               "found_profile_id"=>657, "count"=>7,
+                                               "found_profile_ids"=>[657, 658, 659, 656, 665, 662, 664, 663],
+                                               "searched_profile_ids"=>[667, 668, 666, 669, 673, 670, 672, 671],
+                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5],
+                                               "connection_id"=>nil, "pending_connect"=>0,
+                                               "searched_connected"=>[47], "founded_connected"=>[46] } )
         end
       end
 
@@ -226,7 +262,7 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
         before { SearchResults.store_search_results(search_results, current_user_id)  }
 
         describe ' - check SearchResults have rows count After <store_search_results> with BOTH types duplicates - Ok' do
-          let(:rows_qty) {4}
+          let(:rows_qty) {5}
           it_behaves_like :successful_search_results_rows_count
         end
         it ' - check SearchResults Fourth Factory row - Ok' do # , focus: true
@@ -238,8 +274,22 @@ RSpec.describe SearchResults, type: :model   do  #, focus: true
                                                "found_profile_id"=>540, "count"=>5,
                                                "found_profile_ids"=>[540, 539, 544, 543, 541, 542],
                                                "searched_profile_ids"=>[662, 657, 658, 659, 663, 656],
-                                               "counts"=>[5, 5, 5, 5, 5, 5], "connection_id"=>nil,
-                                               "pending_connect"=>0} )
+                                               "counts"=>[5, 5, 5, 5, 5, 5],
+                                               "connection_id"=>888, "pending_connect"=>0,
+                                               "searched_connected"=>[46], "founded_connected"=>[34] } )
+        end
+        it ' - check SearchResults Five Factory row - Ok' do # , focus: true
+          puts "Check SearchResults.store_search_results[:by_trees] with BOTH types duplicates: #{search_results[:by_trees]} \n"   # 0
+          puts "In SearchResults.store_search_results[:duplicates_one_to_many]: #{search_results[:duplicates_one_to_many]} \n"   # 0
+          puts "In SearchResults.store_search_results[:duplicates_many_to_one]: #{search_results[:duplicates_many_to_one]} \n"   # 0
+          search_results_fields = SearchResults.find(5).attributes.except('created_at','updated_at')
+          expect(search_results_fields).to eq({"id"=>5, "user_id"=>34, "found_user_id"=>46, "profile_id"=>540,
+                                               "found_profile_id"=>662, "count"=>5,
+                                               "found_profile_ids"=>[662, 657, 658, 659, 663, 656],
+                                               "searched_profile_ids"=>[540, 539, 544, 543, 541, 542],
+                                               "counts"=>[5, 5, 5, 5, 5, 5],
+                                               "connection_id"=>nil, "pending_connect"=>1,
+                                               "searched_connected"=>[34], "founded_connected"=>[46] } )
         end
 
       end

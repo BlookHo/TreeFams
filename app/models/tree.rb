@@ -58,7 +58,11 @@ class Tree < ActiveRecord::Base
   # Задание на поиск от Дерева Юзера: tree_is_profiles =
   # [9, 15, 14, 21, 8, 19, 11, 7, 2, 20, 16, 10, 17, 12, 3, 13, 124, 18] - in RSpec
   def self.tree_main_data(current_user)
-    connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
+    # connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
+    connected_author_arr = current_user.connected_users # Состав объединенного дерева в виде массива id
+    # puts "In tree_main_data:  connected_author_arr =  #{connected_author_arr}, current_user =  #{current_user} "
+    # connected_author_arr2 = User.find(current_user).connected_users # Состав объединенного дерева в виде массива id
+    # puts "In tree_main_data:  connected_author_arr2 =  #{connected_author_arr2}, current_user =  #{current_user} "
     author_tree_arr = get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
 
     # Задание на поиск от Дерева Юзера:
