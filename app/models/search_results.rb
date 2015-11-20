@@ -80,6 +80,41 @@ class SearchResults < ActiveRecord::Base
   end
 
 
+  # @note start search methods: # sims & search
+  # first - similars, then - search if no sims results
+  def self.start_search_methods(current_user)
+    puts "In start_search_methods: start_search_methods: current_user.id = #{current_user.id.inspect} "
+
+    similars_results = current_user.start_similars
+    # {tree_info: tree_info, new_sims: new_sims, similars: similars,connected_users: connected_users,
+    #                        log_connection_id: log_connection_id }
+    # [inf] In start_similars: similars =
+    #  [{:first_profile_id=>70, :first_name_id=>"Ольга", :first_relation_id=>"Жена", :name_first_relation_id=>"Петра", :first_sex_id=>"Ж",
+    #    :second_profile_id=>81, :second_name_id=>"Ольга", :second_relation_id=>"Сестра", :name_second_relation_id=>"Елены", :second_sex_id=>"Ж",
+    #    :common_relations=>{"Отец"=>[351], "Мама"=>[187], "Сестра"=>[173], "Муж"=>[370]},
+    #    :common_power=>4, :inter_relations=>[]},
+    #   {:first_profile_id=>79, :first_name_id=>"Олег", :first_relation_id=>"Отец", :name_first_relation_id=>"Ольги", :first_sex_id=>"М",
+    #    :second_profile_id=>82, :second_name_id=>"Олег", :second_relation_id=>"Отец", :name_second_relation_id=>"Елены", :second_sex_id=>"М",
+    #    :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]},
+    #    :common_power=>4, :inter_relations=>[]}]
+
+    puts "In start_search_methods: similars_results[:similars] = #{similars_results[:similars].inspect}, similars_results = #{similars_results.inspect} "
+
+    if similars_results[:similars].blank?
+      puts "In start_search_methods: No Similars -> start search "
+      certain_koeff = WeafamSetting.first.certain_koeff
+      search_results = current_user.start_search(certain_koeff)
+      search_results
+    else
+      puts "In start_search_methods: Similars in tree -> No start search "
+      similars_results
+    end
+
+  end
+
+
+
+
   # @note: МЕТОДЫ ДЛЯ ИЗГОТОВЛЕНИЯ РЕЗУЛЬТАТОВ ПОИСКА (by_profiles, by_trees)
   #   make final search results to store
   def self.make_search_results(uniq_hash, profiles_match_hash)

@@ -50,7 +50,7 @@ class ProfilesController < ApplicationController
     @base_profile = current_user.creation_profile(params_to_create)
 
     # sims & search
-    start_search_methods(current_user)
+    SearchResults.start_search_methods(current_user)
 
 
   end
@@ -63,14 +63,14 @@ class ProfilesController < ApplicationController
     puts "In Profiles_controller: destroy: response = #{response}, response[:message] = #{response[:message]} "
 
     # sims & search
-    start_search_methods(current_user)
+    results = SearchResults.start_search_methods(current_user)
 
-    # if response[:status] == 403
-    #   @error = response[:message]
-    #   respond_with @error
-    # else
-    #   respond_with(status:200)
-    # end
+    if response[:status] == 403
+      @error = response[:message]
+      respond_with @error
+    else
+      respond_with(results)
+    end
 
   end
 
