@@ -1,6 +1,5 @@
 class AutocompleteController < ApplicationController
 
-
   def names
     term  = params[:term].mb_chars.capitalize.concat("%")
     if params[:sex_id].blank?
