@@ -5,15 +5,11 @@ class ApplicationController < ActionController::Base
   #   http_basic_authenticate_with name: "interweb", password: "interweb"
   # end
 
-
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-
   helper_method :current_user, :logged_id?
-
-
 
 
   def current_user

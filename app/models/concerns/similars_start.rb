@@ -24,7 +24,7 @@ module SimilarsStart
     log_connection_id = []
     log_connection_id = SimilarsLog.current_tree_log_id(connected_users) unless connected_users.empty?
 
-    # logger.info "In SimilarsStart 4: sim_data = #{new_sims} "
+    logger.info "In start_similars: similars = #{similars} "
     {tree_info: tree_info,
      new_sims: new_sims,
      similars: similars,

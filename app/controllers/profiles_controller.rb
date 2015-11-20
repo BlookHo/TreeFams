@@ -48,6 +48,11 @@ class ProfilesController < ApplicationController
     puts "In Profiles_controller: create: params_to_create = #{params_to_create} "
 
     @base_profile = current_user.creation_profile(params_to_create)
+
+    # sims & search
+    SearchResults.start_search_methods(current_user)
+
+
   end
 
 
@@ -57,42 +62,51 @@ class ProfilesController < ApplicationController
     response = current_user.destroying_profile(params[:id])
     puts "In Profiles_controller: destroy: response = #{response}, response[:message] = #{response[:message]} "
 
+    # sims & search
+    results = SearchResults.start_search_methods(current_user)
+
     if response[:status] == 403
       @error = response[:message]
       respond_with @error
     else
-      respond_with(status:200)
+      respond_with(results)
+    end
+
+  end
+
+  # @note start search methods: # sims & search
+  # first - similars, then - search if no sims results
+  def start_search_methods(current_user)
+    puts "In Profiles_controller: start_search_methods: current_user.id = #{current_user.id.inspect} "
+
+    tree_info, sim_data, similars = current_user.start_similars
+    sim_result = {similars_founds: similars, sim_data: sim_data}
+    puts "In Profiles_controller: destroy: similars = #{similars.inspect}, sim_result[:similars_founds] = #{sim_result[:similars_founds].inspect} "
+
+    if sim_result[:similars_founds].blank?
+      puts "In Profiles_controller: destroy: start search "
+      certain_koeff = WeafamSetting.first.certain_koeff
+      current_user.start_search(certain_koeff)
+    else
+      puts "In Profiles_controller: destroy: Similars in tree - No start search "
+      respond_with sim_result
     end
 
   end
 
 
 
-
   # @note: rename profile
   def rename_profile
-    # got_profile = params[:profile_to_rename].to_i
     @profile = Profile.find(params[:profile_to_rename].to_i)
-    # puts "In Profiles_controller: rename: got_profile = #{got_profile.inspect} "
     puts "In Profiles_controller: rename: @profile = #{@profile.inspect} "
-    # prev_name = Name.find(@profile.name_id)
     @new_name_id = params[:new_name_id]
-    # @new_name_id = 465 # 465 # 203 = name_id Илья  465=Федор  293=Мария
     puts "In Profiles_controller: rename: @new_name_id = #{@new_name_id.inspect} "
 
-    # new_name = Name.find(@new_name_id)
+    @profile.rename(@new_name_id)
 
-  #  if new_name.sex_id == @profile.sex_id
-      @profile.rename(@new_name_id)
-  #    puts "Профиль успешно переименован: с имени #{prev_name} на имя #{new_name}."
-   #   flash.now[:notice] = "Профиль успешно переименован с имени #{prev_name} на имя #{new_name}  ."
-      # render json: { status: 'ok', redirect: '/home' }
-  #  else
-  #    puts "Error:400 Выбрано имя не того пола, что Профиль: с имени #{prev_name} на имя #{new_name}."
-  #    flash.now[:error] = "Error:400 Выбрано имя не того пола, что Профиль: с имени #{prev_name} на имя #{new_name}  ."
-      # render json: { errors: @profile.errors.messages, redirect: '/home' }
-      # render json: { errors: "Error:400 Выбрано имя не того пола, что Профиль", redirect: '/home' }
-  #  end
+    # sims & search
+    start_search_methods(current_user)
 
   end
 
