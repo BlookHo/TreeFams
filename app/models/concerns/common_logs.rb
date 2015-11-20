@@ -31,6 +31,9 @@ module CommonLogs
         end
       end
 
+      # sims & search
+      SearchResults.start_search_methods(current_user)
+
       # here to check requests to keepif exists in search results
       # todo: uncomment this line below to work check
       # todo: !!!!!!  UPDATE RSPEC - User, Conn.req.  !!!!!!! ->
