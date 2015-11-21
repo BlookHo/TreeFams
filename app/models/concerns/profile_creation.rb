@@ -42,8 +42,8 @@ module ProfileCreation
     ################################
 
     # sims & search
-    puts "In Rails Concern: After creation_profile: start_search_methods "
-    SearchResults.start_search_methods(self)
+    # puts "In Rails Concern: After creation_profile: start_search_methods "
+    # SearchResults.start_search_methods(self)
 
     new_profile
   # respond_with new_profile

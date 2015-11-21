@@ -157,10 +157,6 @@ module ConnectionTrees
             \n diag_connection_item = #{diag_connection_item}, connection_message = #{connection_message}"
     connection_results[:stop_connection] = stop_connection #
 
-
-    # sims & search
-    SearchResults.start_search_methods(self)
-
     connection_results
     end
   end

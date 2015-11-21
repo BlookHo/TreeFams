@@ -49,6 +49,9 @@ class ProfilesController < ApplicationController
 
     @base_profile = current_user.creation_profile(params_to_create)
 
+    # sims & search
+    puts "In Profiles_controller: After creation_profile: start_search_methods "
+    SearchResults.start_search_methods(current_user)
 
 
   end
@@ -60,6 +63,9 @@ class ProfilesController < ApplicationController
     response = current_user.destroying_profile(params[:id])
     puts "In Profiles_controller: destroy: response = #{response}, response[:message] = #{response[:message]} "
 
+    # sims & search
+    puts "In Profiles_controller: After destroying_profile: start_search_methods "
+    SearchResults.start_search_methods(current_user)
 
     if response[:status] == 403
       @error = response[:message]
@@ -102,6 +108,7 @@ class ProfilesController < ApplicationController
     @profile.rename(@new_name_id)
 
     # sims & search
+    puts "In Profiles_controller: After rename_profile: start_search_methods "
     start_search_methods(current_user)
 
   end

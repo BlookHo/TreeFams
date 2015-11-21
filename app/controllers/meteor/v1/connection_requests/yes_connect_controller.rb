@@ -21,10 +21,6 @@ module Meteor
 
           logger.info "In YesConnectController: After connect:  msg_code = #{msg_code}, msg = #{msg} "
 
-          # respond_with yes_con
-          # logger.info "In YesConnectController: @error = #{@error}" if @error
-          # logger.info "In YesConnectController: After YES  @current_user.id = #{@current_user.id}"
-
           status_code = 300 if msg_code > 1 # status NotOk
           if @error
             respond_with @error

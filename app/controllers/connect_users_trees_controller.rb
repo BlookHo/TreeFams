@@ -46,6 +46,9 @@ class ConnectUsersTreesController < ApplicationController
 
     logger.info "@stop_connection = #{@stop_connection},\n connection_results = #{connection_results}"
 
+    # sims & search methods start
+    SearchResults.start_search_methods(current_user)
+
     # flash[:notice] = " #{connection_data[:connection_message]} Ваши деревья успешно объединены!"
 
     current_user.unlock_tree! # unlock tree
