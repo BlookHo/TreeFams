@@ -62,6 +62,8 @@ class Profile < ActiveRecord::Base
       Tree.rename_in_tree(self.id, new_name_id)
       ProfileKey.rename_in_profile_key(self.id, new_name_id)
       puts "Профиль успешно переименован: с имени #{self.name_id} на имя #{new_name}."
+
+
       # render json: { status: 'ok', redirect: '/home' }
     else
       puts "Error:400 Выбрано имя не того пола, что Профиль: с имени #{self.name_id} на имя #{new_name}."

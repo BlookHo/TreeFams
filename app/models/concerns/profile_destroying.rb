@@ -68,6 +68,10 @@ module ProfileDestroying
       # Mark profile as deleted
       profile.update_attribute('deleted', 1)
 
+      # sims & search
+      puts "In Rails Concern: After destroying_profile: start_search_methods "
+      SearchResults.start_search_methods(self)
+
     end
 
     response = error ? {status: 403, message: error} : {status: 200, message: "Профиль удален"}

@@ -18,6 +18,17 @@ class SimilarsFound < ActiveRecord::Base
                            or (first_profile_id = #{second_profile_id} and second_profile_id = #{first_profile_id})") }
 
 
+  # @note Check if similars results already exists - so don't start similars search!
+  def self.similars_results_exists?(current_user_id)
+    connected_users = User.find(current_user_id).connected_users
+    # puts "In similars_results_exists??: current_user_id = #{current_user_id}"
+    # puts "In similars_results_exists??: connected_users = #{connected_users}"
+    where("user_id in (?)", connected_users).exists?
+  end
+
+
+
+
   # Поиск в таблице НОВЫХ пар похожих среди ранее сохраненных (СТАРЫХ) найденных пар похожих
   # sims_profiles_pairs = [[38, 42], [41, 40]]
   # TESTED

@@ -203,38 +203,44 @@ class HomeController < ApplicationController
     # res = Profile.check_profiles_exists?(profile_id, is_profile_id)
     # logger.info "*** In module Profile.check_profiles_exists: res = #{res.inspect} "
     @similars = []
+    logger.info "## current_user = #{current_user.id} ## In home/index: Before similars_results_exists?"
 
-   results = SearchResults.start_search_methods(current_user)
-   logger.info "########## In home/index: results = #{results} "
+    if SimilarsFound.similars_results_exists?(current_user.id)
+      @similars = [""]
+    end
+   # results = SearchResults.start_search_methods(current_user)
+   # logger.info "########## In home/index: results = #{results} "
 
-   if results.has_key?(:similars)
-     @similars = results[:similars]
-     logger.info "########## In home/index: @similars = #{@similars} "
-     @log_connection_id = results[:log_connection_id]
-     @tree_info = results[:tree_info]
+   # if results.has_key?(:similars)
+   #   @similars = results[:similars]
+   #   logger.info "########## In home/index: @similars = #{@similars} "
+   #   @log_connection_id = results[:log_connection_id]
+   #   @tree_info = results[:tree_info]
+   #
+   #  # similars_data = current_user.start_similars
+   #  # @tree_info = similars_data[:tree_info]
+   #  # # new_sims = similars_data[:new_sims]
+   #  # @similars = similars_data[:similars]
+   #  # logger.info "########## In home/index: @similars = #{@similars} "
+   #  # @log_connection_id = similars_data[:log_connection_id]
+   #
+   #
+   #        # todo: проверить: убрать запуск метода SimilarsLog.current_tree_log_id и взять @log_connection_id из sim_data
+   #    # для отображения в show_similars_data
+   #    # @log_connection_id = SimilarsLog.current_tree_log_id(@tree_info[:connected_users]) unless @tree_info.empty?
+   #
+   #    unless @similars.empty?  # т.е. есть похожие
+   #      flash.now[:warning] = "Warning from server! Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно..."
+   #    #   unless new_sims==""#.empty?  #  т.е. есть новые похожие - отлич. от ранее записанных
+   #    #     # @tree_info = tree_info  # To View
+   #    #     view_tree_similars(@tree_info, @similars) unless @tree_info.empty?
+   #    #     render :template => 'similars/show_similars_data' # показываем инфу о похожих
+   #    #   end
+   #    end
+   #
+   # end
 
-    # similars_data = current_user.start_similars
-    # @tree_info = similars_data[:tree_info]
-    # # new_sims = similars_data[:new_sims]
-    # @similars = similars_data[:similars]
-    # logger.info "########## In home/index: @similars = #{@similars} "
-    # @log_connection_id = similars_data[:log_connection_id]
 
-
-          # todo: проверить: убрать запуск метода SimilarsLog.current_tree_log_id и взять @log_connection_id из sim_data
-      # для отображения в show_similars_data
-      # @log_connection_id = SimilarsLog.current_tree_log_id(@tree_info[:connected_users]) unless @tree_info.empty?
-
-      unless @similars.empty?  # т.е. есть похожие
-        flash.now[:warning] = "Warning from server! Предупреждение: В дереве есть 'похожие' профили. Если не добавить профили, то объединиться с другим деревом будет невозможно..."
-      #   unless new_sims==""#.empty?  #  т.е. есть новые похожие - отлич. от ранее записанных
-      #     # @tree_info = tree_info  # To View
-      #     view_tree_similars(@tree_info, @similars) unless @tree_info.empty?
-      #     render :template => 'similars/show_similars_data' # показываем инфу о похожих
-      #   end
-      end
-
-   end
 
   end
 
