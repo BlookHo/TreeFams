@@ -71,6 +71,7 @@
   #context-get-names{
     display:block;
     height: 100px;
+    overflow-y: scroll;
 
     h2 {
       color:red;
@@ -79,6 +80,7 @@
     #one_name{
       display:block;
 //      color:black;
+//      overflow-y: hidden; scroll
 
       h2 {
         color:black;

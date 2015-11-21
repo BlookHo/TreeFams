@@ -38,7 +38,7 @@
 
 
   -# Страница профиля
-  %li= link_to "О нём", profile_path(@profile), class: :grey
+  %li= link_to "О нём", '#', class: :grey
 
   -# Может ли быть удален профиль от current_user
   - if @profile.allow_destroy
