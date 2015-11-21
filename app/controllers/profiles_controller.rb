@@ -76,26 +76,6 @@ class ProfilesController < ApplicationController
 
   end
 
-  # @note start search methods: # sims & search
-  # first - similars, then - search if no sims results
-  def start_search_methods(current_user)
-    puts "In Profiles_controller: start_search_methods: current_user.id = #{current_user.id.inspect} "
-
-    tree_info, sim_data, similars = current_user.start_similars
-    sim_result = {similars_founds: similars, sim_data: sim_data}
-    puts "In Profiles_controller: destroy: similars = #{similars.inspect}, sim_result[:similars_founds] = #{sim_result[:similars_founds].inspect} "
-
-    if sim_result[:similars_founds].blank?
-      puts "In Profiles_controller: destroy: start search "
-      certain_koeff = WeafamSetting.first.certain_koeff
-      current_user.start_search(certain_koeff)
-    else
-      puts "In Profiles_controller: destroy: Similars in tree - No start search "
-      respond_with sim_result
-    end
-
-  end
-
 
 
   # @note: rename profile
@@ -109,7 +89,7 @@ class ProfilesController < ApplicationController
 
     # sims & search
     puts "In Profiles_controller: After rename_profile: start_search_methods "
-    start_search_methods(current_user)
+    SearchResults.start_search_methods(current_user)
 
   end
 
