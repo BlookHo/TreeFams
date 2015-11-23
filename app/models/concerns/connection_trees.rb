@@ -81,7 +81,8 @@ module ConnectionTrees
     ##### на основе исходного массива ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ - uniq_profiles_pairs -> init_connection_hash
     ##### ПОЛНОЕ Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
     complete_search_data = { with_whom_connect: with_whom_connect_users_arr,
-                             uniq_profiles_pairs: uniq_profiles_pairs }
+                             uniq_profiles_pairs: uniq_profiles_pairs,
+                             certain_koeff: certain_koeff}
     final_connection_hash = self.complete_search(complete_search_data)
     ##############################################################################
     profiles_to_rewrite = final_connection_hash.keys

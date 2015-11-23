@@ -32,6 +32,46 @@ class SearchWork
   end
 
 
+  # @note: check add_hash elements: whether each profiles pair - are equal profiles
+  def self.check_add_hash(add_connection_hash, certain_koeff)
+    checked_add_hash = {}
+    add_connection_hash.each do |profile_searched, profile_found|
+      common_relations_hash = SearchCircles.check_equ_profiles?(profile_searched, profile_found, certain_koeff)
+      puts " common_relations_hash = #{common_relations_hash}, common_relations_hash.size = #{common_relations_hash.size} "
+
+      if common_relations_hash.size >= certain_koeff
+        checked_add_hash.merge!(profile_searched => profile_found)
+        puts "profiles: #{profile_searched} and #{profile_found} -  ARE equal"
+        puts " Add EQU profiles: #{profile_searched} and #{profile_found} to checked_add_hash After Check"
+      else
+        puts "profiles: #{profile_searched} and #{profile_found} - are NOT equal"
+        puts " DO NOT Add profiles #{profile_searched} and #{profile_found} in checked_add_hash"
+      end
+    end
+    checked_add_hash
+  end
+
+
+  # hash={10=>12, 20=>11, 30=>15, 40=>15}
+  # => {10=>12, 20=>11, 30=>15, 40=>15}
+  # 2.2.0 :004 > new=SearchCircles.excl_dups_val(hash)
+  # => {10=>12, 20=>11, 30=>15}
+  # def self.excl_dups_val(hash)
+  #   new_hash={}
+  #   hash.each do |k,v|
+  #     if new_hash.values.include?(v)
+  #       new_hash.delete_if { |k_hash,v_hash| v_hash == v }
+  #       puts "If new_hash = #{new_hash}"
+  #     else
+  #       new_hash.merge!(k => v) #unless new_hash.values.include?(v)
+  #       puts "Else new_hash = #{new_hash}"
+  #     end
+  #   end
+  #   new_hash
+  # end
+
+
+
   # @note: "EXCLUDE Many_to_One DUPLICATES"
   # Extract duplicates hashes from input hash
   def self.duplicates_out(start_hash)
