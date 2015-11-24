@@ -1,6 +1,11 @@
 %div{style: "margin-top:100px;margin-bottom:75px;"}
   %h1 Список зарегистрированных пользователей
   %table.tmp_table
+    %tr
+      %th #
+      %th Имя
+      %th Email
+      %th Создан
     - User.all.reverse.each do |user|
       %tr
         %td
@@ -9,4 +14,5 @@
         - unless user.profile.blank?
           %td= user.profile.name.name.mb_chars.capitalize
         %td= user.email
+        %td= user.created_at
         %td= link_to "Войти под этим пользователем", login_as_user_path(user.id)
