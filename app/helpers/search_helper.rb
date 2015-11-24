@@ -136,7 +136,7 @@ module SearchHelper
           distinct2 = search_bk_arr - found_bk_arr
           logger.info " IN Compare = EQUAL: distinct1 = #{distinct1}, distinct2 = #{distinct2}"
 
-          if distinct1 == [] && distinct2 == []
+          if distinct1 == [] && distinct2 == [] # SearchCircles.empty_circles_delta?(found_bk, search_bk)
             compare_rezult = true
             common_circle_arr = []
             logger.info " circles Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_circle_arr = #{common_circle_arr}"

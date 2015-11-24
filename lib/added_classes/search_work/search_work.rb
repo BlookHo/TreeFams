@@ -36,7 +36,7 @@ class SearchWork
   def self.check_add_hash(add_connection_hash, certain_koeff)
     checked_add_hash = {}
     add_connection_hash.each do |profile_searched, profile_found|
-      common_relations_hash = SearchCircles.check_equ_profiles?(profile_searched, profile_found, certain_koeff)
+      common_relations_hash = SearchCircles.compare_profiles(profile_searched, profile_found)
       puts " common_relations_hash = #{common_relations_hash}, common_relations_hash.size = #{common_relations_hash.size} "
 
       if common_relations_hash.size >= certain_koeff
