@@ -13,7 +13,6 @@ module Meteor
 
               puts "In met/v1/../ProfilesDestroyController: After destroying_profile: start_search_methods "
               SearchResults.start_search_methods(@current_user)
-
               respond_with(status:200)
             end
 

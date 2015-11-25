@@ -10,7 +10,7 @@ module Meteor
           if profile && name && profile.rename(name.id)
             puts "In met/v1/../ProfilesRenameController: After rename: start_search_methods "
 
-            SearchResults.start_search_methods(current_user)
+            ::SearchResults.start_search_methods_in_thread(current_user)
 
             respond_with(status:200)
           else

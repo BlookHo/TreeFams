@@ -79,6 +79,15 @@ class SearchResults < ActiveRecord::Base
     where("#{current_user_id} = ANY (searched_connected)").exists?
   end
 
+  # @note Run search methods in tread
+  def self.start_search_methods_in_thread(current_user)
+    Thread.new do
+      # ActiveRecord::Base.connection_pool.with_connection do
+        self.start_search_methods(current_user)
+      # end
+    end
+  end
+
 
   # @note start search methods: # sims & search
   # first - similars, then - search if no sims results
@@ -238,7 +247,7 @@ class SearchResults < ActiveRecord::Base
     #   connected_tree_ids = User.find(tree_id).connected_users # Состав объединенного дерева в виде массива id
     #
     # end
-      
+
     search_results_arr = []
     # logger.info "#### In  make_results: store_data[:tree_ids] = #{store_data[:tree_ids]}"
     store_data[:tree_ids].each do |tree_id|
@@ -763,4 +772,3 @@ end
   :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
 
 # touched trees: 58, 57, 59
-
