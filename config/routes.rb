@@ -264,10 +264,6 @@ Weafam::Application.routes.draw do
         get :make_request, to: "make_request#make_request"
       end
 
-      namespace :search_results do
-        get :search, to: "search_results#search"
-      end
-
       namespace :similars_founds do
         get :search_similars, to: "similars_founds#search_similars"
       end
