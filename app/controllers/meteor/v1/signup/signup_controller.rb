@@ -19,8 +19,8 @@ module Meteor
             user = User.create_user_account_with_json_data(data, password)
             Thread.new do
               UserMailer.welcome_mail(user, password).deliver
-              ::SearchResults.start_search_methods_in_thread(current_user)
             end
+            ::SearchResults.start_search_methods_in_thread(current_user)
             render json: {token: user.access_token}
           else
             respond_with(status: 500)
