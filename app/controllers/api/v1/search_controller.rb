@@ -7,27 +7,26 @@ module Api
       # Глобальный поиск
       def index
         certain_koeff = get_certain_koeff #4
-        logger.info "== in index search api: api_current_user.id = #{api_current_user.id},  certain_koeff = #{certain_koeff}"
+        logger.info "== in index search api: api_current_user.id = #{api_current_user.id}, certain_koeff = #{certain_koeff}"
 
-        if !SimilarsFound.similars_results_exists?(current_user.id)
+        if SimilarsFound.similars_results_exists?(current_user.id)
+          respond_with ("SIMs") #make_results_data(search_results)
+        else
           @similars = [""]
           logger.info "== in index search api: No SIms results -> check search results exists"
-
-          if !SearchResults.results_exists?(api_current_user.id)
-            search_data = api_current_user.start_search(certain_koeff)
-            logger.info "== in index search api: No results -> search start"
-            respond_with collect_search_results(search_data)
-          else
+          if SearchResults.results_exists?(api_current_user.id)
             logger.info "== in index search api: search results already exists! "
             search_results = SearchResults.where("#{current_user.id} = ANY (searched_connected)")
             unless search_results.blank?
               # :by_trees=>[{:found_tree_id=>45, :found_profile_ids=>[649, 650, 646, 645, 651, 648, 647]}]
-              logger.info "== in index search api: make search results from already exists! "
+              logger.info "== in index search api: respond_with search results already exists! "
               respond_with make_results_data(search_results)
             end
+          else
+            logger.info "== in index search api: No results -> search start"
+            search_data = api_current_user.start_search(certain_koeff)
+            respond_with collect_search_results(search_data)
           end
-        else
-          respond_with ("SIMs") #make_results_data(search_results)
         end
 
       end

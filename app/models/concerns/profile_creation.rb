@@ -43,6 +43,7 @@ module ProfileCreation
 
     # sims & search
     # puts "In Rails Concern: After creation_profile: start_search_methods "
+    # puts "In models/concern/profile_creation: In creation_profile: self.id = #{self.id} "
     # SearchResults.start_search_methods(self)
 
     new_profile

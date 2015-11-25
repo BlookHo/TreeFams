@@ -431,11 +431,13 @@ class SearchResults < ActiveRecord::Base
   # @note: Clear all previous results for curent tree
   def self.clear_all_prev_results(current_user_id)
     connected_users = User.find(current_user_id).connected_users
-    # puts "In clear_all_prev_results: connected_users = #{connected_users.inspect} "
+    puts "In clear_all_prev_results: connected_users = #{connected_users.inspect} "
     all_previous_to_results = where("user_id in (?)", connected_users)
     aii_previous_opp_results = where("found_user_id in (?)", connected_users)
     all_previous_results = all_previous_to_results + aii_previous_opp_results
     all_previous_results.each(&:destroy) unless all_previous_results.blank?
+
+    # scope :one_way_result,     -> (connected_users) {where("user_id in (?)", connected_users)}
 
     #test
     # val = 692
@@ -522,7 +524,7 @@ class SearchResults < ActiveRecord::Base
   # @note: Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
   # @params: who_connect, with_whom_connect - arrs of ids
   def self.destroy_previous_results(current_user_id)
-    one_way_result(current_user_id)
+    one_way_result(current_user_id).each(&:destroy) unless results.blank?
     one_opp_way_result(current_user_id)
   end
 
@@ -534,10 +536,10 @@ class SearchResults < ActiveRecord::Base
   # end
 
   # # @note: destroy one result - in one search way
-  # def self.one_result_destroy(user_id, found_user_id)
-  #   results = one_way_result(user_id, found_user_id)
-  #   results.each(&:destroy) unless results.blank?
-  # end
+  def self.one_result_destroy(user_id, found_user_id)
+    results = one_way_result(user_id, found_user_id)
+    results.each(&:destroy) unless results.blank?
+  end
 
 
   # @note - сбор данных о профилях из рез-тов поиска в виде массивов

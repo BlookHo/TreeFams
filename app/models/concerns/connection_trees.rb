@@ -186,14 +186,23 @@ module ConnectionTrees
     ######## Заполнение таблицы ConnectedUser - записью о том, что деревья с current_user_id и user_id - соединились
       ConnectedUser.set_users_connection(connection_data) # здесь сохраняются массивы профилей
     ##################################################################
+      # self.update_connected_users!
+
     ## Update connection requests - to yes connect
       ConnectionRequest.request_connection(connection_data)
       ConnectionRequest.connected_requests_update(current_user_id)
     ##################################################################
-
+    logger.info "In connection_in_tables: current_user_id = #{current_user_id}"
     # Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
     # SearchResults.destroy_previous_results(who_connect_arr, with_whom_connect_arr)
-    SearchResults.destroy_previous_results(current_user_id)
+    # SearchResults.destroy_previous_results(current_user_id)
+    SearchResults.clear_all_prev_results(current_user_id)
+
+
+    # sims & search
+    # puts "In Rails Concern: After creation_profile: start_search_methods "
+    # SearchResults.start_search_methods(self)
+
 
     ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
     profile_current_user = User.find(current_user_id).profile_id   #

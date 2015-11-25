@@ -63,14 +63,15 @@ class ProfilesController < ApplicationController
     response = current_user.destroying_profile(params[:id])
     puts "In Profiles_controller: destroy: response = #{response}, response[:message] = #{response[:message]} "
 
-    # sims & search
-    puts "In Profiles_controller: After destroying_profile: start_search_methods "
-    SearchResults.start_search_methods(current_user)
-
     if response[:status] == 403
       @error = response[:message]
       respond_with @error
     else
+
+      # sims & search
+      puts "In Profiles_controller: After destroying_profile: start_search_methods "
+      SearchResults.start_search_methods(current_user)
+
       respond_with(response)
     end
 

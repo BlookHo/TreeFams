@@ -70,6 +70,7 @@ module ProfileDestroying
 
       # sims & search
       # puts "In Rails Concern: After destroying_profile: start_search_methods "
+      # puts "In ProfileDestroying: In destroying_profile: self.id = #{self.id} "
       # SearchResults.start_search_methods(self)
 
     end

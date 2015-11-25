@@ -10,6 +10,10 @@ module Meteor
             if response[:status] == 403
               respond_with(errorCode: 403, message: response[:message])
             else
+
+              puts "In met/v1/../ProfilesDestroyController: After destroying_profile: start_search_methods "
+              SearchResults.start_search_methods(@current_user)
+
               respond_with(status:200)
             end
 
