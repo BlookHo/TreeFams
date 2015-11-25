@@ -79,12 +79,14 @@ class SearchResults < ActiveRecord::Base
     where("#{current_user_id} = ANY (searched_connected)").exists?
   end
 
+
   # @note Run search methods in tread
   def self.start_search_methods_in_thread(current_user)
     Thread.new do
       # ActiveRecord::Base.connection_pool.with_connection do
         self.start_search_methods(current_user)
       # end
+      ActiveRecord::Base.connection_pool.release_connection
     end
   end
 
