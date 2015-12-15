@@ -72,7 +72,6 @@ class SearchResults < ActiveRecord::Base
   scope :one_way_result,     -> (connected_users) {where("user_id in (?)", connected_users)}
   scope :one_opp_way_result, -> (connected_users) {where("found_user_id in (?)", connected_users)}
 
-
   # @note Check if results already exists - so don't start search!
   def self.results_exists?(current_user_id)
     # puts "In results_exists?: current_user_id = #{current_user_id}"
@@ -122,8 +121,6 @@ class SearchResults < ActiveRecord::Base
     end
 
   end
-
-
 
 
   # @note: МЕТОДЫ ДЛЯ ИЗГОТОВЛЕНИЯ РЕЗУЛЬТАТОВ ПОИСКА (by_profiles, by_trees)
@@ -213,16 +210,10 @@ class SearchResults < ActiveRecord::Base
 
   # @note: prepare and store new search results if there were no doublicates
   def self.store_results_no_doubles(store_data)
-    # logger.info "#### In  store_results_no_doubles: store_data = #{store_data}"
     search_results_arr = make_results(store_data)
-    # logger.info "#### In  store_results_no_doubles: search_results_arr = #{search_results_arr}"
- #   search_opp_results_arr = make_opposite_results(store_data)
-    # logger.info "#### In  store_results_no_doubles: search_opp_results_arr = #{search_opp_results_arr}"
- #   search_results_both_dir = search_results_arr + search_opp_results_arr
-    # logger.info "#### In  store_results_no_doubles: search_results_both_dir = #{search_results_both_dir}"
     create_search_results(search_results_arr)
-
   end
+
 
   # search_results_arr =
       [{:user_id=>34, :found_user_id=>46, :profile_id=>540, :found_profile_id=>662, :count=>5,
@@ -244,16 +235,8 @@ class SearchResults < ActiveRecord::Base
   # @note - prepare data for результатов поиска and search arrays
   def self.make_results(store_data)
 
-    # # update :tree_ids - to collect connected_users ??
-    # store_data[:tree_ids].each do |tree_id|
-    #   connected_tree_ids = User.find(tree_id).connected_users # Состав объединенного дерева в виде массива id
-    #
-    # end
-
     search_results_arr = []
-    # logger.info "#### In  make_results: store_data[:tree_ids] = #{store_data[:tree_ids]}"
     store_data[:tree_ids].each do |tree_id|
-      # logger.info "#### In  make_results.each: tree_id = #{tree_id}, store_data[:tree_ids] = #{store_data[:tree_ids]}"
       results_arrs = collect_search_profile_ids(store_data[:by_profiles], tree_id)
       found_tree_ids = User.find(tree_id).connected_users # Состав объединенного дерева в виде массива id
       conn_id = get_connection_id(store_data[:current_user_tree_ids], found_tree_ids)
@@ -293,9 +276,6 @@ class SearchResults < ActiveRecord::Base
                      founded_connected: store_data[:current_user_tree_ids] }
       search_results_arr << one_opp_result
 
-
-
-      # logger.info "#### In  make_results.IN each: search_results_arr = #{search_results_arr}"
     end
     search_results_arr
   end

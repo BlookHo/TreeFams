@@ -35,55 +35,20 @@ class SearchWork
   # @note: check add_hash elements: whether each profiles pair - are equal profiles
   def self.check_add_hash(add_connection_hash, certain_koeff)
     checked_add_hash = {}
-
-    # binding.pry          # Execution will stop here.
-
     add_connection_hash.each do |profile_searched, profile_found|
       common_relations_hash = SearchCircles.compare_profiles(profile_searched, profile_found)
       puts " common_relations_hash = #{common_relations_hash}, common_relations_hash.size = #{common_relations_hash.size} "
-
-      # binding.pry          # Execution will stop here.
-
       if common_relations_hash.size >= certain_koeff
         checked_add_hash.merge!(profile_searched => profile_found)
         puts "profiles: #{profile_searched} and #{profile_found} -  ARE equal"
         puts " Add EQU profiles: #{profile_searched} and #{profile_found} to checked_add_hash After Check"
-
-        # binding.pry          # Execution will stop here.
-
       else
         puts "profiles: #{profile_searched} and #{profile_found} - are NOT equal"
         puts " DO NOT Add profiles #{profile_searched} and #{profile_found} in checked_add_hash"
-
-        # binding.pry          # Execution will stop here.
-
       end
     end
-
-    # binding.pry          # Execution will stop here.
-
     checked_add_hash
   end
-
-
-  # hash={10=>12, 20=>11, 30=>15, 40=>15}
-  # => {10=>12, 20=>11, 30=>15, 40=>15}
-  # 2.2.0 :004 > new=SearchCircles.excl_dups_val(hash)
-  # => {10=>12, 20=>11, 30=>15}
-  # def self.excl_dups_val(hash)
-  #   new_hash={}
-  #   hash.each do |k,v|
-  #     if new_hash.values.include?(v)
-  #       new_hash.delete_if { |k_hash,v_hash| v_hash == v }
-  #       puts "If new_hash = #{new_hash}"
-  #     else
-  #       new_hash.merge!(k => v) #unless new_hash.values.include?(v)
-  #       puts "Else new_hash = #{new_hash}"
-  #     end
-  #   end
-  #   new_hash
-  # end
-
 
 
   # @note: "EXCLUDE Many_to_One DUPLICATES"
@@ -119,9 +84,6 @@ class SearchWork
 
   # @note: make final sorted by_trees search results
   def self.fill_hash_w_val_arr(filling_hash, input_key, input_val)
-    # test = filling_hash.key?(input_key) # Is elem w/input_key in filling_hash?
-    # if test == false #  "NOT Found in hash"
-    # puts "In fill_hash_w_val_arr"
     if !filling_hash.key?(input_key) #  "NOT Found in hash"
       filling_hash.merge!({input_key => [input_val]}) # include new elem in hash
     else  #  "Found in hash"
@@ -153,7 +115,6 @@ class SearchWork
   # @see Place = main_contrl.,
   ################# FILLING OF HASH WITH KEYS AND/OR VALUES
   def self.fill_arrays_in_hash(fill_arrays_data) # Filling of hash with keys and values, according to key occurance
-    # puts "In  fill_arrays_in_hash: fill_arrays_data = #{fill_arrays_data}"
     one_hash = fill_arrays_data[:profiles_hash]
     tree     = fill_arrays_data[:tree_user_id]
     profile  = fill_arrays_data[:tree_profile_id]
@@ -161,7 +122,6 @@ class SearchWork
 
     # test: one_hash.key?(tree) - Did profile_searched in one_hash?
     if one_hash.key?(tree) #== true
-      # "key = profile_searched IS in hash - collect hash"
       current_hash = one_hash.fetch(tree) # get hash for tree
       test_profile_found = current_hash.key?(profile) # Is elem in one_hash?
       collect_hash_data = {
@@ -171,27 +131,11 @@ class SearchWork
         tree:         tree,
         relation:     relation
       }
-      # PREV REFACT VER
-      # if test_profile_found == false #  "key=profile NOT Found in hash"
-      #   collect_hash_data[:one_data] = [relation] # include profile with new array in hash
-      #   # current_hash.merge!({profile => [relation]}) # include profile with new array in hash
-      #   # one_hash.merge!(tree => current_hash ) # наполнение хэша соответствиями найденных профилей и найденных отношений
-      # else  #  "Found in hash"
-      #   collect_hash_data[:relation] = relation
-      #   value_array = make_relation_value(collect_hash_data)
-      #   # value_array = current_hash.values_at(profile)
-      #   # value_array << relation
-      #   # value_array = value_array.flatten(1)
-      #   collect_hash_data[:one_data] = value_array
-      #   # current_hash.merge!(profile => value_array )
-      #   # one_hash.merge!(tree => current_hash )
-      # end
 
       new_collect_hash_data = proceed_hash_data(test_profile_found, collect_hash_data)
       # наполнение хэша соответствиями найденных профилей и найденных отношений
       one_hash = collect_one_hash(new_collect_hash_data)
     else  # if !test_tree # == false
-      # "key = profile_searched YET NOT in hash - make new hash in hash"
       # include new profile_searched with new profile with new array in hash
       one_hash.merge!(tree => { profile => [relation] } )
     end
@@ -228,7 +172,6 @@ class SearchWork
     one_data     = collect_hash_data[:one_data]
     current_hash.merge!(profile => one_data ) # наполнение хэша соответствиями найденных профилей и найденных отношений
     one_hash.merge!(tree => current_hash ) # наполнение хэша соответствиями найденных профилей и найденных отношений
-  # puts "one_hash = #{one_hash} "
     one_hash
   end
 
@@ -254,7 +197,6 @@ class SearchWork
   def self.make_profiles_power_hash(reduced_rels_hash)
     profiles_powers_hash = {}
     reduced_rels_hash.each { |key, v_arr | profiles_powers_hash.merge!( key => v_arr.size) }
-    # logger.info " profiles_powers_hash = #{profiles_powers_hash} "
     profiles_powers_hash
   end
 
@@ -364,7 +306,6 @@ class SearchWork
   def self.get_max_power_profiles_hash(profiles_powers_hash)
     max_power = profiles_powers_hash.values.max # определение значения макс-й мощности
     max_profiles_powers_hash = profiles_powers_hash.select { |k_power, v_power| v_power == max_power} # выбор эл-тов хэша с макс-й мощностью
-    # puts " max profiles_powers_hash = #{max_profiles_powers_hash} "
     return max_profiles_powers_hash, max_power
   end
 
@@ -388,6 +329,7 @@ class SearchWork
     end
     new_profiles_with_match_hash
   end
+
 
   # @note:Collect of хэша профилей с максимальными значениями совпадений
   def self.collect_profiles_match_hash(profiles_match_hash, max_profiles_powers)

@@ -44,9 +44,7 @@ module SearchComplete
       final_connection_hash = init_connection_modify(init_connection_hash, certain_koeff)
       puts "final_connection_hash = #{final_connection_hash} "
     end
-
     final_connection_hash
-
   end
 
 
@@ -54,111 +52,38 @@ module SearchComplete
   # final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} # In Spec
   def init_connection_modify(init_connection_hash, certain_koeff)
     final_connection_hash = init_connection_hash
-
-    # binding.pry          # Execution will stop here.
-
     # начало сбора полного хэша достоверных пар профилей для объединения
     until init_connection_hash.empty?
       logger.info "** IN UNTIL top: init_connection_hash = #{init_connection_hash}"
       add_connection_hash = collect_add_connection(init_connection_hash, final_connection_hash)
-
-      # binding.pry          # Execution will stop here.
-
 #########################################################################################
       add_hash_checked = SearchWork.check_add_hash(add_connection_hash, certain_koeff)
       puts " After add_hash_checked = #{add_hash_checked}"
-
-      # binding.pry          # Execution will stop here.
-
       add_to_hash_data = { add_connection_hash: add_hash_checked, final_connection_hash: final_connection_hash }
 #########################################################################################
 
       # add_to_hash_data = { add_connection_hash: add_connection_hash, final_connection_hash: final_connection_hash }
       final_connection_hash = SearchWork.collect_final_connection(add_to_hash_data)
-      # binding.pry          # Execution will stop here.
-
       puts "@@@@@ final_connection_hash = #{final_connection_hash} "
 
       # Подготовка к следующему циклу
       # init_connection_hash = add_connection_hash
       init_connection_hash = add_hash_checked
-
-      # binding.pry          # Execution will stop here.
-
     end
-
     # binding.pry          # Execution will stop here.
-
     final_connection_hash
   end
 
-  # [inf] after find_circles_arrs:
-  #                 circles_arrs_data =
-  # {:search_bk_arr=>[
-  #     {"name_id"=>48, "relation_id"=>1, "is_name_id"=>245, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>2, "is_name_id"=>92, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>5, "is_name_id"=>90, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>6, "is_name_id"=>97, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>6, "is_name_id"=>173, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>6, "is_name_id"=>189, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>6, "is_name_id"=>449, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>7, "is_name_id"=>343, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>221, "is_name_id"=>449, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>222, "is_name_id"=>282, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>222, "is_name_id"=>292, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>222, "is_name_id"=>449, "deleted"=>0},
-  #     {"name_id"=>48, "relation_id"=>222, "is_name_id"=>506, "deleted"=>0}],
-  #  :search_bk_profiles_arr=>[
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>1, "is_profile_id"=>872, "is_name_id"=>245, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>2, "is_profile_id"=>873, "is_name_id"=>92, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>5, "is_profile_id"=>874, "is_name_id"=>90, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>6, "is_profile_id"=>871, "is_name_id"=>97, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>6, "is_profile_id"=>878, "is_name_id"=>173, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>6, "is_profile_id"=>876, "is_name_id"=>189, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>6, "is_profile_id"=>875, "is_name_id"=>449, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>7, "is_profile_id"=>883, "is_name_id"=>343, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>221, "is_profile_id"=>884, "is_name_id"=>449, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>222, "is_profile_id"=>881, "is_name_id"=>282, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>222, "is_profile_id"=>880, "is_name_id"=>292, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>222, "is_profile_id"=>882, "is_name_id"=>449, "deleted"=>0},
-  #      {"profile_id"=>877, "name_id"=>48, "relation_id"=>222, "is_profile_id"=>879, "is_name_id"=>506, "deleted"=>0}],
-  #  :search_is_profiles_arr=>[872, 873, 874, 871, 878, 876, 875, 883, 884, 881, 880, 882, 879],
-  #  :found_bk_arr=>[
-  #      {"name_id"=>48, "relation_id"=>4, "is_name_id"=>282, "deleted"=>0},
-  #      {"name_id"=>48, "relation_id"=>6, "is_name_id"=>265, "deleted"=>0},
-  #      {"name_id"=>48, "relation_id"=>6, "is_name_id"=>449, "deleted"=>0},
-  #      {"name_id"=>48, "relation_id"=>7, "is_name_id"=>343, "deleted"=>0},
-  #      {"name_id"=>48, "relation_id"=>212, "is_name_id"=>351, "deleted"=>0},
-  #      {"name_id"=>48, "relation_id"=>222, "is_name_id"=>292, "deleted"=>0},
-  #      {"name_id"=>48, "relation_id"=>222, "is_name_id"=>449, "deleted"=>0}],
-  #  :found_bk_profiles_arr=>[
-  #      {"profile_id"=>892, "name_id"=>48, "relation_id"=>4, "is_profile_id"=>894, "is_name_id"=>282, "deleted"=>0},
-  #      {"profile_id"=>892, "name_id"=>48, "relation_id"=>6, "is_profile_id"=>887, "is_name_id"=>265, "deleted"=>0},
-  #      {"profile_id"=>892, "name_id"=>48, "relation_id"=>6, "is_profile_id"=>890, "is_name_id"=>449, "deleted"=>0},
-  #      {"profile_id"=>892, "name_id"=>48, "relation_id"=>7, "is_profile_id"=>893, "is_name_id"=>343, "deleted"=>0},
-  #      {"profile_id"=>892, "name_id"=>48, "relation_id"=>212, "is_profile_id"=>885, "is_name_id"=>351, "deleted"=>0},
-  #      {"profile_id"=>892, "name_id"=>48, "relation_id"=>222, "is_profile_id"=>888, "is_name_id"=>292, "deleted"=>0},
-  #      {"profile_id"=>892, "name_id"=>48, "relation_id"=>222, "is_profile_id"=>889, "is_name_id"=>449, "deleted"=>0}],
-  #  :found_is_profiles_arr=>[894, 887, 890, 893, 885, 888, 889]}
 
   # @note: init_hash iterate to collect_add_connection
   def collect_add_connection(init_connection_hash, final_connect_hash)
     add_connection_hash = {}
-
-    # binding.pry          # Execution will stop here.
-
     init_connection_hash.each do |profile_searched, profile_found|
       new_connection_hash = {}
       # Получение Кругов для пары профилей - для последующего сравнения и анализа
       logger.info "=== КРУГИ ПРОФИЛЕЙ: profile_searched = #{profile_searched}, profile_found = #{profile_found}"
-
-      # binding.pry          # Execution will stop here.
-
       circles_arrs_data = SearchCircles.find_circles_arrs(profile_searched, profile_found)
       logger.info "after find_circles_arrs: circles_arrs_data = #{circles_arrs_data}"
-
-      # binding.pry          # Execution will stop here.
-
       compare_circles_data = {
         profile_searched:       profile_searched,
         profile_found:          profile_found,
@@ -178,13 +103,8 @@ module SearchComplete
       # add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.blank?
       add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.empty?
       logger.info " add_connection_hash = #{add_connection_hash} "
-
-      # binding.pry          # Execution will stop here.
-
     end
-
     # binding.pry          # Execution will stop here.
-
     add_connection_hash
   end
 
@@ -192,15 +112,9 @@ module SearchComplete
   # @note: Collect new_connection_hash
   def collect_new_connection_hash(compare_circles_data)
     puts " in  collect_new_connection_hash: compare_circles_data = #{compare_circles_data} "
-
-    # binding.pry          # Execution will stop here.
-
     new_connection_hash = sequest_connection_hash(compare_circles_data[:final_connection_hash],
                                                   SearchCircles.two_circles_compare(compare_circles_data))
     puts " after sequest_connection_hash: new_connection_hash = #{new_connection_hash} "
-
-    # binding.pry          # Execution will stop here.
-
     new_connection_hash
   end
 
@@ -214,9 +128,6 @@ module SearchComplete
     final_conn_hash.each do |profiles_s, profile_f|
       new_connection_hash.delete_if { |k_conn,v_conn| k_conn == profiles_s && v_conn == profile_f }
     end
-
-    # binding.pry          # Execution will stop here.
-
     new_connection_hash
   end
 

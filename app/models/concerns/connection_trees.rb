@@ -2,9 +2,6 @@ module ConnectionTrees
   extend ActiveSupport::Concern
   # in User model
 
-  # require 'pry'
-
-
   # @note: Стартовый метод объединения деревьев
   def connection(user_id, connection_id)
     User.transaction do
@@ -112,9 +109,6 @@ module ConnectionTrees
         search_time:              elapsed_search_time #
     }
     logger.info "Before check_connection_arrs: connection_results = #{connection_results}"
-
-    # binding.pry          # Execution will stop here.
-
     ######## Контроль корректности массивов перед объединением
     check_connection_result = self.check_connection_arrs(connection_results)
     stop_by_arrs          = check_connection_result[:stop_by_arrs]
