@@ -200,7 +200,7 @@ class SearchWork
     profiles_powers_hash
   end
 
-
+  #   
   # @note: ПОЛУЧЕНИЕ ПАР СООТВЕТСТВИЙ ПРОФИЛЕЙ С МАКС. МОЩНОСТЬЮ МНОЖЕСТВ СОВПАДЕНИЙ ОТНОШЕНИЙ
   def self.get_certain_profiles_pairs(profiles_found_arr, certainty_koeff)
     # puts "=== IN get_certain_profiles_pairs "
