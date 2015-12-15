@@ -2,9 +2,10 @@ module Api
   module V1
     class SearchController < ApiController
 
+      # require 'pry'
+
       respond_to :json
 
-      # Глобальный поиск
       def index
         certain_koeff = get_certain_koeff #4
         logger.info "== in index search api: api_current_user.id = #{api_current_user.id}, certain_koeff = #{certain_koeff}"
@@ -13,10 +14,16 @@ module Api
           respond_with ("SIMs") #make_results_data(search_results)
         else
           @similars = [""]
-          logger.info "== in index search api: No SIms results -> check search results exists"
+          logger.info "== in index search api: No SIms results -> check search results exists: @similars = #{@similars}"
+
+          # binding.pry          # Execution will stop here.
+
           if SearchResults.results_exists?(api_current_user.id)
             logger.info "== in index search api: search results already exists! "
             search_results = SearchResults.where("#{current_user.id} = ANY (searched_connected)")
+
+            # binding.pry          # Execution will stop here.
+
             unless search_results.blank?
               # :by_trees=>[{:found_tree_id=>45, :found_profile_ids=>[649, 650, 646, 645, 651, 648, 647]}]
               logger.info "== in index search api: respond_with search results already exists! "

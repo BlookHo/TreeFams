@@ -2,6 +2,7 @@ module ConnectionTrees
   extend ActiveSupport::Concern
   # in User model
 
+  # require 'pry'
 
 
   # @note: Стартовый метод объединения деревьев
@@ -112,6 +113,8 @@ module ConnectionTrees
     }
     logger.info "Before check_connection_arrs: connection_results = #{connection_results}"
 
+    # binding.pry          # Execution will stop here.
+
     ######## Контроль корректности массивов перед объединением
     check_connection_result = self.check_connection_arrs(connection_results)
     stop_by_arrs          = check_connection_result[:stop_by_arrs]
@@ -149,6 +152,8 @@ module ConnectionTrees
     #  Если все предыдущие проверки пройдены, то - запуск объединения в таблицах
     unless stop_connection || stop_by_arrs # for stop_connection & view
       logger.info "Для объединения - все корректно!, stop_connection = #{stop_connection},\n connection_message = #{connection_message}"
+
+      # binding.pry          # Execution will stop here.
 
       ##### Центральный метод соединения деревьев = перезапись и удаление профилей в таблицах
       self.connection_in_tables(connection_results)

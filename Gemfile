@@ -110,7 +110,6 @@ group :development, :test do
   # For active record imitation in tests
   gem 'factory_girl_rails', "~> 4.0"
 
-  # gem 'pry'
 
 end
 
@@ -156,6 +155,7 @@ gem 'rvm-capistrano', '1.5.1', group: :development, require: false
 
 
 gem 'newrelic_rpm'
+gem 'pry' #
 
 group :console do
   # does not work !!!

@@ -35,19 +35,33 @@ class SearchWork
   # @note: check add_hash elements: whether each profiles pair - are equal profiles
   def self.check_add_hash(add_connection_hash, certain_koeff)
     checked_add_hash = {}
+
+    # binding.pry          # Execution will stop here.
+
     add_connection_hash.each do |profile_searched, profile_found|
       common_relations_hash = SearchCircles.compare_profiles(profile_searched, profile_found)
       puts " common_relations_hash = #{common_relations_hash}, common_relations_hash.size = #{common_relations_hash.size} "
+
+      # binding.pry          # Execution will stop here.
 
       if common_relations_hash.size >= certain_koeff
         checked_add_hash.merge!(profile_searched => profile_found)
         puts "profiles: #{profile_searched} and #{profile_found} -  ARE equal"
         puts " Add EQU profiles: #{profile_searched} and #{profile_found} to checked_add_hash After Check"
+
+        # binding.pry          # Execution will stop here.
+
       else
         puts "profiles: #{profile_searched} and #{profile_found} - are NOT equal"
         puts " DO NOT Add profiles #{profile_searched} and #{profile_found} in checked_add_hash"
+
+        # binding.pry          # Execution will stop here.
+
       end
     end
+
+    # binding.pry          # Execution will stop here.
+
     checked_add_hash
   end
 
