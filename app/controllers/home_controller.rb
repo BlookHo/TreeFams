@@ -55,6 +55,205 @@ class HomeController < ApplicationController
   #   by_trees_arr
   # end
 
+  # Служебный метод для отладки - для LOGGER
+  # todo: перенести этот метод в Operational - для нескольких моделей
+  # Показывает массив в logger
+    def show_in_logger(arr_to_log, string_to_add)
+      row_no = 0  # DEBUGG_TO_LOGG
+      arr_to_log.each do |row| # DEBUGG_TO_LOGG
+        row_no += 1
+        logger.info "#{string_to_add} № #{row_no.inspect}: #{row.attributes.inspect} " # DEBUGG_TO_LOGG
+      end  # DEBUGG_TO_LOGG
+    end
+
+
+
+    profile_id_searched = 811
+    profile_id_found = 790
+    found_profile_id = 790
+    certain_koeff = 5
+    name_id_searched = 28
+    connected_users = [58]
+
+    def check_exclusions(certain_koeff, profile_id_searched, profile_id_found, name_id_searched, connected_users)
+
+      s_rel_name_arr = ProfileKey.where(:profile_id => profile_id_searched, deleted: 0)
+                                  .pluck(:relation_id, :is_name_id)
+      [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
+      # s_rel_name_hash = Hash[*s_rel_name_arr.flatten(1)]
+      #  {8=>48, 3=>370, 15=>343, 16=>82, 17=>147, 121=>446}
+      logger.info "search results: s_rel_name_arr = #{s_rel_name_arr} "
+
+      f_rel_name_arr = ProfileKey.where(:profile_id => profile_id_found, deleted: 0)
+                           .pluck(:relation_id, :is_name_id)
+      [[1, 122], [2, 82], [91, 90], [3, 465], [121, 446], [3, 370], [8, 48], [101, 449], [92, 361], [102, 293], [17, 147]]
+      # f_rel_name_hash = Hash[*f_rel_name_arr.flatten(1)]
+      # {1=>122, 2=>82, 91=>90, 3=>370, 121=>446, 8=>48, 101=>449, 92=>361, 102=>293, 17=>147}
+      logger.info "found results: f_rel_name_arr = #{f_rel_name_arr}"
+      # ", f_rel_name_hash = #{f_rel_name_hash}" #", is_name_arr = #{is_name_arr}"
+
+      # count_arrs = s_rel_name_arr & f_rel_name_arr
+      # logger.info "found results: count_arrs = #{count_arrs}"
+      #
+      # if count_arrs.size >= 5
+      #   logger.info "PROFILES CAN BE EQUAL - to determine exclusions"
+      # else
+      #   logger.info "PROFILES NOT EQUAL"
+      # end
+      s_filling_hash = {}
+      s_rel_name_arr.each do |one_array|
+        SearchWork.fill_hash_w_val_arr(s_filling_hash, one_array[0], one_array[1])
+      end
+      logger.info "S s_filling_hash = #{s_filling_hash}"
+      s_filling_hash = {8=>[48], 3=>[465, 370], 15=>[343], 16=>[82], 17=>[147,33], 121=>[4465], 4=>[33]}
+
+      f_filling_hash = {}
+      f_rel_name_arr.each do |one_array|
+        SearchWork.fill_hash_w_val_arr(f_filling_hash, one_array[0], one_array[1])
+      end
+      logger.info "F f_filling_hash = #{f_filling_hash}"
+      {1=>[122], 2=>[82], 91=>[90], 3=>[465, 370], 121=>[446], 8=>[48], 101=>[449], 92=>[361], 102=>[293], 17=>[147]}
+
+      match_count = 0
+      priznak = "Ok"
+      s_filling_hash.each do |relation, names|
+        logger.info "In s_filling_hash: - relation = #{relation}, names = #{names}"
+        sval = s_filling_hash[relation]
+
+        if f_filling_hash.has_key?(relation)
+          fval = f_filling_hash[relation]
+          logger.info "In f_filling_hash  has_key: - relation = #{relation}, fval = #{fval}, sval = #{sval}"
+
+          if sval == fval
+            match_count += sval.size
+            priznak = "Ok"
+            logger.info "In IF check: (==) COMPLETE EQUAL - match_count = #{match_count}, check = #{(sval == fval) }"
+          elsif sval & fval != []
+              match_count += (sval & fval).size
+              priznak = "Ok"
+              logger.info "In IF check: (&)ARE COMMON - match_count = #{match_count}, check = #{sval & fval != []}"
+          # elsif sval == [] || fval == []
+          #       match_count += 1
+          #       priznak = "Ok"
+          #       logger.info "In IF check: EMPTY Arrs - match_count = #{match_count}, check = #{sval == [] || fval == []}"
+          else
+                logger.info "In IF check: All checks failed"
+                priznak = "NotOk"
+                return priznak, match_count
+          end
+        else
+          # match_count += 1
+          priznak = "Ok"
+          logger.info "In IF check: ([]) EMPTY Arrs - match_count = #{match_count}, check = #{sval == [] || fval == []}"
+        end
+
+      end
+
+      return priznak, match_count
+    end
+
+
+      # arr_rel = [8,3,3,15,16,17,121]
+      # arr_nam = [48,465,370,343,82,147,446]
+
+      # match_rows_rel_name = ProfileKey
+      #                           .where.not(user_id: connected_users)
+      #                           .where(:name_id => name_id_searched)
+      #                           .where(deleted: 0)
+      #                           .where("relation_id + is_name_id in (?)", rel_name_arr)
+      #                           .order('user_id','relation_id','is_name_id')
+      #                           .select('id','user_id','profile_id','name_id','relation_id','is_name_id','is_profile_id')
+                                  # .where("relation_id in (?)", arr_rel)
+                                  # .where("is_name_id in (?)", arr_nam)
+      # .where("'---- ' || relation_id || '- ' || is_name_id in (?)", rel_name_arr)
+
+      # logger.info "search results: match_rows_rel_name = #{match_rows_rel_name.inspect}, match_rows_rel_name.size = #{match_rows_rel_name.size}"
+      # show_in_logger(match_rows_rel_name, "=== результат" )  # DEBUGG_TO_LOGG
+
+
+      # ('---- 8- 48','---- 3- 465','---- 3- 370','---- 15- 343','---- 16- 82','---- 17- 147','---- 121- 446')
+
+
+
+      # excl_rel = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
+      # excl_match_rows_rel_name = ProfileKey
+      #                           .where.not(user_id: connected_users)
+      #                           .where(:name_id => name_id_searched)
+      #                           .where("relation_id in (?)", arr_rel)
+      #                           .where("relation_id in (?)", excl_rel)
+      #                           .where("is_name_id in (?)", arr_nam)
+      #                           .where(deleted: 0)
+      #                           .order('user_id','relation_id','is_name_id')
+      #
+      # logger.info "search results: excl_match_rows_rel_name = #{excl_match_rows_rel_name}"
+      # show_in_logger(excl_match_rows_rel_name, "=== результат2" )  # DEBUGG_TO_LOGG
+
+
+        [[8, 48, 805], [3, 465, 810], [3, 370, 809], [15, 343, 806], [16, 82, 807], [17, 147, 895], [121, 446, 896]]
+
+      #   unnest_rows = ProfileKey.where(:profile_id => profile_id_searched, deleted: 0)
+      #                       .unnest(rel_name_prof_arr)
+      #                      # .pluck(:relation_id, :is_name_id, :is_profile_id)
+      # logger.info "search results: unnest_rows = #{unnest_rows}"
+          #                      .distinct
+
+    def check_match_count(match_count)
+      if match_count >= 5
+        logger.info "PROFILES ARE EQUAL - with exclusions determine"
+      else
+        logger.info "PROFILES NOT EQUAL"
+      end
+    end
+
+    def check_exclusions_priznak(priznak, match_count)
+      if priznak == "NotOk"
+        logger.info "EXCLUSIONS DID NOT PASSED"
+      else
+        logger.info "EXCLUSIONS PASSED"
+        check_match_count(match_count)
+      end
+    end
+
+
+
+
+    priznak, match_count = check_exclusions(certain_koeff, profile_id_searched, profile_id_found, name_id_searched, connected_users)
+    check_exclusions_priznak(priznak, match_count)
+
+
+
+
+    # SELECT "profile_keys".* FROM "profile_keys"  WHERE ("profile_keys"."user_id" NOT IN (58)) AND "profile_keys"."name_id" = 28 AND (relation_id in (8,3,3,15,16,17,121)) AND (is_name_id in (48,465,370,343,82,147,446)) AND "profile_keys"."deleted" = 0  ORDER BY user_id, relation_id, is_name_id (pid:26935)
+  {"id"=>5611, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "is_profile_id"=>793}
+  {"id"=>5617, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "is_profile_id"=>794}
+  {"id"=>5625, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "is_profile_id"=>795}
+  {"id"=>6387, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>17, "is_name_id"=>147, "is_profile_id"=>897}
+  {"id"=>6395, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>121, "is_name_id"=>446, "is_profile_id"=>898}
+  {"id"=>5776, "user_id"=>59, "profile_id"=>818, "name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "is_profile_id"=>817}
+  {"id"=>5783, "user_id"=>59, "profile_id"=>818, "name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "is_profile_id"=>820}
+  {"id"=>5779, "user_id"=>59, "profile_id"=>818, "name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "is_profile_id"=>819}
+  {"id"=>5811, "user_id"=>59, "profile_id"=>818, "name_id"=>28, "relation_id"=>15, "is_name_id"=>343, "is_profile_id"=>823}
+  {"id"=>5821, "user_id"=>59, "profile_id"=>818, "name_id"=>28, "relation_id"=>16, "is_name_id"=>82, "is_profile_id"=>824}
+  {"id"=>5831, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "is_profile_id"=>828}
+  {"id"=>5824, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "is_profile_id"=>825}
+  {"id"=>5827, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "is_profile_id"=>827}
+  {"id"=>5859, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>15, "is_name_id"=>343, "is_profile_id"=>831}
+  {"id"=>5869, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>16, "is_name_id"=>82, "is_profile_id"=>832}
+
+
+
+
+  {"id"=>5611, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>793, "is_name_id"=>370}
+  {"id"=>5617, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>794, "is_name_id"=>465}
+  {"id"=>5625, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>8, "is_profile_id"=>795, "is_name_id"=>48}
+  {"id"=>6395, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>121, "is_profile_id"=>898, "is_name_id"=>446}
+  {"id"=>5776, "user_id"=>59, "profile_id"=>818, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>817, "is_name_id"=>370}
+  {"id"=>5783, "user_id"=>59, "profile_id"=>818, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>820, "is_name_id"=>465}
+  {"id"=>5779, "user_id"=>59, "profile_id"=>818, "name_id"=>28, "relation_id"=>8, "is_profile_id"=>819, "is_name_id"=>48}
+  {"id"=>5831, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>828, "is_name_id"=>370}
+  {"id"=>5824, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>825, "is_name_id"=>465}
+  {"id"=>5827, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>8, "is_profile_id"=>827, "is_name_id"=>48}
+
 
 
     # TEST
