@@ -184,7 +184,9 @@ module Search
   def get_found_profiles(found_profiles_data)
     logger.info "In  get_found_profiles: found_profiles_data = #{found_profiles_data}"
 
-    connected_users     = found_profiles_data[:connected_users]
+    connected_users     = found_profiles_data[:connected_users] + [106]
+    # 106 - admin user - todo: place this id in Weafam_settings
+    logger.info "In  get_found_profiles: connected_users = #{connected_users}"
     relation_row        = found_profiles_data[:relation_row]
     row_relation_id     = relation_row.relation_id
 
