@@ -90,7 +90,7 @@ module Search
   def all_profiles_search(profiles_search_data)
     iteration = 0 # DEBUGG_TO_LOGG
     profiles_search_data[:tree_profiles].each do |profile_id_searched|
-      logger.info "***** Цикл ПОИСКa: #{iteration+1}-я ИТЕРАЦИЯ - Ищем профиль: #{profile_id_searched.inspect};"
+      # logger.info "***** Цикл ПОИСКa: #{iteration+1}-я ИТЕРАЦИЯ - Ищем профиль: #{profile_id_searched.inspect};"
       ###### ЗАПУСК ПОИСКА ОДНОГО ПРОФИЛЯ
       search_match_data = {
           certain_koeff:        profiles_search_data[:certain_koeff],
@@ -117,8 +117,8 @@ module Search
                            .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
                            .distinct
     # поиск массива записей искомого круга для каждого профиля в дереве Юзера
-    logger.info "Круг ИСКОМОГО ПРОФИЛЯ = #{profile_id_searched.inspect} в (объединенном) дереве #{connected_users} зарег-го Юзера"      # :user_id, , :id
-    show_in_logger(all_profile_rows, "all_profile_rows - запись" )  # DEBUGG_TO_LOGG
+    # logger.info "Круг ИСКОМОГО ПРОФИЛЯ = #{profile_id_searched.inspect} в (объединенном) дереве #{connected_users} зарег-го Юзера"      # :user_id, , :id
+    # show_in_logger(all_profile_rows, "all_profile_rows - запись" )  # DEBUGG_TO_LOGG
 
     if all_profile_rows.blank?
       logger.info "ERROR in search_match: В искомом дереве - НЕТ искомого профиля!?? "
@@ -146,8 +146,8 @@ module Search
     # ОСНОВНОЙ РЕЗ-ТАТ ПОИСКА - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (массив):
     # {профиль искомый -> дерево -> профиль найденный -> [ массив совпавших отношений с искомым профилем ]
     @profiles_found_arr << found_profiles_hash unless found_profiles_hash.empty? # Заполнение выходного массива хэшей
-    logger.info "Где что найдено: Для искомого профиля #{profile_id_searched} - в конце этого Хэша @profiles_found_arr:"
-    logger.info "#{@profiles_found_arr} " # DEBUGG_TO_LOGG
+    # logger.info "Где что найдено: Для искомого профиля #{profile_id_searched} - в конце этого Хэша @profiles_found_arr:"
+    # logger.info "#{@profiles_found_arr} " # DEBUGG_TO_LOGG
   end # End of search_match
 
 
@@ -168,7 +168,7 @@ module Search
     # logger.info "## In  search_profile_relations: one_profile_relations_hash = #{one_profile_relations_hash}"
     # Получение РЕЗ-ТАТа ПОИСКА для одной записи Kруга искомого профиля - НАЙДЕННЫЕ ПРОФИЛИ С СОВПАВШИМИ ОТНОШЕНИЯМИ (hash)
     found_profiles_hash = get_found_profiles(found_profiles_data)
-    logger.info "## In  search_profile_relations, after : found_profiles_hash = #{found_profiles_hash}"
+    # logger.info "## In  search_profile_relations, after : found_profiles_hash = #{found_profiles_hash}"
 
     logger_data = {
         all_profile_rows_no:        search_data[:all_profile_rows_no],
@@ -187,11 +187,11 @@ module Search
   #   Если вставлять деревья, кот-е надо исключить для поиска, то - это здесь: where.not(user_id: search_exclude_users)
   #   search_exclude_users = [22,134,...]
   def get_found_profiles(found_profiles_data)
-    logger.info "In  get_found_profiles: found_profiles_data = #{found_profiles_data}"
+    # logger.info "In  get_found_profiles: found_profiles_data = #{found_profiles_data}"
 
     connected_users     = found_profiles_data[:connected_users] + [106]
     # 106 - admin user - todo: place this id in Weafam_settings
-    logger.info "In  get_found_profiles: connected_users = #{connected_users}"
+    # logger.info "In  get_found_profiles: connected_users = #{connected_users}"
     relation_row        = found_profiles_data[:relation_row]
     row_relation_id     = relation_row.relation_id
 

@@ -41,10 +41,10 @@ class SearchWork
       if common_relations_hash.size >= certain_koeff
         checked_add_hash.merge!(profile_searched => profile_found)
         puts "profiles: #{profile_searched} and #{profile_found} -  ARE equal"
-        puts " Add EQU profiles: #{profile_searched} and #{profile_found} to checked_add_hash After Check"
+        # puts " Add EQU profiles: #{profile_searched} and #{profile_found} to checked_add_hash After Check"
       else
         puts "profiles: #{profile_searched} and #{profile_found} - are NOT equal"
-        puts " DO NOT Add profiles #{profile_searched} and #{profile_found} in checked_add_hash"
+        # puts " DO NOT Add profiles #{profile_searched} and #{profile_found} in checked_add_hash"
       end
     end
     checked_add_hash

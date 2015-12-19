@@ -12,7 +12,7 @@ class SearchCircles
   #   get common_relations_hash - result of two_circles_compare
   def self.compare_profiles(profile_searched, profile_found)
     common_relations_hash ={}
-    puts "In SearchCircles.compare_profiles: profile_searched = #{profile_searched}, profile_found = #{profile_found}"
+    # puts "In SearchCircles.compare_profiles: profile_searched = #{profile_searched}, profile_found = #{profile_found}"
     circles_arrs_data = find_circles_arrs(profile_searched, profile_found)
     compare_circles_data = {
       profile_searched:       profile_searched,
@@ -26,8 +26,8 @@ class SearchCircles
       new_connection_hash:    common_relations_hash
     }
     common_relations_hash = two_circles_compare(compare_circles_data)
-    puts " for profile_searched = #{profile_searched} and profile_found = #{profile_found}:"
-    puts " common_relations_hash = #{common_relations_hash}"
+    # puts " for profile_searched = #{profile_searched} and profile_found = #{profile_found}:"
+    # puts " common_relations_hash = #{common_relations_hash}"
     common_relations_hash
   end
 
@@ -135,8 +135,8 @@ class SearchCircles
         new_connection_hash.merge!(is_profile => found_is_profiles_arr[index])
       end
     else # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
-      puts "To -> get_fields_arr_from_circles: search_bk_profiles_arr = #{search_bk_profiles_arr}:"
-      puts "To -> get_fields_arr_from_circles: found_bk_profiles_arr = #{found_bk_profiles_arr}:"
+      # puts "To -> get_fields_arr_from_circles: search_bk_profiles_arr = #{search_bk_profiles_arr}:"
+      # puts "To -> get_fields_arr_from_circles: found_bk_profiles_arr = #{found_bk_profiles_arr}:"
       new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
     end
     # new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
@@ -160,7 +160,7 @@ class SearchCircles
       }
 
       collect_data = { new_connection_hash: new_connection_hash, one_profile: profile_data_s[:is_profile_id_s][0] }
-      puts "In get_fields_arr_from_circles: collect_data = #{collect_data}"
+      # puts "In get_fields_arr_from_circles: collect_data = #{collect_data}"
       new_connection_hash = bk_found_cycle(bk_arr_found, profile_data_s, collect_data)
 
       # end
@@ -232,8 +232,8 @@ class SearchCircles
   # На входе - два массива Хэшей = 2 БК
   # На выходе: compare_rezult = false or true.
   def self.compare_two_circles(found_bk, search_bk)
-    puts " compare_two_circles: found_bk = #{found_bk}:"
-    puts " compare_two_circles: search_bk = #{search_bk}:"
+    # puts " compare_two_circles: found_bk = #{found_bk}:"
+    # puts " compare_two_circles: search_bk = #{search_bk}:"
 
     common_circle_arr = []
     if found_bk.blank?
@@ -270,16 +270,16 @@ class SearchCircles
 
   # @note: form result of comparing of two circles
   def self.get_compare_results(found_bk, search_bk)
-    puts "## in get_compare_results: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
+    # puts "## in get_compare_results: СРАВНЕНИЕ ДВУХ БК: По Size и По содержанию (разность)"
 
     if equal_circles_size?(found_bk, search_bk) && empty_circles_delta?(found_bk, search_bk)
       common_circle_arr = []
-      puts "# 1. circles Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_circle_arr = #{common_circle_arr}"
+      # puts "# 1. circles Size = EQUAL и Содержание - ОДИНАКОВОЕ. (Разность 2-х БК = []) common_circle_arr = #{common_circle_arr}"
     else
       common_circle_arr = circles_intersection(found_bk, search_bk)
-      puts "# 2.a. circles Sizes = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
-      puts "OR "
-      puts "# 2.b. circles Sizes = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х circles - НЕ != [])"
+      # puts "# 2.a. circles Sizes = EQUAL, но Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х БК - НЕ != []) common_circle_arr = #{common_circle_arr}"
+      # puts "OR "
+      # puts "# 2.b. circles Sizes = UNEQUAL и Содержание - РАЗНОЕ. (ПЕРЕСЕЧЕНИЕ 2-х circles - НЕ != [])"
     end
 
     return common_circle_arr

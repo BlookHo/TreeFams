@@ -300,7 +300,7 @@ class SearchResults < ActiveRecord::Base
                   .where(:done => false )
     connection_id = nil
     connection_id = conn_request.first.connection_id unless conn_request.blank?
-    p " In set_connection_id:  connection_id = #{connection_id.inspect}, conn_request.count = #{conn_request.count}"
+    # p " In set_connection_id:  connection_id = #{connection_id.inspect}, conn_request.count = #{conn_request.count}"
     connection_id
   end
 
@@ -314,7 +314,7 @@ class SearchResults < ActiveRecord::Base
                      .where(:done => false )
     value = 0
     value = 1 unless pending_request.blank?
-    p " In set_pending_request:  pending_value = #{value}, pending_request.count = #{pending_request.count}"
+    # p " In set_pending_request:  pending_value = #{value}, pending_request.count = #{pending_request.count}"
     value
   end
 
