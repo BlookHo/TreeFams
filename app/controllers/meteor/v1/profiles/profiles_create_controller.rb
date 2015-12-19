@@ -28,7 +28,7 @@ module Meteor
               puts "From Meteor - in Rails Profiles#create: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
               puts "From Meteor - in Rails Profiles#create: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
               puts "Дерево - дубль! Действия по добавлению нового профиля - запрещены"
-              respond_with(errorCode: 403, message: "Дерево - дубль! Действия по добавлению нового профиля - запрещены")
+              respond_with(errorCode: 403, message: "Возможно, Ваше дерево - дубль! Действия по добавлению нового профиля - временно запрещены")
             end
 
           end

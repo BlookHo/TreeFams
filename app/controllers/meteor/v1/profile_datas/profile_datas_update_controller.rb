@@ -32,7 +32,7 @@ module Meteor
           else
             puts "From Meteor - in Rails ProfileDatas#update: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
             puts "Дерево - дубль! Действия по изменению данных профиля - запрещены"
-            respond_with(errorCode: 403, message: "Дерево - дубль! Действия по изменению данных профиля - запрещены")
+            respond_with(errorCode: 403, message: "Возможно, Ваше - дубль! Действия по изменению данных профиля - временно запрещены")
           end
         end
 
