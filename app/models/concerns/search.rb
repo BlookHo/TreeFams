@@ -58,20 +58,21 @@ module Search
       ############### ДУБЛИКАТЫ ПОИСКА ######## NEW METHOD ############
       duplicates_one_to_many:   @duplicates_one_to_many,
       duplicates_many_to_one:   @duplicates_many_to_one }
+    end_search_time = Time.now
 
     SearchResults.store_search_results(results, self.id) # запись рез-тов поиска в таблицу - для Метеора
 
     self.start_check_double(results, certain_koeff) if self.double == 0
 
-    end_search_time = Time.now
+    # end_search_time = Time.now
 
     logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
     logger.info "results[:by_profiles] = #{results[:by_profiles].inspect}"
     logger.info "results[:by_trees] = #{results[:by_trees].inspect}"
     logger.info "results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
     logger.info "results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
-    search_time = end_search_time - start_search_time
-    logger.info "== END OF start_search === Search_time = #{search_time.round(3)} sec"
+    search_time = (end_search_time - start_search_time) * 1000
+    logger.info "== END OF start_search === Search_time =  #{search_time.round(2)} msec  \n\n"
 
     results
   end
@@ -261,6 +262,9 @@ module Search
       # Удаление пустых хэшей из результатов # Exclude empty hashes
       uniq_profiles_pairs.delete_if { |key,val|  val == {} }
       # РЕЗУЛЬТАТЫ ПОИСКА ДЛЯ ОТОБРАЖЕНИЯ НА ГЛАВНОЙ #####
+
+      logger.info "Before SearchResults: uniq_profiles_pairs = #{uniq_profiles_pairs}, profiles_with_match_hash = #{profiles_with_match_hash} "
+
       by_profiles, by_trees = SearchResults.make_search_results(uniq_profiles_pairs, profiles_with_match_hash)
       search_results_data = {
         uniq_profiles_pairs:      uniq_profiles_pairs,

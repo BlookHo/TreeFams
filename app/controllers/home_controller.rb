@@ -43,8 +43,8 @@ class HomeController < ApplicationController
   # All profiles in user's tree
   def index
 
-    profile_id_searched = 811
-    profile_id_found = 790
+    # profile_id_searched = 811
+    # profile_id_found = 790
     # name_id_searched = 28
     # connected_users = [58]
 
@@ -131,23 +131,33 @@ class HomeController < ApplicationController
     end
 
     # @note: get checked profiles for exclusions
-    def profiles_checking(profile_id_searched, all_profiles_found)
+    def profiles_checking(profile_id_searched, trees_profiles)
+
+      all_trees_found = trees_profiles.keys.flatten
+      logger.info "all_trees_found = #{all_trees_found}"
+      all_profiles_found = trees_profiles.values.flatten
+      logger.info "all_profiles_found = #{all_profiles_found}"
+
+      certain_profiles_trees = []
       certain_profiles_found = []
+      certain_profiles_count = []
+
       certain_koeff = WeafamSetting.first.certain_koeff
-      all_profiles_found.each do |found_profile_to_check|
+      all_profiles_found.each_with_index do |found_profile_to_check, index|
         priznak, match_count = check_exclusions(profile_id_searched, found_profile_to_check)
         # logger.info "After check_exclusions: found_profile_to_check = #{found_profile_to_check}, priznak = #{priznak}, match_count = #{match_count}"
         profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_to_check, certain_koeff)
-        certain_profiles_found << profile_checked if profile_checked
-        logger.info "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}"
-
+        if profile_checked
+          certain_profiles_count << match_count
+          certain_profiles_found << profile_checked
+          certain_profiles_trees << all_trees_found[index]
+          logger.info "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}"
+        end
        end
-      certain_profiles_found
+      return certain_profiles_found, certain_profiles_count, certain_profiles_trees
     end
 
-
-
-
+    # @note: main check of exclusions - special algorythm
     def check_exclusions(profile_id_searched, profile_id_found)
       puts "\n # check_exclusions # profile_id_searched = #{profile_id_searched}, profile_id_found To check = #{profile_id_found}\n"
 
@@ -241,6 +251,80 @@ class HomeController < ApplicationController
       end
     end
 
+
+    # @note: create data for search_results generation
+    # @input: profiles_found = [790, 818, 826], profiles_trees = [57, 59, 60]
+    def create_results_data(certain_search_data)
+
+      profile_id_searched = certain_search_data[:search]
+      profiles_found      = certain_search_data[:founds]
+      profiles_count      = certain_search_data[:counts]
+      profiles_trees      = certain_search_data[:trees]
+      # - certain_profiles_found =
+      [790, 818, 826]
+      # - certain_profiles_count =
+      [5, 5, 5]
+      # - certain_profiles_trees =
+      [57, 59, 60]
+
+      uniq_profiles_pairs = {}
+      trees_profiles_found = {}
+      profiles_counts = {}
+      profiles_found.each_with_index do |one_profile, index|
+        trees_profiles_found.merge!(profiles_trees[index] => one_profile )
+        profiles_counts.merge!(one_profile => profiles_count[index] )
+      end
+      uniq_profiles_pairs.merge!(profile_id_searched => trees_profiles_found )
+      {811=>{57=>790, 59=>818, 60=>826}}
+
+      # uniq_profiles_pairs
+
+      # uniq_profiles_pairs, profiles_with_match_hash = create_uniq_hash(profile_id_searched, profiles_found, profiles_trees)
+      {811=>{57=>790, 59=>818, 60=>826}}
+
+      # profiles_with_match_hash = create_profiles_counts(profiles_found, profiles_count)
+      {790=>5, 818=>5, 826=>5}
+
+      return uniq_profiles_pairs, profiles_counts
+    end
+
+
+    # [inf] Before SearchResults:
+    # uniq_profiles_pairs =
+    {805=>{59=>819, 60=>827, 57=>795},
+     806=>{59=>823, 60=>831},
+     811=>{57=>790, 59=>818, 60=>826},
+     810=>{59=>820, 60=>825},
+     809=>{57=>793, 59=>817, 60=>828},
+     807=>{59=>824, 60=>832},
+     896=>{57=>898}}
+
+    # profiles_with_match_hash =
+    {898=>5, 832=>5, 824=>5, 828=>5, 817=>5, 793=>5, 825=>5, 820=>5,
+     826=>5, 818=>5, 790=>5, 831=>5, 823=>5, 795=>5, 827=>5, 819=>5}
+
+     # [inf] search records: profiles_with_match_hash =
+    {795=>5, 819=>5, 827=>5, 823=>5, 831=>5, 790=>5, 818=>5, 826=>5,
+     820=>5, 825=>5, 793=>5, 817=>5, 828=>5, 824=>5, 832=>5, 898=>5}
+
+    # search records: uniq_profiles_pairs =
+               {805=>{57=>795, 59=>819, 60=>827},
+                806=>{59=>823, 60=>831},
+                811=>{57=>790, 59=>818, 60=>826},
+                810=>{59=>820, 60=>825},
+                809=>{57=>793, 59=>817, 60=>828},
+                807=>{59=>824, 60=>832},
+                896=>{57=>898}}
+
+    # == END OF search_tree_profiles === Search_time = 756.15 msec
+
+    # == END OF search_tree_profiles === Search_time = 679.99 msec
+    # == END OF search_tree_profiles === Search_time = 667.55 msec
+
+
+    # [inf] == END OF start_search === Search_time = 1.43 sec (pid:3770)
+    # [inf] == END OF start_search === Search_time =  854.63 msec (pid:3770)
+
     # @note: New modified quick search
     # for each profile from searching tree
     # 1.circle of searching profile
@@ -253,17 +337,10 @@ class HomeController < ApplicationController
     # 8.check exclusions for each found profile_ids
     # 9.get final found profile_ids with user_id position
     # 10.make usual search_results for store/
-    def modi_search(profile_id_searched)
+    def modi_search_one_profile(profile_id_searched)
       start_search_time = Time.now
 
       puts "\n ##### modi_search #####\n\n"
-
-      connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
-      author_tree_arr = Tree.get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
-      tree_profiles = [current_user.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
-      tree_profiles = tree_profiles.uniq
-      logger.info "search records: connected_author_arr = #{connected_author_arr}, tree_profiles = #{tree_profiles} "
-
 
 
       s_rel_name_arr = rel_name_profile_records(profile_id_searched)
@@ -293,24 +370,26 @@ class HomeController < ApplicationController
       # found_profiles = get_found_fields(query_data, 'profile_id')
       # logger.info "found_profiles = #{found_profiles}"
 
-      arr_of_trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
-      logger.info "arr_of_trees_profiles = #{arr_of_trees_profiles}"
-      # get_keys_with_items_array
-
-      all_profiles_found = arr_of_trees_profiles.values.flatten
-      logger.info "all_profiles_found = #{all_profiles_found}"
+      trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
+      logger.info "trees_profiles = #{trees_profiles}"
 
       # no_doubles, with_doubles = exclude_double_profiles(arr_of_trees_profiles)
       # logger.info "trees no_doubles = #{no_doubles}, trees with_doubles = #{with_doubles}"
 
-      certain_profiles_found = profiles_checking(profile_id_searched, all_profiles_found)
-      logger.info "After profiles_checking: - certain_profiles_found = #{certain_profiles_found}"
 
-      # results = make_search_results
+      certain_profiles_found, certain_profiles_count, certain_profiles_trees = profiles_checking(profile_id_searched, trees_profiles)
+      logger.info "After profile_checking: profile_id_searched = #{profile_id_searched}"
+      logger.info " - certain_profiles_found = #{certain_profiles_found}"
+      logger.info " - certain_profiles_count = #{certain_profiles_count}"
+      logger.info " - certain_profiles_trees = #{certain_profiles_trees}"
 
-      # SearchResults.store_search_results(results, current_user.id) # запись рез-тов поиска в таблицу - для Метеора
+      certain_search_data = {
+          search: profile_id_searched,
+          founds: certain_profiles_found,
+          counts: certain_profiles_count,
+          trees: certain_profiles_trees }
 
-      # current_user.start_check_double(results, certain_koeff) if current_user.double == 0
+      profiles_trees_pairs, profiles_counts = create_results_data(certain_search_data)
 
       # :by_profiles=>
           [{:search_profile_id=>658, :found_tree_id=>47, :found_profile_id=>668, :count=>8}, {:search_profile_id=>659, :found_tree_id=>47, :found_profile_id=>666, :count=>8}, {:search_profile_id=>656, :found_tree_id=>47, :found_profile_id=>669, :count=>8}, {:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7}, {:search_profile_id=>657, :found_tree_id=>47, :found_profile_id=>667, :count=>7},
@@ -320,10 +399,10 @@ class HomeController < ApplicationController
       # , :duplicates_one_to_many=>
           {734=>{45=>{648=>5, 733=>5}}}
 
-
       end_search_time = Time.now
       search_time = (end_search_time - start_search_time) * 1000
       puts "\n == END OF modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
+      return profiles_trees_pairs, profiles_counts
 
     end
 
@@ -416,10 +495,52 @@ class HomeController < ApplicationController
 
     end
 
+    # @note: New super extra search body
+    def search_tree_profiles
+      profile_id_searched = 811
+      # profile_id_found = 790
 
- #   modi_search(profile_id_searched)
+      start_search_time = Time.now
+
+      puts "\n ##### search_tree_profiles #####\n\n"
+
+      connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
+      author_tree_arr = Tree.get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
+      tree_profiles = [current_user.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
+      tree_profiles = tree_profiles.uniq
+      logger.info "search records: connected_author_arr = #{connected_author_arr}, tree_profiles = #{tree_profiles} "
+
+      uniq_profiles_pairs = {}
+      profiles_with_match_hash = {}
+
+      tree_profiles.each do |profile_id_searched|
+        profiles_trees_pairs, profiles_counts = modi_search_one_profile(profile_id_searched)
+        logger.info "after modi_search_one_profile: profiles_trees_pairs = #{profiles_trees_pairs}, profiles_counts = #{profiles_counts} "
+        uniq_profiles_pairs.merge!(profiles_trees_pairs)
+        profiles_with_match_hash.merge!(profiles_counts)
+      end
+
+      uniq_profiles_pairs.delete_if { |key,val|  val == {} }
+
+      logger.info "search records: uniq_profiles_pairs = #{uniq_profiles_pairs}"
+      logger.info "search records: profiles_with_match_hash = #{profiles_with_match_hash}"
 
 
+      # profiles_search_found.merge!(profile_id_searched => certain_profiles_found )
+      # logger.info "profiles_search_found = #{profiles_search_found}"
+
+      # SearchResults.store_search_results(results, current_user.id) # запись рез-тов поиска в таблицу - для Метеора
+
+      # current_user.start_check_double(results, certain_koeff) if current_user.double == 0
+
+      end_search_time = Time.now
+      search_time = (end_search_time - start_search_time) * 1000
+      puts "\n == END OF search_tree_profiles === Search_time = #{search_time.round(2)} msec  \n\n"
+
+    end
+
+
+    search_tree_profiles
 
     # arr_rel = [8,3,3,15,16,17,121]
     # arr_nam = [48,465,370,343,82,147,446]
