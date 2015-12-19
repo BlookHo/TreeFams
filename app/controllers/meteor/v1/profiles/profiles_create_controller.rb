@@ -7,19 +7,28 @@ module Meteor
 
           # @note: Запуск основного метода создания нового профиля
           def create
-            puts "profile create"
-            puts params
-            params_to_create = {
-                base_profile_id:   params[:base_profile_id],
-                profile_name_id:   params[:profile_name_id],
-                relation_id:       params[:relation_id] }
-            puts "From Meteor - in Rails create: params_to_create = #{params_to_create}"
-            new_profile = current_user.creation_profile(params_to_create)
+            if current_user.double == 1
+              puts "From Meteor - in Rails Profiles#create: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
 
-            puts "In met/v1/../ProfilesCreateController: After creation_profile: start_search_methods "
-            ::SearchResults.start_search_methods_in_thread(current_user)
+              puts "profile create"
+              puts params
+              params_to_create = {
+                  base_profile_id:   params[:base_profile_id],
+                  profile_name_id:   params[:profile_name_id],
+                  relation_id:       params[:relation_id] }
+              puts "From Meteor - in Rails create: params_to_create = #{params_to_create}"
+              new_profile = current_user.creation_profile(params_to_create)
 
-            respond_with new_profile
+              puts "In met/v1/../ProfilesCreateController: After creation_profile: start_search_methods "
+              ::SearchResults.start_search_methods_in_thread(current_user)
+
+              respond_with new_profile
+            else
+              puts "From Meteor - in Rails Profiles#create: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
+              puts "Дерево - дубль! Действия по добавлению нового профиля - запрещены"
+              respond_with( {status: 300, msg: "Дерево - дубль! Действия по добавлению нового профиля - запрещены"} )
+            end
+
           end
 
       end

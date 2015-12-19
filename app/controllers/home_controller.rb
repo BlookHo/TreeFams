@@ -107,9 +107,10 @@ class HomeController < ApplicationController
     end
 
 
-    # @note: collect hash of relations (key) and names array (value)
+    # @note: collect hash of two fields records: relations (key) and names array (value)
+    # for searching profile
     # todo: place this method in ProfileKey model
-    def get_profile_records(profile_id)
+    def rel_name_profile_records(profile_id)
       logger.info "In get_profile_records: profile_id = #{profile_id}"
       ProfileKey.where(:profile_id => profile_id, deleted: 0)
           .order('relation_id','is_name_id')
@@ -147,7 +148,7 @@ class HomeController < ApplicationController
 
       puts "\n ##### modi_search #####\n"
 
-      s_rel_name_arr = get_profile_records(profile_id_searched)
+      s_rel_name_arr = rel_name_profile_records(profile_id_searched)
       [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
       logger.info "search records: profile_id_searched = #{profile_id_searched}, s_rel_name_arr = #{s_rel_name_arr} "
 
@@ -167,17 +168,18 @@ class HomeController < ApplicationController
            :arr_relations=>[3, 3, 8, 15, 16, 17, 121],
            :arr_names=>   [465, 370, 48, 343, 82, 147, 446]}
 
-      found_trees = get_found_fields(query_data, 'user_id')
-      logger.info "found_trees = #{found_trees}"
+      # found_trees = get_found_fields(query_data, 'user_id')
+      # logger.info "found_trees = #{found_trees}"
 
-      found_profiles = get_found_fields(query_data, 'profile_id')
-      logger.info "found_profiles = #{found_profiles}"
-      #   collect_found_profiles
+      # collect_found_profiles
+      # found_profiles = get_found_fields(query_data, 'profile_id')
+      # logger.info "found_profiles = #{found_profiles}"
 
       arr_of_trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
       logger.info "arr_of_trees_profiles = #{arr_of_trees_profiles}"
-
       # get_keys_with_items_array
+
+      # doubles = exclude_double_profiles(arr_of_trees_profiles)
 
       # check_exclusions(profile_id_searched, profile_id_found)
       #
@@ -199,6 +201,8 @@ class HomeController < ApplicationController
     def get_found_two_fields(query_data, field_one, field_two)
       fields_arr_values = both_fields_records(query_data, field_one, field_two)
       logger.info "fields_arr_values = #{fields_arr_values}"
+      fields_arr_values = [[57, 790], [57, 790], [57, 790], [57, 790], [57, 7960], [59, 818], [59, 818], [59, 818], [59, 818], [59, 818], [60, 826], [60, 826], [60, 826], [60, 826], [60, 826]]
+
       get_keys_with_items_array(fields_arr_values)
       # values_occurence = occurence_counts(field_values)
       # logger.info "values_occurence = #{values_occurence}"
@@ -361,11 +365,11 @@ class HomeController < ApplicationController
     puts "\n ##### check_exclusions #####\n"
     logger.info "In check_exclusions: - profile_id_searched = #{profile_id_searched}, profile_id_found = #{profile_id_found}"
 
-    s_rel_name_arr = get_profile_records(profile_id_searched)
+    s_rel_name_arr = rel_name_profile_records(profile_id_searched)
     [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
     logger.info "search results: s_rel_name_arr = #{s_rel_name_arr} "
 
-    f_rel_name_arr = get_profile_records(profile_id_found)
+    f_rel_name_arr = rel_name_profile_records(profile_id_found)
     [[1, 122], [2, 82], [91, 90], [3, 465], [121, 446], [3, 370], [8, 48], [101, 449], [92, 361], [102, 293], [17, 147]]
     logger.info "found results: f_rel_name_arr = #{f_rel_name_arr}"
 

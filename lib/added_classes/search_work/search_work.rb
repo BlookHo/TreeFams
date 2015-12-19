@@ -89,7 +89,7 @@ class SearchWork
     else  #  "Found in hash"
       ids_arr = filling_hash.values_at(input_key)[0]
       ids_arr << input_val
-      filling_hash[input_key] = ids_arr # store new arr val
+      filling_hash[input_key] = ids_arr.uniq # store new arr val
     end
   end
 
