@@ -6,8 +6,9 @@ module Meteor
           before_filter :authenticate
 
           def destroy
-            if current_user.double == 1
-              puts "From Meteor - in Rails Profiles#destroy: current_user.id = #{current_user.id}, @current_user.double = #{current_user.double}"
+            if @current_user.double == 1
+              puts "From Meteor - in Rails Profiles#create: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
+              puts "From Meteor - in Rails Profiles#create: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
 
               response = @current_user.destroying_profile(params[:profile_id])
               if response[:status] == 403
@@ -15,14 +16,14 @@ module Meteor
               else
 
                 puts "In met/v1/../ProfilesDestroyController: After destroying_profile: start_search_methods "
-                ::SearchResults.start_search_methods_in_thread(current_user)
+                ::SearchResults.start_search_methods_in_thread(@current_user)
                 respond_with(status:200)
               end
 
             else
-              puts "From Meteor - in Rails Profiles#destroy: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
+              puts "From Meteor - in Rails Profiles#destroy: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
               puts "Дерево - дубль! Действия по удалению профиля - запрещены"
-              respond_with( {status: 300, msg: "Дерево - дубль! Действия по удалению профиля - запрещены"} )
+              respond_with(errorCode: 403, message: "Дерево - дубль! Действия по удалению профиля - запрещены")
             end
 
           end

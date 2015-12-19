@@ -8,8 +8,8 @@ module Meteor
 
         def update
 
-          if current_user.double == 1
-            puts "From Meteor - in Rails ProfileDatas#update: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
+          if @current_user.double == 1
+            puts "From Meteor - in Rails ProfileDatas#update: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
 
             profile_data = find_profile_data
 
@@ -30,9 +30,9 @@ module Meteor
               respond_with profile_data.errors
             end
           else
-            puts "From Meteor - in Rails ProfileDatas#update: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
+            puts "From Meteor - in Rails ProfileDatas#update: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
             puts "Дерево - дубль! Действия по изменению данных профиля - запрещены"
-            respond_with( {status: 300, msg: "Дерево - дубль! Действия по изменению данных профиля - запрещены"} )
+            respond_with(errorCode: 403, message: "Дерево - дубль! Действия по изменению данных профиля - запрещены")
           end
         end
 

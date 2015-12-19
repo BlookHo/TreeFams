@@ -7,8 +7,8 @@ module Meteor
 
 
         def make_request
-          if current_user.double == 1
-            puts "From Meteor - in Rails ConnectionRequests#make_request: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
+          if @current_user.double == 1
+            puts "From Meteor - in Rails ConnectionRequests#make_request: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
 
             # yes_con = { status: true }
             with_user_id = params[:user_id_to_connect]
@@ -33,7 +33,7 @@ module Meteor
           else
             puts "From Meteor - in Rails ConnectionRequests#make_request: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
             puts "Дерево - дубль! Действия по объединению деревьев - запрещены"
-            respond_with( {status: 300, msg: "Дерево - дубль! Действия по объединению деревьев - запрещены"} )
+            respond_with(errorCode: 403, message: "Дерево - дубль! Действия по объединению деревьев - запрещены")
           end
 
 
