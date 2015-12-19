@@ -130,6 +130,116 @@ class HomeController < ApplicationController
           # .distinct
     end
 
+    # @note: get checked profiles for exclusions
+    def profiles_checking(profile_id_searched, all_profiles_found)
+      certain_profiles_found = []
+      certain_koeff = WeafamSetting.first.certain_koeff
+      all_profiles_found.each do |found_profile_to_check|
+        priznak, match_count = check_exclusions(profile_id_searched, found_profile_to_check)
+        # logger.info "After check_exclusions: found_profile_to_check = #{found_profile_to_check}, priznak = #{priznak}, match_count = #{match_count}"
+        profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_to_check, certain_koeff)
+        certain_profiles_found << profile_checked if profile_checked
+        logger.info "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}"
+
+       end
+      certain_profiles_found
+    end
+
+
+
+
+    def check_exclusions(profile_id_searched, profile_id_found)
+      puts "\n # check_exclusions # profile_id_searched = #{profile_id_searched}, profile_id_found To check = #{profile_id_found}\n"
+
+      s_rel_name_arr = rel_name_profile_records(profile_id_searched)
+      # s_rel_name_arr =
+          [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
+      # logger.info "search results: s_rel_name_arr = #{s_rel_name_arr} "
+
+      f_rel_name_arr = rel_name_profile_records(profile_id_found)
+      # f_rel_name_arr =
+          [[1, 122], [2, 82], [91, 90], [3, 465], [121, 446], [3, 370], [8, 48], [101, 449], [92, 361], [102, 293], [17, 147]]
+      # logger.info "found results: f_rel_name_arr = #{f_rel_name_arr}"
+
+      excl_rel = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
+      # excl_rel - relations to check - todo: place this array in Weafam_settings
+
+      search_filling_hash = get_keys_with_items_array(s_rel_name_arr)
+      logger.info "search_filling_hash = #{search_filling_hash}"
+      found_filling_hash = get_keys_with_items_array(f_rel_name_arr)
+      logger.info "found_filling_hash = #{found_filling_hash}"
+
+      match_count = 0
+      priznak = true
+      search_filling_hash.each do |relation, names|
+        # logger.info "In search_filling_hash: - relation = #{relation}, names = #{names}"
+        sval = search_filling_hash[relation]
+        fval = found_filling_hash[relation]
+        if found_filling_hash.has_key?(relation)
+          # logger.info "In found_filling_hash  has_key: - relation = #{relation}, fval = #{fval}, sval = #{sval}"
+          if excl_rel.include?(relation)
+            # logger.info "include main relations = #{relation}"
+            if sval == fval
+              match_count += sval.size
+              priznak = true
+              # logger.info "In IF check: (==) COMPLETE EQUAL - match_count = #{match_count}, check = #{(sval == fval) }"
+            elsif sval & fval != []
+              match_count += (sval & fval).size
+              priznak = true
+              # logger.info "In IF check: (&)ARE COMMON - match_count = #{match_count}, check = #{sval & fval != []}"
+            else
+              priznak = false
+              # logger.info "In All checks failed: - priznak = #{priznak}, match_count = #{match_count}"
+              return priznak, match_count
+            end
+          else
+            # logger.info "Not include main relations = #{relation}"
+            if sval == fval
+              match_count += sval.size
+              # logger.info "In IF check: (==) COMPLETE EQUAL - match_count = #{match_count}, check = #{(sval == fval) }"
+            else sval & fval != []
+            match_count += (sval & fval).size
+            # logger.info "In IF check: (&)ARE COMMON - match_count = #{match_count}, check = #{sval & fval != []}"
+            end
+          end
+
+        else
+          priznak = true
+          # logger.info "In IF check: ([]) EMPTY Arrs - match_count = #{match_count}, check = #{sval == [] || fval == []}"
+        end
+
+      end
+      # logger.info "check_exclusions end: - priznak = #{priznak}, match_count = #{match_count}"
+
+      return priznak, match_count
+    end
+
+
+    def check_match_count?(match_count, certain_koeff)
+      if match_count >= certain_koeff
+        # logger.info "PROFILES ARE EQUAL - with exclusions determine"
+        true
+      else
+        # logger.info "PROFILES NOT EQUAL"
+        false
+      end
+    end
+
+
+    def check_exclusions_priznak(priznak, match_count, profile_id_found, certain_koeff)
+      # logger.info "check_exclusions_priznak: - priznak = #{priznak}, match_count = #{match_count}"
+      if priznak
+        # logger.info "EXCLUSIONS PASSED"
+        if check_match_count?(match_count, certain_koeff)
+          profile_id_found
+        else
+          nil
+        end
+      else
+        # logger.info "EXCLUSIONS DID NOT PASSED"
+        nil
+      end
+    end
 
     # @note: New modified quick search
     # for each profile from searching tree
@@ -146,7 +256,15 @@ class HomeController < ApplicationController
     def modi_search(profile_id_searched)
       start_search_time = Time.now
 
-      puts "\n ##### modi_search #####\n"
+      puts "\n ##### modi_search #####\n\n"
+
+      connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
+      author_tree_arr = Tree.get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
+      tree_profiles = [current_user.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
+      tree_profiles = tree_profiles.uniq
+      logger.info "search records: connected_author_arr = #{connected_author_arr}, tree_profiles = #{tree_profiles} "
+
+
 
       s_rel_name_arr = rel_name_profile_records(profile_id_searched)
       [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
@@ -179,20 +297,33 @@ class HomeController < ApplicationController
       logger.info "arr_of_trees_profiles = #{arr_of_trees_profiles}"
       # get_keys_with_items_array
 
-      # doubles = exclude_double_profiles(arr_of_trees_profiles)
+      all_profiles_found = arr_of_trees_profiles.values.flatten
+      logger.info "all_profiles_found = #{all_profiles_found}"
 
-      # check_exclusions(profile_id_searched, profile_id_found)
-      #
+      # no_doubles, with_doubles = exclude_double_profiles(arr_of_trees_profiles)
+      # logger.info "trees no_doubles = #{no_doubles}, trees with_doubles = #{with_doubles}"
+
+      certain_profiles_found = profiles_checking(profile_id_searched, all_profiles_found)
+      logger.info "After profiles_checking: - certain_profiles_found = #{certain_profiles_found}"
+
       # results = make_search_results
-      #
+
       # SearchResults.store_search_results(results, current_user.id) # запись рез-тов поиска в таблицу - для Метеора
-      #
+
       # current_user.start_check_double(results, certain_koeff) if current_user.double == 0
+
+      # :by_profiles=>
+          [{:search_profile_id=>658, :found_tree_id=>47, :found_profile_id=>668, :count=>8}, {:search_profile_id=>659, :found_tree_id=>47, :found_profile_id=>666, :count=>8}, {:search_profile_id=>656, :found_tree_id=>47, :found_profile_id=>669, :count=>8}, {:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7}, {:search_profile_id=>657, :found_tree_id=>47, :found_profile_id=>667, :count=>7},
+                     {:search_profile_id=>658, :found_tree_id=>45, :found_profile_id=>645, :count=>7}, {:search_profile_id=>664, :found_tree_id=>45, :found_profile_id=>646, :count=>7}, {:search_profile_id=>659, :found_tree_id=>45, :found_profile_id=>650, :count=>7}, {:search_profile_id=>656, :found_tree_id=>45, :found_profile_id=>649, :count=>7}, {:search_profile_id=>665, :found_tree_id=>47, :found_profile_id=>673, :count=>6}, {:search_profile_id=>664, :found_tree_id=>47, :found_profile_id=>672, :count=>6}, {:search_profile_id=>662, :found_tree_id=>47, :found_profile_id=>670, :count=>5}, {:search_profile_id=>657, :found_tree_id=>45, :found_profile_id=>651, :count=>5}, {:search_profile_id=>663, :found_tree_id=>47, :found_profile_id=>671, :count=>5}, {:search_profile_id=>734, :found_tree_id=>47, :found_profile_id=>721, :count=>5}]
+          # :by_trees=>
+          [{:found_tree_id=>47, :found_profile_ids=>[669, 666, 672, 721, 668, 671, 667, 670, 673]}]
+      # , :duplicates_one_to_many=>
+          {734=>{45=>{648=>5, 733=>5}}}
 
 
       end_search_time = Time.now
       search_time = (end_search_time - start_search_time) * 1000
-      logger.info "== END OF modi_search === Search_time = #{search_time.round(2)} msec"
+      puts "\n == END OF modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
 
     end
 
@@ -201,7 +332,7 @@ class HomeController < ApplicationController
     def get_found_two_fields(query_data, field_one, field_two)
       fields_arr_values = both_fields_records(query_data, field_one, field_two)
       logger.info "fields_arr_values = #{fields_arr_values}"
-      fields_arr_values = [[57, 790], [57, 790], [57, 790], [57, 790], [57, 7960], [59, 818], [59, 818], [59, 818], [59, 818], [59, 818], [60, 826], [60, 826], [60, 826], [60, 826], [60, 826]]
+      # fields_arr_values = [[57, 790], [57, 790], [57, 790], [57, 790], [57, 7960], [59, 818], [59, 818], [59, 818], [59, 818], [59, 818], [60, 826], [60, 826], [60, 826], [60, 826], [60, 826]]
 
       get_keys_with_items_array(fields_arr_values)
       # values_occurence = occurence_counts(field_values)
@@ -286,9 +417,7 @@ class HomeController < ApplicationController
     end
 
 
-
-
-    modi_search(profile_id_searched)
+ #   modi_search(profile_id_searched)
 
 
 
@@ -339,13 +468,6 @@ class HomeController < ApplicationController
 
 
 
-    # [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
-    # s_rel_name_hash = Hash[*s_rel_name_arr.flatten(1)]
-    #  {8=>48, 3=>370, 15=>343, 16=>82, 17=>147, 121=>446}
-
-
-
-
 
     # @note: Check and delete_if: if one_hash contains {found_tree_id: tree_id_with_double} - tree w/doubles results
   #   If No -> leave this one_hash in by_trees_arr of hashes
@@ -358,100 +480,6 @@ class HomeController < ApplicationController
   #   by_trees_arr
   # end
 
-
-
-
-  def check_exclusions(profile_id_searched, profile_id_found)
-    puts "\n ##### check_exclusions #####\n"
-    logger.info "In check_exclusions: - profile_id_searched = #{profile_id_searched}, profile_id_found = #{profile_id_found}"
-
-    s_rel_name_arr = rel_name_profile_records(profile_id_searched)
-    [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
-    logger.info "search results: s_rel_name_arr = #{s_rel_name_arr} "
-
-    f_rel_name_arr = rel_name_profile_records(profile_id_found)
-    [[1, 122], [2, 82], [91, 90], [3, 465], [121, 446], [3, 370], [8, 48], [101, 449], [92, 361], [102, 293], [17, 147]]
-    logger.info "found results: f_rel_name_arr = #{f_rel_name_arr}"
-
-    excl_rel = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
-    # excl_rel - relations to check - todo: place this array in Weafam_settings
-
-    s_filling_hash = get_keys_with_items_array(s_rel_name_arr)
-    logger.info "s_filling_hash = #{s_filling_hash}"
-    f_filling_hash = get_keys_with_items_array(f_rel_name_arr)
-    logger.info "f_filling_hash = #{f_filling_hash}"
-
-    match_count = 0
-    priznak = true
-    s_filling_hash.each do |relation, names|
-      logger.info "In s_filling_hash: - relation = #{relation}, names = #{names}"
-      sval = s_filling_hash[relation]
-      fval = f_filling_hash[relation]
-      if f_filling_hash.has_key?(relation)
-        logger.info "In f_filling_hash  has_key: - relation = #{relation}, fval = #{fval}, sval = #{sval}"
-        if excl_rel.include?(relation)
-          logger.info "include main relations = #{relation}"
-          if sval == fval
-            match_count += sval.size
-            priznak = true
-            logger.info "In IF check: (==) COMPLETE EQUAL - match_count = #{match_count}, check = #{(sval == fval) }"
-          elsif sval & fval != []
-            match_count += (sval & fval).size
-            priznak = true
-            logger.info "In IF check: (&)ARE COMMON - match_count = #{match_count}, check = #{sval & fval != []}"
-          else
-            priznak = false
-            logger.info "In All checks failed: - priznak = #{priznak}, match_count = #{match_count}"
-            return priznak, match_count
-          end
-        else
-          logger.info "Not include main relations = #{relation}"
-          if sval == fval
-            match_count += sval.size
-            # priznak = true
-            logger.info "In IF check: (==) COMPLETE EQUAL - match_count = #{match_count}, check = #{(sval == fval) }"
-          else sval & fval != []
-            match_count += (sval & fval).size
-            # priznak = true
-            logger.info "In IF check: (&)ARE COMMON - match_count = #{match_count}, check = #{sval & fval != []}"
-          end
-        end
-
-      else
-        priznak = true
-        logger.info "In IF check: ([]) EMPTY Arrs - match_count = #{match_count}, check = #{sval == [] || fval == []}"
-      end
-
-    end
-    logger.info "Final: - priznak = #{priznak}, match_count = #{match_count}"
-
-    return priznak, match_count
-  end
-
-
-  def check_match_count(match_count)
-    certain_koeff = WeafamSetting.first.certain_koeff
-    if match_count >= certain_koeff
-      logger.info "PROFILES ARE EQUAL - with exclusions determine"
-    else
-      logger.info "PROFILES NOT EQUAL"
-    end
-  end
-
-
-  def check_exclusions_priznak(priznak, match_count)
-    logger.info "check_exclusions_priznak: - priznak = #{priznak}, match_count = #{match_count}"
-    if priznak
-      logger.info "EXCLUSIONS PASSED"
-      check_match_count(match_count)
-    else
-      logger.info "EXCLUSIONS DID NOT PASSED"
-    end
-  end
-
-
-  priznak, match_count = check_exclusions(profile_id_searched, profile_id_found)
-  check_exclusions_priznak(priznak, match_count)
 
 
 
