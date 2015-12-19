@@ -7,7 +7,7 @@ module Meteor
 
           def destroy
             if current_user.double == 1
-              puts "From Meteor - in Rails Profiles#destroy: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
+              puts "From Meteor - in Rails Profiles#destroy: current_user.id = #{current_user.id}, @current_user.double = #{current_user.double}"
 
               response = @current_user.destroying_profile(params[:profile_id])
               if response[:status] == 403

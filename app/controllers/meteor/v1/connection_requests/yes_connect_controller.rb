@@ -7,8 +7,8 @@ module Meteor
 
 
         def yes_connect
-          if @current_user.double == 1
-            puts "From Meteor - in Rails ConnectionRequests#yes_connect: @current_user.id = #{@current_user.id}, current_user.double = #{current_user.double}"
+          if current_user.double == 1
+            puts "From Meteor - in Rails ConnectionRequests#yes_connect: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
 
             # yes_con = { status: true }
             connection_id = params[:connection_id]
@@ -32,7 +32,7 @@ module Meteor
             end
 
           else
-            puts "From Meteor - in Rails ConnectionRequests#yes_connect: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
+            puts "From Meteor - in Rails ConnectionRequests#yes_connect: current_user.id = #{current_user.id}, current_user.double = #{current_user.double}"
             puts "Дерево - дубль! Действия по объединению деревьев - запрещены"
             respond_with( {status: 300, msg: "Дерево - дубль! Действия по объединению деревьев - запрещены"} )
           end

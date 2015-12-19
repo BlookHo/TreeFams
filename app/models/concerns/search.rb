@@ -65,8 +65,13 @@ module Search
 
     end_search_time = Time.now
 
+    logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
+    logger.info "results[:by_profiles] = #{results[:by_profiles].inspect}"
+    logger.info "results[:by_trees] = #{results[:by_trees].inspect}"
+    logger.info "results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
+    logger.info "results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
     search_time = end_search_time - start_search_time
-    logger.info "== END OF start_search === Search_time = #{search_time.round(3)} sec; results = #{results.inspect}"
+    logger.info "== END OF start_search === Search_time = #{search_time.round(3)} sec"
 
     results
   end
