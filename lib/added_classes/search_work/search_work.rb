@@ -52,6 +52,25 @@ class SearchWork
 
 
   # @note: "EXCLUDE Many_to_One DUPLICATES"
+  #   Extract duplicates hashes from
+  # @input hash = {57=>[795, 6000], 59=>[819], 60=>[827]}
+  # @output:
+  def self.duplicates_one_many_out(profile_id_searched,input_hash)
+    no_doubles = {}
+    duplicates_one_to_many = {}
+    input_hash.each do |key, val_arr|
+      if val_arr.size > 1
+        duplicates_one_to_many.merge!(profile_id_searched => {key => val_arr})
+      else
+        no_doubles.merge!(key => val_arr)
+      end
+    end
+
+    return no_doubles, duplicates_one_to_many
+  end
+
+
+    # @note: "EXCLUDE Many_to_One DUPLICATES"
   # Extract duplicates hashes from input hash
   def self.duplicates_out(start_hash)
     # Initaialize empty hash

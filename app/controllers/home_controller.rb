@@ -111,7 +111,7 @@ class HomeController < ApplicationController
     # for searching profile
     # todo: place this method in ProfileKey model
     def rel_name_profile_records(profile_id)
-      logger.info "In get_profile_records: profile_id = #{profile_id}"
+      # logger.info "In rel_name_profile_records: profile_id = #{profile_id}"
       ProfileKey.where(:profile_id => profile_id, deleted: 0)
           .order('relation_id','is_name_id')
           .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
@@ -151,7 +151,7 @@ class HomeController < ApplicationController
           certain_profiles_count << match_count
           certain_profiles_found << profile_checked
           certain_profiles_trees << all_trees_found[index]
-          logger.info "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}"
+          puts "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}"
         end
        end
       return certain_profiles_found, certain_profiles_count, certain_profiles_trees
@@ -253,7 +253,7 @@ class HomeController < ApplicationController
 
 
     # @note: create data for search_results generation
-    # @input: profiles_found = [790, 818, 826], profiles_trees = [57, 59, 60]
+    # @input: profiles_found = [790, 818, 826], profiles_trees = [57, 59, 60], profiles_count = [5, 5, 5]
     def create_results_data(certain_search_data)
 
       profile_id_searched = certain_search_data[:search]
@@ -277,8 +277,6 @@ class HomeController < ApplicationController
       uniq_profiles_pairs.merge!(profile_id_searched => trees_profiles_found )
       {811=>{57=>790, 59=>818, 60=>826}}
 
-      # uniq_profiles_pairs
-
       # uniq_profiles_pairs, profiles_with_match_hash = create_uniq_hash(profile_id_searched, profiles_found, profiles_trees)
       {811=>{57=>790, 59=>818, 60=>826}}
 
@@ -289,34 +287,23 @@ class HomeController < ApplicationController
     end
 
 
-    # [inf] Before SearchResults:
-    # uniq_profiles_pairs =
-    {805=>{59=>819, 60=>827, 57=>795},
+    # Before SearchResults:
+    # search records: uniq_profiles_pairs =
+    {805=>{57=>795, 59=>819, 60=>827},
      806=>{59=>823, 60=>831},
      811=>{57=>790, 59=>818, 60=>826},
      810=>{59=>820, 60=>825},
      809=>{57=>793, 59=>817, 60=>828},
      807=>{59=>824, 60=>832},
      896=>{57=>898}}
-
-    # profiles_with_match_hash =
-    {898=>5, 832=>5, 824=>5, 828=>5, 817=>5, 793=>5, 825=>5, 820=>5,
-     826=>5, 818=>5, 790=>5, 831=>5, 823=>5, 795=>5, 827=>5, 819=>5}
-
-     # [inf] search records: profiles_with_match_hash =
+    # search records: profiles_with_match_hash =
     {795=>5, 819=>5, 827=>5, 823=>5, 831=>5, 790=>5, 818=>5, 826=>5,
      820=>5, 825=>5, 793=>5, 817=>5, 828=>5, 824=>5, 832=>5, 898=>5}
+    # search records:
+    # doubles_one_to_many_hash =
+    {}
 
-    # search records: uniq_profiles_pairs =
-               {805=>{57=>795, 59=>819, 60=>827},
-                806=>{59=>823, 60=>831},
-                811=>{57=>790, 59=>818, 60=>826},
-                810=>{59=>820, 60=>825},
-                809=>{57=>793, 59=>817, 60=>828},
-                807=>{59=>824, 60=>832},
-                896=>{57=>898}}
 
-    # == END OF search_tree_profiles === Search_time = 756.15 msec
 
     # == END OF search_tree_profiles === Search_time = 679.99 msec
     # == END OF search_tree_profiles === Search_time = 667.55 msec
@@ -337,48 +324,39 @@ class HomeController < ApplicationController
     # 8.check exclusions for each found profile_ids
     # 9.get final found profile_ids with user_id position
     # 10.make usual search_results for store/
-    def modi_search_one_profile(profile_id_searched)
+    def modi_search_one_profile(profile_search_data)
       start_search_time = Time.now
 
       puts "\n ##### modi_search #####\n\n"
+      logger.info "profile_search_data = #{profile_search_data}"
 
+      profile_id_searched = profile_search_data[:profile_id_searched]
 
-      s_rel_name_arr = rel_name_profile_records(profile_id_searched)
       [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
-      logger.info "search records: profile_id_searched = #{profile_id_searched}, s_rel_name_arr = #{s_rel_name_arr} "
-
-      profile = Profile.find(profile_id_searched)
-      name_id_searched = profile.name_id
-      tree_id = profile.tree_id
-      connected_users = User.find(tree_id).connected_users
+      # logger.info "search records: profile_id_searched = #{profile_id_searched}"
 
       arr_relations = one_field_content(profile_id_searched, 'relation_id')
       arr_names     = one_field_content(profile_id_searched, 'is_name_id')
 
-      query_data = { connected_users: connected_users, name_id_searched: name_id_searched,
-                     arr_relations: arr_relations, arr_names: arr_names }
+      query_data = { connected_users: profile_search_data[:connected_users],
+                     name_id_searched: profile_search_data[:name_id_searched],
+                     arr_relations: arr_relations,
+                     arr_names: arr_names }
       logger.info "query_data = #{query_data}"
-      # [inf] query_data =
+      # query_data =
           {:connected_users=>[58], :name_id_searched=>28,
            :arr_relations=>[3, 3, 8, 15, 16, 17, 121],
            :arr_names=>   [465, 370, 48, 343, 82, 147, 446]}
 
-      # found_trees = get_found_fields(query_data, 'user_id')
-      # logger.info "found_trees = #{found_trees}"
-
-      # collect_found_profiles
-      # found_profiles = get_found_fields(query_data, 'profile_id')
-      # logger.info "found_profiles = #{found_profiles}"
-
       trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
-      logger.info "trees_profiles = #{trees_profiles}"
+      # logger.info "trees_profiles = #{trees_profiles}"
+      # trees_profiles = {57=>[795, 6000], 59=>[819], 60=>[827], 64=>[877], 65=>[892]}
+      # logger.info "trees_profiles w doub= #{trees_profiles}"
+      trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, trees_profiles)
+      logger.info "trees_profiles_no_double = uniqs = #{trees_profiles_no_double}, trees doubles_one_to_many = #{doubles_one_to_many}"
 
-      # no_doubles, with_doubles = exclude_double_profiles(arr_of_trees_profiles)
-      # logger.info "trees no_doubles = #{no_doubles}, trees with_doubles = #{with_doubles}"
-
-
-      certain_profiles_found, certain_profiles_count, certain_profiles_trees = profiles_checking(profile_id_searched, trees_profiles)
-      logger.info "After profile_checking: profile_id_searched = #{profile_id_searched}"
+      certain_profiles_found, certain_profiles_count, certain_profiles_trees = profiles_checking(profile_id_searched, trees_profiles_no_double)
+      puts "\n After profile_checking: profile_id_searched = #{profile_id_searched}"
       logger.info " - certain_profiles_found = #{certain_profiles_found}"
       logger.info " - certain_profiles_count = #{certain_profiles_count}"
       logger.info " - certain_profiles_trees = #{certain_profiles_trees}"
@@ -387,25 +365,40 @@ class HomeController < ApplicationController
           search: profile_id_searched,
           founds: certain_profiles_found,
           counts: certain_profiles_count,
-          trees: certain_profiles_trees }
+          trees: certain_profiles_trees
+      }
 
       profiles_trees_pairs, profiles_counts = create_results_data(certain_search_data)
 
-      # :by_profiles=>
-          [{:search_profile_id=>658, :found_tree_id=>47, :found_profile_id=>668, :count=>8}, {:search_profile_id=>659, :found_tree_id=>47, :found_profile_id=>666, :count=>8}, {:search_profile_id=>656, :found_tree_id=>47, :found_profile_id=>669, :count=>8}, {:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7}, {:search_profile_id=>657, :found_tree_id=>47, :found_profile_id=>667, :count=>7},
-                     {:search_profile_id=>658, :found_tree_id=>45, :found_profile_id=>645, :count=>7}, {:search_profile_id=>664, :found_tree_id=>45, :found_profile_id=>646, :count=>7}, {:search_profile_id=>659, :found_tree_id=>45, :found_profile_id=>650, :count=>7}, {:search_profile_id=>656, :found_tree_id=>45, :found_profile_id=>649, :count=>7}, {:search_profile_id=>665, :found_tree_id=>47, :found_profile_id=>673, :count=>6}, {:search_profile_id=>664, :found_tree_id=>47, :found_profile_id=>672, :count=>6}, {:search_profile_id=>662, :found_tree_id=>47, :found_profile_id=>670, :count=>5}, {:search_profile_id=>657, :found_tree_id=>45, :found_profile_id=>651, :count=>5}, {:search_profile_id=>663, :found_tree_id=>47, :found_profile_id=>671, :count=>5}, {:search_profile_id=>734, :found_tree_id=>47, :found_profile_id=>721, :count=>5}]
-          # :by_trees=>
-          [{:found_tree_id=>47, :found_profile_ids=>[669, 666, 672, 721, 668, 671, 667, 670, 673]}]
-      # , :duplicates_one_to_many=>
-          {734=>{45=>{648=>5, 733=>5}}}
+      one_profile_results = {
+          profiles_trees_pairs: profiles_trees_pairs,
+          profiles_counts: profiles_counts,
+          doubles_one_to_many: doubles_one_to_many
+      }
+      logger.info "finish modi_search_one_profile: one_profile_results = #{one_profile_results}"
 
       end_search_time = Time.now
       search_time = (end_search_time - start_search_time) * 1000
       puts "\n == END OF modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
-      return profiles_trees_pairs, profiles_counts
-
+      one_profile_results
     end
 
+    ####################################################################
+        # :by_profiles=>
+    [{:search_profile_id=>658, :found_tree_id=>47, :found_profile_id=>668, :count=>8}, {:search_profile_id=>659, :found_tree_id=>47, :found_profile_id=>666, :count=>8}, {:search_profile_id=>656, :found_tree_id=>47, :found_profile_id=>669, :count=>8}, {:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7}, {:search_profile_id=>657, :found_tree_id=>47, :found_profile_id=>667, :count=>7},
+     {:search_profile_id=>658, :found_tree_id=>45, :found_profile_id=>645, :count=>7}, {:search_profile_id=>664, :found_tree_id=>45, :found_profile_id=>646, :count=>7}, {:search_profile_id=>659, :found_tree_id=>45, :found_profile_id=>650, :count=>7}, {:search_profile_id=>656, :found_tree_id=>45, :found_profile_id=>649, :count=>7}, {:search_profile_id=>665, :found_tree_id=>47, :found_profile_id=>673, :count=>6}, {:search_profile_id=>664, :found_tree_id=>47, :found_profile_id=>672, :count=>6}, {:search_profile_id=>662, :found_tree_id=>47, :found_profile_id=>670, :count=>5}, {:search_profile_id=>657, :found_tree_id=>45, :found_profile_id=>651, :count=>5}, {:search_profile_id=>663, :found_tree_id=>47, :found_profile_id=>671, :count=>5}, {:search_profile_id=>734, :found_tree_id=>47, :found_profile_id=>721, :count=>5}]
+    # :by_trees=>
+    [{:found_tree_id=>47, :found_profile_ids=>[669, 666, 672, 721, 668, 671, 667, 670, 673]}]
+    # , :duplicates_one_to_many=>
+    {734=>{45=>{648=>5, 733=>5}}}
+
+    # For test for doubles: trees_profiles = {57=>[795, 6000], 59=>[819], 60=>[827], 64=>[877], 65=>[892]}
+    # finish modi_search_one_profile: one_profile_results =
+    {:profiles_trees_pairs=>{805=>{59=>819, 60=>827}},
+     :profiles_counts=>{819=>5, 827=>5},
+     :doubles_one_to_many=>{805=>{57=>[795, 6000]}}}
+
+    ##################################################################################
 
     # @note: Determine: in which trees ids profiles were found
     def get_found_two_fields(query_data, field_one, field_two)
@@ -489,47 +482,126 @@ class HomeController < ApplicationController
       user_id_occurence.keys
     end
 
-    # @note: New super extra search
-    # for each profile in tree
-    def collect_found_profiles(profile_id_searched)
 
-    end
 
+    ############################################################
     # @note: New super extra search body
     def search_tree_profiles
-      profile_id_searched = 811
+      # profile_id_searched = 811
       # profile_id_found = 790
 
       start_search_time = Time.now
 
       puts "\n ##### search_tree_profiles #####\n\n"
 
-      connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
-      author_tree_arr = Tree.get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
+      connected_users = current_user.get_connected_users # Состав объединенного дерева в виде массива id
+      author_tree_arr = Tree.get_connected_tree(connected_users) # DISTINCT Массив объединенного дерева из Tree
       tree_profiles = [current_user.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
       tree_profiles = tree_profiles.uniq
-      logger.info "search records: connected_author_arr = #{connected_author_arr}, tree_profiles = #{tree_profiles} "
+      logger.info "search records: connected_users = #{connected_users}, tree_profiles = #{tree_profiles} "
 
       uniq_profiles_pairs = {}
       profiles_with_match_hash = {}
+      doubles_one_to_many_hash = {}
 
       tree_profiles.each do |profile_id_searched|
-        profiles_trees_pairs, profiles_counts = modi_search_one_profile(profile_id_searched)
-        logger.info "after modi_search_one_profile: profiles_trees_pairs = #{profiles_trees_pairs}, profiles_counts = #{profiles_counts} "
-        uniq_profiles_pairs.merge!(profiles_trees_pairs)
-        profiles_with_match_hash.merge!(profiles_counts)
+        name_id_searched = Profile.find(profile_id_searched).name_id
+
+        profile_search_data = {
+            connected_users: connected_users,
+            profile_id_searched: profile_id_searched,
+            name_id_searched: name_id_searched
+        }
+        one_profile_results = modi_search_one_profile(profile_search_data)
+
+        uniq_profiles_pairs.merge!(one_profile_results[:profiles_trees_pairs])
+        profiles_with_match_hash.merge!(one_profile_results[:profiles_counts])
+        doubles_one_to_many_hash.merge!(one_profile_results[:doubles_one_to_many])
       end
 
       uniq_profiles_pairs.delete_if { |key,val|  val == {} }
 
       logger.info "search records: uniq_profiles_pairs = #{uniq_profiles_pairs}"
       logger.info "search records: profiles_with_match_hash = #{profiles_with_match_hash}"
+      logger.info "search records: doubles_one_to_many_hash = #{doubles_one_to_many_hash}"
+
+      # start_hash = {805=>{57=>795, 59=>819, 60=>827}, 806=>{59=>819, 60=>831}, 811=>{57=>790, 59=>818, 60=>826}, 810=>{59=>820, 60=>825}, 809=>{57=>793, 59=>817, 60=>828}, 807=>{59=>824, 60=>832}, 896=>{57=>898}}
+      uniq_profiles_no_doubles, duplicates_many_to_one = SearchWork.duplicates_out(uniq_profiles_pairs)
+      logger.info "After duplicates_out: uniq_profiles_no_doubles = #{uniq_profiles_no_doubles}"
+      logger.info "duplicates_many_to_one = #{duplicates_many_to_one}"
+      # TEST After duplicates_many_to_one:  uniqs =
+     #  {805=>{57=>795, 60=>827}, 806=>{60=>831}, 811=>{57=>790, 59=>818, 60=>826}, 810=>{59=>820, 60=>825}, 809=>{57=>793, 59=>817, 60=>828}, 807=>{59=>824, 60=>832}, 896=>{57=>898}}
+       # duplicates_many_to_one =
+     #  {806=>{59=>819}, 805=>{59=>819}}
+
+      # [inf] search records: start_hash =
+      {805=>{57=>795, 59=>819, 60=>827}, 806=>{59=>823, 60=>831}, 811=>{57=>790, 59=>818, 60=>826}, 810=>{59=>820, 60=>825}, 809=>{57=>793, 59=>817, 60=>828}, 807=>{59=>824, 60=>832}, 896=>{57=>898}}
+      # [inf] search records: profiles_with_match_hash =
+      {795=>5, 819=>5, 827=>5, 823=>5, 831=>5, 790=>5, 818=>5, 826=>5, 820=>5, 825=>5, 793=>5, 817=>5, 828=>5, 824=>5, 832=>5, 898=>5}
+      # [inf] search records: doubles_one_to_many_hash = {} (pid:3925)
+
+      by_profiles, by_trees = SearchResults.make_search_results(uniq_profiles_no_doubles, profiles_with_match_hash)
+      logger.info "SearchResults: by_profiles = #{by_profiles}, by_trees = #{by_trees}"
+      # [inf] SearchResults: by_profiles =
+      [{:search_profile_id=>896, :found_tree_id=>57, :found_profile_id=>898, :count=>5},
+       {:search_profile_id=>807, :found_tree_id=>60, :found_profile_id=>832, :count=>5},
+       {:search_profile_id=>807, :found_tree_id=>59, :found_profile_id=>824, :count=>5},
+       {:search_profile_id=>809, :found_tree_id=>60, :found_profile_id=>828, :count=>5},
+       {:search_profile_id=>809, :found_tree_id=>59, :found_profile_id=>817, :count=>5},
+       {:search_profile_id=>809, :found_tree_id=>57, :found_profile_id=>793, :count=>5},
+       {:search_profile_id=>810, :found_tree_id=>60, :found_profile_id=>825, :count=>5},
+       {:search_profile_id=>810, :found_tree_id=>59, :found_profile_id=>820, :count=>5},
+       {:search_profile_id=>811, :found_tree_id=>60, :found_profile_id=>826, :count=>5},
+       {:search_profile_id=>811, :found_tree_id=>59, :found_profile_id=>818, :count=>5},
+       {:search_profile_id=>811, :found_tree_id=>57, :found_profile_id=>790, :count=>5},
+       {:search_profile_id=>806, :found_tree_id=>60, :found_profile_id=>831, :count=>5},
+       {:search_profile_id=>806, :found_tree_id=>59, :found_profile_id=>823, :count=>5},
+       {:search_profile_id=>805, :found_tree_id=>60, :found_profile_id=>827, :count=>5},
+       {:search_profile_id=>805, :found_tree_id=>59, :found_profile_id=>819, :count=>5},
+       {:search_profile_id=>805, :found_tree_id=>57, :found_profile_id=>795, :count=>5}]
+       # by_trees =
+       [{:found_tree_id=>57, :found_profile_ids=>[795, 790, 793, 898]},
+        {:found_tree_id=>59, :found_profile_ids=>[819, 823, 818, 820, 817, 824]},
+        {:found_tree_id=>60, :found_profile_ids=>[827, 831, 826, 825, 828, 832]}]
+
+      #########################################################################
+
+      # :by_profiles=>
+      [{:search_profile_id=>658, :found_tree_id=>47, :found_profile_id=>668, :count=>8},
+       {:search_profile_id=>659, :found_tree_id=>47, :found_profile_id=>666, :count=>8},
+       {:search_profile_id=>656, :found_tree_id=>47, :found_profile_id=>669, :count=>8},
+       {:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7},
+       {:search_profile_id=>657, :found_tree_id=>47, :found_profile_id=>667, :count=>7},
+       {:search_profile_id=>658, :found_tree_id=>45, :found_profile_id=>645, :count=>7},
+       {:search_profile_id=>664, :found_tree_id=>45, :found_profile_id=>646, :count=>7},
+       {:search_profile_id=>659, :found_tree_id=>45, :found_profile_id=>650, :count=>7},
+       {:search_profile_id=>656, :found_tree_id=>45, :found_profile_id=>649, :count=>7},
+       {:search_profile_id=>665, :found_tree_id=>47, :found_profile_id=>673, :count=>6},
+       {:search_profile_id=>664, :found_tree_id=>47, :found_profile_id=>672, :count=>6},
+       {:search_profile_id=>662, :found_tree_id=>47, :found_profile_id=>670, :count=>5},
+       {:search_profile_id=>657, :found_tree_id=>45, :found_profile_id=>651, :count=>5},
+       {:search_profile_id=>663, :found_tree_id=>47, :found_profile_id=>671, :count=>5},
+       {:search_profile_id=>734, :found_tree_id=>47, :found_profile_id=>721, :count=>5}]
+      # :by_trees=>
+      [{:found_tree_id=>47, :found_profile_ids=>[669, 666, 672, 721, 668, 671, 667, 670, 673]}]
+      # , :duplicates_one_to_many=>
+      {734=>{45=>{648=>5, 733=>5}}}
+
+      results = {
+          by_profiles:              by_profiles,
+          by_trees:                 by_trees,
+          duplicates_one_to_many:   doubles_one_to_many_hash,
+          duplicates_many_to_one:   duplicates_many_to_one }
+
+      # logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
+      logger.info "connected_users = #{connected_users}.inspect}"
+      logger.info "results[:by_profiles] = #{results[:by_profiles].inspect}"
+      logger.info "results[:by_trees] = #{results[:by_trees].inspect}"
+      logger.info "results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
+      logger.info "results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
 
 
-      # profiles_search_found.merge!(profile_id_searched => certain_profiles_found )
-      # logger.info "profiles_search_found = #{profiles_search_found}"
 
-      # SearchResults.store_search_results(results, current_user.id) # запись рез-тов поиска в таблицу - для Метеора
 
       # current_user.start_check_double(results, certain_koeff) if current_user.double == 0
 
@@ -537,69 +609,20 @@ class HomeController < ApplicationController
       search_time = (end_search_time - start_search_time) * 1000
       puts "\n == END OF search_tree_profiles === Search_time = #{search_time.round(2)} msec  \n\n"
 
+      results
     end
 
+    # profile_search_data = {:connected_users=>[58], :profile_id_searched=>805, :name_id_searched=>48}
+    # modi_search_one_profile(profile_search_data)
 
-    search_tree_profiles
+    results = search_tree_profiles
 
-    # arr_rel = [8,3,3,15,16,17,121]
-    # arr_nam = [48,465,370,343,82,147,446]
-
-    # match_rows_rel_name = ProfileKey
-    #                           .where.not(user_id: connected_users)
-    #                           .where(:name_id => name_id_searched)
-    #                           .where(deleted: 0)
-    #                           .where("relation_id + is_name_id in (?)", rel_name_arr)
-    #                           .order('user_id','relation_id','is_name_id')
-    #                           .select('id','user_id','profile_id','name_id','relation_id','is_name_id','is_profile_id')
-    # .where("relation_id in (?)", arr_rel)
-    # .where("is_name_id in (?)", arr_nam)
-    # .where("'---- ' || relation_id || '- ' || is_name_id in (?)", rel_name_arr)
-
-    # logger.info "search results: match_rows_rel_name = #{match_rows_rel_name.inspect}, match_rows_rel_name.size = #{match_rows_rel_name.size}"
-    # show_in_logger(match_rows_rel_name, "=== результат" )  # DEBUGG_TO_LOGG
-
+    # SearchResults.store_search_results(results, current_user.id) # запись рез-тов поиска в таблицу - для Метеора
 
     # ('---- 8- 48','---- 3- 465','---- 3- 370','---- 15- 343','---- 16- 82','---- 17- 147','---- 121- 446')
 
 
-
-
-    # excl_rel = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
-    # excl_match_rows_rel_name = ProfileKey
-    #                           .where.not(user_id: connected_users)
-    #                           .where(:name_id => name_id_searched)
-    #                           .where("relation_id in (?)", arr_rel)
-    #                           .where("relation_id in (?)", excl_rel)
-    #                           .where("is_name_id in (?)", arr_nam)
-    #                           .where(deleted: 0)
-    #                           .order('user_id','relation_id','is_name_id')
-    #
-    # logger.info "search results: excl_match_rows_rel_name = #{excl_match_rows_rel_name}"
-    # show_in_logger(excl_match_rows_rel_name, "=== результат2" )  # DEBUGG_TO_LOGG
-
-
     [[8, 48, 805], [3, 465, 810], [3, 370, 809], [15, 343, 806], [16, 82, 807], [17, 147, 895], [121, 446, 896]]
-
-    #   unnest_rows = ProfileKey.where(:profile_id => profile_id_searched, deleted: 0)
-    #                       .unnest(rel_name_prof_arr)
-    #                      # .pluck(:relation_id, :is_name_id, :is_profile_id)
-    # logger.info "search results: unnest_rows = #{unnest_rows}"
-    #                      .distinct
-
-
-
-
-    # @note: Check and delete_if: if one_hash contains {found_tree_id: tree_id_with_double} - tree w/doubles results
-  #   If No -> leave this one_hash in by_trees_arr of hashes
-  # @params: by_trees_arr - from search results
-  #   arr_to_exclude - arr of tree ids where doubles were found
-  # def exclude_doubles_results(by_trees_arr, arr_to_exclude)
-  #   arr_to_exclude.each do |tree_id_with_double|
-  #     by_trees_arr.delete_if { |one_hash| one_hash.merge({found_tree_id: tree_id_with_double }) == one_hash }
-  #   end
-  #   by_trees_arr
-  # end
 
 
 
