@@ -60,9 +60,9 @@ module Search
       duplicates_many_to_one:   @duplicates_many_to_one }
     end_search_time = Time.now
 
-    SearchResults.store_search_results(results, self.id) # запись рез-тов поиска в таблицу - для Метеора
-
-    self.start_check_double(results, certain_koeff) if self.double == 0
+    # SearchResults.store_search_results(results, self.id) # запись рез-тов поиска в таблицу - для Метеора
+    #
+    # self.start_check_double(results, certain_koeff) if self.double == 0
 
     # end_search_time = Time.now
 
