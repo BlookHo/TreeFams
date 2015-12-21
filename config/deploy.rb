@@ -56,8 +56,8 @@ namespace :db do
       password: 8dj4js9
       encoding: utf8
       reconnect: false
-      pool: 5
-      timeout: 5000
+      pool: 25
+      timeout: 10000
       host: 127.0.0.1
 
 

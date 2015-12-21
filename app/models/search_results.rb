@@ -82,10 +82,11 @@ class SearchResults < ActiveRecord::Base
   # @note Run search methods in tread
   def self.start_search_methods_in_thread(current_user)
     Thread.new do
-      # ActiveRecord::Base.connection_pool.with_connection do
+      ActiveRecord::Base.connection_pool.with_connection do |conn|
         self.start_search_methods(current_user)
-      # end
-      ActiveRecord::Base.connection_pool.release_connection
+        ActiveRecord::Base.connection_pool.release_connection(conn)
+      end
+
     end
   end
 
@@ -754,4 +755,3 @@ end
   :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
 
 # touched trees: 58, 57, 59
-
