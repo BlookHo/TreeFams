@@ -569,6 +569,7 @@ module SearchModified
     {734=>{45=>{648=>5, 733=>5}}}
 
     results = {
+        connected_author_arr:     connected_users,
         by_profiles:              by_profiles,
         by_trees:                 by_trees,
         duplicates_one_to_many:   doubles_one_to_many_hash,
@@ -599,6 +600,7 @@ module SearchModified
 
     logger.info "connected_users = #{self.connected_users}.inspect}"
     results = search_tree_profiles
+    logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
     logger.info "results[:by_profiles] = #{results[:by_profiles].inspect}"
     logger.info "results[:by_trees] = #{results[:by_trees].inspect}"
     logger.info "results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
