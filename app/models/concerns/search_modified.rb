@@ -160,7 +160,7 @@ module SearchModified
       if found_filling_hash.has_key?(relation)
         # logger.info "In found_filling_hash  has_key: - relation = #{relation}, fval = #{fval}, sval = #{sval}"
         if excl_rel.include?(relation)
-          # logger.info "include main relations = #{relation}"
+          logger.info "excl_rel include main relations = #{relation}"
           if sval == fval
             match_count += sval.size
             priznak = true
@@ -171,7 +171,7 @@ module SearchModified
             # logger.info "In IF check: (&)ARE COMMON - match_count = #{match_count}, check = #{sval & fval != []}"
           else
             priznak = false
-            # logger.info "In All checks failed: - priznak = #{priznak}, match_count = #{match_count}"
+            logger.info "In All checks failed: - priznak = #{priznak}, match_count = #{match_count}"
             return priznak, match_count
           end
         else
@@ -479,6 +479,12 @@ module SearchModified
     tree_profiles = tree_profiles.uniq
     logger.info "search records: connected_users = #{connected_users}, tree_profiles = #{tree_profiles} "
 
+    # from [64]
+    # tree_profiles = [871, 872, 881, 877, 875, 873, 874, 878, 880, 879, 876, 882, 883, 884]
+
+    # from [65],
+    # tree_profiles = [885, 893, 888, 887, 894, 903, 890, 886, 889, 891, 892]
+
     uniq_profiles_pairs = {}
     profiles_with_match_hash = {}
     doubles_one_to_many_hash = {}
@@ -607,6 +613,9 @@ module SearchModified
     logger.info "results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
 
     SearchResults.store_search_results(results, self.id) # запись рез-тов поиска в таблицу - для Метеора
+
+    # self.start_check_double(results, certain_koeff) if self.double == 0
+
 
     end_search_time = Time.now
     search_time = (end_search_time - start_search_time) * 1000

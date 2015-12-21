@@ -46,13 +46,24 @@ class HomeController < ApplicationController
 
     current_user.modified_search
 
+    # 64 - 65 - cert.4
+    # 4749;64;65;875;890;4;"2015-12-21 12:59:18.674866";"2015-12-21 12:59:18.674866";"{890,892}";"{875,877}";"{4,4}";;0;"{64}";"{65}"
+    # 4750;65;64;890;875;4;"2015-12-21 12:59:18.717364";"2015-12-21 12:59:18.717364";"{875,877}";"{890,892}";"{4,4}";;0;"{65}";"{64}"
+
+
+
     # == END OF search_tree_profiles === Search_time = 751.69 msec
     # == END OF search_tree_profiles === Search_time = 575.05 msec
     # == END OF modified_search === Search_time = 1313.72 msec
+    # == END OF modified_search === Search_time = 628.13 msec
 
 
 
     # [inf] == END OF start_search === Search_time =  881.45 msec (pid:4469)
+    # [inf] == END OF start_search === Search_time =  901.56 msec (pid:4469)
+    # [inf] == END OF start_search === Search_time =  990.24 msec (pid:4469)
+    # [inf] == END OF start_search === Search_time =  651.77 msec (pid:4469)
+
     # prev SR
     # 4713;58;59;807;824;5;"2015-12-19 20:28:50.070532";"2015-12-19 20:28:50.070532";"{824,817,820,818,823,819}";"{807,809,810,811,806,805}";"{5,5,5,5,5,5}";;0;"{58}";"{59}"
     # 4714;59;58;824;807;5;"2015-12-19 20:28:50.116034";"2015-12-19 20:28:50.116034";"{807,809,810,811,806,805}";"{824,817,820,818,823,819}";"{5,5,5,5,5,5}";;0;"{59}";"{58}"
