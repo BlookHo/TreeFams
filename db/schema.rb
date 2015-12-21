@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216084809) do
+ActiveRecord::Schema.define(version: 20151221135702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "adminpack"
 
   create_table "admins", force: true do |t|
     t.string   "email"
@@ -314,10 +313,11 @@ ActiveRecord::Schema.define(version: 20151216084809) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "weafam_settings", force: true do |t|
-    t.integer  "certain_koeff",               null: false
+    t.integer  "certain_koeff",                   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "certain_connect", default: 4
+    t.integer  "certain_connect",     default: 4
+    t.integer  "exclusion_relations",                          array: true
   end
 
   create_table "weafam_stats", force: true do |t|

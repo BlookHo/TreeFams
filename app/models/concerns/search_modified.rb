@@ -143,8 +143,10 @@ module SearchModified
     [[1, 122], [2, 82], [91, 90], [3, 465], [121, 446], [3, 370], [8, 48], [101, 449], [92, 361], [102, 293], [17, 147]]
     # logger.info "found results: f_rel_name_arr = #{f_rel_name_arr}"
 
-    excl_rel = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
-    # excl_rel - relations to check - todo: place this array in Weafam_settings
+    excl_rel = WeafamSetting.first.exclusion_relations
+
+    # [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
+    # excl_rel - relations to check - todo: place this array in Constants
 
     search_filling_hash = get_keys_with_items_array(s_rel_name_arr)
     logger.info "search_filling_hash = #{search_filling_hash}"
@@ -160,7 +162,7 @@ module SearchModified
       if found_filling_hash.has_key?(relation)
         # logger.info "In found_filling_hash  has_key: - relation = #{relation}, fval = #{fval}, sval = #{sval}"
         if excl_rel.include?(relation)
-          logger.info "excl_rel include main relations = #{relation}"
+          logger.info "excl_rel = #{excl_rel} include main relations = #{relation}"
           if sval == fval
             match_count += sval.size
             priznak = true
