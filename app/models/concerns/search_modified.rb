@@ -162,7 +162,7 @@ module SearchModified
       if found_filling_hash.has_key?(relation)
         # logger.info "In found_filling_hash  has_key: - relation = #{relation}, fval = #{fval}, sval = #{sval}"
         if excl_rel.include?(relation)
-          logger.info "excl_rel = #{excl_rel} include main relations = #{relation}"
+          # logger.info "excl_rel = #{excl_rel} include main relations = #{relation}"
           if sval == fval
             match_count += sval.size
             priznak = true
@@ -530,7 +530,7 @@ module SearchModified
     # [inf] search records: doubles_one_to_many_hash = {} (pid:3925)
 
     by_profiles, by_trees = SearchResults.make_search_results(uniq_profiles_no_doubles, profiles_with_match_hash)
-    logger.info "SearchResults: by_profiles = #{by_profiles}, by_trees = #{by_trees}"
+    logger.info "SearchResults READY: by_profiles = #{by_profiles}, by_trees = #{by_trees}"
     # [inf] SearchResults: by_profiles =
     [{:search_profile_id=>896, :found_tree_id=>57, :found_profile_id=>898, :count=>5},
      {:search_profile_id=>807, :found_tree_id=>60, :found_profile_id=>832, :count=>5},
@@ -586,12 +586,9 @@ module SearchModified
     # logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
     logger.info "connected_users = #{connected_users}.inspect}"
 
-
-    # self.start_check_double(results, certain_koeff) if self.double == 0
-
     end_search_time = Time.now
     search_time = (end_search_time - start_search_time) * 1000
-    puts "\n == END OF search_tree_profiles === Search_time = #{search_time.round(2)} msec  \n\n"
+    puts "\n == END OF ALL search_tree_profiles === Search_time = #{search_time.round(2)} msec  \n\n"
 
     results
   end
@@ -600,32 +597,140 @@ module SearchModified
   # profile_search_data = {:connected_users=>[58], :profile_id_searched=>805, :name_id_searched=>48}
   # modi_search_one_profile(profile_search_data)
 
+  # @note: Put away doubles New super extra search body
+  def results_without_doubles(results)
+    # no_doubles_results = []
+    results_by_trees_to_store = SearchResults.update_by_trees(results)
+    logger.info "results_without_doubles: results_by_trees_to_store = #{results_by_trees_to_store.inspect}"
+
+    # correct_results(results, by_trees_to_store)
+    # logger.info "results_without_doubles: no_doubles_results = #{no_doubles_results.inspect}"
+    results_by_trees_to_store
+  end
+
   # @note: modified search with exclusions
-  #
   def modified_search
 
     start_search_time = Time.now
+    logger.info "modified connected_users = #{self.connected_users}.inspect}"
 
-    logger.info "connected_users = #{self.connected_users}.inspect}"
     results = search_tree_profiles
-    logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
-    logger.info "results[:by_profiles] = #{results[:by_profiles].inspect}"
-    logger.info "results[:by_trees] = #{results[:by_trees].inspect}"
-    logger.info "results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
-    logger.info "results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
 
-    SearchResults.store_search_results(results, self.id) # запись рез-тов поиска в таблицу - для Метеора
+    logger.info "modified results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
+    logger.info "modified results[:by_profiles] = #{results[:by_profiles].inspect}"
+    logger.info "modified results[:by_trees] = #{results[:by_trees].inspect}"
+    logger.info "modified results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
+    logger.info "modified results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
+    # [inf] modified results[:by_profiles] =
+                       [{:search_profile_id=>694, :found_tree_id=>49, :found_profile_id=>687, :count=>6},
+                        {:search_profile_id=>691, :found_tree_id=>49, :found_profile_id=>684, :count=>5},
+                        {:search_profile_id=>691, :found_tree_id=>24, :found_profile_id=>443, :count=>5},
+                        {:search_profile_id=>690, :found_tree_id=>49, :found_profile_id=>683, :count=>5},
+                        {:search_profile_id=>690, :found_tree_id=>24, :found_profile_id=>442, :count=>5},
+                        {:search_profile_id=>695, :found_tree_id=>49, :found_profile_id=>688, :count=>4},
+                        {:search_profile_id=>693, :found_tree_id=>49, :found_profile_id=>686, :count=>4},
+                        {:search_profile_id=>693, :found_tree_id=>24, :found_profile_id=>450, :count=>4}]
+    # [inf] modified results[:by_trees] =
+                       [{:found_tree_id=>24, :found_profile_ids=>[450, 442, 443]},
+                        {:found_tree_id=>49, :found_profile_ids=>[686, 687, 688, 683, 684]}]
+    # [inf] modified results[:duplicates_one_to_many] =
+                       {689=>{49=>[682, 685]}, 692=>{49=>[682, 685]}}
 
-    # self.start_check_double(results, certain_koeff) if self.double == 0
+    if results.blank?
+      puts "Search results READY Ok, but BLANK -> No double trees check, No SearchResults store."
+    else
+      puts "Search results READY Ok"
+      by_trees_to_store = results_without_doubles(results)
+      puts "Exclude Search results with doubles - Ok: by_trees_to_store = #{by_trees_to_store}"
+      puts "Exclude Search results with doubles - Ok: results[:by_trees] = #{results[:by_trees].inspect}"
 
+      self.check_tree_doubles(results) unless results[:by_trees].blank?
+      #
+      # # запись рез-тов поиска в таблицу if self.double == 1
+      # SearchResults.store_search_results(results, self.id)# if self.double == 1
+      # puts "Search results READY Ok -> Double tress check PASSES, SearchResults store."
+
+    end
+
+
+    # results[:by_profiles] =
+        [{:search_profile_id=>690, :found_tree_id=>49, :found_profile_id=>683, :count=>7},
+         {:search_profile_id=>693, :found_tree_id=>49, :found_profile_id=>686, :count=>6},
+         {:search_profile_id=>690, :found_tree_id=>24, :found_profile_id=>442, :count=>5},
+         {:search_profile_id=>694, :found_tree_id=>49, :found_profile_id=>687, :count=>5},
+         {:search_profile_id=>689, :found_tree_id=>49, :found_profile_id=>682, :count=>5},
+         {:search_profile_id=>692, :found_tree_id=>49, :found_profile_id=>685, :count=>4},
+         {:search_profile_id=>694, :found_tree_id=>24, :found_profile_id=>444, :count=>4},
+         {:search_profile_id=>693, :found_tree_id=>24, :found_profile_id=>450, :count=>4}]
+    # [inf] results[:by_trees] =
+        [{:found_tree_id=>49, :found_profile_ids=>[682, 686, 687, 683, 685]},
+         {:found_tree_id=>24, :found_profile_ids=>[450, 444, 442]}]
+    # [inf] results[:profiles_relations_arr] =
+        [{:profile_searched=>689,
+          :profile_relations=>{690=>1, 691=>2, 694=>3, 692=>5, 693=>6, 695=>8}},
+
+         {:profile_searched=>693,
+          :profile_relations=>{690=>1, 691=>2, 689=>5, 692=>5, 694=>211}},
+         {:profile_searched=>694,
+          :profile_relations=>{689=>1, 695=>2, 690=>91, 691=>101, 692=>191, 693=>201}},
+         {:profile_searched=>695,
+          :profile_relations=>{694=>3, 689=>7, 690=>13, 691=>14}},
+         {:profile_searched=>690,
+          :profile_relations=>{689=>3, 692=>3, 693=>4, 691=>8, 695=>17, 694=>111}},
+         {:profile_searched=>691,
+          :profile_relations=>{689=>3, 692=>3, 693=>4, 690=>7, 695=>17, 694=>111}},
+         {:profile_searched=>692,
+          :profile_relations=>{690=>1, 691=>2, 689=>5, 693=>6, 694=>211}}]
+
+
+ #   #if self.double == 0
 
     end_search_time = Time.now
     search_time = (end_search_time - start_search_time) * 1000
     puts "\n == END OF modified_search === Search_time = #{search_time.round(2)} msec  \n\n"
-
-
   end
 
+  [{:profile_searched=>689,
+    :profile_relations=>{690=>1, 691=>2, 694=>3, 692=>5, 693=>6, 695=>8},
+    :profile_relations=>{690=>1, 691=>2, 694=>3, 692=>5, 693=>6, 695=>8},
+
+    :init_user_name=>123, :init_user_id=>50,
+    :init_relations_names=>{690=>162, 691=>48, 694=>461, 692=>123, 693=>2, 695=>9}},
+   {:profile_searched=>682,
+    :profile_relations=>{683=>1, 684=>2, 687=>3, 685=>5, 686=>6, 688=>8},
+    :user_name=>123, :found_user_id=>49,
+    :user_relations_names=>{683=>162, 684=>219, 687=>461, 685=>123, 686=>2, 688=>9}}]
+
+
+  # # [inf] results[:profiles_relations_arr] =
+  # [{:profile_searched=>805,
+  #   :profile_relations=>{806=>1, 807=>2, 809=>3, 810=>3, 808=>6, 811=>7, 895=>17, 812=>91, 814=>92, 813=>101, 815=>102, 896=>121}},
+  #  {:profile_searched=>806,
+  #   :profile_relations=>{812=>1, 813=>2, 805=>4, 808=>4, 807=>8, 814=>15, 815=>16, 811=>18, 809=>112, 810=>112}},
+  #  {:profile_searched=>808,
+  #   :profile_relations=>{806=>1, 807=>2, 805=>6, 812=>91, 814=>92, 813=>101, 815=>102, 809=>212, 810=>212}},
+  #  {:profile_searched=>813,
+  #   :profile_relations=>{806=>3, 812=>7, 807=>17, 805=>121, 808=>121}},
+  #  {:profile_searched=>814,
+  #   :profile_relations=>{807=>4, 815=>8, 806=>18, 805=>122, 808=>122}},
+  #  {:profile_searched=>895,
+  #   :profile_relations=>{902=>1, 896=>4, 809=>7, 811=>13, 805=>14}},
+  #  {:profile_searched=>811,
+  #   :profile_relations=>{809=>3, 810=>3, 805=>8, 806=>15, 807=>16, 895=>17, 896=>121}},
+  #  {:profile_searched=>815,
+  #   :profile_relations=>{807=>4, 814=>7, 806=>18, 805=>122, 808=>122}},
+  #  {:profile_searched=>812,
+  #   :profile_relations=>{806=>3, 813=>8, 807=>17, 805=>121, 808=>121}},
+  #  {:profile_searched=>810,
+  #   :profile_relations=>{811=>1, 805=>2, 809=>5, 806=>92, 807=>102, 808=>202, 896=>221}},
+  #  {:profile_searched=>809,
+  #   :profile_relations=>{811=>1, 805=>2, 896=>4, 810=>5, 895=>8, 902=>15, 806=>92, 807=>102, 808=>202}},
+  #  {:profile_searched=>807,
+  #   :profile_relations=>{814=>1, 815=>2, 805=>4, 808=>4, 806=>7, 812=>13, 813=>14, 811=>18, 809=>112, 810=>112}},
+  #  {:profile_searched=>902,
+  #   :profile_relations=>{}},
+  #  {:profile_searched=>896,
+  #   :profile_relations=>{809=>1, 895=>2, 811=>91, 902=>92, 805=>101, 810=>191}}]
 
   # ('---- 8- 48','---- 3- 465','---- 3- 370','---- 15- 343','---- 16- 82','---- 17- 147','---- 121- 446')
 
@@ -663,15 +768,6 @@ module SearchModified
   {"id"=>5831, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>828, "is_name_id"=>370}
   {"id"=>5824, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>825, "is_name_id"=>465}
   {"id"=>5827, "user_id"=>60, "profile_id"=>826, "name_id"=>28, "relation_id"=>8, "is_profile_id"=>827, "is_name_id"=>48}
-
-
-
-
-
-
-
-
-
 
 
 end # End of search module

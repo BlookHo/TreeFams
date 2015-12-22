@@ -56,6 +56,7 @@ class HomeController < ApplicationController
     # == END OF search_tree_profiles === Search_time = 575.05 msec
     # == END OF modified_search === Search_time = 1313.72 msec
     # == END OF modified_search === Search_time = 628.13 msec
+    # == END OF modified_search === Search_time = 864.09 msec
 
 
 
