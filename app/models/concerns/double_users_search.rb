@@ -12,37 +12,36 @@ module DoubleUsersSearch
 
 
   # @note: Запуск check дублей found юзеров - from search results
-  def check_tree_doubles(results)
-    logger.info "In check_doubles: by_trees = #{results[:by_trees].inspect} "
-    results_by_trees = results[:by_trees]
-    if results_by_trees.blank?
-      no_double_trees
-      # self.update_attributes(:double => 1, :updated_at => Time.now)
-      # puts "Search results READY Ok -> Double trees check PASSES, -> SearchResults store."
-    else
-      find_double_tree(results)
-    end
-  end
+  # def check_tree_doubles(results)
+  #   logger.info "In check_doubles: by_trees = #{results[:by_trees].inspect} "
+  #   results_by_trees = results[:by_trees]
+  #   if results_by_trees.blank?
+  #     no_double_trees
+  #   else
+  #     find_double_tree(results)
+  #   end
+  # end
 
   # @note: actions, when double check passed Ok and there are no double trees
   #   set attribute :double to 1
   def no_double_trees
     self.update_attributes(:double => 1, :updated_at => Time.now)
-    puts "Search results READY Ok -> Double trees check PASSES, -> SearchResults store."
+    puts "Search results READY Ok -> Double trees check PASSED Ok -> to SearchResults.store_search_results."
   end
 
   # @note: find, at least, first double tree
+  # @note: Запуск check дублей found юзеров - from search results
   def find_double_tree(results)
     # check_by_user_name(results)
-    found_users = collect_users_by_names(results[:by_trees])
-    logger.info "In find_double_tree: after collect_users_by_names: found_users = #{found_users} "
-    if found_users.blank?
+    common_name_users = collect_users_by_names(results[:by_trees])
+    logger.info "In find_double_tree: common_name_users = #{common_name_users} "
+    if common_name_users.blank?
       no_double_trees
-      puts "find_double_tree: NO Doubles: different users names"
-      return
+      logger.info  "In find_double_tree: NO Double Users: All found users have different users names WITH self.name"
+      logger.info  "-> goto SearchResults.store_search_results"
+      # return
     else
-      # continue to double trees check
-      puts "find_double_tree: Users have the same names -> continue double trees check"
+      logger.info  "Found Users have the same names as self -> continue double trees check"
       self_tree_data = collect_tree_info(self.id)
       logger.info "In find_double_tree: after SELF collect_tree_info: self_tree_data = #{self_tree_data} "
           # self_tree_data =
@@ -51,7 +50,7 @@ module DoubleUsersSearch
           #      :user_name=>123, :found_user_id=>50,
           #      :user_relations_names=>{690=>162, 691=>219, 694=>461, 692=>188, 693=>2, 695=>9}}
 
-      found_users.each do |one_user_id|
+      common_name_users.each do |one_user_id|
         found_tree_data = collect_tree_info(one_user_id)
         logger.info "In find_double_tree: after collect_tree_info: found_tree_data = #{found_tree_data} "
             # found_tree_data =
@@ -74,7 +73,7 @@ module DoubleUsersSearch
   def collect_tree_info(one_user_id)
 
     profile_id, name_id = user_profile_name(one_user_id)
-    logger.info "In collect_tree_info:  profile_id = #{profile_id}, name_id = #{name_id} "
+    logger.info "In collect_tree_info: profile_id = #{profile_id}, name_id = #{name_id} "
 
      # {:profile_searched=>682,
      # :profile_relations=>{683=>1, 684=>2, 687=>3, 685=>5, 686=>6, 688=>8},
@@ -90,13 +89,13 @@ module DoubleUsersSearch
   # @note: сбор user-id из search results -
   # only trees with user_id have the same name as current_user (self)
   def collect_users_by_names(by_trees)
-    found_users = []
+    common_name_users = []
     by_trees.each do |one_found_tree|
       one_found_tree_id = one_found_tree[:found_tree_id]
       found_user_profile = User.find(one_found_tree_id).profile_id
-      found_users << one_found_tree_id if check_users_names?(found_user_profile)
+      common_name_users << one_found_tree_id if check_users_names?(found_user_profile)
     end
-    found_users
+    common_name_users
   end
 
   # @note поиск массива записей искомого круга для профиля Юзера
@@ -202,23 +201,22 @@ module DoubleUsersSearch
     self_user_hash        = self_tree_data[:init_user_hash]
     one_user_relations    = self_tree_data[:one_user_relations]
     found_user_id         = self_user_hash[:found_user_id]
+    logger.info "In check_one_double?#return_init_user_id: found_user_id = #{found_user_id}"
     [1,2].each do |relation|
       if match_relations?(self_user_hash, one_user_relations, relation)
         qty_matched_relations += 1
-        logger.info " return_init_user_id: qty_matched_relations = #{qty_matched_relations} "
+        logger.info "qty_matched_relations = #{qty_matched_relations} "
         return found_user_id if check_matches_qty?(qty_matched_relations)
       else
         return nil
       end
     end
-    logger.info "In return_init_user_id: before other relations "
-
     relations_arr = self_user_hash[:profile_relations].values - [1,2]
-    logger.info "Double Users: match_users_names?: relations_arr = #{relations_arr} "
+    logger.info "other relations_arr = #{relations_arr} "
     relations_arr.each do |relation|
       if match_relations?(self_user_hash, one_user_relations, relation)
         qty_matched_relations += 1
-        logger.info " return_init_user_id: found_user_id = #{found_user_id}, qty_matched_relations = #{qty_matched_relations} "
+        logger.info "qty_matched_relations = #{qty_matched_relations} "
         return found_user_id if check_matches_qty?(qty_matched_relations)
       end
     end
@@ -232,18 +230,18 @@ module DoubleUsersSearch
   # если нет - то false
   # @return: false - нет совпадений , true - есть
   def match_relations?(init_user_hash, one_user_relations, relation)
-    logger.info "Double Users: match_relations?: relation = #{relation} "
+    logger.info "match_relations?: relation = #{relation} "
     init_relation_profile = init_user_hash[:profile_relations].key(relation)
-    logger.info "Double Users: match_relations?: init_relation_profile = #{init_relation_profile.inspect} "
+    # logger.info "Double Users: match_relations?: init_relation_profile = #{init_relation_profile.inspect} "
 
     unless init_relation_profile.blank?
       init_relation_name = init_user_hash[:user_relations_names][init_relation_profile]
-      logger.info "Double Users: match_relations?: init_relation_name = #{init_relation_name.inspect} "
+      # logger.info "Double Users: match_relations?: init_relation_name = #{init_relation_name.inspect} "
       user_relation_profile = one_user_relations[:profile_relations].key(relation)
-      logger.info "Double Users: match_relations?: user_relation_profile = #{user_relation_profile.inspect} "
+      # logger.info "Double Users: match_relations?: user_relation_profile = #{user_relation_profile.inspect} "
       unless user_relation_profile.blank?
         user_relation_name = one_user_relations[:user_relations_names][user_relation_profile]
-        logger.info "Double Users: match_relations?: user_relation_name = #{user_relation_name.inspect} "
+        # logger.info "Double Users: match_relations?: user_relation_name = #{user_relation_name.inspect} "
         if init_relation_name == user_relation_name
           return true
         else
@@ -280,11 +278,12 @@ module DoubleUsersSearch
   def mark_user(value, user_id)
     self.update_attributes(:double => value, :updated_at => Time.now)
     if value == 1
-      logger.info  " Ваше дерево - уникально! Вы можете продолжить его расширять и развивать! "
+      logger.info  " Ваше дерево - уникально! Вы можете продолжить его расширять и развивать! -> goto SearchResults.store_search_results"
+      puts "-> goto SearchResults.store_search_results"
       # flash.now[:notice] = " Ваше дерево - уникально! Вы можете продолжить его расширять и развивать! "
     elsif value == 2
       logger.info " Внимание! Ваше дерево является ДУБЛИКАТОМ ранее созданного дерева! Мы сейчас будем удалять ваше дерево! "
-      logger.info " Пожалуйста, при повторном заходе на сайт - уточните Ваш логин, состав родственников... Иначе для Вас многое будет невозможно на сайте. "
+      # logger.info " Пожалуйста, при повторном заходе на сайт - уточните Ваш логин, состав родственников... Иначе для Вас многое будет невозможно на сайте. "
 
       ##########################################
       # todo: uncomment next line

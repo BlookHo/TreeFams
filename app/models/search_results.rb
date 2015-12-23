@@ -460,7 +460,7 @@ class SearchResults < ActiveRecord::Base
   def self.update_by_trees(results)
     by_trees_to_store = results[:by_trees]
     tree_ids_to_exclude = collect_doubles_tree_ids(results)
-    # puts "In update_by_trees: tree_ids_to_exclude = #{tree_ids_to_exclude.inspect} "
+    puts "In results_without_doubles#update_by_trees: tree_ids_to_exclude = #{tree_ids_to_exclude.inspect} "
     by_trees_to_store = exclude_doubles_results(by_trees_to_store, tree_ids_to_exclude) unless tree_ids_to_exclude.blank?
     by_trees_to_store
   end
