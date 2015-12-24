@@ -159,7 +159,7 @@ gem 'pry' #
 
 group :console do
   # does not work !!!
-  gem 'pry' #
+  # gem 'pry' #
   gem 'hirb' # даёт прекрасное расположение хэша модели, в стиле mysql.
   gem 'wirble' #   — даёт подсветку.
   gem 'awesome_print', :require => 'ap'
