@@ -105,7 +105,9 @@ module SearchModified
     logger.info "modified results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
     logger.info "modified results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
 
-    check_results_to_store(results)
+    check_double(results) if self.double == 0
+
+    results_to_store(results)
 
     search_time = (Time.now - start_search_time) * 1000
     puts "\nSearch_time in #{self.connected_users.inspect}: modified_search with double trees check = #{search_time.round(2)} msec.\n\n"
@@ -174,21 +176,42 @@ module SearchModified
     results
   end
 
-
-  # @note: check search results for double users check
+  # @note: check search results
   # before store results /
-  def check_results_to_store(results)
-    if results[:by_trees].blank?
-      logger.info  "In check_results_to_store: Search results READY, but BLANK: results[:by_trees] = #{results[:by_trees]} -> No double trees check, No SearchResults store."
-      no_double_trees
-    else
-      results_without_doubles(results) if !results[:duplicates_one_to_many].empty? or !results[:duplicates_many_to_one].empty?
-      logger.info  "In check_results_to_store: Search results READY, checked results_without_doubles: results[:by_trees] = #{results[:by_trees].inspect}"
-
-      self.find_double_tree(results) #unless results[:by_trees].blank?
+  def results_to_store(results)
+    results_without_doubles(results) if !results[:duplicates_one_to_many].empty? or !results[:duplicates_many_to_one].empty?
+    logger.info  "In check_results_to_store: Search results READY, checked results_without_doubles: results[:by_trees] = #{results[:by_trees].inspect}"
+    unless results[:by_trees].blank?
       SearchResults.store_search_results(results, self.id) if self.double == 1
     end
   end
+
+  # @note: Запуск поиска дублей юзеров
+  #   only first time after registration
+  #   If search_results == blank, then - no doubles
+  #   else - start search doubles among search_results
+  def check_double(results)
+    results_by_trees = results[:by_trees]
+    if results_by_trees.blank?
+      self.update_attributes(:double => 1, :updated_at => Time.now)
+    else
+      self.find_double_tree(results)
+    end
+  end
+
+
+  # def wcheck_double(results)
+  #   if results[:by_trees].blank?
+  #     logger.info  "In check_results_to_store: Search results READY, but BLANK: results[:by_trees] = #{results[:by_trees]} -> No double trees check, No SearchResults store."
+  #     no_double_trees
+  #   else
+  #     results_without_doubles(results) if !results[:duplicates_one_to_many].empty? or !results[:duplicates_many_to_one].empty?
+  #     logger.info  "In check_results_to_store: Search results READY, checked results_without_doubles: results[:by_trees] = #{results[:by_trees].inspect}"
+  #
+  #     self.find_double_tree(results) #unless results[:by_trees].blank?
+  #     SearchResults.store_search_results(results, self.id) if self.double == 1
+  #   end
+  # end
 
 
   # Служебный метод для отладки - для LOGGER

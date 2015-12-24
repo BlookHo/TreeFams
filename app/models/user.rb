@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
 
   # @note: delete one user by his ID
   def delete_one_user
-    logger.info "In self.delete_one_user  Это дерево является дубликатом: #{self.id}  - будем удалять ! "
+    logger.info "In self.delete_one_user:  #{self.id} - Это дерево является дубликатом: - будем удалять ! "
 
     # delete ConnectedUser
     ConnectedUser.where("user_id = ? OR with_user_id = ?", self.id, self.id).destroy_all

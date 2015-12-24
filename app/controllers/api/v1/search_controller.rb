@@ -32,7 +32,7 @@ module Api
             end
           else
             logger.info "== in index search api: No results -> search start"
-            logger.info "Before modified start_search: api_current_user = #{api_current_user.connected_users.inspect}, certain_koeff = #{WeafamConstants::CERTAIN_KOEFF}"
+            logger.info "Before modified start_search: api_current_user = #{api_current_user.connected_users.inspect}"
             search_data = api_current_user.start_search#(certain_koeff)
             respond_with collect_search_results(search_data)
           end

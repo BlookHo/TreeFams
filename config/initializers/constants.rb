@@ -4,7 +4,7 @@
 CERTAIN_KOEFF = 5 # WeafamSetting.first.certain_koeff
 
 # exclusion_relations
-EXCLUSION_RELATIONS = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122] #WeafamSetting.first.exclusion_relations
+EXCLUSION_RELATIONS = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122,13,14,15,16,17,18] #WeafamSetting.first.exclusion_relations
 # 23.12.15: [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
 
 # certain_connect
