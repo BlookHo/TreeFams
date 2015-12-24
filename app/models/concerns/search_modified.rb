@@ -99,6 +99,7 @@ module SearchModified
 
     logger.info "SearchResults made & READY:"
     logger.info "modified results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
+    logger.info "modified results[:uniq_profiles_pairs] = #{results[:uniq_profiles_pairs].inspect}"
     logger.info "modified results[:by_profiles] = #{results[:by_profiles].inspect}"
     logger.info "modified results[:by_trees] = #{results[:by_trees].inspect}"
     logger.info "modified results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
