@@ -73,6 +73,8 @@ module SearchModified
   # Search_time OF modified_search with double trees check = 550.21 msec.
   # Search_time OF modified_search with double trees check = 582.76 msec.
   # Search_time OF modified_search with double trees check = 517.74 msec.
+  # Search_time OF modified_search with double trees check = 762.46 msec. [57,58]
+  # Search_time in [57, 58]: modified_search with double trees check = 1072.41 msec.
 
 
 
@@ -105,7 +107,7 @@ module SearchModified
     check_results_to_store(results)
 
     search_time = (Time.now - start_search_time) * 1000
-    puts "\nSearch_time OF modified_search with double trees check = #{search_time.round(2)} msec.\n\n"
+    puts "\nSearch_time in #{self.connected_users.inspect}: modified_search with double trees check = #{search_time.round(2)} msec.\n\n"
 
     results
   end
@@ -116,7 +118,7 @@ module SearchModified
     logger.info "In collect_tree_profiles: connected_users = #{connected_users}"
     author_tree_arr = Tree.get_connected_tree(connected_users) # DISTINCT-Массив объединенного дерева из Tree
     tree_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
-    tree_profiles.uniq
+    return tree_profiles.uniq, connected_users
   end
 
   ############################################################
@@ -133,7 +135,7 @@ module SearchModified
     #  -  new method to reduce search field - space
     # tree_profiles = collect_profiles_to_search(connected_users, action_id)
 
-    tree_profiles = collect_tree_profiles
+    tree_profiles, connected_users = collect_tree_profiles
     logger.info "In search_tree_profiles: tree_profiles = #{tree_profiles} "
 
     uniq_profiles_pairs = {}
@@ -159,6 +161,7 @@ module SearchModified
 
     results = {
         connected_author_arr:     connected_users,
+        uniq_profiles_pairs:      uniq_profiles_no_doubles,
         by_profiles:              by_profiles,
         by_trees:                 by_trees,
         duplicates_one_to_many:   doubles_one_to_many_hash,
