@@ -65,19 +65,29 @@ module SearchModified
   # == END OF modified_search === Search_time = 503.99 msec
   # Search_time OF modified_search with double trees check = 552.69 msec.
   # Search_time OF modified_search with double trees check = 515.11 msec.
+  # Search_time OF modified_search with double trees check = 483.21 msec.
+  # Search_time OF modified_search with double trees check = 883.91 msec.
+  # Search_time OF modified_search with double trees check = 561.63 msec.
+  # Search_time OF modified_search with double trees check = 569.47 msec.
+
 
 
   # [inf] == END OF start_search === Search_time = 1.43 sec (pid:3770)
   # [inf] == END OF start_search === Search_time =  854.63 msec (pid:3770)
+  # [inf] == END OF start_search === Search_time =  1357.82 msec (pid:3571)
+  # [inf] == END OF start_search === Search_time =  568.9 msec (pid:3571)
+  # [inf] == END OF start_search === Search_time =  734.93 msec (pid:6281)
 
 
-  # @note: modified search with exclusions
+  # @note: NEW & LAST TO DATE modified search with exclusions
   def modified_search
 
     start_search_time = Time.now
-    logger.info "modified connected_users = #{self.connected_users}.inspect}"
+    logger.info "modified connected_users = #{self.connected_users}.inspect}, certain_koeff = #{WeafamConstants::CERTAIN_KOEFF}"
 
-    # todo: place conditions, when search should be started - depends upon last action(s) in current tree
+    # WeafamConstants.new.show_all_constants
+
+    # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
     results = search_tree_profiles
 
     logger.info "SearchResults made & READY:"
@@ -133,18 +143,7 @@ module SearchModified
 
     uniq_profiles_pairs.delete_if { |key,val|  val == {} }
     uniq_profiles_no_doubles, duplicates_many_to_one = SearchWork.duplicates_out(uniq_profiles_pairs)
-
-    # logger.info "Collected search data:"
-    # logger.info "uniq_profiles_pairs = #{uniq_profiles_pairs}"
-    # logger.info "profiles_with_match_hash = #{profiles_with_match_hash}"
-    # logger.info "doubles_one_to_many_hash = #{doubles_one_to_many_hash}"
-    # logger.info "After duplicates_out: uniq_profiles_no_doubles = #{uniq_profiles_no_doubles}"
-    # logger.info "duplicates_many_to_one = #{duplicates_many_to_one}"
-
     by_profiles, by_trees = SearchResults.make_search_results(uniq_profiles_no_doubles, profiles_with_match_hash)
-    # logger.info "SearchResults made & READY:"
-    # logger.info "by_profiles = #{by_profiles}"
-    # logger.info "by_trees = #{by_trees}"
 
     results = {
         connected_author_arr:     connected_users,
@@ -167,9 +166,8 @@ module SearchModified
       logger.info  "In check_results_to_store: Search results READY, but BLANK: results[:by_trees] = #{results[:by_trees]} -> No double trees check, No SearchResults store."
       no_double_trees
     else
-      logger.info  "In check_results_to_store: Search results READY"
       results_without_doubles(results) if !results[:duplicates_one_to_many].empty? or !results[:duplicates_many_to_one].empty?
-      logger.info  "checked results_without_doubles: results[:by_trees] = #{results[:by_trees].inspect}"
+      logger.info  "In check_results_to_store: Search results READY, checked results_without_doubles: results[:by_trees] = #{results[:by_trees].inspect}"
 
       self.find_double_tree(results) unless results[:by_trees].blank?
       SearchResults.store_search_results(results, self.id) if self.double == 1
@@ -237,11 +235,10 @@ module SearchModified
     certain_profiles_found = []
     certain_profiles_count = []
 
-    certain_koeff = WeafamSetting.first.certain_koeff
     all_profiles_found.each_with_index do |found_profile_to_check, index|
       priznak, match_count = check_exclusions(profile_id_searched, found_profile_to_check)
       # logger.info "After check_exclusions: found_profile_to_check = #{found_profile_to_check}, priznak = #{priznak}, match_count = #{match_count}"
-      profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_to_check, certain_koeff)
+      profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_to_check)
       if profile_checked
         certain_profiles_count << match_count
         certain_profiles_found << profile_checked
@@ -266,10 +263,7 @@ module SearchModified
     [[1, 122], [2, 82], [91, 90], [3, 465], [121, 446], [3, 370], [8, 48], [101, 449], [92, 361], [102, 293], [17, 147]]
     # logger.info "found results: f_rel_name_arr = #{f_rel_name_arr}"
 
-    excl_rel = WeafamSetting.first.exclusion_relations
-
-    # [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
-    # excl_rel - relations to check - todo: place this array in Constants
+    # EXCLUSION_RELATIONS = WeafamSetting.first.exclusion_relations = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
 
     search_filling_hash = get_keys_with_items_array(s_rel_name_arr)
     logger.info "search_filling_hash = #{search_filling_hash}"
@@ -284,8 +278,7 @@ module SearchModified
       fval = found_filling_hash[relation]
       if found_filling_hash.has_key?(relation)
         # logger.info "In found_filling_hash  has_key: - relation = #{relation}, fval = #{fval}, sval = #{sval}"
-        if excl_rel.include?(relation)
-          # logger.info "excl_rel = #{excl_rel} include main relations = #{relation}"
+        if WeafamConstants::EXCLUSION_RELATIONS.include?(relation)
           if sval == fval
             match_count += sval.size
             priznak = true
@@ -322,8 +315,9 @@ module SearchModified
   end
 
 
-  def check_match_count?(match_count, certain_koeff)
-    if match_count >= certain_koeff
+  def check_match_count?(match_count)
+
+    if match_count >= WeafamConstants::CERTAIN_KOEFF
       # logger.info "PROFILES ARE EQUAL - with exclusions determine"
       true
     else
@@ -333,11 +327,11 @@ module SearchModified
   end
 
 
-  def check_exclusions_priznak(priznak, match_count, profile_id_found, certain_koeff)
+  def check_exclusions_priznak(priznak, match_count, profile_id_found)
     # logger.info "check_exclusions_priznak: - priznak = #{priznak}, match_count = #{match_count}"
     if priznak
       # logger.info "EXCLUSIONS PASSED"
-      if check_match_count?(match_count, certain_koeff)
+      if check_match_count?(match_count)
         profile_id_found
       else
         nil
@@ -543,8 +537,7 @@ module SearchModified
   # @note: Exclude tree_id (user_id) if found records < certain_koeff
   def exclude_uncertain_trees(user_id_occurence)
     # user_id_occurence = {57=>5, 59=>5, 60=>4} #test
-    koeff = WeafamSetting.first.certain_koeff
-    user_id_occurence.delete_if { |user_id, occure| occure < koeff }
+    user_id_occurence.delete_if { |user_id, occure| occure < WeafamConstants::CERTAIN_KOEFF }
     user_id_occurence.keys
   end
 
