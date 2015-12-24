@@ -7,8 +7,9 @@ module Api
       respond_to :json
 
       def index
-        certain_koeff = get_certain_koeff #4
-        logger.info "== in index search api: api_current_user.id = #{api_current_user.id}, certain_koeff = #{certain_koeff}"
+        # certain_koeff = get_certain_koeff #4
+        logger.info "== in index search api: api_current_user.id = #{api_current_user.id}"
+        # , certain_koeff = #{certain_koeff}"
 
         if SimilarsFound.similars_results_exists?(current_user.id)
           respond_with ("SIMs") #make_results_data(search_results)
@@ -31,7 +32,8 @@ module Api
             end
           else
             logger.info "== in index search api: No results -> search start"
-            search_data = api_current_user.start_search(certain_koeff)
+            logger.info "Before modified start_search: api_current_user = #{api_current_user.connected_users.inspect}, certain_koeff = #{WeafamConstants::CERTAIN_KOEFF}"
+            search_data = api_current_user.start_search#(certain_koeff)
             respond_with collect_search_results(search_data)
           end
         end

@@ -52,32 +52,61 @@ class SearchWork
 
 
   # @note: "EXCLUDE Many_to_One DUPLICATES"
+  #   Extract duplicates hashes from
+  # @input hash = {57=>[795, 6000], 59=>[819], 60=>[827]}
+  # @output:
+  def self.duplicates_one_many_out(profile_id_searched, input_hash)
+    no_doubles = {}
+    duplicates_one_to_many = {}
+    input_hash.each do |key, val_arr|
+      if val_arr.size > 1
+        duplicates_one_to_many.merge!(profile_id_searched => {key => val_arr})
+      else
+        no_doubles.merge!(key => val_arr)
+      end
+    end
+
+    return no_doubles, duplicates_one_to_many
+  end
+
+
+  # @note: "EXCLUDE Many_to_One DUPLICATES"
   # Extract duplicates hashes from input hash
+  # Example: start_hash = {805=>{57=>795, 59=>819, 60=>827}, 810=>{59=>819, 60=>825}, 807=>{59=>824, 60=>832}}
+  # Here doubles are: 805=> to 59=>819 and 810=> to 59=>819. many (805 and 810) to one {59=>819})
+  # Output:
+  #   uniq = {805=>{57=>795, 60=>827}, 810=>{60=>825}, 807=>{59=>824, 60=>832}}
+  #   duplicates_many_to_one = {810=>{59=>819}, 805=>{59=>819}}
   def self.duplicates_out(start_hash)
     # Initaialize empty hash
     duplicates_many_to_one = {}
     uniqs = start_hash
 
-    # Collect duplicates
-    start_hash.each_with_index do |(start_k, start_v), index|
-      start_hash.each do |key, value|
-        next if start_k == key
-        intersection = start_hash[key] & start_hash[start_k]
-        if duplicates_many_to_one.has_key?(key)
-          first_key = intersection.keys.first
-          duplicates_many_to_one[key][first_key] = intersection[first_key] unless intersection.empty?
-        else
-          duplicates_many_to_one[key] = intersection unless intersection.empty?
+    if start_hash.respond_to?(:keys)
+      # Collect duplicates
+      start_hash.each_with_index do |(start_k, start_v), index|
+        start_hash.each do |key, value|
+          next if start_k == key
+          intersection = start_hash[key] & start_hash[start_k]
+          if duplicates_many_to_one.has_key?(key)
+            first_key = intersection.keys.first
+            duplicates_many_to_one[key][first_key] = intersection[first_key] unless intersection.empty?
+          else
+            duplicates_many_to_one[key] = intersection unless intersection.empty?
+          end
         end
       end
+
+      # Collect uniqs
+      duplicates_many_to_one.each do |dup_key, value|
+        value.each do |value_k, value_v|
+          uniqs[dup_key].delete_if { |kk,vv|  kk == value_k && vv = value_v }
+        end
+      end
+    else
+      puts "Internal Error: Input hash = #{start_hash} - is NOT a Hash!"
     end
 
-    # Collect uniqs
-    duplicates_many_to_one.each do |dup_key, value|
-      value.each do |value_k, value_v|
-        uniqs[dup_key].delete_if { |kk,vv|  kk == value_k && vv = value_v }
-      end
-    end
     return uniqs, duplicates_many_to_one
   end
 

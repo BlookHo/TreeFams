@@ -25,8 +25,8 @@ module ConnectionTrees
 
     # Запуск стартового поиска с certain_koeff
     with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
-    certain_koeff = WeafamSetting.first.certain_koeff
-    search_results = self.start_search(certain_koeff)
+    # certain_koeff = WeafamSetting.first.certain_koeff
+    search_results = self.start_search#(certain_koeff)
 
     logger.info "@@@@@@ Search Results: search_results = #{search_results} "
     # # [inf] @@@@@@ Search Results: search_results

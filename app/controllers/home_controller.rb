@@ -43,447 +43,47 @@ class HomeController < ApplicationController
   # All profiles in user's tree
   def index
 
-    profile_id_searched = 811
-    profile_id_found = 790
-    # name_id_searched = 28
-    # connected_users = [58]
 
-    # @note: extra_search
-    # New super speed extra search
-    # Before:
-    # 1.new table Person: user_id, profile_id, name_id, deleted, in_sims,
-    #                     fathers (arr - int) = [23,124,345]
-    #                     mothers (arr - int) = [23,124,345]
-    #                     sisters (arr - int) = [23,124,345]
-    #                     daughters (arr - int) = [23,124,345]
-    #                     sons (arr - int) = [23,124,345]
-    #                     wives (arr - int) = [23,124,345]
-    #                     husbands (arr - int) = [23,124,345]
-    #                     deds_father (arr - int) = [23,124,345]
-    #                     deds_mother (arr - int) = [23,124,345]
-    #                     babs_father (arr - int) = [23,124,345]
-    #                     babs_mother (arr - int) = [23,124,345]
-    #                     vnuks_father (arr - int) = [23,124,345]
-    #                     vnuks_mother (arr - int) = [23,124,345]
-    #                     vnuchkas_father (arr - int) = [23,124,345]
-    #                     vnuchkas_mother (arr - int) = [23,124,345]
-    #                     .... an so on
-    # 2.create and update all joined records in Person - at the same time as usual
-    #   so Person content is up_to_date as other main tables
-    # 3.
-    #
-    # Searching.
-    # for each profile from searching tree
-    # 1.circle of searching profile
-    # 2.using arrays match and exclusion logic in query -
-    #   find found matched records of profiles - get profile_ids with user_ids
-    # 3.determine, which profile_id have more records than coeff-t
-    # 4.sequest profile_ids if necessary
-    # 5.determine found profiles in each user_id
-    # 6.eliminate doubled found profiles if there are
-    # 7.make usual search_results for store/
-    # /
+    # current_user.modified_search # now = srat_search
 
-    # Служебный метод для отладки - для LOGGER
-    # todo: перенести этот метод в Operational - для нескольких моделей
-    # Показывает массив в logger
-    def show_in_logger(arr_to_log, string_to_add)
-      row_no = 0  # DEBUGG_TO_LOGG
-      arr_to_log.each do |row| # DEBUGG_TO_LOGG
-        row_no += 1
-        logger.info "#{string_to_add} № #{row_no.inspect}: #{row.attributes.inspect} " # DEBUGG_TO_LOGG
-      end  # DEBUGG_TO_LOGG
-    end
+    # 64 - 65 - cert.4
+    # 4749;64;65;875;890;4;"2015-12-21 12:59:18.674866";"2015-12-21 12:59:18.674866";"{890,892}";"{875,877}";"{4,4}";;0;"{64}";"{65}"
+    # 4750;65;64;890;875;4;"2015-12-21 12:59:18.717364";"2015-12-21 12:59:18.717364";"{875,877}";"{890,892}";"{4,4}";;0;"{65}";"{64}"
 
-    # @note: collect hash of keys and items array as hash value
-    # from input array of arrays=pairs: [[key, item] .. [ , ]]
-    def get_keys_with_items_array(key_item_pairs_arr)
-      new_items_hash = {}
-      key_item_pairs_arr.each do |one_array|
-        SearchWork.fill_hash_w_val_arr(new_items_hash, one_array[0], one_array[1])
-      end
-      # logger.info "new_items_hash = #{new_items_hash}"
-      new_items_hash
-    end
 
 
-    # @note: collect hash of two fields records: relations (key) and names array (value)
-    # for searching profile
-    # todo: place this method in ProfileKey model
-    def rel_name_profile_records(profile_id)
-      logger.info "In get_profile_records: profile_id = #{profile_id}"
-      ProfileKey.where(:profile_id => profile_id, deleted: 0)
-          .order('relation_id','is_name_id')
-          .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
-          .distinct
-          .pluck(:relation_id, :is_name_id)
-    end
+    # == END OF search_tree_profiles === Search_time = 751.69 msec
+    # == END OF search_tree_profiles === Search_time = 575.05 msec
+    # == END OF modified_search === Search_time = 1313.72 msec
+    # == END OF modified_search === Search_time = 628.13 msec
+    # == END OF modified_search === Search_time = 864.09 msec
 
-    # @note: collect hash of relations (key) and names array (value)
-    # todo: place this method in ProfileKey model
-    def one_field_content(profile_id, field_name)
-      logger.info "In one_field_content: field_name = #{field_name}"
-      ProfileKey.where(:profile_id => profile_id, deleted: 0)
-          .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
-          .order('relation_id')
-          .pluck(field_name)
-          # .distinct
-    end
 
-    # @note: get checked profiles for exclusions
-    def profiles_checking(profile_id_searched, all_profiles_found)
-      certain_profiles_found = []
-      certain_koeff = WeafamSetting.first.certain_koeff
-      all_profiles_found.each do |found_profile_to_check|
-        priznak, match_count = check_exclusions(profile_id_searched, found_profile_to_check)
-        # logger.info "After check_exclusions: found_profile_to_check = #{found_profile_to_check}, priznak = #{priznak}, match_count = #{match_count}"
-        profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_to_check, certain_koeff)
-        certain_profiles_found << profile_checked if profile_checked
-        logger.info "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}"
 
-       end
-      certain_profiles_found
-    end
+    # [inf] == END OF start_search === Search_time =  881.45 msec (pid:4469)
+    # [inf] == END OF start_search === Search_time =  901.56 msec (pid:4469)
+    # [inf] == END OF start_search === Search_time =  990.24 msec (pid:4469)
+    # [inf] == END OF start_search === Search_time =  651.77 msec (pid:4469)
 
+    # prev SR
+    # 4713;58;59;807;824;5;"2015-12-19 20:28:50.070532";"2015-12-19 20:28:50.070532";"{824,817,820,818,823,819}";"{807,809,810,811,806,805}";"{5,5,5,5,5,5}";;0;"{58}";"{59}"
+    # 4714;59;58;824;807;5;"2015-12-19 20:28:50.116034";"2015-12-19 20:28:50.116034";"{807,809,810,811,806,805}";"{824,817,820,818,823,819}";"{5,5,5,5,5,5}";;0;"{59}";"{58}"
+    # 4715;58;60;807;832;5;"2015-12-19 20:28:50.159177";"2015-12-19 20:28:50.159177";"{832,828,825,826,831,827}";"{807,809,810,811,806,805}";"{5,5,5,5,5,5}";;0;"{58}";"{60}"
+    # 4716;60;58;832;807;5;"2015-12-19 20:28:50.180996";"2015-12-19 20:28:50.180996";"{807,809,810,811,806,805}";"{832,828,825,826,831,827}";"{5,5,5,5,5,5}";;0;"{60}";"{58}"
+    # 4717;58;57;896;898;5;"2015-12-19 20:28:50.211476";"2015-12-19 20:28:50.211476";"{898,793,790,795}";"{896,809,811,805}";"{5,5,5,5}";;0;"{58}";"{57}"
+    # 4718;57;58;898;896;5;"2015-12-19 20:28:50.239857";"2015-12-19 20:28:50.239857";"{896,809,811,805}";"{898,793,790,795}";"{5,5,5,5}";;0;"{57}";"{58}"
 
+    # modif SR
+    # 4731;58;57;896;898;5;"2015-12-21 12:17:51.028559";"2015-12-21 12:17:51.028559";"{898,793,790,795}";"{896,809,811,805}";"{5,5,5,5}";;0;"{58}";"{57}"
+    # 4732;57;58;898;896;5;"2015-12-21 12:17:51.047659";"2015-12-21 12:17:51.047659";"{896,809,811,805}";"{898,793,790,795}";"{5,5,5,5}";;0;"{57}";"{58}"
+    # 4733;58;59;807;824;5;"2015-12-21 12:17:51.068109";"2015-12-21 12:17:51.068109";"{824,817,820,818,823,819}";"{807,809,810,811,806,805}";"{5,5,5,5,5,5}";;0;"{58}";"{59}"
+    # 4734;59;58;824;807;5;"2015-12-21 12:17:51.094377";"2015-12-21 12:17:51.094377";"{807,809,810,811,806,805}";"{824,817,820,818,823,819}";"{5,5,5,5,5,5}";;0;"{59}";"{58}"
+    # 4735;58;60;807;832;5;"2015-12-21 12:17:51.113236";"2015-12-21 12:17:51.113236";"{832,828,825,826,831,827}";"{807,809,810,811,806,805}";"{5,5,5,5,5,5}";;0;"{58}";"{60}"
+    # 4736;60;58;832;807;5;"2015-12-21 12:17:51.135423";"2015-12-21 12:17:51.135423";"{807,809,810,811,806,805}";"{832,828,825,826,831,827}";"{5,5,5,5,5,5}";;0;"{60}";"{58}"
 
 
-    def check_exclusions(profile_id_searched, profile_id_found)
-      puts "\n # check_exclusions # profile_id_searched = #{profile_id_searched}, profile_id_found To check = #{profile_id_found}\n"
 
-      s_rel_name_arr = rel_name_profile_records(profile_id_searched)
-      # s_rel_name_arr =
-          [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
-      # logger.info "search results: s_rel_name_arr = #{s_rel_name_arr} "
-
-      f_rel_name_arr = rel_name_profile_records(profile_id_found)
-      # f_rel_name_arr =
-          [[1, 122], [2, 82], [91, 90], [3, 465], [121, 446], [3, 370], [8, 48], [101, 449], [92, 361], [102, 293], [17, 147]]
-      # logger.info "found results: f_rel_name_arr = #{f_rel_name_arr}"
-
-      excl_rel = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
-      # excl_rel - relations to check - todo: place this array in Weafam_settings
-
-      search_filling_hash = get_keys_with_items_array(s_rel_name_arr)
-      logger.info "search_filling_hash = #{search_filling_hash}"
-      found_filling_hash = get_keys_with_items_array(f_rel_name_arr)
-      logger.info "found_filling_hash = #{found_filling_hash}"
-
-      match_count = 0
-      priznak = true
-      search_filling_hash.each do |relation, names|
-        # logger.info "In search_filling_hash: - relation = #{relation}, names = #{names}"
-        sval = search_filling_hash[relation]
-        fval = found_filling_hash[relation]
-        if found_filling_hash.has_key?(relation)
-          # logger.info "In found_filling_hash  has_key: - relation = #{relation}, fval = #{fval}, sval = #{sval}"
-          if excl_rel.include?(relation)
-            # logger.info "include main relations = #{relation}"
-            if sval == fval
-              match_count += sval.size
-              priznak = true
-              # logger.info "In IF check: (==) COMPLETE EQUAL - match_count = #{match_count}, check = #{(sval == fval) }"
-            elsif sval & fval != []
-              match_count += (sval & fval).size
-              priznak = true
-              # logger.info "In IF check: (&)ARE COMMON - match_count = #{match_count}, check = #{sval & fval != []}"
-            else
-              priznak = false
-              # logger.info "In All checks failed: - priznak = #{priznak}, match_count = #{match_count}"
-              return priznak, match_count
-            end
-          else
-            # logger.info "Not include main relations = #{relation}"
-            if sval == fval
-              match_count += sval.size
-              # logger.info "In IF check: (==) COMPLETE EQUAL - match_count = #{match_count}, check = #{(sval == fval) }"
-            else sval & fval != []
-            match_count += (sval & fval).size
-            # logger.info "In IF check: (&)ARE COMMON - match_count = #{match_count}, check = #{sval & fval != []}"
-            end
-          end
-
-        else
-          priznak = true
-          # logger.info "In IF check: ([]) EMPTY Arrs - match_count = #{match_count}, check = #{sval == [] || fval == []}"
-        end
-
-      end
-      # logger.info "check_exclusions end: - priznak = #{priznak}, match_count = #{match_count}"
-
-      return priznak, match_count
-    end
-
-
-    def check_match_count?(match_count, certain_koeff)
-      if match_count >= certain_koeff
-        # logger.info "PROFILES ARE EQUAL - with exclusions determine"
-        true
-      else
-        # logger.info "PROFILES NOT EQUAL"
-        false
-      end
-    end
-
-
-    def check_exclusions_priznak(priznak, match_count, profile_id_found, certain_koeff)
-      # logger.info "check_exclusions_priznak: - priznak = #{priznak}, match_count = #{match_count}"
-      if priznak
-        # logger.info "EXCLUSIONS PASSED"
-        if check_match_count?(match_count, certain_koeff)
-          profile_id_found
-        else
-          nil
-        end
-      else
-        # logger.info "EXCLUSIONS DID NOT PASSED"
-        nil
-      end
-    end
-
-    # @note: New modified quick search
-    # for each profile from searching tree
-    # 1.circle of searching profile
-    # 2.find found matched records - get user_ids
-    # 3.determine, for which trees have more records than coeff-t
-    # 4.sequest user_ids if necessary
-    # 5.determine found profiles in each user_id
-    # 6.eliminate doubled found profiles if there are
-    # 7.collect final found profile_ids
-    # 8.check exclusions for each found profile_ids
-    # 9.get final found profile_ids with user_id position
-    # 10.make usual search_results for store/
-    def modi_search(profile_id_searched)
-      start_search_time = Time.now
-
-      puts "\n ##### modi_search #####\n\n"
-
-      connected_author_arr = current_user.get_connected_users # Состав объединенного дерева в виде массива id
-      author_tree_arr = Tree.get_connected_tree(connected_author_arr) # DISTINCT Массив объединенного дерева из Tree
-      tree_profiles = [current_user.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
-      tree_profiles = tree_profiles.uniq
-      logger.info "search records: connected_author_arr = #{connected_author_arr}, tree_profiles = #{tree_profiles} "
-
-
-
-      s_rel_name_arr = rel_name_profile_records(profile_id_searched)
-      [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
-      logger.info "search records: profile_id_searched = #{profile_id_searched}, s_rel_name_arr = #{s_rel_name_arr} "
-
-      profile = Profile.find(profile_id_searched)
-      name_id_searched = profile.name_id
-      tree_id = profile.tree_id
-      connected_users = User.find(tree_id).connected_users
-
-      arr_relations = one_field_content(profile_id_searched, 'relation_id')
-      arr_names     = one_field_content(profile_id_searched, 'is_name_id')
-
-      query_data = { connected_users: connected_users, name_id_searched: name_id_searched,
-                     arr_relations: arr_relations, arr_names: arr_names }
-      logger.info "query_data = #{query_data}"
-      # [inf] query_data =
-          {:connected_users=>[58], :name_id_searched=>28,
-           :arr_relations=>[3, 3, 8, 15, 16, 17, 121],
-           :arr_names=>   [465, 370, 48, 343, 82, 147, 446]}
-
-      # found_trees = get_found_fields(query_data, 'user_id')
-      # logger.info "found_trees = #{found_trees}"
-
-      # collect_found_profiles
-      # found_profiles = get_found_fields(query_data, 'profile_id')
-      # logger.info "found_profiles = #{found_profiles}"
-
-      arr_of_trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
-      logger.info "arr_of_trees_profiles = #{arr_of_trees_profiles}"
-      # get_keys_with_items_array
-
-      all_profiles_found = arr_of_trees_profiles.values.flatten
-      logger.info "all_profiles_found = #{all_profiles_found}"
-
-      # no_doubles, with_doubles = exclude_double_profiles(arr_of_trees_profiles)
-      # logger.info "trees no_doubles = #{no_doubles}, trees with_doubles = #{with_doubles}"
-
-      certain_profiles_found = profiles_checking(profile_id_searched, all_profiles_found)
-      logger.info "After profiles_checking: - certain_profiles_found = #{certain_profiles_found}"
-
-      # results = make_search_results
-
-      # SearchResults.store_search_results(results, current_user.id) # запись рез-тов поиска в таблицу - для Метеора
-
-      # current_user.start_check_double(results, certain_koeff) if current_user.double == 0
-
-      # :by_profiles=>
-          [{:search_profile_id=>658, :found_tree_id=>47, :found_profile_id=>668, :count=>8}, {:search_profile_id=>659, :found_tree_id=>47, :found_profile_id=>666, :count=>8}, {:search_profile_id=>656, :found_tree_id=>47, :found_profile_id=>669, :count=>8}, {:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7}, {:search_profile_id=>657, :found_tree_id=>47, :found_profile_id=>667, :count=>7},
-                     {:search_profile_id=>658, :found_tree_id=>45, :found_profile_id=>645, :count=>7}, {:search_profile_id=>664, :found_tree_id=>45, :found_profile_id=>646, :count=>7}, {:search_profile_id=>659, :found_tree_id=>45, :found_profile_id=>650, :count=>7}, {:search_profile_id=>656, :found_tree_id=>45, :found_profile_id=>649, :count=>7}, {:search_profile_id=>665, :found_tree_id=>47, :found_profile_id=>673, :count=>6}, {:search_profile_id=>664, :found_tree_id=>47, :found_profile_id=>672, :count=>6}, {:search_profile_id=>662, :found_tree_id=>47, :found_profile_id=>670, :count=>5}, {:search_profile_id=>657, :found_tree_id=>45, :found_profile_id=>651, :count=>5}, {:search_profile_id=>663, :found_tree_id=>47, :found_profile_id=>671, :count=>5}, {:search_profile_id=>734, :found_tree_id=>47, :found_profile_id=>721, :count=>5}]
-          # :by_trees=>
-          [{:found_tree_id=>47, :found_profile_ids=>[669, 666, 672, 721, 668, 671, 667, 670, 673]}]
-      # , :duplicates_one_to_many=>
-          {734=>{45=>{648=>5, 733=>5}}}
-
-
-      end_search_time = Time.now
-      search_time = (end_search_time - start_search_time) * 1000
-      puts "\n == END OF modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
-
-    end
-
-
-    # @note: Determine: in which trees ids profiles were found
-    def get_found_two_fields(query_data, field_one, field_two)
-      fields_arr_values = both_fields_records(query_data, field_one, field_two)
-      logger.info "fields_arr_values = #{fields_arr_values}"
-      # fields_arr_values = [[57, 790], [57, 790], [57, 790], [57, 790], [57, 7960], [59, 818], [59, 818], [59, 818], [59, 818], [59, 818], [60, 826], [60, 826], [60, 826], [60, 826], [60, 826]]
-
-      get_keys_with_items_array(fields_arr_values)
-      # values_occurence = occurence_counts(field_values)
-      # logger.info "values_occurence = #{values_occurence}"
-      #
-      # exclude_uncertain_trees(values_occurence)
-    end
-
-    # @note: Determine: in which trees ids profiles were found
-    def get_found_fields(query_data, field)
-      field_values = found_records(query_data, field)
-      logger.info "field_values = #{field_values}"
-
-      values_occurence = occurence_counts(field_values)
-      logger.info "values_occurence = #{values_occurence}"
-
-      exclude_uncertain_trees(values_occurence)
-    end
-
-    # @note: Find by fields - [relation, is_name_id]
-    # for each row in ProfileKey
-    # get array of arrays: [[key, item] .. [ , ]]
-    def both_fields_records(query_data, field_one, field_two)
-      connected_users = query_data[:connected_users]
-      name_id_searched = query_data[:name_id_searched]
-      arr_relations = query_data[:arr_relations]
-      arr_names = query_data[:arr_names]
-
-      # arr_relations = [8,3,3,15,16,17,121]
-      # arr_names = [48,465,370,343,82,147,446]
-
-      ProfileKey.where.not(user_id: connected_users)
-          .where(:name_id => name_id_searched)
-          .where(deleted: 0)
-          .where("relation_id in (?)", arr_relations)
-          .where("is_name_id in (?)", arr_names)
-          .order('user_id','relation_id','is_name_id')
-          .select('id','user_id','profile_id','name_id','relation_id','is_name_id','is_profile_id')
-          .pluck(field_one, field_two)
-    end
-
-  # @note: Find by new field - [relation, is_name_id]
-  # for each row in ProfileKey
-  def found_records(query_data, field_array)
-    connected_users = query_data[:connected_users]
-    name_id_searched = query_data[:name_id_searched]
-    arr_relations = query_data[:arr_relations]
-    arr_names = query_data[:arr_names]
-
-    # arr_relations = [8,3,3,15,16,17,121]
-    # arr_names = [48,465,370,343,82,147,446]
-
-    ProfileKey.where.not(user_id: connected_users)
-              .where(:name_id => name_id_searched)
-              .where(deleted: 0)
-              .where("relation_id in (?)", arr_relations)
-              .where("is_name_id in (?)", arr_names)
-              .order('user_id','relation_id','is_name_id')
-              .select('id','user_id','profile_id','name_id','relation_id','is_name_id','is_profile_id')
-        .pluck(field_array)
-
-  end
-
-    # @note: How many array element ocure
-    def occurence_counts(user_ids)
-      user_ids.each_with_object(Hash.new(0)) { |word,counts| counts[word] += 1 }
-    end
-
-
-    # @note: Exclude tree_id (user_id) if found records < certain_koeff
-    def exclude_uncertain_trees(user_id_occurence)
-      # user_id_occurence = {57=>5, 59=>5, 60=>4} #test
-      koeff = get_certain_koeff
-      user_id_occurence.delete_if { |user_id, occure| occure < koeff }
-      user_id_occurence.keys
-    end
-
-    # @note: New super extra search
-    # for each profile in tree
-    def collect_found_profiles(profile_id_searched)
-
-    end
-
-
- #   modi_search(profile_id_searched)
-
-
-
-    # arr_rel = [8,3,3,15,16,17,121]
-    # arr_nam = [48,465,370,343,82,147,446]
-
-    # match_rows_rel_name = ProfileKey
-    #                           .where.not(user_id: connected_users)
-    #                           .where(:name_id => name_id_searched)
-    #                           .where(deleted: 0)
-    #                           .where("relation_id + is_name_id in (?)", rel_name_arr)
-    #                           .order('user_id','relation_id','is_name_id')
-    #                           .select('id','user_id','profile_id','name_id','relation_id','is_name_id','is_profile_id')
-    # .where("relation_id in (?)", arr_rel)
-    # .where("is_name_id in (?)", arr_nam)
-    # .where("'---- ' || relation_id || '- ' || is_name_id in (?)", rel_name_arr)
-
-    # logger.info "search results: match_rows_rel_name = #{match_rows_rel_name.inspect}, match_rows_rel_name.size = #{match_rows_rel_name.size}"
-    # show_in_logger(match_rows_rel_name, "=== результат" )  # DEBUGG_TO_LOGG
-
-
-    # ('---- 8- 48','---- 3- 465','---- 3- 370','---- 15- 343','---- 16- 82','---- 17- 147','---- 121- 446')
-
-
-
-
-    # excl_rel = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
-    # excl_match_rows_rel_name = ProfileKey
-    #                           .where.not(user_id: connected_users)
-    #                           .where(:name_id => name_id_searched)
-    #                           .where("relation_id in (?)", arr_rel)
-    #                           .where("relation_id in (?)", excl_rel)
-    #                           .where("is_name_id in (?)", arr_nam)
-    #                           .where(deleted: 0)
-    #                           .order('user_id','relation_id','is_name_id')
-    #
-    # logger.info "search results: excl_match_rows_rel_name = #{excl_match_rows_rel_name}"
-    # show_in_logger(excl_match_rows_rel_name, "=== результат2" )  # DEBUGG_TO_LOGG
-
-
-    [[8, 48, 805], [3, 465, 810], [3, 370, 809], [15, 343, 806], [16, 82, 807], [17, 147, 895], [121, 446, 896]]
-
-    #   unnest_rows = ProfileKey.where(:profile_id => profile_id_searched, deleted: 0)
-    #                       .unnest(rel_name_prof_arr)
-    #                      # .pluck(:relation_id, :is_name_id, :is_profile_id)
-    # logger.info "search results: unnest_rows = #{unnest_rows}"
-    #                      .distinct
-
-
-
-
-    # @note: Check and delete_if: if one_hash contains {found_tree_id: tree_id_with_double} - tree w/doubles results
-  #   If No -> leave this one_hash in by_trees_arr of hashes
-  # @params: by_trees_arr - from search results
-  #   arr_to_exclude - arr of tree ids where doubles were found
-  # def exclude_doubles_results(by_trees_arr, arr_to_exclude)
-  #   arr_to_exclude.each do |tree_id_with_double|
-  #     by_trees_arr.delete_if { |one_hash| one_hash.merge({found_tree_id: tree_id_with_double }) == one_hash }
-  #   end
-  #   by_trees_arr
-  # end
-
-
-
-
-    # SELECT "profile_keys".* FROM "profile_keys"  WHERE ("profile_keys"."user_id" NOT IN (58)) AND "profile_keys"."name_id" = 28 AND (relation_id in (8,3,3,15,16,17,121)) AND (is_name_id in (48,465,370,343,82,147,446)) AND "profile_keys"."deleted" = 0  ORDER BY user_id, relation_id, is_name_id (pid:26935)
+  # SELECT "profile_keys".* FROM "profile_keys"  WHERE ("profile_keys"."user_id" NOT IN (58)) AND "profile_keys"."name_id" = 28 AND (relation_id in (8,3,3,15,16,17,121)) AND (is_name_id in (48,465,370,343,82,147,446)) AND "profile_keys"."deleted" = 0  ORDER BY user_id, relation_id, is_name_id (pid:26935)
   {"id"=>5611, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "is_profile_id"=>793}
   {"id"=>5617, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "is_profile_id"=>794}
   {"id"=>5625, "user_id"=>57, "profile_id"=>790, "name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "is_profile_id"=>795}
