@@ -112,8 +112,8 @@ class SearchResults < ActiveRecord::Base
 
     if similars_results[:similars].blank?
       puts "In start_search_methods: No Similars -> start search "
-      certain_koeff = WeafamSetting.first.certain_koeff
-      search_results = current_user.start_search(certain_koeff)
+      # certain_koeff = WeafamSetting.first.certain_koeff
+      search_results = current_user.start_search#(certain_koeff)
       search_results
     else
       puts "In start_search_methods: Similars in tree -> No start search "

@@ -24,7 +24,7 @@ module Search
   # TO TEST CONNECTION TO FAIL
   # @duplicates_one_to_many = { 3=> [2, 4]}     # for DEBUGG ONLY!!!
   # @duplicates_many_to_one = { 4=> 2, 3 => 2}  # for DEBUGG ONLY!!!
-  def start_search(certain_koeff)
+  def old_start_search(certain_koeff)
 
     start_search_time = Time.now
     tree_data =  Tree.tree_main_data(self) # collect tree info

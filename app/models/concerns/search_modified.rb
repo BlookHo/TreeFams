@@ -69,6 +69,10 @@ module SearchModified
   # Search_time OF modified_search with double trees check = 883.91 msec.
   # Search_time OF modified_search with double trees check = 561.63 msec.
   # Search_time OF modified_search with double trees check = 569.47 msec.
+  # Search_time OF modified_search with double trees check = 950.49 msec.
+  # Search_time OF modified_search with double trees check = 550.21 msec.
+  # Search_time OF modified_search with double trees check = 582.76 msec.
+  # Search_time OF modified_search with double trees check = 517.74 msec.
 
 
 
@@ -77,15 +81,16 @@ module SearchModified
   # [inf] == END OF start_search === Search_time =  1357.82 msec (pid:3571)
   # [inf] == END OF start_search === Search_time =  568.9 msec (pid:3571)
   # [inf] == END OF start_search === Search_time =  734.93 msec (pid:6281)
+  # [inf] == END OF start_search === Search_time =  1438.39 msec (pid:3635)
+  # [inf] == END OF start_search === Search_time =  1379.94 msec (pid:3635)
+  # [inf] == END OF start_search === Search_time =  1257.14 msec (pid:3635)
 
 
-  # @note: NEW & LAST TO DATE modified search with exclusions
-  def modified_search
+  # @note: start of NEW & LAST TO DATE modified search with exclusions check
+  def start_search#(WeafamConstants::CERTAIN_KOEFF)
 
     start_search_time = Time.now
-    logger.info "modified connected_users = #{self.connected_users}.inspect}, certain_koeff = #{WeafamConstants::CERTAIN_KOEFF}"
-
-    # WeafamConstants.new.show_all_constants
+    logger.info "In modified start_search: connected_users = #{self.connected_users.inspect}, certain_koeff = #{WeafamConstants::CERTAIN_KOEFF}"
 
     # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
     results = search_tree_profiles
@@ -101,11 +106,21 @@ module SearchModified
 
     search_time = (Time.now - start_search_time) * 1000
     puts "\nSearch_time OF modified_search with double trees check = #{search_time.round(2)} msec.\n\n"
+
+    results
   end
 
+  # @note: collect_tree_profiles from current tree - to search among them
+  def collect_tree_profiles
+    connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
+    logger.info "In collect_tree_profiles: connected_users = #{connected_users}"
+    author_tree_arr = Tree.get_connected_tree(connected_users) # DISTINCT-Массив объединенного дерева из Tree
+    tree_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
+    tree_profiles.uniq
+  end
 
   ############################################################
-  # @note: New super extra search body
+  # @note: New super extra search w/exclusions check
   def search_tree_profiles
 
     start_search_time = Time.now
@@ -118,11 +133,8 @@ module SearchModified
     #  -  new method to reduce search field - space
     # tree_profiles = collect_profiles_to_search(connected_users, action_id)
 
-    connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
-    author_tree_arr = Tree.get_connected_tree(connected_users) # DISTINCT Массив объединенного дерева из Tree
-    tree_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
-    tree_profiles = tree_profiles.uniq
-    logger.info "In search_tree_profiles: connected_users = #{connected_users}, tree_profiles = #{tree_profiles} "
+    tree_profiles = collect_tree_profiles
+    logger.info "In search_tree_profiles: tree_profiles = #{tree_profiles} "
 
     uniq_profiles_pairs = {}
     profiles_with_match_hash = {}
@@ -169,7 +181,7 @@ module SearchModified
       results_without_doubles(results) if !results[:duplicates_one_to_many].empty? or !results[:duplicates_many_to_one].empty?
       logger.info  "In check_results_to_store: Search results READY, checked results_without_doubles: results[:by_trees] = #{results[:by_trees].inspect}"
 
-      self.find_double_tree(results) unless results[:by_trees].blank?
+      self.find_double_tree(results) #unless results[:by_trees].blank?
       SearchResults.store_search_results(results, self.id) if self.double == 1
     end
   end
@@ -298,7 +310,7 @@ module SearchModified
             match_count += sval.size
             # logger.info "In IF check: (==) COMPLETE EQUAL - match_count = #{match_count}, check = #{(sval == fval) }"
           else sval & fval != []
-          match_count += (sval & fval).size
+            match_count += (sval & fval).size
             # logger.info "In IF check: (&)ARE COMMON - match_count = #{match_count}, check = #{sval & fval != []}"
           end
         end
@@ -318,7 +330,7 @@ module SearchModified
   def check_match_count?(match_count)
 
     if match_count >= WeafamConstants::CERTAIN_KOEFF
-      # logger.info "PROFILES ARE EQUAL - with exclusions determine"
+      logger.info "PROFILES ARE EQUAL - match_count = #{match_count}, CERTAIN_KOEFF = #{WeafamConstants::CERTAIN_KOEFF} "
       true
     else
       # logger.info "PROFILES NOT EQUAL"
@@ -408,9 +420,6 @@ module SearchModified
                    name_id_searched: profile_search_data[:name_id_searched],
                    arr_relations: arr_relations,
                    arr_names: arr_names }
-    # logger.info "query_data[:connected_users] = #{query_data[:connected_users]}, query_data[:name_id_searched] = #{query_data[:name_id_searched]}"
-    # logger.info "query_data[:arr_relations] = #{query_data[:arr_relations]}"
-    # logger.info "query_data[:arr_names] = #{query_data[:arr_names]}"
 
     # query_data =
     #     {:connected_users=>[58], :name_id_searched=>28,
@@ -418,18 +427,10 @@ module SearchModified
     #      :arr_names=>   [465, 370, 48, 343, 82, 147, 446]}
 
     trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
-    # logger.info "trees_profiles = #{trees_profiles}"
-    # trees_profiles = {57=>[795, 6000], 59=>[819], 60=>[827], 64=>[877], 65=>[892]}
-    # logger.info "trees_profiles w doub= #{trees_profiles}"
     trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, trees_profiles)
     logger.info "trees_profiles_no_double = uniqs = #{trees_profiles_no_double}, trees doubles_one_to_many = #{doubles_one_to_many}"
 
     certain_profiles_found, certain_profiles_count, certain_profiles_trees = profiles_checking(profile_id_searched, trees_profiles_no_double)
-    # puts "\n After profile_checking: profile_id_searched = #{profile_id_searched}"
-    # logger.info  "\n After profile_checking: profile_id_searched = #{profile_id_searched}"
-    # logger.info " - certain_profiles_found = #{certain_profiles_found}"
-    # logger.info " - certain_profiles_count = #{certain_profiles_count}"
-    # logger.info " - certain_profiles_trees = #{certain_profiles_trees}"
 
     certain_search_data = {
         search: profile_id_searched,
@@ -544,7 +545,7 @@ module SearchModified
 
   # @note: Put away doubles New super extra search body
   def results_without_doubles(results)
-    # results_by_trees_to_store =
+    logger.info  "In results_without_doubles: Excluding double Search results "
     SearchResults.update_by_trees(results)
   end
 

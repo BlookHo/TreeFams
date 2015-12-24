@@ -244,7 +244,7 @@ class ConnectionRequest < ActiveRecord::Base
   # @note: update connection_requests if search_results does not include trees to be connected in requests
   #
   def self.check_requests_with_search(current_user, connected_users_arr)
-    search_data = current_user.start_search(WeafamSetting.first.certain_koeff)
+    search_data = current_user.start_search#(WeafamSetting.first.certain_koeff)
     self.check_valid_requests(search_data, connected_users_arr)
   end
 

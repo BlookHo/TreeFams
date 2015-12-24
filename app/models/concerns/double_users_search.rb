@@ -22,14 +22,14 @@ module DoubleUsersSearch
   #   end
   # end
 
-  # @note: actions, when double check passed Ok and there are no double trees
+  # @note: actions, when double check passed Ok and there are no double trees  #
   #   set attribute :double to 1
   def no_double_trees
     self.update_attributes(:double => 1, :updated_at => Time.now)
-    puts "Search results READY Ok -> Double trees check PASSED Ok -> to SearchResults.store_search_results."
+    logger.info "Search results READY Ok -> Double trees check PASSED Ok -> to SearchResults.store_search_results."
   end
 
-  # @note: find, at least, first double tree
+  # @note: find, at least, first double tree  #
   # @note: Запуск check дублей found юзеров - from search results
   def find_double_tree(results)
     # check_by_user_name(results)
@@ -39,10 +39,9 @@ module DoubleUsersSearch
       no_double_trees
       logger.info  "In find_double_tree: NO Double Users: All found users have different users names WITH self.name"
       logger.info  "-> goto SearchResults.store_search_results"
-      # return
     else
       logger.info  "Found Users have the same names as self -> continue double trees check"
-      self_tree_data = collect_tree_info(self.id)
+      self_tree_data = collect_tree_data(self.id)
       logger.info "In find_double_tree: after SELF collect_tree_info: self_tree_data = #{self_tree_data} "
           # self_tree_data =
           #     {:profile_searched=>689,
@@ -51,8 +50,9 @@ module DoubleUsersSearch
           #      :user_relations_names=>{690=>162, 691=>219, 694=>461, 692=>188, 693=>2, 695=>9}}
 
       common_name_users.each do |one_user_id|
-        found_tree_data = collect_tree_info(one_user_id)
-        logger.info "In find_double_tree: after collect_tree_info: found_tree_data = #{found_tree_data} "
+        found_tree_data = collect_tree_data(one_user_id)
+        logger.info "In find_double_tree: after collect_tree_data: found_tree_data ready"
+        # logger.info "found_tree_data = #{found_tree_data} "
             # found_tree_data =
             #     {:profile_searched=>682,
             #      :profile_relations=>{683=>1, 684=>2, 687=>3, 685=>5, 686=>6, 688=>8},
@@ -70,7 +70,7 @@ module DoubleUsersSearch
 
 
   # @note: prepare all arrays for creating found trees data
-  def collect_tree_info(one_user_id)
+  def collect_tree_data(one_user_id)
 
     profile_id, name_id = user_profile_name(one_user_id)
     logger.info "In collect_tree_info: profile_id = #{profile_id}, name_id = #{name_id} "
@@ -80,13 +80,12 @@ module DoubleUsersSearch
      # :user_name=>123, :found_user_id=>49,
      # :user_relations_names=>{683=>162, 684=>219, 687=>461, 685=>123, 686=>2, 688=>9}}
 
-    # todo: place 4 in constant
-    search_relations(one_user_id, profile_id, 5)
+    search_relations(one_user_id, profile_id, WeafamConstants::CERTAIN_KOEFF)
 
   end
 
 
-  # @note: сбор user-id из search results -
+  # @note: сбор user-id из search results -   #
   # only trees with user_id have the same name as current_user (self)
   def collect_users_by_names(by_trees)
     common_name_users = []
@@ -109,7 +108,9 @@ module DoubleUsersSearch
                            .distinct
     logger.info "search_relations: Круг ИСКОМОГО ПРОФИЛЯ = #{user_profile_id.inspect} в дереве Юзера #{one_found_user} "
     show_in_logger(user_circle_rows, "all_profile_rows - запись" ) # DEBUGG_TO_LOGG
-    if !user_circle_rows.blank?
+    if user_circle_rows.blank?
+      logger.info "Double Users: ERROR in search_match: В искомом дереве - НЕТ искомого профиля!?? "
+    else
       # допускаем до поиска те круги искомых профилей, размер кот-х (кругов) больше или равно коэфф-та достоверности
       if user_circle_rows.size >= certain_koeff
         user_circle_rows.each do |relation_row|
@@ -118,8 +119,6 @@ module DoubleUsersSearch
           one_user_names_hash.merge!(row_is_profile_id => relation_row.is_name_id)
         end
       end
-    else
-      logger.info "Double Users: ERROR in search_match: В искомом дереве - НЕТ искомого профиля!?? "
     end
 
     # СОСТАВ КРУГОВ ПРОФИЛЕЙ ИСКОМОГО ДЕРЕВА со всеми данными:
@@ -169,8 +168,9 @@ module DoubleUsersSearch
 
   # @note: Проверка на совпадение отношений с одним из Юзеров
   def check_one_double?(self_tree_data, found_tree_data) #init_user_hash, one_user_relations)
-    logger.info "In check_one_double?: self_tree_data = #{self_tree_data}"
-    logger.info " found_tree_data = #{found_tree_data} "
+    logger.info "In check_one_double?: Ready - self_tree_data   with   found_tree_data "
+    # logger.info "self_tree_data = #{self_tree_data}"
+    # logger.info "found_tree_data = #{found_tree_data}"
     # In check_one_double?: self_tree_data =
     # {:profile_searched=>689,
     #  :profile_relations=>{690=>1, 691=>2, 694=>3, 692=>5, 693=>6, 695=>8},
@@ -189,19 +189,19 @@ module DoubleUsersSearch
           init_user_hash: self_tree_data,
           one_user_relations: found_tree_data
       }
-      return return_init_user_id(self_tree_data)
+      return return_self_user_id(self_tree_data)
     end
     nil
   end
 
 
-  # @note:
-  def return_init_user_id(self_tree_data)
+  # @note: return self user id if this self - is double tree to some other
+  def return_self_user_id(self_tree_data)
     qty_matched_relations = self_tree_data[:qty_matched_relations]
     self_user_hash        = self_tree_data[:init_user_hash]
     one_user_relations    = self_tree_data[:one_user_relations]
     found_user_id         = self_user_hash[:found_user_id]
-    logger.info "In check_one_double?#return_init_user_id: found_user_id = #{found_user_id}"
+    logger.info "In check_one_double?#return_self_user_id: self[:found_user_id] = #{found_user_id}"
     [1,2].each do |relation|
       if match_relations?(self_user_hash, one_user_relations, relation)
         qty_matched_relations += 1
@@ -229,13 +229,13 @@ module DoubleUsersSearch
   # если да - то true
   # если нет - то false
   # @return: false - нет совпадений , true - есть
-  def match_relations?(init_user_hash, one_user_relations, relation)
-    logger.info "match_relations?: relation = #{relation} "
-    init_relation_profile = init_user_hash[:profile_relations].key(relation)
-    # logger.info "Double Users: match_relations?: init_relation_profile = #{init_relation_profile.inspect} "
+  def match_relations?(self_user_hash, one_user_relations, relation)
+    logger.info "In match_relations?: relation = #{relation} "
+    self_relation_profile = self_user_hash[:profile_relations].key(relation)
+    # logger.info "Double Users: match_relations?: self_relation_profile = #{self_relation_profile.inspect} "
 
-    unless init_relation_profile.blank?
-      init_relation_name = init_user_hash[:user_relations_names][init_relation_profile]
+    unless self_relation_profile.blank?
+      init_relation_name = self_user_hash[:user_relations_names][self_relation_profile]
       # logger.info "Double Users: match_relations?: init_relation_name = #{init_relation_name.inspect} "
       user_relation_profile = one_user_relations[:profile_relations].key(relation)
       # logger.info "Double Users: match_relations?: user_relation_profile = #{user_relation_profile.inspect} "
@@ -263,9 +263,8 @@ module DoubleUsersSearch
   end
 
   # @note: Проверка накапливания кол-ва совпадений отношений ( больше или равно 6)
-  # todo: place this 5 into Weafam_Sett or in Constants
   def check_matches_qty?(matched_relations)
-    matched_relations >= 5 ? true : false
+    matched_relations >= WeafamConstants::CERTAIN_KOEFF ? true : false
   end
 
 
@@ -287,7 +286,7 @@ module DoubleUsersSearch
 
       ##########################################
       # todo: uncomment next line
-      # self.delete_one_user    # delete DOUBLE user by his ID
+     self.delete_one_user    # delete DOUBLE user by his ID
       ##########################################
       # flash.now[:alarm] = " Внимание! У вашего дерева уже есть дубликат! Пожалуйста, уточните Ваш логин, состав родственников... Иначе для Вас многое будет невозможно на сайте. "
     end

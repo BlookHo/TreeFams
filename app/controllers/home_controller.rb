@@ -44,7 +44,7 @@ class HomeController < ApplicationController
   def index
 
 
-    current_user.modified_search
+    # current_user.modified_search # now = srat_search
 
     # 64 - 65 - cert.4
     # 4749;64;65;875;890;4;"2015-12-21 12:59:18.674866";"2015-12-21 12:59:18.674866";"{890,892}";"{875,877}";"{4,4}";;0;"{64}";"{65}"
