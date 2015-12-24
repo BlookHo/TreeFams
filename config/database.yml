@@ -37,8 +37,9 @@ test:
 production:
   adapter: postgresql
   encoding: UTF8
-  database: weafam_production
+  database: weafam_development
   pool: 5
   username: weafam_admin
   password: gR0v1Ng3i
   timeout: 5000
+  host: localhost
