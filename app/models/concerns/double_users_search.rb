@@ -80,7 +80,7 @@ module DoubleUsersSearch
      # :user_name=>123, :found_user_id=>49,
      # :user_relations_names=>{683=>162, 684=>219, 687=>461, 685=>123, 686=>2, 688=>9}}
 
-    search_relations(one_user_id, profile_id, WeafamConstants::CERTAIN_KOEFF)
+    search_relations(one_user_id, profile_id, CERTAIN_KOEFF)
 
   end
 
@@ -264,7 +264,7 @@ module DoubleUsersSearch
 
   # @note: Проверка накапливания кол-ва совпадений отношений ( больше или равно 6)
   def check_matches_qty?(matched_relations)
-    matched_relations >= WeafamConstants::CERTAIN_KOEFF ? true : false
+    matched_relations >= CERTAIN_KOEFF ? true : false
   end
 
 

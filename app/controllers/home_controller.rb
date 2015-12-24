@@ -43,6 +43,7 @@ class HomeController < ApplicationController
   # All profiles in user's tree
   def index
 
+    logger.info "In modified start_search: relations = #{EXCLUSION_RELATIONS.inspect}, certain_koeff = #{CERTAIN_KOEFF}"
 
     # current_user.modified_search # now = srat_search
 

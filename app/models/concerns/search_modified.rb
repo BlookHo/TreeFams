@@ -89,10 +89,10 @@ module SearchModified
 
 
   # @note: start of NEW & LAST TO DATE modified search with exclusions check
-  def start_search#(WeafamConstants::CERTAIN_KOEFF)
+  def start_search#(CERTAIN_KOEFF)
 
     start_search_time = Time.now
-    logger.info "In modified start_search: connected_users = #{self.connected_users.inspect}, certain_koeff = #{WeafamConstants::CERTAIN_KOEFF}"
+    logger.info "In modified start_search: connected_users = #{self.connected_users.inspect}, certain_koeff = #{CERTAIN_KOEFF}"
 
     # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
     results = search_tree_profiles
@@ -294,8 +294,8 @@ module SearchModified
       fval = found_filling_hash[relation]
       if found_filling_hash.has_key?(relation)
         # logger.info "In found_filling_hash  has_key: - relation = #{relation}, fval = #{fval}, sval = #{sval}"
-        if WeafamConstants::EXCLUSION_RELATIONS.include?(relation)
-          if sval == fval
+        if EXCLUSION_RELATIONS.include?(relation)
+            if sval == fval
             match_count += sval.size
             priznak = true
             # logger.info "In IF check: (==) COMPLETE EQUAL - match_count = #{match_count}, check = #{(sval == fval) }"
@@ -333,8 +333,8 @@ module SearchModified
 
   def check_match_count?(match_count)
 
-    if match_count >= WeafamConstants::CERTAIN_KOEFF
-      logger.info "PROFILES ARE EQUAL - match_count = #{match_count}, CERTAIN_KOEFF = #{WeafamConstants::CERTAIN_KOEFF} "
+    if match_count >= CERTAIN_KOEFF
+      logger.info "PROFILES ARE EQUAL - match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF} "
       true
     else
       # logger.info "PROFILES NOT EQUAL"
@@ -542,7 +542,7 @@ module SearchModified
   # @note: Exclude tree_id (user_id) if found records < certain_koeff
   def exclude_uncertain_trees(user_id_occurence)
     # user_id_occurence = {57=>5, 59=>5, 60=>4} #test
-    user_id_occurence.delete_if { |user_id, occure| occure < WeafamConstants::CERTAIN_KOEFF }
+    user_id_occurence.delete_if { |user_id, occure| occure < CERTAIN_KOEFF }
     user_id_occurence.keys
   end
 

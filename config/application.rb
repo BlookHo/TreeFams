@@ -38,9 +38,20 @@ module Weafam
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    # Constants, using in search methods: in start_search and in complete_search
+    # def initialize
+    # certain_koeff
+  #  CERTAIN_KOEFF = 5# WeafamSetting.first.certain_koeff
+    # exclusion_relations
+ #   EXCLUSION_RELATIONS = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
+        # WeafamSetting.first.exclusion_relations
+    # 23.12.15: [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
+    # certain_connect
+  #  CERTAIN_CONNECT = 4 #WeafamSetting.first.certain_connect
+    # end
 
     # Load abstract class in rails_root/app/models
-    config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'weafam_constants')]
+    # config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'weafam_constants')]
     config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'search_work')]
     config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'circles')]
     config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'common_models')]
