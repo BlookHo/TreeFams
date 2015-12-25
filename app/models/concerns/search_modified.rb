@@ -107,7 +107,8 @@ module SearchModified
 
     check_double(results) if self.double == 0
 
-    results_to_store(results)
+    SearchResults.store_search_results(results, self.id) if self.double == 1
+    # results_to_store(results)
 
     search_time = (Time.now - start_search_time) * 1000
     puts "\nSearch_time in #{self.connected_users.inspect}: modified_search with double trees check = #{search_time.round(2)} msec.\n\n"

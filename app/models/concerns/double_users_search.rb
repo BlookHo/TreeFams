@@ -283,6 +283,7 @@ module DoubleUsersSearch
     elsif value == 2
       logger.info " Внимание! Ваше дерево является ДУБЛИКАТОМ ранее созданного дерева! Мы сейчас будем удалять ваше дерево! "
       # logger.info " Пожалуйста, при повторном заходе на сайт - уточните Ваш логин, состав родственников... Иначе для Вас многое будет невозможно на сайте. "
+      logger.info "Double Users: mark_user: self.id = #{self.id}, value = #{value}, with user_id = #{user_id}  "
 
       ##########################################
       # todo: uncomment next line
@@ -291,7 +292,6 @@ module DoubleUsersSearch
       # flash.now[:alarm] = " Внимание! У вашего дерева уже есть дубликат! Пожалуйста, уточните Ваш логин, состав родственников... Иначе для Вас многое будет невозможно на сайте. "
     end
 
-    logger.info "Double Users: mark_user: self.id = #{self.id}, value = #{value}, with user_id = #{user_id}  "
   end
 
   #######################################################################

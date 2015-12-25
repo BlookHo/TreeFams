@@ -32,7 +32,8 @@ module SimilarsInitSearch
     def get_profile_circle(profile_id, connected_users_arr)
       profile_circle = ProfileKey.where(:user_id => connected_users_arr, :profile_id => profile_id, :deleted => 0)
                            .order('relation_id','is_name_id')
-                           .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id).distinct
+                           .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
+                           .distinct
       #logger.info "In get_profile_circle1: profile_circle.size = #{profile_circle.size}" if !profile_circle.blank?
       circle_profiles_arr = make_arrays_from_circle(profile_circle)  # Ok
       #logger.info "In get_profile_circle2: circle_profiles_arr = #{circle_profiles_arr}" if !circle_profiles_arr.blank?
@@ -262,13 +263,14 @@ module SimilarsInitSearch
       c =0  # count different profiles pairs DEBUG
       IDArray.each_pair(profiles_arr) { |a_profile_id, b_profile_id|
         (
-        c = c + 1;logger.info "In compare_tree_circles ITERATION = #{c}: one_profile_id: #{a_profile_id} - b_profile_id: #{b_profile_id}"
+        # c = c + 1;logger.info "In compare_tree_circles ITERATION = #{c}: one_profile_id: #{a_profile_id} - b_profile_id: #{b_profile_id}"
 
         data_a_to_compare = [profiles[a_profile_id][:is_name_id], profiles[a_profile_id][:is_sex_id]]
         data_b_to_compare = [profiles[b_profile_id][:is_name_id], profiles[b_profile_id][:is_sex_id]]
 
         if data_a_to_compare == data_b_to_compare
-          logger.info "*** compare hashes: data_a_to_compare (is_name, is_sex): #{data_a_to_compare},  - data_b_to_compare: #{data_b_to_compare}"
+          # logger.info "*** compare profiles: data_a_to_compare (is_name, is_sex): #{data_a_to_compare},  - data_b_to_compare: #{data_b_to_compare}"
+          logger.info "*** to intersect: a_profile: #{data_a_to_compare} <--> b_profile: #{data_b_to_compare}"
           # сравниваемые хэши кругов профилей и определение их общей части кругов профилей
           common_hash = intersection(tree_circles[a_profile_id], tree_circles[b_profile_id])
           # logger.info "*** compare hashes: tree_circles[a_profile_id]: #{tree_circles[a_profile_id]}"
@@ -330,8 +332,8 @@ module SimilarsInitSearch
         end
         ) }
 
-      logger.info "In compare_tree_circles : similars = #{similars}"
-      logger.info "In compare_tree_circles : similars.size = #{similars.size}" unless similars.empty?
+      logger.info "After compare_tree_circles : similars = #{similars}"
+      logger.info "similars.size = #{similars.size}" unless similars.empty?
 
       similars
     end
