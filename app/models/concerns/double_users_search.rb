@@ -34,7 +34,7 @@ module DoubleUsersSearch
   def find_double_tree(results)
     # check_by_user_name(results)
     common_name_users = collect_users_by_names(results[:by_trees])
-    logger.info "In find_double_tree: common_name_users = #{common_name_users} "
+    logger.info "In find_double_tree: CERTAIN_KOEFF = #{CERTAIN_KOEFF}, common_name_users = #{common_name_users} "
     if common_name_users.blank?
       no_double_trees
       logger.info  "In find_double_tree: NO Double Users: All found users have different users names WITH self.name"
@@ -169,18 +169,6 @@ module DoubleUsersSearch
   # @note: Проверка на совпадение отношений с одним из Юзеров
   def check_one_double?(self_tree_data, found_tree_data) #init_user_hash, one_user_relations)
     logger.info "In check_one_double?: Ready - self_tree_data   with   found_tree_data "
-    # logger.info "self_tree_data = #{self_tree_data}"
-    # logger.info "found_tree_data = #{found_tree_data}"
-    # In check_one_double?: self_tree_data =
-    # {:profile_searched=>689,
-    #  :profile_relations=>{690=>1, 691=>2, 694=>3, 692=>5, 693=>6, 695=>8},
-    #  :user_name=>123, :found_user_id=>50,
-    #  :user_relations_names=>{690=>162, 691=>219, 694=>461, 692=>188, 693=>2, 695=>9}}
-    # [inf] found_tree_data =
-    # {:profile_searched=>682,
-    #  :profile_relations=>{683=>1, 684=>2, 687=>3, 685=>5, 686=>6, 688=>8},
-    #  :user_name=>123, :found_user_id=>49,
-    #  :user_relations_names=>{683=>162, 684=>219, 687=>461, 685=>123, 686=>2, 688=>9}}
     qty_matched_relations = 0
     if match_users_names?(self_tree_data[:user_name], found_tree_data[:user_name])
       qty_matched_relations += 1
@@ -202,7 +190,9 @@ module DoubleUsersSearch
     one_user_relations    = self_tree_data[:one_user_relations]
     found_user_id         = self_user_hash[:found_user_id]
     logger.info "In check_one_double?#return_self_user_id: self[:found_user_id] = #{found_user_id}"
+    logger.info "self[:one_user_relations] = #{one_user_relations}"
     [1,2].each do |relation|
+      # [1,2,3,4,5,6,7,8].each do |relation|
       if match_relations?(self_user_hash, one_user_relations, relation)
         qty_matched_relations += 1
         logger.info "qty_matched_relations = #{qty_matched_relations} "
@@ -211,12 +201,12 @@ module DoubleUsersSearch
         return nil
       end
     end
-    relations_arr = self_user_hash[:profile_relations].values - [1,2]
+    relations_arr = self_user_hash[:profile_relations].values - [1,2] #,3,4,5,6,7,8]
     logger.info "other relations_arr = #{relations_arr} "
     relations_arr.each do |relation|
       if match_relations?(self_user_hash, one_user_relations, relation)
         qty_matched_relations += 1
-        logger.info "qty_matched_relations = #{qty_matched_relations} "
+        logger.info "qty_matched_relations = #{qty_matched_relations}"
         return found_user_id if check_matches_qty?(qty_matched_relations)
       end
     end
@@ -243,8 +233,10 @@ module DoubleUsersSearch
         user_relation_name = one_user_relations[:user_relations_names][user_relation_profile]
         # logger.info "Double Users: match_relations?: user_relation_name = #{user_relation_name.inspect} "
         if init_relation_name == user_relation_name
+          logger.info "Double Users: match_relations?: TRUE init_relation_name = #{init_relation_name.inspect} <-> user_relation_name = #{user_relation_name.inspect} "
           return true
         else
+          logger.info "Double Users: match_relations?: FALSE init_relation_name = #{init_relation_name.inspect} <-> user_relation_name = #{user_relation_name.inspect} "
           return false
         end
       end

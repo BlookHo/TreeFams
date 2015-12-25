@@ -92,23 +92,24 @@ module SearchModified
   def start_search#(CERTAIN_KOEFF)
 
     start_search_time = Time.now
-    logger.info "In modified start_search: connected_users = #{self.connected_users.inspect}, certain_koeff = #{CERTAIN_KOEFF}"
+    logger.info ""
+    logger.info "#### start_search (modified w/exclusions) #### :: connected_users = #{self.connected_users.inspect}, certain_koeff = #{CERTAIN_KOEFF}"
+    logger.info ""
 
     # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
     results = search_tree_profiles
 
-    logger.info "SearchResults made & READY:"
-    logger.info "modified results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
-    logger.info "modified results[:uniq_profiles_pairs] = #{results[:uniq_profiles_pairs].inspect}"
-    logger.info "modified results[:by_profiles] = #{results[:by_profiles].inspect}"
-    logger.info "modified results[:by_trees] = #{results[:by_trees].inspect}"
-    logger.info "modified results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
-    logger.info "modified results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
+    logger.info "SearchResults modified w/exclusions:"
+    logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
+    logger.info "results[:uniq_profiles_pairs] = #{results[:uniq_profiles_pairs].inspect}"
+    logger.info "results[:by_profiles] = #{results[:by_profiles].inspect}"
+    logger.info "results[:by_trees] = #{results[:by_trees].inspect}"
+    logger.info "results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
+    logger.info "results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
 
     check_double(results) if self.double == 0
 
     SearchResults.store_search_results(results, self.id) if self.double == 1
-    # results_to_store(results)
 
     search_time = (Time.now - start_search_time) * 1000
     puts "\nSearch_time in #{self.connected_users.inspect}: modified_search with double trees check = #{search_time.round(2)} msec.\n\n"
@@ -238,7 +239,7 @@ module SearchModified
     key_item_pairs_arr.each do |one_array|
       SearchWork.fill_hash_w_val_arr(new_items_hash, one_array[0], one_array[1])
     end
-    logger.info "After get_keys_with_items_array: new_items_hash = #{new_items_hash}"
+    # logger.info "After get_keys_with_items_array: new_items_hash = #{new_items_hash}"
     new_items_hash
   end
 
@@ -270,9 +271,9 @@ module SearchModified
   def profiles_checking(profile_id_searched, trees_profiles)
 
     all_trees_found = trees_profiles.keys.flatten
-    logger.info "all_trees_found = #{all_trees_found}"
+    # logger.info "all_trees_found = #{all_trees_found}"
     all_profiles_found = trees_profiles.values.flatten
-    logger.info "all_profiles_found = #{all_profiles_found}"
+    # logger.info "all_profiles_found = #{all_profiles_found}"
 
     certain_profiles_trees = []
     certain_profiles_found = []
@@ -286,7 +287,7 @@ module SearchModified
         certain_profiles_count << match_count
         certain_profiles_found << profile_checked
         certain_profiles_trees << all_trees_found[index]
-        puts "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}"
+        puts "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
       end
     end
     return certain_profiles_found, certain_profiles_count, certain_profiles_trees
@@ -361,7 +362,7 @@ module SearchModified
   def check_match_count?(match_count)
 
     if match_count >= CERTAIN_KOEFF
-      logger.info "PROFILES ARE EQUAL - match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF} "
+      # logger.info "PROFILES ARE EQUAL - match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF} "
       true
     else
       # logger.info "PROFILES NOT EQUAL"
@@ -496,25 +497,25 @@ module SearchModified
     # fields_arr_values = [[57, 790], [57, 790], [57, 790], [57, 790], [57, 7960], [59, 818], [59, 818], [59, 818], [59, 818], [59, 818], [60, 826], [60, 826], [60, 826], [60, 826], [60, 826]]
     # logger.info "Hand fields_arr_values = #{fields_arr_values}"
 
-    values_occurence = occurence_counts(fields_arr_values)
-    logger.info "values_occurence = #{values_occurence}"
+    occurence = occurence_counts(fields_arr_values)
+    logger.info "occurence = #{occurence}"
 
-    fields_arr_to_check = exclude_uncertain_trees(values_occurence)
-    logger.info "fields_arr_to_check = #{fields_arr_to_check}"
-    get_keys_with_items_array(fields_arr_to_check)
+    user_ids_to_check = exclude_uncertain_trees(occurence)
+    logger.info "user_ids_to_check = #{user_ids_to_check}"
+    get_keys_with_items_array(user_ids_to_check)
 
   end
 
-  # @note: Determine: in which trees ids profiles were found
-  def get_found_fields(query_data, field)
-    field_values = found_records(query_data, field)
-    logger.info "field_values = #{field_values}"
-
-    values_occurence = occurence_counts(field_values)
-    logger.info "values_occurence = #{values_occurence}"
-
-    exclude_uncertain_trees(values_occurence)
-  end
+  # # @note: Determine: in which trees ids profiles were found
+  # def get_found_fields(query_data, field)
+  #   field_values = found_records(query_data, field)
+  #   logger.info "field_values = #{field_values}"
+  #
+  #   values_occurence = occurence_counts(field_values)
+  #   logger.info "values_occurence = #{values_occurence}"
+  #
+  #   exclude_uncertain_trees(values_occurence)
+  # end
 
   # @note: Find by fields - [relation, is_name_id]
   # for each row in ProfileKey
@@ -525,6 +526,10 @@ module SearchModified
     arr_relations = query_data[:arr_relations]
     arr_names = query_data[:arr_names]
 
+    # logger.info "arr_relations = #{arr_relations}"
+    # logger.info "arr_names = #{arr_names}"
+
+    # todo: here - to install sql selection of extra rows of pairs: relation-name
     # arr_relations = [8,3,3,15,16,17,121]
     # arr_names = [48,465,370,343,82,147,446]
 
@@ -569,6 +574,7 @@ module SearchModified
   # @note: Exclude tree_id (user_id) if found records < certain_koeff
   def exclude_uncertain_trees(user_id_occurence)
     # user_id_occurence = {57=>5, 59=>5, 60=>4} #test
+    logger.info "In exclude_uncertain_trees: CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
     user_id_occurence.delete_if { |user_id, occure| occure < CERTAIN_KOEFF }
     user_id_occurence.keys
   end
