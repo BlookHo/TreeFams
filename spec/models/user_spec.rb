@@ -632,48 +632,48 @@ RSpec.describe User, :type => :model    do  # , focus: true
       #                          :current_user_id => 2, :user_id => 3,:connection_id => 3 } }
 
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
-      let(:search_results) { current_user_1.start_search(certain_koeff_for_connect) }
+      let(:search_results) { current_user_1.start_search }
 
       it "- Check certain_koeff_for_connect before start_search" do
         puts "In User model: certain_koeff_for_connect = #{certain_koeff_for_connect} \n"   # 4
         expect(certain_koeff_for_connect).to eq(4)
       end
-      it "- Check search_results[:tree_profiles] after start_search" do
-        puts "In User model - SEARCH TASK : search_results[:tree_profiles] = #{search_results[:tree_profiles]} \n"
-        expect(search_results[:tree_profiles].sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
-      end
+      # it "- Check search_results[:tree_profiles] after start_search" do
+      #   puts "In User model - SEARCH TASK : search_results[:tree_profiles] = #{search_results[:tree_profiles]} \n"
+      #   expect(search_results[:tree_profiles].sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
+      # end
       it "- Check search_results[:connected_author_arr] after start_search" do
         puts "In User model: search_results[:connected_author_arr] = #{search_results[:connected_author_arr]} \n"
         expect(search_results[:connected_author_arr]).to eq([1,2])
       end
-      it "- Check search_results[:qty_of_tree_profiles] after start_search" do
-        puts "In User model: search_results[:qty_of_tree_profiles] = #{search_results[:qty_of_tree_profiles]} \n"
-        expect(search_results[:qty_of_tree_profiles]).to eq(18)
-      end
-      it "- Check search_results[:profiles_relations_arr] after start_search" do
-        puts "In User model: search_results[:profiles_relations_arr][0] = #{search_results[:profiles_relations_arr][0]} \n"
-        expect(search_results[:profiles_relations_arr].sort_by { |hsh| hsh[:profile_searched] }).to eq([
-        # преобразованная структура - такая же исп-ся в существующем search.rb
-        {:profile_searched=>2, :profile_relations=>{7=>1, 8=>2, 17=>3, 3=>8, 9=>15, 10=>16, 11=>17, 15=>111, 16=>111}},
-        {:profile_searched=>3, :profile_relations=>{9=>1, 10=>2, 17=>3, 2=>7, 7=>13, 8=>14, 11=>17, 15=>111, 16=>111}},
-        {:profile_searched=>7, :profile_relations=>{2=>3, 8=>8, 3=>17, 17=>111}},
-        {:profile_searched=>8, :profile_relations=>{2=>3, 7=>7, 3=>17, 17=>111}},
-        {:profile_searched=>9, :profile_relations=>{3=>4, 10=>8, 2=>18, 17=>112}},
-        {:profile_searched=>10, :profile_relations=>{3=>4, 9=>7, 2=>18, 17=>112}},
-        {:profile_searched=>11, :profile_relations=>{12=>1, 13=>2, 15=>3, 16=>3, 14=>6, 17=>7, 2=>13, 3=>14, 18=>91, 20=>92, 19=>101, 21=>102, 124=>121}},
-        {:profile_searched=>12, :profile_relations=>{18=>1, 19=>2, 11=>4, 14=>4, 13=>8, 20=>15, 21=>16, 17=>18, 15=>112, 16=>112}},
-        {:profile_searched=>13, :profile_relations=>{20=>1, 21=>2, 11=>4, 14=>4, 12=>7, 18=>13, 19=>14, 17=>18, 15=>112, 16=>112}},
-        {:profile_searched=>14, :profile_relations=>{12=>1, 13=>2, 11=>6, 18=>91, 20=>92, 19=>101, 21=>102, 15=>212, 16=>212}},
-        {:profile_searched=>15, :profile_relations=>{17=>1, 11=>2, 124=>4, 16=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202}},
-        {:profile_searched=>16, :profile_relations=>{17=>1, 11=>2, 15=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202, 124=>221}},
-        {:profile_searched=>17, :profile_relations=>{2=>1, 3=>2, 15=>3, 16=>3, 11=>8, 12=>15, 13=>16, 7=>91, 9=>92, 8=>101, 10=>102, 124=>121}},
-        {:profile_searched=>18, :profile_relations=>{12=>3, 19=>8, 13=>17, 11=>121, 14=>121}},
-        {:profile_searched=>19, :profile_relations=>{12=>3, 18=>7, 13=>17, 11=>121, 14=>121}},
-        {:profile_searched=>20, :profile_relations=>{13=>4, 21=>8, 12=>18, 11=>122, 14=>122}},
-        {:profile_searched=>21, :profile_relations=>{13=>4, 20=>7, 12=>18, 11=>122, 14=>122}},
-        {:profile_searched=>124, :profile_relations=>{15=>1, 17=>91, 11=>101, 16=>191}}
-        ])
-      end
+      # it "- Check search_results[:qty_of_tree_profiles] after start_search" do
+      #   puts "In User model: search_results[:qty_of_tree_profiles] = #{search_results[:qty_of_tree_profiles]} \n"
+      #   expect(search_results[:qty_of_tree_profiles]).to eq(18)
+      # end
+      # it "- Check search_results[:profiles_relations_arr] after start_search" do
+      #   puts "In User model: search_results[:profiles_relations_arr][0] = #{search_results[:profiles_relations_arr][0]} \n"
+      #   expect(search_results[:profiles_relations_arr].sort_by { |hsh| hsh[:profile_searched] }).to eq([
+      #   # преобразованная структура - такая же исп-ся в существующем search.rb
+      #   {:profile_searched=>2, :profile_relations=>{7=>1, 8=>2, 17=>3, 3=>8, 9=>15, 10=>16, 11=>17, 15=>111, 16=>111}},
+      #   {:profile_searched=>3, :profile_relations=>{9=>1, 10=>2, 17=>3, 2=>7, 7=>13, 8=>14, 11=>17, 15=>111, 16=>111}},
+      #   {:profile_searched=>7, :profile_relations=>{2=>3, 8=>8, 3=>17, 17=>111}},
+      #   {:profile_searched=>8, :profile_relations=>{2=>3, 7=>7, 3=>17, 17=>111}},
+      #   {:profile_searched=>9, :profile_relations=>{3=>4, 10=>8, 2=>18, 17=>112}},
+      #   {:profile_searched=>10, :profile_relations=>{3=>4, 9=>7, 2=>18, 17=>112}},
+      #   {:profile_searched=>11, :profile_relations=>{12=>1, 13=>2, 15=>3, 16=>3, 14=>6, 17=>7, 2=>13, 3=>14, 18=>91, 20=>92, 19=>101, 21=>102, 124=>121}},
+      #   {:profile_searched=>12, :profile_relations=>{18=>1, 19=>2, 11=>4, 14=>4, 13=>8, 20=>15, 21=>16, 17=>18, 15=>112, 16=>112}},
+      #   {:profile_searched=>13, :profile_relations=>{20=>1, 21=>2, 11=>4, 14=>4, 12=>7, 18=>13, 19=>14, 17=>18, 15=>112, 16=>112}},
+      #   {:profile_searched=>14, :profile_relations=>{12=>1, 13=>2, 11=>6, 18=>91, 20=>92, 19=>101, 21=>102, 15=>212, 16=>212}},
+      #   {:profile_searched=>15, :profile_relations=>{17=>1, 11=>2, 124=>4, 16=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202}},
+      #   {:profile_searched=>16, :profile_relations=>{17=>1, 11=>2, 15=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202, 124=>221}},
+      #   {:profile_searched=>17, :profile_relations=>{2=>1, 3=>2, 15=>3, 16=>3, 11=>8, 12=>15, 13=>16, 7=>91, 9=>92, 8=>101, 10=>102, 124=>121}},
+      #   {:profile_searched=>18, :profile_relations=>{12=>3, 19=>8, 13=>17, 11=>121, 14=>121}},
+      #   {:profile_searched=>19, :profile_relations=>{12=>3, 18=>7, 13=>17, 11=>121, 14=>121}},
+      #   {:profile_searched=>20, :profile_relations=>{13=>4, 21=>8, 12=>18, 11=>122, 14=>122}},
+      #   {:profile_searched=>21, :profile_relations=>{13=>4, 20=>7, 12=>18, 11=>122, 14=>122}},
+      #   {:profile_searched=>124, :profile_relations=>{15=>1, 17=>91, 11=>101, 16=>191}}
+      #   ])
+      # end
 
       # преобразование структуры из существующего search.rb  для обеспечения сортировки для теста и
       # более корректного представления - для рефакторинга.
@@ -688,45 +688,45 @@ RSpec.describe User, :type => :model    do  # , focus: true
         end
         result_arr_of_hashes
       }
-      it "- Check search_results[:profiles_found_arr] after start_search"  do
-        # result_arr_of_hashes = [
-        #     {:profile_searched=>15, :profiles_found=>{}}, {:profile_searched=>9, :profiles_found=>{}},
-        #     {:profile_searched=>20, :profiles_found=>{3=>{28=>[4, 8, 18, 122, 122]}}},
-        #     {:profile_searched=>16, :profiles_found=>{}}, {:profile_searched=>10, :profiles_found=>{}},
-        #     {:profile_searched=>17, :profiles_found=>{}}, {:profile_searched=>3, :profiles_found=>{}},
-        #     {:profile_searched=>12, :profiles_found=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}}},
-        #     {:profile_searched=>13, :profiles_found=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}}},
-        #     {:profile_searched=>14, :profiles_found=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
-        #     {:profile_searched=>21, :profiles_found=>{3=>{29=>[4, 7, 18, 122, 122]}}},
-        #     {:profile_searched=>124, :profiles_found=>{}},
-        #     {:profile_searched=>18, :profiles_found=>{3=>{26=>[3, 8, 17, 121, 121]}}},
-        #     {:profile_searched=>11, :profiles_found=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}}},
-        #     {:profile_searched=>8, :profiles_found=>{}},
-        #     {:profile_searched=>19, :profiles_found=>{3=>{27=>[3, 7, 17, 121, 121]}}},
-        #     {:profile_searched=>2, :profiles_found=>{}}, {:profile_searched=>7, :profiles_found=>{}}]
-        puts "In User model: search_results[:profiles_found_arr][2] = #{search_results[:profiles_found_arr][2]} \n"
-        expect(result_arr_of_hashes.sort_by { |hsh| hsh[:profile_searched] }).to eq( [
-              # преобразованная структура
-              {:profile_searched=>2, :profiles_found=>{}},
-              {:profile_searched=>3, :profiles_found=>{}},
-              {:profile_searched=>7, :profiles_found=>{}},
-              {:profile_searched=>8, :profiles_found=>{}},
-              {:profile_searched=>9, :profiles_found=>{}},
-              {:profile_searched=>10, :profiles_found=>{}},
-              {:profile_searched=>11, :profiles_found=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}}},
-              {:profile_searched=>12, :profiles_found=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}}},
-              {:profile_searched=>13, :profiles_found=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}}},
-              {:profile_searched=>14, :profiles_found=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
-              {:profile_searched=>15, :profiles_found=>{}},
-              {:profile_searched=>16, :profiles_found=>{}},
-              {:profile_searched=>17, :profiles_found=>{}},
-              {:profile_searched=>18, :profiles_found=>{3=>{26=>[3, 8, 17, 121, 121]}}},
-              {:profile_searched=>19, :profiles_found=>{3=>{27=>[3, 7, 17, 121, 121]}}},
-              {:profile_searched=>20, :profiles_found=>{3=>{28=>[4, 8, 18, 122, 122]}}},
-              {:profile_searched=>21, :profiles_found=>{3=>{29=>[4, 7, 18, 122, 122]}}},
-              {:profile_searched=>124, :profiles_found=>{}}]
-                                                                                 )
-        # [     # Структура - из существующего search.rb
+      # it "- Check search_results[:profiles_found_arr] after start_search"  do
+      #   # result_arr_of_hashes = [
+      #   #     {:profile_searched=>15, :profiles_found=>{}}, {:profile_searched=>9, :profiles_found=>{}},
+      #   #     {:profile_searched=>20, :profiles_found=>{3=>{28=>[4, 8, 18, 122, 122]}}},
+      #   #     {:profile_searched=>16, :profiles_found=>{}}, {:profile_searched=>10, :profiles_found=>{}},
+      #   #     {:profile_searched=>17, :profiles_found=>{}}, {:profile_searched=>3, :profiles_found=>{}},
+      #   #     {:profile_searched=>12, :profiles_found=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}}},
+      #   #     {:profile_searched=>13, :profiles_found=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}}},
+      #   #     {:profile_searched=>14, :profiles_found=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
+      #   #     {:profile_searched=>21, :profiles_found=>{3=>{29=>[4, 7, 18, 122, 122]}}},
+      #   #     {:profile_searched=>124, :profiles_found=>{}},
+      #   #     {:profile_searched=>18, :profiles_found=>{3=>{26=>[3, 8, 17, 121, 121]}}},
+      #   #     {:profile_searched=>11, :profiles_found=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}}},
+      #   #     {:profile_searched=>8, :profiles_found=>{}},
+      #   #     {:profile_searched=>19, :profiles_found=>{3=>{27=>[3, 7, 17, 121, 121]}}},
+      #   #     {:profile_searched=>2, :profiles_found=>{}}, {:profile_searched=>7, :profiles_found=>{}}]
+      #   puts "In User model: search_results[:profiles_found_arr][2] = #{search_results[:profiles_found_arr][2]} \n"
+      #   expect(result_arr_of_hashes.sort_by { |hsh| hsh[:profile_searched] }).to eq( [
+      #         # преобразованная структура
+      #         {:profile_searched=>2, :profiles_found=>{}},
+      #         {:profile_searched=>3, :profiles_found=>{}},
+      #         {:profile_searched=>7, :profiles_found=>{}},
+      #         {:profile_searched=>8, :profiles_found=>{}},
+      #         {:profile_searched=>9, :profiles_found=>{}},
+      #         {:profile_searched=>10, :profiles_found=>{}},
+      #         {:profile_searched=>11, :profiles_found=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}}},
+      #         {:profile_searched=>12, :profiles_found=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}}},
+      #         {:profile_searched=>13, :profiles_found=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}}},
+      #         {:profile_searched=>14, :profiles_found=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
+      #         {:profile_searched=>15, :profiles_found=>{}},
+      #         {:profile_searched=>16, :profiles_found=>{}},
+      #         {:profile_searched=>17, :profiles_found=>{}},
+      #         {:profile_searched=>18, :profiles_found=>{3=>{26=>[3, 8, 17, 121, 121]}}},
+      #         {:profile_searched=>19, :profiles_found=>{3=>{27=>[3, 7, 17, 121, 121]}}},
+      #         {:profile_searched=>20, :profiles_found=>{3=>{28=>[4, 8, 18, 122, 122]}}},
+      #         {:profile_searched=>21, :profiles_found=>{3=>{29=>[4, 7, 18, 122, 122]}}},
+      #         {:profile_searched=>124, :profiles_found=>{}}]
+      #                                                                            )
+      #   # [     # Структура - из существующего search.rb
         # {15=>{}},    {9=>{}},     {20=>{3=>{28=>[4, 8, 18, 122, 122]}}},
         # {16=>{}},
         # {10=>{}},
@@ -743,7 +743,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
         # {19=>{3=>{27=>[3, 7, 17, 121, 121]}}},
         # {2=>{}},
         # {7=>{}}]
-      end
+      # end
       it "- Check search_results[:uniq_profiles_pairs] after start_search"  do
         puts "In User model: search_results[:uniq_profiles_pairs] = #{search_results[:uniq_profiles_pairs]} \n"
         # Структура - из существующего search.rb
@@ -759,14 +759,14 @@ RSpec.describe User, :type => :model    do  # , focus: true
         # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  - перед
         # profiles_to_rewrite, profiles_to_destroy = hard_complete_search(init_connection_hash)
       end
-      it "- Check search_results[:profiles_with_match_hash] after start_search"  do
-        puts "In User model: search_results[:profiles_with_match_hash] = #{search_results[:profiles_with_match_hash]} \n"
-        # Структура - из существующего search.rb
-        # {25=>7, 22=>7, 24=>7, 23=>7, 27=>5, 26=>5, 29=>5, 28=>5}
-        expect(search_results[:profiles_with_match_hash].sort_by { |k,v| k }).to eq(
-              [[22, 7], [23, 7], [24, 7], [25, 7], [26, 5], [27, 5], [28, 5], [29, 5]] )
-        # преобразованная структура
-      end
+      # it "- Check search_results[:profiles_with_match_hash] after start_search"  do
+      #   puts "In User model: search_results[:profiles_with_match_hash] = #{search_results[:profiles_with_match_hash]} \n"
+      #   # Структура - из существующего search.rb
+      #   # {25=>7, 22=>7, 24=>7, 23=>7, 27=>5, 26=>5, 29=>5, 28=>5}
+      #   expect(search_results[:profiles_with_match_hash].sort_by { |k,v| k }).to eq(
+      #         [[22, 7], [23, 7], [24, 7], [25, 7], [26, 5], [27, 5], [28, 5], [29, 5]] )
+      #   # преобразованная структура
+      # end
       it "- Check search_results[:by_profiles] after start_search" do
         puts "In User model: search_results[:by_profiles][3] = #{search_results[:by_profiles][3]} \n"
         expect(search_results[:by_profiles].sort_by { |hsh| hsh[:search_profile_id] }).to eq( [
@@ -858,7 +858,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     context '- check SearchResults model after run <search> module' , focus: true  do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
-      before { current_user_1.start_search(certain_koeff_for_connect) }
+      before { current_user_1.start_search }
       describe '- check SearchResults have rows count after <search> - Ok' do
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
@@ -944,7 +944,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check User model Method <complete_search> - Ok'  , focus: true  do  # , focus: true
+    describe '- check User model Method <complete_search> - Ok'    do  # , focus: true
 
       # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
       context '- when valid complete_search_data' do
@@ -1002,7 +1002,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
     # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
     # :current_user_id=>1, :user_id=>3, :connection_id=>3}
-    describe '- check User model Method < check_connection_arrs(connection_data )>' , focus: true  do  # , focus: true
+    describe '- check User model Method < check_connection_arrs(connection_data )>'   do  # , focus: true
       context '- when valid connection_data' do
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
@@ -1149,7 +1149,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################ CONNECTION - DISCONNECTION ###########################
 
-    describe '- check User model Method <connect_trees(connection_data)> - Ok' , focus: true  do  # , focus: true
+    describe '- check User model Method <connect_trees(connection_data)> - Ok'   do  # , focus: true
       context '- check Tables count & fields values BEFORE connect_trees' do
         describe '- check all profile_ids in ProfileKey rows ' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,

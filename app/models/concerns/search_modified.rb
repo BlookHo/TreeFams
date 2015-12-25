@@ -202,7 +202,8 @@ module SearchModified
   end
 
 
-  # @note: check search results for double users check
+  # @note: NO USE
+  # check search results for double users check
   # before store results /
   def check_results_to_store(results)
     if results[:by_trees].blank?

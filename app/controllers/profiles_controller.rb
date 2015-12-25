@@ -77,6 +77,35 @@ class ProfilesController < ApplicationController
 
   end
 
+  # todo: place these methods - to Profile model
+  # @note: collect of all actual profiles from any action
+  def collect_actual_profiles(action_profile_id, current_user)
+
+    action_profiles = profiles_in_action(action_profile_id)
+
+    search_results_profiles = previous_results_profiles(current_user)
+
+    action_profiles + search_results_profiles
+
+  end
+
+  # @note: collect of actual profiles, connecting with action
+  def profiles_in_action(action_profile_id)
+    action_profiles = [action_profile_id]
+    action_profile_id
+
+    action_profiles
+  end
+
+  # @note: collect of actual profiles, from previous search results,
+  # of current_user
+  # and after that - put this array to start search method as a parameter
+  def previous_results_profiles(current_user)
+    search_results_profiles = [current_user.profile_id]
+    current_user
+
+    search_results_profiles
+  end
 
 
   # @note: rename profile
@@ -87,6 +116,10 @@ class ProfilesController < ApplicationController
     puts "In Profiles_controller: rename: @new_name_id = #{@new_name_id.inspect} "
 
     @profile.rename(@new_name_id)
+
+    actual_profiles = collect_actual_profiles(@profile.id, current_user)
+    logger.info "In Profiles_controller: rename: actual_profiles = #{actual_profiles.inspect} "
+
 
     # sims & search
     puts "In Profiles_controller: After rename_profile: start_search_methods "
