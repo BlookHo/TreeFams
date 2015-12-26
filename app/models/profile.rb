@@ -72,6 +72,10 @@ class Profile < ActiveRecord::Base
 
 
 
+
+
+
+
   # require 'pry'
 
   # before_save do

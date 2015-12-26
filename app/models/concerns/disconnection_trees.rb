@@ -1,6 +1,7 @@
 module DisconnectionTrees
   extend ActiveSupport::Concern
   # in User model
+  require 'pry'
 
   # Обратное разъобъединение профилей похожих - по log_id
   # После завершения - удаление данного лога объединения
@@ -15,7 +16,8 @@ module DisconnectionTrees
         with_user_id: Profile.find(connection_common_log["base_profile_id"]).user_id,    #        3,
         connection_id: connection_common_log["log_id"]   #    3,
     }
-
+    connection_id = connection_common_log["log_id"]
+    binding.pry          # Execution will stop here.
 
     log_to_redo = restore_connection_log(connection_common_log["log_id"], connection_common_log["user_id"])
 
@@ -38,24 +40,25 @@ module DisconnectionTrees
     #                    who_made_event: self.id,
     #                    read: false)
     connected = self.get_connected_users
+    binding.pry          # Execution will stop here.
 
-    conn_users_destroy_data[:self_connected] = connected
+    # conn_users_destroy_data[:self_connected] = connected
 
-    connected.each do |each_user_id|
-      if each_user_id != self.id && each_user_id != one_common_log.user_id
-        # profile_current_user = User.find(self.id).profile_id
-        profile_each_user = User.find(each_user_id).profile_id
-
-        UpdatesFeed.create(user_id: self.id, update_id: 17,
-                           agent_user_id: each_user_id, agent_profile_id: profile_each_user,
-                           who_made_event: self.id,
-                           read: false)
-        UpdatesFeed.create(user_id: each_user_id, update_id: 17,
-                           agent_user_id: self.id, agent_profile_id: profile_current_user,
-                           who_made_event: self.id,
-                           read: false)
-      end
-    end
+    # connected.each do |each_user_id|
+    #   if each_user_id != self.id && each_user_id != one_common_log.user_id
+    #     # profile_current_user = User.find(self.id).profile_id
+    #     profile_each_user = User.find(each_user_id).profile_id
+    #
+    #     UpdatesFeed.create(user_id: self.id, update_id: 17,
+    #                        agent_user_id: each_user_id, agent_profile_id: profile_each_user,
+    #                        who_made_event: self.id,
+    #                        read: false)
+    #     UpdatesFeed.create(user_id: each_user_id, update_id: 17,
+    #                        agent_user_id: self.id, agent_profile_id: profile_current_user,
+    #                        who_made_event: self.id,
+    #                        read: false)
+    #   end
+    # end
     ###############################################
 
     CommonLog.find(common_log_id).destroy
@@ -69,9 +72,26 @@ module DisconnectionTrees
     #  См. также изменения в user_spec.rb, lines: 1626,1632,1653,1659,1677,1683
     #   ConnectionRequest.disconnected_requests_update(conn_users_destroy_data)
 
+    logger.info "In disconnect bef : self.connected_users = #{self.connected_users.inspect}"
+    logger.info "In disconnect bef: self.get_connected_users = #{self.get_connected_users.inspect}"
+
+    binding.pry          # Execution will stop here.
+
+    SearchResults.clear_all_prev_results(self.id)
+    logger.info "In disconnect bef: connected = #{connected.inspect}"
+    logger.info "In disconnect bef: conn_users_destroy_data = #{conn_users_destroy_data.inspect}"
+
+    binding.pry          # Execution will stop here.
+
     ConnectedUser.destroy_connection(conn_users_destroy_data)
+    logger.info "In disconnect after : self.connected_users = #{self.connected_users.inspect}"
+    logger.info "In disconnect after : self.get_connected_users = #{self.get_connected_users.inspect}"
+
+    # binding.pry          # Execution will stop here.
 
     self.update_disconnected_users!
+
+    binding.pry          # Execution will stop here.
 
     # Этот метод ниже выключен, чтобы не возвращать запросы на объед-е в состояние, перед объединением.
     #  См. также изменения в user_spec.rb, lines: 1626,1632,1653,1659,1677,1683

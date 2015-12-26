@@ -31,6 +31,9 @@ module CommonLogs
         end
       end
 
+      logger.info "In rollback module: Before start_search_methods:"
+      logger.info "current_user.connected_users = #{current_user.connected_users.inspect}"
+
       # sims & search
       SearchResults.start_search_methods(current_user)
 

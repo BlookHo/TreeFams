@@ -88,9 +88,12 @@ class ConnectedUser < ActiveRecord::Base
   #  }
   def self.destroy_connection(conn_users_destroy_data)
 
-     self.where(user_id: conn_users_destroy_data[:user_id],
-               with_user_id: conn_users_destroy_data[:with_user_id],
-               connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
+     # self.where(user_id: conn_users_destroy_data[:user_id],
+     #           with_user_id: conn_users_destroy_data[:with_user_id],
+     #           connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
+     self.where(connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
+
+
   end
 
 

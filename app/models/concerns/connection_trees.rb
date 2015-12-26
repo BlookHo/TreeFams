@@ -193,7 +193,12 @@ module ConnectionTrees
     # Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
     # SearchResults.destroy_previous_results(who_connect_arr, with_whom_connect_arr)
     # SearchResults.destroy_previous_results(current_user_id)
+
+    puts "In ConnectionTrees: After connection: clear_all_prev_results "
     SearchResults.clear_all_prev_results(current_user_id)
+
+    # puts "In ConnectionTrees: After connection: start_search_methods "
+    # SearchResults.start_search_methods(self)
 
 
     # sims & search
@@ -201,22 +206,22 @@ module ConnectionTrees
     # SearchResults.start_search_methods(self)
 
 
-    ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
-    profile_current_user = User.find(current_user_id).profile_id   #
-    profile_user_id = User.find(user_id).profile_id  #
-    UpdatesFeed.create(user_id: current_user_id, update_id: 2,
-                       agent_user_id: user_id, agent_profile_id: profile_user_id,
-                       who_made_event: current_user_id,
-                       read: false)
-    UpdatesFeed.create(user_id: user_id,
-                       update_id: 2, agent_user_id: current_user_id,
-                       agent_profile_id: profile_current_user,
-                       who_made_event: current_user_id,
-                       read: false)
-
-    ######## Перезапись profile_id при объединении деревьев
-    UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
-    ##################################################################
+    # ##########  UPDATES FEEDS - № 2  ############## В обоих направлениях: Кто с Кем и Обратно
+    # profile_current_user = User.find(current_user_id).profile_id   #
+    # profile_user_id = User.find(user_id).profile_id  #
+    # UpdatesFeed.create(user_id: current_user_id, update_id: 2,
+    #                    agent_user_id: user_id, agent_profile_id: profile_user_id,
+    #                    who_made_event: current_user_id,
+    #                    read: false)
+    # UpdatesFeed.create(user_id: user_id,
+    #                    update_id: 2, agent_user_id: current_user_id,
+    #                    agent_profile_id: profile_current_user,
+    #                    who_made_event: current_user_id,
+    #                    read: false)
+    #
+    # ######## Перезапись profile_id при объединении деревьев
+    # UpdatesFeed.connect_update_profiles(profiles_to_rewrite, profiles_to_destroy)
+    # ##################################################################
 
     ######## Перезапись profile_data при объединении деревьев
        # ProfileData.connect!(profiles_to_rewrite, profiles_to_destroy)

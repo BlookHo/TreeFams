@@ -624,7 +624,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok' , focus: true  do  # , focus: true
+    describe '- check User model Method <Search> - Ok'   do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -856,7 +856,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module' , focus: true  do #  ,  focus: true
+    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search }
       describe '- check SearchResults have rows count after <search> - Ok' do
@@ -1205,9 +1205,9 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         before { current_user_1.connection_in_tables(connection_data) }
 
-        context '- check SearchResults model AFTER <connect_trees> module'  do #  ,  focus: true
+        context '- check SearchResults model AFTER <connect_trees> module'    do #  ,  focus: true
           describe '- check SearchResults have rows count AFTER <connect_trees> - Ok' do
-            let(:rows_qty) {3}
+            let(:rows_qty) {1}
             it_behaves_like :successful_search_results_rows_count
           end
           it '- check SearchResults First Factory row - Ok' do # , focus: true
@@ -1218,15 +1218,21 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                                  "connection_id"=>nil, "pending_connect"=>0,
                                                  "searched_connected"=>[15], "founded_connected"=>[35]} )
           end
-          it '- check SearchResults Second Factory row - Ok' do # , focus: true
-            search_results_fields = SearchResults.second.attributes.except('created_at','updated_at')
-            expect(search_results_fields).to eq({"id"=>2, "user_id"=>2, "found_user_id"=>3, "profile_id"=>1555,
-                                                 "found_profile_id"=>1444, "count"=>5,
-                                                 "found_profile_ids"=>[1444, 22222],
-                                                 "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
-                                                 "connection_id"=>7, "pending_connect"=>1,
-                                                 "searched_connected"=>[2], "founded_connected"=>[3]} )
-          end
+
+
+
+          # it '- check SearchResults Second Factory row - Ok' do # , focus: true
+          #   search_results_fields = SearchResults.second.attributes.except('created_at','updated_at')
+          #   expect(search_results_fields).to eq({"id"=>2, "user_id"=>2, "found_user_id"=>3, "profile_id"=>1555,
+          #                                        "found_profile_id"=>1444, "count"=>5,
+          #                                        "found_profile_ids"=>[1444, 22222],
+          #                                        "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
+          #                                        "connection_id"=>7, "pending_connect"=>1,
+          #                                        "searched_connected"=>[2], "founded_connected"=>[3]} )
+          # end
+
+
+
         end
 
         describe '- check Profiles AFTER <connect_trees>'   do #, focus: true

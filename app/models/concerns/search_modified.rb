@@ -99,7 +99,7 @@ module SearchModified
     # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
     results = search_tree_profiles
 
-    logger.info "SearchResults modified w/exclusions:"
+    logger.info "Search Results modified w/exclusions:"
     logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
     logger.info "results[:uniq_profiles_pairs] = #{results[:uniq_profiles_pairs].inspect}"
     logger.info "results[:by_profiles] = #{results[:by_profiles].inspect}"
@@ -112,7 +112,7 @@ module SearchModified
     SearchResults.store_search_results(results, self.id) if self.double == 1
 
     search_time = (Time.now - start_search_time) * 1000
-    puts "\nSearch_time in #{self.connected_users.inspect}: modified_search with double trees check = #{search_time.round(2)} msec.\n\n"
+    puts "\nSearch_time in #{results[:connected_author_arr].inspect}: modified_search with double trees check = #{search_time.round(2)} msec.\n\n"
 
     results
   end
@@ -139,6 +139,8 @@ module SearchModified
     # @note:
     #  -  new method to reduce search field - space
     # tree_profiles = collect_profiles_to_search(connected_users, action_id)
+
+
 
     tree_profiles, connected_users = collect_tree_profiles
     logger.info "In search_tree_profiles: tree_profiles = #{tree_profiles} "

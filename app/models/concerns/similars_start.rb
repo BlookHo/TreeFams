@@ -10,8 +10,8 @@ module SimilarsStart
     new_sims = ""
     tree_info = Tree.get_tree_info(self)
 
-    # logger.info "In SimilarsStart 1:  @tree_info[:connected_users] = #{tree_info[:connected_users]}, tree_info = #{tree_info} "
     connected_users = self.get_connected_users
+    logger.info "In SimilarsStart:  connected_users = #{connected_users}"
 
     ### Удаление ВСЕХ ранее сохраненных пар похожих ДЛЯ ОДНОГО ДЕРЕВА
     SimilarsFound.clear_tree_similars(connected_users)
@@ -24,7 +24,7 @@ module SimilarsStart
     log_connection_id = []
     log_connection_id = SimilarsLog.current_tree_log_id(connected_users) unless connected_users.empty?
 
-    logger.info "In start_similars: similars = #{similars} "
+    # logger.info "In start_similars Results: similars[:similars] = #{similars[:similars]}, similars[:new_sims] = #{similars[:new_sims]} "
     {tree_info: tree_info,
      new_sims: new_sims,
      similars: similars,
