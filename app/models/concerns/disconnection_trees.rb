@@ -1,7 +1,7 @@
 module DisconnectionTrees
   extend ActiveSupport::Concern
   # in User model
-  # require 'pry'
+  require 'pry'
   # binding.pry          # Execution will stop here.
 
   # @note Обратное разъобъединение профилей похожих - по log_id
@@ -97,10 +97,18 @@ module DisconnectionTrees
     unless log_to_redo.blank?
       log_to_redo.each do |log_row|
         #     {:table_name=>"profiles", :table_row=>52, :field=>"tree_id", :written=>5, :overwritten=>4}
+        logger.info "In redo_connection_log: log_row = #{log_row.inspect}"
         model = log_row[:table_name].classify.constantize
+        logger.info "In redo_connection_log: log_id = #{log_row[:id]}, model = #{model.inspect}, field = #{log_row[:field]}"
         row_to_update = model.find(log_row[:table_row]) if model.exists? id: log_row[:table_row]
+        logger.info "In redo_connection_log: row_to_update = #{row_to_update.inspect}"
+
+        # binding.pry          # Execution will stop here.
+
     # row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now) unless row_to_update.blank?
     row_to_update.update_columns(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now) unless row_to_update.blank?
+
+        # binding.pry          # Execution will stop here.
 
       end
     end

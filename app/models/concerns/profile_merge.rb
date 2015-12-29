@@ -81,7 +81,7 @@ module ProfileMerge
                               table_row: main_profile.id,
                               field: 'user_id',
                               written: opposite_profile.user_id,
-                              overwritten: main_profile_user_id } # should be nil  # overwritten: nil }
+                              overwritten: nil } # should be nil  # overwritten: main_profile_user_id }
 
       log_profiles_connection = collect_one_connection_log(log_profiles_connection, one_connection_data)
       logger.info "# 2 ##*** In module Profile_Merge log_profiles_connection: #{log_profiles_connection.inspect} "
@@ -109,7 +109,7 @@ module ProfileMerge
                               table_name: 'profiles',
                               table_row: opposite_profile.id,
                               field: 'user_id',
-                              written: main_profile_user_id,   # should be nil # written: nil,
+                              written: nil,   # should be nil # written: main_profile_user_id,
                               overwritten: opposite_profile.user_id }
 
       log_profiles_connection = collect_one_connection_log(log_profiles_connection, one_connection_data)

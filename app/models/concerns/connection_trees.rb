@@ -243,6 +243,7 @@ module ConnectionTrees
     #####################################################
     # todo: Раскоммитить 1 строки ниже и закоммитить 1 строки за ними  - для полной перезаписи логов и отладки
     log_connection_user_profile = Profile.merge(connection_data)
+    logger.info "*** : model = #{model.inspect} "
     # log_connection_user_profile = []
     #####################################################
 
