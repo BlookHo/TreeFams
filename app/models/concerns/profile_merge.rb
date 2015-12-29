@@ -10,9 +10,10 @@ module ProfileMerge
       profiles_to_rewrite = connection_data[:profiles_to_rewrite]
       profiles_to_destroy = connection_data[:profiles_to_destroy]
       logger.info "Starting merge profile: to_rewrite = #{profiles_to_rewrite},  to_destroy = #{profiles_to_destroy}"
+      logger.info "In merge profile: connection_data = #{connection_data}"
 
-      log_profiles_connection = []
-      log_merge_profiles_connection = []
+      log_connection_user_profile = []
+      # log_merge_profiles_connection = []
       profiles_to_rewrite.each_with_index do |profile_id, index|
 
         main_profile     = Profile.find(profile_id)
@@ -26,6 +27,7 @@ module ProfileMerge
         # Если юзер есть у opposite_profile, котрый будет удален,
         # то линкуем юзера к новому профилю
         if opposite_profile.user.present?
+          logger.info "opposite_profile - is User: opposite_profile.user.id = #{opposite_profile.user.id}, профиля = #{opposite_profile.id}"
           new_log_merge_profiles = []
           link_data = { main_profile:     main_profile,
                         opposite_profile: opposite_profile,
@@ -33,12 +35,12 @@ module ProfileMerge
                         user_id:          connection_data[:user_id],
                         connected_at:     connection_data[:connection_id] }
           new_log_merge_profiles = user_profile_connection_link(link_data)
-          log_profiles_connection = log_profiles_connection + new_log_merge_profiles
+          log_connection_user_profile = log_connection_user_profile + new_log_merge_profiles
         end
 
       end
 
-      log_profiles_connection
+      log_connection_user_profile
     end
 
 
@@ -58,8 +60,8 @@ module ProfileMerge
 
       # for RSpec
       @main_profile_id = main_profile.id
-
       main_profile_user_id = main_profile.user_id # previous value of this field before updates
+
       # 1 link #################################
       one_connection_data = { connected_at: connection_id,
                               current_user_id: current_user_id,
@@ -124,6 +126,7 @@ module ProfileMerge
       log_user_profiles << ConnectionLog.new(one_connection_data)
       log_user_profiles
     end
+    # log_profiles_del << log_table.new(one_connection_data)
 
   end
 end

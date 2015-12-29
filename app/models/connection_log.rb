@@ -13,7 +13,7 @@ class ConnectionLog < ActiveRecord::Base
   validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
   validates_inclusion_of :field, :in => ["tree_id", "user_id", "deleted"], :if => :table_profiles?
   validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
-  validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
+  # validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
       # - тогда поле table_row д.б.uniq
 
   # validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
@@ -103,6 +103,17 @@ end
     791=>{59=>821, 60=>829},
     795=>{59=>819, 60=>827},
     807=>{59=>824, 60=>832}}
+
+# [57, 58] results[:uniq_profiles_pairs] =
+    {795=>{59=>819, 60=>827},
+     790=>{59=>818, 60=>826},
+     792=>{59=>822, 60=>830},
+     794=>{59=>820, 60=>825},
+     793=>{59=>817, 60=>828},
+     806=>{59=>823, 60=>831},
+     791=>{59=>821, 60=>829},
+     807=>{59=>824, 60=>832}}
+
 
 # [57,58] - diskonnect: Meteor
 # [inf] results[:uniq_profiles_pairs]

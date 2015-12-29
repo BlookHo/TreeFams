@@ -243,7 +243,7 @@ module ConnectionTrees
     #####################################################
     # todo: Раскоммитить 1 строки ниже и закоммитить 1 строки за ними  - для полной перезаписи логов и отладки
     log_connection_user_profile = Profile.merge(connection_data)
-    logger.info "*** : model = #{model.inspect} "
+    logger.info "*** After Profile.merge: log_connection_user_profile.size = #{log_connection_user_profile.size.inspect} " # unless log_connection_user_profile.blank?
     # log_connection_user_profile = []
     #####################################################
 
@@ -354,13 +354,16 @@ module ConnectionTrees
     table_field = table_update_data[:table_field]
     log_table   = table_update_data[:log_table]
 
-    all_users_to_connect = users_connecting_scope(who_connect, with_whom_connect)
+    # all_users_to_connect = users_connecting_scope(who_connect, with_whom_connect)
 
     # prof_to_store = []  # Если учитывать, какой профиль старее, моложе
 
     for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
-      rows_to_update = table.where(:user_id => all_users_to_connect)
-                           .where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
+
+      # rows_to_update = table.where(:user_id => all_users_to_connect)
+      #                      .where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
+      rows_to_update = table.where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
+
       unless rows_to_update.blank?
         rows_to_update.each do |rewrite_row|
 
