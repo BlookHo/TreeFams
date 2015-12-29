@@ -13,14 +13,12 @@ class ConnectionLog < ActiveRecord::Base
   validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
   validates_inclusion_of :field, :in => ["tree_id", "user_id", "deleted"], :if => :table_profiles?
   validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
-  # validates_uniqueness_of :table_row, scope: [:table_name, :field]  # при условии, что эти поля одинаковые
-      # - тогда поле table_row д.б.uniq
 
   # validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
   # validates_numericality_of :written, :overwritten, :only_integer => true, :unless => :writtens_can_be_nil?
   # validate :written_fields_are_not_equal, :unless => :writtens_can_be_equal? # :written AND :overwritten
 
-      # custom validations
+  # custom validations
   # def written_fields_are_not_equal
   #   self.errors.add(:similars_logs,
   #                   'Значения полей в одном ряду не должны быть равны в ConnectionLog.') if self.written == self.overwritten
