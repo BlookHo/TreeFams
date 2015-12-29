@@ -8,8 +8,8 @@
 set :output, "log/cron_log.log"
 
 
-every 1.day, :at => '5:00 pm' do   # 17 () + 7 = 00 MSK - появился стат, at 22 - in PG & in Excel
-# every 1.day, :at => '7:00 pm' do   # 19 () + 7 = 02 MSK, at 00 - in PG & in Excel
+every 1.day, :at => '4:00 pm' do   # 16 () + 8 = 24 (00) MSK - появился стат, at 22 - in PG & in Excel
+# every 1.day, :at => '7:00 pm' do   # 19 () + 8 = 03 MSK, at 00 - in PG & in Excel
 # every 1.day, :at => '4:00 am' do   # 4 () + 7 = 11 MSK, at 9 - in PG & in Excel, at 8 - in Rails (?)
 # every 1.hour do
   runner "WeafamStat.create_stats_row"  #  , environment: :development
