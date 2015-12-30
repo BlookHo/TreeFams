@@ -1,6 +1,5 @@
 class Admin::WeafamStatsController < Admin::AdminController
 
-
   before_action :set_weafam_stat, only: [:show, :destroy]
 
   # GET /weafam_stats
@@ -17,10 +16,10 @@ class Admin::WeafamStatsController < Admin::AdminController
       format.html
       #   format.csv { render text: @weafam_stats.to_csv }
       #   format.xls { send_data @weafam_stats.to_csv(col_sep: "\t") }
+      # format.xlsx {render xlsx: 'download',filename: "payments.xlsx"}
       format.xls
     end
   end
-
 
   # GET /weafam_stats/1
   # GET /weafam_stats/1.json

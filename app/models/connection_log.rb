@@ -1,39 +1,15 @@
 class ConnectionLog < ActiveRecord::Base
 
-
   validates_presence_of :connected_at, :current_user_id, :with_user_id, :table_name, :table_row, :field,
                         :message => "Должно присутствовать в ConnectionLog"
-
   validates_numericality_of :connected_at, :current_user_id, :with_user_id, :table_row, :only_integer => true,
                             :message => "Должны быть целым числом в ConnectionLog"
   validates_numericality_of :connected_at, :current_user_id, :with_user_id, :table_row, :greater_than => 0,
                             :message => "Должны быть больше 0 в ConnectionLog"
-
   validates_inclusion_of :field, :in => ["profile_id"], :if => :table_users?
   validates_inclusion_of :field, :in => ["profile_id", "is_profile_id"], :if => :table_trees_pr_keys?
   validates_inclusion_of :field, :in => ["tree_id", "user_id", "deleted"], :if => :table_profiles?
   validates_inclusion_of :table_name, :in => ["trees", "profile_keys", "users", "profiles"]
-
-  # validates_presence_of :written, :overwritten, :unless => :writtens_can_be_nil?
-  # validates_numericality_of :written, :overwritten, :only_integer => true, :unless => :writtens_can_be_nil?
-  # validate :written_fields_are_not_equal, :unless => :writtens_can_be_equal? # :written AND :overwritten
-
-  # custom validations
-  # def written_fields_are_not_equal
-  #   self.errors.add(:similars_logs,
-  #                   'Значения полей в одном ряду не должны быть равны в ConnectionLog.') if self.written == self.overwritten
-  # end
-
-  # def writtens_can_be_equal?
-  #   self.table_name == "profiles" && self.field == "tree_id"
-  # end
-
-  # def writtens_can_be_nil?
-  #   # puts "In ConnectionLog Model valid:  table_name = #{self.table_name}, written = #{self.written}, field = #{self.field} "
-  #   # puts "In ConnectionLog Model valid:  table_name? = #{self.table_name == "profiles"} "
-  #   # puts "In ConnectionLog Model valid:  table_name && field? = #{self.table_name == "profiles" && self.field == "user_id"} "
-  #   self.table_name == "profiles" && self.field == "user_id"
-  # end
 
   def table_users?
     self.table_name == "users"
@@ -47,10 +23,6 @@ class ConnectionLog < ActiveRecord::Base
     self.table_name == "profiles"
   end
 
-  # def field_tree?
-  #   self.field == "tree_id"
-  # end
-
 
   # for RSpec - in User_spec.rb
   scope :at_current_user_connected_fields, -> (current_user_id, connection_id) { where(current_user_id: current_user_id,
@@ -59,7 +31,6 @@ class ConnectionLog < ActiveRecord::Base
   scope :at_current_user_deleted_field, -> (current_user_id, connection_id) { where(current_user_id: current_user_id,
                                                                                        connected_at: connection_id).
                                                             where(" field = 'deleted' ")}
-
 
   # Для текущего дерева - получение номера id лога для прогона разъединения trees,
   # ранее объединенных.
@@ -84,8 +55,6 @@ class ConnectionLog < ActiveRecord::Base
     logger.info "MMMMM *** In model ConnectionLog store_log "
     connection_log.each(&:save)
   end
-
-
 
 
 end
@@ -126,6 +95,12 @@ end
     {795=>{59=>819, 60=>827}, 790=>{59=>818, 60=>826},
      792=>{59=>822, 60=>830},     794=>{59=>820, 60=>825},
      793=>{59=>817, 60=>828}, 806=>{59=>823, 60=>831}, 791=>{59=>821, 60=>829}, 807=>{59=>824, 60=>832}}
+
+# [57,58,59] SR in [60]:
+# [inf] results[:uniq_profiles_pairs] =
+    {817=>{60=>828}, 821=>{60=>829}, 820=>{60=>825}, 818=>{60=>826}, 819=>{60=>827},
+     823=>{60=>831}, 824=>{60=>832}, 822=>{60=>830}}
+
 
 # [57,58] + [59]
 # Profile merge create ConnectionLogs
@@ -229,3 +204,20 @@ end
 # [sql] ConnectionLog Exists (2.9ms)  SELECT  1 AS one FROM "connection_logs"  WHERE ("connection_logs"."table_row" = 849 AND "connection_logs"."table_name" = 'trees' AND "connection_logs"."field" = 'profile_id') LIMIT 1 (pid:3186)
 # [sql] ConnectionLog Exists (2.6ms)  SELECT  1 AS one FROM "connection_logs"  WHERE ("connection_logs"."table_row" = 848 AND "connection_logs"."table_name" = 'trees' AND "connection_logs"."field" = 'profile_id') LIMIT 1 (pid:3186)
 # [sql] ConnectionLog Exists (2.8ms)  SELECT  1 AS one FROM "connection_logs"  WHERE ("connection_logs"."table_row" = 768 AND "connection_logs"."table_name" = 'trees' AND "connection_logs"."field" = 'profile_id') LIMIT 1 (pid:3186)
+
+
+
+
+# On serv found from Petr [420,421]
+# results[:uniq_profiles_pairs] =
+    {6033=>{420=>5687, 421=>5687},
+     6036=>{420=>5688, 421=>5688},
+     6038=>{420=>5686},
+     6034=>{420=>5684, 421=>5684},
+     6039=>{421=>5695},
+     6037=>{420=>5685}, 6040=>{421=>5696}, 6035=>{420=>5689, 421=>5689}}
+
+
+{:found_tree_id=>420, :found_profile_ids=>[5687, 5688, 5686, 5684, 5685, 5689]}
+
+{:found_tree_id=>421, :found_profile_ids=>[5687, 5688, 5684, 5695, 5696, 5689]}

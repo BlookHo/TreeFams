@@ -140,6 +140,8 @@ module SearchModified
     #  -  new method to reduce search field - space
     # tree_profiles = collect_profiles_to_search(connected_users, action_id)
 
+    # actual_profiles = collect_actual_profiles(@profile.id, current_user)
+    # logger.info "In Profiles_controller: rename: actual_profiles = #{actual_profiles.inspect} "
 
 
     tree_profiles, connected_users = collect_tree_profiles
