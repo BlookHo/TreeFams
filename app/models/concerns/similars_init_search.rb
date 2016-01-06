@@ -9,6 +9,7 @@ module SimilarsInitSearch
     # 2. Сравниваем все круги - находим похожие профили
     # 3. Готовим данные для отображения
     def similars_init_search(tree_info)
+      logger.info "In similars_init_search"
       unless tree_info.empty?  # Исходные данные
         tree_circles = get_tree_circles(tree_info) # Получаем круги для каждого профиля в дереве
         # logger.info "In similars_init_search 11111: tree_circles = #{tree_circles}" unless tree_circles.empty?

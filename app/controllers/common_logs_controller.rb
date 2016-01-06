@@ -17,6 +17,7 @@ class CommonLogsController < ApplicationController
     view_tree_data(tree_info) unless tree_info.empty?  # to index.html.haml
 
     # get one tree all types common_logs
+    # tree_all_logs = CommonLog.get_tree_all_logs(current_user)
     tree_all_logs = CommonLog.get_tree_all_logs(tree_info[:connected_users])
 
     # show connected tree all types common_logs

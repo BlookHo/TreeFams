@@ -94,7 +94,7 @@ class SearchResults < ActiveRecord::Base
   # @note start search methods: # sims & search
   # first - similars, then - search if no sims results
   def self.start_search_methods(current_user)
-    puts "In start_search_methods: start_search_methods: current_user.id = #{current_user.id.inspect} "
+    logger.info  "In start_search_methods: start_search_methods: current_user.id = #{current_user.id.inspect} "
 
     similars_results = current_user.start_similars
     # {tree_info: tree_info, new_sims: new_sims, similars: similars,connected_users: connected_users,
@@ -109,15 +109,16 @@ class SearchResults < ActiveRecord::Base
     #    :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]},
     #    :common_power=>4, :inter_relations=>[]}]
 
-    puts "In start_search_methods: similars_results[:similars] = #{similars_results[:similars].inspect}, similars_results = #{similars_results.inspect} "
+    logger.info  "In start_search_methods: similars_results[:similars] = #{similars_results[:similars].inspect}"
+    # ", similars_results = #{similars_results.inspect} "
 
     if similars_results[:similars].blank?
-      puts "In start_search_methods: No Similars -> start search "
+      logger.info  "In start_search_methods: No Similars -> start search "
       # certain_koeff = WeafamSetting.first.certain_koeff
       search_results = current_user.start_search#(certain_koeff)
       search_results
     else
-      puts "In start_search_methods: Similars in tree -> No start search "
+      logger.info  "In start_search_methods: Similars in tree -> No start search "
       similars_results
     end
 

@@ -16,7 +16,7 @@ class Counter < ActiveRecord::Base
   def self.increment_disconnects
     counters = first
     counters.disconnects += 1
-    counters.update_attributes(disconnects: counters.invites,:updated_at => Time.now)
+    counters.update_attributes(disconnects: counters.disconnects,:updated_at => Time.now)
   end
 
 

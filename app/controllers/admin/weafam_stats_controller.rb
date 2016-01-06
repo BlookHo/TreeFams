@@ -1,26 +1,32 @@
 class Admin::WeafamStatsController < Admin::AdminController
 
-
   before_action :set_weafam_stat, only: [:show, :destroy]
 
   # GET /weafam_stats
   # @note: show stats rows in DESCend order
   def index
     @weafam_stats = WeafamStat.order('id DESC').page params[:page] # DESC
+    respond_to do |format|
+      format.html
+      # format.csv { send_data @weafam_stats.to_csv }
+      # format.csv { render text: @weafam_stats.to_csv }
+      # format.xls { send_data @weafam_stats.to_csv(col_sep: "\t") }
+    end
   end
 
   # GET we_all_family_stats_admin_weafam_stats_path(format: "xls")
   # SAVE file 'we_all_family_stats.xls'
   def we_all_family_stats
-    @weafam_stats = WeafamStat.order('id')
+    @weafam_stats = WeafamStat.order('id DESC')
     respond_to do |format|
       format.html
-      #   format.csv { render text: @weafam_stats.to_csv }
+      format.csv { render text: @weafam_stats.to_csv }
       #   format.xls { send_data @weafam_stats.to_csv(col_sep: "\t") }
-      format.xls
+      # format.xlsx {render xlsx: 'download',filename: "payments.xlsx"}
+      format.xls { send_data @weafam_stats.to_csv(col_sep: "\t") }
+      # format.xls
     end
   end
-
 
   # GET /weafam_stats/1
   # GET /weafam_stats/1.json

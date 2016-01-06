@@ -50,7 +50,6 @@ class WeafamStat < ActiveRecord::Base
 
   # @note: Start call of site weafam_stats calc
   def self.collect_site_stats
-    # logger.info "In WeafamStat site_stats"
 
     profiles_stat_data = Profile.collect_profile_stats
     users_stat_data = User.collect_user_stats

@@ -1,12 +1,15 @@
 .page-header
   %h2
-    Статистика сайта
-    (Кол-во users =
-    %small= User.count
-    )
+    Статистика сайта<br />
+    %small
+      (Кол-во users =
+      = User.count
+      )
   %h4
-    Скачать файл статистики 'we_all_family_stats.xls':
+    Скачать файл статистики 'we_all_family_stats.xls':<br />
     = link_to "Upload To Excel", we_all_family_stats_admin_weafam_stats_path(format: "xls")
+    <br />
+    = link_to "Upload To Csv", we_all_family_stats_admin_weafam_stats_path(format: "csv")
 
 = paginate @weafam_stats, :theme => 'admin'
 = render 'table'

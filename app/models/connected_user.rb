@@ -42,7 +42,7 @@ class ConnectedUser < ActiveRecord::Base
   #     current_user_id:      current_user_id, #
   #     user_id:              user_id ,#
   #     connection_id:        @connection_id } #
-  def self.set_users_connection(connection_data) #, current_user_id, user_id, connection_id)
+  def self.set_users_connection(connection_data)
     current_user_id     = connection_data[:current_user_id]
     user_id             = connection_data[:user_id]
 
@@ -52,15 +52,7 @@ class ConnectedUser < ActiveRecord::Base
       profiles_to_destroy = connection_data[:profiles_to_destroy]
       connection_id       = connection_data[:connection_id]
 
-      # logger.info "== In connect_users:  connection_data = #{connection_data}, connection_id = #{connection_id}"
-      # logger.info "== In connect_users:  profiles_to_rewrite = #{profiles_to_rewrite} "
-      # logger.info "== In connect_users:  profiles_to_destroy = #{profiles_to_destroy} "
-      # logger.info "== In connect_users:  current_user_id = #{current_user_id}, user_id = #{user_id} "
-
       profiles_to_rewrite.each_with_index  do |rewrite_profile, index|
-        # logger.info "== In connect_users: create_one_connection_row; index = #{index}, profiles_to_destroy[i] = #{profiles_to_destroy[index]} "
-        # logger.info "== In connect_users:  index = #{index}, rewrite_profile = #{rewrite_profile} "
-        # logger.info "== In connect_users:  index = #{index}, profiles_to_destroy[i] = #{profiles_to_destroy[index]} "
         new_users_connection = ConnectedUser.new
         new_users_connection.user_id = current_user_id
         new_users_connection.with_user_id = user_id
@@ -80,24 +72,23 @@ class ConnectedUser < ActiveRecord::Base
   end
 
 
-  # @note:
-  # conn_users_destroy_data = {
+  # @note: conn_users_destroy_data = {
   #      user_id: common_log_row_fields["user_id"], #    1,
   #      with_user_id: User.where(profile_id: common_log_row_fields["base_profile_id"]),    #        3,
   #      connection_id: common_log_row_fields["log_id"]   #    3,
   #  }
   def self.destroy_connection(conn_users_destroy_data)
-
-     self.where(user_id: conn_users_destroy_data[:user_id],
-               with_user_id: conn_users_destroy_data[:with_user_id],
-               connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
+     # self.where(user_id: conn_users_destroy_data[:user_id],
+     #           with_user_id: conn_users_destroy_data[:with_user_id],
+     #           connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
+     self.where(connection_id: conn_users_destroy_data[:connection_id]).map(&:destroy)
   end
-
 
 
   # after_update  :update_connected_users
   after_create  :update_connected_users
-  # after_destroy :update_connected_users
+
+  # @note: after_destroy :update_connected_users
   def update_connected_users
     user = User.find(self.user_id)
     user.update_connected_users!

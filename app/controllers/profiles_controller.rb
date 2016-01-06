@@ -36,7 +36,6 @@ class ProfilesController < ApplicationController
 
   # @note: Запуск основного метода создания нового профиля
   def create
-
     relation_id_param = params[:profile].fetch("relation_id") unless params[:profile].blank?
     # todo: вставить проверки params на nil
     params_to_create = {
@@ -52,8 +51,6 @@ class ProfilesController < ApplicationController
     # sims & search
     puts "In Profiles_controller: After creation_profile: start_search_methods "
     SearchResults.start_search_methods(current_user)
-
-
   end
 
 
@@ -67,16 +64,13 @@ class ProfilesController < ApplicationController
       @error = response[:message]
       respond_with @error
     else
-
       # sims & search
       puts "In Profiles_controller: After destroying_profile: start_search_methods "
       SearchResults.start_search_methods(current_user)
 
       respond_with(response)
     end
-
   end
-
 
 
   # @note: rename profile
@@ -91,7 +85,6 @@ class ProfilesController < ApplicationController
     # sims & search
     puts "In Profiles_controller: After rename_profile: start_search_methods "
     SearchResults.start_search_methods(current_user)
-
   end
 
 
@@ -102,7 +95,6 @@ class ProfilesController < ApplicationController
     @base_relation_id = params[:base_relation_id]
     @path_link = params[:path_link]
   end
-
 
 
   def context_menu
@@ -127,7 +119,6 @@ class ProfilesController < ApplicationController
   def profile_params
     params[:profile].permit(:profile_name,
                             :relation_id)
-                            # :display_name_id)
   end
 
 

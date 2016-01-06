@@ -1,23 +1,22 @@
 module DisconnectionTrees
   extend ActiveSupport::Concern
   # in User model
+  # require 'pry'
+  # binding.pry          # Execution will stop here.
 
-  # Обратное разъобъединение профилей похожих - по log_id
+  # @note Обратное разъобъединение профилей похожих - по log_id
   # После завершения - удаление данного лога объединения
   def disconnect_tree(common_log_id)
-    # puts "In User model: disconnect_tree: common_log_id = #{common_log_id}"
-
-    connection_common_log = CommonLog.find(common_log_id).attributes.except('created_at','updated_at')
 
     # Before CommonLog destroy
-    conn_users_destroy_data = {
-        user_id: connection_common_log["user_id"], #    1,
-        with_user_id: Profile.find(connection_common_log["base_profile_id"]).user_id,    #        3,
-        connection_id: connection_common_log["log_id"]   #    3,
-    }
+    connection_common_log = CommonLog.find(common_log_id).attributes.except('created_at','updated_at')
+    conn_users_destroy_data = { user_id:       connection_common_log["user_id"],
+                                with_user_id:  Profile.find(connection_common_log["base_profile_id"]).user_id,
+                                connection_id: connection_common_log["log_id"] }
+    connection_id = connection_common_log["log_id"]
+    logger.info  "In DisconnectionTrees: common_log_id = #{common_log_id}, connection_id = #{connection_id}"
 
-
-    log_to_redo = restore_connection_log(connection_common_log["log_id"], connection_common_log["user_id"])
+    log_to_redo = restore_connection_log(connection_common_log["log_id"])#, connection_common_log["user_id"])
 
     redo_connection_log(log_to_redo)
 
@@ -25,43 +24,10 @@ module DisconnectionTrees
 
     Counter.increment_disconnects
 
-    ##########  UPDATES FEEDS - № 17  ############## В обоих направлениях: Кто с Кем и Обратно
-    # Before CommonLog destroy_connection
-    one_common_log = CommonLog.find(common_log_id)
-    profile_current_user = User.find(self.id).profile_id
-    # UpdatesFeed.create(user_id: self.id, update_id: 17,
-    #                    agent_user_id: one_common_log.user_id, agent_profile_id: one_common_log.profile_id,
-    #                    who_made_event: self.id,
-    #                    read: false)
-    # UpdatesFeed.create(user_id: one_common_log.user_id, update_id: 17,
-    #                    agent_user_id: self.id, agent_profile_id: profile_current_user,
-    #                    who_made_event: self.id,
-    #                    read: false)
     connected = self.get_connected_users
 
-    conn_users_destroy_data[:self_connected] = connected
-
-    connected.each do |each_user_id|
-      if each_user_id != self.id && each_user_id != one_common_log.user_id
-        # profile_current_user = User.find(self.id).profile_id
-        profile_each_user = User.find(each_user_id).profile_id
-
-        UpdatesFeed.create(user_id: self.id, update_id: 17,
-                           agent_user_id: each_user_id, agent_profile_id: profile_each_user,
-                           who_made_event: self.id,
-                           read: false)
-        UpdatesFeed.create(user_id: each_user_id, update_id: 17,
-                           agent_user_id: self.id, agent_profile_id: profile_current_user,
-                           who_made_event: self.id,
-                           read: false)
-      end
-    end
-    ###############################################
-
     CommonLog.find(common_log_id).destroy
-
     ProfileData.destroy_profile_data(conn_users_destroy_data)
-
 
     # Before ConnectedUser destroy_connection для всех запросов на объединение, ранее установленных как выполненные,
     # confirm был равен 2, т.е. для всех входящих в запросы юзеров (деревьев)
@@ -69,8 +35,8 @@ module DisconnectionTrees
     #  См. также изменения в user_spec.rb, lines: 1626,1632,1653,1659,1677,1683
     #   ConnectionRequest.disconnected_requests_update(conn_users_destroy_data)
 
+    SearchResults.clear_all_prev_results(self.id)
     ConnectedUser.destroy_connection(conn_users_destroy_data)
-
     self.update_disconnected_users!
 
     # Этот метод ниже выключен, чтобы не возвращать запросы на объед-е в состояние, перед объединением.
@@ -80,35 +46,27 @@ module DisconnectionTrees
   end
 
 
-  # Получение массива логов из таблицы ConnectionLog по номеру лога log_id
-  def restore_connection_log(log_id, user_id)
-    # puts "In User model: restore_connection_log: log_id = #{log_id}, user_id = #{user_id}"
-    # logger.info "*** In module DisconnectionTrees restore_connection_log:
-    #              log_id = #{log_id}, user_id = #{user_id} "
-    ConnectionLog.where(connected_at: log_id, current_user_id: user_id)
+  # @note Получение массива логов из таблицы ConnectionLog по номеру лога log_id
+  def restore_connection_log(log_id)#, user_id)
+  # def restore_connection_log(log_id, user_id)
+    # ConnectionLog.where(connected_at: log_id, current_user_id: user_id)
+    ConnectionLog.where(connected_at: log_id)#, current_user_id: user_id)
   end
 
 
-  # @note
-  #   Исполнение операций по логам - обратная перезапись в таблицах
+  # @note Исполнение операций по логам - обратная перезапись в таблицах
   def redo_connection_log(log_to_redo)
-
     unless log_to_redo.blank?
       log_to_redo.each do |log_row|
-        #     {:table_name=>"profiles", :table_row=>52, :field=>"tree_id", :written=>5, :overwritten=>4}
         model = log_row[:table_name].classify.constantize
-        # logger.info "*** In module DisconnectionTrees redo_log: model = #{model.inspect} "
         row_to_update = model.find(log_row[:table_row]) if model.exists? id: log_row[:table_row]
-        logger.info "*** In module DisconnectionTrees redo_connection_log: log_row = #{log_row.inspect} "
-        logger.info "*** In module DisconnectionTrees redo_connection_log: row_to_update = #{row_to_update.inspect} "
-
-        # todo:Раскоммитить 1 строкy ниже  - для полной перезаписи логов и отладки
-    row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now) unless row_to_update.blank?
-
+        logger.info "In redo_connection_log: row_to_update = #{row_to_update.inspect}"
+    # row_to_update.update_attributes(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now) unless row_to_update.blank?
+        row_to_update.update_columns(:"#{log_row[:field]}" => log_row[:overwritten], :updated_at => Time.now) unless row_to_update.blank?
       end
     end
-
   end
+
 
   # Удаление разъединенного лога - после обратной перезаписи в таблицах
   def log_connection_deletion(log_to_redo)

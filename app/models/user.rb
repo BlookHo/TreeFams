@@ -216,7 +216,10 @@ class User < ActiveRecord::Base
     users_male = 0
     users_female = 0
     all.each do |user|
-      user.profile.sex_id == 1 ? users_male += 1 : users_female += 1
+      user_profile = user.profile
+      unless user_profile.blank?
+        user_profile.sex_id == 1 ? users_male += 1 : users_female += 1
+      end
     end
     { users_male: users_male, users_female: users_female}
   end
