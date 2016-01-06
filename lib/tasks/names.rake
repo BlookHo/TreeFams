@@ -1,4 +1,16 @@
 namespace :names do
+  desc "Find and fix names duplicate"
+  task :duplicate => :environment do
+    puts "Find and fix names duplicate"
+    result = Name.select("COUNT(name) as total, name").
+             group(:name).
+             having("COUNT(name) > 1").
+             order(:name).
+             map{|p| {p.name => p.total} }
+    puts result
+  end
+
+
   desc "Create downcase names seeds with sex_id and is_approved"
   task :seeds => :environment do
     file = File.open("#{Rails.root}/db/seeds/names/names_seeds.rb", "w+")
