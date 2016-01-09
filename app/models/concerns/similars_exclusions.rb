@@ -14,7 +14,8 @@ module SimilarsExclusions
       logger.info "*** In check_similars_exclusions 1: data_for_check: #{data_for_check}"
       uncommon_hash_a, uncommon_hash_b = get_uncommons(data_for_check[:a_profile_circle], data_for_check[:b_profile_circle], data_for_check[:common_hash])
       inter_relations = common_of_uncommons(uncommon_hash_a, uncommon_hash_b)
-      sim_exlude_relations = [ "Отец", "Мама", "Дед-о", "Дед-м", "Бабка-о","Бабка-м", "Брат"   ] # ++ "Отец",
+      sim_exlude_relations = [ "Отец", "Мама", "Дед-о", "Дед-м", "Бабка-о","Бабка-м", "Брат", "Сестра",
+                               "Муж", "Жена", "Сын", "Дочь", "Внук-о", "Внук-м", "Внучка-о", "Внучка-м"   ]
       # todo: поместить и брать массив exlude_relations из таблицы WeafamSettings
       unsimilar_sign = check_relations_exclusion(inter_relations, sim_exlude_relations)
       logger.info "*** In check_similars_exclusion: unsimilar_sign: #{unsimilar_sign}, inter_relations: #{inter_relations}"
