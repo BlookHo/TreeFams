@@ -56,7 +56,7 @@ module SimilarsProfileMerge
           # Mark opposite_profile as deleted = Удаление opposite_profile
           # opposite_profile.update_attributes(:deleted => 1, :updated_at => Time.now)
           opposite_profile.update_columns(:deleted => 1, :updated_at =>  Time.now) # ONLY SO!!!
-          log_profiles_connection = []
+          log_del_profiles_connection = []
           one_connection_data = { connected_at: connection_data[:connection_id],
                                   current_user_id: connection_data[:current_user_id],
                                   table_name: 'profiles',
@@ -65,8 +65,8 @@ module SimilarsProfileMerge
                                   written: 1,
                                   overwritten: 0 }
           # log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
-          log_profiles_connection << SimilarsLog.new(one_connection_data)
-          log_sims_profiles_connection = log_sims_profiles_connection + log_profiles_connection
+          log_del_profiles_connection << SimilarsLog.new(one_connection_data)
+          log_sims_profiles_connection = log_sims_profiles_connection + log_del_profiles_connection
         end
       end
       log_sims_profiles_connection
