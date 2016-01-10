@@ -71,6 +71,7 @@ module ProfileCreation
   #   exclusions_hash: nil,
   #   tree_ids: tree_ids
   def create_keys(profile, new_profile, relation_id, user)
+    puts "In Rails Concern: create_keys: profile.id = #{profile.id}, new_profile.id = #{new_profile.id}, relation_id = #{relation_id}, user.id = #{user.id} "
     ProfileKey.add_new_profile(
         profile.sex_id,
         profile,

@@ -189,6 +189,7 @@ class Profile < ActiveRecord::Base
   def mothers_hash(user_id)
     hash = {}
     mothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
+    logger.info "== in mothers_hash: hash = #{hash} "
     return hash
   end
 
@@ -206,6 +207,7 @@ class Profile < ActiveRecord::Base
   def fathers_hash(user_id)
     hash = {}
     fathers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
+    logger.info "== in fathers_hash: hash = #{hash} "
     return hash
   end
 
@@ -223,6 +225,7 @@ class Profile < ActiveRecord::Base
   def sons_hash(user_id)
     hash = {}
     sons(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
+    logger.info "== in sons_hash: hash = #{hash} "
     return hash
   end
 
@@ -241,6 +244,7 @@ class Profile < ActiveRecord::Base
   def daughters_hash(user_id)
     hash = {}
     daughters(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
+    logger.info "== in daughters_hash: hash = #{hash} "
     return hash
   end
 
@@ -258,6 +262,7 @@ class Profile < ActiveRecord::Base
   def brothers_hash(user_id)
     hash = {}
     brothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
+    logger.info "== in brothers_hash: hash = #{hash} "
     return hash
   end
 
@@ -294,6 +299,7 @@ class Profile < ActiveRecord::Base
   def husbands_hash(user_id)
     hash = {}
     husbands(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
+    logger.info "== in husbands_hash: hash = #{hash} "
     return hash
   end
 
@@ -311,6 +317,7 @@ class Profile < ActiveRecord::Base
   def wives_hash(user_id)
     hash = {}
     wives(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
+    logger.info "== in wives_hash: hash = #{hash} "
     return hash
   end
 
