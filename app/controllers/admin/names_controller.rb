@@ -21,6 +21,15 @@ class Admin::NamesController < Admin::AdminController
     render template: 'admin/names/index'
   end
 
+  def duplicates
+    @names = Name.select("COUNT(name) as total, name").
+               group(:name).
+               having("COUNT(name) > 1").
+               order(:name).
+               map{|p| {p.name => p.total} }
+    render template: 'admin/names/index'
+  end
+
 
 
   def edit

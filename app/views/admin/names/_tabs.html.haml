@@ -2,4 +2,5 @@
   %li{class: ('active' if action_name == 'index')}= link_to "Все", admin_names_path
   %li{class: ('active' if action_name == 'males')}= link_to "Мужские", males_admin_names_path
   %li{class: ('active' if action_name == 'females')}= link_to "Женские", females_admin_names_path
+  %li{class: ('active' if action_name == 'duplicates')}= link_to "Дубликаты", duplicates_admin_names_path
   %li{class: ('active' if action_name == 'pending')}= link_to "Ожидают модерации", pending_admin_names_path
