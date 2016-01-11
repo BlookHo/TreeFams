@@ -310,9 +310,10 @@ Weafam::Application.routes.draw do
     end
 
     resources :names do
-      get 'males',   to: "names#males",   on: :collection, as: :males
-      get 'females', to: "names#females", on: :collection, as: :females
-      get 'pending', to: "names#pending", on: :collection, as: :pending
+      get 'males',      to: "names#males",      on: :collection, as: :males
+      get 'females',    to: "names#females",    on: :collection, as: :females
+      get 'pending',    to: "names#pending",    on: :collection, as: :pending
+      get 'duplicates', to: "names#duplicates", on: :collection, as: :duplicates
     end
 
     resources :weafam_stats do
