@@ -6,7 +6,7 @@ namespace :names do
              group(:name).
              having("COUNT(name) > 1").
              order(:name).
-             map{|p| {p.name => p.total} }
+             map{|p| {p.name => {total: p.total, id: p.inspect}} }
     puts result
   end
 

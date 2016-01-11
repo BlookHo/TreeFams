@@ -2,7 +2,7 @@ class Name < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            uniqueness: { scope: :parent_name_id, message: "Должно быть уникальным в пределах группы" }
+            uniqueness: true
 
   # Нельзя сохранить имя, не указав пол
   # 1 - муж, 0 - жен
