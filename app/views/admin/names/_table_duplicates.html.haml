@@ -2,10 +2,14 @@
   %thead
     %tr
       %th Name
-      %th Count
+      %th Counter
+      %th Dublicates
   %tbody
     - @names.each do |name|
       %tr
         - name.each do |key, value|
           %td= key
-          %td= value
+          %td= value['counter']
+          %td
+            - value['dublicates'].each do |name|
+              %li= "#{name.name}, id: #{name.id}, sex_id: #{name.sex_id}"

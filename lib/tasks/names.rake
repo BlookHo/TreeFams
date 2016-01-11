@@ -4,7 +4,7 @@ namespace :names do
 
     puts "Find and complex fix names duplicate"
     duplicate_names = Name.select("COUNT(name) as total, name").
-               group(:name).
+               group(:name, :sex_id).
                having("COUNT(name) > 1").
                order(:name).
                map{|p| p.name }  # map{|p| {p.name => p.total} }
