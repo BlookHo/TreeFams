@@ -133,6 +133,43 @@ module SimilarsCompleteSearch
 
   end
 
+  # @note: NEW METHOD "SIMILARS SEARCH COMPLETE "
+  #   сбор полных достоверных пар профилей для объединения
+  #   Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
+  # @param:
+  #   with_whom_connect_users_arr = [3]
+  #   uniq_profiles_pairs =
+  #   {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29},
+  #   19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
+  #   20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126},
+  #   12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156},
+  #   124=>{9=>91}, 18=>{3=>26}}
+  # Output:
+  #  final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} (pid:4353)
+  #   ( profiles_to_rewrite = [14, 21, 19, 11, 20, 12, 13, 18]
+  #   profiles_to_destroy = [22, 29, 27, 25, 28, 23, 24, 26] )
+  def new_sims_complete_search(first_profile_connect, second_profile_connect)
+
+    init_connection_hash = { first_profile_connect => second_profile_connect}
+    logger.info "** IN similars_complete_search *** "
+    logger.info " init_connection_hash = #{init_connection_hash}"
+    final_profiles_to_rewrite = []
+    final_profiles_to_destroy = []
+    final_connection_hash = {}
+
+    unless init_connection_hash.empty?
+      final_connection_hash = init_connection_modify(init_connection_hash, CERTAIN_KOEFF)
+      puts "final_connection_hash = #{final_connection_hash} "
+
+      final_profiles_to_rewrite = final_connection_hash.keys
+      final_profiles_to_destroy = final_connection_hash.values
+
+    end
+    return final_profiles_to_rewrite, final_profiles_to_destroy, final_connection_hash  # for RSpec & TO_VIEW
+
+  end
+
+
 
 
   # @note: METHOD " SEARCH COMPLETE "

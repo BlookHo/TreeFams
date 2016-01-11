@@ -40,7 +40,8 @@ module SimilarsConnection
   end
 
 
-
+  # @note: exclude equal profile_ids from connection arrays
+  #   leave only profile_to_rewrite != profile_to_destroy
   def clean_profiles_arrs(profiles_to_rewrite, profiles_to_destroy)
     clean_to_rewrite = []
     clean_to_destroy = []
