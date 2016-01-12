@@ -2,14 +2,11 @@
   %thead
     %tr
       %th Name
+      %th Sex_id
       %th Counter
-      %th Dublicates
   %tbody
     - @names.each do |name|
       %tr
-        - name.each do |key, value|
-          %td= key
-          %td= value['counter']
-          %td
-            - value['dublicates'].each do |name|
-              %li= "#{name.name}, id: #{name.id}, sex_id: #{name.sex_id}"
+        %td= name.name
+        %td= name.sex_id
+        %td > 1

@@ -22,10 +22,7 @@ class Admin::NamesController < Admin::AdminController
   end
 
   def duplicates
-    @names = Name.select("COUNT(name) as total, name").
-               group(:name, :sex_id).
-               having("COUNT(name) > 1").
-               map{|p| {p.name => {'counter' => p.total, 'dublicates' => Name.where(name: p.name) }}}
+    @names = Name.duplicates
     render template: 'admin/names/index'
   end
 
