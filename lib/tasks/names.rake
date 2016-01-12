@@ -1,27 +1,12 @@
 namespace :names do
   desc "Find and fix names duplicate"
-  task :duplicate => :environment do
+  task :duplicates => :environment do
 
-    puts "Find and complex fix names duplicate"
-    duplicate_names = Name.select("COUNT(name) as total, name").
-               group(:name, :sex_id).
-               having("COUNT(name) > 1").
-               order(:name).
-               map{|p| p.name }  # map{|p| {p.name => p.total} }
-
-    duplicate_names.each do |duplicate_name|
-      names = Name.where(name: duplicate_name).order('id ASC').to_a
+    Name.duplicates.each do |duplucate_name|
+      names = Name.where(name: duplucate_name.name, sex_id: duplucate_name.sex_id).order('id ASC').to_a
       original_name = names.shift
 
-      puts "Base name #{original_name.name}"
-      puts "Base name id: #{original_name.id}"
-
-
       names.each do |name_to_fix|
-
-        puts "Fix name #{original_name.name}"
-        puts "Fix name id #{original_name.name}"
-
         Profile.where(name_id: name_to_fix.id).each {|p| p.update_column(:name_id, original_name.id)}
 
         ProfileKey.where(name_id: name_to_fix.id).each {|p| p.update_column(:name_id, original_name.id)}
@@ -32,7 +17,6 @@ namespace :names do
 
         Name.find(name_to_fix.id).destroy
       end
-
     end
   end
 

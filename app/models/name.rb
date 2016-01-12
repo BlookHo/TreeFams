@@ -88,4 +88,19 @@ class Name < ActiveRecord::Base
     name.try(:mb_chars).try(:capitalize)
   end
 
+
+  def self.duplicates
+    query = "SELECT t.name, t.sex_id, count(*) AS qty
+              FROM names s
+              JOIN (
+                  SELECT name, sex_id
+                  FROM names
+                  GROUP BY name, sex_id
+                  HAVING count(*) > 1
+              ) t
+              ON s.name = t.name AND s.sex_id = t.sex_id
+              GROUP BY t.name, t.sex_id"
+     self.find_by_sql(query)
+  end
+
 end
