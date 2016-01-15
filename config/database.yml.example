@@ -8,14 +8,14 @@ base: &base
   timeout: 10000
   host: 127.0.0.1
 
-production:
-  database: weafam_rails_production
-  <<: *base
-
 development:
-  database: weafam_rails_development
+  database: weafam_development
   <<: *base
 
 test:
-  database: weafam_rails_test
+  database: weafam_test
+  <<: *base
+
+production:
+  database: weafam_production
   <<: *base
