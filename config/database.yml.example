@@ -1,7 +1,7 @@
 base: &base
   adapter: postgresql
-  username: weafamdb
-  password: 8dj4js9
+  username: db_user
+  password: db_password
   encoding: utf8
   reconnect: false
   pool: 25

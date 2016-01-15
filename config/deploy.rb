@@ -45,6 +45,10 @@ role :db,  domain, :primary => true
 #   timeout: 5000
 #   host: 127.0.0.1
 
+
+# Backup
+# pg_dump -U weafamdb -h remote_host -p remote_port name_of_database > name_of_backup_file
+
 # Настройка БД
 namespace :db do
   desc "Create database yaml in shared path"
@@ -91,6 +95,7 @@ namespace :deploy do
     run "touch #{current_path}/tmp/restart.txt"
   end
 end
+
 
 
 before  "deploy:setup", :db
