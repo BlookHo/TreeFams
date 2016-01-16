@@ -157,7 +157,8 @@ module SearchModified
                               profile_id_searched: profile_id_searched,
                               name_id_searched: Profile.find(profile_id_searched).name_id }
       # modified search with exclusions
-      one_profile_results = modi_search_one_profile(profile_search_data)
+ #     one_profile_results = modi_search_one_profile(profile_search_data)
+      one_profile_results = new_modi_search_one_profile(profile_search_data)
 
       uniq_profiles_pairs.merge!(one_profile_results[:profiles_trees_pairs])
       profiles_with_match_hash.merge!(one_profile_results[:profiles_counts])
@@ -296,6 +297,52 @@ module SearchModified
       end
     end
     return certain_profiles_found, certain_profiles_count, certain_profiles_trees
+  end
+
+  # @note: get checked profiles for exclusions
+  # @input: trees_profiles = [[380, 5247], [610, 8085], [610, 8088]]
+  def new_profiles_checking(profile_id_searched, trees_profiles)
+
+#    all_trees_found = trees_profiles.keys.flatten
+    # logger.info "all_trees_found = #{all_trees_found}"
+#    all_profiles_found = trees_profiles.values.flatten
+    # logger.info "all_profiles_found = #{all_profiles_found}"
+
+    certain_profiles_trees = []
+    certain_profiles_found = []
+    certain_profiles_count = []
+
+    # all_profiles_found.each_with_index do |found_profile_to_check, index|
+    #   priznak, match_count = check_exclusions(profile_id_searched, found_profile_to_check)
+    #   # logger.info "After check_exclusions: found_profile_to_check = #{found_profile_to_check}, priznak = #{priznak}, match_count = #{match_count}"
+    #   profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_to_check)
+    #   if profile_checked
+    #     certain_profiles_count << match_count
+    #     certain_profiles_found << profile_checked
+    #     certain_profiles_trees << all_trees_found[index]
+    #     puts "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
+    #   end
+    # end
+    reduced_trees_profiles = trees_profiles
+    trees_profiles.each do |one_tree_profile|
+      # found_tree_id = one_tree_profile[0]
+      found_profile_id = one_tree_profile[1]
+      priznak, match_count = check_exclusions(profile_id_searched, found_profile_id)
+      logger.info "After check_exclusions: found_profile_id = #{found_profile_id}, priznak = #{priznak}, match_count = #{match_count}"
+      profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_id)
+      unless profile_checked
+        reduced_trees_profiles = trees_profiles - one_tree_profile
+        # certain_profiles_count << match_count
+        # certain_profiles_found << profile_checked
+        # certain_profiles_trees << found_tree_id
+        puts "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
+      end
+    end
+
+    puts "reduced_trees_profiles = #{reduced_trees_profiles.inspect}"
+    reduced_trees_profiles
+
+    # return certain_profiles_found, certain_profiles_count, certain_profiles_trees
   end
 
   # @note: main check of exclusions - special algorythm
@@ -453,6 +500,12 @@ module SearchModified
     arr_relations = one_field_content(profile_id_searched, 'relation_id')
     arr_names     = one_field_content(profile_id_searched, 'is_name_id')
 
+    arr_relations = arr_relations.uniq
+    arr_names = arr_names.uniq
+
+    # arr_relations = [1, 2, 3, 3, 3, 3, 8, 8, 15, 16, 17, 17, 91, 92, 101, 102, 121, 121] (pid:7540)
+    # arr_names = [122, 82, 370, 465, 370, 465, 48, 48, 343, 82, 147, 147, 90, 361, 449, 293, 446, 446] (pid:7540)
+
     query_data = { connected_users: profile_search_data[:connected_users],
                    name_id_searched: profile_search_data[:name_id_searched],
                    arr_relations: arr_relations,
@@ -494,6 +547,115 @@ module SearchModified
   end
 
   ##################################################################################
+  def new_modi_search_one_profile(profile_search_data)
+    start_search_time = Time.now
+
+    puts "\n ##### New modi_search_one_profile #####\n\n"
+    logger.info "profile_search_data = #{profile_search_data}"
+
+    profile_id_searched = profile_search_data[:profile_id_searched]
+
+    [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
+    # logger.info "search records: profile_id_searched = #{profile_id_searched}"
+
+    arr_relations = one_field_content(profile_id_searched, 'relation_id')
+    arr_names     = one_field_content(profile_id_searched, 'is_name_id')
+
+    arr_relations = arr_relations.uniq
+    arr_names = arr_names.uniq
+
+    # arr_relations = [1, 2, 3, 3, 3, 3, 8, 8, 15, 16, 17, 17, 91, 92, 101, 102, 121, 121] (pid:7540)
+    # arr_names = [122, 82, 370, 465, 370, 465, 48, 48, 343, 82, 147, 147, 90, 361, 449, 293, 446, 446] (pid:7540)
+
+    query_data = { connected_users: profile_search_data[:connected_users],
+                   name_id_searched: profile_search_data[:name_id_searched],
+                   arr_relations: arr_relations,
+                   arr_names: arr_names }
+
+    # query_data =
+    #     {:connected_users=>[58], :name_id_searched=>28,
+    #      :arr_relations=>[3, 3, 8, 15, 16, 17, 121],
+    #      :arr_names=>   [465, 370, 48, 343, 82, 147, 446]}
+
+    # trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
+    # trees_profiles = {380=>[5247], 610=>[8085, 8088]}
+
+    # trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, trees_profiles)
+    # logger.info "trees_profiles_no_double = uniqs = #{trees_profiles_no_double}, trees doubles_one_to_many = #{doubles_one_to_many}"
+
+    trees_to_check = new_get_found_two_fields(query_data, 'user_id', 'profile_id')
+    # from new_get_found_two_fields:
+    # user_ids_to_check = [[380, 5247], [610, 8085], [610, 8088]]
+
+    # certain_profiles_found, certain_profiles_count, certain_profiles_trees = new_profiles_checking(profile_id_searched, trees_to_check)
+    # certain_profiles_found, certain_profiles_count, certain_profiles_trees = profiles_checking(profile_id_searched, trees_profiles)
+    reduced_trees_profiles = new_profiles_checking(profile_id_searched, trees_to_check)
+    checked_trees_profiles = get_keys_with_items_array(reduced_trees_profiles)
+    logger.info "checked_trees_profiles = #{checked_trees_profiles.inspect}"
+    trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, checked_trees_profiles)
+    logger.info "trees_profiles_no_double = #{trees_profiles_no_double.inspect}, doubles_one_to_many = #{doubles_one_to_many.inspect}"
+    # relation with name (names array): {3=>[370, 465], ... 17=>[147], 121=>[446]}
+    certain_profiles_trees = []
+    certain_profiles_found = []
+    certain_profiles_count = []
+
+    trees_profiles_no_double.each do |found_tree, found_profile|
+      # priznak, match_count = check_exclusions(profile_id_searched, found_profile_to_check)
+      # logger.info "After check_exclusions: found_profile_to_check = #{found_profile_to_check}, priznak = #{priznak}, match_count = #{match_count}"
+      # profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_to_check)
+      # if profile_checked
+  #      certain_profiles_count << match_count
+       certain_profiles_found << found_profile
+       certain_profiles_trees << found_tree
+  #      puts "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
+      # end
+    end
+
+    # certain_profiles_found = [818, 790, 826], certain_profiles_count = [7, 13, 7], certain_profiles_trees = [59, 59, 60]
+
+    # todo: put out doubles trees
+    # check certain_profiles_trees for matchings tree_ids, get indexes and exclude elements[indexes] from
+    # certain_profiles_found and certain_profiles_count (?)
+    # and fill the doubles_one_to_many
+
+    # duplicates_one_to_many = {}
+    # uniq_trees = certain_profiles_trees.uniq
+    # uniq_trees.each do |one_tree|
+    #   index_arr = certain_profiles_trees.each_index.select{|i| certain_profiles_trees[i] == one_tree} # =>[0, 2, 6]
+    #   if index_arr.size > 1
+    #     index_arr.each do |index|
+    #       duplicates_one_to_many.merge!(profile_id_searched => {certain_profiles_trees[index] => certain_profiles_found[index]})
+    #
+    #
+    #     end
+    #   end
+    # end
+
+
+
+    certain_search_data = {
+        search: profile_id_searched,
+        founds: certain_profiles_found,
+        counts: certain_profiles_count,
+        trees: certain_profiles_trees
+    }
+
+    profiles_trees_pairs, profiles_counts = create_results_data(certain_search_data)
+
+    one_profile_results = {
+        profiles_trees_pairs: profiles_trees_pairs,
+        profiles_counts: profiles_counts,
+        doubles_one_to_many: {}
+    }
+    # logger.info "finish modi_search_one_profile:"
+    logger.info "one_profile_results = #{one_profile_results}"
+
+    search_time = (Time.now - start_search_time) * 1000
+    puts "\n == END OF New modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
+    one_profile_results
+  end
+
+  ##################################################################################
 
   # @note: Determine: in which trees ids profiles were found
   def get_found_two_fields(query_data, field_one, field_two)
@@ -511,6 +673,30 @@ module SearchModified
     logger.info "user_ids_to_check = #{user_ids_to_check}"
     # user_ids_to_check = [[380, 5247], [610, 8085], [610, 8088]]
     get_keys_with_items_array(user_ids_to_check)
+    # {380=>[5247], 610=>[8085, 8088]}
+  end
+
+
+  # @note: Determine: in which trees ids profiles were found
+  def new_get_found_two_fields(query_data, field_one, field_two)
+    fields_arr_values = both_fields_records(query_data, field_one, field_two)
+    logger.info "fields_arr_values = #{fields_arr_values}"
+    # Hand test:
+    # fields_arr_values = [[57, 795], [57, 795], [57, 795], [57, 795], [57, 795], [59, 819], [59, 819], [59, 819], [59, 819], [59, 819], [60, 827], [60, 827], [60, 827], [60, 827], [60, 827], [64, 877], [65, 892]]
+    fields_arr_values = [                         [59, 818], [59, 818], [59, 818], [59, 818], [59, 818],
+                                                  [59, 790], [59, 790], [59, 790], [59, 790], [59, 790], [59, 7960],
+                         [60, 826], [60, 826], [60, 826], [60, 826], [60, 826]]
+    logger.info "Hand fields_arr_values = #{fields_arr_values}"
+
+    occurence = occurence_counts(fields_arr_values)
+    logger.info "occurence = #{occurence}"
+
+    user_ids_to_check = exclude_uncertain_trees(occurence)
+    logger.info "user_ids_to_check = #{user_ids_to_check}"
+    # user_ids_to_check = [[380, 5247], [610, 8085], [610, 8088]]
+    user_ids_to_check
+
+    # get_keys_with_items_array(user_ids_to_check)
     # {380=>[5247], 610=>[8085, 8088]}
   end
 
