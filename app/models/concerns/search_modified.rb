@@ -244,7 +244,7 @@ module SearchModified
     key_item_pairs_arr.each do |one_array|
       SearchWork.fill_hash_w_val_arr(new_items_hash, one_array[0], one_array[1])
     end
-    # logger.info "After get_keys_with_items_array: new_items_hash = #{new_items_hash}"
+    logger.info "After get_keys_with_items_array: new_items_hash = #{new_items_hash}"
     new_items_hash
   end
 
@@ -464,6 +464,8 @@ module SearchModified
     #      :arr_names=>   [465, 370, 48, 343, 82, 147, 446]}
 
     trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
+    # trees_profiles = {380=>[5247], 610=>[8085, 8088]}
+
     trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, trees_profiles)
     logger.info "trees_profiles_no_double = uniqs = #{trees_profiles_no_double}, trees doubles_one_to_many = #{doubles_one_to_many}"
 
@@ -483,7 +485,7 @@ module SearchModified
         profiles_counts: profiles_counts,
         doubles_one_to_many: doubles_one_to_many
     }
-    logger.info "finish modi_search_one_profile:"
+    # logger.info "finish modi_search_one_profile:"
     logger.info "one_profile_results = #{one_profile_results}"
 
     search_time = (Time.now - start_search_time) * 1000
@@ -496,7 +498,7 @@ module SearchModified
   # @note: Determine: in which trees ids profiles were found
   def get_found_two_fields(query_data, field_one, field_two)
     fields_arr_values = both_fields_records(query_data, field_one, field_two)
-    # logger.info "fields_arr_values = #{fields_arr_values}"
+    logger.info "fields_arr_values = #{fields_arr_values}"
     # Hand test:
     # fields_arr_values = [[57, 795], [57, 795], [57, 795], [57, 795], [57, 795], [59, 819], [59, 819], [59, 819], [59, 819], [59, 819], [60, 827], [60, 827], [60, 827], [60, 827], [60, 827], [64, 877], [65, 892]]
     # fields_arr_values = [[57, 790], [57, 790], [57, 790], [57, 790], [57, 7960], [59, 818], [59, 818], [59, 818], [59, 818], [59, 818], [60, 826], [60, 826], [60, 826], [60, 826], [60, 826]]
@@ -507,8 +509,9 @@ module SearchModified
 
     user_ids_to_check = exclude_uncertain_trees(occurence)
     logger.info "user_ids_to_check = #{user_ids_to_check}"
+    # user_ids_to_check = [[380, 5247], [610, 8085], [610, 8088]]
     get_keys_with_items_array(user_ids_to_check)
-
+    # {380=>[5247], 610=>[8085, 8088]}
   end
 
   # # @note: Determine: in which trees ids profiles were found
@@ -531,8 +534,8 @@ module SearchModified
     arr_relations = query_data[:arr_relations]
     arr_names = query_data[:arr_names]
 
-    # logger.info "arr_relations = #{arr_relations}"
-    # logger.info "arr_names = #{arr_names}"
+    logger.info "arr_relations = #{arr_relations}"
+    logger.info "arr_names = #{arr_names}"
 
     # todo: here - to install sql selection of extra rows of pairs: relation-name
     # arr_relations = [8,3,3,15,16,17,121]

@@ -307,8 +307,8 @@ module SimilarsInitSearch
               # Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та достоверности
 
               #############################################################
-              # certain_koeff_for_connect ||= WeafamSetting.first.certain_koeff
-              certain_koeff_for_connect = CERTAIN_KOEFF
+              certain_koeff_for_connect ||= WeafamSetting.first.certain_koeff
+              # certain_koeff_for_connect = CERTAIN_KOEFF
               #############################################################
 
               if common_power >= certain_koeff_for_connect
