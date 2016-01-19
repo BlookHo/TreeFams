@@ -273,10 +273,10 @@ module SimilarsInitSearch
           # logger.info "*** compare profiles: data_a_to_compare (is_name, is_sex): #{data_a_to_compare},  - data_b_to_compare: #{data_b_to_compare}"
           # сравниваемые хэши кругов профилей и определение их общей части кругов профилей
           common_hash = intersection(tree_circles[a_profile_id], tree_circles[b_profile_id])
-          logger.info "*** After intersection: one_profile_id = #{a_profile_id}: #{data_a_to_compare} <--> b_profile_id = #{b_profile_id}: #{data_b_to_compare}"
+          logger.info "*** compare profiles: one_profile_id = #{a_profile_id}: #{data_a_to_compare} <--> b_profile_id = #{b_profile_id}: #{data_b_to_compare}"
           # logger.info "*** compare hashes: tree_circles[a_profile_id]: #{tree_circles[a_profile_id]}"
           # logger.info "*** compare hashes: tree_circles[b_profile_id]: #{tree_circles[b_profile_id]}"
-          logger.info "*** compare profiles: common_hash: #{common_hash}"
+          logger.info "*** common_hash: #{common_hash}"
           # logger.info "*** compare hashes: common_hash: #{common_hash}"
           # logger.warn "*** compare hashes: common_hash: #{common_hash}"
           # logger.error "*** compare hashes: common_hash: #{common_hash}"
@@ -307,8 +307,8 @@ module SimilarsInitSearch
               # Занесение в результат тех пар профилей, у кот. мощность совпадения больше коэфф-та достоверности
 
               #############################################################
-              certain_koeff_for_connect ||= WeafamSetting.first.certain_koeff
-              # certain_koeff_for_connect = CERTAIN_KOEFF
+              # certain_koeff_for_connect ||= WeafamSetting.first.certain_koeff
+              certain_koeff_for_connect = CERTAIN_KOEFF
               #############################################################
 
               if common_power >= certain_koeff_for_connect
