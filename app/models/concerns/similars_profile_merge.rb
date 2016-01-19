@@ -15,7 +15,7 @@ module SimilarsProfileMerge
       profiles_to_destroy = connection_data[:profiles_to_destroy]
       # connected_users_arr = connection_data[:connected_users_arr]
 
-      log_profiles_connection = []
+      log_sims_profiles_connection = []
 
       profiles_to_rewrite.each_with_index do |profile_id, index|
         puts "In Sims ProfileMerge: profile_to_rewrite =  #{profile_id}, profiles_to_destroy = #{profiles_to_destroy[index]} "
@@ -38,6 +38,7 @@ module SimilarsProfileMerge
                           current_user_id: connection_data[:current_user_id],
                           connected_at: connection_data[:connection_id] }
             log_profiles_connection = make_user_profile_link(link_data)
+            log_sims_profiles_connection = log_sims_profiles_connection + log_profiles_connection
           end
 
           puts "AFter LINK profiles: opposite_profile.id = #{opposite_profile.id.inspect} \n"  # id = 66
@@ -55,7 +56,7 @@ module SimilarsProfileMerge
           # Mark opposite_profile as deleted = Удаление opposite_profile
           # opposite_profile.update_attributes(:deleted => 1, :updated_at => Time.now)
           opposite_profile.update_columns(:deleted => 1, :updated_at =>  Time.now) # ONLY SO!!!
-
+          log_del_profiles_connection = []
           one_connection_data = { connected_at: connection_data[:connection_id],
                                   current_user_id: connection_data[:current_user_id],
                                   table_name: 'profiles',
@@ -63,10 +64,12 @@ module SimilarsProfileMerge
                                   field: 'deleted',
                                   written: 1,
                                   overwritten: 0 }
-          log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
+          # log_profiles_connection = store_one_log(log_profiles_connection, one_connection_data)
+          log_del_profiles_connection << SimilarsLog.new(one_connection_data)
+          log_sims_profiles_connection = log_sims_profiles_connection + log_del_profiles_connection
         end
       end
-      log_profiles_connection
+      log_sims_profiles_connection
     end
 
     # Поочередное линкование Юзера и Профиля

@@ -63,7 +63,7 @@ module ConnectionTrees
     # На вьюхе проверяем: продолжать ли объединение.
     # Чтобы протестировать check_connection_permit: в модуле search.rb, после запуска метода
     # search_profiles_from_tree - раскомментить одну или обе строки с # for DEBUGG ONLY!!!
-    connection_message = "Проверка 2 Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
+    connection_message = "Внимание! Нельзя объединить ваши деревья, т.к. в результатах поиска есть дубликаты!"
     if (!duplicates_one_to_many.empty? || !duplicates_many_to_one.empty?)
       logger.info "=== IN check_connection_switch: ЕСТЬ дубликаты!!"
       connection_results[:stop_connection] = true # STOP connection

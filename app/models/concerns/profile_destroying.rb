@@ -55,15 +55,15 @@ module ProfileDestroying
       # ProfileKey.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
 
 
-      ##########  UPDATES FEEDS - № 18  # destroy ###################
-      update_feed_data = { user_id:           self.id,    #
-                           update_id:         18,                  #
-                           agent_user_id:     base_profile.tree_id,   #
-                           read:              false,              #
-                           agent_profile_id:  profile_id,        #
-                           who_made_event:    self.id }   #
-      logger.info "In Profile controller: Before destroy UpdatesFeed   update_feed_data= #{update_feed_data} "
-      UpdatesFeed.create(update_feed_data) #
+      # ##########  UPDATES FEEDS - № 18  # destroy ###################
+      # update_feed_data = { user_id:           self.id,    #
+      #                      update_id:         18,                  #
+      #                      agent_user_id:     base_profile.tree_id,   #
+      #                      read:              false,              #
+      #                      agent_profile_id:  profile_id,        #
+      #                      who_made_event:    self.id }   #
+      # logger.info "In Profile controller: Before destroy UpdatesFeed   update_feed_data= #{update_feed_data} "
+      # UpdatesFeed.create(update_feed_data) #
 
       # Mark profile as deleted
       profile.update_attribute('deleted', 1)

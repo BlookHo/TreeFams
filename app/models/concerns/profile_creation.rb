@@ -29,17 +29,17 @@ module ProfileCreation
 
     CommonLog.create_common_log(common_log_data)
 
-    ##########  UPDATES FEEDS - № 4  # create ###################
-    update_feed_data = { user_id:           self.id,    # 3   Алексей к Анне у Натальи
-                         update_id:         4,                  # 4
-                         agent_user_id:     new_profile.tree_id,   # 3
-                         read:              false,              #
-                         agent_profile_id:  new_profile.id,        # 215
-                         who_made_event:    self.id }   # 3
-
-    UpdatesFeed.create(update_feed_data) #
-    new_profile.case_update_amounts(new_profile, self)
-    ################################
+    # ##########  UPDATES FEEDS - № 4  # create ###################
+    # update_feed_data = { user_id:           self.id,    # 3   Алексей к Анне у Натальи
+    #                      update_id:         4,                  # 4
+    #                      agent_user_id:     new_profile.tree_id,   # 3
+    #                      read:              false,              #
+    #                      agent_profile_id:  new_profile.id,        # 215
+    #                      who_made_event:    self.id }   # 3
+    #
+    # UpdatesFeed.create(update_feed_data) #
+    # new_profile.case_update_amounts(new_profile, self)
+    # ################################
 
     # sims & search
     # puts "In Rails Concern: After creation_profile: start_search_methods "
@@ -71,6 +71,7 @@ module ProfileCreation
   #   exclusions_hash: nil,
   #   tree_ids: tree_ids
   def create_keys(profile, new_profile, relation_id, user)
+    logger.info "In Rails Concern: create_keys: profile.id = #{profile.id}, new_profile.id = #{new_profile.id}, relation_id = #{relation_id}, user.id = #{user.id} "
     ProfileKey.add_new_profile(
         profile.sex_id,
         profile,

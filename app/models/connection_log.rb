@@ -52,7 +52,7 @@ class ConnectionLog < ActiveRecord::Base
   # From -Module # similars_connect_tree
   # Сохранение массива логов в таблицу ConnectionLog
   def self.store_log(connection_log)
-    logger.info "MMMMM *** In model ConnectionLog store_log "
+    # logger.info "MMMMM *** In model ConnectionLog store_log "
     connection_log.each(&:save)
   end
 

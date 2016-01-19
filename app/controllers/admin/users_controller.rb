@@ -29,7 +29,7 @@ class Admin::UsersController < Admin::AdminController
         # delete SimilarsFound
         SimilarsFound.where("user_id = ?", user_id).destroy_all
         # delete UpdateFeeds
-        UpdatesFeed.where("user_id = ? OR agent_user_id = ?", user_id, user_id).destroy_all
+   # UpdatesFeed.where("user_id = ? OR agent_user_id = ?", user_id, user_id).destroy_all
         # delete ConnectionLogs
         ConnectionLog.where("current_user_id = ? OR with_user_id = ?", user_id, user_id).destroy_all
         # delete SimilarsLog

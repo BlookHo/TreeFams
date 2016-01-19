@@ -101,12 +101,12 @@ class ConnectionRequest < ActiveRecord::Base
       ##########################################
       new_connection_request.save
       #########################################
-      profile_user_to_conn = User.find(user_to_connect).profile_id unless user_to_connect.blank?
-      ##########  UPDATES - № 1  ####################
-      # logger.info "In create_requests:  user_id = #{current_user_id}, agent_user_id = #{user_to_connect},
-      #              agent_profile_id = #{profile_user_to_connect} " #
-      UpdatesFeed.create(user_id: current_user_id, update_id: 1, agent_user_id: user_to_connect,
-                         agent_profile_id: profile_user_to_conn,  who_made_event: current_user_id, read: false)
+      # profile_user_to_conn = User.find(user_to_connect).profile_id unless user_to_connect.blank?
+      # ##########  UPDATES - № 1  ####################
+      # # logger.info "In create_requests:  user_id = #{current_user_id}, agent_user_id = #{user_to_connect},
+      # #              agent_profile_id = #{profile_user_to_connect} " #
+      # UpdatesFeed.create(user_id: current_user_id, update_id: 1, agent_user_id: user_to_connect,
+      #                    agent_profile_id: profile_user_to_conn,  who_made_event: current_user_id, read: false)
 
     end
     puts "In create_requests: New requests created"

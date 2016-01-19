@@ -16,6 +16,7 @@ module ProfileKeysGeneration
     # профили в exclusions_hash с значение 0/false исключаются из генерации связей
     def add_new_profile(base_sex_id, base_profile, new_profile, new_relation_id,
                         exclusions_hash: nil, tree_ids: tree_ids) # [trees connected] типа [126, 127]
+      # puts "In add_new_profile: base_sex_id = #{base_sex_id}, base_profile.id = #{base_profile.id}, new_profile.id = #{new_profile.id}, new_relation_id = #{new_relation_id}, tree_ids = #{tree_ids} "
 
       # Получит хэши имен ближнего круга
       # вокруг базового профиля с учетом хэша исключений - от нестандартных ответов.
@@ -79,6 +80,7 @@ module ProfileKeysGeneration
     # base_sex_id - исп-ся для определения обратного relation в завис-ти от пола базового профиля, к кому добавляем
     # todo: уточнить с sex_id == base_sex_id ??
     def  make_profilekeys_rows(base_sex_id, base_profile_tree_id, add_row_to_tree)
+      # puts "In make_profilekeys_rows: add_row_to_tree = #{add_row_to_tree}"
 
       profile_id              = add_row_to_tree[:base_profile_id] # base_profile_id
       sex_id                  = add_row_to_tree[:base_sex_id] # base_sex_id  ?
@@ -97,6 +99,7 @@ module ProfileKeysGeneration
                             new_profile_name_id: new_profile_name_id }
 
       add_main_pkeys_rows(add_data, add_relation_data)
+      logger.info "In make_profilekeys_rows: new_relation_id = #{new_relation_id}"
 
       case new_relation_id
         when 1
@@ -168,6 +171,8 @@ module ProfileKeysGeneration
                          new_relation_id: new_relation_id,
                          rigth_profile_id: new_profile_id,
                          rigth_profile_name_id: new_profile_name_id }
+      # puts "In add_main_pkeys_rows: add_data_1row = #{add_data_1row}"
+
       add_profile_key_row(add_data_1row)
 
       # Добавить ряд Новый_профиль - Отношение_Обратное_Новому - Профиль_К_Кому_Добавили
@@ -177,6 +182,7 @@ module ProfileKeysGeneration
                         new_relation_id: @reverse_relation_id,
                         rigth_profile_id: profile_id,
                         rigth_profile_name_id: name_id }
+      # puts "In add_main_pkeys_rows: add_data_2row = #{add_data_2row}"
       add_profile_key_row(add_data_2row)
 
     end
@@ -333,6 +339,10 @@ module ProfileKeysGeneration
     # @note GET /
     # @see News
     def add_daugther_p_keys(base_sex_id, base_profile_tree_id, add_relation_data ) #new_profile_id, new_profile_name_id)
+      # puts "In add_daugther_p_keys: base_sex_id = #{base_sex_id}, base_profile_tree_id = #{base_profile_tree_id}"
+      # puts "In add_daugther_p_keys: @husbands_hash = #{@husbands_hash}, @daughters_hash = #{@daughters_hash}"
+
+
       # Хэш_родста, Пол_родства_из_Хэша_того_С_Кем_делаем_новый_ряд, Вид_Родства_Добавляемого_к_Профилю_Хэша, профиль_Кого_добавляем, имя_Кого_добавляем,
       fill_relation_rows(base_profile_tree_id, @wives_hash, 0, 4, add_relation_data ) #new_profile_id, new_profile_name_id, display_name_id, new_prf_display_name_id)  ### NonStandard
       fill_relation_rows(base_profile_tree_id, @husbands_hash, 1, 4, add_relation_data ) #new_profile_id, new_profile_name_id, display_name_id, new_prf_display_name_id)  ### NonStandard
@@ -470,16 +480,18 @@ module ProfileKeysGeneration
       @daughters_hash = Profile.find(base_profile_id).daughters_hash(tree_ids)
       # puts "== @daughters_hash = #{@daughters_hash}"
 
-      if exclusions_hash
-        @fathers_hash = proceed_exclusions_profile(@fathers_hash, exclusions_hash)
-        @mothers_hash = proceed_exclusions_profile(@mothers_hash, exclusions_hash)
-        @brothers_hash = proceed_exclusions_profile(@brothers_hash, exclusions_hash)
-        @sisters_hash = proceed_exclusions_profile(@sisters_hash, exclusions_hash)
-        @wives_hash = proceed_exclusions_profile(@wives_hash, exclusions_hash)
-        @husbands_hash = proceed_exclusions_profile(@husbands_hash, exclusions_hash)
-        @sons_hash = proceed_exclusions_profile(@sons_hash, exclusions_hash)
-        @daughters_hash = proceed_exclusions_profile(@daughters_hash, exclusions_hash)
-      end
+      # if exclusions_hash
+      #   @fathers_hash = proceed_exclusions_profile(@fathers_hash, exclusions_hash)
+      #   @mothers_hash = proceed_exclusions_profile(@mothers_hash, exclusions_hash)
+      #   @brothers_hash = proceed_exclusions_profile(@brothers_hash, exclusions_hash)
+      #   @sisters_hash = proceed_exclusions_profile(@sisters_hash, exclusions_hash)
+      #   @wives_hash = proceed_exclusions_profile(@wives_hash, exclusions_hash)
+      #   @husbands_hash = proceed_exclusions_profile(@husbands_hash, exclusions_hash)
+      #   @sons_hash = proceed_exclusions_profile(@sons_hash, exclusions_hash)
+      #   @daughters_hash = proceed_exclusions_profile(@daughters_hash, exclusions_hash)
+      # end
+
+
     end
 
 

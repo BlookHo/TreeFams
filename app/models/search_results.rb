@@ -28,7 +28,7 @@ class SearchResults < ActiveRecord::Base
   validate :count_value_more_certain  # :count
 
   def count_value_more_certain
-    certain_koeff = 4 #WeafamSetting.first.certain_koeff
+    certain_koeff = CERTAIN_KOEFF #WeafamSetting.first.certain_koeff
     self.errors.add(:search_results, 'Макс. кол-во отношений не должно быть меньше, чем настройка в WeafamSetting.') if self.count < certain_koeff
   end
 
