@@ -1,5 +1,6 @@
 module SearchModified
   extend ActiveSupport::Concern
+  require 'pry'
 
   #############################################################
   # Иванищев А.В. 2015, December
@@ -344,18 +345,32 @@ module SearchModified
     reduced_trees_profiles = trees_profiles
     trees_profiles.each_with_index do |one_tree_profile, index|
       found_profile_id = one_tree_profile[1]
-      priznak, match_count = check_exclusions(profile_id_searched, found_profile_id)
-      logger.info "After check_exclusions: found_profile_id = #{found_profile_id}, priznak = #{priznak}, match_count = #{match_count}"
+      logger.info "one_tree_profile = #{one_tree_profile}, found_profile_id = #{found_profile_id}"
+
+      # todo: убрать # two lines when Ok
+  #    priznak, match_count = check_exclusions(profile_id_searched, found_profile_id)
+  #    logger.info "After check_exclusions: found_profile_id = #{found_profile_id}, priznak = #{priznak}, match_count = #{match_count}"
+
+      # After check_exclusions:
+                found_profile_id = 1978, priznak = false, match_count = 0
+
       profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_id)
+      logger.info "profile_checked = #{profile_checked}"
+
+      binding.pry          # Execution will stop here.
+
       unless profile_checked
         reduced_trees_profiles = trees_profiles - one_tree_profile
-        # puts "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
+        logger.info "reduced_trees_profiles = #{reduced_trees_profiles}, one_tree_profile = #{one_tree_profile}"
+
       end
       reduced_trees_profiles[index] = one_tree_profile + [match_count]
-      # puts "reduced_trees_profiles[index] = #{reduced_trees_profiles[index].inspect}"
+      logger.info "reduced_trees_profiles[index] = #{reduced_trees_profiles[index].inspect}"
+      binding.pry          # Execution will stop here.
+
     end
 
-    puts "\n After Profiles checking: reduced_trees_profiles = #{reduced_trees_profiles.inspect} \n"
+    logger.info "\n After Profiles checking: reduced_trees_profiles = #{reduced_trees_profiles.inspect} \n"
     reduced_trees_profiles
   end
 
@@ -369,8 +384,11 @@ module SearchModified
     f_rel_name_arr = rel_name_profile_records(profile_id_found)
 
     search_filling_hash = relations_with_names(s_rel_name_arr)
+
     logger.info "search_filling_hash = #{search_filling_hash}"
+
     found_filling_hash = relations_with_names(f_rel_name_arr)
+
     logger.info "found_filling_hash = #{found_filling_hash}"
 
     match_count = 0
@@ -423,14 +441,15 @@ module SearchModified
   def check_exclusions_priznak(priznak, match_count, profile_id_found)
     # logger.info "check_exclusions_priznak: - priznak = #{priznak}, match_count = #{match_count}"
     if priznak
-      # logger.info "EXCLUSIONS PASSED"
+      logger.info "EXCLUSIONS PASSED"
       if check_match_count?(match_count)
+        logger.info "PROFILES ARE EQUAL - match_count > CK"
         profile_id_found
       else
         nil
       end
     else
-      # logger.info "EXCLUSIONS DID NOT PASSED"
+      logger.info "EXCLUSIONS DID NOT PASSED"
       nil
     end
   end
@@ -570,8 +589,16 @@ module SearchModified
     trees_to_check = get_found_two_fields(query_data, 'user_id', 'profile_id')
     # from new_get_found_two_fields: trees_to_check = [[380, 5247], [610, 8085], [610, 8088]]
     logger.info "trees_to_check = #{trees_to_check.inspect}"
+    trees_to_check = [[119, 1978], [151, 2414], [312, 4384], [525, 11220], [763, 10335], [789, 10545], [789, 10541],
+                      [789, 14148], [964, 13156], [973, 13307], [1086, 13156], [1091, 16043]]
+
+    binding.pry          # Execution will stop here.
 
     reduced_trees_profiles = profiles_checking(profile_id_searched, trees_to_check)
+    logger.info "reduced_trees_profiles = #{reduced_trees_profiles.inspect}"
+
+    binding.pry          # Execution will stop here.
+
     cheked_trees_profiles, checked_trees_counts = trees_with_profiles_counts(reduced_trees_profiles)
     logger.info "cheked_trees_profiles = #{cheked_trees_profiles.inspect}, checked_trees_counts = #{checked_trees_counts.inspect}"
     trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, cheked_trees_profiles)
