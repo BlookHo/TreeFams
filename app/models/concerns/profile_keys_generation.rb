@@ -16,7 +16,7 @@ module ProfileKeysGeneration
     # профили в exclusions_hash с значение 0/false исключаются из генерации связей
     def add_new_profile(base_sex_id, base_profile, new_profile, new_relation_id,
                         exclusions_hash: nil, tree_ids: tree_ids) # [trees connected] типа [126, 127]
-      puts "In add_new_profile: base_sex_id = #{base_sex_id}, base_profile.id = #{base_profile.id}, new_profile.id = #{new_profile.id}, new_relation_id = #{new_relation_id}, tree_ids = #{tree_ids} "
+      # puts "In add_new_profile: base_sex_id = #{base_sex_id}, base_profile.id = #{base_profile.id}, new_profile.id = #{new_profile.id}, new_relation_id = #{new_relation_id}, tree_ids = #{tree_ids} "
 
       # Получит хэши имен ближнего круга
       # вокруг базового профиля с учетом хэша исключений - от нестандартных ответов.
@@ -99,7 +99,7 @@ module ProfileKeysGeneration
                             new_profile_name_id: new_profile_name_id }
 
       add_main_pkeys_rows(add_data, add_relation_data)
-      puts "In make_profilekeys_rows: new_relation_id = #{new_relation_id}"
+      logger.info "In make_profilekeys_rows: new_relation_id = #{new_relation_id}"
 
       case new_relation_id
         when 1
@@ -171,7 +171,7 @@ module ProfileKeysGeneration
                          new_relation_id: new_relation_id,
                          rigth_profile_id: new_profile_id,
                          rigth_profile_name_id: new_profile_name_id }
-      puts "In add_main_pkeys_rows: add_data_1row = #{add_data_1row}"
+      # puts "In add_main_pkeys_rows: add_data_1row = #{add_data_1row}"
 
       add_profile_key_row(add_data_1row)
 
@@ -182,7 +182,7 @@ module ProfileKeysGeneration
                         new_relation_id: @reverse_relation_id,
                         rigth_profile_id: profile_id,
                         rigth_profile_name_id: name_id }
-      puts "In add_main_pkeys_rows: add_data_2row = #{add_data_2row}"
+      # puts "In add_main_pkeys_rows: add_data_2row = #{add_data_2row}"
       add_profile_key_row(add_data_2row)
 
     end
@@ -464,21 +464,21 @@ module ProfileKeysGeneration
       # puts "============ In get_bk_relative_names ==== exclusions_hash: #{exclusions_hash}"
 
       @fathers_hash = Profile.find(base_profile_id).fathers_hash(tree_ids)
-      puts "== @fathers_hash = #{@fathers_hash}"
+      # puts "== @fathers_hash = #{@fathers_hash}"
       @mothers_hash = Profile.find(base_profile_id).mothers_hash(tree_ids)
-      puts "== @mothers_hash = #{@mothers_hash}"
+      # puts "== @mothers_hash = #{@mothers_hash}"
       @brothers_hash = Profile.find(base_profile_id).brothers_hash(tree_ids)
-      puts "== @brothers_hash = #{@brothers_hash}"
+      # puts "== @brothers_hash = #{@brothers_hash}"
       @sisters_hash = Profile.find(base_profile_id).sisters_hash(tree_ids)
-      puts "== @sisters_hash = #{@sisters_hash}"
+      # puts "== @sisters_hash = #{@sisters_hash}"
       @wives_hash = Profile.find(base_profile_id).wives_hash(tree_ids)
-      puts "== @wives_hash = #{@wives_hash}"
+      # puts "== @wives_hash = #{@wives_hash}"
       @husbands_hash = Profile.find(base_profile_id).husbands_hash(tree_ids)
-      puts "== @husbands_hash = #{@husbands_hash}"
+      # puts "== @husbands_hash = #{@husbands_hash}"
       @sons_hash = Profile.find(base_profile_id).sons_hash(tree_ids)
-      puts "== @sons_hash = #{@sons_hash}"
+      # puts "== @sons_hash = #{@sons_hash}"
       @daughters_hash = Profile.find(base_profile_id).daughters_hash(tree_ids)
-      puts "== @daughters_hash = #{@daughters_hash}"
+      # puts "== @daughters_hash = #{@daughters_hash}"
 
       # if exclusions_hash
       #   @fathers_hash = proceed_exclusions_profile(@fathers_hash, exclusions_hash)

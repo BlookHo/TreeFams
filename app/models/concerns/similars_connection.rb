@@ -96,17 +96,17 @@ module SimilarsConnection
     #                             connection_id: last_log_id }
 
     ##########  UPDATES FEEDS - № 19  # similars_connect ###################
-    profile_current_user = User.find(connection_data[:current_user_id]).profile_id
-    update_feed_data = { user_id:           connection_data[:current_user_id] ,    #
-                         update_id:         19,                  #
-                         agent_user_id:     connection_data[:current_user_id],   #
-                         read:              false,              #
-                         agent_profile_id:  profile_current_user,        #
-                         who_made_event:    connection_data[:current_user_id] }   #
-    logger.info "In SimilarsConnection: Before create UpdatesFeed   update_feed_data= #{update_feed_data} "
+    # profile_current_user = User.find(connection_data[:current_user_id]).profile_id
+    # update_feed_data = { user_id:           connection_data[:current_user_id] ,    #
+    #                      update_id:         19,                  #
+    #                      agent_user_id:     connection_data[:current_user_id],   #
+    #                      read:              false,              #
+    #                      agent_profile_id:  profile_current_user,        #
+    #                      who_made_event:    connection_data[:current_user_id] }   #
+    # logger.info "In SimilarsConnection: Before create UpdatesFeed   update_feed_data= #{update_feed_data} "
     # update_feed_data= {:user_id=>1, :update_id=>4, :agent_user_id=>2, :read=>false, :agent_profile_id=>219, :who_made_event=>1} (pid:16287)
 
-    UpdatesFeed.create(update_feed_data) #
+    # UpdatesFeed.create(update_feed_data) #
 
     common_sims_log
   end

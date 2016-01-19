@@ -388,8 +388,9 @@ class Profile < ActiveRecord::Base
   #   то они участвуют в отработке логов: redo_deletion_log
   #   for ProfileKeys logs update: one profile could been previously deleted
   def self.check_profiles_exists?(profile_id, is_profile_id)
-    logger.info "*** In module Profile.check_profiles_exists: 1ex = #{self.where(id: profile_id, deleted: 0).exists?.inspect} "
-    logger.info "*** In module Profile.check_profiles_exists: 2ex = #{self.where(id: is_profile_id, deleted: 0).exists?.inspect} "
+    logger.info "*** In module Profile.check_profiles_exists"
+    # logger.info "*** In module Profile.check_profiles_exists: 1ex = #{self.where(id: profile_id, deleted: 0).exists?.inspect} "
+    # logger.info "*** In module Profile.check_profiles_exists: 2ex = #{self.where(id: is_profile_id, deleted: 0).exists?.inspect} "
     self.where(id: profile_id, deleted: 0).exists? && self.where(id: is_profile_id, deleted: 0).exists?
   end
 

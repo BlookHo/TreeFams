@@ -49,7 +49,7 @@ class ProfilesController < ApplicationController
     @base_profile = current_user.creation_profile(params_to_create)
 
     # sims & search
-    puts "In Profiles_controller: After creation_profile: start_search_methods "
+    logger.info "In Profiles_controller: After creation_profile: start_search_methods "
     SearchResults.start_search_methods(current_user)
   end
 
