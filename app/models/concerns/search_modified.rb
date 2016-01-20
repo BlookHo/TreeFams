@@ -229,7 +229,6 @@ module SearchModified
   end
 
 
-
   # Служебный метод для отладки - для LOGGER
   # todo: перенести этот метод в Operational - для нескольких моделей
   # Показывает массив в logger
@@ -260,14 +259,9 @@ module SearchModified
   # relation with name (names array): {3=>[370, 465], ... 17=>[147], 121=>[446]}
   def relations_with_names(key_item_pairs_arr)
     trees_profiles = {}
-    # logger.info "In get_keys_with_items_array: key_item_pairs_arr = #{key_item_pairs_arr}"
     key_item_pairs_arr.each do |one_array|
       SearchWork.fill_hash_w_val_arr(trees_profiles, one_array[0], one_array[1])
-      # SearchWork.fill_hash_w_val_arr(trees_counts, one_array[0], one_array[2])
     end
-    # logger.info "After get_keys_with_items_array: trees_profiles = #{trees_profiles}"
-    # logger.info " trees_counts = #{trees_counts}"
-    # return trees_profiles, trees_counts
      trees_profiles
   end
 
@@ -277,7 +271,7 @@ module SearchModified
   def trees_with_profiles_counts(three_items_arrs)
     trees_profiles = {}
     trees_counts = {}
-    logger.info "In get_keys_with_items_array: three_items_arrs = #{three_items_arrs}"
+    logger.info "In trees_with_profiles_counts: three_items_arrs = #{three_items_arrs}"
     three_items_arrs.each do |one_array|
       SearchWork.fill_hash_w_val_arr(trees_profiles, one_array[0], one_array[1])
       SearchWork.fill_hash_w_val_arr(trees_counts, one_array[0], one_array[2])
@@ -299,15 +293,37 @@ module SearchModified
         .pluck(:relation_id, :is_name_id)
   end
 
+  # @note: to fulfill sql query in RoR
+  # OR sql_result2 = ProfileKey.find_by_sql("SELECT #{field_name} FROM profile_keys
+  #                   WHERE profile_id = #{profile_id} AND deleted = 0")
+  def execute_statement(sql)
+    results = ActiveRecord::Base.connection.execute(sql)
+    if results.present?
+      results
+    else
+      nil
+    end
+  end
+
+
   # @note: collect hash of relations (key) and names array (value)
   # todo: place this method in ProfileKey model
   def one_field_content(profile_id, field_name)
-    # logger.info "In one_field_content: field_name = #{field_name}"
+
+    logger.info "In one_field_content: profile_id = #{profile_id}, field_name = #{field_name}"
+
+    # binding.pry          # Execution will stop here.
+    # # sql_result = ActiveRecord::Base.connection.execute("SELECT #{field_name}  FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # sql_result1 = execute_statement("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # logger.info "In one_field_content: sql_result1 = #{sql_result1}" #", sql_result.size = #{sql_result.size}"
+    # sql_result2 = ProfileKey.find_by_sql("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # logger.info "In one_field_content: sql_result2 = #{sql_result2}"
+    # binding.pry          # Execution will stop here.
+
     ProfileKey.where(:profile_id => profile_id, deleted: 0)
         .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
         .order('relation_id')
         .pluck(field_name)
-    # .distinct
   end
 
   # @note: get checked profiles for exclusions
@@ -338,67 +354,86 @@ module SearchModified
 
 
   # @note: get checked profiles for exclusions
+  # @input: search_filled_hash =  {1=>[122], 2=>[82], 3=>[370, 465], 8=>[48], 15=>[343], 16=>[82], 17=>[147], 91=>[90],
+  #                               92=>[361], 101=>[449], 102=>[293], 121=>[446]}
   # @input: trees_profiles = [[380, 5247], [610, 8085], [610, 8088]]
   # @output: reduced_trees_profiles = [[59, 818, 7], [60, 826, 7]]
-  def profiles_checking(profile_id_searched, trees_profiles)
+  # def profiles_checking(profile_id_searched, trees_profiles)
+  def trees_profiles_checking(search_filled_hash, trees_profiles)
+    puts "\n found #trees_profiles_checking\n"
 
     reduced_trees_profiles = trees_profiles
-    trees_profiles.each_with_index do |one_tree_profile, index|
+    logger.info "start reduced_trees_profiles = #{reduced_trees_profiles}"
+    trees_profiles.each do |one_tree_profile|
       found_profile_id = one_tree_profile[1]
+      puts "\n"
       logger.info "one_tree_profile = #{one_tree_profile}, found_profile_id = #{found_profile_id}"
-
-      # todo: убрать # two lines when Ok
-  #    priznak, match_count = check_exclusions(profile_id_searched, found_profile_id)
-  #    logger.info "After check_exclusions: found_profile_id = #{found_profile_id}, priznak = #{priznak}, match_count = #{match_count}"
+      found_filled_hash = filling_hash(found_profile_id)
+      logger.info "found_filled_hash = #{found_filled_hash}"
+      priznak, match_count = check_exclusions(search_filled_hash, found_filled_hash) unless found_filled_hash.empty?
+      logger.info "After check_exclusions: found_profile_id = #{found_profile_id}, priznak = #{priznak.inspect}, match_count = #{match_count.inspect}"
 
       # After check_exclusions:
-                found_profile_id = 1978, priznak = false, match_count = 0
-
       profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_id)
-      logger.info "profile_checked = #{profile_checked}"
-
-      binding.pry          # Execution will stop here.
-
-      unless profile_checked
-        reduced_trees_profiles = trees_profiles - one_tree_profile
-        logger.info "reduced_trees_profiles = #{reduced_trees_profiles}, one_tree_profile = #{one_tree_profile}"
-
+      logger.info "profile_checked = #{profile_checked.inspect}"
+  #    binding.pry          # Execution will stop here.
+      if profile_checked.blank?
+        reduced_trees_profiles = reduced_trees_profiles - [one_tree_profile]
+        logger.info "NOT Checked: reduced_trees_profiles = #{reduced_trees_profiles}, one_tree_profile = #{one_tree_profile}"
+      else
+        index_arr = reduced_trees_profiles.index { |elem| elem == one_tree_profile }
+        logger.info "Checked Ok: one_tree_profile = #{one_tree_profile}, index_arr = #{index_arr}"
+        if index_arr.blank?
+          reduced_trees_profiles = reduced_trees_profiles - [one_tree_profile]
+          logger.info "In search: trees_profiles_checking: index_arr.blank? #{reduced_trees_profiles.inspect}, one_tree_profile = #{one_tree_profile}"
+        else
+          with_count_one_tree_profile = one_tree_profile + [match_count]
+          reduced_trees_profiles[index_arr] = with_count_one_tree_profile
+          logger.info "Checked Ok: reduced_trees_profiles[index] = #{reduced_trees_profiles[index_arr].inspect}, with_count_one_tree_profile = #{with_count_one_tree_profile}"
+        end
+  #      binding.pry          # Execution will stop here.
       end
-      reduced_trees_profiles[index] = one_tree_profile + [match_count]
-      logger.info "reduced_trees_profiles[index] = #{reduced_trees_profiles[index].inspect}"
-      binding.pry          # Execution will stop here.
+      logger.info "current reduced_trees_profiles = #{reduced_trees_profiles}"
 
     end
 
-    logger.info "\n After Profiles checking: reduced_trees_profiles = #{reduced_trees_profiles.inspect} \n"
+    logger.info "\n After Profiles Ok checking: reduced_trees_profiles = #{reduced_trees_profiles.inspect} \n"
+    # After Profiles Ok checking: reduced_trees_profiles = [[59, 824, 5], [60, 832, 5]]
     reduced_trees_profiles
   end
 
+  # @note: collect filling hashes for search and found profiles
+  # @input: profile_id
+  # @output: filled_hash = {1=>[122], 2=>[82], 3=>[370, 465], 8=>[48], 15=>[343], 16=>[82]}
+  #  { relation => [name] }
+  def filling_hash(profile_id)
+    rel_name_arr = rel_name_profile_records(profile_id)
+    # filled_hash =
+    relations_with_names(rel_name_arr)
+    # logger.info "filled_hash = #{filled_hash}"
+    # filled_hash
+  end
 
   # @note: main check of exclusions - special algorythm
   # EXCLUSION_RELATIONS = WeafamSetting.first.exclusion_relations = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
-  def check_exclusions(profile_id_searched, profile_id_found)
-    puts "\n # check_exclusions # profile_id_searched = #{profile_id_searched}, profile_id_found To check = #{profile_id_found}\n"
+  # def check_exclusions(profile_id_searched, profile_id_found)
+  def check_exclusions(search_filled_hash, found_filled_hash)
+    # logger.info  "# check_exclusions # profile_id_searched = #{profile_id_searched}, profile_id_found To check = #{profile_id_found}\n"
 
-    s_rel_name_arr = rel_name_profile_records(profile_id_searched)
-    f_rel_name_arr = rel_name_profile_records(profile_id_found)
+    # search_filling_hash = filling_hash(profile_id_searched)
+    # found_filling_hash = filling_hash(profile_id_found)
 
-    search_filling_hash = relations_with_names(s_rel_name_arr)
-
-    logger.info "search_filling_hash = #{search_filling_hash}"
-
-    found_filling_hash = relations_with_names(f_rel_name_arr)
-
-    logger.info "found_filling_hash = #{found_filling_hash}"
+#    logger.info "search_filling_hash = #{search_filling_hash}"
+#    logger.info "found_filling_hash = #{found_filling_hash}"
 
     match_count = 0
     priznak = true
-    search_filling_hash.each do |relation, names|
-      sval = search_filling_hash[relation]
-      fval = found_filling_hash[relation]
-      if found_filling_hash.has_key?(relation)
+    search_filled_hash.each do |relation, names|
+      sval = search_filled_hash[relation]
+      fval = found_filled_hash[relation]
+      if found_filled_hash.has_key?(relation)
         if EXCLUSION_RELATIONS.include?(relation)
-            if sval == fval
+          if sval == fval
             match_count += sval.size
             priznak = true
           elsif sval & fval != []
@@ -421,7 +456,7 @@ module SearchModified
         priznak = true
       end
     end
-    logger.info "check_exclusions end: - priznak = #{priznak}, match_count = #{match_count}"
+    # logger.info "check_exclusions end: - priznak = #{priznak}, match_count = #{match_count}"
     return priznak, match_count
   end
 
@@ -538,7 +573,7 @@ module SearchModified
     trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, trees_profiles)
     logger.info "trees_profiles_no_double = uniqs = #{trees_profiles_no_double}, trees doubles_one_to_many = #{doubles_one_to_many}"
 
-    certain_profiles_found, certain_profiles_count, certain_profiles_trees = profiles_checking(profile_id_searched, trees_profiles_no_double)
+    certain_profiles_found, certain_profiles_count, certain_profiles_trees = prev_profiles_checking(profile_id_searched, trees_profiles_no_double)
 
     certain_search_data = {
         search: profile_id_searched,
@@ -566,8 +601,8 @@ module SearchModified
   ##################################################################################
   def modi_search_one_profile(profile_search_data)
     start_search_time = Time.now
-
-    puts "\n ##### modi_search_one_profile #####\n\n"
+    puts "\n"
+    logger.info "\n ##### modi_search_one_profile #####\n\n"
     logger.info "profile_search_data = #{profile_search_data}"
 
     profile_id_searched = profile_search_data[:profile_id_searched]
@@ -588,19 +623,29 @@ module SearchModified
 
     trees_to_check = get_found_two_fields(query_data, 'user_id', 'profile_id')
     # from new_get_found_two_fields: trees_to_check = [[380, 5247], [610, 8085], [610, 8088]]
+    puts "\n All found profiles and trees - to check:\n"
+ #   trees_to_check = [[119, 1978], [151, 2414], [312, 4384], [525, 11220], [763, 10335], [789, 10545], [789, 10541],
+ #                     [789, 14148], [964, 13156], [973, 13307], [1086, 13156], [1091, 16043]]
+ #   binding.pry          # Execution will stop here.
+
+
     logger.info "trees_to_check = #{trees_to_check.inspect}"
-    trees_to_check = [[119, 1978], [151, 2414], [312, 4384], [525, 11220], [763, 10335], [789, 10545], [789, 10541],
-                      [789, 14148], [964, 13156], [973, 13307], [1086, 13156], [1091, 16043]]
+    trees_to_check = [[16, 340], [20,374]] + trees_to_check +  [[60, 826], [61, 839]]
 
-    binding.pry          # Execution will stop here.
+    logger.info "trees_to_check added = #{trees_to_check.inspect}"
 
-    reduced_trees_profiles = profiles_checking(profile_id_searched, trees_to_check)
+    search_filled_hash = filling_hash(profile_id_searched)
+    logger.info "profile_id_searched = #{profile_id_searched}, search_filled_hash = #{search_filled_hash}"
+
+    reduced_trees_profiles = trees_profiles_checking(search_filled_hash, trees_to_check)
+    puts "\n found profiles checked\n"
     logger.info "reduced_trees_profiles = #{reduced_trees_profiles.inspect}"
+    # reduced_trees_profiles = [[59, 824, 5], [60, 832, 5]]
 
-    binding.pry          # Execution will stop here.
+ #   binding.pry          # Execution will stop here.
 
     cheked_trees_profiles, checked_trees_counts = trees_with_profiles_counts(reduced_trees_profiles)
-    logger.info "cheked_trees_profiles = #{cheked_trees_profiles.inspect}, checked_trees_counts = #{checked_trees_counts.inspect}"
+    logger.info "checked_trees_profiles = #{cheked_trees_profiles.inspect}, checked_trees_counts = #{checked_trees_counts.inspect}"
     trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, cheked_trees_profiles)
     logger.info "trees_profiles_no_double = #{trees_profiles_no_double.inspect}, doubles_one_to_many = #{doubles_one_to_many.inspect}"
 
@@ -608,7 +653,7 @@ module SearchModified
     certain_profiles_trees = []
     certain_profiles_found = []
     certain_profiles_count = []
-    # todo: here check if match_count, found_profile - has one el-t
+    # todo: here to check if match_count, found_profile - has one el-t
     trees_profiles_no_double.each do |found_tree, found_profile|
       match_count = checked_trees_counts.values_at(found_tree)
       one_match_count = match_count.flatten[0]
@@ -626,7 +671,7 @@ module SearchModified
         trees: certain_profiles_trees
     }
     logger.info "certain_search_data = #{certain_search_data}"
-    # @input: profiles_found = [790, 818, 826], profiles_trees = [57, 59, 60], profiles_count = [5, 5, 5]
+    # certain_search_data = {:search=>807, :founds=>[824, 832], :counts=>[5, 5], :trees=>[59, 60]}
 
     profiles_trees_pairs, profiles_counts = create_results_data(certain_search_data)
     one_profile_results = {
@@ -635,7 +680,10 @@ module SearchModified
         doubles_one_to_many: doubles_one_to_many
     }
     logger.info "Search one_profile_results = #{one_profile_results}"
-    # one_profile_results = {:profiles_trees_pairs=>{122=>{6=>8988}}, :profiles_counts=>{8988=>5}, :doubles_one_to_many=>{}}
+    # Search one_profile_results =
+    # {:profiles_trees_pairs=>{807=>{59=>824, 60=>832}},
+    # :profiles_counts=>{824=>5, 832=>5},
+    # :doubles_one_to_many=>{}}
 
     search_time = (Time.now - start_search_time) * 1000
     puts "\n == END OF New modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
