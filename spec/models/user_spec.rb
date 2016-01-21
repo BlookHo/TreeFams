@@ -39,7 +39,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
   end
 
-  describe '- Check method get_connected_users'   do  # , focus: true
+  describe '- Check method get_connected_users' , focus: true  do  # , focus: true
 
     before do
       User.delete_all
@@ -624,19 +624,20 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok'   do  # , focus: true
+    describe '- check User model Method <Search> - Ok' , focus: true   do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
       #                          :profiles_to_destroy => [22, 29, 27, 25, 28, 23, 24, 26],
       #                          :current_user_id => 2, :user_id => 3,:connection_id => 3 } }
 
-      let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+      # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+      let(:certain_koeff_for_connect) { CERTAIN_KOEFF }  # 5
       let(:search_results) { current_user_1.start_search }
 
       it "- Check certain_koeff_for_connect before start_search" do
         puts "In User model: certain_koeff_for_connect = #{certain_koeff_for_connect} \n"   # 4
-        expect(certain_koeff_for_connect).to eq(4)
+        expect(certain_koeff_for_connect).to eq(5)
       end
       # it "- Check search_results[:tree_profiles] after start_search" do
       #   puts "In User model - SEARCH TASK : search_results[:tree_profiles] = #{search_results[:tree_profiles]} \n"

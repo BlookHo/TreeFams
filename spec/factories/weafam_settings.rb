@@ -1,7 +1,7 @@
 FactoryGirl.define do
 
   factory :weafam_setting, class: WeafamSetting  do
-    certain_koeff 4
+    certain_koeff CERTAIN_KOEFF
   end
 
   factory :weafam_setting_model_test, class: WeafamSetting  do |f|
