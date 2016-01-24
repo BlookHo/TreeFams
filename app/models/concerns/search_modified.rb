@@ -480,7 +480,6 @@ module SearchModified
 
 
   def check_match_count?(match_count)
-
     if match_count >= CERTAIN_KOEFF
       # logger.info "PROFILES ARE EQUAL - match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF} "
       true
@@ -615,7 +614,7 @@ module SearchModified
     one_profile_results
   end
 
-
+  # @note:
   ##################################################################################
   def modi_search_one_profile(profile_search_data)
     start_search_time = Time.now
@@ -672,10 +671,6 @@ module SearchModified
     trees_to_check = get_found_two_fields(query_data, 'user_id', 'profile_id')
     # from new_get_found_two_fields: trees_to_check = [[380, 5247], [610, 8085], [610, 8088]]
     puts "\n All found profiles and trees - to check:\n"
- #   trees_to_check = [[119, 1978], [151, 2414], [312, 4384], [525, 11220], [763, 10335], [789, 10545], [789, 10541],
- #                     [789, 14148], [964, 13156], [973, 13307], [1086, 13156], [1091, 16043]]
- #   binding.pry          # Execution will stop here.
-
 
     logger.info "trees_to_check = #{trees_to_check.inspect}"
     # trees_to_check = [[16, 340], [20,374]] + trees_to_check +  [[60, 826], [61, 839]] # - results[:duplicates_many_to_one] = {839=>{61=>839}, 840=>{61=>839}}
@@ -692,8 +687,6 @@ module SearchModified
     logger.info "After Profiles Ok checking: reduced_trees_profiles = #{reduced_trees_profiles.inspect}"
     logger.info ""
     # reduced_trees_profiles = [[59, 824, 5], [60, 832, 5]]
-
- #   binding.pry          # Execution will stop here.
 
     cheked_trees_profiles, checked_trees_counts = trees_with_profiles_counts(reduced_trees_profiles)
     logger.info "checked_trees_profiles = #{cheked_trees_profiles.inspect}, checked_trees_counts = #{checked_trees_counts.inspect}"
@@ -827,15 +820,14 @@ module SearchModified
     # arr_names = [48,465,370,343,82,147,446]
     # connected_users = [57]
 
-    # # sql_result = ActiveRecord::Base.connection.execute("SELECT #{field_name}  FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # sql_result = ActiveRecord::Base.connection.execute("SELECT #{field_name}  FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
     # sql_result1 = execute_statement("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
     # logger.info "In one_field_content: sql_result1 = #{sql_result1}" #", sql_result.size = #{sql_result.size}"
     # sql_result2 = ProfileKey.find_by_sql("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
     # logger.info "In one_field_content: sql_result2 = #{sql_result2}"
 
-
     # res = ActiveRecord::Base.connection.execute("SELECT relation_id, name_id   FROM profile_keys WHERE user_id != #{connected_users} AND name_id = #{name_id_searched} AND deleted = 0 AND WHERE (relation_id, is_name_id) IN #{two_fields} ") #  ((25,350), (45,550), ... (65,350));)
-    res = ProfileKey.find_by_sql("SELECT user_id, profile_id FROM profile_keys WHERE (relation_id, is_name_id) IN  ((1,73), (2,445), (6,331), (6, 214), (8, 103), (91, 318), (92, 194), (101, 174), (102, 128), (191, 26), (212, 194)) AND user_id NOT IN (61,72) AND name_id = #{name_id_searched} AND deleted = 0 ") #  ((25,350), (45,550), ... (65,350));)
+    # res = ProfileKey.find_by_sql("SELECT user_id, profile_id FROM profile_keys WHERE (relation_id, is_name_id) IN  ((1,73), (2,445), (6,331), (6, 214), (8, 103), (91, 318), (92, 194), (101, 174), (102, 128), (191, 26), (212, 194)) AND user_id NOT IN (61,72) AND name_id = #{name_id_searched} AND deleted = 0 ") #  ((25,350), (45,550), ... (65,350));)
     logger.info "In from_two_fields: res.size = #{res.size}"
     # two_res =
        # [#<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>]

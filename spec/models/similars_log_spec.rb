@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SimilarsLog, :type => :model   do  # , focus: true
+RSpec.describe SimilarsLog, :type => :model    do  # , focus: true
   #pending "add some examples to (or delete) #{__FILE__}"
 
   describe '- Validation' do
@@ -59,10 +59,10 @@ RSpec.describe SimilarsLog, :type => :model   do  # , focus: true
       end
       context '- invalid similars log' do
 
-        let(:bad_sims_written_equal_overwritten) {FactoryGirl.build(:similars_log, :bad_written_and_overwritten)}
-        it '- 1 Dont save: - written_and_overwritten - equal' do
-          expect(bad_sims_written_equal_overwritten).to_not be_valid
-        end
+        # let(:bad_sims_written_equal_overwritten) {FactoryGirl.build(:similars_log, :bad_written_and_overwritten)}
+        # it '- 1 Dont save: - written_and_overwritten - equal' do
+        #   expect(bad_sims_written_equal_overwritten).to_not be_valid
+        # end
 
         let(:bad_sims_written_nil_table) {FactoryGirl.build(:similars_log, :bad_written_nil_table)}
         it '- 2 Dont save: - written = nil: table = trees, user_id' do
@@ -194,12 +194,12 @@ RSpec.describe SimilarsLog, :type => :model   do  # , focus: true
           end
         end
 
-        context '- Check table_row to be stored' do
-          let(:third_row) { FactoryGirl.build(:similars_log, :sims_log_table_row_3, current_user_id: current_user_id)}
-          it '- table_rows CAN NOT BE equal for two specific rows' do
-            expect(third_row).to_not be_valid #
-          end
-        end
+        # context '- Check table_row to be stored' do
+        #   let(:third_row) { FactoryGirl.build(:similars_log, :sims_log_table_row_3, current_user_id: current_user_id)}
+        #   it '- table_rows CAN NOT BE equal for two specific rows' do
+        #     expect(third_row).to_not be_valid #
+        #   end
+        # end
 
     end
 
