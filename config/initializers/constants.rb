@@ -13,4 +13,4 @@ EXCLUSION_RELATIONS =  [1, 2, 3, 4, 5, 6, 7, 8, 91, 101, 111, 121, 92, 102, 112,
 #WeafamSetting.first.exclusion_relations
 
 # certain_connect
-CERTAIN_CONNECT = 4 #WeafamSetting.first.certain_connect
+CERTAIN_CONNECT = 5 #WeafamSetting.first.certain_connect

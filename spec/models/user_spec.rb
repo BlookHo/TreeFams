@@ -623,14 +623,13 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok' , focus: true   do  # , focus: true
+    describe '- check User model Method <Search> - Ok'   do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
       #                          :profiles_to_destroy => [22, 29, 27, 25, 28, 23, 24, 26],
       #                          :current_user_id => 2, :user_id => 3,:connection_id => 3 } }
 
-      # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 5
       let(:certain_koeff_for_connect) { CERTAIN_KOEFF }  # 5
       let(:search_results) { current_user_1.start_search }
 
@@ -650,30 +649,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
       #   puts "In User model: search_results[:qty_of_tree_profiles] = #{search_results[:qty_of_tree_profiles]} \n"
       #   expect(search_results[:qty_of_tree_profiles]).to eq(18)
       # end
-      # it "- Check search_results[:profiles_relations_arr] after start_search" do
-      #   puts "In User model: search_results[:profiles_relations_arr][0] = #{search_results[:profiles_relations_arr][0]} \n"
-      #   expect(search_results[:profiles_relations_arr].sort_by { |hsh| hsh[:profile_searched] }).to eq([
-      #   # преобразованная структура - такая же исп-ся в существующем search.rb
-      #   {:profile_searched=>2, :profile_relations=>{7=>1, 8=>2, 17=>3, 3=>8, 9=>15, 10=>16, 11=>17, 15=>111, 16=>111}},
-      #   {:profile_searched=>3, :profile_relations=>{9=>1, 10=>2, 17=>3, 2=>7, 7=>13, 8=>14, 11=>17, 15=>111, 16=>111}},
-      #   {:profile_searched=>7, :profile_relations=>{2=>3, 8=>8, 3=>17, 17=>111}},
-      #   {:profile_searched=>8, :profile_relations=>{2=>3, 7=>7, 3=>17, 17=>111}},
-      #   {:profile_searched=>9, :profile_relations=>{3=>4, 10=>8, 2=>18, 17=>112}},
-      #   {:profile_searched=>10, :profile_relations=>{3=>4, 9=>7, 2=>18, 17=>112}},
-      #   {:profile_searched=>11, :profile_relations=>{12=>1, 13=>2, 15=>3, 16=>3, 14=>6, 17=>7, 2=>13, 3=>14, 18=>91, 20=>92, 19=>101, 21=>102, 124=>121}},
-      #   {:profile_searched=>12, :profile_relations=>{18=>1, 19=>2, 11=>4, 14=>4, 13=>8, 20=>15, 21=>16, 17=>18, 15=>112, 16=>112}},
-      #   {:profile_searched=>13, :profile_relations=>{20=>1, 21=>2, 11=>4, 14=>4, 12=>7, 18=>13, 19=>14, 17=>18, 15=>112, 16=>112}},
-      #   {:profile_searched=>14, :profile_relations=>{12=>1, 13=>2, 11=>6, 18=>91, 20=>92, 19=>101, 21=>102, 15=>212, 16=>212}},
-      #   {:profile_searched=>15, :profile_relations=>{17=>1, 11=>2, 124=>4, 16=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202}},
-      #   {:profile_searched=>16, :profile_relations=>{17=>1, 11=>2, 15=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202, 124=>221}},
-      #   {:profile_searched=>17, :profile_relations=>{2=>1, 3=>2, 15=>3, 16=>3, 11=>8, 12=>15, 13=>16, 7=>91, 9=>92, 8=>101, 10=>102, 124=>121}},
-      #   {:profile_searched=>18, :profile_relations=>{12=>3, 19=>8, 13=>17, 11=>121, 14=>121}},
-      #   {:profile_searched=>19, :profile_relations=>{12=>3, 18=>7, 13=>17, 11=>121, 14=>121}},
-      #   {:profile_searched=>20, :profile_relations=>{13=>4, 21=>8, 12=>18, 11=>122, 14=>122}},
-      #   {:profile_searched=>21, :profile_relations=>{13=>4, 20=>7, 12=>18, 11=>122, 14=>122}},
-      #   {:profile_searched=>124, :profile_relations=>{15=>1, 17=>91, 11=>101, 16=>191}}
-      #   ])
-      # end
 
       # преобразование структуры из существующего search.rb  для обеспечения сортировки для теста и
       # более корректного представления - для рефакторинга.
@@ -688,62 +663,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
         end
         result_arr_of_hashes
       }
-      # it "- Check search_results[:profiles_found_arr] after start_search"  do
-      #   # result_arr_of_hashes = [
-      #   #     {:profile_searched=>15, :profiles_found=>{}}, {:profile_searched=>9, :profiles_found=>{}},
-      #   #     {:profile_searched=>20, :profiles_found=>{3=>{28=>[4, 8, 18, 122, 122]}}},
-      #   #     {:profile_searched=>16, :profiles_found=>{}}, {:profile_searched=>10, :profiles_found=>{}},
-      #   #     {:profile_searched=>17, :profiles_found=>{}}, {:profile_searched=>3, :profiles_found=>{}},
-      #   #     {:profile_searched=>12, :profiles_found=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}}},
-      #   #     {:profile_searched=>13, :profiles_found=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}}},
-      #   #     {:profile_searched=>14, :profiles_found=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
-      #   #     {:profile_searched=>21, :profiles_found=>{3=>{29=>[4, 7, 18, 122, 122]}}},
-      #   #     {:profile_searched=>124, :profiles_found=>{}},
-      #   #     {:profile_searched=>18, :profiles_found=>{3=>{26=>[3, 8, 17, 121, 121]}}},
-      #   #     {:profile_searched=>11, :profiles_found=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}}},
-      #   #     {:profile_searched=>8, :profiles_found=>{}},
-      #   #     {:profile_searched=>19, :profiles_found=>{3=>{27=>[3, 7, 17, 121, 121]}}},
-      #   #     {:profile_searched=>2, :profiles_found=>{}}, {:profile_searched=>7, :profiles_found=>{}}]
-      #   puts "In User model: search_results[:profiles_found_arr][2] = #{search_results[:profiles_found_arr][2]} \n"
-      #   expect(result_arr_of_hashes.sort_by { |hsh| hsh[:profile_searched] }).to eq( [
-      #         # преобразованная структура
-      #         {:profile_searched=>2, :profiles_found=>{}},
-      #         {:profile_searched=>3, :profiles_found=>{}},
-      #         {:profile_searched=>7, :profiles_found=>{}},
-      #         {:profile_searched=>8, :profiles_found=>{}},
-      #         {:profile_searched=>9, :profiles_found=>{}},
-      #         {:profile_searched=>10, :profiles_found=>{}},
-      #         {:profile_searched=>11, :profiles_found=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}}},
-      #         {:profile_searched=>12, :profiles_found=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}}},
-      #         {:profile_searched=>13, :profiles_found=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}}},
-      #         {:profile_searched=>14, :profiles_found=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
-      #         {:profile_searched=>15, :profiles_found=>{}},
-      #         {:profile_searched=>16, :profiles_found=>{}},
-      #         {:profile_searched=>17, :profiles_found=>{}},
-      #         {:profile_searched=>18, :profiles_found=>{3=>{26=>[3, 8, 17, 121, 121]}}},
-      #         {:profile_searched=>19, :profiles_found=>{3=>{27=>[3, 7, 17, 121, 121]}}},
-      #         {:profile_searched=>20, :profiles_found=>{3=>{28=>[4, 8, 18, 122, 122]}}},
-      #         {:profile_searched=>21, :profiles_found=>{3=>{29=>[4, 7, 18, 122, 122]}}},
-      #         {:profile_searched=>124, :profiles_found=>{}}]
-      #                                                                            )
-      #   # [     # Структура - из существующего search.rb
-        # {15=>{}},    {9=>{}},     {20=>{3=>{28=>[4, 8, 18, 122, 122]}}},
-        # {16=>{}},
-        # {10=>{}},
-        # {17=>{}},
-        # {3=>{}},
-        # {12=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}}},
-        # {13=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}}},
-        # {14=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
-        # {21=>{3=>{29=>[4, 7, 18, 122, 122]}}},
-        # {124=>{}},
-        # {18=>{3=>{26=>[3, 8, 17, 121, 121]}}},
-        # {11=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}}},
-        # {8=>{}},
-        # {19=>{3=>{27=>[3, 7, 17, 121, 121]}}},
-        # {2=>{}},
-        # {7=>{}}]
-      # end
       it "- Check search_results[:uniq_profiles_pairs] after start_search"  do
         puts "In User model: search_results[:uniq_profiles_pairs] = #{search_results[:uniq_profiles_pairs]} \n"
         # Структура - из существующего search.rb
@@ -759,14 +678,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
         # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  - перед
         # profiles_to_rewrite, profiles_to_destroy = hard_complete_search(init_connection_hash)
       end
-      # it "- Check search_results[:profiles_with_match_hash] after start_search"  do
-      #   puts "In User model: search_results[:profiles_with_match_hash] = #{search_results[:profiles_with_match_hash]} \n"
-      #   # Структура - из существующего search.rb
-      #   # {25=>7, 22=>7, 24=>7, 23=>7, 27=>5, 26=>5, 29=>5, 28=>5}
-      #   expect(search_results[:profiles_with_match_hash].sort_by { |k,v| k }).to eq(
-      #         [[22, 7], [23, 7], [24, 7], [25, 7], [26, 5], [27, 5], [28, 5], [29, 5]] )
-      #   # преобразованная структура
-      # end
       it "- Check search_results[:by_profiles] after start_search" do
         puts "In User model: search_results[:by_profiles][3] = #{search_results[:by_profiles][3]} \n"
         expect(search_results[:by_profiles].sort_by { |hsh| hsh[:search_profile_id] }).to eq( [
@@ -800,44 +711,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
       end
 
       # search_results = {:connected_author_arr=>[1, 2], :qty_of_tree_profiles=>18,
-      # :profiles_relations_arr=>[
-      # {15=>{17=>1, 11=>2, 124=>4, 16=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202}},
-      # {9=>{3=>4, 10=>8, 2=>18, 17=>112}},
-      # {20=>{13=>4, 21=>8, 12=>18, 11=>122, 14=>122}},
-      # {16=>{17=>1, 11=>2, 15=>5, 2=>91, 12=>92, 3=>101, 13=>102, 14=>202, 124=>221}},
-      # {10=>{3=>4, 9=>7, 2=>18, 17=>112}},
-      # {17=>{2=>1, 3=>2, 15=>3, 16=>3, 11=>8, 12=>15, 13=>16, 7=>91, 9=>92, 8=>101, 10=>102, 124=>121}},
-      # {3=>{9=>1, 10=>2, 17=>3, 2=>7, 7=>13, 8=>14, 11=>17, 15=>111, 16=>111}},
-      # {12=>{18=>1, 19=>2, 11=>4, 14=>4, 13=>8, 20=>15, 21=>16, 17=>18, 15=>112, 16=>112}},
-      # {13=>{20=>1, 21=>2, 11=>4, 14=>4, 12=>7, 18=>13, 19=>14, 17=>18, 15=>112, 16=>112}},
-      # {14=>{12=>1, 13=>2, 11=>6, 18=>91, 20=>92, 19=>101, 21=>102, 15=>212, 16=>212}},
-      # {21=>{13=>4, 20=>7, 12=>18, 11=>122, 14=>122}},
-      # {124=>{15=>1, 17=>91, 11=>101, 16=>191}},
-      # {18=>{12=>3, 19=>8, 13=>17, 11=>121, 14=>121}},
-      # {11=>{12=>1, 13=>2, 15=>3, 16=>3, 14=>6, 17=>7, 2=>13, 3=>14, 18=>91, 20=>92, 19=>101, 21=>102, 124=>121}},
-      # {8=>{2=>3, 7=>7, 3=>17, 17=>111}},
-      # {19=>{12=>3, 18=>7, 13=>17, 11=>121, 14=>121}},
-      # {2=>{7=>1, 8=>2, 17=>3, 3=>8, 9=>15, 10=>16, 11=>17, 15=>111, 16=>111}},
-      # {7=>{2=>3, 8=>8, 3=>17, 17=>111}}],
-      # :profiles_found_arr=>[
-      # {15=>{}},
-      # {9=>{}},
-      # {20=>{3=>{28=>[4, 8, 18, 122, 122]}}},
-      # {16=>{}},
-      # {10=>{}},
-      # {17=>{}},
-      # {3=>{}},
-      # {12=>{3=>{23=>[1, 2, 4, 4, 8, 15, 16]}}},
-      # {13=>{3=>{24=>[1, 2, 4, 4, 7, 13, 14]}}},
-      # {14=>{3=>{22=>[1, 2, 6, 91, 92, 101, 102]}}},
-      # {21=>{3=>{29=>[4, 7, 18, 122, 122]}}},
-      # {124=>{}},
-      # {18=>{3=>{26=>[3, 8, 17, 121, 121]}}},
-      # {11=>{3=>{25=>[1, 2, 6, 91, 92, 101, 102]}}},
-      # {8=>{}},
-      # {19=>{3=>{27=>[3, 7, 17, 121, 121]}}},
-      # {2=>{}},
-      # {7=>{}}],
       # :uniq_profiles_pairs=>{
       # 20=>{3=>28}, 12=>{3=>23}, 13=>{3=>24}, 14=>{3=>22}, 21=>{3=>29}, 18=>{3=>26}, 11=>{3=>25}, 19=>{3=>27}},
       # :profiles_with_match_hash=>{25=>7, 22=>7, 24=>7, 23=>7, 27=>5, 26=>5, 29=>5, 28=>5},
@@ -856,8 +729,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module' , focus: true   do #  ,  focus: true
-      # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+    context '- check SearchResults model after run <search> module'    do #  ,  focus: true
  #     let(:certain_koeff_for_connect) { CERTAIN_CONNECT }  # 4
       before { current_user_1.start_search }
       describe '- check SearchResults have rows count after <search> - Ok' do
@@ -945,7 +817,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check User model Method <complete_search> - Ok'    do  # , focus: true
+    describe '- check User model Method <complete_search> - Ok'  , focus: true  do  #  , focus: true
 
       # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
       context '- when valid complete_search_data' do
@@ -954,26 +826,18 @@ RSpec.describe User, :type => :model    do  # , focus: true
             :uniq_profiles_pairs => { 15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
                                       11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
                                      20=>{3=>28} },
-            :certain_koeff => 4
+            :certain_koeff => CERTAIN_CONNECT
         } }
         # 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} }  #,
         # 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
 
-        # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
-        let(:certain_koeff_for_connect) { CERTAIN_CONNECT }  # 4
+        # let(:certain_koeff_for_connect) { CERTAIN_CONNECT }
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
-        # let(:compare_circles_data) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Valid Complete search result: final_connection_hash after <complete_search>" do
           puts "In User model: final_connection_hash = #{final_connection_hash} \n"
           expect(final_connection_hash).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
         end
-
-        # it "- Check Valid Complete search result: compare_circles_data after <complete_search>" do
-        #   puts "In User model: compare_circles_data = #{compare_circles_data} \n"
-        #   expect(compare_circles_data).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
-        # end
-
 
       end
 
@@ -986,8 +850,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                       3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
         } }
 
-        # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
-        let(:certain_koeff_for_connect) { CERTAIN_CONNECT }  # 4
+        let(:certain_koeff_for_connect) { CERTAIN_CONNECT }
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Invalid Complete search result: final_connection_hash == {} " do
@@ -1152,7 +1015,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################ CONNECTION - DISCONNECTION ###########################
 
-    describe '- check User model Method <connect_trees(connection_data)> - Ok'   do  # , focus: true
+    describe '- check User model Method <connect_trees(connection_data)> - Ok'     do  # , focus: true
       context '- check Tables count & fields values BEFORE connect_trees' do
         describe '- check all profile_ids in ProfileKey rows ' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
@@ -1181,19 +1044,12 @@ RSpec.describe User, :type => :model    do  # , focus: true
           end
         end
 
-        # describe '- check UpdatesFeed BEFORE <connect_trees>'  do #, focus: true
-        #   describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
-        #     let(:rows_qty) {0}
-        #     it_behaves_like :successful_updates_feed_rows_count
-        #   end
-        # end
-
       end
 
 
       ################ CONNECTION  ###########################
 
-      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'   do # , focus: true
+      context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'    do # , focus: true
         # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
         # profiles_to_destroy = connection_data[:profiles_to_destroy]
         # who_connect         = connection_data[:who_connect]
@@ -1246,7 +1102,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
         describe '- check ConnectionLog Profiles.deleted update count AFTER <connect_trees>'  do # , focus: true
           it '- check ConnectionLog have rows count - Ok' do
             profiles_del_logs_count =  ConnectionLog.where(field: 'deleted').count
-            puts "in check ConnectionLog Profiles.deleted count: profiles_del_logs_count = #{profiles_del_logs_count.inspect} \n"
+            puts "in check ConnectionLog  AFTER <connect_trees> Profiles.deleted count: profiles_del_logs_count = #{profiles_del_logs_count.inspect} \n"
             # expect(connection_logs_count).to eq(rows_qty) # got rows_qty of ConnectionLog
           end
         end
@@ -1273,6 +1129,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
           end
           it '- check CommonLog 1st & last row - Ok' do # , focus: true
             common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
+            puts "Check CommonLog AFTER <connect_trees> \n"
             expect(common_log_row_fields).to eq({"id"=>1, "user_id"=>1, "log_type"=>4, "log_id"=>3, "profile_id"=>17,
                                                  "base_profile_id"=>14, "relation_id"=>999} )
           end
@@ -1307,27 +1164,9 @@ RSpec.describe User, :type => :model    do  # , focus: true
           let(:connected_users_arr_1) {[1,2,3]}
           let(:connected_users_arr_2) {[1,2,3]}
           let(:connected_users_arr_3) {[1,2,3]}
-          puts "Check AFTER <connect_trees>"
+          # puts "Check AFTER <connect_trees>"
           it_behaves_like :successful_users_connected
         end
-
-
-        # describe '- check UpdatesFeed AFTER <connect_trees>' do #, focus: true
-        #   describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
-        #     let(:rows_qty) {2}  # т.к.  - вне модели
-        #     it_behaves_like :successful_updates_feed_rows_count
-        #   end
-        #   it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
-        #     connection_request_fields = UpdatesFeed.first.attributes.except('created_at','updated_at')
-        #     expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
-        #                                              "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
-        #   end
-        #   it '- check UpdatesFeed 2 row - Ok' do # , focus: true
-        #     connection_request_fields = UpdatesFeed.last.attributes.except('created_at','updated_at')
-        #     expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
-        #                                              "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
-        #   end
-        # end
 
       end
 
@@ -1477,9 +1316,10 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     end
 
+
     ################  DISCONNECTION ###########################
 
-    describe '- check User model Method <disconnect> - Ok'   do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok'  do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
@@ -1519,36 +1359,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
           puts "Check AFTER <disconnect_tree>"
           it_behaves_like :successful_users_connected
         end
-
-
-        # describe '- check UpdatesFeed AFTER <disconnect_tree>'  do #, focus: true
-        #   describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
-        #     let(:rows_qty) {4}  # т.к.  - вне модели
-        #     it_behaves_like :successful_updates_feed_rows_count
-        #   end
-        #   it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
-        #     connection_request_fields = UpdatesFeed.find(1).attributes.except('created_at','updated_at')
-        #     expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
-        #                                              "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
-        #   end
-        #   it '- check UpdatesFeed 2 row - Ok' do # , focus: true
-        #     connection_request_fields = UpdatesFeed.find(2).attributes.except('created_at','updated_at')
-        #     expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
-        #                                              "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
-        #   end
-        #   it '- check UpdatesFeed 3 row - Ok'  do # , focus: true
-        #     connection_request_fields = UpdatesFeed.find(3).attributes.except('created_at','updated_at')
-        #     expect(connection_request_fields).to eq({"id"=>3, "user_id"=>2, "update_id"=>17, "agent_user_id"=>3,
-        #                                              "read"=>false, "agent_profile_id"=>22, "who_made_event"=>2} )
-        #   end
-        #   it '- check UpdatesFeed 4 row - Ok' do # , focus: true
-        #     connection_request_fields = UpdatesFeed.find(4).attributes.except('created_at','updated_at')
-        #     expect(connection_request_fields).to eq( {"id"=>4, "user_id"=>3, "update_id"=>17, "agent_user_id"=>2,
-        #                                               "read"=>false, "agent_profile_id"=>11, "who_made_event"=>2}
-        #                                          )
-        #   end
-        # end
-
 
         describe '- check all profile_ids generated in ProfileKey rows AFTER <disconnect_tree>' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
@@ -1753,12 +1563,66 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
 
 
-
-
-
-
     end
 
   end
 
 end
+
+
+
+# for UpdatesFeed
+
+# describe '- check UpdatesFeed BEFORE <connect_trees>'  do #, focus: true
+#   describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
+#     let(:rows_qty) {0}
+#     it_behaves_like :successful_updates_feed_rows_count
+#   end
+# end
+
+
+# describe '- check UpdatesFeed AFTER <disconnect_tree>'  do #, focus: true
+#   describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
+#     let(:rows_qty) {4}  # т.к.  - вне модели
+#     it_behaves_like :successful_updates_feed_rows_count
+#   end
+#   it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
+#     connection_request_fields = UpdatesFeed.find(1).attributes.except('created_at','updated_at')
+#     expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
+#                                              "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
+#   end
+#   it '- check UpdatesFeed 2 row - Ok' do # , focus: true
+#     connection_request_fields = UpdatesFeed.find(2).attributes.except('created_at','updated_at')
+#     expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
+#                                              "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
+#   end
+#   it '- check UpdatesFeed 3 row - Ok'  do # , focus: true
+#     connection_request_fields = UpdatesFeed.find(3).attributes.except('created_at','updated_at')
+#     expect(connection_request_fields).to eq({"id"=>3, "user_id"=>2, "update_id"=>17, "agent_user_id"=>3,
+#                                              "read"=>false, "agent_profile_id"=>22, "who_made_event"=>2} )
+#   end
+#   it '- check UpdatesFeed 4 row - Ok' do # , focus: true
+#     connection_request_fields = UpdatesFeed.find(4).attributes.except('created_at','updated_at')
+#     expect(connection_request_fields).to eq( {"id"=>4, "user_id"=>3, "update_id"=>17, "agent_user_id"=>2,
+#                                               "read"=>false, "agent_profile_id"=>11, "who_made_event"=>2}
+#                                          )
+#   end
+# end
+
+
+# describe '- check UpdatesFeed AFTER <connect_trees>' do #, focus: true
+#   describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
+#     let(:rows_qty) {2}  # т.к.  - вне модели
+#     it_behaves_like :successful_updates_feed_rows_count
+#   end
+#   it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
+#     connection_request_fields = UpdatesFeed.first.attributes.except('created_at','updated_at')
+#     expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
+#                                              "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
+#   end
+#   it '- check UpdatesFeed 2 row - Ok' do # , focus: true
+#     connection_request_fields = UpdatesFeed.last.attributes.except('created_at','updated_at')
+#     expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
+#                                              "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
+#   end
+# end
