@@ -35,17 +35,58 @@ class SearchWork
   # @note: check add_hash elements: whether each profiles pair - are equal profiles
   def self.check_add_hash(add_connection_hash, certain_koeff)
     checked_add_hash = {}
+
+    # before [57] + [58]
+    # add_connection_hash = {794=>810, 897=>895}
+
     add_connection_hash.each do |profile_searched, profile_found|
+
       common_relations_hash = SearchCircles.compare_profiles(profile_searched, profile_found)
       puts " common_relations_hash = #{common_relations_hash}, common_relations_hash.size = #{common_relations_hash.size} "
-      if common_relations_hash.size >= certain_koeff
-        checked_add_hash.merge!(profile_searched => profile_found)
-        puts "profiles: #{profile_searched} and #{profile_found} -  ARE equal"
+
+
+      # here - found пересекающиеся пары профилей - в виде хэша. кол-во эл-тов в этом хэше - сравнивается с СК
+              # Здесь вместо этого SearchCircles.compare_profiles - надо вставить метод проверки исключений в пересекшихся отношениях
+        #  типа: .
+        priznak = SearchCircles.compare_profiles_exclusions(profile_searched, profile_found)
+        puts "After check_exclusions:  priznak = #{priznak.inspect}"
+
+        # search_filled_hash = filled_hash(profile_searched)
+        # logger.info "profile_searched = #{profile_searched}, search_filled_hash = #{search_filled_hash}"
+        # found_filled_hash = filled_hash(profile_found)
+        # logger.info "profile_found = #{profile_found}, found_filled_hash = #{found_filled_hash}"
+        # priznak, match_count = check_exclusions(search_filled_hash, found_filled_hash) unless found_filled_hash.empty?
+        # logger.info "After check_exclusions: priznak = #{priznak.inspect}, match_count = #{match_count.inspect}"
+        # profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_id)
+
+        if priznak # profiles = EQUAL
+          checked_add_hash.merge!(profile_searched => profile_found)
+          puts "profiles: #{profile_searched} and #{profile_found} -  ARE equal"
+        else
+          puts "profiles: #{profile_searched} and #{profile_found} - are NOT equal"
+        end
+
+
+      # before [57] + [58]
+      # common_relations_hash = {790=>811, 795=>805, 793=>809, 898=>896}, common_relations_hash.size = 4
+
+      # common_relations_hash = {898=>896, 793=>809, 790=>811, 795=>805}, common_relations_hash.size = 4
+
+
+ #     if common_relations_hash.size >= certain_koeff
+ #       checked_add_hash.merge!(profile_searched => profile_found)
+ #       puts "profiles: #{profile_searched} and #{profile_found} -  ARE equal"
         # puts " Add EQU profiles: #{profile_searched} and #{profile_found} to checked_add_hash After Check"
-      else
-        puts "profiles: #{profile_searched} and #{profile_found} - are NOT equal"
-        # puts " DO NOT Add profiles #{profile_searched} and #{profile_found} in checked_add_hash"
-      end
+ #     else
+ #       puts "profiles: #{profile_searched} and #{profile_found} - are NOT equal"
+
+        # before [57] + [58]
+        # profiles: 794 and 810 - are NOT equal
+
+        # profiles: 897 and 895 - are NOT equal
+
+ #    end
+
     end
     checked_add_hash
   end

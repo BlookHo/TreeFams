@@ -817,7 +817,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check User model Method <complete_search> - Ok'  , focus: true  do  #  , focus: true
+    describe '- check User model Method <complete_search> - Ok'  , focus: true  do  #   , focus: true
 
       # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
       context '- when valid complete_search_data' do

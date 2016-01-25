@@ -214,9 +214,16 @@ class SearchCircles
         if (profile_id_s != is_profile_id_f) && (profile_id_f != is_profile_id_s)# Одинаковые профили не заносим в хэш объединения (они и так одинаковые)
           # make new el-t of new_connection_hash
           new_connection_hash.merge!({one_profile => to_profile})
-          puts "$ new_connection_hash = #{new_connection_hash} "
 
-          ###################################3
+          # before [57] + [58]
+          # $ new_connection_hash = {793=>809}
+          # $ new_connection_hash = {793=>809, 794=>810}
+          # $ new_connection_hash = {793=>809, 794=>810, 795=>805}
+          # $ new_connection_hash = {793=>809, 794=>810, 795=>805, 897=>895}
+          # $ new_connection_hash = {793=>809, 794=>810, 795=>805, 897=>895, 898=>896}
+
+          puts "In find_profiles_connect: $ new_connection_hash = #{new_connection_hash} "
+
         end
       end
     end
@@ -290,6 +297,100 @@ class SearchCircles
   # Метод получения общей части 2-х БК профилей
   def self.circles_intersection(found_bk, search_bk)
     found_bk & search_bk # ПЕРЕСЕЧЕНИЕ 2-х БК
+  end
+
+
+  # @note:
+  def self.compare_profiles_exclusions(profile_searched, profile_found)
+    search_filled_hash = filled_hash(profile_searched)
+    puts "profile_searched = #{profile_searched}, search_filled_hash = #{search_filled_hash}"
+    found_filled_hash = filled_hash(profile_found)
+    puts "profile_found = #{profile_found}, found_filled_hash = #{found_filled_hash}"
+    priznak, match_count = check_exclusions(search_filled_hash, found_filled_hash) unless found_filled_hash.empty?
+
+    priznak
+
+
+  end
+
+
+  # @note: collect filling hashes for search and found profiles
+  # @input: profile_id
+  # @output: filled_hash = {1=>[122], 2=>[82], 3=>[370, 465], 8=>[48], 15=>[343], 16=>[82]}
+  #  { relation => [name] }
+  def self.filled_hash(profile_id)
+    rel_name_arr = rel_name_profile_records(profile_id)
+    # filled_hash =
+    relations_with_names(rel_name_arr)
+    # logger.info "filled_hash = #{filled_hash}"
+    # filled_hash
+  end
+
+
+  # @note: collect hash of two fields records: relations (key) and names array (value)
+  # for searching profile
+  # todo: place this method in ProfileKey model
+  def self.rel_name_profile_records(profile_id)
+    # logger.info "In rel_name_profile_records: profile_id = #{profile_id}"
+    ProfileKey.where(:profile_id => profile_id, deleted: 0)
+        .order('relation_id','is_name_id')
+        .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
+        .distinct
+        .pluck(:relation_id, :is_name_id)
+  end
+
+
+  # @note: collect hash of keys and items array as hash value
+  # from input array of arrays=pairs: [[key, item] .. [ , ]]
+  # trees with found profile in it: {57=>[795], 59=>[819], 60=>[827]}   OR
+  # relation with name (names array): {3=>[370, 465], ... 17=>[147], 121=>[446]}
+  def self.relations_with_names(key_item_pairs_arr)
+    trees_profiles = {}
+    key_item_pairs_arr.each do |one_array|
+      SearchWork.fill_hash_w_val_arr(trees_profiles, one_array[0], one_array[1])
+    end
+    trees_profiles
+  end
+
+  # @note: main check of exclusions - special algorythm
+  # EXCLUSION_RELATIONS = WeafamSetting.first.exclusion_relations = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
+  # def check_exclusions(profile_id_searched, profile_id_found)
+  def self.check_exclusions(search_filled_hash, found_filled_hash)
+#    logger.info "search_filled_hash = #{search_filled_hash}"
+#    logger.info "found_filled_hash = #{found_filled_hash}"
+
+    match_count = 0
+    priznak = true
+    search_filled_hash.each do |relation, names|
+      sval = search_filled_hash[relation]
+      fval = found_filled_hash[relation]
+      if found_filled_hash.has_key?(relation)
+        if EXCLUSION_RELATIONS.include?(relation)
+          if sval == fval
+            match_count += sval.size
+            priznak = true
+          elsif sval & fval != []
+            match_count += (sval & fval).size
+            priznak = true
+          else
+            priznak = false
+            puts "In All checks failed: - priznak = #{priznak}, match_count = #{match_count}"
+            return priznak, match_count
+          end
+        else
+          if sval == fval
+            match_count += sval.size
+          else sval & fval != []
+          match_count += (sval & fval).size
+          end
+        end
+
+      else
+        priznak = true
+      end
+    end
+    # logger.info "check_exclusions end: - priznak = #{priznak}, match_count = #{match_count}"
+    return priznak, match_count
   end
 
 

@@ -79,7 +79,9 @@ module ConnectionTrees
     # запуск ПОЛНОГО метода поиска от дерева Автора
     # на основе исходного массива ДОСТОВЕРНЫХ ПАР ПРОФИЛЕЙ - uniq_profiles_pairs -> init_connection_hash
     # ПОЛНОЕ Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
-    certain_connect_koeff = WeafamSetting.first.certain_connect # new coeff for connection - more close
+    # certain_connect_koeff = WeafamSetting.first.certain_connect # new coeff for connection - more close
+    certain_connect_koeff = CERTAIN_CONNECT
+
     complete_search_data = { with_whom_connect: with_whom_connect_users_arr,
                              uniq_profiles_pairs: uniq_profiles_pairs,
                              certain_koeff: certain_connect_koeff}
