@@ -154,7 +154,7 @@ class User < ActiveRecord::Base
       user = User.find(connected_user_id)
       user.update_attribute(:connected_users, connected_user_ids)
     end
-    puts "user updated connected_users = #{connected_user_ids}"
+    # puts "user updated connected_users = #{connected_user_ids}"
   end
 
 

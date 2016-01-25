@@ -90,12 +90,12 @@ module SearchModified
 
 
   # @note: start of NEW & LAST TO DATE modified search with exclusions check
-  def start_search#(CERTAIN_KOEFF)
+  def start_search
 
     start_search_time = Time.now
     logger.info ""
-    logger.info "#### start_search (modified w/exclusions) #### :: connected_users = #{self.connected_users.inspect}, certain_koeff = #{CERTAIN_KOEFF}"
-    logger.info ""
+    logger.info "#### start_search (modified w/exclusions) #### :: connected_users = #{self.connected_users.inspect}"
+    logger.info "CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
 
     # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
     results = search_tree_profiles
@@ -113,7 +113,7 @@ module SearchModified
     SearchResults.store_search_results(results, self.id) if self.double == 1
 
     search_time = (Time.now - start_search_time) * 1000
-    puts "\nSearch_time in #{results[:connected_author_arr].inspect}: modified_search with double trees check = #{search_time.round(2)} msec.\n\n"
+    puts "\nSearch_time in #{results[:connected_author_arr].inspect}: start_search w/store results = #{search_time.round(2)} msec.\n\n"
 
     results
   end
@@ -183,7 +183,7 @@ module SearchModified
         duplicates_many_to_one:   duplicates_many_to_one }
 
     search_time = (Time.now - start_search_time) * 1000
-    puts  "\nSearch_time OF ALL search_tree_profiles = #{search_time.round(2)} msec.\n\n"
+    puts  "\n Search_time OF ALL search_tree_profiles = #{search_time.round(2)} msec.\n\n"
 
     results
   end
@@ -293,37 +293,6 @@ module SearchModified
         .pluck(:relation_id, :is_name_id)
   end
 
-  # @note: to fulfill sql query in RoR
-  # OR sql_result2 = ProfileKey.find_by_sql("SELECT #{field_name} FROM profile_keys
-  #                   WHERE profile_id = #{profile_id} AND deleted = 0")
-  def execute_statement(sql)
-    results = ActiveRecord::Base.connection.execute(sql)
-    if results.present?
-      results
-    else
-      nil
-    end
-  end
-
-  # @note: collect hash of relations (key) and names array (value)
-  # todo: place this method in ProfileKey model
-  def two_fields_content(profile_id, field_name_one, field_name_two)
-
-    logger.info "In two_fields_content: profile_id = #{profile_id}, field_name_one = #{field_name_one}, field_name_two = #{field_name_two}"
-
-    # binding.pry          # Execution will stop here.
-    # # sql_result = ActiveRecord::Base.connection.execute("SELECT #{field_name}  FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
-    # sql_result1 = execute_statement("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
-    # logger.info "In one_field_content: sql_result1 = #{sql_result1}" #", sql_result.size = #{sql_result.size}"
-    # sql_result2 = ProfileKey.find_by_sql("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
-    # logger.info "In one_field_content: sql_result2 = #{sql_result2}"
-    # binding.pry          # Execution will stop here.
-
-    ProfileKey.where(:profile_id => profile_id, deleted: 0)
-        .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
-        .order('relation_id')
-        .pluck(field_name_one, field_name_two)
-  end
 
   # @note: collect hash of relations (key) and names array (value)
   # todo: place this method in ProfileKey model
@@ -343,32 +312,6 @@ module SearchModified
         .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
         .order('relation_id')
         .pluck(field_name)
-  end
-
-  # @note: get checked profiles for exclusions
-  def prev_profiles_checking(profile_id_searched, trees_profiles)
-
-    all_trees_found = trees_profiles.keys.flatten
-    # logger.info "all_trees_found = #{all_trees_found}"
-    all_profiles_found = trees_profiles.values.flatten
-    # logger.info "all_profiles_found = #{all_profiles_found}"
-
-    certain_profiles_trees = []
-    certain_profiles_found = []
-    certain_profiles_count = []
-
-    all_profiles_found.each_with_index do |found_profile_to_check, index|
-      priznak, match_count = check_exclusions(profile_id_searched, found_profile_to_check)
-      # logger.info "After check_exclusions: found_profile_to_check = #{found_profile_to_check}, priznak = #{priznak}, match_count = #{match_count}"
-      profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_to_check)
-      if profile_checked
-        certain_profiles_count << match_count
-        certain_profiles_found << profile_checked
-        certain_profiles_trees << all_trees_found[index]
-        puts "After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
-      end
-    end
-    return certain_profiles_found, certain_profiles_count, certain_profiles_trees
   end
 
 
@@ -395,7 +338,6 @@ module SearchModified
       # After check_exclusions:
       profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_id)
       logger.info "profile_checked = #{profile_checked.inspect}"
-  #    binding.pry          # Execution will stop here.
       if profile_checked.blank?
         reduced_trees_profiles = reduced_trees_profiles - [one_tree_profile]
         logger.info "NOT Checked: reduced_trees_profiles = #{reduced_trees_profiles}, one_tree_profile = #{one_tree_profile}"
@@ -436,11 +378,6 @@ module SearchModified
   # EXCLUSION_RELATIONS = WeafamSetting.first.exclusion_relations = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
   # def check_exclusions(profile_id_searched, profile_id_found)
   def check_exclusions(search_filled_hash, found_filled_hash)
-    # logger.info  "# check_exclusions # profile_id_searched = #{profile_id_searched}, profile_id_found To check = #{profile_id_found}\n"
-
-    # search_filled_hash = filled_hash(profile_id_searched)
-    # found_filled_hash = filled_hash(profile_id_found)
-
 #    logger.info "search_filled_hash = #{search_filled_hash}"
 #    logger.info "found_filled_hash = #{found_filled_hash}"
 
@@ -554,67 +491,6 @@ module SearchModified
   # 8.check exclusions for each found profile_ids
   # 9.get final found profile_ids with user_id position
   # 10.make usual search_results for store/
-  def prev_modi_search_one_profile(profile_search_data)
-    start_search_time = Time.now
-
-    puts "\n ##### modi_search_one_profile #####\n\n"
-    logger.info "profile_search_data = #{profile_search_data}"
-
-    profile_id_searched = profile_search_data[:profile_id_searched]
-
-    [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
-    # logger.info "search records: profile_id_searched = #{profile_id_searched}"
-
-    arr_relations = one_field_content(profile_id_searched, 'relation_id')
-    arr_names     = one_field_content(profile_id_searched, 'is_name_id')
-
-    arr_relations = arr_relations.uniq
-    arr_names = arr_names.uniq
-
-    # arr_relations = [1, 2, 3, 3, 3, 3, 8, 8, 15, 16, 17, 17, 91, 92, 101, 102, 121, 121] (pid:7540)
-    # arr_names = [122, 82, 370, 465, 370, 465, 48, 48, 343, 82, 147, 147, 90, 361, 449, 293, 446, 446] (pid:7540)
-
-    query_data = { connected_users: profile_search_data[:connected_users],
-                   name_id_searched: profile_search_data[:name_id_searched],
-                   arr_relations: arr_relations,
-                   arr_names: arr_names }
-
-    # query_data =
-    #     {:connected_users=>[58], :name_id_searched=>28,
-    #      :arr_relations=>[3, 3, 8, 15, 16, 17, 121],
-    #      :arr_names=>   [465, 370, 48, 343, 82, 147, 446]}
-
-    trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
-    # trees_profiles = {380=>[5247], 610=>[8085, 8088]}
-
-    trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, trees_profiles)
-    logger.info "trees_profiles_no_double = uniqs = #{trees_profiles_no_double}, trees doubles_one_to_many = #{doubles_one_to_many}"
-
-    certain_profiles_found, certain_profiles_count, certain_profiles_trees = prev_profiles_checking(profile_id_searched, trees_profiles_no_double)
-
-    certain_search_data = {
-        search: profile_id_searched,
-        founds: certain_profiles_found,
-        counts: certain_profiles_count,
-        trees: certain_profiles_trees
-    }
-
-    profiles_trees_pairs, profiles_counts = create_results_data(certain_search_data)
-
-    one_profile_results = {
-        profiles_trees_pairs: profiles_trees_pairs,
-        profiles_counts: profiles_counts,
-        doubles_one_to_many: doubles_one_to_many
-    }
-    # logger.info "finish modi_search_one_profile:"
-    logger.info "one_profile_results = #{one_profile_results}"
-
-    search_time = (Time.now - start_search_time) * 1000
-    puts "\n == END OF modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
-    one_profile_results
-  end
-
-  # @note:
   ##################################################################################
   def modi_search_one_profile(profile_search_data)
     start_search_time = Time.now
@@ -658,7 +534,6 @@ module SearchModified
 
 
 
-
     query_data = { connected_users: profile_search_data[:connected_users],
                    name_id_searched: profile_search_data[:name_id_searched],
                    arr_relations: arr_relations,
@@ -683,7 +558,7 @@ module SearchModified
 
     ############# main method of trees & profiles checking ############################
     reduced_trees_profiles = trees_profiles_checking(search_filled_hash, trees_to_check)
-    puts "\nfound profiles checked and finished\n"
+    puts "\n found profiles checked and finished\n"
     logger.info "After Profiles Ok checking: reduced_trees_profiles = #{reduced_trees_profiles.inspect}"
     logger.info ""
     # reduced_trees_profiles = [[59, 824, 5], [60, 832, 5]]
@@ -730,28 +605,8 @@ module SearchModified
     # :doubles_one_to_many=>{}}
 
     search_time = (Time.now - start_search_time) * 1000
-    puts "\n == END OF New modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
+    puts "\n == END OF modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
     one_profile_results
-  end
-  ##################################################################################
-
-  # @note: Determine: in which trees ids profiles were found
-  def prev_get_found_two_fields(query_data, field_one, field_two)
-    fields_arr_values = both_fields_records(query_data, field_one, field_two)
-    logger.info "fields_arr_values = #{fields_arr_values}"
-    # Hand test:
-    # fields_arr_values = [[57, 795], [57, 795], [57, 795], [57, 795], [57, 795], [59, 819], [59, 819], [59, 819], [59, 819], [59, 819], [60, 827], [60, 827], [60, 827], [60, 827], [60, 827], [64, 877], [65, 892]]
-    # fields_arr_values = [[57, 790], [57, 790], [57, 790], [57, 790], [57, 7960], [59, 818], [59, 818], [59, 818], [59, 818], [59, 818], [60, 826], [60, 826], [60, 826], [60, 826], [60, 826]]
-    # logger.info "Hand fields_arr_values = #{fields_arr_values}"
-
-    occurence = occurence_counts(fields_arr_values)
-    logger.info "occurence = #{occurence}"
-
-    user_ids_to_check = exclude_uncertain_trees(occurence)
-    logger.info "user_ids_to_check = #{user_ids_to_check}"
-    # user_ids_to_check = [[380, 5247], [610, 8085], [610, 8088]]
-    get_keys_with_items_array(user_ids_to_check)
-    # {380=>[5247], 610=>[8085, 8088]}
   end
 
 
@@ -765,16 +620,6 @@ module SearchModified
     exclude_uncertain_trees(occurence_counts(fields_arr_values))
   end
 
-  # # @note: Determine: in which trees ids profiles were found
-  # def get_found_fields(query_data, field)
-  #   field_values = found_records(query_data, field)
-  #   logger.info "field_values = #{field_values}"
-  #
-  #   values_occurence = occurence_counts(field_values)
-  #   logger.info "values_occurence = #{values_occurence}"
-  #
-  #   exclude_uncertain_trees(values_occurence)
-  # end
 
   # @note: Find by fields - [relation, is_name_id]
   # for each row in ProfileKey
@@ -803,69 +648,6 @@ module SearchModified
         .select('id','user_id','profile_id','name_id','relation_id','is_name_id','is_profile_id')
         .pluck(field_one, field_two)
   end
-
-
-  def from_two_fields(query_data, field_one, field_two)
-    connected_users = query_data[:connected_users]
-    name_id_searched = query_data[:name_id_searched]
-    two_fields = query_data[:two_fields]
-    logger.info "two_fields = #{two_fields}"
-    # logger.info "field_one = #{field_one}, field_two = #{field_two}"
-
-    # logger.info "arr_relations = #{arr_relations}"
-    # logger.info "arr_names = #{arr_names}"
-
-    # todo: here - to install sql selection of extra rows of pairs: relation-name
-    # arr_relations = [8,3,3,15,16,17,121]
-    # arr_names = [48,465,370,343,82,147,446]
-    # connected_users = [57]
-
-    # sql_result = ActiveRecord::Base.connection.execute("SELECT #{field_name}  FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
-    # sql_result1 = execute_statement("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
-    # logger.info "In one_field_content: sql_result1 = #{sql_result1}" #", sql_result.size = #{sql_result.size}"
-    # sql_result2 = ProfileKey.find_by_sql("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
-    # logger.info "In one_field_content: sql_result2 = #{sql_result2}"
-
-    # res = ActiveRecord::Base.connection.execute("SELECT relation_id, name_id   FROM profile_keys WHERE user_id != #{connected_users} AND name_id = #{name_id_searched} AND deleted = 0 AND WHERE (relation_id, is_name_id) IN #{two_fields} ") #  ((25,350), (45,550), ... (65,350));)
-    # res = ProfileKey.find_by_sql("SELECT user_id, profile_id FROM profile_keys WHERE (relation_id, is_name_id) IN  ((1,73), (2,445), (6,331), (6, 214), (8, 103), (91, 318), (92, 194), (101, 174), (102, 128), (191, 26), (212, 194)) AND user_id NOT IN (61,72) AND name_id = #{name_id_searched} AND deleted = 0 ") #  ((25,350), (45,550), ... (65,350));)
-    logger.info "In from_two_fields: res.size = #{res.size}"
-    # two_res =
-       # [#<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>]
-
-
- #   http://edgeguides.rubyonrails.org/active_record_postgresql.html
- #   rails transform ruby array to postgresql array
-
-
-    # ProfileKey.where.not(user_id: connected_users)
-    #     .select('id','user_id','profile_id','name_id','relation_id','is_name_id','is_profile_id')
-    #     .where(:name_id => name_id_searched)
-    #     .where(deleted: 0)
-    #     .where("(relation_id, is_name_id) in (?)", (two_fields)) #(1, 73), (2, 445), (6, 331), (6, 214))) #", [8, 103], [91, 318], [92, 194], [101, 174], [102, 128], [191, 26], [212, 194]])"
-    #     .order('user_id','relation_id','is_name_id')
-    #     .pluck(:profile_id)#, field_two)
-
-    # .where("is_name_id in (?)", arr_names)
-    res
-  end
-
-
-  #In #get_found_two_fields: fields_arr_values =
- # Local: query_data = {:connected_users=>[61, 72], :name_id_searched=>151,
-  # :arr_relations=>[1, 2, 6, 8, 91, 92, 101, 102, 191, 212],
-  # :arr_names=>[73, 445, 331, 214, 103, 318, 194, 174, 128, 26]}
-  # arr_relations =
-  [1, 2, 6, 6, 8, 91, 92, 101, 102, 191, 212]
-  # arr_names =
-  [73, 445, 331, 214, 103, 318, 194, 174, 128, 26, 194]
-  # two_fields =
-  [[1, 73], [2, 445], [6, 331], [6, 214], [8, 103], [91, 318], [92, 194], [101, 174], [102, 128], [191, 26], [212, 194]]
-
-
-
-  # result = [[62, 852], [62, 852], [62, 852], [62, 852], [62, 852], [62, 852], [62, 852], [62, 852], [62, 852]]
-
-
 
 
 
@@ -913,10 +695,228 @@ module SearchModified
   end
 
 
+  ####################################################################################
 
 
 
-  # TEST
+
+  # # @note: get checked profiles for exclusions
+  # def prev_profiles_checking(profile_id_searched, trees_profiles)
+  #
+  #   all_trees_found = trees_profiles.keys.flatten
+  #   # logger.info "all_trees_found = #{all_trees_found}"
+  #   all_profiles_found = trees_profiles.values.flatten
+  #   # logger.info "all_profiles_found = #{all_profiles_found}"
+  #
+  #   certain_profiles_trees = []
+  #   certain_profiles_found = []
+  #   certain_profiles_count = []
+  #
+  #   all_profiles_found.each_with_index do |found_profile_to_check, index|
+  #     priznak, match_count = check_exclusions(profile_id_searched, found_profile_to_check)
+  #     # logger.info "After check_exclusions: found_profile_to_check = #{found_profile_to_check}, priznak = #{priznak}, match_count = #{match_count}"
+  #     profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_to_check)
+  #     if profile_checked
+  #       certain_profiles_count << match_count
+  #       certain_profiles_found << profile_checked
+  #       certain_profiles_trees << all_trees_found[index]
+  #       puts " After check_exclusions & check_match_count?: profile_checked = #{profile_checked.inspect}, priznak = #{priznak}, match_count = #{match_count}, CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
+  #     end
+  #   end
+  #   return certain_profiles_found, certain_profiles_count, certain_profiles_trees
+  # end
+
+
+  # # @note: Determine: in which trees ids profiles were found
+  # def get_found_fields(query_data, field)
+  #   field_values = found_records(query_data, field)
+  #   logger.info "field_values = #{field_values}"
+  #
+  #   values_occurence = occurence_counts(field_values)
+  #   logger.info "values_occurence = #{values_occurence}"
+  #
+  #   exclude_uncertain_trees(values_occurence)
+  # end
+
+  # # @note: Determine: in which trees ids profiles were found
+  # def prev_get_found_two_fields(query_data, field_one, field_two)
+  #   fields_arr_values = both_fields_records(query_data, field_one, field_two)
+  #   logger.info "fields_arr_values = #{fields_arr_values}"
+  #   # Hand test:
+  #   # fields_arr_values = [[57, 795], [57, 795], [57, 795], [57, 795], [57, 795], [59, 819], [59, 819], [59, 819], [59, 819], [59, 819], [60, 827], [60, 827], [60, 827], [60, 827], [60, 827], [64, 877], [65, 892]]
+  #   # fields_arr_values = [[57, 790], [57, 790], [57, 790], [57, 790], [57, 7960], [59, 818], [59, 818], [59, 818], [59, 818], [59, 818], [60, 826], [60, 826], [60, 826], [60, 826], [60, 826]]
+  #   # logger.info "Hand fields_arr_values = #{fields_arr_values}"
+  #
+  #   occurence = occurence_counts(fields_arr_values)
+  #   logger.info "occurence = #{occurence}"
+  #
+  #   user_ids_to_check = exclude_uncertain_trees(occurence)
+  #   logger.info "user_ids_to_check = #{user_ids_to_check}"
+  #   # user_ids_to_check = [[380, 5247], [610, 8085], [610, 8088]]
+  #   get_keys_with_items_array(user_ids_to_check)
+  #   # {380=>[5247], 610=>[8085, 8088]}
+  # end
+
+  # def prev_modi_search_one_profile(profile_search_data)
+  #   start_search_time = Time.now
+  #
+  #   puts "\n ##### modi_search_one_profile #####\n\n"
+  #   logger.info "profile_search_data = #{profile_search_data}"
+  #
+  #   profile_id_searched = profile_search_data[:profile_id_searched]
+  #
+  #   [[8, 48], [3, 465], [3, 370], [15, 343], [16, 82], [17, 147], [121, 446]]
+  #   # logger.info "search records: profile_id_searched = #{profile_id_searched}"
+  #
+  #   arr_relations = one_field_content(profile_id_searched, 'relation_id')
+  #   arr_names     = one_field_content(profile_id_searched, 'is_name_id')
+  #
+  #   arr_relations = arr_relations.uniq
+  #   arr_names = arr_names.uniq
+  #
+  #   # arr_relations = [1, 2, 3, 3, 3, 3, 8, 8, 15, 16, 17, 17, 91, 92, 101, 102, 121, 121] (pid:7540)
+  #   # arr_names = [122, 82, 370, 465, 370, 465, 48, 48, 343, 82, 147, 147, 90, 361, 449, 293, 446, 446] (pid:7540)
+  #
+  #   query_data = { connected_users: profile_search_data[:connected_users],
+  #                  name_id_searched: profile_search_data[:name_id_searched],
+  #                  arr_relations: arr_relations,
+  #                  arr_names: arr_names }
+  #
+  #   # query_data =
+  #   #     {:connected_users=>[58], :name_id_searched=>28,
+  #   #      :arr_relations=>[3, 3, 8, 15, 16, 17, 121],
+  #   #      :arr_names=>   [465, 370, 48, 343, 82, 147, 446]}
+  #
+  #   trees_profiles = get_found_two_fields(query_data, 'user_id', 'profile_id')
+  #   # trees_profiles = {380=>[5247], 610=>[8085, 8088]}
+  #
+  #   trees_profiles_no_double, doubles_one_to_many = SearchWork.duplicates_one_many_out(profile_id_searched, trees_profiles)
+  #   logger.info "trees_profiles_no_double = uniqs = #{trees_profiles_no_double}, trees doubles_one_to_many = #{doubles_one_to_many}"
+  #
+  #   certain_profiles_found, certain_profiles_count, certain_profiles_trees = prev_profiles_checking(profile_id_searched, trees_profiles_no_double)
+  #
+  #   certain_search_data = {
+  #       search: profile_id_searched,
+  #       founds: certain_profiles_found,
+  #       counts: certain_profiles_count,
+  #       trees: certain_profiles_trees
+  #   }
+  #
+  #   profiles_trees_pairs, profiles_counts = create_results_data(certain_search_data)
+  #
+  #   one_profile_results = {
+  #       profiles_trees_pairs: profiles_trees_pairs,
+  #       profiles_counts: profiles_counts,
+  #       doubles_one_to_many: doubles_one_to_many
+  #   }
+  #   # logger.info "finish modi_search_one_profile:"
+  #   logger.info "one_profile_results = #{one_profile_results}"
+  #
+  #   search_time = (Time.now - start_search_time) * 1000
+  #   puts "\n == END OF modi_search === Search_time = #{search_time.round(2)} msec  \n\n"
+  #   one_profile_results
+  # end
+
+
+
+  # TEST ############################################################
+
+  # @note: to fulfill sql query in RoR
+  # OR sql_result2 = ProfileKey.find_by_sql("SELECT #{field_name} FROM profile_keys
+  #                   WHERE profile_id = #{profile_id} AND deleted = 0")
+  def execute_statement(sql)
+    results = ActiveRecord::Base.connection.execute(sql)
+    if results.present?
+      results
+    else
+      nil
+    end
+  end
+
+  # @note: collect hash of relations (key) and names array (value)
+  # todo: place this method in ProfileKey model
+  def two_fields_content(profile_id, field_name_one, field_name_two)
+
+    logger.info "In two_fields_content: profile_id = #{profile_id}, field_name_one = #{field_name_one}, field_name_two = #{field_name_two}"
+
+    # binding.pry          # Execution will stop here.
+    # # sql_result = ActiveRecord::Base.connection.execute("SELECT #{field_name}  FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # sql_result1 = execute_statement("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # logger.info "In one_field_content: sql_result1 = #{sql_result1}" #", sql_result.size = #{sql_result.size}"
+    # sql_result2 = ProfileKey.find_by_sql("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # logger.info "In one_field_content: sql_result2 = #{sql_result2}"
+    # binding.pry          # Execution will stop here.
+
+    ProfileKey.where(:profile_id => profile_id, deleted: 0)
+        .select( :name_id, :relation_id, :is_name_id, :profile_id, :is_profile_id)
+        .order('relation_id')
+        .pluck(field_name_one, field_name_two)
+  end
+
+
+
+  #In #get_found_two_fields: fields_arr_values =
+  # Local: query_data = {:connected_users=>[61, 72], :name_id_searched=>151,
+  # :arr_relations=>[1, 2, 6, 8, 91, 92, 101, 102, 191, 212],
+  # :arr_names=>[73, 445, 331, 214, 103, 318, 194, 174, 128, 26]}
+  # arr_relations =
+  [1, 2, 6, 6, 8, 91, 92, 101, 102, 191, 212]
+  # arr_names =
+  [73, 445, 331, 214, 103, 318, 194, 174, 128, 26, 194]
+  # two_fields =
+  [[1, 73], [2, 445], [6, 331], [6, 214], [8, 103], [91, 318], [92, 194], [101, 174], [102, 128], [191, 26], [212, 194]]
+
+
+
+  # result = [[62, 852], [62, 852], [62, 852], [62, 852], [62, 852], [62, 852], [62, 852], [62, 852], [62, 852]]
+
+
+
+
+  def from_two_fields(query_data, field_one, field_two)
+    connected_users = query_data[:connected_users]
+    name_id_searched = query_data[:name_id_searched]
+    two_fields = query_data[:two_fields]
+    logger.info "two_fields = #{two_fields}"
+    # logger.info "field_one = #{field_one}, field_two = #{field_two}"
+
+    # logger.info "arr_relations = #{arr_relations}"
+    # logger.info "arr_names = #{arr_names}"
+
+    # todo: here - to install sql selection of extra rows of pairs: relation-name
+    # arr_relations = [8,3,3,15,16,17,121]
+    # arr_names = [48,465,370,343,82,147,446]
+    # connected_users = [57]
+
+    # sql_result = ActiveRecord::Base.connection.execute("SELECT #{field_name}  FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # sql_result1 = execute_statement("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # logger.info "In one_field_content: sql_result1 = #{sql_result1}" #", sql_result.size = #{sql_result.size}"
+    # sql_result2 = ProfileKey.find_by_sql("SELECT #{field_name} FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
+    # logger.info "In one_field_content: sql_result2 = #{sql_result2}"
+
+    # res = ActiveRecord::Base.connection.execute("SELECT relation_id, name_id   FROM profile_keys WHERE user_id != #{connected_users} AND name_id = #{name_id_searched} AND deleted = 0 AND WHERE (relation_id, is_name_id) IN #{two_fields} ") #  ((25,350), (45,550), ... (65,350));)
+    # res = ProfileKey.find_by_sql("SELECT user_id, profile_id FROM profile_keys WHERE (relation_id, is_name_id) IN  ((1,73), (2,445), (6,331), (6, 214), (8, 103), (91, 318), (92, 194), (101, 174), (102, 128), (191, 26), (212, 194)) AND user_id NOT IN (61,72) AND name_id = #{name_id_searched} AND deleted = 0 ") #  ((25,350), (45,550), ... (65,350));)
+    logger.info "In from_two_fields: res.size = #{res.size}"
+    # two_res =
+    # [#<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>, #<ProfileKey id: nil, user_id: 62, profile_id: 852>]
+
+
+    #   http://edgeguides.rubyonrails.org/active_record_postgresql.html
+    #   rails transform ruby array to postgresql array
+
+
+    # ProfileKey.where.not(user_id: connected_users)
+    #     .select('id','user_id','profile_id','name_id','relation_id','is_name_id','is_profile_id')
+    #     .where(:name_id => name_id_searched)
+    #     .where(deleted: 0)
+    #     .where("(relation_id, is_name_id) in (?)", (two_fields)) #(1, 73), (2, 445), (6, 331), (6, 214))) #", [8, 103], [91, 318], [92, 194], [101, 174], [102, 128], [191, 26], [212, 194]])"
+    #     .order('user_id','relation_id','is_name_id')
+    #     .pluck(:profile_id)#, field_two)
+
+    # .where("is_name_id in (?)", arr_names)
+    res
+  end
+
 
   # Before SearchResults:
   # search records: uniq_profiles_pairs =

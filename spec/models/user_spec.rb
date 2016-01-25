@@ -39,7 +39,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
   end
 
-  describe '- Check method get_connected_users' , focus: true  do  # , focus: true
+  describe '- Check method get_connected_users'   do  # , focus: true
 
     before do
       User.delete_all
@@ -69,7 +69,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
       FactoryGirl.create(:connected_user, :connected_user_4)
       FactoryGirl.create(:connected_user, :connected_user_5)
       FactoryGirl.create(:connected_user, :connected_user_6)
-
       # puts "before 6. connected_user = #{ConnectedUser.find(6).user_id} \n"
 
     end
@@ -631,7 +630,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
       #                          :profiles_to_destroy => [22, 29, 27, 25, 28, 23, 24, 26],
       #                          :current_user_id => 2, :user_id => 3,:connection_id => 3 } }
 
-      # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+      # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 5
       let(:certain_koeff_for_connect) { CERTAIN_KOEFF }  # 5
       let(:search_results) { current_user_1.start_search }
 
@@ -857,8 +856,9 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
-      let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+    context '- check SearchResults model after run <search> module' , focus: true   do #  ,  focus: true
+      # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+ #     let(:certain_koeff_for_connect) { CERTAIN_CONNECT }  # 4
       before { current_user_1.start_search }
       describe '- check SearchResults have rows count after <search> - Ok' do
         let(:rows_qty) {3}
@@ -888,8 +888,8 @@ RSpec.describe User, :type => :model    do  # , focus: true
       it '- check SearchResults First Factory row - Ok' do # , focus: true
         search_results_fields = SearchResults.first.attributes.except('created_at','updated_at')
         expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
-                                             "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
-                                             "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
+                                             "found_profile_id"=>7, "count"=>5, "found_profile_ids"=>[7, 25],
+                                             "searched_profile_ids"=>[5, 52], "counts"=>[5, 5],
                                              "connection_id"=>nil, "pending_connect"=>0,
                                              "searched_connected"=>[15], "founded_connected"=>[35] } )
       end
@@ -959,7 +959,8 @@ RSpec.describe User, :type => :model    do  # , focus: true
         # 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} }  #,
         # 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
 
-        let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+        # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+        let(:certain_koeff_for_connect) { CERTAIN_CONNECT }  # 4
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
         # let(:compare_circles_data) { current_user_1.complete_search(complete_search_data) }
 
@@ -985,7 +986,8 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                       3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
         } }
 
-        let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+        # let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
+        let(:certain_koeff_for_connect) { CERTAIN_CONNECT }  # 4
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Invalid Complete search result: final_connection_hash == {} " do
@@ -1179,18 +1181,17 @@ RSpec.describe User, :type => :model    do  # , focus: true
           end
         end
 
-        describe '- check UpdatesFeed BEFORE <connect_trees>'  do #, focus: true
-          describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
-            let(:rows_qty) {0}
-            it_behaves_like :successful_updates_feed_rows_count
-          end
-        end
+        # describe '- check UpdatesFeed BEFORE <connect_trees>'  do #, focus: true
+        #   describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
+        #     let(:rows_qty) {0}
+        #     it_behaves_like :successful_updates_feed_rows_count
+        #   end
+        # end
 
       end
 
 
       ################ CONNECTION  ###########################
-
 
       context '- check Tables count & fields values when valid connection_data AFTER <connect_trees>'   do # , focus: true
         # profiles_to_rewrite = connection_data[:profiles_to_rewrite]
@@ -1214,25 +1215,11 @@ RSpec.describe User, :type => :model    do  # , focus: true
           it '- check SearchResults First Factory row - Ok' do # , focus: true
             search_results_fields = SearchResults.first.attributes.except('created_at','updated_at')
             expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
-                                                 "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
-                                                 "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
+                                                 "found_profile_id"=>7, "count"=>5, "found_profile_ids"=>[7, 25],
+                                                 "searched_profile_ids"=>[5, 52], "counts"=>[5, 5],
                                                  "connection_id"=>nil, "pending_connect"=>0,
                                                  "searched_connected"=>[15], "founded_connected"=>[35]} )
           end
-
-
-
-          # it '- check SearchResults Second Factory row - Ok' do # , focus: true
-          #   search_results_fields = SearchResults.second.attributes.except('created_at','updated_at')
-          #   expect(search_results_fields).to eq({"id"=>2, "user_id"=>2, "found_user_id"=>3, "profile_id"=>1555,
-          #                                        "found_profile_id"=>1444, "count"=>5,
-          #                                        "found_profile_ids"=>[1444, 22222],
-          #                                        "searched_profile_ids"=>[1555, 27777], "counts"=>[5, 5],
-          #                                        "connection_id"=>7, "pending_connect"=>1,
-          #                                        "searched_connected"=>[2], "founded_connected"=>[3]} )
-          # end
-
-
 
         end
 
@@ -1325,22 +1312,22 @@ RSpec.describe User, :type => :model    do  # , focus: true
         end
 
 
-        describe '- check UpdatesFeed AFTER <connect_trees>' do #, focus: true
-          describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
-            let(:rows_qty) {2}  # т.к.  - вне модели
-            it_behaves_like :successful_updates_feed_rows_count
-          end
-          it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
-            connection_request_fields = UpdatesFeed.first.attributes.except('created_at','updated_at')
-            expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
-                                                     "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
-          end
-          it '- check UpdatesFeed 2 row - Ok' do # , focus: true
-            connection_request_fields = UpdatesFeed.last.attributes.except('created_at','updated_at')
-            expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
-                                                     "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
-          end
-        end
+        # describe '- check UpdatesFeed AFTER <connect_trees>' do #, focus: true
+        #   describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
+        #     let(:rows_qty) {2}  # т.к.  - вне модели
+        #     it_behaves_like :successful_updates_feed_rows_count
+        #   end
+        #   it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
+        #     connection_request_fields = UpdatesFeed.first.attributes.except('created_at','updated_at')
+        #     expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
+        #                                              "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
+        #   end
+        #   it '- check UpdatesFeed 2 row - Ok' do # , focus: true
+        #     connection_request_fields = UpdatesFeed.last.attributes.except('created_at','updated_at')
+        #     expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
+        #                                              "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
+        #   end
+        # end
 
       end
 
@@ -1492,7 +1479,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################  DISCONNECTION ###########################
 
-    describe '- check User model Method <disconnect> - Ok'  do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok'   do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
@@ -1501,25 +1488,10 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
         let(:common_log_id) { 1 }
         let(:user_2_connected) { User.second }  # User = 2. Tree = [1,2]. profile_id = 11
-        # let(:connected_users_2) { user_2_connected.get_connected_users }
+
         before {
-          current_user_1.connection_in_tables(connection_data)  ############
-          # connected_users_1 = current_user_1.get_connected_users   # [1,2]
-          # connection_req_count = ConnectionRequest.all.count
-          # com_log = CommonLog.first.attributes.except('created_at','updated_at')
-          # puts " connection_req_count = #{connection_req_count} \n"
-          # connection_log_count = ConnectionLog.all.count
-          # user_3_profile = User.find(3).profile_id
-          # puts "Before Disconnect:\n user_3_profile = #{user_3_profile}, Common_log count = #{common_log_count}
-          #          Connection_log count = #{connection_log_count} \n
-          #        connected_users_1 = #{connected_users_1} "  # 1     114
-
-          # current_user_1.disconnect_tree(common_log_id)
+          current_user_1.connection_in_tables(connection_data)
           user_2_connected.disconnect_tree(common_log_id)
-
-          # connected_users_1_disconn = current_user_1.get_connected_users   # [1,2]
-          # puts "After Disconnect: connected_users_1_disconn = #{connected_users_1_disconn} "  # 1
-          ############
         }
 
         describe '- check ConnectedUsers AFTER <disconnect_tree>'  do #, focus: true
@@ -1549,39 +1521,33 @@ RSpec.describe User, :type => :model    do  # , focus: true
         end
 
 
-        describe '- check UpdatesFeed AFTER <disconnect_tree>'  do #, focus: true
-          describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
-            let(:rows_qty) {4}  # т.к.  - вне модели
-            it_behaves_like :successful_updates_feed_rows_count
-          end
-          it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
-            connection_request_fields = UpdatesFeed.find(1).attributes.except('created_at','updated_at')
-            expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
-                                                     "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
-          end
-          it '- check UpdatesFeed 2 row - Ok' do # , focus: true
-            connection_request_fields = UpdatesFeed.find(2).attributes.except('created_at','updated_at')
-            expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
-                                                     "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
-          end
-          it '- check UpdatesFeed 3 row - Ok'  do # , focus: true
-            connection_request_fields = UpdatesFeed.find(3).attributes.except('created_at','updated_at')
-            expect(connection_request_fields).to eq({"id"=>3, "user_id"=>2, "update_id"=>17, "agent_user_id"=>3,
-                                                     "read"=>false, "agent_profile_id"=>22, "who_made_event"=>2} )
-          end
-          it '- check UpdatesFeed 4 row - Ok' do # , focus: true
-            connection_request_fields = UpdatesFeed.find(4).attributes.except('created_at','updated_at')
-            expect(connection_request_fields).to eq( {"id"=>4, "user_id"=>3, "update_id"=>17, "agent_user_id"=>2,
-                                                      "read"=>false, "agent_profile_id"=>11, "who_made_event"=>2}
-                                                 )
-          end
-          # it '- check UpdatesFeed 5 row - Ok' do # , focus: true
-          #   connection_request_fields = UpdatesFeed.find(5).attributes.except('created_at','updated_at')
-          #   expect(connection_request_fields).to eq( {"id"=>5, "user_id"=>3, "update_id"=>17, "agent_user_id"=>2,
-          #                                             "read"=>false, "agent_profile_id"=>11, "who_made_event"=>2}
-          #                                        )
-          # end
-        end
+        # describe '- check UpdatesFeed AFTER <disconnect_tree>'  do #, focus: true
+        #   describe '- check UpdatesFeed rows count AFTER <connect_trees>' do
+        #     let(:rows_qty) {4}  # т.к.  - вне модели
+        #     it_behaves_like :successful_updates_feed_rows_count
+        #   end
+        #   it '- check UpdatesFeed 1 row - Ok'  do # , focus: true
+        #     connection_request_fields = UpdatesFeed.find(1).attributes.except('created_at','updated_at')
+        #     expect(connection_request_fields).to eq({"id"=>1, "user_id"=>1, "update_id"=>2, "agent_user_id"=>3,
+        #                                              "read"=>false, "agent_profile_id"=>14, "who_made_event"=>1} )
+        #   end
+        #   it '- check UpdatesFeed 2 row - Ok' do # , focus: true
+        #     connection_request_fields = UpdatesFeed.find(2).attributes.except('created_at','updated_at')
+        #     expect(connection_request_fields).to eq({"id"=>2, "user_id"=>3, "update_id"=>2, "agent_user_id"=>1,
+        #                                              "read"=>false, "agent_profile_id"=>17, "who_made_event"=>1} )
+        #   end
+        #   it '- check UpdatesFeed 3 row - Ok'  do # , focus: true
+        #     connection_request_fields = UpdatesFeed.find(3).attributes.except('created_at','updated_at')
+        #     expect(connection_request_fields).to eq({"id"=>3, "user_id"=>2, "update_id"=>17, "agent_user_id"=>3,
+        #                                              "read"=>false, "agent_profile_id"=>22, "who_made_event"=>2} )
+        #   end
+        #   it '- check UpdatesFeed 4 row - Ok' do # , focus: true
+        #     connection_request_fields = UpdatesFeed.find(4).attributes.except('created_at','updated_at')
+        #     expect(connection_request_fields).to eq( {"id"=>4, "user_id"=>3, "update_id"=>17, "agent_user_id"=>2,
+        #                                               "read"=>false, "agent_profile_id"=>11, "who_made_event"=>2}
+        #                                          )
+        #   end
+        # end
 
 
         describe '- check all profile_ids generated in ProfileKey rows AFTER <disconnect_tree>' do
