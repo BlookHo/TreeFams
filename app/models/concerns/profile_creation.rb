@@ -16,7 +16,7 @@ module ProfileCreation
     create_keys(profile, new_profile, relation_id, self)
 
     ################################
-    current_log_type = 1  #  # add: rollback == delete. Тип = добавление нового профиля при rollback
+    current_log_type = 1  #  add: rollback == delete. Тип = добавление нового профиля при rollback
     new_log_number = CommonLog.new_log_id(profile.tree_id, current_log_type)
 
     common_log_data = { user_id:         profile.tree_id,   # 3   Алексей к Анне у Натальи
@@ -25,7 +25,6 @@ module ProfileCreation
                         profile_id:      new_profile.id,             # 215
                         base_profile_id: profile.id,        # 25
                         new_relation_id: relation_id }   # 3
-
 
     CommonLog.create_common_log(common_log_data)
 

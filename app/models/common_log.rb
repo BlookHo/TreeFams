@@ -25,21 +25,6 @@ class CommonLog < ActiveRecord::Base
       one_common_log.tree_user_name = User.find(one_common_log.user_id).name
       one_common_log.agent_name = Name.find(Profile.find(one_common_log[:profile_id]).name_id).name
 
-      # CommonLog Load (129.8ms)  SELECT "common_logs".* FROM "common_logs"  WHERE "common_logs"."user_id" IN (7, 8)  ORDER BY created_at DESC (pid:6556)
-      # [sql] CACHE (0.0ms)  SELECT  "users".* FROM "users"  WHERE "users"."id" = $1 LIMIT 1  [["id", 7]] (pid:6556)
-      # [sql] Profile Load (2.2ms)  SELECT  "profiles".* FROM "profiles"  WHERE "profiles"."user_id" = $1 LIMIT 1  [["user_id", 7]] (pid:6556)
-      # [sql] Name Load (2.0ms)  SELECT  "names".* FROM "names"  WHERE "names"."id" = $1  ORDER BY name LIMIT 1  [["id", 40]] (pid:6556)
-      # [sql] Profile Load (3.1ms)  SELECT  "profiles".* FROM "profiles"  WHERE "profiles"."id" = $1 LIMIT 1  [["id", 976]] (pid:6556)
-      # [sql] Name Load (3.9ms)  SELECT  "names".* FROM "names"  WHERE "names"."id" = $1  ORDER BY name LIMIT 1  [["id", 82]] (pid:6556)
-
-      # [sql] CACHE (0.0ms)  SELECT  "names".* FROM "names"  WHERE "names"."id" = $1  ORDER BY name LIMIT 1  [["id", 82]] (pid:6556)
-      # [sql] CACHE (0.0ms)  SELECT  "users".* FROM "users"  WHERE "users"."id" = $1 LIMIT 1  [["id", 7]] (pid:6556)
-      # [sql] CACHE (0.0ms)  SELECT  "profiles".* FROM "profiles"  WHERE "profiles"."user_id" = $1 LIMIT 1  [["user_id", 7]] (pid:6556)
-      # [sql] CACHE (0.0ms)  SELECT  "names".* FROM "names"  WHERE "names"."id" = $1  ORDER BY name LIMIT 1  [["id", 40]] (pid:6556)
-      # [sql] CACHE (0.0ms)  SELECT  "profiles".* FROM "profiles"  WHERE "profiles"."id" = $1 LIMIT 1  [["id", 975]] (pid:6556)
-      # [sql] CACHE (0.0ms)  SELECT  "names".* FROM "names"  WHERE "names"."id" = $1  ORDER BY name LIMIT 1  [["id", 82]] (pid:6556)
-      # [sql] CACHE (0.0ms)  SELECT  "users".* FROM "users"  WHERE "users"."id" = $1 LIMIT 1  [["id", 8]] (pid:6556)
-
     end
     common_logs_data
   end

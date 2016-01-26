@@ -306,10 +306,9 @@ class SearchCircles
     puts "profile_searched = #{profile_searched}, search_filled_hash = #{search_filled_hash}"
     found_filled_hash = filled_hash(profile_found)
     puts "profile_found = #{profile_found}, found_filled_hash = #{found_filled_hash}"
-    priznak, match_count = check_exclusions(search_filled_hash, found_filled_hash) unless found_filled_hash.empty?
+    equality, priznak, match_count = check_exclusions(search_filled_hash, found_filled_hash) unless found_filled_hash.empty?
 
-    priznak
-
+    equality#, match_count
 
   end
 
@@ -356,41 +355,43 @@ class SearchCircles
   # EXCLUSION_RELATIONS = WeafamSetting.first.exclusion_relations = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
   # def check_exclusions(profile_id_searched, profile_id_found)
   def self.check_exclusions(search_filled_hash, found_filled_hash)
-#    logger.info "search_filled_hash = #{search_filled_hash}"
-#    logger.info "found_filled_hash = #{found_filled_hash}"
 
+    equality = false
     match_count = 0
     priznak = true
     search_filled_hash.each do |relation, names|
       sval = search_filled_hash[relation]
       fval = found_filled_hash[relation]
-      if found_filled_hash.has_key?(relation)
-        if EXCLUSION_RELATIONS.include?(relation)
+      if found_filled_hash.has_key?(relation) #
+        if EXCLUSION_RELATIONS.include?(relation) # IN exclusions list
           if sval == fval
             match_count += sval.size
             priznak = true
+            equality = true
           elsif sval & fval != []
             match_count += (sval & fval).size
             priznak = true
+            equality = true
           else
             priznak = false
+            equality = false
             puts "In All checks failed: - priznak = #{priznak}, match_count = #{match_count}"
-            return priznak, match_count
+            return equality, priznak, match_count
           end
-        else
+        else # out of exclusions list
           if sval == fval
             match_count += sval.size
           else sval & fval != []
-          match_count += (sval & fval).size
+            match_count += (sval & fval).size
           end
         end
 
       else
-        priznak = true
+        priznak = true #true
       end
     end
-    # logger.info "check_exclusions end: - priznak = #{priznak}, match_count = #{match_count}"
-    return priznak, match_count
+    puts "check_exclusions end: - priznak = #{priznak}, match_count = #{match_count}"
+    return equality, priznak, match_count
   end
 
 
