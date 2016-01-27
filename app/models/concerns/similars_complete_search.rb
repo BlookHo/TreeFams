@@ -15,7 +15,7 @@ module SimilarsCompleteSearch
   # start_tree = от какого дерева объедин.
   # connected_user = с каким деревом объед-ся
   # Input: init_connection_hash
-  def similars_complete_search(first_profile_connecting, second_profile_connecting)
+  def prev_similars_complete_search(first_profile_connecting, second_profile_connecting)
 
     init_connection_hash = { first_profile_connecting => second_profile_connecting}
     logger.info "** IN similars_complete_search *** "
@@ -153,23 +153,22 @@ module SimilarsCompleteSearch
   #  final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} (pid:4353)
   #   ( profiles_to_rewrite = [14, 21, 19, 11, 20, 12, 13, 18]
   #   profiles_to_destroy = [22, 29, 27, 25, 28, 23, 24, 26] )
-  def new_sims_complete_search(first_profile_connect, second_profile_connect)
+  def similars_complete_search(first_profile_connect, second_profile_connect)
 
     init_connection_hash = { first_profile_connect => second_profile_connect}
     logger.info "** IN similars_complete_search *** "
     logger.info " init_connection_hash = #{init_connection_hash}"
-    final_profiles_to_rewrite = []
-    final_profiles_to_destroy = []
+    # final_profiles_to_rewrite = []
+    # final_profiles_to_destroy = []
     final_connection_hash = {}
 
     unless init_connection_hash.empty?
-      final_connection_hash = init_connection_modify(init_connection_hash, CERTAIN_KOEFF)
+      final_connection_hash = init_connection_modify(init_connection_hash)#, CERTAIN_KOEFF)
       puts "final_connection_hash = #{final_connection_hash} "
 
-      final_profiles_to_rewrite = final_connection_hash.keys
-      final_profiles_to_destroy = final_connection_hash.values
-
     end
+    final_profiles_to_rewrite = final_connection_hash.keys
+    final_profiles_to_destroy = final_connection_hash.values
     return final_profiles_to_rewrite, final_profiles_to_destroy, final_connection_hash  # for RSpec & TO_VIEW
 
   end

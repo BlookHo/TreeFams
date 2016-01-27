@@ -825,8 +825,8 @@ RSpec.describe User, :type => :model    do  # , focus: true
             :with_whom_connect => [3],
             :uniq_profiles_pairs => { 15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
                                       11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
-                                     20=>{3=>28} },
-            :certain_koeff => CERTAIN_CONNECT
+                                     20=>{3=>28} }
+            # :certain_koeff => CERTAIN_CONNECT
         } }
 
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
@@ -847,7 +847,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                       3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
         } }
 
-        let(:certain_koeff_for_connect) { CERTAIN_CONNECT }
+        # let(:certain_koeff_for_connect) { CERTAIN_CONNECT }
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Invalid Complete search result: final_connection_hash == {} " do
@@ -1066,7 +1066,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################ CONNECTION - DISCONNECTION ###########################
 
-    describe '- check User model Method <connect_trees(connection_data)> - Ok'     do  # , focus: true
+    describe '- check User model Method <connect_trees(connection_data)> - Ok'  , focus: true    do  # , focus: true
       context '- check Tables count & fields values BEFORE connect_trees' do
         describe '- check all profile_ids in ProfileKey rows ' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
@@ -1370,7 +1370,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################  DISCONNECTION ###########################
 
-    describe '- check User model Method <disconnect> - Ok'  do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok' , focus: true  do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],

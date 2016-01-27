@@ -58,8 +58,8 @@ module SearchComplete
       #########################################################################################
 
       final_connection_hash = SearchWork.collect_final_connection(add_to_hash_data)
-      # Подготовка к следующему циклу
-      init_connection_hash = add_hash_checked
+
+      init_connection_hash = add_hash_checked # Подготовка к следующему циклу
     end
     final_connection_hash
   end

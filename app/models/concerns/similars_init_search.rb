@@ -201,29 +201,6 @@ module SimilarsInitSearch
 
     end
 
-    # todo: уточнить необходимость и место исп-я
-    # todo: перенести этот метод в Operational - для нескольких моделей
-    # No use
-    # Получаем новое имя отношения в хэш круга
-    #def get_new_elem_name(circle_keys_arr, name_relation)
-    #  name_qty = name_next_qty(circle_keys_arr, name_relation)
-    #  new_name = name_relation.concat(name_qty.to_s)
-    #  #logger.info "In get_new_elem_name: new_name = #{new_name} "
-    #  return new_name
-    #end
-
-    # todo: перенести этот метод в CirclesMethods - для нескольких моделей
-    # No use
-    # Получаем кол-во для нового имени отношения в хэш круга
-    # длина имени отношения - 3 символа. можно изменить в: one_name_key[0, 3 ]
-    #def name_next_qty(circle_keys_arr, name_relation)
-    #  name_qty = 0
-    #  circle_keys_arr.each do |one_name_key|
-    #    name_qty += 1 if one_name_key[0,3] == name_relation
-    #  end
-    #  name_qty += 1
-    #  return name_qty
-    #end
 
     # Служебный метод для отладки - для LOGGER
     # todo: перенести этот метод в Operational - для нескольких моделей
