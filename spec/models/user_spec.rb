@@ -623,7 +623,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok'   do  # , focus: true
+    describe '- check User model Method <Search> - Ok'  , focus: true  do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -817,7 +817,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check User model Method <complete_search> - Ok'    do  #   , focus: true
+    describe '- check User model Method <complete_search> - Ok'  , focus: true   do  #   , focus: true
 
       # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
       context '- when valid complete_search_data' do
@@ -863,7 +863,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check two Profiles Compare by Exclusions - in Search_work class - in <complete_search> - Ok'  , focus: true  do  #   , focus: true
+    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -'  , focus: true  do  #   , focus: true
 
       context '- check one pair of UNIQ correct profiles -' do
         # let(:uniq_profiles) { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
@@ -871,50 +871,46 @@ RSpec.describe User, :type => :model    do  # , focus: true
         let(:two_profile_t) { 22 }
         let(:equality) {  SearchCircles.compare_profiles_exclusions(one_profile_t, two_profile_t) }
         it "- Check Valid Compare of two profile by exclusions: check  priznak. In <complete_search>" do
-          puts "correct profiles pairs - after compare_profiles_exclusions: equality = #{equality} \n"
+          puts "Correct profiles pairs - after compare_profiles_exclusions: equality = #{equality} \n"
           puts "profiles: #{one_profile_t} and #{two_profile_t} - to be EQUAL \n"
           expect(equality).to eq( true )
         end
       end
 
-
-
-      # context '- check one pair of UNIQ correct profiles -' do
-      #   let(:uniq_profiles) { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
-      #   it "- Check Valid Compare of two profile by exclusions: check  priznak. In <complete_search>" do
-      #     uniq_profiles.each do |one_profile, two_profile|
-      #       # priznak_1 = false
-      #       priznak_1 = SearchCircles.compare_profiles_exclusions(one_profile, two_profile)
-      #       puts "correct profiles pairs - after compare_profiles_exclusions: priznak_1 = #{priznak_1} \n"
-      #       puts "profiles: #{one_profile} and #{two_profile} - are EQUAL \n"
-      #       expect(priznak_1).to eq( true )
-      #     end
-      #   end
-      # end
+      context '- check one pair of UNIQ correct profiles -' do
+        let(:uniq_profiles) { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
+        it "- Check Valid Compare of two profile by exclusions: check  priznak. In <complete_search>" do
+          uniq_profiles.each do |one_profile, two_profile|
+            equality = SearchCircles.compare_profiles_exclusions(one_profile, two_profile)
+            puts "Correct profiles pairs - after compare_profiles_exclusions: equality = #{equality} \n"
+            puts "profiles: #{one_profile} and #{two_profile} - to be EQUAL \n"
+            expect(equality).to eq( true )
+          end
+        end
+      end
 
       context '- check one pair of WRONG unequal profiles -' do
-        let(:one_profile_f) { 19 } #=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
-        let(:two_profile_f) { 23 } #, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
+        let(:one_profile_f) { 22 }
+        let(:two_profile_f) { 25 }
         let(:equality) {  SearchCircles.compare_profiles_exclusions(one_profile_f, two_profile_f) }
         it "- Check Valid Compare of two profile by exclusions: check  priznak. In <complete_search>" do
-          puts "correct profiles pairs - after compare_profiles_exclusions: equality = #{equality} \n"
+          puts "Uncorrect profiles pairs - after compare_profiles_exclusions: equality = #{equality} \n"
           puts "profiles: #{one_profile_f} and #{two_profile_f} - to be UNEQUAL \n"
           expect(equality).to eq( false )
         end
       end
 
-      # context '- check one pair of WRONG unequal profiles -' do
-      #   let(:wrong_profiles) { {19=>23, 14=>29, 21=>27, 20=>25, 11=>28, 13=>23, 12=>24, 18=>26}  }
-      #   it "- Check Valid Compare of two profile by exclusions: check  priznak. In <complete_search>" do
-      #     wrong_profiles.each do |one_profile, two_profile|
-      #       priznak = true
-      #       priznak = SearchCircles.compare_profiles_exclusions(one_profile, two_profile)
-      #       puts "correct profiles pairs - after compare_profiles_exclusions: priznak = #{priznak} \n"
-      #       puts "profiles: #{one_profile} and #{two_profile} - are UNEQUAL \n"
-      #       expect(priznak).to eq( false )
-      #     end
-      #   end
-      # end
+      context '- check one pair of WRONG unequal profiles -' do
+        let(:wrong_profiles) { {19=>23, 14=>29, 21=>27, 20=>25, 11=>28, 13=>23, 12=>24, 26=>23}  }
+        it "- Check Valid Compare of two profile by exclusions: check  priznak. In <complete_search>" do
+          wrong_profiles.each do |one_profile, two_profile|
+            equality = SearchCircles.compare_profiles_exclusions(one_profile, two_profile)
+            puts "Uncorrect profiles pairs - after compare_profiles_exclusions: equality = #{equality} \n"
+            puts "profiles: #{one_profile} and #{two_profile} - to be UNEQUAL \n"
+            expect(equality).to eq( false )
+          end
+        end
+      end
 
     end
 

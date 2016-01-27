@@ -382,7 +382,8 @@ module SearchModified
 #    logger.info "found_filled_hash = #{found_filled_hash}"
 
     match_count = 0
-    priznak = true
+    # priznak = true
+    priznak = false
     search_filled_hash.each do |relation, names|
       sval = search_filled_hash[relation]
       fval = found_filled_hash[relation]
@@ -407,8 +408,8 @@ module SearchModified
           end
         end
 
-      else
-        priznak = true
+      # else
+      #   priznak = true
       end
     end
     # logger.info "check_exclusions end: - priznak = #{priznak}, match_count = #{match_count}"

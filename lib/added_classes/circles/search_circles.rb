@@ -214,16 +214,7 @@ class SearchCircles
         if (profile_id_s != is_profile_id_f) && (profile_id_f != is_profile_id_s)# Одинаковые профили не заносим в хэш объединения (они и так одинаковые)
           # make new el-t of new_connection_hash
           new_connection_hash.merge!({one_profile => to_profile})
-
-          # before [57] + [58]
-          # $ new_connection_hash = {793=>809}
-          # $ new_connection_hash = {793=>809, 794=>810}
-          # $ new_connection_hash = {793=>809, 794=>810, 795=>805}
-          # $ new_connection_hash = {793=>809, 794=>810, 795=>805, 897=>895}
-          # $ new_connection_hash = {793=>809, 794=>810, 795=>805, 897=>895, 898=>896}
-
-          puts "In find_profiles_connect: $ new_connection_hash = #{new_connection_hash} "
-
+          # puts "In find_profiles_connect: $ new_connection_hash = #{new_connection_hash} "
         end
       end
     end
@@ -300,16 +291,17 @@ class SearchCircles
   end
 
 
-  # @note:
+  # @note: New & last ver of profiles compare - based on exclusions of relations - ONLY
   def self.compare_profiles_exclusions(profile_searched, profile_found)
+    puts "\n In compare_profiles_exclusions"
     search_filled_hash = filled_hash(profile_searched)
-    puts "profile_searched = #{profile_searched}, search_filled_hash = #{search_filled_hash}"
+    puts "profile_searched = #{profile_searched}, profile_found = #{profile_found}"
+    # puts "search_filled_hash = #{search_filled_hash}"
     found_filled_hash = filled_hash(profile_found)
-    puts "profile_found = #{profile_found}, found_filled_hash = #{found_filled_hash}"
-    equality, priznak, match_count = check_exclusions(search_filled_hash, found_filled_hash) unless found_filled_hash.empty?
+    # puts "found_filled_hash = #{found_filled_hash}"
+    equality, match_count = check_exclusions(search_filled_hash, found_filled_hash) unless found_filled_hash.empty?
 
     equality#, match_count
-
   end
 
 
@@ -352,47 +344,73 @@ class SearchCircles
   end
 
   # @note: main check of exclusions - special algorythm
-  # EXCLUSION_RELATIONS = WeafamSetting.first.exclusion_relations = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
-  # def check_exclusions(profile_id_searched, profile_id_found)
+  # @input: For profile_searched = 13 and profile_found = 23:
+  #   search_filled_hash = {1=>[110], 2=>[249], 4=>[48, 331], 7=>[343], 13=>[194], 14=>[48], 18=>[28], 112=>[370, 465]}
+  #   found_filled_hash = {1=>[194], 2=>[48], 4=>[48, 331], 8=>[82], 15=>[110], 16=>[249]}
+  #   EXCLUSION_RELATIONS = WeafamSetting.first.exclusion_relations = [1,2,3,4,5,6,7,8,91,101,111,121,92,102,112,122]
+  # @output:
+  #   equality = [true, false] - main result: two profiles are equal or not
+  #   priznak = [true, false]
+  #   match_count = integer - has value > 0 until exclusions passed
   def self.check_exclusions(search_filled_hash, found_filled_hash)
 
-    equality = false
-    match_count = 0
-    priznak = true
+    check_data = {}
+    check_data[:equality] = false
+    check_data[:match_count] = 0
     search_filled_hash.each do |relation, names|
+      # puts "In each: - relation = #{relation}"
       sval = search_filled_hash[relation]
       fval = found_filled_hash[relation]
-      if found_filled_hash.has_key?(relation) #
-        if EXCLUSION_RELATIONS.include?(relation) # IN exclusions list
-          if sval == fval
-            match_count += sval.size
-            priznak = true
-            equality = true
-          elsif sval & fval != []
-            match_count += (sval & fval).size
-            priznak = true
-            equality = true
-          else
-            priznak = false
-            equality = false
-            puts "In All checks failed: - priznak = #{priznak}, match_count = #{match_count}"
-            return equality, priznak, match_count
-          end
-        else # out of exclusions list
-          if sval == fval
-            match_count += sval.size
-          else sval & fval != []
-            match_count += (sval & fval).size
-          end
-        end
+      check_data[:sval] = sval
+      check_data[:fval] = fval
+      if found_filled_hash.has_key?(relation)
+        check_data[:relation] = relation
+        current_equality, current_match_count = set_equality(check_data)
+        # puts "current check_exclusions: current_equality = #{current_equality}, current_match_count = #{current_match_count}"
+        return current_equality, current_match_count unless current_equality
+        check_data[:equality]    = current_equality
+        check_data[:match_count] = current_match_count
+      end
 
-      else
-        priznak = true #true
+    end
+    puts "After all check_exclusions: :equality = #{check_data[:equality]}, :match_count = #{check_data[:match_count]}"
+    return check_data[:equality], check_data[:match_count]
+  end
+
+
+  # @note: check data and set equality priznak. At the same time - count match_count
+  def self.set_equality(check_data)
+    sval        = check_data[:sval]
+    fval        = check_data[:fval]
+    relation    = check_data[:relation]
+    equality    = check_data[:equality]
+    match_count = check_data[:match_count]
+
+    if EXCLUSION_RELATIONS.include?(relation) # is IN exclusions list
+      if sval == fval         # completely equal names arrays for one relation
+        match_count += sval.size
+        equality = true
+      elsif sval & fval != [] # names arrays for one relation has intersection
+        match_count += (sval & fval).size
+        equality = true
+      else                    # unequal names arrays for one relation
+        equality = false
+        # puts "In All checks failed: - equality = #{equality}, match_count = #{match_count}"
+        return equality, match_count
+      end
+    else # out of Exclusions relations list
+      if sval == fval # completely equal names arrays
+        match_count += sval.size
+      else sval & fval != []
+        match_count += (sval & fval).size
       end
     end
-    puts "check_exclusions end: - priznak = #{priznak}, match_count = #{match_count}"
-    return equality, priznak, match_count
+
+    return equality, match_count
   end
+
+
+
 
 
   # # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
