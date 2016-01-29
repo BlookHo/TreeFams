@@ -1,6 +1,11 @@
 class ConnectedUser < ActiveRecord::Base
 
-  validates_presence_of :user_id, :with_user_id, :connection_id, :rewrite_profile_id, :overwrite_profile_id,
+  #############################################################
+  # Иванищев А.В. 2014 -2015
+  #############################################################
+
+
+validates_presence_of :user_id, :with_user_id, :connection_id, :rewrite_profile_id, :overwrite_profile_id,
                         :message => "Должно присутствовать в ConnectedUser"
   validates_numericality_of :user_id, :with_user_id, :connection_id, :rewrite_profile_id, :overwrite_profile_id,
                             :only_integer => true,

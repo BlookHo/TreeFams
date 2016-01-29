@@ -14,15 +14,6 @@ module SearchComplete
   #   as proper search results and update search data
   #############################################################
 
-  # in  collect_new_connection_hash
-  # :profile_searched = 749, :profile_found = 766
-  # after sequest_connection_hash: new_connection_hash = {}
-  # After add_hash_checked = {}
-  # @@@@@ final_connection_hash = {736=>752, 741=>753, 742=>754, 735=>755, 738=>756, 737=>757, 743=>760, 740=>758, 746=>763, 748=>761, 747=>762, 739=>759, 744=>765, 745=>764, 749=>766}
-   {736=>752, 741=>753, 742=>754, 735=>755, 738=>756, 737=>757,
-      743=>760, 740=>758, 746=>763, 748=>761, 747=>762, 739=>759,
-      744=>765, 745=>764, 749=>766}
-
   # @note: METHOD " SEARCH COMPLETE "
   #   сбор полных достоверных пар профилей для объединения
   #   Определение массивов профилей для перезаписи: profiles_to_rewrite, profiles_to_destroy
@@ -52,7 +43,7 @@ module SearchComplete
 
 
   # @note: init_hash iterate to collect final_connection_hash
-  # final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} # In Spec
+  #   final_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} # In Spec
   def init_connection_modify(init_connection_hash)#, certain_koeff)
     final_connection_hash = init_connection_hash
     # начало сбора полного хэша достоверных пар профилей для объединения
@@ -81,7 +72,6 @@ module SearchComplete
       # Получение Кругов для пары профилей - для последующего сравнения и анализа
       logger.info "=== КРУГИ ПРОФИЛЕЙ: profile_searched = #{profile_searched}, profile_found = #{profile_found}"
       circles_arrs_data = SearchCircles.find_circles_arrs(profile_searched, profile_found)
-      # logger.info "after find_circles_arrs: circles_arrs_data = #{circles_arrs_data}"
       compare_circles_data = {
         profile_searched:       profile_searched,
         profile_found:          profile_found,
@@ -94,13 +84,10 @@ module SearchComplete
         final_connection_hash:  final_connect_hash,
         new_connection_hash:    new_connection_hash
       }
-      # puts " После сравнения Кругов: compare_circles_data"#" = #{compare_circles_data} "
       new_connection_hash = collect_new_connection_hash(compare_circles_data)
 
       # накапливание нового доп.хаша по всему циклу
-      # add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.blank?
       add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.empty?
-      # logger.info " add_connection_hash = #{add_connection_hash} "
     end
     add_connection_hash
   end
@@ -110,8 +97,6 @@ module SearchComplete
   def collect_new_connection_hash(compare_circles_data)
     puts " in  collect_new_connection_hash"
     puts "  :profile_searched = #{compare_circles_data[:profile_searched]}, :profile_found = #{compare_circles_data[:profile_found]} "
-    # puts "  :search_is_profiles_arr= = #{compare_circles_data[:search_is_profiles_arr]} "
-    # puts "  :found_is_profiles_arr== = #{compare_circles_data[:found_is_profiles_arr]} "
     new_connection_hash = sequest_connection_hash(compare_circles_data[:final_connection_hash],
                                                   SearchCircles.two_circles_compare(compare_circles_data))
     puts " after sequest_connection_hash: new_connection_hash = #{new_connection_hash} "
