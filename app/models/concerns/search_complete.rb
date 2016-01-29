@@ -14,6 +14,14 @@ module SearchComplete
   #   as proper search results and update search data
   #############################################################
 
+  # in  collect_new_connection_hash
+  # :profile_searched = 749, :profile_found = 766
+  # after sequest_connection_hash: new_connection_hash = {}
+  # After add_hash_checked = {}
+  # @@@@@ final_connection_hash = {736=>752, 741=>753, 742=>754, 735=>755, 738=>756, 737=>757, 743=>760, 740=>758, 746=>763, 748=>761, 747=>762, 739=>759, 744=>765, 745=>764, 749=>766}
+   {736=>752, 741=>753, 742=>754, 735=>755, 738=>756, 737=>757,
+      743=>760, 740=>758, 746=>763, 748=>761, 747=>762, 739=>759,
+      744=>765, 745=>764, 749=>766}
 
   # @note: METHOD " SEARCH COMPLETE "
   #   сбор полных достоверных пар профилей для объединения

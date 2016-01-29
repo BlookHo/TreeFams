@@ -63,15 +63,11 @@ module SimilarsConnection
     connected_users_arr = self.get_connected_users # Состав объединенного дерева в виде массива id
     connection_data[:connected_users_arr] = connected_users_arr
 
-    #########  перезапись profile_id's & update User
+    #  перезапись profile_id's & update User
      log_connection_user_profile = Profile.profiles_merge(connection_data)
-  #  log_connection_user_profile = []
-    # todo:Раскоммитить 2 строки ниже и закоммитить 2 строки за ними  - для полной перезаписи логов и отладки
-    #########  перезапись profile_id's в Tree и ProfileKey
+    #  перезапись profile_id's в Tree и ProfileKey
     log_connection_tree       = update_table(connection_data, Tree)
     log_connection_profilekey = update_table(connection_data, ProfileKey)
-    # log_connection_tree = []
-    # log_connection_profilekey = []
 
     common_sims_log = {  log_user_profile: log_connection_user_profile,  log_tree: log_connection_tree, log_profilekey: log_connection_profilekey }
     complete_log_arr = common_sims_log[:log_user_profile] + common_sims_log[:log_tree] + common_sims_log[:log_profilekey]
@@ -85,32 +81,13 @@ module SimilarsConnection
 
     ### Удаление сохраненных ранее найденных пар похожих
     SimilarsFound.clear_similars_found(data_to_clear)
-    logger.info "# CONN ##*** In module SimilarsConnection common_sims_logs: #{common_sims_log.inspect} "
+    logger.info "# *** In module SimilarsConnection: after store_log & clear_similars_found" #" common_sims_logs: #{common_sims_log.inspect} "
 
     # Запись строки Общего лога в таблицу CommonLog
     make_sims_connec_common_log(connection_data)
 
-    # connection_data = {profiles_to_rewrite: profiles_to_rewrite, #
-    #                             profiles_to_destroy: profiles_to_destroy,
-    #                             current_user_id: current_user.id,
-    #                             connection_id: last_log_id }
-
-    ##########  UPDATES FEEDS - № 19  # similars_connect ###################
-    # profile_current_user = User.find(connection_data[:current_user_id]).profile_id
-    # update_feed_data = { user_id:           connection_data[:current_user_id] ,    #
-    #                      update_id:         19,                  #
-    #                      agent_user_id:     connection_data[:current_user_id],   #
-    #                      read:              false,              #
-    #                      agent_profile_id:  profile_current_user,        #
-    #                      who_made_event:    connection_data[:current_user_id] }   #
-    # logger.info "In SimilarsConnection: Before create UpdatesFeed   update_feed_data= #{update_feed_data} "
-    # update_feed_data= {:user_id=>1, :update_id=>4, :agent_user_id=>2, :read=>false, :agent_profile_id=>219, :who_made_event=>1} (pid:16287)
-
-    # UpdatesFeed.create(update_feed_data) #
-
     common_sims_log
   end
-
 
 
   # перезапись значений в полях одной таблицы
@@ -149,7 +126,7 @@ module SimilarsConnection
     for arr_ind in 0 .. profiles_to_destroy.length-1 # ищем этот profile_id для его замены
       rows_to_update = table.where(:user_id => connected_users_arr).
                              where(" #{table_field} = #{profiles_to_destroy[arr_ind]} " )
-      logger.info "*** In module SimilarsConnection update_field: rows_to_update = #{rows_to_update.inspect} "
+      # logger.info "*** In module SimilarsConnection update_field: rows_to_update = #{rows_to_update.inspect} "
 
       unless rows_to_update.blank?
         rows_to_update.each do |rewrite_row|

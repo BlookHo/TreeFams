@@ -62,11 +62,18 @@ class SearchCircles
   # получить массивы триад для дальнейшего сравнения
   # показать в Логгере
   def self.have_profile_circle(profile_id)
-    profile_user_id = Profile.where(id: profile_id, deleted: 0)[0].tree_id
-    profile_circle = get_one_profile_circle(profile_id, profile_user_id)
-    circle_arr, circle_profiles_arr, circle_is_profiles_arr =
-        make_arrays_from_circle(profile_circle)
-    circle_is_profiles_arr = circle_is_profiles_arr.uniq
+    circle_arr = []
+    circle_profiles_arr = []
+    circle_is_profiles_arr = []
+    profile = Profile.where(id: profile_id, deleted: 0)[0]
+    unless profile.blank?
+      puts "Before get circle: profile = #{profile_id} - NOT blank"
+      profile_user_id = profile.tree_id
+      profile_circle = get_one_profile_circle(profile_id, profile_user_id)
+      circle_arr, circle_profiles_arr, circle_is_profiles_arr =
+          make_arrays_from_circle(profile_circle)
+      circle_is_profiles_arr = circle_is_profiles_arr.uniq
+    end
     return circle_arr, circle_profiles_arr, circle_is_profiles_arr
   end
 

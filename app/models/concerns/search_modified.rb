@@ -164,10 +164,10 @@ module SearchModified
       profiles_with_match_hash.merge!(one_profile_results[:profiles_counts])
       doubles_one_to_many_hash.merge!(one_profile_results[:doubles_one_to_many])
 
-      logger.info "After modi_search_one_profile:"
-      logger.info " uniq_profiles_pairs = #{uniq_profiles_pairs} "
-      logger.info " profiles_with_match_hash = #{profiles_with_match_hash} "
-      logger.info " doubles_one_to_many_hash = #{doubles_one_to_many_hash} "
+      # logger.info "After modi_search_one_profile:"
+      # logger.info " uniq_profiles_pairs = #{uniq_profiles_pairs} "
+      # logger.info " profiles_with_match_hash = #{profiles_with_match_hash} "
+      # logger.info " doubles_one_to_many_hash = #{doubles_one_to_many_hash} "
     end
 
     uniq_profiles_pairs.delete_if { |key,val|  val == {} }
@@ -298,7 +298,7 @@ module SearchModified
   # todo: place this method in ProfileKey model
   def one_field_content(profile_id, field_name)
 
-    logger.info "In one_field_content: profile_id = #{profile_id}, field_name = #{field_name}"
+    # logger.info "In one_field_content: profile_id = #{profile_id}, field_name = #{field_name}"
 
     # binding.pry          # Execution will stop here.
     # # sql_result = ActiveRecord::Base.connection.execute("SELECT #{field_name}  FROM profile_keys WHERE profile_id = #{profile_id} AND deleted = 0")
@@ -325,36 +325,36 @@ module SearchModified
     puts "\n found #trees_profiles_checking\n"
 
     reduced_trees_profiles = trees_profiles
-    logger.info "start reduced_trees_profiles = #{reduced_trees_profiles}"
+    # logger.info "start reduced_trees_profiles = #{reduced_trees_profiles}"
     trees_profiles.each do |one_tree_profile|
       found_profile_id = one_tree_profile[1]
       puts "\n"
       logger.info "one_tree_profile = #{one_tree_profile}, found_profile_id = #{found_profile_id}"
       found_filled_hash = filled_hash(found_profile_id)
-      logger.info "found_filled_hash = #{found_filled_hash}"
+      # logger.info "found_filled_hash = #{found_filled_hash}"
       priznak, match_count = check_exclusions(search_filled_hash, found_filled_hash) unless found_filled_hash.empty?
-      logger.info "After check_exclusions: found_profile_id = #{found_profile_id}, priznak = #{priznak.inspect}, match_count = #{match_count.inspect}"
+      # logger.info "After check_exclusions: found_profile_id = #{found_profile_id}, priznak = #{priznak.inspect}, match_count = #{match_count.inspect}"
 
       # After check_exclusions:
       profile_checked = check_exclusions_priznak(priznak, match_count, found_profile_id)
-      logger.info "profile_checked = #{profile_checked.inspect}"
+      # logger.info "profile_checked = #{profile_checked.inspect}"
       if profile_checked.blank?
         reduced_trees_profiles = reduced_trees_profiles - [one_tree_profile]
-        logger.info "NOT Checked: reduced_trees_profiles = #{reduced_trees_profiles}, one_tree_profile = #{one_tree_profile}"
+        # logger.info "NOT Checked: reduced_trees_profiles = #{reduced_trees_profiles}, one_tree_profile = #{one_tree_profile}"
       else
         index_arr = reduced_trees_profiles.index { |elem| elem == one_tree_profile }
-        logger.info "Checked Ok: one_tree_profile = #{one_tree_profile}, index_arr = #{index_arr}"
+        # logger.info "Checked Ok: one_tree_profile = #{one_tree_profile}, index_arr = #{index_arr}"
         if index_arr.blank?
           reduced_trees_profiles = reduced_trees_profiles - [one_tree_profile]
-          logger.info "In search: trees_profiles_checking: index_arr.blank? #{reduced_trees_profiles.inspect}, one_tree_profile = #{one_tree_profile}"
+          # logger.info "In search: trees_profiles_checking: index_arr.blank? #{reduced_trees_profiles.inspect}, one_tree_profile = #{one_tree_profile}"
         else
           with_count_one_tree_profile = one_tree_profile + [match_count]
           reduced_trees_profiles[index_arr] = with_count_one_tree_profile
-          logger.info "Checked Ok: reduced_trees_profiles[index] = #{reduced_trees_profiles[index_arr].inspect}, with_count_one_tree_profile = #{with_count_one_tree_profile}"
+          # logger.info "Checked Ok: reduced_trees_profiles[index] = #{reduced_trees_profiles[index_arr].inspect}, with_count_one_tree_profile = #{with_count_one_tree_profile}"
         end
   #      binding.pry          # Execution will stop here.
       end
-      logger.info "current reduced_trees_profiles = #{reduced_trees_profiles}"
+      # logger.info "current reduced_trees_profiles = #{reduced_trees_profiles}"
 
     end
     # logger.info ""
@@ -548,14 +548,15 @@ module SearchModified
     # from new_get_found_two_fields: trees_to_check = [[380, 5247], [610, 8085], [610, 8088]]
     puts "\n All found profiles and trees - to check:\n"
 
-    logger.info "trees_to_check = #{trees_to_check.inspect}"
+    # logger.info "trees_to_check = #{trees_to_check.inspect}"
+
     # trees_to_check = [[16, 340], [20,374]] + trees_to_check +  [[60, 826], [61, 839]] # - results[:duplicates_many_to_one] = {839=>{61=>839}, 840=>{61=>839}}
     # trees_to_check = [[16, 340], [20,374]] + trees_to_check +  [[60, 826]]  # -  results[:duplicates_many_to_one] = {}
 
-    logger.info "trees_to_check added = #{trees_to_check.inspect}"
+    # logger.info "trees_to_check added = #{trees_to_check.inspect}"
 
     search_filled_hash = filled_hash(profile_id_searched)
-    logger.info "profile_id_searched = #{profile_id_searched}, search_filled_hash = #{search_filled_hash}"
+    # logger.info "profile_id_searched = #{profile_id_searched}, search_filled_hash = #{search_filled_hash}"
 
     ############# main method of trees & profiles checking ############################
     reduced_trees_profiles = trees_profiles_checking(search_filled_hash, trees_to_check)
@@ -630,7 +631,7 @@ module SearchModified
     name_id_searched = query_data[:name_id_searched]
     arr_relations = query_data[:arr_relations]
     arr_names = query_data[:arr_names]
-    logger.info "query_data = #{query_data}"
+    # logger.info "query_data = #{query_data}"
     # logger.info "field_one = #{field_one}, field_two = #{field_two}"
 
     # logger.info "arr_relations = #{arr_relations}"
