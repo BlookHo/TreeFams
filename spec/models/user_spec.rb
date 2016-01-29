@@ -919,7 +919,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
     # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
     # :current_user_id=>1, :user_id=>3, :connection_id=>3}
-    describe '- check User model Method < check_connection_arrs(connection_data )>'   do  # , focus: true
+    describe '- check User model Method < check_connection_arrs(connection_data )>' , focus: true   do  # , focus: true
       context '- when valid connection_data' do
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],

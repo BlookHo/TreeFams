@@ -22,7 +22,7 @@ module Meteor
             msg_code = connection_results[:diag_connection_item]
             msg      = connection_results[:connection_message]
 
-            logger.info "In YesConnectController: After connect:  msg_code = #{msg_code}, msg = #{msg} "
+            logger.info "In YesConnectController: After connection:  msg_code = #{msg_code}, msg = #{msg} "
 
             status_code = 300 if msg_code > 1 # status NotOk
             if @error

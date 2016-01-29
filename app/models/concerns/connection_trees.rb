@@ -31,12 +31,10 @@ module ConnectionTrees
 
     beg_search_time = Time.now   # Начало отсечки времени поиска
 
-    # Запуск стартового поиска с certain_koeff
     with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
-    # certain_koeff = WeafamSetting.first.certain_koeff
-    search_results = self.start_search#(certain_koeff)
+    search_results = self.start_search
 
-    logger.info "@@@@@@ Search Results: search_results = #{search_results} "
+    logger.info "after start_search: search_results = #{search_results} "
     # # [inf] @@@@@@ Search Results: search_results
     # {:connected_author_arr=>[16], :qty_of_tree_profiles=>9,
     #  :profiles_relations_arr=>[{:profile_searched=>347, :profile_relations=>{341=>4, 348=>8, 340=>18, 342=>112, 339=>112}}, {:profile_searched=>341, :profile_relations=>{347=>1, 348=>2, 342=>3, 339=>3, 340=>7, 345=>13, 346=>14, 344=>17, 343=>111}}, {:profile_searched=>342, :profile_relations=>{340=>1, 341=>2, 339=>5, 345=>91, 347=>92, 346=>101, 348=>102, 343=>211}}, {:profile_searched=>343, :profile_relations=>{339=>1, 344=>2, 340=>91, 341=>101, 342=>191}}, {:profile_searched=>348, :profile_relations=>{341=>4, 347=>7, 340=>18, 342=>112, 339=>112}}, {:profile_searched=>340, :profile_relations=>{345=>1, 346=>2, 342=>3, 339=>3, 341=>8, 347=>15, 348=>16, 344=>17, 343=>111}},
@@ -54,13 +52,9 @@ module ConnectionTrees
     #  :duplicates_one_to_many=>{3=>[2, 4]}, :duplicates_many_to_one=>{}}
 
 
-    ######## Сбор рез-тов поиска:
-    uniq_profiles_pairs = search_results[:uniq_profiles_pairs]
+    uniq_profiles_pairs    = search_results[:uniq_profiles_pairs]
     duplicates_one_to_many = search_results[:duplicates_one_to_many]
     duplicates_many_to_one = search_results[:duplicates_many_to_one]
-
-    logger.info "In connection_of_trees, After start_search: duplicates_one_to_many = #{duplicates_one_to_many},
-                 duplicates_many_to_one = #{duplicates_many_to_one} "
 
     stop_connection = false  # for controle & to return, to view
 
@@ -91,7 +85,7 @@ module ConnectionTrees
     complete_search_data = { with_whom_connect: with_whom_connect_users_arr,
                              uniq_profiles_pairs: uniq_profiles_pairs,
                              certain_koeff: certain_connect_koeff} # NO USE HERE
-    logger.info "=== Before complete_search: complete_search_data = #{complete_search_data}"
+    logger.info "Before complete_search: complete_search_data = #{complete_search_data}"
     final_connection_hash = self.complete_search(complete_search_data)
     ##############################################################################
     profiles_to_rewrite = final_connection_hash.keys
@@ -154,12 +148,11 @@ module ConnectionTrees
 
     #  Если все предыдущие проверки пройдены, то - запуск объединения в таблицах
     unless stop_connection || stop_by_arrs # for stop_connection & view
-      logger.info "Для объединения - все корректно!, stop_connection = #{stop_connection},\n connection_message = #{connection_message}"
+      logger.info "Для объединения - все корректно!, stop_connection = #{stop_connection}, connection_message = #{connection_message}"
       # Центральный метод соединения деревьев = перезапись и 'удаление' профилей в таблицах
       self.connection_in_tables(connection_results) ################
     end
-    logger.info "stop_connection = #{stop_connection},
-            \n diag_connection_item = #{diag_connection_item}, connection_message = #{connection_message}"
+    logger.info "stop_connection = #{stop_connection}, diag_connection_item = #{diag_connection_item}, connection_message = #{connection_message}"
     connection_results[:stop_connection] = stop_connection #
 
     connection_results
@@ -174,7 +167,7 @@ module ConnectionTrees
   # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
   # :current_user_id=>1, :user_id=>3, :connection_id=>3}
   def connection_in_tables(connection_data)
-
+    logger.info "In connection_in_tables"
     current_user_id = connection_data[:current_user_id]
     # Центральный метод соединения деревьев = перезапись профилей в таблицах
     connect_trees(connection_data) ############
@@ -186,7 +179,6 @@ module ConnectionTrees
     # Удаление SearchResults, относящихся к проведенному объединению между двумя деревьями
     puts "In ConnectionTrees: After connection: clear_all_prev_results "
     SearchResults.clear_all_prev_results(current_user_id)
-
   end
 
 

@@ -21,7 +21,7 @@ module Meteor
             # start_counter_search(with_user_id)
 
             # respond_with yes_con
-            logger.info "In MakeRequestController: After connect:  msg_code = #{msg_code}, msg = #{msg} "
+            logger.info "In MakeRequestController: After make_request:  msg_code = #{msg_code}, msg = #{msg} "
             status_code = 600 if msg_code > 1 # status NotOk
 
             if @error
