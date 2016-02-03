@@ -2,18 +2,30 @@ module SimilarsConnection
   extend ActiveSupport::Concern
   # in User model
 
+  # require 'pry'
+  # binding.pry          # Execution will stop here.
+
+
   # @note Основной метод объединения похожих профилей в одном дереве
   # @params Первый и Второй похожие профили из одной пары
   def similars_connection(first_profile_connecting, second_profile_connecting)
+    logger.info "similars_connection : first_profile_connecting = #{first_profile_connecting} , second_profile_connecting = #{second_profile_connecting} "
 
     #################################################
-    rewrite_to_clean, destroy_to_clean, init_hash = self.similars_complete_search(first_profile_connecting, second_profile_connecting)
+  #  rewrite_to_clean, destroy_to_clean, init_hash = self.similars_complete_search(first_profile_connecting, second_profile_connecting)
     #################################################
     # logger.info "TEST similars_connection : clean_profiles_arrs: rewrite_to_clean = #{rewrite_to_clean} , destroy_to_clean = #{destroy_to_clean} "
-
+    init_hash = {}
+    init_hash.merge!(first_profile_connecting => second_profile_connecting)
+    logger.info "similars_connection : init_hash = #{init_hash} "
+    rewrite_to_clean = [first_profile_connecting]
+    destroy_to_clean = [second_profile_connecting]
+    logger.info "similars_connection : rewrite_to_clean = #{rewrite_to_clean} , destroy_to_clean = #{destroy_to_clean} "
     #### update profiles arrays ###########
     profiles_to_rewrite, profiles_to_destroy = clean_profiles_arrs(rewrite_to_clean, destroy_to_clean)
-    logger.info "TEST similars_connection : clean_profiles_arrs: profiles_to_rewrite = #{profiles_to_rewrite} , profiles_to_destroy = #{profiles_to_destroy} "
+    logger.info "similars_connection : clean_profiles_arrs: profiles_to_rewrite = #{profiles_to_rewrite} , profiles_to_destroy = #{profiles_to_destroy} "
+
+    # binding.pry          # Execution will stop here.
 
     # Перезапись profile_data при объединении профилей
     ProfileData.connect_profiles_data(profiles_to_rewrite, profiles_to_destroy)
@@ -32,9 +44,9 @@ module SimilarsConnection
     log_connection = self.similars_connect_tree(similars_connection_data)
 
         {init_hash: init_hash,                       # for RSpec & TO_VIEW
-         profiles_to_rewrite: profiles_to_rewrite,   # for RSpec & TO_VIEW
-         profiles_to_destroy: profiles_to_destroy,   # for RSpec & TO_VIEW
-         last_log_id: log_connection
+        profiles_to_rewrite: profiles_to_rewrite,   # for RSpec & TO_VIEW
+        profiles_to_destroy: profiles_to_destroy,   # for RSpec & TO_VIEW
+        last_log_id: log_connection
         }
 
   end
