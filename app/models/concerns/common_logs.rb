@@ -35,7 +35,9 @@ module CommonLogs
       logger.info "current_user.connected_users = #{current_user.connected_users.inspect}"
 
       # sims & search
-      SearchResults.start_search_methods(current_user)
+      ::SearchResults.start_search_methods_in_thread(current_user)
+
+      # SearchResults.start_search_methods(current_user)
 
       # here to check requests to keepif exists in search results
       # todo: uncomment this line below to work check
