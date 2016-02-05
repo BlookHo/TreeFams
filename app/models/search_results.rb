@@ -122,12 +122,10 @@ class SearchResults < ActiveRecord::Base
     #    :common_power=>4, :inter_relations=>[]}]
 
     logger.info  "In start_search_methods: similars_results[:similars] = #{similars_results[:similars].inspect}"
-    # ", similars_results = #{similars_results.inspect} "
 
     if similars_results[:similars].blank?
       logger.info  "In start_search_methods: No Similars -> start search "
-      # certain_koeff = WeafamSetting.first.certain_koeff
-      search_results = current_user.start_search#(certain_koeff)
+      search_results = current_user.start_search
       search_results
     else
       logger.info  "In start_search_methods: Similars in tree -> No start search "
