@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SearchResults, type: :model ,  focus: true  do  #, focus: true
+RSpec.describe SearchResults, type: :model    do  #, focus: true
 
   describe '- Validation' do
     describe '- on create' do
@@ -85,6 +85,9 @@ RSpec.describe SearchResults, type: :model ,  focus: true  do  #, focus: true
       # create model data
       before {
         # Users
+        FactoryGirl.create(:user, :current_user_1_connected )  # User = 1 . Tree = [1,2]. profile_id = 17
+
+
         FactoryGirl.create(:user_search_results, :user_34 )  # User = 34 . Tree = 34. profile_id = 539  #1
         FactoryGirl.create(:user_search_results, :user_45 )  # User = 45 . Tree = 45. profile_id = 645  #2
         FactoryGirl.create(:user_search_results, :user_46 )  # User = 46 . Tree = 46. profile_id = 656  #3
@@ -112,7 +115,7 @@ RSpec.describe SearchResults, type: :model ,  focus: true  do  #, focus: true
         ConnectionRequest.reset_pk_sequence
       }
 
-      context '- Before actions - check table values '  do   #   , focus: true
+      context '- Before actions - check table values ' , focus: true    do   #   , focus: true
         describe '- check SearchResults have rows count Before <store_search_results> - Ok' do
           let(:rows_qty) {3}
           it_behaves_like :successful_search_results_rows_count
@@ -145,7 +148,38 @@ RSpec.describe SearchResults, type: :model ,  focus: true  do  #, focus: true
         end
       end
 
-      context 'check Action <store_search_results> with duplicates_one_to_many'    do   #   , focus: true
+      context '- Check read searched & found profiles from SearchResults ' , focus: true   do   #   , focus: true
+        describe '- check SearchResults have rows count Before <store_search_results> - Ok' do
+          let(:rows_qty) {3}
+          it_behaves_like :successful_search_results_rows_count
+        end
+
+        describe '- check SearchResults exists for current_user_id -' do
+          let(:current_user_1) { User.first }  # User = 1.  profile_id = 17
+          let(:current_user_id) {current_user_1.id}  # id = 1
+          it '- check current_user_id' do
+            expect(current_user_id).to eq(1)
+          end
+          context '- Check search_results exists from SearchResults -'    do
+            let(:search_profiles) {SearchResults.collect_search_profiles(current_user_id) }
+
+            it '- check search_results' do
+              expect(search_profiles).to eq([11, 12, 13, 14, 18, 19, 20, 21])
+            end
+
+          end
+        end
+
+
+
+
+      end
+
+
+
+
+
+        context 'check Action <store_search_results> with duplicates_one_to_many'    do   #   , focus: true
         let(:search_results)  {
            {  connected_author_arr: [46],
               by_profiles:      [{:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7},

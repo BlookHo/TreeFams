@@ -1,5 +1,6 @@
-module SearchModified
+module SearchMain
   extend ActiveSupport::Concern
+
   require 'pry'
 
   #############################################################

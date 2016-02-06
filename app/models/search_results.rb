@@ -78,6 +78,15 @@ class SearchResults < ActiveRecord::Base
     where("#{current_user_id} = ANY (searched_connected)").exists?
   end
 
+  # @note Check if results already exists - so don't start search!
+  def self.collect_search_profiles(current_user_id)
+    puts "In collect_search_profiles: current_user_id = #{current_user_id}"
+    searched_profiles = where("#{current_user_id} = ANY (searched_connected) and #{current_user_id} = user_id")[0].searched_profile_ids
+    puts "Collected searched_profile_ids = #{searched_profiles}"
+    # puts "Collected search_results found_profile_ids = #{search_results[0].found_profile_ids}"
+    searched_profiles
+  end
+
 
   # @note Run search methods in tread
   def self.start_search_methods_in_thread(current_user)
@@ -570,7 +579,19 @@ class SearchResults < ActiveRecord::Base
     results_arrs
   end
 
-end
+  # @note: collect all results arrays
+  def self.search_results_exists?(current_user_id)
+    puts "In search_results_exists? current_user_id = #{current_user_id}"
+
+
+
+  end
+
+
+
+
+
+  end
 
 
 #58
