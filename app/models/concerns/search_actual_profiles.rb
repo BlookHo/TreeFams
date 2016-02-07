@@ -17,6 +17,7 @@ module SearchActualProfiles
 # @note: METHOD " SEARCH COMPLETE "
 #   сбор полных достоверных пар профилей для объединения
 
+  # connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
 
 
 

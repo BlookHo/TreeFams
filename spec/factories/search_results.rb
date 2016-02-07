@@ -47,6 +47,36 @@ FactoryGirl.define do
 
     end
 
+    trait :connected_10_11_12_to_3 do
+      user_id 10
+      found_user_id 3
+      profile_id 110
+      found_profile_id 250
+      count 7
+      found_profile_ids [220, 230, 240, 250, 260, 270, 280, 290]
+      searched_profile_ids [110, 120, 130, 140, 180, 190, 200, 210]
+      counts [7, 7, 7, 7, 5, 5, 5, 5]
+      connection_id 30
+      pending_connect 0
+      searched_connected [10,11,12]
+      founded_connected [3]
+    end
+
+    trait :connected_10_11_12_to_7_8 do
+      user_id 11
+      found_user_id 7
+      profile_id 110
+      found_profile_id 2500
+      count 7
+      found_profile_ids [2200, 2300, 2400, 2500, 2600, 2700, 280, 290]
+      searched_profile_ids [410, 420, 430, 440, 480, 490, 200, 210]
+      counts [7, 7, 7, 7, 5, 5, 5, 5]
+      connection_id 300
+      pending_connect 0
+      searched_connected [10,11,12]
+      founded_connected [7,8]
+    end
+
     trait :big_IDs do
       user_id 1222222
       found_user_id 13333333

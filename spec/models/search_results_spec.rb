@@ -87,17 +87,21 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
         # Users
         FactoryGirl.create(:user, :current_user_1_connected )  # User = 1 . Tree = [1,2]. profile_id = 17
 
-
         FactoryGirl.create(:user_search_results, :user_34 )  # User = 34 . Tree = 34. profile_id = 539  #1
         FactoryGirl.create(:user_search_results, :user_45 )  # User = 45 . Tree = 45. profile_id = 645  #2
         FactoryGirl.create(:user_search_results, :user_46 )  # User = 46 . Tree = 46. profile_id = 656  #3
         FactoryGirl.create(:user_search_results, :user_47 )  # User = 47 . Tree = 47. profile_id = 666  #4
 
+        FactoryGirl.create(:user_search_results, :user_11 )  # User = 47 . Tree = 47. profile_id = 666  #4
+
         # SearchResults
         FactoryGirl.create(:search_results)
         FactoryGirl.create(:search_results, :correct2)
         FactoryGirl.create(:search_results, :correct3)
+        FactoryGirl.create(:search_results, :connected_10_11_12_to_3)
+        FactoryGirl.create(:search_results, :connected_10_11_12_to_7_8)
 
+        # ConnectionRequest
         FactoryGirl.create(:connection_request, :conn_request_1_2)    #
         FactoryGirl.create(:connection_request, :conn_request_7_8)    #
         FactoryGirl.create(:connection_request, :conn_request_3_1)    #
@@ -117,7 +121,7 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
 
       context '- Before actions - check table values ' , focus: true    do   #   , focus: true
         describe '- check SearchResults have rows count Before <store_search_results> - Ok' do
-          let(:rows_qty) {3}
+          let(:rows_qty) {5}
           it_behaves_like :successful_search_results_rows_count
         end
         it '- check SearchResults First Factory row - Ok' do # , focus: true
@@ -136,7 +140,7 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
                                                "connection_id"=>7, "pending_connect"=>1,
                                                "searched_connected"=>[2], "founded_connected"=>[3] } )
         end
-        it '- check SearchResults Second Factory row - Ok' do # , focus: true
+        it '- check SearchResults Third Factory row - Ok' do # , focus: true
           search_results_fields = SearchResults.third.attributes.except('created_at','updated_at')
           expect(search_results_fields).to eq({"id"=>3, "user_id"=>1, "found_user_id"=>3, "profile_id"=>11,
                                                "found_profile_id"=>25, "count"=>7,
@@ -146,15 +150,35 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
                                                "pending_connect"=>0,
                                                "searched_connected"=>[1], "founded_connected"=>[3] } )
         end
+        it '- check SearchResults Forth Factory row - Ok' do # , focus: true
+          search_results_fields = SearchResults.find(4).attributes.except('created_at','updated_at')
+          expect(search_results_fields).to eq({"id"=>4, "user_id"=>10, "found_user_id"=>3, "profile_id"=>110,
+                                               "found_profile_id"=>250, "count"=>7,
+                                               "found_profile_ids"=>[220, 230, 240, 250, 260, 270, 280, 290],
+                                               "searched_profile_ids"=>[110, 120, 130, 140, 180, 190, 200, 210],
+                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>30,
+                                               "pending_connect"=>0,
+                                               "searched_connected"=>[10,11,12], "founded_connected"=>[3] } )
+        end
+        it '- check SearchResults Fofth Factory row - Ok' do # , focus: true
+          search_results_fields = SearchResults.find(5).attributes.except('created_at','updated_at')
+          expect(search_results_fields).to eq({"id"=>5, "user_id"=>11, "found_user_id"=>7, "profile_id"=>110,
+                                               "found_profile_id"=>2500, "count"=>7,
+                                               "found_profile_ids"=>[2200, 2300, 2400, 2500, 2600, 2700, 280, 290],
+                                               "searched_profile_ids"=>[410, 420, 430, 440, 480, 490, 200, 210],
+                                               "counts"=>[7, 7, 7, 7, 5, 5, 5, 5], "connection_id"=>300,
+                                               "pending_connect"=>0,
+                                               "searched_connected"=>[10,11,12], "founded_connected"=>[7,8] } )
+        end
       end
 
       context '- Check read searched & found profiles from SearchResults ' , focus: true   do   #   , focus: true
         describe '- check SearchResults have rows count Before <store_search_results> - Ok' do
-          let(:rows_qty) {3}
+          let(:rows_qty) {5}
           it_behaves_like :successful_search_results_rows_count
         end
 
-        describe '- check SearchResults exists for current_user_id -' do
+        describe '- check SearchResults exists for current_user_id = 1' do
           let(:current_user_1) { User.first }  # User = 1.  profile_id = 17
           let(:current_user_id) {current_user_1.id}  # id = 1
           it '- check current_user_id' do
@@ -170,6 +194,30 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
           end
         end
 
+        describe '- check SearchResults exists for current_user_id = 10' do
+          # let(:current_user_1) { User.first }  # User = 1.  profile_id = 17
+          let(:current_user_id_11) {11}  # id = 10
+          it '- check current_user_id' do
+            expect(current_user_id_11).to eq(11)
+          end
+          context '- Check search_results exists from SearchResults -'    do
+            let(:search_profiles) {SearchResults.collect_search_profiles(current_user_id_11) }
+
+            it '- check search_results' do
+              expect(search_profiles).to eq([110, 120, 130, 140, 180, 190, 200, 210, 410, 420, 430, 440, 480, 490])
+            end
+
+          end
+          let(:current_user_id_16) {16}  # id = 16 - empty
+          context '- Check search_results exists from SearchResults -'    do
+            let(:search_profiles) {SearchResults.collect_search_profiles(current_user_id_16) }
+
+            it '- check search_results' do
+              expect(search_profiles).to eq([])
+            end
+
+          end
+        end
 
 
 

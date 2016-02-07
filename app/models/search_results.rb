@@ -81,9 +81,17 @@ class SearchResults < ActiveRecord::Base
   # @note Check if results already exists - so don't start search!
   def self.collect_search_profiles(current_user_id)
     puts "In collect_search_profiles: current_user_id = #{current_user_id}"
-    searched_profiles = where("#{current_user_id} = ANY (searched_connected) and #{current_user_id} = user_id")[0].searched_profile_ids
+    searched_profiles = []
+    searched_profiles_query = where("#{current_user_id} = ANY (searched_connected)") 
+    unless searched_profiles_query.blank?
+      puts "searched_profiles_query.size = #{searched_profiles_query.size}"
+      searched_profiles_query.each do |one_result|
+        searched_profiles = (searched_profiles + one_result.searched_profile_ids).uniq
+      end
+      # searched_profiles_query.map{ |one_result| searched_profiles =
+      #     (searched_profiles + one_result.searched_profile_ids).uniq }
+    end
     puts "Collected searched_profile_ids = #{searched_profiles}"
-    # puts "Collected search_results found_profile_ids = #{search_results[0].found_profile_ids}"
     searched_profiles
   end
 

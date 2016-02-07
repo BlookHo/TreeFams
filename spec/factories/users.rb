@@ -161,6 +161,14 @@ FactoryGirl.define do
       connected_users [47]
     end
 
+    trait :user_11 do
+      id 11
+      profile_id 666
+      email "fuser_11@uu.uu"
+      password '1111'
+      connected_users [10,11,12]
+    end
+
   end
 
 
