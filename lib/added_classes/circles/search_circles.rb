@@ -66,6 +66,7 @@ class SearchCircles
     circle_profiles_arr = []
     circle_is_profiles_arr = []
     profile = Profile.where(id: profile_id, deleted: 0)[0]
+    # puts "In have_profile_circle: profile = #{profile.inspect} "
     unless profile.blank?
       puts "Before get circle: profile = #{profile_id} - NOT blank"
       profile_user_id = profile.tree_id
@@ -84,7 +85,7 @@ class SearchCircles
   def self.get_one_profile_circle(profile_id, user_id)
     connected_users_arr = User.find(user_id).connected_users  ##найти БК для найденного профиля .where('relation_id <= 8')
     if connected_users_arr.blank?
-      puts "Error in get_one_profile_BK. Нет такого Юзера = #{user_id} или не найдены его connected_users_arr = #{connected_users_arr.inspect}"
+      puts "Error in get_one_profile_BK: Нет такого Юзера = #{user_id} или не найден его connected_users_arr = #{connected_users_arr.inspect}"
     else
       found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id, deleted: 0)
                                        .order('user_id','relation_id','is_name_id' )

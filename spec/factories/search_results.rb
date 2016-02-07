@@ -1,6 +1,23 @@
-FactoryGirl.define do
-  factory :search_results, :class => 'SearchResults' do
+require 'faker'
 
+FactoryGirl.define do
+
+  factory :test_search_results, class: SearchResults do |f|
+    f.user_id              { Faker::Number.number(5) }
+    f.found_user_id        { Faker::Number.number(5) }
+    f.profile_id           { Faker::Number.number(5) }
+    f.found_profile_id     { Faker::Number.number(5) }
+    f.count                { Faker::Number.number(5) }
+    f.found_profile_ids    { [1,100] }
+    f.searched_profile_ids { [1,100] }
+    f.counts               { [5,5] }
+    f.pending_connect      { Faker::Number.between(0, 1)}
+    f.connection_id        { Faker::Number.number(5) }
+    f.searched_connected   { [1,100] }
+    f.founded_connected    { [2,200] }
+  end
+
+  factory :search_results, :class => 'SearchResults' do
     # CORRECT
     user_id 15
     found_user_id 35

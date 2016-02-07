@@ -82,7 +82,7 @@ class SearchResults < ActiveRecord::Base
   def self.collect_search_profiles(current_user_id)
     puts "In collect_search_profiles: current_user_id = #{current_user_id}"
     searched_profiles = []
-    searched_profiles_query = where("#{current_user_id} = ANY (searched_connected)") 
+    searched_profiles_query = where("#{current_user_id} = ANY (searched_connected)")
     unless searched_profiles_query.blank?
       puts "searched_profiles_query.size = #{searched_profiles_query.size}"
       searched_profiles_query.each do |one_result|

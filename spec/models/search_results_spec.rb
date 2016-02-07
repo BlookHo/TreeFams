@@ -4,8 +4,17 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
 
   describe '- Validation' do
     describe '- on create' do
+      after {
+        SearchResults.delete_all
+        SearchResults.reset_pk_sequence
+      }
 
       context '- valid search_results'  do  # , focus: true
+
+        it "has a valid factory" , focus: true   do
+          puts " Model SearchResults validation - has a valid factory"
+          expect(FactoryGirl.create(:test_search_results)).to be_valid
+        end
 
         let(:good_search_results) {FactoryGirl.build(:search_results)}
         it '- 1 Saves a valid search_results' do
@@ -188,7 +197,7 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
             let(:search_profiles) {SearchResults.collect_search_profiles(current_user_id) }
 
             it '- check search_results' do
-              expect(search_profiles).to eq([11, 12, 13, 14, 18, 19, 20, 21])
+              expect(search_profiles).to match_array([11, 12, 13, 14, 18, 19, 20, 21])
             end
 
           end
@@ -202,20 +211,16 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
           end
           context '- Check search_results exists from SearchResults -'    do
             let(:search_profiles) {SearchResults.collect_search_profiles(current_user_id_11) }
-
             it '- check search_results' do
-              expect(search_profiles).to eq([110, 120, 130, 140, 180, 190, 200, 210, 410, 420, 430, 440, 480, 490])
+              expect(search_profiles).to match_array([110, 120, 130, 140, 180, 190, 200, 210, 410, 420, 430, 440, 480, 490])
             end
-
           end
           let(:current_user_id_16) {16}  # id = 16 - empty
           context '- Check search_results exists from SearchResults -'    do
             let(:search_profiles) {SearchResults.collect_search_profiles(current_user_id_16) }
-
             it '- check search_results' do
-              expect(search_profiles).to eq([])
+              expect(search_profiles).to match_array([])
             end
-
           end
         end
 
