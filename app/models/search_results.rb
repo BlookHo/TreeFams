@@ -81,29 +81,18 @@ class SearchResults < ActiveRecord::Base
 
   # @note Run search methods in tread
   def self.start_search_methods_in_thread(current_user)
-    logger.info "1 DEBUG AR CONNECTION POOL connections SIZE ====="
-    logger.info ActiveRecord::Base.connection_pool.connections.size
-    logger.info "1 DEBUG AR CONNECTION POOL ====="
+    logger.info "LOG_KEY start_search_methods_in_thread: AR CONNECTION POOL SIZE #1: #{ActiveRecord::Base.connection_pool.connections.size}"
     Thread.new do
       ActiveRecord::Base.connection_pool.with_connection do |conn|
-
-        logger.info "2 DEBUG AR CONNECTION POOL connections SIZE====="
-        logger.info ActiveRecord::Base.connection_pool.connections.size
-        logger.info "2 DEBUG AR CONNECTION POOL connections SIZE====="
-
+        logger.info "LOG_KEY start_search_methods_in_thread: AR CONNECTION POOL SIZE #2: #{ActiveRecord::Base.connection_pool.connections.size}"
         self.start_search_methods(current_user)
         ActiveRecord::Base.connection_pool.release_connection(conn)
         ActiveRecord::Base.connection_handler.connection_pool_list.each(&:clear_stale_cached_connections!)
-
-        logger.info "2-1 DEBUG ACTIVE RECORD CONNECTION POOL connections SIZE ====="
-        logger.info ActiveRecord::Base.connection_pool.connections.size
-        logger.info "2-1 DEBUG ACTIVE RECORD CONNECTION POOL connections SIZE ====="
+        logger.info "LOG_KEY start_search_methods_in_thread: AR CONNECTION POOL SIZE #3: #{ActiveRecord::Base.connection_pool.connections.size}"
       end
     end
+    logger.info "LOG_KEY start_search_methods_in_thread: AR CONNECTION POOL SIZE #4: #{ActiveRecord::Base.connection_pool.connections.size}"
 
-    logger.info "3 DEBUG ACTIVE RECORD CONNECTION POOL connections SIZE ====="
-    logger.info ActiveRecord::Base.connection_pool.connections.size
-    logger.info "3 DEBUG ACTIVE RECORD CONNECTION POOL connections SIZE ====="
   end
 
 
