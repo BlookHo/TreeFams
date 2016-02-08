@@ -327,12 +327,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
       FactoryGirl.create(:connection_trees, :connect_tree_2_pr124) # 15 pr124
 
-      # puts "before All: Tree.last.id 12 = #{Tree.last.id}, .user_id 2 = #{Tree.last.user_id.inspect} \n"  #
-      # puts "before All: Tree.last.relation_id  6 = #{Tree.last.relation_id},
-      #          .profile_id 11 = #{Tree.last.profile_id.inspect}, name_id 48 = #{Tree.last.name_id.inspect},
-      #          .is_profile_id 14 = #{Tree.last.is_profile_id.inspect}   \n"  #
-      # puts "before All: Tree.9.id = #{Tree.find(9).id}, .name_id 82 = #{Tree.find(9).name_id} \n"  #
-
       #Profile_Key
       FactoryGirl.create(:connection_profile_keys)                             # 17  2
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_1_2)   # 2   17
@@ -623,7 +617,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok'  , focus: true   do  # , focus: true
+    describe '- check User model Method <Search> - Ok'    do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -729,7 +723,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module'  , focus: true   do #  ,  focus: true
+    context '- check SearchResults model after run <search> module'   do #  ,  focus: true
  #     let(:certain_koeff_for_connect) { CERTAIN_CONNECT }  # 4
       before { current_user_1.start_search }
       describe '- check SearchResults have rows count after <search> - Ok' do
@@ -817,18 +811,14 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check User model Method <complete_search> - Ok'    do  #   , focus: true
+    describe '- check User model Method <complete_search> - Ok'  , focus: true  do  #   , focus: true
 
-      # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
       context '- when valid complete_search_data' do
         let(:complete_search_data) { {
             :with_whom_connect => [3],
             :uniq_profiles_pairs => { 15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
-                                      11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
-                                     20=>{3=>28} }
-            # :certain_koeff => CERTAIN_CONNECT
-        } }
-
+                                      11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28} }
+                                      } }
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Valid Complete search result: final_connection_hash after <complete_search>" do
@@ -844,10 +834,8 @@ RSpec.describe User, :type => :model    do  # , focus: true
             :uniq_profiles_pairs => { 15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
                                       11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
                                       20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} ,
-                                      3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
-        } }
+                                      3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} } }
 
-        # let(:certain_koeff_for_connect) { CERTAIN_CONNECT }
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Invalid Complete search result: final_connection_hash == {} " do
@@ -859,14 +847,13 @@ RSpec.describe User, :type => :model    do  # , focus: true
           expect(final_connection_hash).to_not eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24} )
         end
       end
-
     end
 
     ############################################################################################
-    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -'  , focus: true  do  #   , focus: true
+    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -' , focus: true   do  #   , focus: true
 
       context '- check one pair of UNIQ correct profiles -' do
-        # let(:uniq_profiles) { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
+        # :uniq_profiles { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
         let(:one_profile_t) { 14 }
         let(:two_profile_t) { 22 }
         let(:equality) {  SearchCircles.compare_profiles_exclusions(one_profile_t, two_profile_t) }

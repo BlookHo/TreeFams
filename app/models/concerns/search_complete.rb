@@ -75,12 +75,12 @@ module SearchComplete
       compare_circles_data = {
         profile_searched:       profile_searched,
         profile_found:          profile_found,
-        search_bk_arr:          circles_arrs_data[:search_bk_arr],
+        # search_bk_arr:          circles_arrs_data[:search_bk_arr],
         search_bk_profiles_arr: circles_arrs_data[:search_bk_profiles_arr],
-        search_is_profiles_arr: circles_arrs_data[:search_is_profiles_arr],
-        found_bk_arr:           circles_arrs_data[:found_bk_arr],
+        # search_is_profiles_arr: circles_arrs_data[:search_is_profiles_arr],
+        # found_bk_arr:           circles_arrs_data[:found_bk_arr],
         found_bk_profiles_arr:  circles_arrs_data[:found_bk_profiles_arr],
-        found_is_profiles_arr:  circles_arrs_data[:found_is_profiles_arr],
+        # found_is_profiles_arr:  circles_arrs_data[:found_is_profiles_arr],
         final_connection_hash:  final_connect_hash,
         new_connection_hash:    new_connection_hash
       }

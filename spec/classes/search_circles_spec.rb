@@ -449,8 +449,6 @@ RSpec.describe SearchCircles     do  #, focus: true
           puts "Profile.find(17).id = #{profile.id} \n"   # 0
           expect(profile.id).to eq(17)
         end
-
-
       end
       describe '- check Tree have rows count before - Ok' do
         let(:rows_qty) {28}
@@ -468,21 +466,9 @@ RSpec.describe SearchCircles     do  #, focus: true
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
       end
-      # describe '- check ConnectionRequest have rows count before - Ok' do
-      #   let(:rows_qty) {4}
-      #   it_behaves_like :successful_connection_request_rows_count
-      # end
 
     end
 
-    # context '- Check method: get_one_profile_circle(profile_id, user_id) - '  do   #   , focus: true
-    #   let(:profile_id) {17}  # id = 17 == user_id =1
-    #   let(:found_profile_circle) { SearchCircles.get_one_profile_circle(profile_id, currentuser_id) }
-    #   it "- Check SearchCircles: found_profile_circle after <get_one_profile_circle>" do
-    #     puts "In SearchCircles class: found_profile_circle = #{found_profile_circle} \n"
-    #     expect(found_profile_circle).to eq( [])
-    #   end
-    # end
 
 
     context '- Check method: have_profile_circle(profile_id, user_id) - '  , focus: true  do   #   , focus: true
@@ -492,46 +478,45 @@ RSpec.describe SearchCircles     do  #, focus: true
 
       it "- Check SearchCircles arrays: in have_profile_circle" do
         puts "In have_profile_circle: profile 17 = #{profile.inspect} "
-        puts "In SearchCircles class: circle_arr = #{circle_arrays[0]} \n"
+        # expect(circle_arrays[0]).to match_array(
+        #     [
+        #         {"name_id"=>28, "relation_id"=>1, "is_name_id"=>122, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>2, "is_name_id"=>82, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>91, "is_name_id"=>90, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>92, "is_name_id"=>361, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>101, "is_name_id"=>449, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>102, "is_name_id"=>293, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>15, "is_name_id"=>343, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>16, "is_name_id"=>82, "deleted"=>0},
+        #         {"name_id"=>28, "relation_id"=>121, "is_name_id"=>446, "deleted"=>0}
+        #     ] )
+        puts "In SearchCircles class: circle_profiles_arr = #{circle_arrays[0]} \n"
         expect(circle_arrays[0]).to match_array(
-            [
-                {"name_id"=>28, "relation_id"=>1, "is_name_id"=>122, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>2, "is_name_id"=>82, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>91, "is_name_id"=>90, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>92, "is_name_id"=>361, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>101, "is_name_id"=>449, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>102, "is_name_id"=>293, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>15, "is_name_id"=>343, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>16, "is_name_id"=>82, "deleted"=>0},
-                {"name_id"=>28, "relation_id"=>121, "is_name_id"=>446, "deleted"=>0}
-            ] )
-        puts "In SearchCircles class: circle_profiles_arr = #{circle_arrays[1]} \n"
-        expect(circle_arrays[1]).to match_array(
          [
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>1, "is_profile_id"=>2, "is_name_id"=>122, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>2, "is_profile_id"=>3, "is_name_id"=>82, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>15, "is_name_id"=>370, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>16, "is_name_id"=>465, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>8, "is_profile_id"=>11, "is_name_id"=>48, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>91, "is_profile_id"=>7, "is_name_id"=>90, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>92, "is_profile_id"=>9, "is_name_id"=>361, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>101, "is_profile_id"=>8, "is_name_id"=>449, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>102, "is_profile_id"=>10, "is_name_id"=>293, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>15, "is_name_id"=>370, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>16, "is_name_id"=>465, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>8, "is_profile_id"=>11, "is_name_id"=>48, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>15, "is_profile_id"=>12, "is_name_id"=>343, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>16, "is_profile_id"=>13, "is_name_id"=>82, "deleted"=>0},
-          {"profile_id"=>17, "name_id"=>28, "relation_id"=>121, "is_profile_id"=>124, "is_name_id"=>446, "deleted"=>0}
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>1, "is_profile_id"=>2, "is_name_id"=>122},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>2, "is_profile_id"=>3, "is_name_id"=>82},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>15, "is_name_id"=>370},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>16, "is_name_id"=>465},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>8, "is_profile_id"=>11, "is_name_id"=>48},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>91, "is_profile_id"=>7, "is_name_id"=>90},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>92, "is_profile_id"=>9, "is_name_id"=>361},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>101, "is_profile_id"=>8, "is_name_id"=>449},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>102, "is_profile_id"=>10, "is_name_id"=>293},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>15, "is_name_id"=>370},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>16, "is_name_id"=>465},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>8, "is_profile_id"=>11, "is_name_id"=>48},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>15, "is_profile_id"=>12, "is_name_id"=>343},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>16, "is_profile_id"=>13, "is_name_id"=>82},
+             {"profile_id"=>17, "name_id"=>28, "relation_id"=>121, "is_profile_id"=>124, "is_name_id"=>446}
          ] )
-        puts "In SearchCircles class: circle_is_profiles_arr = #{circle_arrays[2]} \n"
-        expect(circle_arrays[2]).to match_array( [2, 3, 7, 8, 9, 10, 11, 12, 13, 15, 16, 124] )
+        puts "In SearchCircles class: circle_is_profiles_arr = #{circle_arrays[1]} \n"
+        expect(circle_arrays[1]).to match_array( [2, 3, 7, 8, 9, 10, 11, 12, 13, 15, 16, 124] )
       end
     end
 

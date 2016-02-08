@@ -35,12 +35,21 @@ class SearchCircles
   # @note: Получение Кругов для пары профилей - для последующего сравнения и анализа
   #   ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH":  SearchCircles.compare_profiles
   def self.find_circles_arrs(profile_searched, profile_found)
-    search_bk_arr, search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
-    found_bk_arr, found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
-    { search_bk_arr: search_bk_arr,
+    # search_bk_arr, search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
+    # found_bk_arr, found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
+    # { search_bk_arr: search_bk_arr,
+    #   search_bk_profiles_arr: search_bk_profiles_arr,
+    #   search_is_profiles_arr: search_is_profiles_arr,
+    #   found_bk_arr: found_bk_arr,
+    #   found_bk_profiles_arr: found_bk_profiles_arr,
+    #   found_is_profiles_arr: found_is_profiles_arr
+    # }
+    search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
+    found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
+    { #search_bk_arr: search_bk_arr,
       search_bk_profiles_arr: search_bk_profiles_arr,
       search_is_profiles_arr: search_is_profiles_arr,
-      found_bk_arr: found_bk_arr,
+      #found_bk_arr: found_bk_arr,
       found_bk_profiles_arr: found_bk_profiles_arr,
       found_is_profiles_arr: found_is_profiles_arr
     }
@@ -60,9 +69,8 @@ class SearchCircles
   # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
   # Взять Бл.круг одного профиля
   # получить массивы триад для дальнейшего сравнения
-  # показать в Логгере
   def self.have_profile_circle(profile_id)
-    circle_arr = []
+    # circle_arr = []
     circle_profiles_arr = []
     circle_is_profiles_arr = []
     profile = Profile.where(id: profile_id, deleted: 0)[0]
@@ -70,32 +78,39 @@ class SearchCircles
     unless profile.blank?
       puts "Before get circle: profile = #{profile_id} - NOT blank"
       profile_user_id = profile.tree_id
-      profile_circle = get_one_profile_circle(profile_id, profile_user_id)
-      circle_arr, circle_profiles_arr, circle_is_profiles_arr =
-          make_arrays_from_circle(profile_circle)
-      circle_is_profiles_arr = circle_is_profiles_arr.uniq
+      user_of_tree = User.find(profile_user_id)#.connected_users
+      unless user_of_tree.blank?
+        connected_users_arr = user_of_tree.connected_users
+        puts "Before get circle: user_of_tree.id = #{user_of_tree.id} - NOT blank, connected_users_arr = #{connected_users_arr}"
+        profile_circle = get_one_profile_circle(profile_id, connected_users_arr)
+        # circle_arr, circle_profiles_arr, circle_is_profiles_arr =
+        circle_profiles_arr, circle_is_profiles_arr =
+            make_arrays_from_circle(profile_circle)
+        circle_is_profiles_arr = circle_is_profiles_arr.uniq
+      end
     end
-    return circle_arr, circle_profiles_arr, circle_is_profiles_arr
+    # return circle_arr, circle_profiles_arr, circle_is_profiles_arr
+    return circle_profiles_arr, circle_is_profiles_arr
   end
 
 
   # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH" & Similars complete search
   # NB: ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ? - check действие order('user_id',??
   # МЕТОД Получения БК для любого одного профиля из дерева
-  def self.get_one_profile_circle(profile_id, user_id)
-    connected_users_arr = User.find(user_id).connected_users  ##найти БК для найденного профиля .where('relation_id <= 8')
-    if connected_users_arr.blank?
-      puts "Error in get_one_profile_BK: Нет такого Юзера = #{user_id} или не найден его connected_users_arr = #{connected_users_arr.inspect}"
-    else
+  def self.get_one_profile_circle(profile_id, connected_users_arr)
+    # connected_users_arr = User.find(user_id).connected_users  ##найти БК для найденного профиля .where('relation_id <= 8')
+    # if connected_users_arr.blank?
+    #   puts "Error in get_one_profile_BK: У Юзера не найден его connected_users_arr = #{connected_users_arr.inspect}"
+    # else
       found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id, deleted: 0)
                                        .order('user_id','relation_id','is_name_id' )
       #.select(:user_id, :name_id, :relation_id, :is_name_id).distinct
       if found_profile_circle.blank?
-        puts "Error in get_one_profile_BK. Не найден БК для Профиля = #{profile_id} у такого Юзера = #{user_id}"
+        puts "Error in get_one_profile_circle: No БК для Профиля = #{profile_id}, connected_users_arr = #{connected_users_arr}"
       else
         return found_profile_circle # Найден БК
       end
-    end
+    # end
   end
 
 
@@ -104,53 +119,53 @@ class SearchCircles
   # Аттрибуты здесь заданы жестко - путем исключения из ActiveRecord
   # ИСп-ся в Жестком поиске - в hard_search_match
   def self.make_arrays_from_circle(bk_rows)
-    bk_arr = []
+    # bk_arr = []
     bk_arr_w_profiles = []
     is_profiles_arr = []
     bk_rows.each do |row|
-      bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
-      bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at')
+      # bk_arr << row.attributes.except('id','user_id','profile_id','is_profile_id','created_at','updated_at')
+      bk_arr_w_profiles << row.attributes.except('id','user_id','created_at','updated_at','deleted')
       is_profiles_arr << row.attributes.except('id','user_id','profile_id','name_id','relation_id','is_name_id','created_at','updated_at').values_at('is_profile_id')
     end
     is_profiles_arr = is_profiles_arr.flatten(1)
-    return bk_arr, bk_arr_w_profiles, is_profiles_arr
+    # return bk_arr, bk_arr_w_profiles, is_profiles_arr
+    return bk_arr_w_profiles, is_profiles_arr
   end
 
 
-  # @note: compare two circles & proceed compare result
-  #  ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"
-  def self.proceed_compare_circles(compare_circles_data)
-    profile_searched = compare_circles_data[:profile_searched]
-    profile_found = compare_circles_data[:profile_found]
-    found_bk_arr = compare_circles_data[:found_bk_arr]
-    search_bk_arr = compare_circles_data[:search_bk_arr]
-    found_bk_profiles_arr = compare_circles_data[:found_bk_profiles_arr]
-    search_bk_profiles_arr = compare_circles_data[:search_bk_profiles_arr]
-    found_is_profiles_arr = compare_circles_data[:found_is_profiles_arr]
-    search_is_profiles_arr = compare_circles_data[:search_is_profiles_arr]
-    # new_connection_hash = compare_circles_data[:new_connection_hash]
-
-    # Сравнение двух Кругов пары профилей Если: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
-    puts " compare_two_circles: ИСКОМОГО ПРОФИЛЯ = #{profile_searched} и НАЙДЕННОГО ПРОФИЛЯ = #{profile_found}:"
-    common_circle_arr = compare_two_circles(found_bk_arr, search_bk_arr)
-    # common_circle_arr = circles_intersection(found_bk, search_bk)
-
-    # Анализ результата сравнения двух Кругов
-    if common_circle_arr.blank?
-      # @@@@@ NB !! Вставить проверку: Если Круги равны, И: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
-      # то формируем новый хэш из их профилей, КОТ-Е ТОЖЕ РАВНЫ
-      search_is_profiles_arr.each_with_index do | is_profile, index |
-        new_connection_hash.merge!(is_profile => found_is_profiles_arr[index])
-      end
-    else # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
-      # puts "To -> get_fields_arr_from_circles: search_bk_profiles_arr = #{search_bk_profiles_arr}:"
-      # puts "To -> get_fields_arr_from_circles: found_bk_profiles_arr = #{found_bk_profiles_arr}:"
-      new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
-    end
-    # new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
-
-    new_connection_hash
-  end
+  # # @note: compare two circles & proceed compare result
+  # def self.no_use_proceed_compare_circles(compare_circles_data)
+  #   profile_searched = compare_circles_data[:profile_searched]
+  #   profile_found = compare_circles_data[:profile_found]
+  #   found_bk_arr = compare_circles_data[:found_bk_arr]
+  #   search_bk_arr = compare_circles_data[:search_bk_arr]
+  #   found_bk_profiles_arr = compare_circles_data[:found_bk_profiles_arr]
+  #   search_bk_profiles_arr = compare_circles_data[:search_bk_profiles_arr]
+  #   found_is_profiles_arr = compare_circles_data[:found_is_profiles_arr]
+  #   search_is_profiles_arr = compare_circles_data[:search_is_profiles_arr]
+  #   # new_connection_hash = compare_circles_data[:new_connection_hash]
+  #
+  #   # Сравнение двух Кругов пары профилей Если: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
+  #   puts " compare_two_circles: ИСКОМОГО ПРОФИЛЯ = #{profile_searched} и НАЙДЕННОГО ПРОФИЛЯ = #{profile_found}:"
+  #   common_circle_arr = compare_two_circles(found_bk_arr, search_bk_arr)
+  #   # common_circle_arr = circles_intersection(found_bk, search_bk)
+  #
+  #   # Анализ результата сравнения двух Кругов
+  #   if common_circle_arr.blank?
+  #     # @@@@@ NB !! Вставить проверку: Если Круги равны, И: НЕТ ДУБЛИКАТОВ В КАЖДОМ ИЗ КРУГОВ,
+  #     # то формируем новый хэш из их профилей, КОТ-Е ТОЖЕ РАВНЫ
+  #     search_is_profiles_arr.each_with_index do | is_profile, index |
+  #       new_connection_hash.merge!(is_profile => found_is_profiles_arr[index])
+  #     end
+  #   else # Если есть какое-то ПЕРЕСЕЧЕНИЕ при сравнении 2-х Кругов
+  #     # puts "To -> get_fields_arr_from_circles: search_bk_profiles_arr = #{search_bk_profiles_arr}:"
+  #     # puts "To -> get_fields_arr_from_circles: found_bk_profiles_arr = #{found_bk_profiles_arr}:"
+  #     new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
+  #   end
+  #   # new_connection_hash = get_fields_arr_from_circles(search_bk_profiles_arr, found_bk_profiles_arr )
+  #
+  #   new_connection_hash
+  # end
 
 
   # @note:

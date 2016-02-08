@@ -79,7 +79,7 @@ class SearchResults < ActiveRecord::Base
   end
 
   # @note Check if results already exists - so don't start search!
-  def self.collect_search_profiles(current_user_id)
+  def self.search_results_profiles(current_user_id)
     puts "In collect_search_profiles: current_user_id = #{current_user_id}"
     searched_profiles = []
     searched_profiles_query = where("#{current_user_id} = ANY (searched_connected)")

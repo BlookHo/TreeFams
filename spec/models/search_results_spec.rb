@@ -35,7 +35,6 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
       end
 
       context '- invalid search_results'  do  # , focus: true
-
         let(:bad_search_results_nonintegers) {FactoryGirl.build(:search_results, :unintegers)}
         it '- 1 Dont save: - unintegers fields' do
           expect(bad_search_results_nonintegers).to_not be_valid
@@ -85,9 +84,7 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
         it '- 10 Dont save: - :profile_id  AND :found_profile_id - equals' do
           expect(bad_profiles_equals).to_not be_valid
         end
-
       end
-
     end
 
     context '- check SearchResults methods'    do #  , focus: true
@@ -116,7 +113,6 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
         FactoryGirl.create(:connection_request, :conn_request_3_1)    #
         FactoryGirl.create(:connection_request, :conn_request_3_2)    #
         FactoryGirl.create(:connection_request, :conn_request_34_46)    #
-
       }
 
       after {
@@ -194,7 +190,7 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
             expect(current_user_id).to eq(1)
           end
           context '- Check search_results exists from SearchResults -'    do
-            let(:search_profiles) {SearchResults.collect_search_profiles(current_user_id) }
+            let(:search_profiles) {SearchResults.search_results_profiles(current_user_id) }
 
             it '- check search_results' do
               expect(search_profiles).to match_array([11, 12, 13, 14, 18, 19, 20, 21])
@@ -210,14 +206,14 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
             expect(current_user_id_11).to eq(11)
           end
           context '- Check search_results exists from SearchResults -'    do
-            let(:search_profiles) {SearchResults.collect_search_profiles(current_user_id_11) }
+            let(:search_profiles) {SearchResults.search_results_profiles(current_user_id_11) }
             it '- check search_results' do
               expect(search_profiles).to match_array([110, 120, 130, 140, 180, 190, 200, 210, 410, 420, 430, 440, 480, 490])
             end
           end
           let(:current_user_id_16) {16}  # id = 16 - empty
           context '- Check search_results exists from SearchResults -'    do
-            let(:search_profiles) {SearchResults.collect_search_profiles(current_user_id_16) }
+            let(:search_profiles) {SearchResults.search_results_profiles(current_user_id_16) }
             it '- check search_results' do
               expect(search_profiles).to match_array([])
             end
