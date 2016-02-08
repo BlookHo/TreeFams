@@ -6,30 +6,30 @@ class SearchCircles
   #############################################################
 
 
-  # @note: In SearchWork.check_add_hash
-  # To check add_connection_hash before its including into final_connection_hash
-  #   compare_profiles to check equ two profiles
-  #   get common_relations_hash - result of two_circles_compare
-  def self.compare_profiles(profile_searched, profile_found)
-    common_relations_hash ={}
-    # puts "In SearchCircles.compare_profiles: profile_searched = #{profile_searched}, profile_found = #{profile_found}"
-    circles_arrs_data = find_circles_arrs(profile_searched, profile_found)
-    compare_circles_data = {
-      profile_searched:       profile_searched,
-      profile_found:          profile_found,
-      search_bk_arr:          circles_arrs_data[:search_bk_arr],
-      search_bk_profiles_arr: circles_arrs_data[:search_bk_profiles_arr],
-      search_is_profiles_arr: circles_arrs_data[:search_is_profiles_arr],
-      found_bk_arr:           circles_arrs_data[:found_bk_arr],
-      found_bk_profiles_arr:  circles_arrs_data[:found_bk_profiles_arr],
-      found_is_profiles_arr:  circles_arrs_data[:found_is_profiles_arr],
-      new_connection_hash:    common_relations_hash
-    }
-    common_relations_hash = two_circles_compare(compare_circles_data)
-    # puts " for profile_searched = #{profile_searched} and profile_found = #{profile_found}:"
-    # puts " common_relations_hash = #{common_relations_hash}"
-    common_relations_hash
-  end
+  # # @note: In SearchWork.check_add_hash
+  # # To check add_connection_hash before its including into final_connection_hash
+  # #   compare_profiles to check equ two profiles
+  # #   get common_relations_hash - result of two_circles_compare
+  # def self.compare_profiles(profile_searched, profile_found)
+  #   common_relations_hash ={}
+  #   # puts "In SearchCircles.compare_profiles: profile_searched = #{profile_searched}, profile_found = #{profile_found}"
+  #   circles_arrs_data = find_circles_arrs(profile_searched, profile_found)
+  #   compare_circles_data = {
+  #     profile_searched:       profile_searched,
+  #     profile_found:          profile_found,
+  #     search_bk_arr:          circles_arrs_data[:search_bk_arr],
+  #     search_bk_profiles_arr: circles_arrs_data[:search_bk_profiles_arr],
+  #     search_is_profiles_arr: circles_arrs_data[:search_is_profiles_arr],
+  #     found_bk_arr:           circles_arrs_data[:found_bk_arr],
+  #     found_bk_profiles_arr:  circles_arrs_data[:found_bk_profiles_arr],
+  #     found_is_profiles_arr:  circles_arrs_data[:found_is_profiles_arr],
+  #     new_connection_hash:    common_relations_hash
+  #   }
+  #   common_relations_hash = two_circles_compare(compare_circles_data)
+  #   # puts " for profile_searched = #{profile_searched} and profile_found = #{profile_found}:"
+  #   # puts " common_relations_hash = #{common_relations_hash}"
+  #   common_relations_hash
+  # end
 
 
   # @note: Получение Кругов для пары профилей - для последующего сравнения и анализа
@@ -46,15 +46,31 @@ class SearchCircles
     # }
     search_bk_profiles_arr, search_is_profiles_arr = have_profile_circle(profile_searched)
     found_bk_profiles_arr, found_is_profiles_arr = have_profile_circle(profile_found)
-    { #search_bk_arr: search_bk_arr,
-      search_bk_profiles_arr: search_bk_profiles_arr,
+    { search_bk_profiles_arr: search_bk_profiles_arr,
       search_is_profiles_arr: search_is_profiles_arr,
-      #found_bk_arr: found_bk_arr,
       found_bk_profiles_arr: found_bk_profiles_arr,
-      found_is_profiles_arr: found_is_profiles_arr
-    }
+      found_is_profiles_arr: found_is_profiles_arr }
   end
 
+  # {:search_bk_profiles_arr=>[
+  #     {"profile_id"=>815, "name_id"=>249, "relation_id"=>4, "is_name_id"=>82, "is_profile_id"=>807},
+  #     {"profile_id"=>815, "name_id"=>249, "relation_id"=>7, "is_name_id"=>110, "is_profile_id"=>814},
+  #     {"profile_id"=>815, "name_id"=>249, "relation_id"=>18, "is_name_id"=>343, "is_profile_id"=>806},
+  #     {"profile_id"=>815, "name_id"=>249, "relation_id"=>122, "is_name_id"=>48, "is_profile_id"=>795},
+  #     {"profile_id"=>815, "name_id"=>249, "relation_id"=>122, "is_name_id"=>331, "is_profile_id"=>808}],
+  #  :search_is_profiles_arr=>[807, 814, 806, 795, 808],
+  #     :found_bk_profiles_arr=>[
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>1, "is_name_id"=>28, "is_profile_id"=>818},
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>2, "is_name_id"=>48, "is_profile_id"=>819},
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>4, "is_name_id"=>446, "is_profile_id"=>1006},
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>5, "is_name_id"=>465, "is_profile_id"=>820},
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>8, "is_name_id"=>147, "is_profile_id"=>1005},
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>91, "is_name_id"=>122, "is_profile_id"=>821},
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>92, "is_name_id"=>343, "is_profile_id"=>823},
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>101, "is_name_id"=>82, "is_profile_id"=>822},
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>102, "is_name_id"=>82, "is_profile_id"=>824},
+  #         {"profile_id"=>817, "name_id"=>370, "relation_id"=>202, "is_name_id"=>331, "is_profile_id"=>1004}],
+  #     :found_is_profiles_arr=>[818, 819, 1006, 820, 1005, 821, 823, 822, 824, 1004]}
 
   # @note: compare two circles & proceed compare result
   #  ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH":  SearchCircles.compare_profiles
@@ -84,9 +100,11 @@ class SearchCircles
         # profile_circle = get_one_profile_circle(profile_id, connected_users_arr)
         profile_circle = profile.profile_circle(connected_users_arr)
         # circle_arr, circle_profiles_arr, circle_is_profiles_arr =
-        circle_profiles_arr, circle_is_profiles_arr =
-            make_arrays_from_circle(profile_circle)
-        circle_is_profiles_arr = circle_is_profiles_arr.uniq
+        unless profile_circle.blank?
+          circle_profiles_arr, circle_is_profiles_arr =
+              make_arrays_from_circle(profile_circle)
+          circle_is_profiles_arr = circle_is_profiles_arr.uniq
+        end
       end
     end
     # return circle_arr, circle_profiles_arr, circle_is_profiles_arr
@@ -94,7 +112,7 @@ class SearchCircles
   end
 
 
-  # # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH" & Similars complete search
+  # # @note: NO USE ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH" & Similars complete search
   # # NB: ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ? - check действие order('user_id',??
   # # МЕТОД Получения БК для любого одного профиля из дерева
   # def self.get_one_profile_circle(profile_id, connected_users_arr)

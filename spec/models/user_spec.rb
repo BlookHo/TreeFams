@@ -655,7 +655,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok'    do  # , focus: true
+    describe '- check User model Method <Search> - Ok'  , focus: true  do  # , focus: true
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -699,8 +699,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
               # преобразованная структура
               [[11, {3=>25}], [12, {3=>23}], [13, {3=>24}], [14, {3=>22}], [18, {3=>26}], [19, {3=>27}],
                [20, {3=>28}], [21, {3=>29}]] )
-        # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  - перед
-        # profiles_to_rewrite, profiles_to_destroy = hard_complete_search(init_connection_hash)
       end
       it "- Check search_results[:by_profiles] after start_search" do
         puts "In User model: search_results[:by_profiles][3] = #{search_results[:by_profiles][3]} \n"
@@ -877,9 +875,9 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -'    do  #   , focus: true
+    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -'  , focus: true  do  #   , focus: true
 
-      context '- check one pair of UNIQ correct profiles -' do
+      context '- check one pair of UNIQ correct profiles with exclusions -' do
         # :uniq_profiles { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
         let(:one_profile_t) { 14 }
         let(:two_profile_t) { 22 }
@@ -1080,7 +1078,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################ CONNECTION - DISCONNECTION ###########################
 
-    describe '- check User model Method <connect_trees(connection_data)> - Ok'     do  # , focus: true
+    describe '- check User model Method <connect_trees(connection_data)> - Ok'  , focus: true   do  # , focus: true
       context '- check Tables count & fields values BEFORE connect_trees' do
         describe '- check all profile_ids in ProfileKey rows ' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,

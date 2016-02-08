@@ -581,7 +581,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
           end
           it '- check one profile Circle array size - Ok' do
             puts "in profile_circle: circle_array = #{circle_array.inspect} \n"
-            expect(circle_array.size).to eq(7)
+            expect(circle_array.size).to eq(7) unless circle_array.blank?
           end
           it '- check one profile Circle: array of <is_profile_ids> - Ok' do
             is_profiles_ids = []
@@ -589,6 +589,28 @@ RSpec.describe Profile, :type => :model   do # , focus: true
             is_profiles_ids.uniq
             puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
             expect(is_profiles_ids).to eq([86, 87, 91, 88, 92, 172, 173])
+          end
+        end
+      end
+      describe 'Method Profile profile_circle test' , focus: true  do # , focus: true
+        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
+          let(:connected_users_arr) {[10]}
+          let(:one_profile) { Profile.find(85) }
+          let(:circle_array) { one_profile.profile_circle(connected_users_arr) }
+          it '- check one profile exists - Ok' do
+            puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+            expect(one_profile.id).to eq(85)
+          end
+          it '- check one profile Circle array size - Ok' do
+            puts "in profile_circle: circle_array = #{circle_array.inspect} \n"
+            expect(circle_array.size).to eq(0) unless circle_array.blank?
+          end
+          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+            is_profiles_ids = []
+            circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id } unless circle_array.blank?
+            is_profiles_ids.uniq
+            puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
+            expect(is_profiles_ids).to eq([])
           end
         end
       end

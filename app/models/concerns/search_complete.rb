@@ -84,10 +84,11 @@ module SearchComplete
         final_connection_hash:  final_connect_hash,
         new_connection_hash:    new_connection_hash
       }
-      new_connection_hash = collect_new_connection_hash(compare_circles_data)
 
+      new_connection_hash = collect_new_connection_hash(compare_circles_data)
       # накапливание нового доп.хаша по всему циклу
       add_connection_hash.merge!(new_connection_hash) unless new_connection_hash.empty?
+
     end
     add_connection_hash
   end
