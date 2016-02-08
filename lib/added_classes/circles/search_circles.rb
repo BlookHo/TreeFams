@@ -74,15 +74,15 @@ class SearchCircles
     circle_profiles_arr = []
     circle_is_profiles_arr = []
     profile = Profile.where(id: profile_id, deleted: 0)[0]
-    # puts "In have_profile_circle: profile = #{profile.inspect} "
     unless profile.blank?
-      puts "Before get circle: profile = #{profile_id} - NOT blank"
+      puts "Before get profile_circle: profile = #{profile_id} - NOT blank"
       profile_user_id = profile.tree_id
       user_of_tree = User.find(profile_user_id)#.connected_users
       unless user_of_tree.blank?
         connected_users_arr = user_of_tree.connected_users
-        puts "Before get circle: user_of_tree.id = #{user_of_tree.id} - NOT blank, connected_users_arr = #{connected_users_arr}"
-        profile_circle = get_one_profile_circle(profile_id, connected_users_arr)
+        puts "Before get profile_circle: user_of_tree.id = #{user_of_tree.id} - NOT blank, connected_users_arr = #{connected_users_arr}"
+        # profile_circle = get_one_profile_circle(profile_id, connected_users_arr)
+        profile_circle = profile.profile_circle(connected_users_arr)
         # circle_arr, circle_profiles_arr, circle_is_profiles_arr =
         circle_profiles_arr, circle_is_profiles_arr =
             make_arrays_from_circle(profile_circle)
@@ -94,24 +94,24 @@ class SearchCircles
   end
 
 
-  # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH" & Similars complete search
-  # NB: ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ? - check действие order('user_id',??
-  # МЕТОД Получения БК для любого одного профиля из дерева
-  def self.get_one_profile_circle(profile_id, connected_users_arr)
-    # connected_users_arr = User.find(user_id).connected_users  ##найти БК для найденного профиля .where('relation_id <= 8')
-    # if connected_users_arr.blank?
-    #   puts "Error in get_one_profile_BK: У Юзера не найден его connected_users_arr = #{connected_users_arr.inspect}"
-    # else
-      found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id, deleted: 0)
-                                       .order('user_id','relation_id','is_name_id' )
-      #.select(:user_id, :name_id, :relation_id, :is_name_id).distinct
-      if found_profile_circle.blank?
-        puts "Error in get_one_profile_circle: No БК для Профиля = #{profile_id}, connected_users_arr = #{connected_users_arr}"
-      else
-        return found_profile_circle # Найден БК
-      end
-    # end
-  end
+  # # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH" & Similars complete search
+  # # NB: ЕСЛИ connected_user = ОБЪЕДИНЕННЫМ ДЕРЕВОМ ? - check действие order('user_id',??
+  # # МЕТОД Получения БК для любого одного профиля из дерева
+  # def self.get_one_profile_circle(profile_id, connected_users_arr)
+  #   # connected_users_arr = User.find(user_id).connected_users  ##найти БК для найденного профиля .where('relation_id <= 8')
+  #   # if connected_users_arr.blank?
+  #   #   puts "Error in get_one_profile_BK: У Юзера не найден его connected_users_arr = #{connected_users_arr.inspect}"
+  #   # else
+  #     found_profile_circle = ProfileKey.where(user_id: connected_users_arr, profile_id: profile_id, deleted: 0)
+  #                                      .order('user_id','relation_id','is_name_id' )
+  #     #.select(:user_id, :name_id, :relation_id, :is_name_id).distinct
+  #     if found_profile_circle.blank?
+  #       puts "Error in get_one_profile_circle: No БК для Профиля = #{profile_id}, connected_users_arr = #{connected_users_arr}"
+  #     else
+  #       return found_profile_circle # Найден БК
+  #     end
+  #   # end
+  # end
 
 
   # @note: ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH"

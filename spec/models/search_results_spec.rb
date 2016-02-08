@@ -31,7 +31,6 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
         it '- 2 Saves a valid good_search_results2 - big IDs' do
           expect(good_search_results2).to be_valid
         end
-
       end
 
       context '- invalid search_results'  do  # , focus: true
@@ -220,15 +219,10 @@ RSpec.describe SearchResults, type: :model    do  #, focus: true
           end
         end
 
-
-
       end
 
 
-
-
-
-        context 'check Action <store_search_results> with duplicates_one_to_many'    do   #   , focus: true
+      context 'check Action <store_search_results> with duplicates_one_to_many'    do   #   , focus: true
         let(:search_results)  {
            {  connected_author_arr: [46],
               by_profiles:      [{:search_profile_id=>665, :found_tree_id=>45, :found_profile_id=>647, :count=>7},

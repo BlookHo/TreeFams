@@ -31,12 +31,14 @@ class ProfileKey < ActiveRecord::Base
 
   has_many :profile_datas, through: :profile
 
-  # todo: set index to model: user_id, profile_id
-
-  # def full_name
-  #   # [self.display_name.name, self.is_profile.last_name].join(' ')
-  #   [self.name.name, self.is_profile.last_name].join(' ')
-  # end
+  # used in Profile
+  scope :one_profile_circle,  -> (connected_users_arr, profile) {
+                                   where("user_id in (?)", connected_users_arr)
+                                  .where(profile_id: profile.id, deleted: 0)
+                                  .order('user_id','relation_id','is_name_id' )
+                                  .select(:user_id, :profile_id, :name_id, :relation_id, :is_name_id, :is_profile_id)
+                                  .distinct
+                                  }
 
 
   # @note: rename one profile in this model

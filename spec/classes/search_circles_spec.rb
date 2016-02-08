@@ -466,10 +466,7 @@ RSpec.describe SearchCircles     do  #, focus: true
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
       end
-
     end
-
-
 
     context '- Check method: have_profile_circle(profile_id, user_id) - '  , focus: true  do   #   , focus: true
       let(:profile_id) { 17 }  # id = 17 == user_id =1
@@ -478,24 +475,6 @@ RSpec.describe SearchCircles     do  #, focus: true
 
       it "- Check SearchCircles arrays: in have_profile_circle" do
         puts "In have_profile_circle: profile 17 = #{profile.inspect} "
-        # expect(circle_arrays[0]).to match_array(
-        #     [
-        #         {"name_id"=>28, "relation_id"=>1, "is_name_id"=>122, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>2, "is_name_id"=>82, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>91, "is_name_id"=>90, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>92, "is_name_id"=>361, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>101, "is_name_id"=>449, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>102, "is_name_id"=>293, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>3, "is_name_id"=>370, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>3, "is_name_id"=>465, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>8, "is_name_id"=>48, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>15, "is_name_id"=>343, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>16, "is_name_id"=>82, "deleted"=>0},
-        #         {"name_id"=>28, "relation_id"=>121, "is_name_id"=>446, "deleted"=>0}
-        #     ] )
         puts "In SearchCircles class: circle_profiles_arr = #{circle_arrays[0]} \n"
         expect(circle_arrays[0]).to match_array(
          [

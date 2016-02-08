@@ -485,10 +485,6 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         FactoryGirl.create(:profile_key, :profile_key9_87_173_69)   # 87_173 # - add_log 173
         FactoryGirl.create(:profile_key, :profile_key9_173_87_70)   # 173_87 # - add_log 173
 
-        # puts "before All: ProfileKey.last.user_id = #{ProfileKey.last.user_id} \n"  # user_id = 1
-        # puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
-        # puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
-
         FactoryGirl.create(:common_log, :log_delete_profile_89)    #
         FactoryGirl.create(:common_log, :log_delete_profile_90)    #
         FactoryGirl.create(:common_log, :log_add_profile_172)    #
@@ -529,7 +525,6 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         end
         it '- check CommonLog 1st row before - Ok' do
           common_log_first =  CommonLog.first
-          # puts "before action: trees_count = #{trees_count.inspect} \n"
           expect(common_log_first.profile_id).to eq(89)
           expect(common_log_first.id).to eq(1)
         end
@@ -547,7 +542,6 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         end
         it '- check CommonLog 4th row before - Ok' do
           common_log_forth =  CommonLog.find(4)
-          # puts "before action: trees_count = #{trees_count.inspect} \n"
           expect(common_log_forth.profile_id).to eq(173)
           expect(common_log_forth.id).to eq(4)
         end
@@ -569,12 +563,37 @@ RSpec.describe Profile, :type => :model   do # , focus: true
           let(:profiles_ids_arr_size) {46}
           it_behaves_like :successful_profile_keys_profile_ids
         end
-
       end
 
       context '- After actions - create profile ' do
 
       end
+
+
+      describe 'Method Profile profile_circle test' , focus: true  do # , focus: true
+        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
+          let(:connected_users_arr) {[9]}
+          let(:one_profile) { Profile.find(85) }
+          let(:circle_array) { one_profile.profile_circle(connected_users_arr) }
+          it '- check one profile exists - Ok' do
+            puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+            expect(one_profile.id).to eq(85)
+          end
+          it '- check one profile Circle array size - Ok' do
+            puts "in profile_circle: circle_array = #{circle_array.inspect} \n"
+            expect(circle_array.size).to eq(7)
+          end
+          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+            is_profiles_ids = []
+            circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id }
+            is_profiles_ids.uniq
+            puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
+            expect(is_profiles_ids).to eq([86, 87, 91, 88, 92, 172, 173])
+          end
+        end
+      end
+
+
 
     end
   end

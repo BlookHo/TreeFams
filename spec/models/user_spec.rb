@@ -582,6 +582,44 @@ RSpec.describe User, :type => :model    do  # , focus: true
         expect(connected_users).to eq([1,2])
       end
     end
+    describe 'Method Profile profile_circle test' , focus: true  do # , focus: true
+      context "- Check Method profile_circle for one Profile=17 -"   do
+        let(:one_profile) { Profile.find(17) }
+        let(:circle_array) { one_profile.profile_circle(connected_users) }
+        it '- check one profile exists - Ok' do
+          puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+          expect(one_profile.id).to eq(17)
+        end
+        it '- check one profile Circle array size - Ok' do
+          expect(circle_array.size).to eq(15)
+        end
+        it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+          is_profiles_ids = []
+          circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id }
+          puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
+          expect(is_profiles_ids.uniq.sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 15, 16, 124])
+        end
+      end
+      context "- Check Method profile_circle for one Profile=11 -"   do
+        let(:one_profile) { Profile.find(11) }
+        let(:circle_array) { one_profile.profile_circle(connected_users) }
+        it '- check one profile exists - Ok' do
+          puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+          expect(one_profile.id).to eq(11)
+        end
+        it '- check one profile Circle array size - Ok' do
+          puts "in profile_circle: circle_array = #{circle_array.inspect} \n"
+          expect(circle_array.size).to eq(17)
+        end
+        it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+          is_profiles_ids = []
+          circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id }
+          puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
+          expect(is_profiles_ids.uniq.sort).to eq([2, 3, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
+        end
+      end
+    end
+
     context '- before actions - check tables values '  do   #   , focus: true
       describe '- check User have double == 0 before - Ok' do
         it "- current_user.double == 0 check" do
@@ -631,18 +669,10 @@ RSpec.describe User, :type => :model    do  # , focus: true
         puts "In User model: certain_koeff_for_connect = #{certain_koeff_for_connect} \n"   # 4
         expect(certain_koeff_for_connect).to eq(5)
       end
-      # it "- Check search_results[:tree_profiles] after start_search" do
-      #   puts "In User model - SEARCH TASK : search_results[:tree_profiles] = #{search_results[:tree_profiles]} \n"
-      #   expect(search_results[:tree_profiles].sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
-      # end
       it "- Check search_results[:connected_author_arr] after start_search" do
         puts "In User model: search_results[:connected_author_arr] = #{search_results[:connected_author_arr]} \n"
         expect(search_results[:connected_author_arr]).to eq([1,2])
       end
-      # it "- Check search_results[:qty_of_tree_profiles] after start_search" do
-      #   puts "In User model: search_results[:qty_of_tree_profiles] = #{search_results[:qty_of_tree_profiles]} \n"
-      #   expect(search_results[:qty_of_tree_profiles]).to eq(18)
-      # end
 
       # преобразование структуры из существующего search.rb  для обеспечения сортировки для теста и
       # более корректного представления - для рефакторинга.
@@ -724,7 +754,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     context '- check SearchResults model after run <search> module'   do #  ,  focus: true
- #     let(:certain_koeff_for_connect) { CERTAIN_CONNECT }  # 4
       before { current_user_1.start_search }
       describe '- check SearchResults have rows count after <search> - Ok' do
         let(:rows_qty) {3}
@@ -807,7 +836,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
         search_results_fields = search_results_fourth_row.counts.sort
         expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7, 7])
       end
-
     end
 
     ############################################################################################
@@ -825,7 +853,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
           puts "In User model: final_connection_hash = #{final_connection_hash} \n"
           expect(final_connection_hash).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
         end
-
       end
 
       context '- when Invalid complete_search_data - with_whom_connect: wrong = [4]' do
@@ -850,7 +877,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -' , focus: true   do  #   , focus: true
+    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -'    do  #   , focus: true
 
       context '- check one pair of UNIQ correct profiles -' do
         # :uniq_profiles { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }

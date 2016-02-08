@@ -69,6 +69,28 @@ class Profile < ActiveRecord::Base
   end
 
 
+  # @note: Main circle method - ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH" - in SearchCircles class
+  #   МЕТОД Получения circle для любого одного профиля из дерева
+  # @input: [connected_users_arr]
+  # @output: circle_profiles_arr =
+  #   [{"profile_id"=>17, "name_id"=>28, "relation_id"=>1, "is_profile_id"=>2, "is_name_id"=>122},
+  #    {"profile_id"=>17, "name_id"=>28, "relation_id"=>2, "is_profile_id"=>3, "is_name_id"=>82},
+  #    {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>15, "is_name_id"=>370}, ....
+  def profile_circle(connected_users_arr)
+    # found_profile_circle = ProfileKey.where("user_id in (?)", connected_users_arr)
+    #                            .where(profile_id: self.id, deleted: 0)
+    #                            .order('user_id','relation_id','is_name_id' )
+    #     #.select(:user_id, :name_id, :relation_id, :is_name_id).distinct
+
+  found_profile_circle = ProfileKey.one_profile_circle(connected_users_arr, self)
+    if found_profile_circle.blank?
+      puts "Error in get_one_profile_circle: No БК для Профиля = #{self.id}, connected_users_arr = #{connected_users_arr}"
+    else
+      found_profile_circle # Найден circle of profile=self
+    end
+  end
+
+
   # @note: collect of all actual profiles from any action
   def collect_actual_profiles(action_profile_id, current_user)
 
