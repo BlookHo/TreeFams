@@ -592,24 +592,54 @@ RSpec.describe Profile, :type => :model   do # , focus: true
           end
         end
       end
-      describe 'Method Profile profile_circle test' , focus: true  do # , focus: true
+      describe 'Method Profile profile_circle test' , focus: true   do # , focus: true
         context "- Check Method profile_circle for one Profile -"   do  # , focus: true
           let(:connected_users_arr) {[10]}
           let(:one_profile) { Profile.find(85) }
           let(:circle_array) { one_profile.profile_circle(connected_users_arr) }
           it '- check one profile exists - Ok' do
-            puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+            puts "profile_circle for one_profile.id = #{one_profile.id.inspect} \n"
             expect(one_profile.id).to eq(85)
           end
+          it '- check one profile exists - Ok' do
+            puts "NO profile_circle: one_profile.tree_id = #{one_profile.tree_id.inspect} - NOT in #{connected_users_arr} \n"
+            expect(one_profile.tree_id).to eq(9)
+          end
           it '- check one profile Circle array size - Ok' do
-            puts "in profile_circle: circle_array = #{circle_array.inspect} \n"
+            puts "NO circle_array = #{circle_array.inspect} \n"
             expect(circle_array.size).to eq(0) unless circle_array.blank?
           end
           it '- check one profile Circle: array of <is_profile_ids> - Ok' do
             is_profiles_ids = []
             circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id } unless circle_array.blank?
             is_profiles_ids.uniq
-            puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
+            puts "NO is_profiles_ids = #{is_profiles_ids.inspect} \n"
+            expect(is_profiles_ids).to eq([])
+          end
+        end
+      end
+      describe 'Method Profile profile_circle test' , focus: true   do # , focus: true
+        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
+          let(:connected_users_arr) {[9]}
+          let(:profile_94) {FactoryGirl.create(:add_profile, :add_profile_94)}
+          let(:circle_array) { profile_94.profile_circle(connected_users_arr) }
+          it '- check one profile exists - Ok' do
+            puts "profile_circle for profile_94.id = #{profile_94.id.inspect} \n"
+            expect(profile_94.id).to eq(94)
+          end
+          it '- check one profile exists - Ok' do
+            puts "NO profile_circle: profile_94.tree_id = #{profile_94.tree_id.inspect} - NOT in #{connected_users_arr} \n"
+            expect(profile_94.tree_id).to eq(10)
+          end
+          it '- check one profile Circle array size - Ok' do
+            puts "NO circle_array = #{circle_array.inspect} \n"
+            expect(circle_array.size).to eq(0) unless circle_array.blank?
+          end
+          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+            is_profiles_ids = []
+            circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id } unless circle_array.blank?
+            is_profiles_ids.uniq
+            puts "NO is_profiles_ids = #{is_profiles_ids.inspect} \n"
             expect(is_profiles_ids).to eq([])
           end
         end
