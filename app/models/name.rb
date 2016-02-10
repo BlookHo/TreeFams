@@ -90,12 +90,12 @@ class Name < ActiveRecord::Base
 
 
   def self.duplicates
-    query = "SELECT t.name, t.sex_id, count(*) AS qty
+    query = "SELECT t.id, t.name, t.sex_id, t.created_at, count(*) AS qty
               FROM names s
               JOIN (
-                  SELECT name, sex_id
+                  SELECT id, name, sex_id, created_at
                   FROM names
-                  GROUP BY name, sex_id
+                  GROUP BY id, name, sex_id, created_at
                   HAVING count(*) > 1
               ) t
               ON s.name = t.name AND s.sex_id = t.sex_id
