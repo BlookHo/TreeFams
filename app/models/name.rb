@@ -90,7 +90,7 @@ class Name < ActiveRecord::Base
 
 
   def self.duplicates
-    query = "SELECT t.name, t.sex_id, count(*) AS qty
+    query = "SELECT t.name, t.sex_id,  count(*) AS qty
               FROM names s
               JOIN (
                   SELECT name, sex_id
@@ -101,8 +101,23 @@ class Name < ActiveRecord::Base
               ON s.name = t.name AND s.sex_id = t.sex_id
               GROUP BY t.name, t.sex_id"
     self.find_by_sql(query)
-
   end
-# AND s.sex_id = t.sex_id
- # s.name = t.name
+
+
+  def self.duplicates_short
+    dups_arr = all.group(:name).having("count(*) > 1").count
+    puts "duplicates names: #{dups_arr}" # duplicates names: {"Ян"=>2}
+  end
+
+
+  def self.duplicates_with_ids
+    select("COUNT(name) as total, name, array_agg(id) AS name_ids").
+    group(:name).
+    having("COUNT(name) > 1").
+    order(:name).
+    map{|p| {p.name => [p.total, p.name_ids]} }
+  end
+
+
+
 end
