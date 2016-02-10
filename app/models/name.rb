@@ -99,7 +99,7 @@ class Name < ActiveRecord::Base
                   HAVING count(*) > 1
               ) t
               ON s.name = t.name AND s.sex_id = t.sex_id
-              GROUP BY t.name, t.sex_id"
+              GROUP BY t.id, t.name, t.sex_id, t.created_at"
      self.find_by_sql(query)
   end
 
