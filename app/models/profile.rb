@@ -90,7 +90,9 @@ class Profile < ActiveRecord::Base
   # @note: collect of all actual profiles from any action
   def collect_actual_profiles(action_profile_id, current_user)
 
-    action_profiles = profiles_in_action(action_profile_id)
+
+    first_row_profiles = profiles_in_action(action_profile_id)
+    final_action_profiles = second_row_profiles(first_row_profiles)
 
     search_results_profiles = previous_results_profiles(current_user)
 
@@ -100,11 +102,35 @@ class Profile < ActiveRecord::Base
 
   # @note: collect of actual profiles, connecting with action
   def profiles_in_action(action_profile_id)
-    action_profiles = [action_profile_id]
-    action_profile_id
-
+    # action_profiles = []
+    puts "Before have_profile_circle: action_profile_id = #{action_profile_id}"
+    circle_of_profile, circle_is_profiles = SearchCircles.have_profile_circle(action_profile_id)
+    puts "In profiles_in_action:  circle_of_profile = #{circle_of_profile},  circle_is_profiles = #{circle_is_profiles}"
+    action_profiles = [action_profile_id, action_profile_id]
+    unless circle_is_profiles.blank?
+      action_profiles = (action_profiles + circle_is_profiles).uniq
+    end
     action_profiles
   end
+
+  # @note: collect of actual profiles, - second row
+  # share/backup   pg_dump -U weafamdb weafam > weafam_backup.bak
+  def second_row_profiles(first_row_profiles)
+    second_row_profiles = first_row_profiles
+    puts "In second: Before have_profile_circle: second_row_profiles = #{second_row_profiles}"
+    first_row_profiles.each do |one_first_row_profile|
+      circle_of_profile, circle_is_profiles = SearchCircles.have_profile_circle(one_first_row_profile)
+      puts "In second: :   circle_is_profiles = #{circle_is_profiles}"
+      unless circle_is_profiles.blank?
+        # second_row_profiles << circle_is_profiles
+        second_row_profiles = (second_row_profiles + circle_is_profiles).uniq
+        puts "In second: :   second_row_profiles = #{second_row_profiles}"
+      end
+    end
+    second_row_profiles
+  end
+
+
 
   # @note: collect of actual profiles, from previous search results,
   # of current_user

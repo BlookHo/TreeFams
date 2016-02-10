@@ -288,7 +288,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
     end
   end
 
-  describe '- Model methods'   do
+  describe '- Model methods'   do  # , focus: true
     describe '- #' do
       # create model data
       before {
@@ -374,7 +374,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         FactoryGirl.create(:user, :user_6 )  # User = 6 . Tree = 10. profile_id = 666
         FactoryGirl.create(:user, :user_7 )  # User = 7 . Tree = 10. profile_id = 777
         FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
-        # FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 9 . profile_id = 85
+        FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 9 . profile_id = 85
         # FactoryGirl.create(:user, :user_10 )  # User = 10. Tree = 10. profile_id = 93
 
         # ConnectedUser
@@ -428,20 +428,20 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         FactoryGirl.create(:profile_key, :profile_key9_add_12)   # 88 87
         # FactoryGirl.create(:profile_key, :profile_key9_add_13) # before # 85 89
         # FactoryGirl.create(:profile_key, :profile_key9_add_14) # before # 85 89
-        # FactoryGirl.create(:profile_key, :profile_key9_add_15)    # 86 89
-        # FactoryGirl.create(:profile_key, :profile_key9_add_16)    # 89 86
-        # FactoryGirl.create(:profile_key, :profile_key9_add_17)   # 87 89
-        # FactoryGirl.create(:profile_key, :profile_key9_add_18)  # 87 89
+        FactoryGirl.create(:profile_key, :profile_key9_add_15)    # 86 89
+        FactoryGirl.create(:profile_key, :profile_key9_add_16)    # 89 86
+        FactoryGirl.create(:profile_key, :profile_key9_add_17)    # 87 89        ######
+        FactoryGirl.create(:profile_key, :profile_key9_add_18)    # 87 89         ######
         # FactoryGirl.create(:profile_key, :profile_key9_add_19) # before # 88 89
         # FactoryGirl.create(:profile_key, :profile_key9_add_20) # before # 88 89
         # FactoryGirl.create(:profile_key, :profile_key9_add_21) # before # 85 90
         # FactoryGirl.create(:profile_key, :profile_key9_add_22) # before # 85 90
-        # FactoryGirl.create(:profile_key, :profile_key9_add_23)  # 86 90
-        # FactoryGirl.create(:profile_key, :profile_key9_add_24)    # 90 86
+        FactoryGirl.create(:profile_key, :profile_key9_add_23)  # 86 90      ######  deleted 1
+        FactoryGirl.create(:profile_key, :profile_key9_add_24)    # 90 86      ######  deleted 1
         # FactoryGirl.create(:profile_key, :profile_key9_add_25)    # 87 90
         # FactoryGirl.create(:profile_key, :profile_key9_add_26)  # 90 87
-        # FactoryGirl.create(:profile_key, :profile_key9_add_27) # before  # 88 90
-        # FactoryGirl.create(:profile_key, :profile_key9_add_28) # before  # 90 88
+        FactoryGirl.create(:profile_key, :profile_key9_add_27) # before  # 88 90  ######  deleted 1
+        FactoryGirl.create(:profile_key, :profile_key9_add_28) # before  # 90 88  ###### deleted  1
         # FactoryGirl.create(:profile_key, :profile_key9_add_29) # before  # 89 90
         # FactoryGirl.create(:profile_key, :profile_key9_add_30) # before  # 89 90
         FactoryGirl.create(:profile_key, :profile_key9_add_31) # before  # 85 91
@@ -458,8 +458,8 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         # FactoryGirl.create(:profile_key, :profile_key9_add_42) # before # 91 89
         FactoryGirl.create(:profile_key, :profile_key9_add_43)    # 85 92
         FactoryGirl.create(:profile_key, :profile_key9_add_44)   # 92 85
-        # FactoryGirl.create(:profile_key, :profile_key9_add_45)   # 90 92
-        # FactoryGirl.create(:profile_key, :profile_key9_add_46)   # 92 90
+        FactoryGirl.create(:profile_key, :profile_key9_add_45)   # 90 92   ######
+        FactoryGirl.create(:profile_key, :profile_key9_add_46)   # 92 90   ######
         FactoryGirl.create(:profile_key, :profile_key9_add_47)   # 91 92
         FactoryGirl.create(:profile_key, :profile_key9_add_48)   # 92 91
         FactoryGirl.create(:profile_key, :profile_key9_add_49)   # 92 86
@@ -570,8 +570,8 @@ RSpec.describe Profile, :type => :model   do # , focus: true
       end
 
 
-      describe 'Method Profile profile_circle test' , focus: true  do # , focus: true
-        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
+      describe 'Method Profile profile_circle test'   do # , focus: true
+        context "- Check Method profile_circle for one Profile -"    do  # , focus: true
           let(:connected_users_arr) {[9]}
           let(:one_profile) { Profile.find(85) }
           let(:circle_array) { one_profile.profile_circle(connected_users_arr) }
@@ -591,8 +591,6 @@ RSpec.describe Profile, :type => :model   do # , focus: true
             expect(is_profiles_ids).to eq([86, 87, 91, 88, 92, 172, 173])
           end
         end
-      end
-      describe 'Method Profile profile_circle test' , focus: true   do # , focus: true
         context "- Check Method profile_circle for one Profile -"   do  # , focus: true
           let(:connected_users_arr) {[10]}
           let(:one_profile) { Profile.find(85) }
@@ -617,8 +615,6 @@ RSpec.describe Profile, :type => :model   do # , focus: true
             expect(is_profiles_ids).to eq([])
           end
         end
-      end
-      describe 'Method Profile profile_circle test' , focus: true   do # , focus: true
         context "- Check Method profile_circle for one Profile -"   do  # , focus: true
           let(:connected_users_arr) {[9]}
           let(:profile_94) {FactoryGirl.create(:add_profile, :add_profile_94)}
@@ -645,6 +641,63 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         end
       end
 
+      describe 'Method Profile profiles_in_action test'   do # , focus: true
+        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
+          let(:connected_users_arr) {[9]}
+          let(:one_profile) { Profile.find(85) }
+          let(:action_profiles) { one_profile.profiles_in_action(one_profile.id) }
+          it '- check one profile exists - Ok' do
+            # puts "before profile_circle: User.last = #{User.last.inspect} \n"
+            puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+            expect(one_profile.id).to eq(85)
+          end
+          it '- check one profile exists - Ok' do
+            puts "profile_circle: one_profile.tree_id = #{one_profile.tree_id.inspect} - IN #{connected_users_arr} \n"
+            expect(one_profile.tree_id).to eq(9)
+          end
+          it '- check one profile action_profiles array size - Ok' do
+            puts "in profile_circle: action_profiles = #{action_profiles.inspect} \n"
+            expect(action_profiles.size).to eq(8) unless action_profiles.blank?
+          end
+          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+            puts "in profile_circle: action_profiles = #{action_profiles.inspect} \n"
+            expect(action_profiles).to eq([85, 86, 87, 91, 88, 92, 172, 173])
+          end
+        end
+      end
+
+      describe 'Method Profile second_row_profiles test' , focus: true  do # , focus: true
+        context "- Check Method second_row_profiles for first_row_profiles -"   do  # , focus: true
+          let(:first_row_profiles) {[85, 86, 87, 91, 88, 92, 172, 173]}
+          let(:one_profile) { Profile.find(85) }
+          let(:one_user) { User.last }
+          let(:action_profiles) { one_profile.second_row_profiles(first_row_profiles) }
+          it '- check one profile exists - Ok' do
+            puts "before second_row_profiles: one_profile.id = #{one_profile.id.inspect} \n"
+            expect(one_profile.id).to eq(85)
+          end
+          it '- check one user.id - Ok' do
+            puts "before profile_circle: one_user.id = #{one_user.id.inspect} \n"
+            expect(one_user.id).to eq(9)
+          end
+          it '- check one user.connected_users - Ok' do
+            puts "before profile_circle: one_user.connected_users = #{one_user.connected_users.inspect} \n"
+            expect(one_user.connected_users).to eq([9])
+          end
+          it '- check first_row_profiles - Ok' do
+            puts "before second_row_profiles: first_row_profiles = #{first_row_profiles.inspect}"
+            expect(first_row_profiles).to eq([85, 86, 87, 91, 88, 92, 172, 173])
+          end
+          it '- check Final action_profiles array size - Ok' do
+            puts "After second_row_profiles: action_profiles = #{action_profiles.inspect} \n"
+            expect(action_profiles.size).to eq(10) unless action_profiles.blank?
+          end
+          it '- check second_row_profiles: Final array of action_profiles - Ok' do
+            puts "After second_row_profiles: action_profiles = #{action_profiles.inspect} \n"
+            expect(action_profiles.sort).to eq([85, 86, 87, 88, 89, 90, 91, 92, 172, 173])
+          end
+        end
+      end
 
 
     end

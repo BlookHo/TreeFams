@@ -89,17 +89,17 @@ class SearchCircles
     # circle_arr = []
     circle_profiles_arr = []
     circle_is_profiles_arr = []
+    puts "In have_profile_circle: profile_id = #{profile_id}"
     profile = Profile.where(id: profile_id, deleted: 0)[0]
     unless profile.blank?
-      puts "Before get profile_circle: profile = #{profile_id} - NOT blank"
+      # puts "Before get profile_circle: profile = #{profile} - NOT blank"
       profile_user_id = profile.tree_id
-      user_of_tree = User.find(profile_user_id)#.connected_users
+      # puts "before User.find: profile_user_id = #{profile_user_id}"
+      user_of_tree = User.find(profile_user_id) #.connected_users
       unless user_of_tree.blank?
         connected_users_arr = user_of_tree.connected_users
-        puts "Before get profile_circle: user_of_tree.id = #{user_of_tree.id} - NOT blank, connected_users_arr = #{connected_users_arr}"
-        # profile_circle = get_one_profile_circle(profile_id, connected_users_arr)
+        # puts "Before get profile_circle: user_of_tree.id = #{user_of_tree.id} - NOT blank, connected_users_arr = #{connected_users_arr}"
         profile_circle = profile.profile_circle(connected_users_arr)
-        # circle_arr, circle_profiles_arr, circle_is_profiles_arr =
         unless profile_circle.blank?
           circle_profiles_arr, circle_is_profiles_arr =
               make_arrays_from_circle(profile_circle)
@@ -107,7 +107,6 @@ class SearchCircles
         end
       end
     end
-    # return circle_arr, circle_profiles_arr, circle_is_profiles_arr
     return circle_profiles_arr, circle_is_profiles_arr
   end
 

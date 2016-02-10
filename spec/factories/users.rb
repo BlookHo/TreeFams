@@ -50,10 +50,12 @@ FactoryGirl.define do
     trait :user_9 do              # before
       profile_id 85
       email "add_petr@pe.pe"
+      connected_users [9]
     end
-    trait :user_10 do
+    trait :user_10 do  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       profile_id 93
       email "add_darja@da.da"
+      connected_users nil   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     end
 
     trait :user_11 do
