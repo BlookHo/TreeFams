@@ -79,6 +79,37 @@ FactoryGirl.define do
       founded_connected [3]
     end
 
+    trait :correct_9_to_7_8 do
+      user_id 9
+      found_user_id 7
+      profile_id 85
+      found_profile_id 777
+      count 7
+      found_profile_ids [7110, 7120, 7130, 7140, 7180, 7190, 7200, 7210]
+      searched_profile_ids [84, 86, 87, 88, 93, 94, 95, 173]
+      counts [7, 7, 7, 7, 5, 5, 5, 5]
+      connection_id 31
+      pending_connect 0
+      searched_connected [9]
+      founded_connected [7,8]
+    end
+
+    trait :correct_7_8_to_9 do
+      user_id 7
+      found_user_id 9
+      profile_id 777
+      found_profile_id 85
+      count 7
+      found_profile_ids [84, 86, 87, 88, 93, 94, 95, 173]
+      searched_profile_ids [7110, 7120, 7130, 7140, 7180, 7190, 7200, 7210]
+      counts [7, 7, 7, 7, 5, 5, 5, 5]
+      connection_id 31
+      pending_connect 0
+      searched_connected [7,8]
+      founded_connected [9]
+    end
+
+
     trait :connected_10_11_12_to_7_8 do
       user_id 11
       found_user_id 7

@@ -377,6 +377,11 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 9 . profile_id = 85
         # FactoryGirl.create(:user, :user_10 )  # User = 10. Tree = 10. profile_id = 93
 
+        # SearchResults
+        FactoryGirl.create(:search_results, :correct_9_to_7_8)
+        FactoryGirl.create(:search_results, :correct_7_8_to_9)
+
+
         # ConnectedUser
         FactoryGirl.create(:connected_user, :correct)      # 1  2
         FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
@@ -510,13 +515,13 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         CommonLog.reset_pk_sequence
       }
 
-      context '- before actions - check tables values ' do
+      context '- before actions - check tables values '  do
         describe '- check Tree have rows count before - Ok' do
           let(:rows_qty) {7}
           it_behaves_like :successful_tree_rows_count
         end
         describe '- check ProfileKey have rows count before - Ok' do
-          let(:rows_qty) {46}
+          let(:rows_qty) {56}
           it_behaves_like :successful_profile_keys_rows_count
         end
         describe '- check CommonLog have rows count before - Ok' do
@@ -545,27 +550,27 @@ RSpec.describe Profile, :type => :model   do # , focus: true
           expect(common_log_forth.profile_id).to eq(173)
           expect(common_log_forth.id).to eq(4)
         end
-        describe '- check all relations generated in ProfileKey rows: start state - Ok'  do  # , focus: true
-          let(:relations_ids_arr_all) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13,
-                                        14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121,
-                                        121, 191, 221]}
-          let(:relations_arr_all_size) {46}
-          let(:relations_ids_arr) {[1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 5, 5, 7, 7, 7, 8, 8, 8, 13, 13, 14,
-                                    14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111, 121, 121,
-                                    191, 221]}
-          let(:relations_arr_size) {46}
+        describe '- check all relations generated in ProfileKey rows: start state - Ok'   do  # , focus: true
+          let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 7, 7,
+                                        7, 8, 8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 91, 101, 101, 101, 111,
+                                        111, 111, 111, 111, 121, 121, 191, 191, 211, 221]}
+          let(:relations_arr_all_size) {56}
+          let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 7, 7, 7, 8,
+                                    8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111,
+                                    121, 121, 191, 221]}
+          let(:relations_arr_size) {52}
           it_behaves_like :successful_profile_keys_relation_ids
         end
         describe '- check all profile_ids generated in ProfileKey rows: start state - Ok' do
-          let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87, 87, 87,
-                                   88, 88, 88, 88, 88, 88, 91, 91, 91, 91, 91, 92, 92, 92, 92, 172, 172, 172, 172, 172,
-                                   173, 173, 173, 173, 173]}
-          let(:profiles_ids_arr_size) {46}
+          let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87,
+                                   87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 90, 90, 90, 91, 91, 91, 91, 91, 92,
+                                   92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
+          let(:profiles_ids_arr_size) {56}
           it_behaves_like :successful_profile_keys_profile_ids
         end
       end
 
-      context '- After actions - create profile ' do
+      context '- After actions - create profile '  do
 
       end
 
@@ -666,7 +671,33 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         end
       end
 
-      describe 'Method Profile second_row_profiles test' , focus: true  do # , focus: true
+      describe 'Method Profile profiles_in_action test' , focus: true  do # , focus: true
+        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
+          let(:connected_users_arr) {[9]}
+          let(:one_profile) { Profile.find(85) }
+          let(:action_profile_id) { 173 } # profile: added or deleted or renamed
+          let(:action_profiles) { one_profile.profiles_in_action(action_profile_id) }
+          it '- check one profile exists - Ok' do
+            # puts "before profile_circle: User.last = #{User.last.inspect} \n"
+            puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+            expect(one_profile.id).to eq(85)
+          end
+          it '- check one profile exists - Ok' do
+            puts "profile_circle: one_profile.tree_id = #{one_profile.tree_id.inspect} - IN #{connected_users_arr} \n"
+            expect(one_profile.tree_id).to eq(9)
+          end
+          it '- check one profile action_profiles array size - Ok' do
+            puts "in profile_circle: action_profiles = #{action_profiles.inspect} \n"
+            expect(action_profiles.size).to eq(6) unless action_profiles.blank?
+          end
+          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+            puts "in profile_circle: action_profiles = #{action_profiles.inspect} \n"
+            expect(action_profiles.sort).to eq([85, 86, 87, 88, 172, 173])
+          end
+        end
+      end
+
+      describe 'Method Profile second_row_profiles test'   do # , focus: true
         context "- Check Method second_row_profiles for first_row_profiles -"   do  # , focus: true
           let(:first_row_profiles) {[85, 86, 87, 91, 88, 92, 172, 173]}
           let(:one_profile) { Profile.find(85) }
@@ -699,6 +730,27 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         end
       end
 
+      describe 'Method Profile collect_actual_profiles test' , focus: true   do # , focus: true
+        context "- Check Method second_row_profiles for first_row_profiles -"   do  # , focus: true
+          # let(:first_row_profiles) {[85, 86, 87, 91, 88, 92, 172, 173]}
+          let(:one_profile) { Profile.find(85) }
+          let(:current_user_id) { User.find(9).id } # [9]
+          let(:action_profile_id) { 173 } # profile: added or deleted or renamed
+          let(:action_profiles) { one_profile.collect_actual_profiles(action_profile_id, current_user_id) }
+          it '- check one profile exists - Ok' do
+            puts "before second_row_profiles: one_profile.id = #{one_profile.id.inspect} \n"
+            expect(one_profile.id).to eq(85)
+          end
+          it '- check one user.id - Ok' do
+            puts "before profile_circle: one_user.id = #{current_user_id.inspect} \n"
+            expect(current_user_id).to eq(9)
+          end
+          it '- check collect_actual_profiles - ' do
+            puts "After collect_actual_profiles: action_profiles = #{action_profiles.inspect}"
+            expect(action_profiles.sort).to eq([84, 85, 86, 87, 88, 89, 91, 92, 93, 94, 95, 172, 173])
+          end
+        end
+      end
 
     end
   end

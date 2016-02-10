@@ -88,16 +88,18 @@ class Profile < ActiveRecord::Base
 
 
   # @note: collect of all actual profiles from any action
-  def collect_actual_profiles(action_profile_id, current_user)
+  def collect_actual_profiles(action_profile_id, current_user_id)
 
 
     first_row_profiles = profiles_in_action(action_profile_id)
-    final_action_profiles = second_row_profiles(first_row_profiles)
+    two_rows_action_profiles = second_row_profiles(first_row_profiles)
+    puts "In collect_actual_profiles: two_rows_action_profiles = #{two_rows_action_profiles}"
 
-    search_results_profiles = previous_results_profiles(current_user)
+    search_results_profiles = SearchResults.search_results_profiles(current_user_id)
+    puts "In collect_actual_profiles: search_results_profiles = #{search_results_profiles}"
 
-    action_profiles + search_results_profiles
-
+    action_profiles = (two_rows_action_profiles + search_results_profiles).uniq
+    action_profiles
   end
 
   # @note: collect of actual profiles, connecting with action
