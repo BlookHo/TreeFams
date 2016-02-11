@@ -89,7 +89,7 @@ class Profile < ActiveRecord::Base
 
   # @note: collect of all actual profiles from any action
   def collect_actual_profiles(action_profile_id, current_user_id)
-
+    start_time = Time.now
 
     first_row_profiles = profiles_in_action(action_profile_id)
     two_rows_action_profiles = second_row_profiles(first_row_profiles)
@@ -98,8 +98,14 @@ class Profile < ActiveRecord::Base
     search_results_profiles = SearchResults.search_results_profiles(current_user_id)
     puts "In collect_actual_profiles: search_results_profiles = #{search_results_profiles}"
 
-    action_profiles = (two_rows_action_profiles + search_results_profiles).uniq
-    action_profiles
+    actual_profiles = (two_rows_action_profiles + search_results_profiles).uniq
+    puts "In collect_actual_profiles: actual_profiles = #{actual_profiles.inspect}"
+
+    collect_actual_profiles_time = (Time.now - start_time) * 1000
+    puts  "\n Collect_actual_profiles Time = #{collect_actual_profiles_time.round(2)} msec.\n\n"
+
+    actual_profiles
+
   end
 
   # @note: collect of actual profiles, connecting with action

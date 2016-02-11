@@ -671,7 +671,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         end
       end
 
-      describe 'Method Profile profiles_in_action test' , focus: true  do # , focus: true
+      describe 'Method Profile profiles_in_action test'   do # , focus: true
         context "- Check Method profile_circle for one Profile -"   do  # , focus: true
           let(:connected_users_arr) {[9]}
           let(:one_profile) { Profile.find(85) }
@@ -730,7 +730,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         end
       end
 
-      describe 'Method Profile collect_actual_profiles test' , focus: true   do # , focus: true
+      describe 'Method Profile collect_actual_profiles test'  , focus: true   do # , focus: true
         context "- Check Method second_row_profiles for first_row_profiles -"   do  # , focus: true
           # let(:first_row_profiles) {[85, 86, 87, 91, 88, 92, 172, 173]}
           let(:one_profile) { Profile.find(85) }
