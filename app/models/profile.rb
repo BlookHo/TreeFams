@@ -87,7 +87,7 @@ class Profile < ActiveRecord::Base
   end
 
 
-  # @note: collect of all actual profiles from any action
+  # @note: collect of all actual profiles from their circles (two rows) and search results
   def collect_actual_profiles(action_profile_id, current_user_id)
     start_time = Time.now
 
@@ -105,8 +105,8 @@ class Profile < ActiveRecord::Base
     puts  "\n Collect_actual_profiles Time = #{collect_actual_profiles_time.round(2)} msec.\n\n"
 
     actual_profiles
-
   end
+
 
   # @note: collect of actual profiles, connecting with action
   def profiles_in_action(action_profile_id)
