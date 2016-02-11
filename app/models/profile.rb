@@ -69,7 +69,7 @@ class Profile < ActiveRecord::Base
   end
 
 
-  # @note: Main circle method - ИСПОЛЬЗУЕТСЯ В METHOD "COMPLETE SEARCH" - in SearchCircles class
+  # @note: Main circle method - ИСПОЛЬЗУЕТСЯ В METHOD "SEARCH MAIN"
   #   МЕТОД Получения circle для любого одного профиля из дерева
   # @input: [connected_users_arr]
   # @output: circle_profiles_arr =
@@ -114,7 +114,7 @@ class Profile < ActiveRecord::Base
     puts "Before have_profile_circle: action_profile_id = #{action_profile_id}"
     circle_of_profile, circle_is_profiles = SearchCircles.have_profile_circle(action_profile_id)
     puts "In profiles_in_action:  circle_of_profile = #{circle_of_profile},  circle_is_profiles = #{circle_is_profiles}"
-    action_profiles = [action_profile_id, action_profile_id]
+    action_profiles = [action_profile_id]#, action_profile_id]
     unless circle_is_profiles.blank?
       action_profiles = (action_profiles + circle_is_profiles).uniq
     end

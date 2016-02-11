@@ -78,11 +78,14 @@ FactoryGirl.define do
       email "alexey@al.al"
       password '11111'
       double 0
+      connected_users [1,2]
+
     end
     trait :user_2_connected do        # For [1, 2] connected trees test
       profile_id 11
       email "aneta@an.an"
       password '11111'
+      connected_users [1,2]
     end
     trait :user_3_to_connect do        # For [3] to be connected [1,2,3] trees test
       profile_id 22

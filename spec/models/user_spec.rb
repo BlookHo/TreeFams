@@ -293,6 +293,13 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
       FactoryGirl.create(:connect_profile, :connect_profile_124)  # 124
 
+      FactoryGirl.create(:common_log, :log_actual_profile_172)    #
+      FactoryGirl.create(:common_log, :log_actual_profile_173)    #
+      FactoryGirl.create(:common_log, :log_actual_profile_23)    #
+      FactoryGirl.create(:common_log, :log_actual_profile_24)    #
+
+
+
       # Tree
       FactoryGirl.create(:connection_trees)                        # 17 pr2
       FactoryGirl.create(:connection_trees, :connect_tree_1_pr3)   # 17 pr3
@@ -582,7 +589,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
         expect(connected_users).to eq([1,2])
       end
     end
-    describe 'Method Profile profile_circle test' , focus: true  do # , focus: true
+    describe 'Method Profile profile_circle test'   do # , focus: true
       context "- Check Method profile_circle for one Profile=17 -"   do
         let(:one_profile) { Profile.find(17) }
         let(:circle_array) { one_profile.profile_circle(connected_users) }
@@ -651,11 +658,58 @@ RSpec.describe User, :type => :model    do  # , focus: true
         let(:rows_qty) {4}
         it_behaves_like :successful_connection_request_rows_count
       end
+      describe '- check CommonLog have rows count before - Ok'   do  # CommonLog
+        let(:rows_qty) {4}
+        it_behaves_like :successful_common_logs_rows_count
+      end
+
 
     end
 
+
     #############################################################################################
-    describe '- check User model Method <Search> - Ok'  , focus: true  do  # , focus: true
+    describe '- check User model Method <Search> - Ok'    do  # , focus: true
+
+      describe 'Method actual_profiles in <start_search> test'  , focus: true   do # , focus: true
+        context "- Check Method actual_profiles -"   do  # , focus: true
+          let(:actual_profiles) { current_user_1.actual_profiles }
+           it '- check current_user_1.id - Ok' do
+            puts "before profile_circle: current_user_1.id = #{current_user_1.id.inspect} \n"
+            expect(current_user_1.id).to eq(1)
+          end
+          it '- check actual_profiles - ' do
+            puts "After collect_actual_profiles: actual_profiles = #{actual_profiles.inspect}"
+            expect(actual_profiles.sort).to eq([11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29])
+          end
+        end
+      end
+
+      describe 'Method actual_profiles in <start_search> test'  , focus: true   do # , focus: true
+        context "- Check Method actual_profiles -"   do  # , focus: true
+          let(:actual_profiles) { current_user_1.actual_profiles }
+          let(:action_profile_id) { 24 }
+          let(:current_profile) { Profile.find(current_user_1.profile_id) }
+          let(:actual_profiles) { current_profile.collect_actual_profiles(action_profile_id, current_user_1.id) }
+          it '- check current_user_1.id - Ok' do
+            puts "before profile_circle: current_user_1.profile_id = #{current_user_1.profile_id.inspect} \n"
+            expect(current_user_1.profile_id).to eq(17)
+          end
+          it '- check current_profile.id - Ok' do
+            puts "before profile_circle: current_profile.id = #{current_profile.id.inspect} \n"
+            expect(current_profile.id).to eq(17)
+          end
+          it '- check actual_profiles - ' do
+            puts "After collect_actual_profiles: actual_profiles = #{actual_profiles.inspect}"
+            expect(actual_profiles.sort).to eq([11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29])
+          end
+        end
+      end
+
+
+
+
+
+
 
       # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
       #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -837,7 +891,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check User model Method <complete_search> - Ok'  , focus: true  do  #   , focus: true
+    describe '- check User model Method <complete_search> - Ok'    do  #   , focus: true
 
       context '- when valid complete_search_data' do
         let(:complete_search_data) { {
@@ -875,7 +929,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     end
 
     ############################################################################################
-    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -'  , focus: true  do  #   , focus: true
+    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -'   do  #   , focus: true
 
       context '- check one pair of UNIQ correct profiles with exclusions -' do
         # :uniq_profiles { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
@@ -1078,7 +1132,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################ CONNECTION - DISCONNECTION ###########################
 
-    describe '- check User model Method <connect_trees(connection_data)> - Ok'  , focus: true   do  # , focus: true
+    describe '- check User model Method <connect_trees(connection_data)> - Ok'     do  # , focus: true
       context '- check Tables count & fields values BEFORE connect_trees' do
         describe '- check all profile_ids in ProfileKey rows ' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,

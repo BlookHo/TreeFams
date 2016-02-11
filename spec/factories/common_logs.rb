@@ -72,6 +72,42 @@ FactoryGirl.define do
       relation_id 2
     end
 
+    # test add logs action
+    trait :log_actual_profile_172 do
+      user_id 7
+      log_type 2
+      log_id 1
+      profile_id 172
+      base_profile_id 86
+      relation_id 1
+    end
+    trait :log_actual_profile_173 do
+      user_id 5
+      log_type 1
+      log_id 2
+      profile_id 173
+      base_profile_id 86
+      relation_id 2
+    end
+    trait :log_actual_profile_23 do
+      user_id 2
+      log_type 2
+      log_id 12
+      profile_id 23
+      base_profile_id 17
+      relation_id 1
+    end
+    trait :log_actual_profile_24 do
+      user_id 1
+      log_type 1
+      log_id 11
+      profile_id 24
+      base_profile_id 8
+      relation_id 2
+    end
+
+
+
   end
 
 end

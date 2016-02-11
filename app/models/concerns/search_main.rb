@@ -128,6 +128,19 @@ module SearchMain
     return tree_profiles.uniq, connected_users
   end
 
+
+  # @note: collect actual_profiles from current tree - to search among them
+  def actual_profiles
+    profile = Profile.find(self.profile_id)
+    puts "In actual_profiles: profile.id = #{profile.id}"
+    action_profile_id = CommonLog.get_action_profile(self.id)
+    puts "In actual_profiles: action_profile_id = #{action_profile_id}"
+    actual_profiles = profile.collect_actual_profiles(action_profile_id, self.id)
+    puts "In actual_profiles: actual_profiles = #{actual_profiles}"
+    actual_profiles
+  end
+
+
   ############################################################
   # @note: New super extra search w/exclusions check
   def search_tree_profiles
@@ -144,6 +157,9 @@ module SearchMain
 
     # actual_profiles = collect_actual_profiles(@profile.id, current_user)
     # logger.info "In Profiles_controller: rename: actual_profiles = #{actual_profiles.inspect} "
+
+ #   connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
+ #   tree_profiles = actual_profiles # collect actual_profiles from current tree - to search among them
 
 
     tree_profiles, connected_users = collect_tree_profiles
