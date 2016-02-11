@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160210083238) do
+ActiveRecord::Schema.define(version: 20160211102408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "adminpack"
 
   create_table "admins", force: true do |t|
     t.string   "email"
@@ -134,9 +135,11 @@ ActiveRecord::Schema.define(version: 20160210083238) do
     t.integer  "sex_id"
     t.integer  "parent_name_id"
     t.integer  "search_name_id"
+    t.integer  "status_id",      default: 0
   end
 
   add_index "names", ["name", "sex_id"], name: "index_names_on_name_and_sex_id", unique: true, using: :btree
+  add_index "names", ["status_id"], name: "index_names_on_status_id", using: :btree
 
   create_table "pending_users", force: true do |t|
     t.integer  "status",       default: 0

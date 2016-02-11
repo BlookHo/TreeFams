@@ -14,7 +14,7 @@
         = link_to 'Забыли пароль?', reset_password_path, class: 'pull-right'
 
 
--# if Rails.env =~ /development/
-.clear.top-32
-  %br
-  = render 'users/login_list'
+- if Rails.env =~ /development/
+  .clear.top-32
+    %br
+    = render 'users/login_list'

@@ -30,6 +30,7 @@ class Admin::NamesController < Admin::AdminController
 
   def edit
     @name = Name.find params[:id]
+    @status = NameStatus.all
     @parent_names = Name.parent_names
   end
 
@@ -77,7 +78,7 @@ class Admin::NamesController < Admin::AdminController
   private
 
   def name_params
-    params[:name].permit(:name, :parent_name_id, :sex_id, :is_approved)
+    params[:name].permit(:name, :parent_name_id, :sex_id, :status_id)
   end
 
 end

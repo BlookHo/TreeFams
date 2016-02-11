@@ -4,14 +4,14 @@
     = f.text_field :name, class: "form-control"
 
 
-.form-group.form-group-lgs
-  = f.label :name, "Синоним для имени", class: "col-sm-2 control-label"
-  .col-sm-6
-    %select.selectpicker{name: "name[parent_name_id]", :"data-live-search" => "true", :"data-max-options"=>"2"}
-      %option.special_option{value:  '', selected: @name.parent_name_id.nil? } Главное имя
-      - @parent_names.each do |name|
-        %option{value: name.id, selected: @name.parent_name_id == name.id}
-          = name.name
+-# .form-group.form-group-lgs
+-#   = f.label :name, "Синоним для имени", class: "col-sm-2 control-label"
+-#   .col-sm-6
+-#     %select.selectpicker{name: "name[parent_name_id]", :"data-live-search" => "true", :"data-max-options"=>"2"}
+-#       %option.special_option{value:  '', selected: @name.parent_name_id.nil? } Главное имя
+-#       - @parent_names.each do |name|
+-#         %option{value: name.id, selected: @name.parent_name_id == name.id}
+-#           = name.name
 
 
 .form-group
@@ -23,15 +23,25 @@
 
 
 .form-group
-  = f.label :search_name_id, "search_name_id", class: "col-sm-2 control-label"
+  = f.label :status_id, "Статус", class: "col-sm-2 control-label"
   .col-sm-2
-    %input.form-control{type: :text, disabled: true, value: @name.search_name_id}
+    %select.selectpicker{name: "name[status_id]"}
+      - @status.each do |status|
+        %option{value: status[:id], selected: @name.status_id == status[:id]}= status[:title]
 
 
-.form-group
-  = f.label :is_approved, "Утверждено", class: "col-sm-2 control-label"
-  .col-sm-2
-    = f.check_box :is_approved
+
+
+-# .form-group
+-#   = f.label :search_name_id, "search_name_id", class: "col-sm-2 control-label"
+-#   .col-sm-2
+-#     %input.form-control{type: :text, disabled: true, value: @name.search_name_id}
+
+
+-# .form-group
+-#   = f.label :is_approved, "Утверждено", class: "col-sm-2 control-label"
+-#   .col-sm-2
+-#     = f.check_box :is_approved
 
 
 %br

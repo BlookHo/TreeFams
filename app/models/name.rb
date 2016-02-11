@@ -74,7 +74,7 @@ class Name < ActiveRecord::Base
 
   scope :approved, -> { where(is_approved: true) }
 
-  scope :pending, -> { where(is_approved: false) }
+  scope :pending, -> { where(status_id: 0) }
 
 
   # Утвержденные админом
