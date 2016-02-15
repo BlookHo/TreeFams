@@ -17,9 +17,9 @@ every 1.day, :at => '4:00 pm' do   # 16 () + 8 = 24 (00) MSK - появился 
   # runner "Counter.increment_disconnects"# , environment: :development
 end
 
-every 1.minutes do
-  runner "Pool.log"
-end
+# every 1.minutes do
+#   runner "Pool.log"
+# end
 
 
 

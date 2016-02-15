@@ -62,8 +62,9 @@ namespace :db do
       reconnect: false
       pool: 25
       timeout: 10000
+      checkout_timeout: 10
+      reaping_frequency: 30
       host: 127.0.0.1
-
 
 
     production:

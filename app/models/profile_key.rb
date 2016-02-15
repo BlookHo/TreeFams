@@ -20,8 +20,9 @@ class ProfileKey < ActiveRecord::Base
 
   # custom validations
   def profiles_ids_are_not_equal
-    self.errors.add(:profile_keys,
-                    'Значения полей в одном ряду не должны быть равны в ProfileKey') if self.profile_id == self.is_profile_id
+    if self.profile_id == self.is_profile_id
+      self.errors.add(:profile_keys, 'Значения полей в одном ряду не должны быть равны в ProfileKey')
+    end
   end
 
   belongs_to :profile #, dependent: :destroy

@@ -41,6 +41,8 @@ module Meteor
             # ActiveRecord::Base.connection_pool.release_connection(conn)
             # ActiveRecord::Base.connection_handler.connection_pool_list.each(&:clear_stale_cached_connections!)
           end
+          current_size = ActiveRecord::Base.connection_pool.connections.size
+          logger.info "== AR POOL SIZE LOG: {signup.send_user_email} size: #{current_size}"
         end
 
 
