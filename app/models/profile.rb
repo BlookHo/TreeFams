@@ -93,13 +93,13 @@ class Profile < ActiveRecord::Base
 
     first_row_profiles = profiles_in_action(action_profile_id)
     two_rows_action_profiles = second_row_profiles(first_row_profiles)
-    puts "In collect_actual_profiles: two_rows_action_profiles = #{two_rows_action_profiles}"
+    # puts "In collect_actual_profiles: two_rows_action_profiles = #{two_rows_action_profiles}"
 
     search_results_profiles = SearchResults.search_results_profiles(current_user_id)
-    puts "In collect_actual_profiles: search_results_profiles = #{search_results_profiles}"
+    # puts "In collect_actual_profiles: search_results_profiles = #{search_results_profiles}"
 
     actual_profiles = (two_rows_action_profiles + search_results_profiles).uniq
-    puts "In collect_actual_profiles: actual_profiles = #{actual_profiles.inspect}"
+    # puts "In collect_actual_profiles: actual_profiles = #{actual_profiles.inspect}"
 
     collect_actual_profiles_time = (Time.now - start_time) * 1000
     puts  "\n Collect_actual_profiles Time = #{collect_actual_profiles_time.round(2)} msec.\n\n"
@@ -110,11 +110,10 @@ class Profile < ActiveRecord::Base
 
   # @note: collect of actual profiles, connecting with action
   def profiles_in_action(action_profile_id)
-    # action_profiles = []
     puts "Before have_profile_circle: action_profile_id = #{action_profile_id}"
     circle_of_profile, circle_is_profiles = SearchCircles.have_profile_circle(action_profile_id)
     puts "In profiles_in_action:  circle_of_profile = #{circle_of_profile},  circle_is_profiles = #{circle_is_profiles}"
-    action_profiles = [action_profile_id]#, action_profile_id]
+    action_profiles = [action_profile_id]
     unless circle_is_profiles.blank?
       action_profiles = (action_profiles + circle_is_profiles).uniq
     end
@@ -125,12 +124,11 @@ class Profile < ActiveRecord::Base
   # share/backup   pg_dump -U weafamdb weafam > weafam_backup.bak
   def second_row_profiles(first_row_profiles)
     second_row_profiles = first_row_profiles
-    puts "In second: Before have_profile_circle: second_row_profiles = #{second_row_profiles}"
+    # puts "In second: Before have_profile_circle: second_row_profiles = #{second_row_profiles}"
     first_row_profiles.each do |one_first_row_profile|
       circle_of_profile, circle_is_profiles = SearchCircles.have_profile_circle(one_first_row_profile)
-      puts "In second: :   circle_is_profiles = #{circle_is_profiles}"
+      # puts "In second: :   circle_is_profiles = #{circle_is_profiles}"
       unless circle_is_profiles.blank?
-        # second_row_profiles << circle_is_profiles
         second_row_profiles = (second_row_profiles + circle_is_profiles).uniq
         puts "In second: :   second_row_profiles = #{second_row_profiles}"
       end
