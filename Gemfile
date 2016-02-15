@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.4'
+gem 'rails', '4.2.1'
 
 gem 'thin'
 
@@ -56,6 +56,7 @@ gem 'therubyracer'
 # Extend hash
 gem 'hashie'
 
+gem 'responders', '~> 2.0'
 
 gem "paperclip", "~> 4.2"
 gem "papercrop"

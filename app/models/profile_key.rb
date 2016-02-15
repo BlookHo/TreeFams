@@ -2,14 +2,18 @@ class ProfileKey < ActiveRecord::Base
   include ProfileKeysGeneration
   include SearchHelper
 
-  validates_presence_of :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id,
-                        :message => "Должно присутствовать в ProfileKey"
+  validates :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id,
+            :presence => {:message => "Должно присутствовать в ProfileKey"}
+
+  # validates_presence_of :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id,
+  #                       :message => "Должно присутствовать в ProfileKey"
   validates_numericality_of :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id,
                             :greater_than => 0, :message => "Должны быть больше 0 в ProfileKey"
   validates_numericality_of :user_id, :profile_id, :name_id, :relation_id, :is_profile_id, :is_name_id,
                             :only_integer => true,  :message => "Должны быть целым числом в ProfileKey"
   # profile_id and .is_profile_id
-  validate :profiles_ids_are_not_equal, :message => "Значения полей в одном ряду не должны быть равны в ProfileKey"
+  validate :profiles_ids_are_not_equal#, :message => "Значения полей в одном ряду не должны быть равны в ProfileKey"
+
   validates_inclusion_of :relation_id, :in => [1,2,3,4,5,6,7,8,91,92,101,102,111,112,121,122,13,14,15,16,17,18,191,192,
                                                201,202,211,212,221,222],
                          :message => "Должны быть целым числом из заданного множества в ProfileKey"
