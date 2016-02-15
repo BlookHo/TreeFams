@@ -37,12 +37,9 @@ module Meteor
 
         def send_user_email(user, password)
           Thread.new do
-            logger.info "LOG_KEY: SignupController send email: AR CONNECTION POOL SIZE #1: #{ActiveRecord::Base.connection_pool.connections.size}"
             UserMailer.welcome_mail(user, password).deliver
-            logger.info "LOG_KEY: SignupController send email: AR CONNECTION POOL SIZE #2: #{ActiveRecord::Base.connection_pool.connections.size}"
-            ActiveRecord::Base.connection_pool.release_connection(conn)
-            ActiveRecord::Base.connection_handler.connection_pool_list.each(&:clear_stale_cached_connections!)
-            logger.info "LOG_KEY: SignupController send email: AR CONNECTION POOL SIZE #3: #{ActiveRecord::Base.connection_pool.connections.size}"
+            # ActiveRecord::Base.connection_pool.release_connection(conn)
+            # ActiveRecord::Base.connection_handler.connection_pool_list.each(&:clear_stale_cached_connections!)
           end
         end
 
