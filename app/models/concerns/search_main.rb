@@ -100,44 +100,102 @@ module SearchMain
 
     # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
     results = search_tree_profiles
+    if results.empty?
+      search_time = (Time.now - start_search_time) * 1000
+      logger.info "\nNo search results! for current_user = #{self.connected_users}. Spent time = #{search_time.round(2)} msec.\n\n"
+    else
+      logger.info "Search Results modified w/exclusions:"
+      logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
+      logger.info "results[:uniq_profiles_pairs] = #{results[:uniq_profiles_pairs].inspect}"
+      logger.info "results[:by_profiles] = #{results[:by_profiles].inspect}"
+      logger.info "results[:by_trees] = #{results[:by_trees].inspect}"
+      logger.info "results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
+      logger.info "results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
 
-    logger.info "Search Results modified w/exclusions:"
-    logger.info "results[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
-    logger.info "results[:uniq_profiles_pairs] = #{results[:uniq_profiles_pairs].inspect}"
-    logger.info "results[:by_profiles] = #{results[:by_profiles].inspect}"
-    logger.info "results[:by_trees] = #{results[:by_trees].inspect}"
-    logger.info "results[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
-    logger.info "results[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
+      check_double(results) if self.double == 0
+      SearchResults.store_search_results(results, self.id) if self.double == 1
 
-    check_double(results) if self.double == 0
-
-    SearchResults.store_search_results(results, self.id) if self.double == 1
-
-    search_time = (Time.now - start_search_time) * 1000
-    puts "\nSearch_time in #{results[:connected_author_arr].inspect}: start_search w/store results = #{search_time.round(2)} msec.\n\n"
+      search_time = (Time.now - start_search_time) * 1000
+      puts "\nSearch_time in #{results[:connected_author_arr].inspect}: start_search w/store results = #{search_time.round(2)} msec.\n\n"
+    end
 
     results
   end
 
   # @note: collect_tree_profiles from current tree - to search among them
-  def collect_tree_profiles
-    connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
-    logger.info "In collect_tree_profiles: connected_users = #{connected_users}"
+  def collect_tree_profiles(connected_users)
+    # connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
+    # logger.info "In collect_tree_profiles: connected_users = #{connected_users}"
+    puts "In collect_tree_profiles: connected_users = #{connected_users.inspect}"
     author_tree_arr = Tree.get_connected_tree(connected_users) # DISTINCT-Массив объединенного дерева из Tree
     tree_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
-    return tree_profiles.uniq, connected_users
+    tree_profiles.uniq #, connected_users
   end
 
 
-  # @note: collect actual_profiles from current tree - to search among them
-  def actual_profiles
-    profile = Profile.find(self.profile_id)
-    puts "In actual_profiles: profile.id = #{profile.id}"
-    action_profile_id = CommonLog.get_action_profile(self.id)
-    puts "In actual_profiles: action_profile_id = #{action_profile_id}"
-    actual_profiles = profile.collect_actual_profiles(action_profile_id, self.id)
-    puts "In actual_profiles: actual_profiles = #{actual_profiles}"
-    actual_profiles
+  # # @note: collect actual_profiles from current tree - to search among them
+  # def actual_profiles(action_profile_id)
+  #   profile = Profile.find(self.profile_id)
+  #   # puts "In actual_profiles: current profile.id = #{profile.id}, action_profile_id = #{action_profile_id}"
+  #   actual_profiles = profile.collect_actual_profiles(action_profile_id, self.id)
+  #   puts "In actual_profiles: actual_profiles = #{actual_profiles}"
+  #   actual_profiles
+  # end
+
+  # @note: Select profiles to search - in current tree connected
+  #   call method to get tree actual_profiles according to CommonLog.log_type
+  def select_tree_profiles(search_event)
+    start_time = Time.now
+    tree_profiles = []
+    connected_users = self.connected_users
+    puts "In select_tree_profiles: connected_users = #{connected_users.inspect}"
+
+      case search_event
+        when 1, 5 # create & rename profile
+          puts "Action: search_event = create (1) or rename (3) profile in tree"
+          tree_profiles = logged_actual_profiles(:profile_id)
+
+        when 2 # destroy profile
+          puts "Action: search_event = destroy (2) profile in tree"
+          tree_profiles = logged_actual_profiles(:base_profile_id)
+
+        when 100 # All other actions: connection, sign_up, rollback, similars_connection
+          puts "Action Others in tree"
+          action_profile_id = nil
+          tree_profiles = collect_tree_profiles(connected_users)
+
+        else  # ERROR: No actions - but start search
+          puts "No Actions in tree - false search_start"
+          action_profile_id = nil
+          connected_users = self.
+          tree_profiles = []
+      end
+
+
+    puts "After case: action profile_id = #{action_profile_id.inspect} \n" # debug
+    puts "In select_tree_profiles: tree_profiles = #{tree_profiles}"
+    select_tree_profiles_time = (Time.now - start_time) * 1000
+    puts  "\n Collect select_tree_profiles Time = #{select_tree_profiles_time.round(2)} msec.\n\n"
+
+    return tree_profiles, connected_users
+
+  end
+
+  # @note: start get actual tree_profiles upon CommonLog content
+  #   Rspec tested
+  def logged_actual_profiles(name_actual_profile)
+    puts "In logged_actual_profiles: name_actual_profile = #{name_actual_profile.inspect} "
+    action_data = CommonLog.get_action_data(self.id)
+    if action_data.blank?
+      puts "Error in logged_actual_profiles: No CommonLog for search_event in tree. Blank action_data = #{action_data.inspect}"
+      tree_profiles = []
+    else
+      puts "In logged_actual_profiles: action_data = #{action_data.inspect}"
+      puts "In logged_actual_profiles: action_profile_id = #{action_data[name_actual_profile].inspect}"
+      profile = Profile.find(self.profile_id)
+      tree_profiles = profile.collect_actual_profiles(action_data[name_actual_profile], self.id)
+    end
+    tree_profiles
   end
 
 
@@ -158,8 +216,8 @@ module SearchMain
     # actual_profiles = collect_actual_profiles(@profile.id, current_user)
     # logger.info "In Profiles_controller: rename: actual_profiles = #{actual_profiles.inspect} "
 
- #   connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
- #   tree_profiles = actual_profiles # collect actual_profiles from current tree - to search among them
+ # connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
+ #  tree_profiles = actual_profiles # collect actual_profiles from current tree - to search among them
 
 
     tree_profiles, connected_users = collect_tree_profiles
@@ -167,38 +225,53 @@ module SearchMain
 
     uniq_profiles_pairs = {}
     profiles_with_match_hash = {}
+    uniq_profiles_no_doubles = {}
+    by_profiles = {}
+    by_trees = {}
     doubles_one_to_many_hash = {}
+    duplicates_many_to_one = {}
 
-    # Start MAIN SEARCH PROFILES CYCLE by profiles to search & found
-    tree_profiles.each do |profile_id_searched|
-      profile_search_data = { connected_users: connected_users,
-                              profile_id_searched: profile_id_searched,
-                              name_id_searched: Profile.find(profile_id_searched).name_id }
-      ############ modified search with exclusions w/doubles update #################
-      one_profile_results = modi_search_one_profile(profile_search_data)
+    if tree_profiles.blank?
+      results = {}
+          # connected_author_arr:     connected_users,
+          # uniq_profiles_pairs:      uniq_profiles_no_doubles,
+          # by_profiles:              by_profiles,
+          # by_trees:                 by_trees,
+          # duplicates_one_to_many:   doubles_one_to_many_hash,
+          # duplicates_many_to_one:   duplicates_many_to_one }
+      puts "In search_tree_profiles: No results. tree_profiles.blank! = #{tree_profiles}, results = #{results} "
+    else
+      # Start MAIN SEARCH PROFILES CYCLE by profiles to search & found
+      tree_profiles.each do |profile_id_searched|
+        profile_search_data = { connected_users: connected_users,
+                                profile_id_searched: profile_id_searched,
+                                name_id_searched: Profile.find(profile_id_searched).name_id }
+        ############ modified search with exclusions w/doubles update #################
+        one_profile_results = modi_search_one_profile(profile_search_data)
 
-      uniq_profiles_pairs.merge!(one_profile_results[:profiles_trees_pairs])
-      profiles_with_match_hash.merge!(one_profile_results[:profiles_counts])
-      doubles_one_to_many_hash.merge!(one_profile_results[:doubles_one_to_many])
+        uniq_profiles_pairs.merge!(one_profile_results[:profiles_trees_pairs])
+        profiles_with_match_hash.merge!(one_profile_results[:profiles_counts])
+        doubles_one_to_many_hash.merge!(one_profile_results[:doubles_one_to_many])
 
-      # logger.info "After modi_search_one_profile:"
-      # logger.info " uniq_profiles_pairs = #{uniq_profiles_pairs} "
-      # logger.info " profiles_with_match_hash = #{profiles_with_match_hash} "
-      # logger.info " doubles_one_to_many_hash = #{doubles_one_to_many_hash} "
+        # logger.info "After modi_search_one_profile:"
+        # logger.info " uniq_profiles_pairs = #{uniq_profiles_pairs} "
+        # logger.info " profiles_with_match_hash = #{profiles_with_match_hash} "
+        # logger.info " doubles_one_to_many_hash = #{doubles_one_to_many_hash} "
+      end
+
+      uniq_profiles_pairs.delete_if { |key,val|  val == {} }
+      uniq_profiles_no_doubles, duplicates_many_to_one = SearchWork.duplicates_out(uniq_profiles_pairs)
+      by_profiles, by_trees = SearchResults.make_search_results(uniq_profiles_no_doubles, profiles_with_match_hash)
+
+      results = {
+          connected_author_arr:     connected_users,
+          uniq_profiles_pairs:      uniq_profiles_no_doubles,
+          by_profiles:              by_profiles,
+          by_trees:                 by_trees,
+          duplicates_one_to_many:   doubles_one_to_many_hash,
+          duplicates_many_to_one:   duplicates_many_to_one }
+
     end
-
-    uniq_profiles_pairs.delete_if { |key,val|  val == {} }
-    uniq_profiles_no_doubles, duplicates_many_to_one = SearchWork.duplicates_out(uniq_profiles_pairs)
-    by_profiles, by_trees = SearchResults.make_search_results(uniq_profiles_no_doubles, profiles_with_match_hash)
-
-    results = {
-        connected_author_arr:     connected_users,
-        uniq_profiles_pairs:      uniq_profiles_no_doubles,
-        by_profiles:              by_profiles,
-        by_trees:                 by_trees,
-        duplicates_one_to_many:   doubles_one_to_many_hash,
-        duplicates_many_to_one:   duplicates_many_to_one }
-
     search_time = (Time.now - start_search_time) * 1000
     puts  "\n Search_time OF ALL search_tree_profiles = #{search_time.round(2)} msec.\n\n"
 

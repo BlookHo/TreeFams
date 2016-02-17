@@ -5,24 +5,30 @@ module CommonLogs
   module ClassMethods
 
     # @note: collect of all actual profiles from their circles (two rows) and search results  , descend
-    def get_action_profile(current_user_id)
+    def get_action_data(current_user_id)
       action_common_log = where(user_id: current_user_id).order('created_at desc').first
-      # puts "In get_action_profile: action_common_log.relation_id = #{action_common_log.relation_id}"
-      # action_profile_id = action_common_log.profile_id
-      # puts "In get_action_profile: action_profile_id = #{action_profile_id}"
-      # base_profile_id = action_common_log.base_profile_id
-      # puts "In get_action_profile: base_profile_id = #{base_profile_id}"
-      # log_type = action_common_log.log_type
-      # puts "In get_action_profile: log_type = #{log_type}"
-      # log_id = action_common_log.log_id
-      # puts "In get_action_profile: log_id = #{log_id}"
-      action_data = action_common_log.attributes.except('id','created_at','updated_at')
-      puts "In get_action_profile: action_data = #{action_data}"
 
-      base_profile_id = action_data['base_profile_id']
-      puts "In get_action_profile: base_profile_id = #{base_profile_id}"
+      if action_common_log.blank?
+        nil
+      else
+        action_data = action_common_log.attributes.except('id','created_at','updated_at')
+        puts "In get_action_data: action_data = #{action_data}"
 
-      action_data['profile_id'] #, base_profile_id
+        log_type = action_common_log.log_type
+        puts "In get_action_data: log_type = #{log_type}"
+
+        profile_id = action_common_log.profile_id
+        puts "In get_action_data: profile_id = #{profile_id}"
+
+        base_profile_id = action_common_log.base_profile_id
+        puts "In get_action_data: base_profile_id = #{base_profile_id}"
+
+        {log_type: log_type,
+         profile_id: profile_id,
+         base_profile_id: base_profile_id
+        }
+      end
+
     end
 
 

@@ -353,7 +353,7 @@ RSpec.describe CommonLog, type: :model   do # , focus: true
         let(:current_user_9) { create(:user, :user_9) }  # User = 9. Tree = 9. profile_id = 85
         let(:current_user_9_id) { current_user_9.id } # [9]
         # let(:action_profile_id) { 173 } # profile: added or deleted or renamed
-        let(:action_profile_id) { CommonLog.get_action_profile(current_user_9_id) }
+        let(:action_data) { CommonLog.get_action_data(current_user_9_id) }
         let(:current_profile) { current_user_9.profile_id }
         it '- before check action_profile_id = current_user_9_id - Ok' do
           puts "before get_action_profile: current_user_9_id = #{current_user_9_id.inspect} \n"
@@ -363,14 +363,23 @@ RSpec.describe CommonLog, type: :model   do # , focus: true
           puts "before get_action_profile: current_profile = #{current_profile.inspect} \n"
           expect(current_profile).to eq(85)
         end
-        # it '- check action_profile_id - Ok' do
-        #   puts "action_data: after get_action_profile = #{action_data.inspect} \n"
-        #   expect(action_data).to eq({"user_id"=>9, "log_type"=>1, "log_id"=>2, "profile_id"=>173,
-        #                              "base_profile_id"=>86, "relation_id"=>2})
-        # end
+        it '- check action_profile_id - Ok' do
+          puts "action_data: after get_action_data = #{action_data.inspect} \n"
+          # expect(action_data).to eq({"user_id"=>9, "log_type"=>1, "log_id"=>2, "profile_id"=>173,
+          #                            "base_profile_id"=>86, "relation_id"=>2})
+          expect(action_data).to eq({:log_type => 1,:profile_id => 173, :base_profile_id => 86})
+        end
         it '- check action_profile_id = action_result.profile_id - Ok' do
-          puts "action_profile_id = #{action_profile_id.inspect} \n"
-          expect(action_profile_id).to eq(173)
+          puts "action profile_id = action_data[:profile_id] = #{action_data[:profile_id].inspect} \n"
+          expect(action_data[:profile_id]).to eq(173)
+        end
+        it '- check action log_type - Ok' do
+          puts "action log_type = action_data[:log_type] = #{action_data[:log_type].inspect} \n"
+          expect(action_data[:log_type]).to eq(1)
+        end
+        it '- check action base_profile_id - Ok' do
+          puts "action base_profile_id = action_data[:base_profile_id] = #{action_data[:base_profile_id].inspect} \n"
+          expect(action_data[:base_profile_id]).to eq(86)
         end
       end
     end

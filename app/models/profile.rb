@@ -121,13 +121,13 @@ class Profile < ActiveRecord::Base
   end
 
   # @note: collect of actual profiles, - second row
-  # share/backup   pg_dump -U weafamdb weafam > weafam_backup.bak
+  # share/backup pg_dump -U weafamdb weafam > weafam_backup.bak
   def second_row_profiles(first_row_profiles)
     second_row_profiles = first_row_profiles
-    # puts "In second: Before have_profile_circle: second_row_profiles = #{second_row_profiles}"
+    puts "In second: Before have_profile_circle: second_row_profiles = #{second_row_profiles}"
     first_row_profiles.each do |one_first_row_profile|
       circle_of_profile, circle_is_profiles = SearchCircles.have_profile_circle(one_first_row_profile)
-      # puts "In second: :   circle_is_profiles = #{circle_is_profiles}"
+      puts "In second: :   circle_is_profiles = #{circle_is_profiles}"
       unless circle_is_profiles.blank?
         second_row_profiles = (second_row_profiles + circle_is_profiles).uniq
         puts "In second: :   second_row_profiles = #{second_row_profiles}"

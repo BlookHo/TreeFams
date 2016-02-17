@@ -105,6 +105,14 @@ FactoryGirl.define do
       base_profile_id 8
       relation_id 2
     end
+    trait :log_actual_profile_29 do
+      user_id 3
+      log_type 1
+      log_id 14
+      profile_id 29
+      base_profile_id 24
+      relation_id 2
+    end
 
 
 

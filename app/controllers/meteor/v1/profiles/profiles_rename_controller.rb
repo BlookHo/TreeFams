@@ -26,7 +26,7 @@ module Meteor
           else
             puts "From Meteor - in Rails Profiles#rename: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
             puts "Дерево - дубль! Действия по переименованию профиля - запрещены"
-            respond_with(errorCode: 403, message: "Возможно, Ваше - дубль! Действия по переименованию профиля - временно запрещены")
+            respond_with(errorCode: 403, message: "Возможно, Ваше Дерево - дубль! Действия по переименованию профиля - временно запрещены")
           end
 
         end

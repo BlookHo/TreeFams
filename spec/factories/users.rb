@@ -25,11 +25,13 @@ FactoryGirl.define do
     trait :user_4 do
       profile_id 444
       email "mail_4@pe.pe"
+      connected_users [4]
     end
 
     trait :user_5 do
       profile_id 555
       email "mail_5@pe.pe"
+      connected_users [5]
     end
 
     trait :user_6 do
