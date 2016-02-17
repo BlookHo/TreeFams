@@ -1,4 +1,12 @@
 namespace :names do
+
+  desc "Approve names with status 0"
+  task :approve => :environment do
+    Name.pending.each do |name|
+      name.update_attribute(:status_id, 1)
+    end
+  end
+
   desc "Find and fix names duplicate"
   task :duplicates => :environment do
 
