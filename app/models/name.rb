@@ -2,7 +2,7 @@ class Name < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            uniqueness: true
+            uniqueness: { scope: :sex_id, message: "Имя уже существует с данным sex_id" }
 
   # Нельзя сохранить имя, не указав пол
   # 1 - муж, 0 - жен
