@@ -26,6 +26,12 @@ class Admin::NamesController < Admin::AdminController
     render template: 'admin/names/index'
   end
 
+  def search
+    term  = params[:term].mb_chars.capitalize + "%"
+    @names = Name.where("name LIKE ?", term).page params[:page]
+    render template: 'admin/names/index'
+  end
+
 
 
   def edit

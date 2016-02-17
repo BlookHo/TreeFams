@@ -314,6 +314,7 @@ Weafam::Application.routes.draw do
       get 'females',    to: "names#females",    on: :collection, as: :females
       get 'pending',    to: "names#pending",    on: :collection, as: :pending
       get 'duplicates', to: "names#duplicates", on: :collection, as: :duplicates
+      get 'search',     to: "names#search",     on: :collection, as: :search
     end
 
     resources :weafam_stats do
