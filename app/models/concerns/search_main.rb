@@ -277,11 +277,16 @@ module SearchMain
           duplicates_one_to_many:   doubles_one_to_many_hash,
           duplicates_many_to_one:   duplicates_many_to_one }
 
-      search_time = (Time.now - start_search_time) * 1000
+      search_time = ((Time.now - start_search_time) * 1000).round(2)
       puts  "\n Search_time OF ALL search_tree_profiles = #{search_time.round(2)} msec.\n\n"
       puts "\nSearch: search_event = #{search_event}; search_time = #{search_time.round(2)} msec; In #{results[:connected_author_arr].inspect} (start_search w/store results).\n\n"
 
 
+      store_log_data = { search_event:            search_event,
+                         time:                    search_time,
+                         connected_users:         connected_users,
+                         searched_profiles:       tree_profiles.size }
+      SearchServiceLogs.store_search_time_log(store_log_data)
 
     end
 

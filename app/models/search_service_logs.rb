@@ -32,13 +32,21 @@ class SearchServiceLogs < ActiveRecord::Base
 
   def self.store_search_time_log(store_log_data)
 
+    # store_log_data = { search_event:            search_event,
+    #                    time:                    search_time,
+    #                    connected_users:         connected_users,
+    #                    searched_profiles:       tree_profiles.size }
+
+    name = LogType(store_log_data[:name])
+    ave_profile_search_time = tima.div(store_log_data[:searched_profiles])
+
     create({
-           name:                    store_log_data[:name],
+           name:                    name,
            search_event:            store_log_data[:search_event],
            time:                    store_log_data[:time],
            connected_users:         store_log_data[:connected_users],
            searched_profiles:       store_log_data[:searched_profiles],
-           ave_profile_search_time: store_log_data[:ave_profile_search_time]
+           ave_profile_search_time: ave_profile_search_time
        })
 
   end
