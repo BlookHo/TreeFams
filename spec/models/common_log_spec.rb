@@ -348,7 +348,7 @@ RSpec.describe CommonLog, type: :model   do # , focus: true
 
     end
 
-    describe 'Method Profile get_action_profile test'  , focus: true   do # , focus: true
+    describe 'Method Profile get_action_profile test' , focus: true   do # , focus: true
       context "- Check Method get_action_profile for last CommonLog action among exists -"   do  # , focus: true
         let(:current_user_9) { create(:user, :user_9) }  # User = 9. Tree = 9. profile_id = 85
         let(:current_user_9_id) { current_user_9.id } # [9]
@@ -365,8 +365,6 @@ RSpec.describe CommonLog, type: :model   do # , focus: true
         end
         it '- check action_profile_id - Ok' do
           puts "action_data: after get_action_data = #{action_data.inspect} \n"
-          # expect(action_data).to eq({"user_id"=>9, "log_type"=>1, "log_id"=>2, "profile_id"=>173,
-          #                            "base_profile_id"=>86, "relation_id"=>2})
           expect(action_data).to eq({:log_type => 1,:profile_id => 173, :base_profile_id => 86})
         end
         it '- check action_profile_id = action_result.profile_id - Ok' do

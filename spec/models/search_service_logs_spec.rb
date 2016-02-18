@@ -85,18 +85,14 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
 
           context "- Check Method logged_actual_profiles -"   do  # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
 
-            let(:name) {  "Удален профиль" }
-            let(:search_event) { 2 }
+            let(:search_event) { 2 } # :name) {  "Удален профиль"
             let(:time) {  110.93 }
             let(:connected_users) { current_user_1.connected_users }
-            let(:searched_profiles) { 15 }
-            let(:ave_profile_search_time) { 137.68 }
-            let(:store_log_data) {{ name: name,
-                                    search_event: search_event,
+            let(:searched_profiles) { 16 }
+            let(:store_log_data) {{ search_event: search_event,
                                     time: time,
                                     connected_users: connected_users,
-                                    searched_profiles: searched_profiles,
-                                    ave_profile_search_time: ave_profile_search_time }  }
+                                    searched_profiles: searched_profiles  } }
 
             before { SearchServiceLogs.store_search_time_log(store_log_data) }
 
@@ -117,8 +113,8 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
               puts "check After SearchServiceLogs.store_search_time_log - Ok\n"   # 0
               search_service_logs = SearchServiceLogs.find(1).attributes.except('created_at','updated_at')
               expect(search_service_logs).to eq({"id"=>1, "name"=>"Удален профиль", "search_event"=>2, "time"=>110.93,
-                                                 "connected_users"=>[1, 2], "searched_profiles"=>15,
-                                                 "ave_profile_search_time"=>137.68 } )
+                                                 "connected_users"=> [1, 2], "searched_profiles"=>16,
+                                                 "ave_profile_search_time"=> 6.93 } )
             end
           end
 

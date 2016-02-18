@@ -14,8 +14,10 @@ module ProfileDestroying
       error = "Вы можете удалить только последнего родственника в цепочке"
     else
 
+      new_relation_id = 444
       tree_row = Tree.where(is_profile_id: profile_id)
-      new_relation_id = tree_row[0].relation_id
+      new_relation_id = tree_row[0].relation_id unless tree_row.blank?
+
       # Профиль, от которого растет удаляемый
       base_profile = Profile.find(tree_row[0].profile_id)  #
 
@@ -53,7 +55,6 @@ module ProfileDestroying
       # Previous version
       # Tree.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
       # ProfileKey.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
-
 
       # ##########  UPDATES FEEDS - № 18  # destroy ###################
       # update_feed_data = { user_id:           self.id,    #

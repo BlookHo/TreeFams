@@ -95,9 +95,7 @@ module SearchMain
 
     start_search_time = Time.now
     logger.info ""
-    logger.info "#### start_search (modified w/exclusions) #### :: connected_users = #{self.connected_users.inspect}"
-
-    # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
+    logger.info "#### start_search (modified + w/exclusions + w/determine actual tree_profiles) #### :: connected_users = #{self.connected_users.inspect}"
     results = search_tree_profiles(search_event)
     if results.empty?
       search_time = (Time.now - start_search_time) * 1000
@@ -115,7 +113,7 @@ module SearchMain
       SearchResults.store_search_results(results, self.id) if self.double == 1
 
       search_time = (Time.now - start_search_time) * 1000
-      puts "\nSearch: search_event = #{search_event}; search_time = #{search_time.round(2)} msec; In #{results[:connected_author_arr].inspect} (start_search w/store results).\n\n"
+      puts "\nAfter search w/store results ( & w/check_double): search_event = #{search_event}; SR complete time = #{search_time.round(2)} msec; In #{results[:connected_author_arr].inspect}\n\n"
     end
 
     results
@@ -145,7 +143,7 @@ module SearchMain
     puts "In select_tree_profiles: connected_users = #{connected_users.inspect}"
 
       case search_event
-        when 1, 5 # create & rename profile
+        when 1 # create & (w/out rename) profile
           puts "Action: search_event = #{search_event.inspect}: create (1) or rename (5) profile in tree"
           tree_profiles = logged_actual_profiles(:profile_id)
 
@@ -153,7 +151,7 @@ module SearchMain
           puts "Action: search_event = #{search_event.inspect}: destroy (2) profile in tree"
           tree_profiles = logged_actual_profiles(:base_profile_id)
 
-        when 100 # All other actions: connection, sign_up, rollback, similars_connection
+        when 5, 100 # All other actions: connection, sign_up, rollback, similars_connection
           puts "Action Others in tree: search_event = #{search_event.inspect}"
           tree_profiles = all_tree_profiles(connected_users)
 
@@ -169,6 +167,9 @@ module SearchMain
     return tree_profiles, connected_users
 
   end
+
+
+
 
   # @note: start get actual tree_profiles upon CommonLog content
   #   Rspec tested
@@ -207,44 +208,6 @@ module SearchMain
    # tree_profiles = all_tree_profiles(connected_users)
    logger.info "In search_tree_profiles: connected_users = #{connected_users}, tree_profiles.size = #{tree_profiles.size}, tree_profiles = #{tree_profiles}  "
 
-                     [57, 58, 60]
-    # tree_profiles.size = 21
-    # tree_profiles =
-        [790, 792, 794, 814, 913, 793, 902, 799, 796, 797, 806, 897, 791, 813, 808, 795, 898, 798, 815, 812, 807]
-    # Search_time OF ALL search_tree_profiles =
-                           580.32
-
-    ## PREV SEARCH ### After create 5 Anatoly
-    # [inf] In search_tree_profiles: connected_users = [57, 58, 60],
-    #          tree_profiles.size = 22,
-    #          tree_profiles =
-                 [790, 792, 794, 814, 913, 793, 902, 799, 796, 797, 806, 1022, 897, 791, 813, 808, 795, 898, 798, 815, 812, 807]
-    # Search_time OF ALL search_tree_profiles =
-    525.48
-    # 23.88
-    # {795,793,794,790,807,806,898,808,791,792} - s
-    # {819,817,820,818,824,823,1006,1004,821,822} - f
-
-    ## NEW SEARCH ### After create 5 Anatoly
-    # action_profile_id = 1023     circle_is_profiles = [798, 799, 792, 790]
-
-
-
-    # {793,795,794,790,807,806,808,898,791,792}
-    # {817,819,820,818,824,823,1004,1006,821,822}
-    # [inf] In search_tree_profiles: connected_users = [57, 58, 60],
-    #          tree_profiles.size = 16,
-    #          tree_profiles =
-                 [1023, 798, 799, 792, 790, 791, 796, 797, 795, 793, 794, 897, 898, 806, 807, 808]
-
-    # Collect select_tree_profiles Time =
-    157.68
-
-    # Search_time OF ALL search_tree_profiles =
-    550.3 - 157
-    393
-    # 24.56
-
     uniq_profiles_pairs = {}
     profiles_with_match_hash = {}
     doubles_one_to_many_hash = {}
@@ -277,15 +240,19 @@ module SearchMain
           duplicates_one_to_many:   doubles_one_to_many_hash,
           duplicates_many_to_one:   duplicates_many_to_one }
 
-      search_time = ((Time.now - start_search_time) * 1000).round(2)
-      puts  "\n Search_time OF ALL search_tree_profiles = #{search_time.round(2)} msec.\n\n"
-      puts "\nSearch: search_event = #{search_event}; search_time = #{search_time.round(2)} msec; In #{results[:connected_author_arr].inspect} (start_search w/store results).\n\n"
 
+      # tree_profiles_size = 1
+      # tree_profiles_size = tree_profiles.size unless tree_profiles.blank?
+      tree_profiles.blank? ? tree_profiles_size = 1 : tree_profiles_size = tree_profiles.size
+
+      search_time = ((Time.now - start_search_time) * 1000).round(2)
+      puts "\n Search_time of tree_profiles = #{search_time.round(2)} msec.\n\n"
+      puts "\n Search in #{results[:connected_author_arr].inspect} - search_event = #{search_event} \n\n"
 
       store_log_data = { search_event:            search_event,
                          time:                    search_time,
                          connected_users:         connected_users,
-                         searched_profiles:       tree_profiles.size }
+                         searched_profiles:       tree_profiles_size }
       SearchServiceLogs.store_search_time_log(store_log_data)
 
     end

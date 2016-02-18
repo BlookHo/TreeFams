@@ -3,19 +3,21 @@ class CommonLog < ActiveRecord::Base
   include CommonLogs    # основной метод отката назад логов деревьев
 
 
-  validates_presence_of      :user_id, :log_type, :log_id, :profile_id, :base_profile_id, :relation_id,
+  validates_presence_of      :user_id, :log_type, :log_id, :profile_id, :base_profile_id,  :relation_id,
                              :message => "Должно присутствовать в CommonLog"
   validates_numericality_of  :user_id, :log_type, :log_id, :profile_id, :base_profile_id, :relation_id,
                              :greater_than => 0, :message => "Должны быть больше 0 в CommonLog"
   validates_numericality_of  :user_id, :log_type, :log_id, :profile_id, :base_profile_id, :relation_id,
                              :only_integer => true, :message => "Должны быть целым числом в CommonLog"
-  validates_inclusion_of     :log_type, :in => [1,2,3,4], :message => "Должны быть [1,2,3,4] в CommonLog"
+  validates_inclusion_of     :log_type, :in => [1,2,3,4,5,6,7], :message => "Должны быть [1,2,3,4,5,6,7] в CommonLog"
   validates_inclusion_of     :relation_id, :in => [1,2,3,4,5,6,7,8,91,92,101,102,111,112,121,122,13,14,15,16,17,18,191,
-                                                   192,201,202,211,212,221,222,888,999],
+                                                   192,201,202,211,212,221,222,444,888,999],
                                                    # 888 - для логов разъединения  деревьев
                                                    # 999 - для логов объединения деревьев
+                                                   # 444 - errors with relation_id
                                                    :message => "Должны быть целым числом из заданного множества в CommonLog"
-  attr_accessor :agent_name, :tree_user_name
+  # attr_accessor :agent_name, :tree_user_name
+
 
 
   # Collect One type of Common_logs for current_user_id
@@ -47,12 +49,12 @@ class CommonLog < ActiveRecord::Base
   # Запись строки Общего лога в таблицу CommonLog
   def self.create_common_log(common_log_data)
     create(
-        user_id:         common_log_data[:user_id],
-    log_type:        common_log_data[:log_type],
-    log_id:          common_log_data[:log_id],
-    profile_id:      common_log_data[:profile_id],
-    base_profile_id: common_log_data[:base_profile_id],
-    relation_id:     common_log_data[:new_relation_id]
+      user_id:         common_log_data[:user_id],
+      log_type:        common_log_data[:log_type],
+      log_id:          common_log_data[:log_id],
+      profile_id:      common_log_data[:profile_id],
+      base_profile_id: common_log_data[:base_profile_id],
+      relation_id:     common_log_data[:new_relation_id]
     )
   end
 
