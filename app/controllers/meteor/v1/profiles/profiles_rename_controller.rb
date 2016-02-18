@@ -16,7 +16,8 @@ module Meteor
               puts "in Rails Profiles#rename: profile.id = #{profile.id}, name.id = #{name.id}"
 
               p "In met/v1/../ProfilesRenameController: After rename: start_search_methods "
-              ::SearchResults.start_search_methods_in_thread(@current_user)
+              search_event = 5
+              ::SearchResults.start_search_methods_in_thread(@current_user, search_event)
 
               respond_with(status:200)
             else

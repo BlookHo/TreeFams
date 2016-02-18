@@ -269,7 +269,8 @@ class HomeController < ApplicationController
     if SimilarsFound.similars_results_exists?(current_user.id)
       @similars = [""]
     else
-      results = SearchResults.start_search_methods(current_user)
+      search_event = 100
+      results = SearchResults.start_search_methods(current_user, search_event)
       logger.info "########## In home/index: results = #{results} "
 
        if results.has_key?(:similars)

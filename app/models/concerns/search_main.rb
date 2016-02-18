@@ -91,7 +91,7 @@ module SearchMain
 
 
   # @note: start of NEW & LAST TO DATE modified search with exclusions check
-  def start_search
+  def start_search(search_event)
 
     start_search_time = Time.now
     logger.info ""
@@ -99,7 +99,7 @@ module SearchMain
     logger.info "CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
 
     # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
-    results = search_tree_profiles
+    results = search_tree_profiles(search_event)
     if results.empty?
       search_time = (Time.now - start_search_time) * 1000
       logger.info "\nNo search results! for current_user = #{self.connected_users}. Spent time = #{search_time.round(2)} msec.\n\n"
@@ -116,34 +116,25 @@ module SearchMain
       SearchResults.store_search_results(results, self.id) if self.double == 1
 
       search_time = (Time.now - start_search_time) * 1000
-      puts "\nSearch_time in #{results[:connected_author_arr].inspect}: start_search w/store results = #{search_time.round(2)} msec.\n\n"
+      puts "\nSearch: search_event = #{search_event}; search_time = #{search_time.round(2)} msec; In #{results[:connected_author_arr].inspect} (start_search w/store results).\n\n"
     end
 
     results
   end
 
   # @note: collect_tree_profiles from current tree - to search among them
-  def collect_tree_profiles(connected_users)
+  def all_tree_profiles(connected_users)
     # connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
     # logger.info "In collect_tree_profiles: connected_users = #{connected_users}"
-    puts "In collect_tree_profiles: connected_users = #{connected_users.inspect}"
+    puts "In all_tree_profiles: connected_users = #{connected_users.inspect}"
     author_tree_arr = Tree.get_connected_tree(connected_users) # DISTINCT-Массив объединенного дерева из Tree
     tree_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
     tree_profiles.uniq #, connected_users
   end
 
-
-  # # @note: collect actual_profiles from current tree - to search among them
-  # def actual_profiles(action_profile_id)
-  #   profile = Profile.find(self.profile_id)
-  #   # puts "In actual_profiles: current profile.id = #{profile.id}, action_profile_id = #{action_profile_id}"
-  #   actual_profiles = profile.collect_actual_profiles(action_profile_id, self.id)
-  #   puts "In actual_profiles: actual_profiles = #{actual_profiles}"
-  #   actual_profiles
-  # end
-
   # @note: Select profiles to search - in current tree connected
   #   call method to get tree actual_profiles according to CommonLog.log_type
+  #   Rspec tested
   def select_tree_profiles(search_event)
     start_time = Time.now
     tree_profiles = []
@@ -152,27 +143,22 @@ module SearchMain
 
       case search_event
         when 1, 5 # create & rename profile
-          puts "Action: search_event = create (1) or rename (3) profile in tree"
+          puts "Action: search_event = #{search_event.inspect}: create (1) or rename (5) profile in tree"
           tree_profiles = logged_actual_profiles(:profile_id)
 
         when 2 # destroy profile
-          puts "Action: search_event = destroy (2) profile in tree"
+          puts "Action: search_event = #{search_event.inspect}: destroy (2) profile in tree"
           tree_profiles = logged_actual_profiles(:base_profile_id)
 
         when 100 # All other actions: connection, sign_up, rollback, similars_connection
-          puts "Action Others in tree"
-          action_profile_id = nil
-          tree_profiles = collect_tree_profiles(connected_users)
+          puts "Action Others in tree: search_event = #{search_event.inspect}"
+          tree_profiles = all_tree_profiles(connected_users)
 
         else  # ERROR: No actions - but start search
-          puts "No Actions in tree - false search_start"
-          action_profile_id = nil
+          puts "No Actions in tree - false search_start - False event: search_event = #{search_event.inspect}"
           connected_users = self.
           tree_profiles = []
       end
-
-
-    puts "After case: action profile_id = #{action_profile_id.inspect} \n" # debug
     puts "In select_tree_profiles: tree_profiles = #{tree_profiles}"
     select_tree_profiles_time = (Time.now - start_time) * 1000
     puts  "\n Collect select_tree_profiles Time = #{select_tree_profiles_time.round(2)} msec.\n\n"
@@ -201,7 +187,7 @@ module SearchMain
 
   ############################################################
   # @note: New super extra search w/exclusions check
-  def search_tree_profiles
+  def search_tree_profiles(search_event)
 
     start_search_time = Time.now
     # logger.info  "\n##### search_tree_profiles #####\n\n"
@@ -211,25 +197,63 @@ module SearchMain
     # todo: get profiles touched by last action: create, delete, rename ...
     # @note:
     #  -  new method to reduce search field - space
-    # tree_profiles = collect_profiles_to_search(connected_users, action_id)
 
-    # actual_profiles = collect_actual_profiles(@profile.id, current_user)
-    # logger.info "In Profiles_controller: rename: actual_profiles = #{actual_profiles.inspect} "
+    # NEW REDUCED VAR
+    tree_profiles, connected_users = select_tree_profiles(search_event)
+    puts "In search_tree_profiles: tree_profiles = #{tree_profiles} "
 
- # connected_users = self.get_connected_users # Состав объединенного дерева в виде массива id
- #  tree_profiles = actual_profiles # collect actual_profiles from current tree - to search among them
+    # PREV FULL VAR
+   # connected_users = self.connected_users
+   # tree_profiles = all_tree_profiles(connected_users)
+   logger.info "In search_tree_profiles: connected_users = #{connected_users}, tree_profiles.size = #{tree_profiles.size}, tree_profiles = #{tree_profiles}  "
 
 
-    tree_profiles, connected_users = collect_tree_profiles
-    logger.info "In search_tree_profiles: tree_profiles = #{tree_profiles} "
+                     [57, 58, 60]
+    # tree_profiles.size = 21
+    # tree_profiles =
+        [790, 792, 794, 814, 913, 793, 902, 799, 796, 797, 806, 897, 791, 813, 808, 795, 898, 798, 815, 812, 807]
+    # Search_time OF ALL search_tree_profiles =
+                           580.32
+
+    ## PREV SEARCH ### After create 5 Anatoly
+    # [inf] In search_tree_profiles: connected_users = [57, 58, 60],
+    #          tree_profiles.size = 22,
+    #          tree_profiles =
+                 [790, 792, 794, 814, 913, 793, 902, 799, 796, 797, 806, 1022, 897, 791, 813, 808, 795, 898, 798, 815, 812, 807]
+    # Search_time OF ALL search_tree_profiles =
+    525.48
+    # 23.88
+    # {795,793,794,790,807,806,898,808,791,792} - s
+    # {819,817,820,818,824,823,1006,1004,821,822} - f
+
+    ## NEW SEARCH ### After create 5 Anatoly
+    # action_profile_id = 1023     circle_is_profiles = [798, 799, 792, 790]
+
+
+
+
+    # {793,795,794,790,807,806,808,898,791,792}
+    # {817,819,820,818,824,823,1004,1006,821,822}
+    # [inf] In search_tree_profiles: connected_users = [57, 58, 60],
+    #          tree_profiles.size = 16,
+    #          tree_profiles =
+                 [1023, 798, 799, 792, 790, 791, 796, 797, 795, 793, 794, 897, 898, 806, 807, 808]
+
+    # Collect select_tree_profiles Time =
+    157.68
+
+    # Search_time OF ALL search_tree_profiles =
+    550.3 - 157
+    393
+    # 24.56
 
     uniq_profiles_pairs = {}
     profiles_with_match_hash = {}
-    uniq_profiles_no_doubles = {}
-    by_profiles = {}
-    by_trees = {}
+    # uniq_profiles_no_doubles = {}
+    # by_profiles = {}
+    # by_trees = {}
     doubles_one_to_many_hash = {}
-    duplicates_many_to_one = {}
+    # duplicates_many_to_one = {}
 
     if tree_profiles.blank?
       results = {}

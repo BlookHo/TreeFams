@@ -67,7 +67,8 @@ module CommonLogs
       logger.info "current_user.connected_users = #{current_user.connected_users.inspect}"
 
       # sims & search
-      ::SearchResults.start_search_methods_in_thread(current_user)
+      search_event = 100
+      ::SearchResults.start_search_methods_in_thread(current_user, search_event)
 
       # SearchResults.start_search_methods(current_user)
 

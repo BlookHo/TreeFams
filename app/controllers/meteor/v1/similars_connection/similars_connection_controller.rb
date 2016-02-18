@@ -17,7 +17,8 @@ module Meteor
           @current_user.similars_connection(first_profile_connecting, second_profile_connecting)
           logger.info "In SimilarsConnectionController: After similars_connection: @error = #{@error}  " if @error
           logger.info "In SimilarsConnectionController: After similars_connection - @current_user.id = #{@current_user.id} "
-          ::SearchResults.start_search_methods_in_thread(@current_user)
+          search_event = 100
+          ::SearchResults.start_search_methods_in_thread(@current_user, search_event)
 
           # respond_with roll
 

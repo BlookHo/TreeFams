@@ -16,7 +16,8 @@ module Meteor
               else
 
                 puts "In met/v1/../ProfilesDestroyController: After destroying_profile: start_search_methods "
-                ::SearchResults.start_search_methods_in_thread(@current_user)
+                search_event = 2
+                ::SearchResults.start_search_methods_in_thread(@current_user, search_event)
                 respond_with(status:200)
               end
 

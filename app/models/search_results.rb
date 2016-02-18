@@ -98,10 +98,10 @@ class SearchResults < ActiveRecord::Base
 
 
   # @note Run search methods in tread
-  def self.start_search_methods_in_thread(current_user)
+  def self.start_search_methods_in_thread(current_user, search_event)
     Thread.new do
       ActiveRecord::Base.connection_pool.with_connection do |conn|
-        self.start_search_methods(current_user)
+        self.start_search_methods(current_user, search_event)
         ActiveRecord::Base.connection_pool.release_connection(conn)
       end
 
@@ -111,7 +111,7 @@ class SearchResults < ActiveRecord::Base
 
   # @note start search methods: # sims & search
   # first - similars, then - search if no sims results
-  def self.start_search_methods(current_user)
+  def self.start_search_methods(current_user, search_event)
     logger.info  "In start_search_methods: start_search_methods: current_user.id = #{current_user.id.inspect} "
 
     similars_results = current_user.start_similars
@@ -131,7 +131,7 @@ class SearchResults < ActiveRecord::Base
 
     if similars_results[:similars].blank?
       logger.info  "In start_search_methods: No Similars -> start search "
-      search_results = current_user.start_search
+      search_results = current_user.start_search(search_event)
       search_results
     else
       logger.info  "In start_search_methods: Similars in tree -> No start search "

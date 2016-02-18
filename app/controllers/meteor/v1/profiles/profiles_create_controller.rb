@@ -19,9 +19,9 @@ module Meteor
                   relation_id:       params[:relation_id] }
               puts "From Meteor - in Rails create: params_to_create = #{params_to_create}"
               new_profile = @current_user.creation_profile(params_to_create)
-
+              search_event = 1
               puts "In met/v1/../ProfilesCreateController: After creation_profile: start_search_methods "
-              ::SearchResults.start_search_methods_in_thread(@current_user)
+              ::SearchResults.start_search_methods_in_thread(@current_user, search_event)
 
               respond_with new_profile
             else
