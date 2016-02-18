@@ -96,7 +96,6 @@ module SearchMain
     start_search_time = Time.now
     logger.info ""
     logger.info "#### start_search (modified w/exclusions) #### :: connected_users = #{self.connected_users.inspect}"
-    logger.info "CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
 
     # todo: DEVELOPING: place conditions, when search should be started - depends upon last action(s) in current tree
     results = search_tree_profiles(search_event)
@@ -132,7 +131,11 @@ module SearchMain
     tree_profiles.uniq #, connected_users
   end
 
-  # @note: Select profiles to search - in current tree connected
+  # @note: method to reduce search field - space
+  #   collect profiles to start search profiles list,
+  #   combine with previous search_results in table if exists
+  #   get profiles touched by last action: create, delete, rename ...
+  #   Select profiles to search - in current tree connected
   #   call method to get tree actual_profiles according to CommonLog.log_type
   #   Rspec tested
   def select_tree_profiles(search_event)
@@ -190,13 +193,10 @@ module SearchMain
   def search_tree_profiles(search_event)
 
     start_search_time = Time.now
-    # logger.info  "\n##### search_tree_profiles #####\n\n"
-
-    # todo: collect profiles to start search profiles list,
-    # todo: combine with previous search_results in table if exists
-    # todo: get profiles touched by last action: create, delete, rename ...
-    # @note:
-    #  -  new method to reduce search field - space
+    logger.info ""
+    logger.info "#### start search_tree_profiles (reduced w/exclusions) ####, CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
+    logger.info ""
+    results = {}
 
     # NEW REDUCED VAR
     tree_profiles, connected_users = select_tree_profiles(search_event)
@@ -206,7 +206,6 @@ module SearchMain
    # connected_users = self.connected_users
    # tree_profiles = all_tree_profiles(connected_users)
    logger.info "In search_tree_profiles: connected_users = #{connected_users}, tree_profiles.size = #{tree_profiles.size}, tree_profiles = #{tree_profiles}  "
-
 
                      [57, 58, 60]
     # tree_profiles.size = 21
@@ -231,7 +230,6 @@ module SearchMain
 
 
 
-
     # {793,795,794,790,807,806,808,898,791,792}
     # {817,819,820,818,824,823,1004,1006,821,822}
     # [inf] In search_tree_profiles: connected_users = [57, 58, 60],
@@ -249,20 +247,9 @@ module SearchMain
 
     uniq_profiles_pairs = {}
     profiles_with_match_hash = {}
-    # uniq_profiles_no_doubles = {}
-    # by_profiles = {}
-    # by_trees = {}
     doubles_one_to_many_hash = {}
-    # duplicates_many_to_one = {}
-
     if tree_profiles.blank?
       results = {}
-          # connected_author_arr:     connected_users,
-          # uniq_profiles_pairs:      uniq_profiles_no_doubles,
-          # by_profiles:              by_profiles,
-          # by_trees:                 by_trees,
-          # duplicates_one_to_many:   doubles_one_to_many_hash,
-          # duplicates_many_to_one:   duplicates_many_to_one }
       puts "In search_tree_profiles: No results. tree_profiles.blank! = #{tree_profiles}, results = #{results} "
     else
       # Start MAIN SEARCH PROFILES CYCLE by profiles to search & found
@@ -276,11 +263,6 @@ module SearchMain
         uniq_profiles_pairs.merge!(one_profile_results[:profiles_trees_pairs])
         profiles_with_match_hash.merge!(one_profile_results[:profiles_counts])
         doubles_one_to_many_hash.merge!(one_profile_results[:doubles_one_to_many])
-
-        # logger.info "After modi_search_one_profile:"
-        # logger.info " uniq_profiles_pairs = #{uniq_profiles_pairs} "
-        # logger.info " profiles_with_match_hash = #{profiles_with_match_hash} "
-        # logger.info " doubles_one_to_many_hash = #{doubles_one_to_many_hash} "
       end
 
       uniq_profiles_pairs.delete_if { |key,val|  val == {} }
@@ -295,9 +277,13 @@ module SearchMain
           duplicates_one_to_many:   doubles_one_to_many_hash,
           duplicates_many_to_one:   duplicates_many_to_one }
 
+      search_time = (Time.now - start_search_time) * 1000
+      puts  "\n Search_time OF ALL search_tree_profiles = #{search_time.round(2)} msec.\n\n"
+      puts "\nSearch: search_event = #{search_event}; search_time = #{search_time.round(2)} msec; In #{results[:connected_author_arr].inspect} (start_search w/store results).\n\n"
+
+
+
     end
-    search_time = (Time.now - start_search_time) * 1000
-    puts  "\n Search_time OF ALL search_tree_profiles = #{search_time.round(2)} msec.\n\n"
 
     results
   end
@@ -610,6 +596,7 @@ module SearchMain
   def modi_search_one_profile(profile_search_data)
     start_search_time = Time.now
     puts "\n"
+    logger.info ""
     logger.info "\n ##### modi_search_one_profile #####\n\n"
     logger.info "profile_search_data = #{profile_search_data}"
 

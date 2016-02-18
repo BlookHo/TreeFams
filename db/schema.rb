@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151221135702) do
+ActiveRecord::Schema.define(version: 20160218100702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "adminpack"
 
   create_table "admins", force: true do |t|
     t.string   "email"
@@ -135,10 +134,11 @@ ActiveRecord::Schema.define(version: 20151221135702) do
     t.integer  "sex_id"
     t.integer  "parent_name_id"
     t.integer  "search_name_id"
+    t.integer  "status_id",      default: 0
   end
 
-  add_index "names", ["name"], name: "index_names_on_name", using: :btree
-  add_index "names", ["only_male"], name: "index_names_on_only_male", using: :btree
+  add_index "names", ["name", "sex_id"], name: "index_names_on_name_and_sex_id", unique: true, using: :btree
+  add_index "names", ["status_id"], name: "index_names_on_status_id", using: :btree
 
   create_table "pending_users", force: true do |t|
     t.integer  "status",       default: 0
@@ -224,6 +224,15 @@ ActiveRecord::Schema.define(version: 20151221135702) do
 
   add_index "search_results", ["profile_id"], name: "index_search_results_on_profile_id", using: :btree
   add_index "search_results", ["user_id"], name: "index_search_results_on_user_id", using: :btree
+
+  create_table "search_service_logs", force: true do |t|
+    t.string  "name"
+    t.integer "search_event"
+    t.float   "time",                    default: 0.0
+    t.integer "connected_users",         default: [],  array: true
+    t.integer "searched_profiles"
+    t.float   "ave_profile_search_time", default: 0.0
+  end
 
   create_table "similars_founds", force: true do |t|
     t.integer  "user_id",           null: false
