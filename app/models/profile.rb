@@ -58,10 +58,29 @@ class Profile < ActiveRecord::Base
     p "In model Profile - rename: profile_id = #{self.id}, new_name_id = #{new_name_id}, new_name.sex_id = #{new_name.sex_id}"
 
     if new_name.sex_id == self.sex_id
+
+      # # Make rename CommonLog
+      # current_log_type = 5  # rename
+      # new_log_number = CommonLog.new_log_id(base_profile.tree_id, current_log_type)
+      #
+      # common_log_data = { user_id:         self.id,
+      #                     log_type:        current_log_type,
+      #                     log_id:          new_log_number,
+      #                     profile_id:      profile_id,
+      #                     base_profile_id: base_profile.id,
+      #                     new_relation_id: new_relation_id  } # 444 - destroying_profile
+      # # Запись строки Общего лога в таблицу CommonLog
+      # CommonLog.create_common_log(common_log_data)
+      #
+      #######################################################
+
+
       self.rename_in_profile(new_name_id)
       Tree.rename_in_tree(self.id, new_name_id)
       ProfileKey.rename_in_profile_key(self.id, new_name_id)
       puts "Профиль успешно переименован на имя #{new_name.name}."
+
+
     else
       puts "Error:400 Выбрано имя не того пола, что Профиль: с имени #{self.name_id} на имя #{new_name}."
     end

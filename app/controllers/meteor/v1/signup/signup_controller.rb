@@ -20,7 +20,7 @@ module Meteor
             Thread.new do
               UserMailer.welcome_mail(user, password).deliver
             end
-            search_event = 100
+            search_event = 6
             ::SearchResults.start_search_methods_in_thread(user, search_event)
             render json: {token: user.access_token}
           else

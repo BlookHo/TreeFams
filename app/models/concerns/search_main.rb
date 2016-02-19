@@ -138,12 +138,12 @@ module SearchMain
   #   Rspec tested
   def select_tree_profiles(search_event)
     start_time = Time.now
-    tree_profiles = []
+    # tree_profiles = []
     connected_users = self.connected_users
     puts "In select_tree_profiles: connected_users = #{connected_users.inspect}"
 
       case search_event
-        when 1 # create & (w/out rename) profile
+        when 1 # , 5  # create & (w/out rename) profile
           puts "Action: search_event = #{search_event.inspect}: create (1) or rename (5) profile in tree"
           tree_profiles = logged_actual_profiles(:profile_id)
 
@@ -151,13 +151,12 @@ module SearchMain
           puts "Action: search_event = #{search_event.inspect}: destroy (2) profile in tree"
           tree_profiles = logged_actual_profiles(:base_profile_id)
 
-        when 5, 100 # All other actions: connection, sign_up, rollback, similars_connection
+        when 3, 4, 5, 6, 7, 100 # All other actions: connection, sign_up, rollback, similars_connection, home
           puts "Action Others in tree: search_event = #{search_event.inspect}"
           tree_profiles = all_tree_profiles(connected_users)
 
         else  # ERROR: No actions - but start search
           puts "No Actions in tree - false search_start - False event: search_event = #{search_event.inspect}"
-          connected_users = self.
           tree_profiles = []
       end
     puts "In select_tree_profiles: tree_profiles = #{tree_profiles}"
@@ -165,10 +164,7 @@ module SearchMain
     puts  "\n Collect select_tree_profiles Time = #{select_tree_profiles_time.round(2)} msec.\n\n"
 
     return tree_profiles, connected_users
-
   end
-
-
 
 
   # @note: start get actual tree_profiles upon CommonLog content

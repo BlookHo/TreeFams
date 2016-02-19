@@ -13,27 +13,27 @@ class LogType < ActiveRecord::Base
   # Select name for current LogType
   def self.name_log_type(log_type)
     # logger.info "In LogType model name_log_type: log_type: #{log_type} "
-    name_common_log = ""
+    name_event = ""
     case log_type
       when 1
-        name_common_log = "Добавлен профиль"
+        name_event = "Добавлен профиль"
       when 2
-        name_common_log = "Удален профиль"
+        name_event = "Удален профиль"
       when 3
-        name_common_log = "Объединение похожих"
+        name_event = "Объединение похожих"
       when 4
-        name_common_log = "Объединение деревьев"
+        name_event = "Объединение деревьев"
       when 5
-        name_common_log = "Переименован профиль"
+        name_event = "Переименован профиль"
       when 6
-        name_common_log = "Зарегистрирован новый юзер"
+        name_event = "Зарегистрирован новый юзер"
       when 7
-        name_common_log = "Откат истории дерева"
+        name_event = "Откат истории дерева"
       else
-        name_common_log = "home in rails, etc."
-        logger.info "ERROR in LogType model: No name for log_type = #{log_type} "
+        name_event = "home in rails, etc."
+        logger.info "ERROR in LogType model: No name for event = #{log_type} "
     end
-    name_common_log
+    name_event
   end
 
 

@@ -58,6 +58,8 @@ module CommonLogs
             rollback_similars_profiles(common_log.id, current_user)
           when 4 #  Объединение деревьев
             rollback_connection_trees(common_log.id, current_user)
+          # when 5 #  Rename профиля
+          #   rollback_rename_profile(common_log.id, current_user)
           else
             @error = "Тип лога - не определен! common_log.log_type = #{common_log.log_type} "
         end
@@ -67,7 +69,7 @@ module CommonLogs
       logger.info "current_user.connected_users = #{current_user.connected_users.inspect}"
 
       # sims & search
-      search_event = 100
+      search_event = 7
       ::SearchResults.start_search_methods_in_thread(current_user, search_event)
 
       # SearchResults.start_search_methods(current_user)

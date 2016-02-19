@@ -33,28 +33,26 @@ module Meteor
           else
             puts "From Meteor - in Rails ConnectionRequests#make_request: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
             puts "Дерево - дубль! Действия по объединению деревьев - запрещены"
-            respond_with(errorCode: 403, message: "Возможно, Ваше - дубль! Действия по объединению деревьев - временно запрещены")
+            respond_with(errorCode: 403, message: "Возможно, Ваше Дерево - дубль! Действия по объединению деревьев - временно запрещены")
           end
 
-
-
         end
 
 
-        # @note: Start search for conn_request Counter-agent
-        def start_counter_search(with_user_id)
-
-          # certain_koeff = WeafamSetting.first.certain_koeff
-          # logger.info "In MakeRequestController: certain_koeff = #{certain_koeff} "
-          with_user = User.find(with_user_id)
-          logger.info "In MakeRequestController: with_user_id = #{with_user_id} "
-
-          ## ЗАПУСК ПОИСКА НАВСТРЕЧУ
-          with_user.start_search#(certain_koeff)
-          logger.info "In MakeRequestController: After start_search: @error = #{@error}  " if @error
-          logger.info "In MakeRequestController: After start_search"
-
-        end
+        # # @note: Start search for conn_request Counter-agent
+        # def start_counter_search(with_user_id)
+        #
+        #   # certain_koeff = WeafamSetting.first.certain_koeff
+        #   # logger.info "In MakeRequestController: certain_koeff = #{certain_koeff} "
+        #   with_user = User.find(with_user_id)
+        #   logger.info "In MakeRequestController: with_user_id = #{with_user_id} "
+        #
+        #   ## ЗАПУСК ПОИСКА НАВСТРЕЧУ
+        #   with_user.start_search#(certain_koeff)
+        #   logger.info "In MakeRequestController: After start_search: @error = #{@error}  " if @error
+        #   logger.info "In MakeRequestController: After start_search"
+        #
+        # end
 
 
 

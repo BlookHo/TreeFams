@@ -669,7 +669,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok'   do  # , focus: true
+    describe '- check User model Method <Search> - Ok' , focus: true  do  # , focus: true
 
 
       ######################################
@@ -1003,7 +1003,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     end
 
-    context '- check SearchResults model after run <search> module' , focus: true   do #  ,  focus: true
+    context '- check SearchResults model after run <search> module'    do #  ,  focus: true
       let(:search_event) { 100 }
       before { current_user_1.start_search(search_event) }
       describe '- check SearchResults have rows count after <search> - Ok' do
