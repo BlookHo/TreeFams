@@ -293,13 +293,12 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
       FactoryGirl.create(:connect_profile, :connect_profile_124)  # 124
 
+      # CommonLog
       FactoryGirl.create(:common_log, :log_actual_profile_172)    #
       FactoryGirl.create(:common_log, :log_actual_profile_173)    #
       FactoryGirl.create(:common_log, :log_actual_profile_23)    #
       FactoryGirl.create(:common_log, :log_actual_profile_24)    #
       FactoryGirl.create(:common_log, :log_actual_profile_29)    #
-
-
 
       # Tree
       FactoryGirl.create(:connection_trees)                        # 17 pr2
@@ -859,7 +858,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
           end
         end
 
-        describe 'Method select_tree_profiles in <start_search> <HAVE CommonLogs>: current_user_2, [1,2]'   do # , focus: true
+        describe 'Method select_tree_profiles in <start_search> <HAVE CommonLogs>: current_user_2, [1,2]' , focus: true   do # , focus: true
 
           before { FactoryGirl.create(:search_results, :correct2_1_connected) }
 
@@ -1097,7 +1096,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
       ######################################
 
-      describe '- check search_results after start_search in <Search Main> - Ok'  , focus: true  do  # , focus: true
+      describe '- check search_results after start_search in <Search Main> - Ok'    do  # , focus: true
 
         # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
         #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
@@ -1638,13 +1637,13 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
         context ' - check CommonLog table AFTER <connect_trees>' do
           describe '- check CommonLog have rows count - Ok ' do
-            let(:rows_qty) {1}
+            let(:rows_qty) {6}
             it_behaves_like :successful_common_logs_rows_count
           end
           it '- check CommonLog 1st & last row - Ok' do # , focus: true
             common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
             puts "Check CommonLog AFTER <connect_trees> \n"
-            expect(common_log_row_fields).to eq({"id"=>1, "user_id"=>1, "log_type"=>4, "log_id"=>3, "profile_id"=>17,
+            expect(common_log_row_fields).to eq({"id"=>6, "user_id"=>1, "log_type"=>4, "log_id"=>3, "profile_id"=>17,
                                                  "base_profile_id"=>14, "relation_id"=>999} )
           end
         end
@@ -1684,7 +1683,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
       end
 
-      describe '- check ConnectionRequest AFTER <connect_trees>'  do # , focus: true
+      describe '- check ConnectionRequest AFTER <connect_trees>'   do # , focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
@@ -1840,7 +1839,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
-        let(:common_log_id) { 1 }
+        let(:common_log_id) { 6 }
         let(:user_2_connected) { User.second }  # User = 2. Tree = [1,2]. profile_id = 11
 
         before {
@@ -1901,7 +1900,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
         end
 
         describe '- check CommonLog have rows count AFTER <disconnect_tree>' do
-          let(:rows_qty) {0}
+          let(:rows_qty) {5}
           it_behaves_like :successful_common_logs_rows_count
         end
       end
@@ -1933,7 +1932,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
-        let(:common_log_id) { 1 }
+        let(:common_log_id) { 6 }
 
         before {  # ConnectionRequest
           FactoryGirl.create(:connection_request, :conn_request_3_4)    # id = 5  done: true

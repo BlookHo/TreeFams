@@ -9,6 +9,8 @@ FactoryGirl.define do
     f.connected_users         { [1,2,100] }               # arr
     f.searched_profiles       { Faker::Number.number(5) } # int
     f.ave_profile_search_time { Faker::Number.positive(from = 1.00, to = 5000.00) } # float
+    f.all_tree_profiles       { Faker::Number.number(5) } # int
+    f.all_profiles            { Faker::Number.number(5) } # int
   end
 
   factory :search_service_logs, :class => 'SearchServiceLogs' do
@@ -19,6 +21,8 @@ FactoryGirl.define do
     connected_users          [1,2,10, 150]
     searched_profiles        15
     ave_profile_search_time  157.68
+    all_tree_profiles        26
+    all_profiles             156
 
     trait :correct2 do
       name                    "Удален профиль"
@@ -27,6 +31,8 @@ FactoryGirl.define do
       connected_users          [1,2,10, 150]
       searched_profiles        15
       ave_profile_search_time  137.68
+      all_tree_profiles        25
+      all_profiles             155
     end
 
     trait :correct3 do
@@ -36,6 +42,8 @@ FactoryGirl.define do
       connected_users          [1,2,10, 150]
       searched_profiles        15
       ave_profile_search_time  75.68
+      all_tree_profiles        25
+      all_profiles             155
     end
 
   end

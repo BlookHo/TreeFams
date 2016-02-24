@@ -63,6 +63,12 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
           FactoryGirl.create(:connect_profile, :connect_profile_16)  # 16
           FactoryGirl.create(:connect_profile, :connect_profile_17)  # 17
 
+          # WeafamStat
+          FactoryGirl.create(:weafam_stat, :weafam_stat_1)      #
+          FactoryGirl.create(:weafam_stat, :weafam_stat_2)      #
+          FactoryGirl.create(:weafam_stat, :weafam_stat_3)      #
+
+
         }
 
         after {
@@ -74,6 +80,8 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
           Profile.reset_pk_sequence
           SearchServiceLogs.delete_all
           SearchServiceLogs.reset_pk_sequence
+          WeafamStat.delete_all
+          WeafamStat.reset_pk_sequence
 
         }
 
@@ -89,10 +97,14 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
             let(:time) {  110.93 }
             let(:connected_users) { current_user_1.connected_users }
             let(:searched_profiles) { 16 }
+            let(:all_tree_profiles) { 26 }
+            let(:all_profiles) { 155 }
             let(:store_log_data) {{ search_event: search_event,
                                     time: time,
                                     connected_users: connected_users,
-                                    searched_profiles: searched_profiles  } }
+                                    searched_profiles: searched_profiles,
+                                    all_tree_profiles: all_tree_profiles,
+                                    all_profiles: all_profiles } }
 
             before { SearchServiceLogs.store_search_time_log(store_log_data) }
 
@@ -114,7 +126,8 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
               search_service_logs = SearchServiceLogs.find(1).attributes.except('created_at','updated_at')
               expect(search_service_logs).to eq({"id"=>1, "name"=>"Удален профиль", "search_event"=>2, "time"=>110.93,
                                                  "connected_users"=> [1, 2], "searched_profiles"=>16,
-                                                 "ave_profile_search_time"=> 6.93 } )
+                                                 "ave_profile_search_time"=> 6.93, "all_tree_profiles"=>26,
+                                                 "all_profiles"=>195 } )
             end
           end
 
