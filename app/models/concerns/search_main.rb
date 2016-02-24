@@ -126,8 +126,9 @@ module SearchMain
     puts "In all_tree_profiles: connected_users = #{connected_users.inspect}"
     author_tree_arr = Tree.get_connected_tree(connected_users) # DISTINCT-Массив объединенного дерева из Tree
     tree_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
-    tree_profiles.uniq #, connected_users
+    tree_profiles.uniq
   end
+
 
   # @note: method to reduce search field - space
   #   collect profiles to start search profiles list,
@@ -138,10 +139,14 @@ module SearchMain
   #   Rspec tested
   def select_tree_profiles(search_event)
     start_time = Time.now
-    # tree_profiles = []
     connected_users = self.connected_users
-    puts "In select_tree_profiles: connected_users = #{connected_users.inspect}"
-
+    all_tree_profiles_qty = 0
+    puts "In select_tree_profiles: connected_users = #{connected_users.inspect}, all_tree_profiles_qty = #{all_tree_profiles_qty.inspect}"
+    if connected_users.blank?
+      tree_profiles = []
+    else
+      all_tree_profiles = all_tree_profiles(connected_users)
+      all_tree_profiles_qty = all_tree_profiles.size unless all_tree_profiles.blank?
       case search_event
         when 1 # , 5  # create & (w/out rename) profile  or rename (5)
           puts "Action: search_event = #{search_event.inspect}: create (1)  profile in tree"
@@ -153,17 +158,22 @@ module SearchMain
 
         when 3, 4, 5, 6, 7, 100 # All other actions: connection, sign_up, rollback, similars_connection, home
           puts "Action Others in tree: search_event = #{search_event.inspect}"
-          tree_profiles = all_tree_profiles(connected_users)
+          tree_profiles = all_tree_profiles
 
         else  # ERROR: No actions - but start search
           puts "No Actions in tree - false search_start - False event: search_event = #{search_event.inspect}"
           tree_profiles = []
       end
+
+    end
     puts "In select_tree_profiles: tree_profiles = #{tree_profiles}"
     select_tree_profiles_time = (Time.now - start_time) * 1000
     puts  "\n Collect select_tree_profiles Time = #{select_tree_profiles_time.round(2)} msec.\n\n"
 
-    return tree_profiles, connected_users
+    { tree_profiles: tree_profiles,
+      connected_users: connected_users,
+      all_tree_profiles_qty: all_tree_profiles_qty }
+    # return tree_profiles, connected_users, all_tree_profiles_qty
   end
 
 
@@ -196,8 +206,11 @@ module SearchMain
     results = {}
 
     # NEW REDUCED VAR
-    tree_profiles, connected_users = select_tree_profiles(search_event)
-    puts "In search_tree_profiles: tree_profiles = #{tree_profiles} "
+    selected_profiles_data = select_tree_profiles(search_event)
+    puts "In search_tree_profiles: selected_profiles_data = #{selected_profiles_data} "
+    tree_profiles = selected_profiles_data[:tree_profiles]
+    connected_users = selected_profiles_data[:connected_users]
+    all_tree_profiles_qty = selected_profiles_data[:all_tree_profiles_qty]
 
     # PREV FULL VAR
    # connected_users = self.connected_users
@@ -248,7 +261,8 @@ module SearchMain
       store_log_data = { search_event:            search_event,
                          time:                    search_time,
                          connected_users:         connected_users,
-                         searched_profiles:       tree_profiles_size }
+                         searched_profiles:       tree_profiles_size,
+                         all_tree_profiles:       all_tree_profiles_qty }
       SearchServiceLogs.store_search_time_log(store_log_data)
 
     end

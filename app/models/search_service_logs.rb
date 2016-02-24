@@ -40,20 +40,26 @@ class SearchServiceLogs < ActiveRecord::Base
     search_event      = store_log_data[:search_event]
     time              = store_log_data[:time]
     connected_users   = store_log_data[:connected_users]
-    searched_profiles = store_log_data[:searched_profiles] # tree_profiles.size
+    searched_profiles = store_log_data[:searched_profiles] # selected searched tree_profiles.size
+    all_tree_profiles = store_log_data[:all_tree_profiles] # all profiles qty in tree
 
     name = LogType.name_log_type(search_event)
     logger.info "In SearchServiceLogs model #store_search_time_log : name = #{name.inspect} "
 
     ave_profile_search_time = (time.fdiv(searched_profiles.to_f)).round(2)
+
+    all_profiles = WeafamStat.last.profiles # all profiles qty in all trees - from statistics last row
+
     create({
            name:                    name,
            search_event:            search_event,
            time:                    time,
            connected_users:         connected_users,
            searched_profiles:       searched_profiles,
-           ave_profile_search_time: ave_profile_search_time
-       })
+           ave_profile_search_time: ave_profile_search_time,
+           all_tree_profiles:       all_tree_profiles,
+           all_profiles:            all_profiles
+           })
   end
 
 

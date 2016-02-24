@@ -45,7 +45,21 @@ FactoryGirl.define do
       pending_connect 1
       searched_connected [2]
       founded_connected [3]
+    end
 
+    trait :correct2_1_connected do
+      user_id 2
+      found_user_id 3
+      profile_id 1555
+      found_profile_id 1444
+      count 5
+      found_profile_ids [1444,22222, 333345]
+      searched_profile_ids [1555,27777, 333336]
+      counts [5,5]
+      connection_id 7
+      pending_connect 1
+      searched_connected [1,2]
+      founded_connected [3]
     end
 
     trait :correct3 do
