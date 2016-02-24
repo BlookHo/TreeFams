@@ -143,8 +143,8 @@ module SearchMain
     puts "In select_tree_profiles: connected_users = #{connected_users.inspect}"
 
       case search_event
-        when 1 # , 5  # create & (w/out rename) profile
-          puts "Action: search_event = #{search_event.inspect}: create (1) or rename (5) profile in tree"
+        when 1 # , 5  # create & (w/out rename) profile  or rename (5)
+          puts "Action: search_event = #{search_event.inspect}: create (1)  profile in tree"
           tree_profiles = logged_actual_profiles(:profile_id)
 
         when 2 # destroy profile

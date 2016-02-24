@@ -669,11 +669,38 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
 
     #############################################################################################
-    describe '- check User model Method <Search> - Ok' , focus: true  do  # , focus: true
+    describe '- check User model Methods in <Search Main> - Ok'   do  # , focus: true
 
 
       ######################################
       ######################################
+      describe 'Method all_tree_profiles(connected_users) in <start_search>:  ' , focus: true   do # , focus: true
+
+        context "- Check Method all_tree_profiles -"   do # , focus: true
+          # current_user_1, [1, 2]
+          # User = 1. Tree = [1,2]. profile_id = 17
+          let(:tree_profiles) { current_user_1.all_tree_profiles(connected_users) }
+          let(:current_profile) { Profile.find(current_user_1.profile_id) }
+          it '- check current_user_1.id - Ok' do
+            puts "before all_tree_profiles: current_user_1.profile_id = #{current_user_1.profile_id.inspect} \n"
+            expect(current_user_1.profile_id).to eq(17)
+          end
+          it '- check current_profile.id - Ok' do
+            puts "before all_tree_profiles: current_profile.id = #{current_profile.id.inspect} \n"
+            expect(current_profile.id).to eq(17)
+          end
+          it '- check After all_tree_profiles: tree_profiles.size - ' do
+            puts "After all_tree_profiles: tree_profiles.size = #{tree_profiles.size.inspect}"
+            expect(tree_profiles.size).to eq(18)
+          end
+          it '- check After all_tree_profiles: tree_profiles - ' do
+            puts "After all_tree_profiles: tree_profiles = #{tree_profiles.inspect}"
+            expect(tree_profiles.sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
+          end
+        end
+
+      end
+
 
       describe 'Method select_tree_profiles in <start_search> test'   do # , focus: true
 
