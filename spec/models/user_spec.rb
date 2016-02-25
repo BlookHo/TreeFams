@@ -1117,7 +1117,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
           puts "In User model: certain_koeff_for_connect = #{certain_koeff_for_connect} \n"   # 4
           expect(certain_koeff_for_connect).to eq(5)
         end
-        it "- Check search_results[:connected_author_arr] after start_search"  , focus: true  do
+        it "- Check search_results[:connected_author_arr] after start_search"   do
           puts "In User model: search_results[:connected_author_arr] = #{search_results[:connected_author_arr]} \n"
           expect(search_results[:connected_author_arr]).to eq([1,2])
         end
@@ -1381,7 +1381,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
     # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
     # :current_user_id=>1, :user_id=>3, :connection_id=>3}
-    describe '- check User model Method < check_connection_arrs(connection_data )>'     do  # , focus: true
+    describe '- check User model Method < check_connection_arrs(connection_data )>'   do  # , focus: true
       context '- when valid connection_data' do
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
@@ -1528,7 +1528,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################ CONNECTION - DISCONNECTION ###########################
 
-    describe '- check User model Method <connect_trees(connection_data)> - Ok'     do  # , focus: true
+    describe '- check User model Method <connect_trees(connection_data)> - Ok'       do  # , focus: true
       context '- check Tables count & fields values BEFORE connect_trees' do
         describe '- check all profile_ids in ProfileKey rows ' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
@@ -1832,7 +1832,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################  DISCONNECTION ###########################
 
-    describe '- check User model Method <disconnect> - Ok'   do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok' , focus: true  do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
