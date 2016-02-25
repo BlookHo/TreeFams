@@ -1,7 +1,7 @@
 
 RSpec.describe User, :type => :model    do  # , focus: true
 
-  describe '- validation' do
+  describe '- validation'    do
     before do
       @user = User.new( email: "new@nn.nn", password: '1111', profile_id:  1)
       @user.save
@@ -12,7 +12,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
       @profile.save
     end
 
-    describe '- on create' do
+    describe '- on create'   do
       context '- when valid user' do
         let(:user) {FactoryGirl.build(:user)}
         it '- saves a valid user' do
@@ -993,7 +993,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
       end
 
-      describe 'Method logged_actual_profiles in <start_search> test'   do # , focus: true
+      describe 'Method logged_actual_profiles in <start_search> test'    do # , focus: true
 
         describe 'Method logged_actual_profiles in <start_search> test: current_user_1, [1, 2]'  do # , focus: true
           context "- Check Method logged_actual_profiles -"   do  # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
@@ -1113,11 +1113,11 @@ RSpec.describe User, :type => :model    do  # , focus: true
           expect(weafam_stat_last_profiles).to eq(195)
         end
 
-        it "- Check certain_koeff_for_connect before start_search" do
+        it "- Check certain_koeff_for_connect before start_search"    do
           puts "In User model: certain_koeff_for_connect = #{certain_koeff_for_connect} \n"   # 4
           expect(certain_koeff_for_connect).to eq(5)
         end
-        it "- Check search_results[:connected_author_arr] after start_search" do
+        it "- Check search_results[:connected_author_arr] after start_search"  , focus: true  do
           puts "In User model: search_results[:connected_author_arr] = #{search_results[:connected_author_arr]} \n"
           expect(search_results[:connected_author_arr]).to eq([1,2])
         end
@@ -1524,7 +1524,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
         end
       end
 
-    end 
+    end
 
     ################ CONNECTION - DISCONNECTION ###########################
 
