@@ -34,7 +34,7 @@ module Meteor
           else
             puts "From Meteor - in Rails ConnectionRequests#yes_connect: current_user.id = #{@current_user.id}, current_user.double = #{@current_user.double}"
             puts "Дерево - дубль! Действия по объединению деревьев - запрещены"
-            respond_with(errorCode: 403, message: "Возможно, Ваше - дубль! Действия по объединению деревьев - временно запрещены")
+            respond_with(errorCode: 403, message: "Возможно, Ваше Дерево - дубль! Действия по объединению деревьев - временно запрещены")
           end
 
         end

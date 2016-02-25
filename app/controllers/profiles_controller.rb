@@ -50,7 +50,8 @@ class ProfilesController < ApplicationController
 
     # sims & search
     logger.info "In Profiles_controller: After creation_profile: start_search_methods "
-    SearchResults.start_search_methods(current_user)
+    search_event = 1
+    SearchResults.start_search_methods(current_user, search_event)
   end
 
 
@@ -66,7 +67,8 @@ class ProfilesController < ApplicationController
     else
       # sims & search
       puts "In Profiles_controller: After destroying_profile: start_search_methods "
-      SearchResults.start_search_methods(current_user)
+      search_event = 2
+      SearchResults.start_search_methods(current_user, search_event)
 
       respond_with(response)
     end
@@ -84,7 +86,9 @@ class ProfilesController < ApplicationController
 
     # sims & search
     puts "In Profiles_controller: After rename_profile: start_search_methods "
-    SearchResults.start_search_methods(current_user)
+
+    search_event = 5
+    SearchResults.start_search_methods(current_user, search_event)
   end
 
 

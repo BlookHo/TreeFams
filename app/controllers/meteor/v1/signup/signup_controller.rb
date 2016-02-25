@@ -28,6 +28,9 @@ module Meteor
             rescue Exception => e
               return render_json_error("Unknown signup error", @@endpoint, data)
             end
+            search_event = 6
+            ::SearchResults.start_search_methods_in_thread(user, search_event)
+            render json: {token: user.access_token}
           else
             render_json_error("Invalid user params", @@endpoint, data)
           end

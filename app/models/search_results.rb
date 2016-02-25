@@ -78,9 +78,26 @@ class SearchResults < ActiveRecord::Base
     where("#{current_user_id} = ANY (searched_connected)").exists?
   end
 
+  # @note Collect profiles from search results for current_user
+  #
+  def self.search_results_profiles(current_user_id)
+    puts "In collect search_results_profiles: current_user_id = #{current_user_id}"
+    searched_profiles = []
+    searched_profiles_query = where("#{current_user_id} = ANY (searched_connected)")
+    unless searched_profiles_query.blank?
+      puts "searched_profiles_query.size = #{searched_profiles_query.size}"
+      searched_profiles_query.each do |one_result|
+        searched_profiles = (searched_profiles + one_result.searched_profile_ids).uniq
+      end
+      # searched_profiles_query.map{ |one_result| searched_profiles =
+      #     (searched_profiles + one_result.searched_profile_ids).uniq }
+    end
+    puts "Collected searched_profile_ids = #{searched_profiles}"
+    searched_profiles
+  end
 
   # @note Run search methods in tread
-  def self.start_search_methods_in_thread(current_user)
+  def self.start_search_methods_in_thread(current_user, search_event)
     Thread.new do
       self.start_search_methods(current_user)
       #ActiveRecord::Base.connection_pool.with_connection do |conn|
@@ -88,6 +105,11 @@ class SearchResults < ActiveRecord::Base
         # ActiveRecord::Base.connection_pool.release_connection(conn)
         # ActiveRecord::Base.connection_handler.connection_pool_list.each(&:clear_stale_cached_connections!)
       # end
+      ActiveRecord::Base.connection_pool.with_connection do |conn|
+        self.start_search_methods(current_user, search_event)
+        ActiveRecord::Base.connection_pool.release_connection(conn)
+      end
+
     end
     current_size = ActiveRecord::Base.connection_pool.connections.size
     logger.info "== AR POOL SIZE LOG: {search.start_search_methods_in_thread} size: #{current_size}"
@@ -96,7 +118,7 @@ class SearchResults < ActiveRecord::Base
 
   # @note start search methods: # sims & search
   # first - similars, then - search if no sims results
-  def self.start_search_methods(current_user)
+  def self.start_search_methods(current_user, search_event)
     logger.info  "In start_search_methods: start_search_methods: current_user.id = #{current_user.id.inspect} "
 
     similars_results = current_user.start_similars
@@ -116,7 +138,7 @@ class SearchResults < ActiveRecord::Base
 
     if similars_results[:similars].blank?
       logger.info  "In start_search_methods: No Similars -> start search "
-      search_results = current_user.start_search
+      search_results = current_user.start_search(search_event)
       search_results
     else
       logger.info  "In start_search_methods: Similars in tree -> No start search "
@@ -573,7 +595,19 @@ class SearchResults < ActiveRecord::Base
     results_arrs
   end
 
-end
+  # @note: collect all results arrays
+  def self.search_results_exists?(current_user_id)
+    puts "In search_results_exists? current_user_id = #{current_user_id}"
+
+
+
+  end
+
+
+
+
+
+  end
 
 
 #58

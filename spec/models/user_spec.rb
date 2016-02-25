@@ -293,6 +293,13 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
       FactoryGirl.create(:connect_profile, :connect_profile_124)  # 124
 
+      # CommonLog
+      FactoryGirl.create(:common_log, :log_actual_profile_172)    #
+      FactoryGirl.create(:common_log, :log_actual_profile_173)    #
+      FactoryGirl.create(:common_log, :log_actual_profile_23)    #
+      FactoryGirl.create(:common_log, :log_actual_profile_24)    #
+      FactoryGirl.create(:common_log, :log_actual_profile_29)    #
+
       # Tree
       FactoryGirl.create(:connection_trees)                        # 17 pr2
       FactoryGirl.create(:connection_trees, :connect_tree_1_pr3)   # 17 pr3
@@ -326,12 +333,6 @@ RSpec.describe User, :type => :model    do  # , focus: true
       FactoryGirl.create(:connection_trees, :connect_tree_1_pr14)  # 11 pr14
 
       FactoryGirl.create(:connection_trees, :connect_tree_2_pr124) # 15 pr124
-
-      # puts "before All: Tree.last.id 12 = #{Tree.last.id}, .user_id 2 = #{Tree.last.user_id.inspect} \n"  #
-      # puts "before All: Tree.last.relation_id  6 = #{Tree.last.relation_id},
-      #          .profile_id 11 = #{Tree.last.profile_id.inspect}, name_id 48 = #{Tree.last.name_id.inspect},
-      #          .is_profile_id 14 = #{Tree.last.is_profile_id.inspect}   \n"  #
-      # puts "before All: Tree.9.id = #{Tree.find(9).id}, .name_id 82 = #{Tree.find(9).name_id} \n"  #
 
       #Profile_Key
       FactoryGirl.create(:connection_profile_keys)                             # 17  2
@@ -544,6 +545,11 @@ RSpec.describe User, :type => :model    do  # , focus: true
       FactoryGirl.create(:connection_request, :conn_request_3_1)    #
       FactoryGirl.create(:connection_request, :conn_request_3_2)    #
 
+
+      # WeafamStat
+      FactoryGirl.create(:weafam_stat, :weafam_stat_1)      #
+      FactoryGirl.create(:weafam_stat, :weafam_stat_2)      #
+      FactoryGirl.create(:weafam_stat, :weafam_stat_3)      #
     }
 
     after {
@@ -569,6 +575,8 @@ RSpec.describe User, :type => :model    do  # , focus: true
       UpdatesFeed.reset_pk_sequence
       SearchResults.delete_all
       SearchResults.reset_pk_sequence
+      WeafamStat.delete_all
+      WeafamStat.reset_pk_sequence
     }
 
     # create User parameters
@@ -588,6 +596,44 @@ RSpec.describe User, :type => :model    do  # , focus: true
         expect(connected_users).to eq([1,2])
       end
     end
+    describe 'Method Profile profile_circle test'   do # , focus: true
+      context "- Check Method profile_circle for one Profile=17 -"   do
+        let(:one_profile) { Profile.find(17) }
+        let(:circle_array) { one_profile.profile_circle(connected_users) }
+        it '- check one profile exists - Ok' do
+          puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+          expect(one_profile.id).to eq(17)
+        end
+        it '- check one profile Circle array size - Ok' do
+          expect(circle_array.size).to eq(15)
+        end
+        it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+          is_profiles_ids = []
+          circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id }
+          puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
+          expect(is_profiles_ids.uniq.sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 15, 16, 124])
+        end
+      end
+      context "- Check Method profile_circle for one Profile=11 -"   do
+        let(:one_profile) { Profile.find(11) }
+        let(:circle_array) { one_profile.profile_circle(connected_users) }
+        it '- check one profile exists - Ok' do
+          puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+          expect(one_profile.id).to eq(11)
+        end
+        it '- check one profile Circle array size - Ok' do
+          puts "in profile_circle: circle_array = #{circle_array.inspect} \n"
+          expect(circle_array.size).to eq(17)
+        end
+        it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+          is_profiles_ids = []
+          circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id }
+          puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
+          expect(is_profiles_ids.uniq.sort).to eq([2, 3, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
+        end
+      end
+    end
+
     context '- before actions - check tables values '  do   #   , focus: true
       describe '- check User have double == 0 before - Ok' do
         it "- current_user.double == 0 check" do
@@ -619,119 +665,544 @@ RSpec.describe User, :type => :model    do  # , focus: true
         let(:rows_qty) {4}
         it_behaves_like :successful_connection_request_rows_count
       end
+      describe '- check CommonLog have rows count before - Ok'   do  # CommonLog
+        let(:rows_qty) {5}
+        it_behaves_like :successful_common_logs_rows_count
+      end
+      describe '- check WeafamStat have rows count before - Ok'    do  # WeafamStat
+        let(:rows_qty) {3}
+        it_behaves_like :successful_weafam_stats_rows_count
+      end
+
 
     end
 
+
     #############################################################################################
-    describe '- check User model Method <Search> - Ok'  , focus: true  do  # , focus: true
+    describe '- check User model Methods in <Search Main> - Ok'    do  # , focus: true
 
-      # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
-      #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
-      #                          :profiles_to_destroy => [22, 29, 27, 25, 28, 23, 24, 26],
-      #                          :current_user_id => 2, :user_id => 3,:connection_id => 3 } }
+      ######################################
+      describe 'Method all_tree_profiles(connected_users) in <start_search>:  '   do # , focus: true
 
-      let(:certain_koeff_for_connect) { CERTAIN_KOEFF }  # 5
-      let(:search_results) { current_user_1.start_search }
-
-      it "- Check certain_koeff_for_connect before start_search" do
-        puts "In User model: certain_koeff_for_connect = #{certain_koeff_for_connect} \n"   # 4
-        expect(certain_koeff_for_connect).to eq(5)
-      end
-      # it "- Check search_results[:tree_profiles] after start_search" do
-      #   puts "In User model - SEARCH TASK : search_results[:tree_profiles] = #{search_results[:tree_profiles]} \n"
-      #   expect(search_results[:tree_profiles].sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
-      # end
-      it "- Check search_results[:connected_author_arr] after start_search" do
-        puts "In User model: search_results[:connected_author_arr] = #{search_results[:connected_author_arr]} \n"
-        expect(search_results[:connected_author_arr]).to eq([1,2])
-      end
-      # it "- Check search_results[:qty_of_tree_profiles] after start_search" do
-      #   puts "In User model: search_results[:qty_of_tree_profiles] = #{search_results[:qty_of_tree_profiles]} \n"
-      #   expect(search_results[:qty_of_tree_profiles]).to eq(18)
-      # end
-
-      # преобразование структуры из существующего search.rb  для обеспечения сортировки для теста и
-      # более корректного представления - для рефакторинга.
-      let(:result_arr_of_hashes) {
-        result_arr_of_hashes = []
-        search_results[:profiles_found_arr].each do |one_hash|
-          one_profile_hash = Hash.new
-          one_hash.each do |k,v|
-            one_profile_hash = { profile_searched: k, profiles_found: v}
+        context "- Check Method all_tree_profiles - User 1"    do # , focus: true
+          # current_user_1, [1, 2]
+          # User = 1. Tree = [1,2]. profile_id = 17
+          let(:tree_profiles) { current_user_1.all_tree_profiles(connected_users) }
+          let(:current_profile) { Profile.find(current_user_1.profile_id) }
+          it '- check current_user_1.id - Ok' do
+            puts "before all_tree_profiles: current_user_1.profile_id = #{current_user_1.profile_id.inspect} \n"
+            expect(current_user_1.profile_id).to eq(17)
           end
-          result_arr_of_hashes << one_profile_hash
+          it '- check current_profile.id - Ok' do
+            puts "before all_tree_profiles: current_profile.id = #{current_profile.id.inspect} \n"
+            expect(current_profile.id).to eq(17)
+          end
+          it '- check After all_tree_profiles: tree_profiles.size - ' do
+            puts "After all_tree_profiles: tree_profiles.size = #{tree_profiles.size.inspect}"
+            expect(tree_profiles.size).to eq(18)
+          end
+          it '- check After all_tree_profiles: tree_profiles - ' do
+            puts "After all_tree_profiles: tree_profiles = #{tree_profiles.inspect}"
+            expect(tree_profiles.sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
+          end
         end
-        result_arr_of_hashes
-      }
-      it "- Check search_results[:uniq_profiles_pairs] after start_search"  do
-        puts "In User model: search_results[:uniq_profiles_pairs] = #{search_results[:uniq_profiles_pairs]} \n"
-        # Структура - из существующего search.rb
-        # uniq_profiles_pairs =
-        # {20=>{3=>28}, 12=>{3=>23}, 13=>{3=>24}, 14=>{3=>22}, 21=>{3=>29}, 18=>{3=>26}, 11=>{3=>25}, 19=>{3=>27}}
-        # или
-        #  uniq_profiles_pairs = {135=>{12=>94}, 129=>{12=>110, 13=>110, 14=>104}} - перед
-        # init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_pairs)
-        expect(search_results[:uniq_profiles_pairs].sort_by { |k,v| k }).to eq(
-              # преобразованная структура
-              [[11, {3=>25}], [12, {3=>23}], [13, {3=>24}], [14, {3=>22}], [18, {3=>26}], [19, {3=>27}],
-               [20, {3=>28}], [21, {3=>29}]] )
-        # init_connection_hash = {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  - перед
-        # profiles_to_rewrite, profiles_to_destroy = hard_complete_search(init_connection_hash)
-      end
-      it "- Check search_results[:by_profiles] after start_search" do
-        puts "In User model: search_results[:by_profiles][3] = #{search_results[:by_profiles][3]} \n"
-        expect(search_results[:by_profiles].sort_by { |hsh| hsh[:search_profile_id] }).to eq( [
-        # Сортированная структура - из существующего search.rb
-        {:search_profile_id=>11, :found_tree_id=>3, :found_profile_id=>25, :count=>7},
-        {:search_profile_id=>12, :found_tree_id=>3, :found_profile_id=>23, :count=>7},
-        {:search_profile_id=>13, :found_tree_id=>3, :found_profile_id=>24, :count=>7},
-        {:search_profile_id=>14, :found_tree_id=>3, :found_profile_id=>22, :count=>7},
-        {:search_profile_id=>18, :found_tree_id=>3, :found_profile_id=>26, :count=>5},
-        {:search_profile_id=>19, :found_tree_id=>3, :found_profile_id=>27, :count=>5},
-        {:search_profile_id=>20, :found_tree_id=>3, :found_profile_id=>28, :count=>5},
-        {:search_profile_id=>21, :found_tree_id=>3, :found_profile_id=>29, :count=>5}])
+
+        context "- Check Method all_tree_profiles - User 2"    do # , focus: true
+          let(:current_user_2) { User.find(2) }  # User = user_2 user.id = 2. Tree = [1,2]. profile_id = 11
+          let(:tree_profiles) { current_user_2.all_tree_profiles(connected_users) }
+          let(:current_profile) { Profile.find(current_user_2.profile_id) }
+          it '- check current_user_2.id - Ok' do
+            puts "before all_tree_profiles: current_user_2.profile_id = #{current_user_2.profile_id.inspect} \n"
+            expect(current_user_2.profile_id).to eq(11)
+          end
+          it '- check current_profile.id - Ok' do
+            puts "before all_tree_profiles: current_profile.id = #{current_profile.id.inspect} \n"
+            expect(current_profile.id).to eq(11)
+          end
+          it '- check After all_tree_profiles: tree_profiles.size - ' do
+            puts "After all_tree_profiles: tree_profiles.size = #{tree_profiles.size.inspect}"
+            expect(tree_profiles.size).to eq(18)
+          end
+          it '- check After all_tree_profiles: tree_profiles - ' do
+            puts "After all_tree_profiles: tree_profiles = #{tree_profiles.inspect}"
+            expect(tree_profiles.sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124])
+          end
+        end
+
+        context "- Check Method all_tree_profiles - User 3"    do # , focus: true
+          let(:current_user_3) { User.find(3) }  # User = user_3 user.id = 3. Tree = [3]. profile_id = 22
+          let(:connected_users_3) { current_user_3.connected_users }  # connected_users = [3]
+          let(:tree_profiles) { current_user_3.all_tree_profiles(connected_users_3) }
+          let(:current_profile) { Profile.find(current_user_3.profile_id) }
+          it '- check current_user_3.id - Ok' do
+            puts "before all_tree_profiles: current_user_3.profile_id = #{current_user_3.profile_id.inspect} \n"
+            expect(current_user_3.profile_id).to eq(22)
+          end
+          it '- check current_user_3.connected_users - Ok' do
+            puts "before all_tree_profiles: current_user_3.connected_users = #{current_user_3.connected_users.inspect} \n"
+            expect(current_user_3.connected_users).to eq([3])
+          end
+          it '- check current_profile.id - Ok' do
+            puts "before all_tree_profiles: current_profile.id = #{current_profile.id.inspect} \n"
+            expect(current_profile.id).to eq(22)
+          end
+          it '- check After all_tree_profiles: tree_profiles.size - ' do
+            puts "After all_tree_profiles: tree_profiles.size = #{tree_profiles.size.inspect}"
+            expect(tree_profiles.size).to eq(8)
+          end
+          it '- check After all_tree_profiles: tree_profiles - ' do
+            puts "After all_tree_profiles: tree_profiles = #{tree_profiles.inspect}"
+            expect(tree_profiles.sort).to eq([22, 23, 24, 25, 26, 27, 28, 29])
+          end
+        end
+
       end
 
-      let(:found_profiles_arr_sorted) { search_results[:by_trees][0][:found_profile_ids].sort }
-      let(:found_tree) { search_results[:by_trees][0][:found_tree_id] }
-      it "- Check search_results[:by_trees] after start_search"  do  #, focus: true
-        puts "In User model: search_results[:by_trees] = #{search_results[:by_trees]} \n"
-        # Структура - из существующего search.rb
-        # search_results[:by_trees] = {:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}
-        expect(found_tree).to eq(3)
-        expect(found_profiles_arr_sorted).to eq([22, 23, 24, 25, 26, 27, 28, 29])
-      end
-      it "- Check search_results[:duplicates_one_to_many] after start_search" do
-        puts "In User model: search_results[:duplicates_one_to_many] = #{search_results[:duplicates_one_to_many]} \n"
-        expect(search_results[:duplicates_one_to_many]).to eq({})
-      end
-      it "- Check search_results[:duplicates_many_to_one] after start_search" do
-        puts "In User model: search_results[:duplicates_many_to_one] = #{search_results[:duplicates_many_to_one]} \n"
-        expect(search_results[:duplicates_many_to_one]).to eq({})
+
+      describe 'Method select_tree_profiles in <start_search> test'   do # , focus: true
+
+        describe 'Method select_tree_profiles in <start_search> : Wrong connected_users'   do # , focus: true
+          context "- Check Method select_tree_profiles -"   do #
+            let(:search_event) { 1 }
+            let(:current_user_10) {FactoryGirl.create(:user, :user_10 )}  # User = 10. Tree = nil. profile_id = 93
+            # let(:current_user_10) { User.find(10) }
+            let(:wrong_connected_users) {current_user_10.connected_users}
+            let(:selected_profiles_data) { current_user_10.select_tree_profiles(search_event) }
+            it '- check current_user_10.id - Ok' do
+              puts "before select_tree_profiles: current_user_10.profile_id = #{current_user_10.profile_id.inspect} \n"
+              expect(current_user_10.profile_id).to eq(93)
+            end
+            it '- check current_user_8.connected_users - Ok' do
+              puts "before select_tree_profiles: wrong_connected_users = #{wrong_connected_users.inspect} \n"
+              expect(wrong_connected_users).to eq(nil)
+            end
+            it '- check After select_tree_profiles: tree_profiles - ' do
+              puts "After select_tree_profiles: tree_profiles = #{selected_profiles_data[:tree_profiles].inspect}"
+              expect(selected_profiles_data[:tree_profiles].sort).to eq([])
+            end
+            it '- check After select_tree_profiles: all_tree_profiles_qty - ' do
+              puts "After select_tree_profiles: all_tree_profiles_qty = #{selected_profiles_data[:all_tree_profiles_qty].inspect}"
+              expect(selected_profiles_data[:all_tree_profiles_qty]).to eq(0) # when Wrong connected_users = blank
+            end
+            it '- check After select_tree_profiles: Quantities of all_tree_profiles_qty and selected tree profiles qty - ' do
+              puts "After select_tree_profiles: Quantities: tree_profiles.size = #{selected_profiles_data[:tree_profiles].size.inspect}"
+              expect(selected_profiles_data[:tree_profiles].size - selected_profiles_data[:all_tree_profiles_qty]).to eq(0)
+            end
+          end
+        end
+
+
+        describe 'Method select_tree_profiles in <start_search> : current_user_1, [1, 2]'   do # , focus: true
+          context "- Check Method select_tree_profiles -"   do # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
+            let(:search_event) { 1 }
+            let(:selected_profiles_data) { current_user_1.select_tree_profiles(search_event) }
+            let(:current_profile) { Profile.find(current_user_1.profile_id) }
+            it '- check current_user_1.id - Ok' do
+              puts "before select_tree_profiles: current_user_1.profile_id = #{current_user_1.profile_id.inspect} \n"
+              expect(current_user_1.profile_id).to eq(17)
+            end
+            it '- check current_profile.id - Ok' do
+              puts "before select_tree_profiles: current_profile.id = #{current_profile.id.inspect} \n"
+              expect(current_profile.id).to eq(17)
+            end
+            it '- check After select_tree_profiles: connected_users - ' do
+              puts "After select_tree_profiles: connected_users = #{selected_profiles_data[:connected_users].inspect}"
+              expect(selected_profiles_data[:connected_users]).to eq([1,2])
+            end
+            it '- check After select_tree_profiles: tree_profiles - ' do
+              puts "After select_tree_profiles, with profiles from SearchResults: tree_profiles = #{selected_profiles_data[:tree_profiles].inspect}"
+              expect(selected_profiles_data[:tree_profiles].sort).to eq([11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25,
+                                                                     26, 27, 28, 29])
+            end
+            it '- check After select_tree_profiles: all_tree_profiles_qty - ' do
+              puts "After select_tree_profiles: all_tree_profiles_qty = #{selected_profiles_data[:all_tree_profiles_qty].inspect}"
+              expect(selected_profiles_data[:all_tree_profiles_qty]).to eq(18)
+            end
+            it '- check After select_tree_profiles: Quantities of all_tree_profiles_qty and selected tree profiles qty - ' do
+              puts "After select_tree_profiles: Quantities: tree_profiles.size = #{selected_profiles_data[:tree_profiles].size.inspect}"
+              expect(selected_profiles_data[:tree_profiles].size - selected_profiles_data[:all_tree_profiles_qty]).to eq(-2)
+            end
+          end
+        end
+
+        describe 'Method select_tree_profiles in <start_search> : current_user_1, [1, 2]'   do # , focus: true
+          context "- Check Method select_tree_profiles -"   do # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
+            let(:search_event) { 6 }
+            let(:selected_profiles_data) { current_user_1.select_tree_profiles(search_event) }
+            let(:current_profile) { Profile.find(current_user_1.profile_id) }
+            it '- check current_user_1.id - Ok' do
+              puts "before select_tree_profiles: current_user_1.profile_id = #{current_user_1.profile_id.inspect} \n"
+              expect(current_user_1.profile_id).to eq(17)
+            end
+            it '- check current_profile.id - Ok' do
+              puts "before select_tree_profiles: current_profile.id = #{current_profile.id.inspect} \n"
+              expect(current_profile.id).to eq(17)
+            end
+            it '- check After select_tree_profiles: connected_users - ' do
+              puts "After select_tree_profiles: connected_users = #{selected_profiles_data[:connected_users].inspect}"
+              expect(selected_profiles_data[:connected_users]).to eq([1,2])
+            end
+            it '- check After select_tree_profiles: complete tree_profiles - ' do
+              puts "After select_tree_profiles: tree_profiles = #{selected_profiles_data[:tree_profiles].inspect}"
+              expect(selected_profiles_data[:tree_profiles].sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+                                                                     19, 20, 21, 124])
+            end
+            it '- check After select_tree_profiles: all_tree_profiles_qty - ' do
+              puts "After select_tree_profiles: all_tree_profiles_qty = #{selected_profiles_data[:all_tree_profiles_qty].inspect}"
+              expect(selected_profiles_data[:all_tree_profiles_qty]).to eq(18)
+            end
+            it '- check After select_tree_profiles: Quantities of all_tree_profiles_qty and selected tree profiles qty - ' do
+              puts "After select_tree_profiles: Quantities: tree_profiles.size = all_tree_profiles_qty = #{selected_profiles_data[:tree_profiles].size.inspect}"
+              expect(selected_profiles_data[:tree_profiles].size).to eq(selected_profiles_data[:all_tree_profiles_qty])
+            end
+          end
+        end
+
+        describe 'Method select_tree_profiles in <start_search> <HAVE CommonLogs>: current_user_2, [1,2]'    do # , focus: true
+
+          before { FactoryGirl.create(:search_results, :correct2_1_connected) }
+
+          context "- Check Method select_tree_profiles -"   do  # , focus: true
+            let(:current_user_2) { User.find(2) }  # User = user_2 user.id = 2. Tree = [1,2]. profile_id = 11
+            let(:search_event) { 2 }
+            let(:selected_profiles_data) { current_user_2.select_tree_profiles(search_event) }
+            it '- check current_user_2.id - Ok' do
+              puts "before select_tree_profiles: current_user_2.profile_id = #{current_user_2.profile_id.inspect} \n"
+              expect(current_user_2.profile_id).to eq(11)
+            end
+            it '- check current_user_2.connected_users - ' do
+              puts "After select_tree_profiles: current_user_2.connected_users = #{current_user_2.connected_users.inspect}"
+              expect(current_user_2.connected_users).to eq([1,2])
+            end
+            it '- check After select_tree_profiles:  connected_users - ' do
+              puts "After select_tree_profiles: connected_users = #{selected_profiles_data[:connected_users].inspect}"
+              expect(selected_profiles_data[:connected_users]).to eq([1,2])
+            end
+            it '- check After select_tree_profiles: tree_profiles - ' do
+              puts "After select_tree_profiles with profiles from SearchResults: tree_profiles = #{selected_profiles_data[:tree_profiles].inspect}"
+              expect(selected_profiles_data[:tree_profiles].sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+                                                                     19, 20, 21, 124, 1555, 27777, 333336])
+            end
+            it '- check After select_tree_profiles: all_tree_profiles_qty - ' do
+              puts "After select_tree_profiles: all_tree_profiles_qty = #{selected_profiles_data[:all_tree_profiles_qty].inspect}"
+              expect(selected_profiles_data[:all_tree_profiles_qty]).to eq(18)
+            end
+            it '- check After select_tree_profiles: Quantities of all_tree_profiles_qty and selected tree profiles qty - ' do
+              puts "After select_tree_profiles: Quantities: tree_profiles.size = all_tree_profiles_qty = #{selected_profiles_data[:tree_profiles].size.inspect}"
+              expect(selected_profiles_data[:tree_profiles].size - selected_profiles_data[:all_tree_profiles_qty]).to eq(3)
+            end
+          end
+        end
+
+        describe 'Method select_tree_profiles in <start_search> test <HAVE CommonLogs>: current_user_3, [3]'   do # , focus: true
+          context "- Check Method select_tree_profiles -"   do
+            let(:current_user_3) { User.find(3) }  # User = user_3 user.id = 3. Tree = [3]. profile_id = 22
+            let(:search_event) { 1 }
+            let(:selected_profiles_data) { current_user_3.select_tree_profiles(search_event) }
+
+            it '- check current_user_3.id - Ok' do
+              puts "before select_tree_profiles: current_user_3.profile_id = #{current_user_3.profile_id.inspect} \n"
+              expect(current_user_3.profile_id).to eq(22)
+            end
+            it '- check current_user_3.connected_users - ' do
+              puts "After select_tree_profiles: current_user_3.connected_users = #{current_user_3.connected_users.inspect}"
+              expect(current_user_3.connected_users).to eq([3])
+            end
+            it '- check After select_tree_profiles:  connected_users - ' do
+              puts "After select_tree_profiles: connected_users = #{selected_profiles_data[:connected_users].inspect}"
+              expect(selected_profiles_data[:connected_users]).to eq([3])
+            end
+            it '- check After select_tree_profiles: tree_profiles - ' do
+              puts "After select_tree_profiles: tree_profiles = #{selected_profiles_data[:tree_profiles].inspect}"
+              expect(selected_profiles_data[:tree_profiles].sort).to eq([22, 23, 24, 25, 26, 27, 28, 29])
+            end
+            it '- check After select_tree_profiles: all_tree_profiles_qty - ' do
+              puts "After select_tree_profiles: all_tree_profiles_qty = #{selected_profiles_data[:all_tree_profiles_qty].inspect}"
+              expect(selected_profiles_data[:all_tree_profiles_qty]).to eq(8)
+            end
+            it '- check After select_tree_profiles: Quantities of all_tree_profiles_qty and selected tree profiles qty - ' do
+              puts "After select_tree_profiles: Quantities: tree_profiles.size = all_tree_profiles_qty = #{selected_profiles_data[:tree_profiles].size.inspect}"
+              expect(selected_profiles_data[:tree_profiles].size - selected_profiles_data[:all_tree_profiles_qty]).to eq(0)
+            end
+          end
+        end
+
+        describe 'Method select_tree_profiles in <start_search> test <HAVE CommonLogs>: current_user_3, [3]'   do # , focus: true
+          context "- Check Method select_tree_profiles -"   do  # , focus: true
+            let(:current_user_3) { User.find(3) }  # User = user_3 user.id = 3. Tree = [3]. profile_id = 22
+            let(:search_event) { 100 }
+            let(:selected_profiles_data) { current_user_3.select_tree_profiles(search_event) }
+            it '- check current_user_3.id - Ok' do
+              puts "before select_tree_profiles: current_user_3.profile_id = #{current_user_3.profile_id.inspect} \n"
+              expect(current_user_3.profile_id).to eq(22)
+            end
+            it '- check current_user_3.connected_users - ' do
+              puts "After select_tree_profiles: current_user_3.connected_users = #{current_user_3.connected_users.inspect}"
+              expect(current_user_3.connected_users).to eq([3])
+            end
+            it '- check After select_tree_profiles:  connected_users - ' do
+              puts "After select_tree_profiles: connected_users = #{selected_profiles_data[:connected_users].inspect}"
+              expect(selected_profiles_data[:connected_users]).to eq([3])
+            end
+            it '- check After select_tree_profiles: tree_profiles - ' do
+              puts "After select_tree_profiles: tree_profiles = #{selected_profiles_data[:tree_profiles].inspect}"
+              expect(selected_profiles_data[:tree_profiles].sort).to eq([22, 23, 24, 25, 26, 27, 28, 29])
+            end
+            it '- check After select_tree_profiles: all_tree_profiles_qty - ' do
+              puts "After select_tree_profiles: all_tree_profiles_qty = #{selected_profiles_data[:all_tree_profiles_qty].inspect}"
+              expect(selected_profiles_data[:all_tree_profiles_qty]).to eq(8)
+            end
+            it '- check After select_tree_profiles: Quantities of all_tree_profiles_qty and selected tree profiles qty - ' do
+              puts "After select_tree_profiles: Quantities: tree_profiles.size = all_tree_profiles_qty = #{selected_profiles_data[:tree_profiles].size.inspect}"
+              expect(selected_profiles_data[:tree_profiles].size - selected_profiles_data[:all_tree_profiles_qty]).to eq(0)
+            end
+          end
+        end
+
+        describe 'Method select_tree_profiles in <start_search>: current_user_4, [4] - should be Error and Empty tree_profiles '   do # , focus: true
+          context "- Check Method select_tree_profiles <NO CommonLogs> -"    do  # , focus: true
+            let(:current_user_4) { User.find(4) }  # User = user_4 user.id = 4. Tree = [4]. profile_id = 444
+            let(:search_event) { 1 }
+            let(:selected_profiles_data) { current_user_4.select_tree_profiles(search_event) }
+            it '- check current_user_4.id - Ok' do
+              puts "before select_tree_profiles: current_user_4.profile_id = #{current_user_4.profile_id.inspect} \n"
+              expect(current_user_4.profile_id).to eq(444)
+            end
+            it '- check current_user_3.connected_users - ' do
+              puts "After select_tree_profiles: current_user_3.connected_users = #{current_user_4.connected_users.inspect}"
+              expect(current_user_4.connected_users).to eq([4])
+            end
+            it '- check After select_tree_profiles:  connected_users - ' do
+              puts "After select_tree_profiles: connected_users = #{selected_profiles_data[:connected_users].inspect}"
+              expect(selected_profiles_data[:connected_users]).to eq([4])
+            end
+            it '- check After select_tree_profiles: tree_profiles - ' do
+              puts "After select_tree_profiles when <NO CommonLogs> : tree_profiles = #{selected_profiles_data[:tree_profiles].inspect}"
+              expect(selected_profiles_data[:tree_profiles].sort).to eq([])
+            end
+            it '- check After select_tree_profiles: all_tree_profiles_qty - ' do
+              puts "After select_tree_profiles: all_tree_profiles_qty = #{selected_profiles_data[:all_tree_profiles_qty].inspect}"
+              expect(selected_profiles_data[:all_tree_profiles_qty]).to eq(1)
+            end
+            it '- check After select_tree_profiles: Quantities of all_tree_profiles_qty and selected tree profiles qty - ' do
+              puts "After select_tree_profiles: Quantities: tree_profiles.size = all_tree_profiles_qty = #{selected_profiles_data[:tree_profiles].size.inspect}"
+              expect(selected_profiles_data[:tree_profiles].size - selected_profiles_data[:all_tree_profiles_qty]).to eq(-1)
+            end
+          end
+        end
+
       end
 
-      # search_results = {:connected_author_arr=>[1, 2], :qty_of_tree_profiles=>18,
-      # :uniq_profiles_pairs=>{
-      # 20=>{3=>28}, 12=>{3=>23}, 13=>{3=>24}, 14=>{3=>22}, 21=>{3=>29}, 18=>{3=>26}, 11=>{3=>25}, 19=>{3=>27}},
-      # :profiles_with_match_hash=>{25=>7, 22=>7, 24=>7, 23=>7, 27=>5, 26=>5, 29=>5, 28=>5},
-      # :by_profiles=>[
-      # {:search_profile_id=>11, :found_tree_id=>3, :found_profile_id=>25, :count=>7},
-      # {:search_profile_id=>14, :found_tree_id=>3, :found_profile_id=>22, :count=>7},
-      # {:search_profile_id=>13, :found_tree_id=>3, :found_profile_id=>24, :count=>7},
-      # {:search_profile_id=>12, :found_tree_id=>3, :found_profile_id=>23, :count=>7},
-      # {:search_profile_id=>19, :found_tree_id=>3, :found_profile_id=>27, :count=>5},
-      # {:search_profile_id=>18, :found_tree_id=>3, :found_profile_id=>26, :count=>5},
-      # {:search_profile_id=>21, :found_tree_id=>3, :found_profile_id=>29, :count=>5},
-      # {:search_profile_id=>20, :found_tree_id=>3, :found_profile_id=>28, :count=>5}],
-      # :by_trees=>[
-      # {:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}],
-      # :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+      describe 'Method logged_actual_profiles in <start_search> test'   do # , focus: true
 
+        describe 'Method logged_actual_profiles in <start_search> test: current_user_1, [1, 2]'  do # , focus: true
+          context "- Check Method logged_actual_profiles -"   do  # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
+            let(:name_actual_profile) { :profile_id }
+            let(:tree_profiles) { current_user_1.logged_actual_profiles(name_actual_profile) }
+            let(:current_profile) { Profile.find(current_user_1.profile_id) }
+            it '- check current_user_1.id - Ok' do
+              puts "before logged_actual_profiles: current_user_1.profile_id = #{current_user_1.profile_id.inspect} \n"
+              expect(current_user_1.profile_id).to eq(17)
+            end
+            it '- check name_actual_profile - Ok' do
+              puts "before logged_actual_profiles: name_actual_profile = #{name_actual_profile.inspect} \n"
+              expect(name_actual_profile).to eq(:profile_id)
+            end
+            it '- check current_profile.id - Ok' do
+              puts "before logged_actual_profiles: current_profile.id = #{current_profile.id.inspect} \n"
+              expect(current_profile.id).to eq(17)
+            end
+            it '- check After logged_actual_profiles: tree_profiles - ' do
+              puts "After logged_actual_profiles: tree_profiles = #{tree_profiles.inspect}"
+              expect(tree_profiles.sort).to eq([11, 12, 13, 14, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29])
+            end
+          end
+        end
+
+        describe 'Method logged_actual_profiles in <start_search> test: current_user_2, [1, 2]'  do # , focus: true
+          context "- Check Method logged_actual_profiles -"   do  # , focus: true
+            let(:current_user_2) { User.second }  # User = 2. Tree = [1,2]. profile_id = 11
+            let(:name_actual_profile) { :base_profile_id }
+            let(:tree_profiles) { current_user_2.logged_actual_profiles(name_actual_profile) }
+            let(:current_profile) { Profile.find(current_user_2.profile_id) } # 11
+            it '- check user_2_connected.id - Ok' do
+              puts "before logged_actual_profiles: current_user_2.profile_id = #{current_user_2.profile_id.inspect} \n"
+              expect(current_user_2.profile_id).to eq(11)
+            end
+            it '- check name_actual_profile - Ok' do
+              puts "before logged_actual_profiles: name_actual_profile = #{name_actual_profile.inspect} \n"
+              expect(name_actual_profile).to eq(:base_profile_id)
+            end
+            it '- check current_profile.id - Ok' do
+              puts "before logged_actual_profiles: current_profile.id = #{current_profile.id.inspect} \n"
+              expect(current_profile.id).to eq(11)
+            end
+            it '- check After logged_actual_profiles: tree_profiles - ' do
+              puts "After logged_actual_profiles with profiles from SearchResults: tree_profiles = #{tree_profiles.inspect}"
+              expect(tree_profiles.sort).to eq([2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 124,
+                                                1555, 27777])
+            end
+          end
+        end
+
+        describe 'Method logged_actual_profiles in <start_search> test: current_user_3, [3]'  do # , focus: true
+          context "- Check Method logged_actual_profiles -"   do  # , focus: true
+            let(:current_user_3) { User.third }  # User = 3. Tree = [3]. profile_id = 22
+            let(:name_actual_profile) { :profile_id }
+            let(:tree_profiles) { current_user_3.logged_actual_profiles(name_actual_profile) }
+            let(:current_profile) { Profile.find(current_user_3.profile_id) } # 22
+            it '- check user_3_connected.id - Ok' do
+              puts "before logged_actual_profiles: current_user_3.profile_id = #{current_user_3.profile_id.inspect} \n"
+              expect(current_user_3.profile_id).to eq(22)
+            end
+            it '- check name_actual_profile - Ok' do
+              puts "before logged_actual_profiles: name_actual_profile = #{name_actual_profile.inspect} \n"
+              expect(name_actual_profile).to eq(:profile_id)
+            end
+            it '- check current_profile.id - Ok' do
+              puts "before logged_actual_profiles: current_profile.id = #{current_profile.id.inspect} \n"
+              expect(current_profile.id).to eq(22)
+            end
+            it '- check After logged_actual_profiles: tree_profiles - ' do
+              puts "After logged_actual_profiles: tree_profiles = #{tree_profiles.inspect}"
+              expect(tree_profiles.sort).to eq([22, 23, 24, 25, 26, 27, 28, 29])
+            end
+          end
+        end
+
+
+        describe 'Method logged_actual_profiles in <start_search> test: current_user_4, [4]'    do # , focus: true
+          context "- Check Method logged_actual_profiles <NO CommonLogs> - should be Error and Empty tree_profiles - "   do  # , focus: true
+            let(:current_user_4) { User.find(4) }  # User = user_4 user.id = 4. Tree = [4]. profile_id = 444
+            let(:name_actual_profile) { "profile_id" }
+
+            let(:tree_profiles) { current_user_4.logged_actual_profiles(name_actual_profile) }
+            it '- check current_user_4.id - Ok' do
+              puts "before logged_actual_profiles: current_user_4.profile_id = #{current_user_4.profile_id.inspect} \n"
+              expect(current_user_4.profile_id).to eq(444)
+            end
+            it '- check current_user_3.connected_users - ' do
+              puts "After logged_actual_profiles: current_user_3.connected_users = #{current_user_4.connected_users.inspect}"
+              expect(current_user_4.connected_users).to eq([4])
+            end
+            it '- check After logged_actual_profiles: tree_profiles - ' do
+              puts "After logged_actual_profiles when <NO CommonLogs> : tree_profiles = #{tree_profiles.inspect}"
+              expect(tree_profiles.sort).to eq([])
+            end
+          end
+        end
+
+      end
+
+      ######################################
+
+      describe '- check search_results after start_search in <Search Main> - Ok'    do  # , focus: true
+
+        # let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
+        #                          :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
+        #                          :profiles_to_destroy => [22, 29, 27, 25, 28, 23, 24, 26],
+        #                          :current_user_id => 2, :user_id => 3,:connection_id => 3 } }
+        let(:search_event) { 100 }
+
+        let(:certain_koeff_for_connect) { CERTAIN_KOEFF }  # 5
+        let(:search_results) { current_user_1.start_search(search_event) }
+        let(:weafam_stat_last_profiles) { WeafamStat.last.profiles }
+
+        it "- Check weafam_stat_last_profiles before start_search"   do
+          puts "In User model: weafam_stat_last_profiles = #{weafam_stat_last_profiles} \n"   # 4
+          expect(weafam_stat_last_profiles).to eq(195)
+        end
+
+        it "- Check certain_koeff_for_connect before start_search" do
+          puts "In User model: certain_koeff_for_connect = #{certain_koeff_for_connect} \n"   # 4
+          expect(certain_koeff_for_connect).to eq(5)
+        end
+        it "- Check search_results[:connected_author_arr] after start_search" do
+          puts "In User model: search_results[:connected_author_arr] = #{search_results[:connected_author_arr]} \n"
+          expect(search_results[:connected_author_arr]).to eq([1,2])
+        end
+
+        # преобразование структуры из существующего search.rb  для обеспечения сортировки для теста и
+        # более корректного представления - для рефакторинга.
+        let(:result_arr_of_hashes) {
+          result_arr_of_hashes = []
+          search_results[:profiles_found_arr].each do |one_hash|
+            one_profile_hash = Hash.new
+            one_hash.each do |k,v|
+              one_profile_hash = { profile_searched: k, profiles_found: v}
+            end
+            result_arr_of_hashes << one_profile_hash
+          end
+          result_arr_of_hashes
+        }
+        it "- Check search_results[:uniq_profiles_pairs] after start_search"  do
+          puts "In User model: search_results[:uniq_profiles_pairs] = #{search_results[:uniq_profiles_pairs]} \n"
+          # Структура - из существующего search.rb
+          # uniq_profiles_pairs =
+          # {20=>{3=>28}, 12=>{3=>23}, 13=>{3=>24}, 14=>{3=>22}, 21=>{3=>29}, 18=>{3=>26}, 11=>{3=>25}, 19=>{3=>27}}
+          # или
+          #  uniq_profiles_pairs = {135=>{12=>94}, 129=>{12=>110, 13=>110, 14=>104}} - перед
+          # init_connection_hash = make_init_connection_hash(with_whom_connect_users_arr, uniq_profiles_pairs)
+          expect(search_results[:uniq_profiles_pairs].sort_by { |k,v| k }).to eq(
+                # преобразованная структура
+                [[11, {3=>25}], [12, {3=>23}], [13, {3=>24}], [14, {3=>22}], [18, {3=>26}], [19, {3=>27}],
+                 [20, {3=>28}], [21, {3=>29}]] )
+        end
+        it "- Check search_results[:by_profiles] after start_search" do
+          puts "In User model: search_results[:by_profiles][3] = #{search_results[:by_profiles][3]} \n"
+          expect(search_results[:by_profiles].sort_by { |hsh| hsh[:search_profile_id] }).to eq( [
+          # Сортированная структура - из существующего search.rb
+          {:search_profile_id=>11, :found_tree_id=>3, :found_profile_id=>25, :count=>7},
+          {:search_profile_id=>12, :found_tree_id=>3, :found_profile_id=>23, :count=>7},
+          {:search_profile_id=>13, :found_tree_id=>3, :found_profile_id=>24, :count=>7},
+          {:search_profile_id=>14, :found_tree_id=>3, :found_profile_id=>22, :count=>7},
+          {:search_profile_id=>18, :found_tree_id=>3, :found_profile_id=>26, :count=>5},
+          {:search_profile_id=>19, :found_tree_id=>3, :found_profile_id=>27, :count=>5},
+          {:search_profile_id=>20, :found_tree_id=>3, :found_profile_id=>28, :count=>5},
+          {:search_profile_id=>21, :found_tree_id=>3, :found_profile_id=>29, :count=>5}])
+        end
+
+        let(:found_profiles_arr_sorted) { search_results[:by_trees][0][:found_profile_ids].sort }
+        let(:found_tree) { search_results[:by_trees][0][:found_tree_id] }
+        it "- Check search_results[:by_trees] after start_search"  do  #, focus: true
+          puts "In User model: search_results[:by_trees] = #{search_results[:by_trees]} \n"
+          # Структура - из существующего search.rb
+          # search_results[:by_trees] = {:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}
+          expect(found_tree).to eq(3)
+          expect(found_profiles_arr_sorted).to eq([22, 23, 24, 25, 26, 27, 28, 29])
+        end
+        it "- Check search_results[:duplicates_one_to_many] after start_search" do
+          puts "In User model: search_results[:duplicates_one_to_many] = #{search_results[:duplicates_one_to_many]} \n"
+          expect(search_results[:duplicates_one_to_many]).to eq({})
+        end
+        it "- Check search_results[:duplicates_many_to_one] after start_search" do
+          puts "In User model: search_results[:duplicates_many_to_one] = #{search_results[:duplicates_many_to_one]} \n"
+          expect(search_results[:duplicates_many_to_one]).to eq({})
+        end
+
+        # search_results = {:connected_author_arr=>[1, 2], :qty_of_tree_profiles=>18,
+        # :uniq_profiles_pairs=>{
+        # 20=>{3=>28}, 12=>{3=>23}, 13=>{3=>24}, 14=>{3=>22}, 21=>{3=>29}, 18=>{3=>26}, 11=>{3=>25}, 19=>{3=>27}},
+        # :profiles_with_match_hash=>{25=>7, 22=>7, 24=>7, 23=>7, 27=>5, 26=>5, 29=>5, 28=>5},
+        # :by_profiles=>[
+        # {:search_profile_id=>11, :found_tree_id=>3, :found_profile_id=>25, :count=>7},
+        # {:search_profile_id=>14, :found_tree_id=>3, :found_profile_id=>22, :count=>7},
+        # {:search_profile_id=>13, :found_tree_id=>3, :found_profile_id=>24, :count=>7},
+        # {:search_profile_id=>12, :found_tree_id=>3, :found_profile_id=>23, :count=>7},
+        # {:search_profile_id=>19, :found_tree_id=>3, :found_profile_id=>27, :count=>5},
+        # {:search_profile_id=>18, :found_tree_id=>3, :found_profile_id=>26, :count=>5},
+        # {:search_profile_id=>21, :found_tree_id=>3, :found_profile_id=>29, :count=>5},
+        # {:search_profile_id=>20, :found_tree_id=>3, :found_profile_id=>28, :count=>5}],
+        # :by_trees=>[
+        # {:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}],
+        # :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
+
+      end
     end
 
     context '- check SearchResults model after run <search> module'    do #  ,  focus: true
- #     let(:certain_koeff_for_connect) { CERTAIN_CONNECT }  # 4
-      before { current_user_1.start_search }
+      let(:search_event) { 100 }
+      before { current_user_1.start_search(search_event) }
       describe '- check SearchResults have rows count after <search> - Ok' do
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
@@ -813,29 +1284,23 @@ RSpec.describe User, :type => :model    do  # , focus: true
         search_results_fields = search_results_fourth_row.counts.sort
         expect(search_results_fields).to eq( [5, 5, 5, 5, 7, 7, 7, 7])
       end
-
     end
 
     ############################################################################################
-    describe '- check User model Method <complete_search> - Ok'  , focus: true   do  #   , focus: true
+    describe '- check User model Method <complete_search> - Ok'    do  #   , focus: true
 
-      # [inf] with_whom_connect_users_arr = [3], uniq_profiles_pairs = {15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27}, 11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155}, 3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} (pid:4353)
       context '- when valid complete_search_data' do
         let(:complete_search_data) { {
             :with_whom_connect => [3],
             :uniq_profiles_pairs => { 15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
-                                      11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
-                                     20=>{3=>28} }
-            # :certain_koeff => CERTAIN_CONNECT
-        } }
-
+                                      11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139}, 20=>{3=>28} }
+                                      } }
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Valid Complete search result: final_connection_hash after <complete_search>" do
           puts "In User model: final_connection_hash = #{final_connection_hash} \n"
           expect(final_connection_hash).to eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26} )
         end
-
       end
 
       context '- when Invalid complete_search_data - with_whom_connect: wrong = [4]' do
@@ -844,10 +1309,8 @@ RSpec.describe User, :type => :model    do  # , focus: true
             :uniq_profiles_pairs => { 15=>{9=>85, 11=>128}, 14=>{3=>22}, 21=>{3=>29}, 19=>{3=>27},
                                       11=>{3=>25, 11=>127, 9=>87}, 2=>{9=>172, 11=>139},
                                       20=>{3=>28}, 16=>{9=>88, 11=>125}, 17=>{9=>86, 11=>126}, 12=>{3=>23, 11=>155} ,
-                                      3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}}
-        } }
+                                      3=>{9=>173, 11=>154}, 13=>{3=>24, 11=>156}, 124=>{9=>91}, 18=>{3=>26}} } }
 
-        # let(:certain_koeff_for_connect) { CERTAIN_CONNECT }
         let(:final_connection_hash) { current_user_1.complete_search(complete_search_data) }
 
         it "- Check Invalid Complete search result: final_connection_hash == {} " do
@@ -859,14 +1322,13 @@ RSpec.describe User, :type => :model    do  # , focus: true
           expect(final_connection_hash).to_not eq( {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24} )
         end
       end
-
     end
 
     ############################################################################################
-    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -'  , focus: true  do  #   , focus: true
+    describe '- check two Profiles Equality w/Exclusions - in SearchCircles - for <complete_search> -'   do  #   , focus: true
 
-      context '- check one pair of UNIQ correct profiles -' do
-        # let(:uniq_profiles) { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
+      context '- check one pair of UNIQ correct profiles with exclusions -' do
+        # :uniq_profiles { {14=>22, 21=>29, 19=>27, 11=>25, 20=>28, 12=>23, 13=>24, 18=>26}  }
         let(:one_profile_t) { 14 }
         let(:two_profile_t) { 22 }
         let(:equality) {  SearchCircles.compare_profiles_exclusions(one_profile_t, two_profile_t) }
@@ -919,7 +1381,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
     #  connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
     # :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18], :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
     # :current_user_id=>1, :user_id=>3, :connection_id=>3}
-    describe '- check User model Method < check_connection_arrs(connection_data )>' , focus: true   do  # , focus: true
+    describe '- check User model Method < check_connection_arrs(connection_data )>'     do  # , focus: true
       context '- when valid connection_data' do
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
@@ -1066,7 +1528,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################ CONNECTION - DISCONNECTION ###########################
 
-    describe '- check User model Method <connect_trees(connection_data)> - Ok'  , focus: true    do  # , focus: true
+    describe '- check User model Method <connect_trees(connection_data)> - Ok'     do  # , focus: true
       context '- check Tables count & fields values BEFORE connect_trees' do
         describe '- check all profile_ids in ProfileKey rows ' do
           let(:profiles_ids_arr) {[2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9,
@@ -1175,13 +1637,13 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
         context ' - check CommonLog table AFTER <connect_trees>' do
           describe '- check CommonLog have rows count - Ok ' do
-            let(:rows_qty) {1}
+            let(:rows_qty) {6}
             it_behaves_like :successful_common_logs_rows_count
           end
           it '- check CommonLog 1st & last row - Ok' do # , focus: true
             common_log_row_fields = CommonLog.last.attributes.except('created_at','updated_at')
             puts "Check CommonLog AFTER <connect_trees> \n"
-            expect(common_log_row_fields).to eq({"id"=>1, "user_id"=>1, "log_type"=>4, "log_id"=>3, "profile_id"=>17,
+            expect(common_log_row_fields).to eq({"id"=>6, "user_id"=>1, "log_type"=>4, "log_id"=>3, "profile_id"=>17,
                                                  "base_profile_id"=>14, "relation_id"=>999} )
           end
         end
@@ -1221,7 +1683,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
       end
 
-      describe '- check ConnectionRequest AFTER <connect_trees>'  do # , focus: true
+      describe '- check ConnectionRequest AFTER <connect_trees>'   do # , focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
@@ -1370,14 +1832,14 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################  DISCONNECTION ###########################
 
-    describe '- check User model Method <disconnect> - Ok' , focus: true  do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok'   do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
-        let(:common_log_id) { 1 }
+        let(:common_log_id) { 6 }
         let(:user_2_connected) { User.second }  # User = 2. Tree = [1,2]. profile_id = 11
 
         before {
@@ -1438,7 +1900,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
         end
 
         describe '- check CommonLog have rows count AFTER <disconnect_tree>' do
-          let(:rows_qty) {0}
+          let(:rows_qty) {5}
           it_behaves_like :successful_common_logs_rows_count
         end
       end
@@ -1470,7 +1932,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
                                 :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
                                 :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
                                 :current_user_id=>1, :user_id=>3, :connection_id=>3} }
-        let(:common_log_id) { 1 }
+        let(:common_log_id) { 6 }
 
         before {  # ConnectionRequest
           FactoryGirl.create(:connection_request, :conn_request_3_4)    # id = 5  done: true

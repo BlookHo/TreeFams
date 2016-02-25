@@ -1,19 +1,16 @@
 # encoding: utf-8
 
-WeafamStat.delete_all
-WeafamStat.reset_pk_sequence
-WeafamStat.create([
+LogType.delete_all
+LogType.reset_pk_sequence
+LogType.create([
 
-{users: 0, users_male: 0, users_female: 0, profiles: 0, profiles_male: 0, profiles_female: 0,trees: 0, invitations: 0, requests: 0, connections: 0, refuse_requests: 0, disconnections: 0, similars_found: 0 }
+{type_number: 1, table_name: 'adds_logs'},
+{type_number: 2, table_name: 'deletions_logs'},
+{type_number: 3, table_name: 'similars_logs'},
+{type_number: 4, table_name: 'connections_logs'},
+{type_number: 5, table_name: 'renames_logs'},
+{type_number: 6, table_name: 'sign_ups'},
+{type_number: 7, table_name: 'rollbacks common_logs'},
+{type_number: 100, table_name: 'home in rails, etc.'}
 
-])
-
-
-
-Counter.delete_all
-Counter.reset_pk_sequence
-Counter.create([
-
-{invites: 0, disconnects: 0}
-
-                  ])
+               ])

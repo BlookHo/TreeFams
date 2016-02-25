@@ -4,6 +4,38 @@ module CommonLogs
 
   module ClassMethods
 
+    # @note: collect of all actual profiles from their circles (two rows) and search results  , descend
+    def get_action_data(current_user_id)
+      action_common_log = where(user_id: current_user_id).order('created_at desc').first
+
+      if action_common_log.blank?
+        nil
+      else
+        action_data = action_common_log.attributes.except('id','created_at','updated_at')
+        puts "In get_action_data: action_data = #{action_data}"
+
+        log_type = action_common_log.log_type
+        puts "In get_action_data: log_type = #{log_type}"
+
+        profile_id = action_common_log.profile_id
+        puts "In get_action_data: profile_id = #{profile_id}"
+
+        base_profile_id = action_common_log.base_profile_id
+        puts "In get_action_data: base_profile_id = #{base_profile_id}"
+
+        {log_type: log_type,
+         profile_id: profile_id,
+         base_profile_id: base_profile_id
+        }
+      end
+
+    end
+
+
+
+
+
+
     # @note: основной метод запуска возврата дерева в состояние на выбранную дату
     def rollback(rollback_id, current_user)
       logger.info "START In rollback module: current_user.id = #{current_user.id}  "
@@ -26,6 +58,8 @@ module CommonLogs
             rollback_similars_profiles(common_log.id, current_user)
           when 4 #  Объединение деревьев
             rollback_connection_trees(common_log.id, current_user)
+          # when 5 #  Rename профиля
+          #   rollback_rename_profile(common_log.id, current_user)
           else
             @error = "Тип лога - не определен! common_log.log_type = #{common_log.log_type} "
         end
@@ -35,7 +69,8 @@ module CommonLogs
       logger.info "current_user.connected_users = #{current_user.connected_users.inspect}"
 
       # sims & search
-      ::SearchResults.start_search_methods_in_thread(current_user)
+      search_event = 7
+      ::SearchResults.start_search_methods_in_thread(current_user, search_event)
 
       # SearchResults.start_search_methods(current_user)
 

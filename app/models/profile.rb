@@ -58,10 +58,29 @@ class Profile < ActiveRecord::Base
     p "In model Profile - rename: profile_id = #{self.id}, new_name_id = #{new_name_id}, new_name.sex_id = #{new_name.sex_id}"
 
     if new_name.sex_id == self.sex_id
+
+      # # Make rename CommonLog
+      # current_log_type = 5  # rename
+      # new_log_number = CommonLog.new_log_id(base_profile.tree_id, current_log_type)
+      #
+      # common_log_data = { user_id:         self.id,
+      #                     log_type:        current_log_type,
+      #                     log_id:          new_log_number,
+      #                     profile_id:      profile_id,
+      #                     base_profile_id: base_profile.id,
+      #                     new_relation_id: new_relation_id  } # 444 - destroying_profile
+      # # Запись строки Общего лога в таблицу CommonLog
+      # CommonLog.create_common_log(common_log_data)
+      #
+      #######################################################
+
+
       self.rename_in_profile(new_name_id)
       Tree.rename_in_tree(self.id, new_name_id)
       ProfileKey.rename_in_profile_key(self.id, new_name_id)
       puts "Профиль успешно переименован на имя #{new_name.name}."
+
+
     else
       puts "Error:400 Выбрано имя не того пола, что Профиль: с имени #{self.name_id} на имя #{new_name}."
     end
@@ -69,24 +88,65 @@ class Profile < ActiveRecord::Base
   end
 
 
-  # @note: collect of all actual profiles from any action
-  def collect_actual_profiles(action_profile_id, current_user)
-
-    action_profiles = profiles_in_action(action_profile_id)
-
-    search_results_profiles = previous_results_profiles(current_user)
-
-    action_profiles + search_results_profiles
-
+  # @note: Main circle method - ИСПОЛЬЗУЕТСЯ В METHOD "SEARCH MAIN"
+  #   МЕТОД Получения circle для любого одного профиля из дерева
+  # @input: [connected_users_arr]
+  # @output: circle_profiles_arr =
+  #   [{"profile_id"=>17, "name_id"=>28, "relation_id"=>1, "is_profile_id"=>2, "is_name_id"=>122},
+  #    {"profile_id"=>17, "name_id"=>28, "relation_id"=>2, "is_profile_id"=>3, "is_name_id"=>82},
+  #    {"profile_id"=>17, "name_id"=>28, "relation_id"=>3, "is_profile_id"=>15, "is_name_id"=>370}, ....
+  def profile_circle(connected_users_arr)
+    found_profile_circle = ProfileKey.one_profile_circle(connected_users_arr, self)
+    if found_profile_circle.blank?
+      puts "Error in profile_circle: No circle для Профиля = #{self.id}, connected_users_arr = #{connected_users_arr}"
+      []
+    else
+      found_profile_circle # Найден circle of profile=self
+    end
   end
 
-  # @note: collect of actual profiles, connecting with action
-  def profiles_in_action(action_profile_id)
-    action_profiles = [action_profile_id]
-    action_profile_id
 
-    action_profiles
+  # @note: collect of all actual profiles from their circles (two rows) and search results
+  def collect_actual_profiles(action_profile_id, current_user_id)
+    start_time = Time.now
+    circle_of_profile, first_row_profiles = SearchCircles.have_profile_circle(action_profile_id)
+    puts "In collect_actual_profiles:  circle_of_profile = #{circle_of_profile},  first_row_profiles = #{first_row_profiles}"
+
+    # first_row_profiles = profiles_in_action(action_profile_id)
+    two_rows_action_profiles = second_row_profiles(first_row_profiles, action_profile_id)
+    # puts "In collect_actual_profiles: two_rows_action_profiles = #{two_rows_action_profiles}"
+
+    search_results_profiles = SearchResults.search_results_profiles(current_user_id)
+    # puts "In collect_actual_profiles: search_results_profiles = #{search_results_profiles}"
+
+    actual_profiles = ([action_profile_id] + two_rows_action_profiles + search_results_profiles).uniq
+    # puts "In collect_actual_profiles: actual_profiles = #{actual_profiles.inspect}"
+
+    collect_actual_profiles_time = (Time.now - start_time) * 1000
+    puts  "\n Collect_actual_profiles Time = #{collect_actual_profiles_time.round(2)} msec.\n\n"
+
+    actual_profiles
   end
+
+
+
+  # @note: collect of actual profiles, - second row
+  #   share/backup pg_dump -U weafamdb weafam > weafam_backup.bak
+  def second_row_profiles(first_row_profiles, action_profile_id)
+    second_row_profiles = first_row_profiles + [action_profile_id]
+    puts "In second: Before have_profile_circle: second_row_profiles = #{second_row_profiles}"
+    first_row_profiles.each do |one_first_row_profile|
+      circle_of_profile, circle_is_profiles = SearchCircles.have_profile_circle(one_first_row_profile)
+      puts "In second:  circle_is_profiles = #{circle_is_profiles}"
+      unless circle_is_profiles.blank?
+        second_row_profiles = (second_row_profiles + circle_is_profiles).uniq
+        puts "In second:  growing second_row_profiles = #{second_row_profiles}"
+      end
+    end
+    second_row_profiles
+  end
+
+
 
   # @note: collect of actual profiles, from previous search results,
   # of current_user

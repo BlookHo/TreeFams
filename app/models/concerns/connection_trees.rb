@@ -32,7 +32,8 @@ module ConnectionTrees
     beg_search_time = Time.now   # Начало отсечки времени поиска
 
     with_whom_connect_users_arr = User.find(user_id).get_connected_users  #
-    search_results = self.start_search
+    search_event = 4
+    search_results = self.start_search(search_event)
 
     logger.info "after start_search: search_results = #{search_results} "
     # # [inf] @@@@@@ Search Results: search_results

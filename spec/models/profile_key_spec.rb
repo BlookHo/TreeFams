@@ -1992,7 +1992,7 @@ RSpec.describe ProfileKey, :type => :model  do # , focus: true
             Relation.reset_pk_sequence
           }
 
-          context '- before action <add_new_profile> - check created data' do
+          context '- before action <add_new_profile> - check created data'  , focus: true  do
             puts "Before action Add Wife- data created \n"  #
             it "- Return proper connected_users Array result for current_user_id = 1" do
               expect(connected_users).to eq([9])

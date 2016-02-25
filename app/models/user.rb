@@ -1,10 +1,11 @@
 class User < ActiveRecord::Base
 
-  include SearchModified        # модифицированный основной метод поиска, , с отработкой исключений противоречий
+  include SearchMain            # модифицированный основной метод поиска, , с отработкой исключений противоречий
                                 # между найденными профилями
-  # include Search                # OLD метод поиска
+  include SearchActualProfiles  # определение актуальных профилей - для основного поиска
   include SearchComplete        # метод полного поиска
   include SearchHelper          # Исп-ся в Search,  SimilarsCompleteSearch
+
   include ConnectionTrees       # основной метод объединения деревьев
   include DisconnectionTrees    # основной метод разъединения деревьев
 

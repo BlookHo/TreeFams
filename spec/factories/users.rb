@@ -25,11 +25,13 @@ FactoryGirl.define do
     trait :user_4 do
       profile_id 444
       email "mail_4@pe.pe"
+      connected_users [4]
     end
 
     trait :user_5 do
       profile_id 555
       email "mail_5@pe.pe"
+      connected_users [5]
     end
 
     trait :user_6 do
@@ -50,10 +52,12 @@ FactoryGirl.define do
     trait :user_9 do              # before
       profile_id 85
       email "add_petr@pe.pe"
+      connected_users [9]
     end
-    trait :user_10 do
+    trait :user_10 do  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       profile_id 93
       email "add_darja@da.da"
+      connected_users nil   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     end
 
     trait :user_11 do
@@ -76,11 +80,14 @@ FactoryGirl.define do
       email "alexey@al.al"
       password '11111'
       double 0
+      connected_users [1,2]
+
     end
     trait :user_2_connected do        # For [1, 2] connected trees test
       profile_id 11
       email "aneta@an.an"
       password '11111'
+      connected_users [1,2]
     end
     trait :user_3_to_connect do        # For [3] to be connected [1,2,3] trees test
       profile_id 22
@@ -159,6 +166,14 @@ FactoryGirl.define do
       email "fedor_iva@fe.fe"
       password '1111'
       connected_users [47]
+    end
+
+    trait :user_11 do
+      id 11
+      profile_id 666
+      email "fuser_11@uu.uu"
+      password '1111'
+      connected_users [10,11,12]
     end
 
   end

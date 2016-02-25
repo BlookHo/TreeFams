@@ -16,7 +16,8 @@ module Meteor
               puts "in Rails Profiles#rename: profile.id = #{profile.id}, name.id = #{name.id}"
 
               p "In met/v1/../ProfilesRenameController: After rename: start_search_methods "
-              ::SearchResults.start_search_methods_in_thread(@current_user)
+              search_event = 5
+              ::SearchResults.start_search_methods_in_thread(@current_user, search_event)
 
               respond_with(status:200)
             else
@@ -26,7 +27,7 @@ module Meteor
           else
             puts "From Meteor - in Rails Profiles#rename: @current_user.id = #{@current_user.id}, @current_user.double = #{@current_user.double}"
             puts "Дерево - дубль! Действия по переименованию профиля - запрещены"
-            respond_with(errorCode: 403, message: "Возможно, Ваше - дубль! Действия по переименованию профиля - временно запрещены")
+            respond_with(errorCode: 403, message: "Возможно, Ваше Дерево - дубль! Действия по переименованию профиля - временно запрещены")
           end
 
         end

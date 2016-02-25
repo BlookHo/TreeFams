@@ -14,8 +14,10 @@ module ProfileDestroying
       error = "Вы можете удалить только последнего родственника в цепочке"
     else
 
+      new_relation_id = 444
       tree_row = Tree.where(is_profile_id: profile_id)
-      new_relation_id = tree_row[0].relation_id
+      new_relation_id = tree_row[0].relation_id unless tree_row.blank?
+
       # Профиль, от которого растет удаляемый
       base_profile = Profile.find(tree_row[0].profile_id)  #
 
@@ -30,7 +32,7 @@ module ProfileDestroying
                           log_id:          new_log_number,
                           profile_id:      profile_id,
                           base_profile_id: base_profile.id,
-                          new_relation_id: new_relation_id  }
+                          new_relation_id: new_relation_id  } # 444 - destroying_profile
       # Запись строки Общего лога в таблицу CommonLog
       CommonLog.create_common_log(common_log_data)
 
@@ -44,16 +46,11 @@ module ProfileDestroying
             table: table.table_name
         }
         log_table_del = log_table_rows_deleted(destroy_table_data)
-        deletion_tables_logs = deletion_tables_logs +  log_table_del
+        deletion_tables_logs = deletion_tables_logs + log_table_del
       end
 
       # Запись массива лога в таблицу DeletionLog
       DeletionLog.store_deletion_log(deletion_tables_logs) unless deletion_tables_logs.blank?
-
-      # Previous version
-      # Tree.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
-      # ProfileKey.where("is_profile_id = ? OR profile_id = ?", profile.id, profile.id).map(&:destroy)
-
 
       # ##########  UPDATES FEEDS - № 18  # destroy ###################
       # update_feed_data = { user_id:           self.id,    #
@@ -68,13 +65,7 @@ module ProfileDestroying
       # Mark profile as deleted
       profile.update_attribute('deleted', 1)
 
-      # sims & search
-      # puts "In Rails Concern: After destroying_profile: start_search_methods "
-      # puts "In ProfileDestroying: In destroying_profile: self.id = #{self.id} "
-      # SearchResults.start_search_methods(self)
-
     end
-
     response = error ? {status: 403, message: error} : {status: 200, message: "Профиль удален"}
     puts response
     response
