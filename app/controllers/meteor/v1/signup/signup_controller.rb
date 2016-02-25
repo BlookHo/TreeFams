@@ -23,14 +23,12 @@ module Meteor
                 user = User.create_user_account_with_json_data(data, password)
               end
               send_user_email(user, password)
-              ::SearchResults.start_search_methods_in_thread(user)
+              search_event = 6
+              ::SearchResults.start_search_methods_in_thread(user, search_event)
               return render json: {token: user.access_token}
             rescue Exception => e
               return render_json_error("Unknown signup error", @@endpoint, data)
             end
-            search_event = 6
-            ::SearchResults.start_search_methods_in_thread(user, search_event)
-            render json: {token: user.access_token}
           else
             render_json_error("Invalid user params", @@endpoint, data)
           end

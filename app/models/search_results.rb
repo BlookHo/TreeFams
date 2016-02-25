@@ -99,7 +99,6 @@ class SearchResults < ActiveRecord::Base
   # @note Run search methods in tread
   def self.start_search_methods_in_thread(current_user, search_event)
     Thread.new do
-      self.start_search_methods(current_user)
       #ActiveRecord::Base.connection_pool.with_connection do |conn|
         # self.start_search_methods(current_user)
         # ActiveRecord::Base.connection_pool.release_connection(conn)
