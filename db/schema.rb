@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(version: 20160224115706) do
   enable_extension "plpgsql"
 
   create_table "admins", force: :cascade do |t|
-    t.string   "email",           limit: 255
-    t.string   "password_digest", limit: 255
+    t.string   "email"
+    t.string   "password_digest"
     t.datetime "logged_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -56,9 +56,9 @@ ActiveRecord::Schema.define(version: 20160224115706) do
     t.integer  "connected_at"
     t.integer  "current_user_id"
     t.integer  "with_user_id"
-    t.string   "table_name",      limit: 255
+    t.string   "table_name"
     t.integer  "table_row"
-    t.string   "field",           limit: 255
+    t.string   "field"
     t.integer  "written"
     t.integer  "overwritten"
     t.datetime "created_at"
@@ -91,9 +91,9 @@ ActiveRecord::Schema.define(version: 20160224115706) do
   create_table "deletion_logs", force: :cascade do |t|
     t.integer  "log_number"
     t.integer  "current_user_id"
-    t.string   "table_name",      limit: 255
+    t.string   "table_name"
     t.integer  "table_row"
-    t.string   "field",           limit: 255
+    t.string   "field"
     t.integer  "written"
     t.integer  "overwritten"
     t.datetime "created_at"
@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 20160224115706) do
 
   create_table "log_types", force: :cascade do |t|
     t.integer  "type_number"
-    t.string   "table_name",  limit: 255
+    t.string   "table_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -125,21 +125,19 @@ ActiveRecord::Schema.define(version: 20160224115706) do
   end
 
   create_table "names", force: :cascade do |t|
-    t.string   "name",           limit: 255
+    t.string   "name"
     t.boolean  "only_male"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "name_freq",                  default: 0
-    t.boolean  "is_approved",                default: false
+    t.integer  "name_freq",      default: 0
+    t.boolean  "is_approved",    default: false
     t.integer  "sex_id"
     t.integer  "parent_name_id"
     t.integer  "search_name_id"
-    t.integer  "status_id",                  default: 0
+    t.integer  "status_id",      default: 0
   end
 
   add_index "names", ["name", "sex_id"], name: "index_names_on_name_and_sex_id", unique: true, using: :btree
-  add_index "names", ["name"], name: "index_names_on_name", using: :btree
-  add_index "names", ["only_male"], name: "index_names_on_only_male", using: :btree
   add_index "names", ["status_id"], name: "index_names_on_status_id", using: :btree
 
   create_table "pending_users", force: :cascade do |t|
@@ -152,15 +150,15 @@ ActiveRecord::Schema.define(version: 20160224115706) do
 
   create_table "profile_data", force: :cascade do |t|
     t.integer  "profile_id"
-    t.string   "last_name",       limit: 255
+    t.string   "last_name"
     t.text     "biography"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "birthday",        limit: 255
-    t.string   "country",         limit: 255
-    t.string   "city",            limit: 255
-    t.integer  "deleted",                     default: 0
-    t.string   "avatar_mongo_id", limit: 255
+    t.string   "birthday"
+    t.string   "country"
+    t.string   "city"
+    t.string   "avatar_mongo_id"
+    t.integer  "deleted",         default: 0
   end
 
   add_index "profile_data", ["profile_id"], name: "index_profile_data_on_profile_id", using: :btree
@@ -195,13 +193,13 @@ ActiveRecord::Schema.define(version: 20160224115706) do
   add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "relations", force: :cascade do |t|
-    t.string   "relation",              limit: 255
+    t.string   "relation"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "relation_id"
-    t.string   "relation_rod_padej",    limit: 255, default: ""
+    t.string   "relation_rod_padej",    default: ""
     t.integer  "reverse_relation_id"
-    t.string   "reverse_relation",      limit: 255, default: ""
+    t.string   "reverse_relation",      default: ""
     t.integer  "origin_profile_sex_id"
   end
 
@@ -228,16 +226,16 @@ ActiveRecord::Schema.define(version: 20160224115706) do
   add_index "search_results", ["user_id"], name: "index_search_results_on_user_id", using: :btree
 
   create_table "search_service_logs", force: :cascade do |t|
-    t.string   "name",                    limit: 255
+    t.string   "name"
     t.integer  "search_event"
-    t.float    "time",                                default: 0.0
-    t.integer  "connected_users",                     default: [],  array: true
+    t.float    "time",                    default: 0.0
+    t.integer  "connected_users",         default: [],  array: true
     t.integer  "searched_profiles"
-    t.float    "ave_profile_search_time",             default: 0.0
+    t.float    "ave_profile_search_time", default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "all_tree_profiles",                   default: 0
-    t.integer  "all_profiles",                        default: 0
+    t.integer  "all_tree_profiles",       default: 0
+    t.integer  "all_profiles",            default: 0
   end
 
   create_table "similars_founds", force: :cascade do |t|
@@ -254,9 +252,9 @@ ActiveRecord::Schema.define(version: 20160224115706) do
   create_table "similars_logs", force: :cascade do |t|
     t.integer  "connected_at"
     t.integer  "current_user_id"
-    t.string   "table_name",      limit: 255
+    t.string   "table_name"
     t.integer  "table_row"
-    t.string   "field",           limit: 255
+    t.string   "field"
     t.integer  "written"
     t.integer  "overwritten"
     t.datetime "created_at"
@@ -284,8 +282,8 @@ ActiveRecord::Schema.define(version: 20160224115706) do
   add_index "trees", ["user_id"], name: "index_trees_on_user_id", using: :btree
 
   create_table "updates_events", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "image",      limit: 255
+    t.string   "name"
+    t.string   "image"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -303,25 +301,25 @@ ActiveRecord::Schema.define(version: 20160224115706) do
 
   create_table "users", force: :cascade do |t|
     t.integer  "profile_id"
-    t.boolean  "admin",                              default: false
-    t.float    "rating",                             default: 0.0
+    t.boolean  "admin",                  default: false
+    t.float    "rating",                 default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "email",                  limit: 255, default: "",    null: false
-    t.string   "encrypted_password",     limit: 255, default: "",    null: false
-    t.string   "reset_password_token",   limit: 255
+    t.string   "email",                  default: "",    null: false
+    t.string   "encrypted_password",     default: "",    null: false
+    t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0,     null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.string   "password_digest",        limit: 255
-    t.boolean  "is_locked",                          default: false
-    t.string   "access_token",           limit: 255
-    t.integer  "connected_users",                    default: [],                 array: true
-    t.integer  "double",                             default: 0
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "password_digest"
+    t.boolean  "is_locked",              default: false
+    t.string   "access_token"
+    t.integer  "connected_users",        default: [],                 array: true
+    t.integer  "double",                 default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
