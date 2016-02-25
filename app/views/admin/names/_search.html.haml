@@ -1,0 +1,5 @@
+= form_tag search_admin_names_path, method: :get, style: "width:100%;float:left;margin-bottom:20px;" do
+  .col-sm-4{style: "padding-left:0;"}
+    = text_field_tag :term, params[:term], {class: "form-control",  placeholder: "Поиск имен..."}
+  .col-sm-2
+    = submit_tag "Найти", class: 'btn btn-default pull-left'

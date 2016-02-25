@@ -17,6 +17,10 @@ every 1.day, :at => '4:00 pm' do   # 16 () + 8 = 24 (00) MSK - появился 
   # runner "Counter.increment_disconnects"# , environment: :development
 end
 
+# every 1.minutes do
+#   runner "Pool.log"
+# end
+
 
 
 # namespace :whenever do
@@ -70,6 +74,3 @@ end
 # Would run /usr/local/bin/awesome party extreme every two hours.
 # :task is always replaced with the first argument,
 # and any additional :whatevers are replaced with the options passed in or by variables that have been defined with set.
-
-
-
