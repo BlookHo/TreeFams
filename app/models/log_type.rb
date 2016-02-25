@@ -31,7 +31,7 @@ class LogType < ActiveRecord::Base
         name_event = "Откат истории дерева"
       else
         name_event = "home in rails, etc."
-        logger.info "ERROR in LogType model: No name for event = #{log_type} "
+        logger.info "home in rails, etc.  event = #{log_type} "
     end
     name_event
   end

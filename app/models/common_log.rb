@@ -16,7 +16,8 @@ class CommonLog < ActiveRecord::Base
                                                    # 999 - для логов объединения деревьев
                                                    # 444 - errors with relation_id
                                                    :message => "Должны быть целым числом из заданного множества в CommonLog"
-  # attr_accessor :agent_name, :tree_user_name
+
+  attr_accessor :agent_name, :tree_user_name # use in self.get_tree_all_logs
 
 
 

@@ -156,7 +156,7 @@ module SearchMain
           puts "Action: search_event = #{search_event.inspect}: destroy (2) profile in tree"
           tree_profiles = logged_actual_profiles(:base_profile_id)
 
-        when 3, 4, 5, 6, 7, 100 # All other actions: connection, sign_up, rollback, similars_connection, home
+        when 3, 4, 5, 6, 7, 100 # All other actions: rename, connection, sign_up, rollback, similars_connection, home
           puts "Action Others in tree: search_event = #{search_event.inspect}"
           tree_profiles = all_tree_profiles
 
@@ -208,6 +208,7 @@ module SearchMain
     # NEW REDUCED VAR
     selected_profiles_data = select_tree_profiles(search_event)
     puts "In search_tree_profiles: selected_profiles_data = #{selected_profiles_data} "
+    logger.info "In search_tree_profiles: selected_profiles_data = #{selected_profiles_data} "
     tree_profiles = selected_profiles_data[:tree_profiles]
     connected_users = selected_profiles_data[:connected_users]
     all_tree_profiles_qty = selected_profiles_data[:all_tree_profiles_qty]

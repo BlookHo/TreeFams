@@ -858,7 +858,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
           end
         end
 
-        describe 'Method select_tree_profiles in <start_search> <HAVE CommonLogs>: current_user_2, [1,2]' , focus: true   do # , focus: true
+        describe 'Method select_tree_profiles in <start_search> <HAVE CommonLogs>: current_user_2, [1,2]'    do # , focus: true
 
           before { FactoryGirl.create(:search_results, :correct2_1_connected) }
 

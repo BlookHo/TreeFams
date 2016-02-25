@@ -77,6 +77,11 @@ class SimilarsController < ApplicationController
 
     show_log_data(log_connection)
     flash[:notice] = "Похожие профили в дереве успешно объединены"
+
+    logger.info "In SimilarsConnectionController: After similars_connection - @current_user.id = #{@current_user.id} "
+    search_event = 3
+    SearchResults.start_search_methods(current_user, search_event)
+
   end
 
 
