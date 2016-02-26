@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe CommonLog, type: :model   do # , focus: true
 
   describe '- validation' do
-    describe '- on create' do
+    describe '- on create'    do
 
       context '- valid common_log_row' do
         let(:common_log_row) {FactoryGirl.build(:common_log)}  #
@@ -13,9 +13,9 @@ RSpec.describe CommonLog, type: :model   do # , focus: true
         end
       end
 
-      context '- invalid common_log_row' do
+      context '- invalid common_log_row'   do
         let(:bad_type_number) {FactoryGirl.build(:common_log, :uncorrect_type)}
-        it '- 1 Dont save: - bad_type_number - out of range' do
+        it '- 1 Dont save: - bad_type_number - out of range'   do
           expect(bad_type_number).to_not be_valid
         end
         let(:bad_user) {FactoryGirl.build(:common_log, :uncorrect_user)}
@@ -348,7 +348,7 @@ RSpec.describe CommonLog, type: :model   do # , focus: true
 
     end
 
-    describe 'Method Profile get_action_profile test' , focus: true   do # , focus: true
+    describe 'Method Profile get_action_profile test'   do # , focus: true
       context "- Check Method get_action_profile for last CommonLog action among exists -"   do  # , focus: true
         let(:current_user_9) { create(:user, :user_9) }  # User = 9. Tree = 9. profile_id = 85
         let(:current_user_9_id) { current_user_9.id } # [9]

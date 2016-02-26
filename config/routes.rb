@@ -61,7 +61,6 @@ Weafam::Application.routes.draw do
   # messages controller
   resources :messages, except: [:update, :show, :destroy, :edit]
 
-
   match 'send_message' => 'messages#send_message', via: :get
   match 'send_message' => 'messages#send_message', via: :post
 
@@ -319,6 +318,10 @@ Weafam::Application.routes.draw do
 
     resources :weafam_stats do
       get 'we_all_family_stats', to: "weafam_stats#we_all_family_stats", as: :we_all_family_stats, on: :collection
+    end
+
+    resources :search_service_logs do
+      get 'search_service_logs', to: "search_service#search_service_logs", as: :search_service_logs, on: :collection
     end
 
     resources :subnames

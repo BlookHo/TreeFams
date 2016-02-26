@@ -9,12 +9,18 @@ class SearchServiceLogs < ActiveRecord::Base
   #############################################################
 
   validates_presence_of :name, :search_event, :time, :connected_users, :searched_profiles, :ave_profile_search_time,
+                        :all_tree_profiles, :all_profiles,
                         :message => "Должно присутствовать в SearchServiceLogs"
-  validates_numericality_of :search_event, :searched_profiles,
-                            :only_integer => true,
-                            :message => "Должны быть целым числом в SearchServiceLogs"
+  validates_numericality_of :search_event, :searched_profiles, :all_tree_profiles, :all_profiles,
+                            :only_integer => true, :greater_than => 0,
+                            :message => "Должны быть целым числом and > 0 в SearchServiceLogs"
   validates_numericality_of :time, :ave_profile_search_time,
-                            :message => "Должны быть числом в SearchServiceLogs"
+                            :greater_than => 0,
+                            :message => "Должны быть числом and > 0 в SearchServiceLogs"
+  validates_inclusion_of :search_event, :in => [1,2,3,4,5,6,7,100],
+                         :message => "Должнo быть числом в диапазоне [1,2,3,4,5,6,7, 100] в SearchServiceLogs"
+
+
 
   validate :validate_connected_users
   def validate_connected_users
