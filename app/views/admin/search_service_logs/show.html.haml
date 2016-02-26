@@ -1,0 +1,36 @@
+%p#notice= notice
+
+%p
+  %b Id:
+  = @search_service_log.id
+%p
+  %b Событие:
+  = @search_service_log.name
+%p
+  %b Время (Т), мсек:
+  = @search_service_log.time
+%p
+  %b Код:
+  = @search_service_log.search_event
+%p
+  %b Профили - в поиске:
+  = @search_service_log.searched_profiles
+%p
+  %b Профили - в дереве:
+  = @search_service_log.all_tree_profiles
+%p
+  %b Профили - всего:
+  = @search_service_log.all_profiles
+%p
+  %b Т ср./профиль, мсек:
+  = @search_service_log.ave_profile_search_time
+%p
+  %b Состав дерева:
+  = @search_service_log.connected_users
+%p
+  %b Дата:
+  = localize(@search_service_log.created_at, :format => :long)
+
+%p
+  = link_to 'Back - to Stats list', admin_search_service_logs_path
+

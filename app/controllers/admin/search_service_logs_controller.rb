@@ -1,11 +1,11 @@
-class Admin::SearchServiceController < Admin::AdminController
+class Admin::SearchServiceLogsController < Admin::AdminController
 
-  before_action :set_search_service_logs, only: [:show, :destroy]
+  before_action :set_search_service_log, only: [:show, :destroy]
 
   # GET /search_service_logs
   # @note: show search_service_logs rows in DESCend order
   def index
-    @search_service_logs = SearchServiceLogs.order('id DESC').page params[:page] # DESC
+    @search_service_logs = SearchServiceLogs.order('id DESC').page params[:page]
     respond_to do |format|
       format.html
       # format.csv { send_data @weafam_stats.to_csv }
@@ -16,7 +16,7 @@ class Admin::SearchServiceController < Admin::AdminController
 
   # GET search_service_logs_admin_search_service_path(format: "xls")
   # SAVE file 'weafam_search_logs.xls'
-  def search_service_logs
+  def search_logs_display
     @search_service_logs = SearchServiceLogs.order('id DESC')
     respond_to do |format|
       format.html
@@ -36,25 +36,23 @@ class Admin::SearchServiceController < Admin::AdminController
   # DELETE /search_service_logs/1
   # DELETE /search_service_logs/1.json
   def destroy
-    @search_service_logs.destroy
+    @search_service_log.destroy
     respond_to do |format|
-      format.html { redirect_to admin_search_service_url, notice: 'SearchServiceLogs was successfully destroyed.' }
+      format.html { redirect_to admin_search_service_logs_url, notice: 'SearchServiceLogs was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
   # Use callbacks to share common setup or constraints between actions.
-  def set_search_service_logs
-    @search_service_logs = SearchServiceLogs.find(params[:id])
+  def set_search_service_log
+    @search_service_log = SearchServiceLogs.find(params[:id])
   end
 
   def search_service_logs_params
-    params.require(:search_service_logs).permit(:users, :users_male, :users_female,
-                                        :profiles, :profiles_male, :profiles_female,
-                                        :trees, :invitations,
-                                        :requests, :connections, :refuse_requests,
-                                        :disconnections, :similars_found)
+    params.require(:search_service_log).permit( :name, :search_event, :time, :connected_users,
+                                                 :searched_profiles, :ave_profile_search_time,
+                                                 :all_tree_profiles, :all_profiles)
   end
 
 end

@@ -2,40 +2,31 @@
   %thead
     %tr
       %th #
+      %th Событие
+      %th Время (Т), мсек
+      %th Код
+      %th Профили - в поиске
+      %th Профили - в дереве
+      %th Профили - всего
+      %th Т ср./профиль, мсек
+      %th Состав дерева
       %th Дата
-      %th Юзеры
-      %th Юзеры М
-      %th Юзеры Ж
-      %th Профили
-      %th Профили М
-      %th Профили Ж
-      %th Деревья
-      %th Пригл.
-      %th Запросы
-      %th Объед.
-      %th Отказы
-      %th Разъед.
-      %th Похожие
       %th
       %th
   %tbody
-    - @weafam_stats.each do |stat|
+    - @search_service_logs.each do |search_row|
       %tr
-        %td= stat.id
+        %td= search_row.id
+        %td= search_row.name
+        %td= search_row.time
+        %td= search_row.search_event
+        %td= search_row.searched_profiles
+        %td= search_row.all_tree_profiles
+        %td= search_row.all_profiles
+        %td= search_row.ave_profile_search_time
+        %td= search_row.connected_users
         -#%td= stat.created_at.strftime("%d-%b-%Y %H:%M")
-        %td= localize(stat.created_at, :format => :long)
-        %td= stat.users
-        %td= stat.users_male
-        %td= stat.users_female
-        %td= stat.profiles
-        %td= stat.profiles_male
-        %td= stat.profiles_female
-        %td= stat.trees
-        %td= stat.invitations
-        %td= stat.requests
-        %td= stat.connections
-        %td= stat.refuse_requests
-        %td= stat.disconnections
-        %td= stat.similars_found
-        %td= link_to 'Show', admin_weafam_stat_path(stat)
-        %td= link_to 'Destroy', admin_weafam_stat_path(stat), :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= localize(search_row.created_at, :format => :long)
+        %td= link_to 'Show', admin_search_service_log_path(search_row)
+        %td= link_to 'Destroy', admin_search_service_log_path(search_row), :method => :delete, :data => { :confirm => 'Are you sure?' }
+

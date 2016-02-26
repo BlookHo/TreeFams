@@ -321,7 +321,7 @@ Weafam::Application.routes.draw do
     end
 
     resources :search_service_logs do
-      get 'search_service_logs', to: "search_service#search_service_logs", as: :search_service_logs, on: :collection
+      get 'search_logs_display', to: "search_service_logs#search_logs_display", as: :search_logs_display, on: :collection
     end
 
     resources :subnames

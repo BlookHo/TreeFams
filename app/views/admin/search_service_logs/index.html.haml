@@ -7,9 +7,9 @@
       )
   %h4
     Скачать файл параметров поиска 'weafam_search_logs.xls':<br />
-    = link_to "Upload To Excel", search_service_logs_admin_search_service_path(format: "xls")
+    = link_to "Upload To Excel", search_logs_display_admin_search_service_logs_path(format: "xls")
     <br />
-    = link_to "Upload To Csv", search_service_logs_admin_search_service_path(format: "csv")
+    = link_to "Upload To Csv", search_logs_display_admin_search_service_logs_path(format: "csv")
 
 = paginate @search_service_logs, :theme => 'admin'
 = render 'table'
