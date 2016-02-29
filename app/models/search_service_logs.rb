@@ -42,6 +42,9 @@ class SearchServiceLogs < ActiveRecord::Base
   #                    time:                    search_time,
   #                    connected_users:         connected_users,
   #                    searched_profiles:       tree_profiles.size }
+  #   name - created from LogType
+  #   ave_profile_search_time - средняя длит-ть поиска на один профиль - вычисляется
+  #   all_profiles - все профили на сайте - из статистики.
   def self.store_search_time_log(store_log_data)
     search_event      = store_log_data[:search_event]
     time              = store_log_data[:time]
@@ -52,7 +55,7 @@ class SearchServiceLogs < ActiveRecord::Base
     name = LogType.name_log_type(search_event)
     logger.info "In SearchServiceLogs model #store_search_time_log : name = #{name.inspect} "
 
-    ave_profile_search_time = (time.fdiv(searched_profiles.to_f)).round(2)
+    ave_profile_search_time = (time.fdiv(searched_profiles.to_f)).round(3)
 
     all_profiles = WeafamStat.last.profiles # all profiles qty in all trees - from statistics last row
 

@@ -261,8 +261,8 @@ module SearchMain
       # tree_profiles_size = tree_profiles.size unless tree_profiles.blank?
       tree_profiles.blank? ? tree_profiles_size = 1 : tree_profiles_size = tree_profiles.size
 
-      search_time = ((Time.now - start_search_time) * 1000).round(2)
-      puts "\n Search_time of tree_profiles = #{search_time.round(2)} msec.\n\n"
+      search_time = ((Time.now - start_search_time) ).round(3)
+      puts "\n Search_time of tree_profiles = #{search_time.round(3)} sec.\n\n"
       puts "\n Search in #{results[:connected_author_arr].inspect} - search_event = #{search_event} \n\n"
 
       store_log_data = { search_event:            search_event,

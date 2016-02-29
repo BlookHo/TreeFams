@@ -9,37 +9,27 @@
       <Row>
         <Cell><Data ss:Type="String"># ID</Data></Cell>
         <Cell><Data ss:Type="String">Дата</Data></Cell>
-        <Cell><Data ss:Type="String">Юзеры</Data></Cell>
-        <Cell><Data ss:Type="String">Юзеры М</Data></Cell>
-        <Cell><Data ss:Type="String">Юзеры Ж</Data></Cell>
-        <Cell><Data ss:Type="String">Профили</Data></Cell>
-        <Cell><Data ss:Type="String">Профили М</Data></Cell>
-        <Cell><Data ss:Type="String">Профили Ж</Data></Cell>
-        <Cell><Data ss:Type="String">Деревья</Data></Cell>
-        <Cell><Data ss:Type="String">Пригл-я</Data></Cell>
-        <Cell><Data ss:Type="String">Запросы</Data></Cell>
-        <Cell><Data ss:Type="String">Объед-я</Data></Cell>
-        <Cell><Data ss:Type="String">Отказы</Data></Cell>
-        <Cell><Data ss:Type="String">Разъед-я</Data></Cell>
-        <Cell><Data ss:Type="String">Похожие</Data></Cell>
+        <Cell><Data ss:Type="String">Событие</Data></Cell>
+        <Cell><Data ss:Type="String">Время T, сек</Data></Cell>
+        <Cell><Data ss:Type="String">Код</Data></Cell>
+        <Cell><Data ss:Type="String">Профили - в поиске</Data></Cell>
+        <Cell><Data ss:Type="String">Профили - в дереве</Data></Cell>
+        <Cell><Data ss:Type="String">Профили - всего</Data></Cell>
+        <Cell><Data ss:Type="String">Т ср./профиль, сек</Data></Cell>
+        <Cell><Data ss:Type="String">Состав дерева</Data></Cell>
       </Row>
-      <% @weafam_stats.each do |stat| %>
+      <% @search_service_logs.each do |search_row| %>
           <Row>
-            <Cell><Data ss:Type="Number"><%= stat.id %></Data></Cell>
-            <Cell><Data ss:Type="Data">  <%= stat.created_at.strftime("%d-%b-%Y %H:%M") %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.users %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.users_male %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.users_female %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.profiles %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.profiles_male %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.profiles_female %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.trees %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.invitations %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.requests %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.connections %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.refuse_requests %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.disconnections %></Data></Cell>
-            <Cell><Data ss:Type="Number"><%= stat.similars_found %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= search_row.id %></Data></Cell>
+            <Cell><Data ss:Type="Data">  <%= search_row.created_at.strftime("%d-%b-%Y %H:%M") %></Data></Cell>
+            <Cell><Data ss:Type="String"><%= search_row.name %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= search_row.time %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= search_row.search_event %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= search_row.searched_profiles %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= search_row.all_tree_profiles %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= search_row.all_profiles %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= search_row.ave_profile_search_time %></Data></Cell>
+            <Cell><Data ss:Type="Array"><%= search_row.connected_users %></Data></Cell>
           </Row>
       <% end %>
     </Table>

@@ -1,0 +1,7 @@
+<% wb = xlsx_package.workbook
+wb.add_worksheet(name: "Search_logs") do |sheet|
+    sheet.add_row ["ID", "Событие","Время (Т), мсек","Код"]
+    @search_service_logs.each do |search_row|
+        sheet.add_row [search_row.id, search_row.name,search_row.time,search_row.search_event]
+    end
+end %>
