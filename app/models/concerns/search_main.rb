@@ -65,7 +65,7 @@ module SearchMain
 
     # start_search_time = Time.now
     logger.info ""
-    logger.info "#### Main start_search (modified + w/exclusions + w/determine actual tree_profiles), connected_users = #{self.connected_users.inspect}"
+    logger.info "#### Main start_search (modified + w/exclusions + w/determine actual tree_profiles), connected_users = #{self.connected_users}"
     results = search_tree_profiles(search_event)
     if results.empty?
       logger.info ""
