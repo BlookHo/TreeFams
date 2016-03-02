@@ -7,7 +7,7 @@ class LogType < ActiveRecord::Base
 
   validates_inclusion_of :type_number, :in => [1,2,3,4,5,6,7,100], :message => "Должнo быть числом в диапазоне [1,2,3,4,5,6,7] в LogType"
   validates_inclusion_of :table_name, :in => ["adds_logs", "deletions_logs", "similars_logs", "connections_logs",
-                                              "renames_logs", "sign_ups", "rollbacks common_logs", "home in rails, etc."],
+                                              "renames_logs", "sign_ups", "rollbacks common_logs", "home in rails"],
                          :message => "Должнo быть именем из заданного списка в LogType"
 
   # Select name for current LogType
@@ -30,8 +30,8 @@ class LogType < ActiveRecord::Base
       when 7
         name_event = "Откат истории дерева"
       else
-        name_event = "home in rails, etc."
-        logger.info "home in rails, etc.  event = #{log_type} "
+        name_event = "home in rails"
+        logger.info "home in rails  event = #{log_type} "
     end
     name_event
   end

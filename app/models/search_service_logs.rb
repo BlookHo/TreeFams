@@ -36,6 +36,20 @@ class SearchServiceLogs < ActiveRecord::Base
   # scope :one_way_result,     -> (connected_users) {where("user_id in (?)", connected_users)}
   # scope :one_opp_way_result, -> (connected_users) {where("found_user_id in (?)", connected_users)}
 
+  # @note: to generate the CSV data
+  # def self.to_csv
+  #   CSV.generate do |csv|
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << column_names
+      all.each do |search_log|
+        csv << search_log.attributes.values_at(*column_names)
+      end
+    end
+  end
+
+
+
 
   # @note: Store one row of search tome result for given data:
   # store_log_data = { search_event:            search_event,

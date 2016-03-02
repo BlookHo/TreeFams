@@ -41,8 +41,8 @@ gem 'font-awesome-rails', '~> 4.2.0.0'
 gem 'ionicons-rails'
 
 # gems for xls format
-gem 'axlsx', '~> 2.0'
-gem "axlsx_rails"
+# gem 'axlsx', '~> 2.0'
+# gem "axlsx_rails"
 
 # Russian localization
 gem 'russian', '~> 0.6.0'

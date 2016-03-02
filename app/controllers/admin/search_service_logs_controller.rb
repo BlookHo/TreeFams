@@ -18,17 +18,20 @@ class Admin::SearchServiceLogsController < Admin::AdminController
   # SAVE file 'weafam_search_logs.xls'
   def weafam_search_logs
     @search_service_logs = SearchServiceLogs.order('id DESC')
-    # respond_to do |format|
-    #   format.html
-    #   format.csv { render text: @search_service_logs.to_csv }
-    #   #   format.xls { send_data @weafam_stats.to_csv(col_sep: "\t") }
-    #   # format.xlsx {render xlsx: 'download',filename: "payments.xlsx"}
-    #   format.xls { send_data @search_service_logs.to_csv(col_sep: "\t") }
-    #   # format.xls
-    # end
     respond_to do |format|
-      format.xls {render xls: 'weafam_search_logs',filename: "weafam_search_logs.xls"}
+      format.html
+      format.csv { render text: @search_service_logs.to_csv(:col_sep => "\t") }
+      format.xls { send_data @search_service_logs.to_csv(col_sep: "\t") }
     end
+
+    # respond_to do |format|
+    #     format.csv { render csv: @search_service_logs.to_csv }
+    #   # format.xls {render xls: 'weafam_search_logs',filename: "weafam_search_logs.xls"}
+    #     format.xls {render xls: 'weafam_search_logs',filename: "weafam_search_logs.xls"}
+    #      #   format.xls { send_data @weafam_stats.to_csv(col_sep: "\t") }
+    # format.xlsx {render xlsx: 'download',filename: "payments.xlsx"}
+    #
+    # end
 
   end
 
