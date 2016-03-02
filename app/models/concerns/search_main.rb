@@ -67,11 +67,11 @@ module SearchMain
     logger.info ""
     logger.info "#### Main start_search (modified + w/exclusions + w/determine actual tree_profiles), connected_users = #{self.connected_users}"
     results = search_tree_profiles(search_event)
-    if results.empty?
-      logger.info ""
-      logger.info "\nNo search results! for current_user = #{self.connected_users}."
-      logger.info ""
-    else
+    # if results.empty?
+    #   logger.info ""
+    #   logger.info "\nNo search results! for current_user = #{self.connected_users}."
+    #   logger.info ""
+    # else
       logger.info "Search results:"
       logger.info "[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
       logger.info "[:uniq_profiles_pairs] = #{results[:uniq_profiles_pairs].inspect}"
@@ -88,7 +88,7 @@ module SearchMain
       logger.info ""
       logger.info "#### End of Main search - Ok"
       logger.info ""
-    end
+    # end
 
     results
   end
@@ -112,7 +112,11 @@ module SearchMain
   #   call method to get tree actual_profiles according to CommonLog.log_type
   #   Rspec tested
   def select_tree_profiles(search_event)
-    connected_users = self.connected_users
+    # connected_users = self.connected_users
+    connected_users = self.get_connected_users
+    logger.info "In update_connected_users!: self.get_connected_users = #{self.get_connected_users}"
+    logger.info "In update_connected_users!: self.connected_users = #{self.connected_users}"
+
     all_tree_profiles_qty = 0
     puts "In select_tree_profiles"
     logger.info "In select_tree_profiles: connected_users = #{connected_users.inspect}"

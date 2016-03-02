@@ -155,8 +155,10 @@ class User < ActiveRecord::Base
     connected_user_ids.each do |connected_user_id|
       user = User.find(connected_user_id)
       user.update_attribute(:connected_users, connected_user_ids)
+      logger.info "In update_connected_users!: self.get_connected_users = #{self.get_connected_users}"
+      logger.info "In update_connected_users!: self.connected_users = #{self.connected_users}"
     end
-    logger.info "user updated: .connected_users = #{connected_user_ids}"
+    logger.info "user updated: connected_users = #{connected_user_ids}"
   end
 
 

@@ -22,7 +22,7 @@ module Meteor
               ActiveRecord::Base.transaction do
                 user = User.create_user_account_with_json_data(data, password)
               end
-              send_user_email(user, password)
+      #        send_user_email(user, password)
               search_event = 6
               ::SearchResults.start_search_methods_in_thread(user, search_event)
               return render json: {token: user.access_token}
