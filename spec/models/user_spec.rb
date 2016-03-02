@@ -1,5 +1,5 @@
 
-RSpec.describe User, :type => :model    do  # , focus: true
+RSpec.describe User, :type => :model     do  # , focus: true
 
   describe '- validation'    do
     before do
@@ -895,7 +895,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
         end
 
         describe 'Method select_tree_profiles in <start_search> test <HAVE CommonLogs>: current_user_3, [3]'   do # , focus: true
-          context "- Check Method select_tree_profiles -"   do
+          context "- Check Method select_tree_profiles -" , focus: true    do
             let(:current_user_3) { User.find(3) }  # User = user_3 user.id = 3. Tree = [3]. profile_id = 22
             let(:search_event) { 1 }
             let(:selected_profiles_data) { current_user_3.select_tree_profiles(search_event) }
@@ -1832,7 +1832,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
     ################  DISCONNECTION ###########################
 
-    describe '- check User model Method <disconnect> - Ok' , focus: true  do  #  , focus: true
+    describe '- check User model Method <disconnect> - Ok'   do  #  , focus: true
 
       context '- check Tables count & fields values when valid disconnection_data'  do #, focus: true
         let(:connection_data) {{:who_connect_arr=>[1, 2], :with_whom_connect_arr=>[3],

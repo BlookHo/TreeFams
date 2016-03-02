@@ -96,7 +96,8 @@ module SearchMain
   # @note: collect_tree_profiles from current tree - to search among them
   #   connected_users # Состав объединенного дерева в виде массива id
   def all_tree_profiles(connected_users)
-    # logger.info "In all_tree_profiles: connected_users = #{connected_users}"
+    puts "In all_tree_profiles: connected_users = #{connected_users}"
+    logger.info "In all_tree_profiles: connected_users = #{connected_users}"
     author_tree_arr = Tree.get_connected_tree(connected_users) # Массив объединенного дерева из Tree
     tree_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
     tree_profiles.uniq

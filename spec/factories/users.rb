@@ -93,6 +93,7 @@ FactoryGirl.define do
       profile_id 22
       email "natali@na.na"
       password '11111'
+      connected_users [3]
     end
 
 
