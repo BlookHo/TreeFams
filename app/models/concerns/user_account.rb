@@ -22,14 +22,16 @@ module UserAccount
 
       # Create extra relation for father(father-father, etc) and mother(mother-mother, mother-father)
       data.except('author', 'father', 'mother', 'brothers', 'sisters', 'sons', 'daughters', 'wife', 'husband').each do |key, value|
-        logger.info "================ TEST EXTRA KEY"
-        logger.info "==KEY: #{key}"
-        logger.info "==VALUE: #{value}"
-        logger.info "================ END TEST EXTRA KEY"
+        # logger.info "================ TEST EXTRA KEY"
+        # logger.info "==KEY: #{key}"
+        # logger.info "==VALUE: #{value}"
+        # logger.info "================ END TEST EXTRA KEY"
         create_extra_keys( key, value, user )
       end
 
-      return user
+      # Fill user.connected_users
+      user.update_connected_users!
+      user
     end
 
 
@@ -56,8 +58,6 @@ module UserAccount
     end
 
 
-
-
     def create_extra_keys(relation_name, data, user)
 
       extra_profile = get_extra_profile(relation_name, user)
@@ -76,14 +76,14 @@ module UserAccount
 
 
     def get_extra_profile(relation_name, user)
-      logger.info("=================")
-      logger.info(relation_name)
-      logger.info(user)
-      logger.info("=================")
+      # logger.info("=================")
+      # logger.info(relation_name)
+      # logger.info(user)
+      # logger.info("=================")
       if relation_name == 'father_father' || relation_name == 'father_mother'
-        return user.profile.fathers(user.id).first.is_profile
+        user.profile.fathers(user.id).first.is_profile
       else
-        return user.profile.mothers(user.id).first.is_profile
+        user.profile.mothers(user.id).first.is_profile
       end
     end
 
@@ -91,9 +91,9 @@ module UserAccount
 
     def get_id_for_extra_relation(relation_name)
       if relation_name == 'father_father' || relation_name == 'mother_father'
-        return 1
+        1
       else
-        return 2
+        2
       end
     end
 

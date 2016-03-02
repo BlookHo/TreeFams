@@ -20,10 +20,16 @@ class SignupController < ApplicationController
 
   def create
     @data = sanitize_data(params['family'].compact)
-    logger.info("================")
+    logger.info("====== create user ======")
     logger.info(@data)
     logger.info("================")
     has_new_names? ? create_pending_user : create_regular_user
+
+    search_event = 6
+    results = SearchResults.start_search_methods(current_user, search_event)
+
+    logger.info "End of create user"
+
   end
 
 
@@ -34,15 +40,19 @@ class SignupController < ApplicationController
 
   private
 
-
+  # @note: HERE welcome_mail does not sending!!! - in comment
   def create_regular_user
     password =  User.generate_password
     user = User.new( email: @data["author"]["email"], password: password, password_confirmation: password)
     user.valid? # нужно дернуть метод, чтобы получить ошибки
+    logger.info "===== In create_regular_user: @data[author][email] = #{@data["author"]["email"]} "
+
     if user.errors.messages[:email].nil?
       user = User.create_user_account_with_json_data(@data, password)
+      logger.info "In create_regular_user: user.id = #{user.id.inspect} "
+
       # Send welcome email
-      UserMailer.welcome_mail(user).deliver
+  #    UserMailer.welcome_mail(user).deliver #########################
       session[:user_id] = user.id
       render json: { status: 'ok', redirect: '/home' }
     else

@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
 
 
   before_create :generate_access_token
-  after_create :update_connected_users!
+  # after_create :update_connected_users!
   before_save :downcase_email
 
 
@@ -150,12 +150,13 @@ class User < ActiveRecord::Base
 
   def update_connected_users!
     connected_user_ids = self.get_connected_users
-    cids = connected_user_ids.size > 0 ? connected_user_ids : [self.id]
+    # cids =
+    connected_user_ids.size > 0 ? connected_user_ids : [self.id]
     connected_user_ids.each do |connected_user_id|
       user = User.find(connected_user_id)
       user.update_attribute(:connected_users, connected_user_ids)
     end
-    logger.info "user updated connected_users = #{connected_user_ids}"
+    logger.info "user updated: .connected_users = #{connected_user_ids}"
   end
 
 

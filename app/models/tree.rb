@@ -140,10 +140,10 @@ class Tree < ActiveRecord::Base
   # Кол-во профилей в дереве
   # и другая инфа о дереве и профилях дерева
   def self.get_tree_info(current_user)
-    logger.info "In Tree - get_tree_info: current_user = #{current_user} "
+    # logger.info "In Tree - get_tree_info: current_user = #{current_user} "
     tree_profiles_info = get_tree_profiles_info(current_user)
     all_tree_profiles_info = get_all_tree_profiles_info(tree_profiles_info)
-    logger.info "In Tree - get_tree_info: tree_profiles_info[:connected_users] = #{tree_profiles_info[:connected_users]} " unless tree_profiles_info[:connected_users].blank?
+    # logger.info "In Tree - get_tree_info: tree_profiles_info[:connected_users] = #{tree_profiles_info[:connected_users]} " unless tree_profiles_info[:connected_users].blank?
     { current_user:  current_user,
       users_profiles_ids: all_tree_profiles_info[:users_profiles_ids], # Массив users_profiles_ids в дереве (авторы)
 

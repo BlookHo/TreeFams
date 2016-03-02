@@ -99,7 +99,7 @@ module ProfileKeysGeneration
                             new_profile_name_id: new_profile_name_id }
 
       add_main_pkeys_rows(add_data, add_relation_data)
-      logger.info "In make_profilekeys_rows: new_relation_id = #{new_relation_id}"
+      # logger.info "In make_profilekeys_rows: new_relation_id = #{new_relation_id}"
 
       case new_relation_id
         when 1

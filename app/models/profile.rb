@@ -110,17 +110,12 @@ class Profile < ActiveRecord::Base
   def collect_actual_profiles(action_profile_id, current_user_id)
     start_time = Time.now
     circle_of_profile, first_row_profiles = SearchCircles.have_profile_circle(action_profile_id)
-    puts "In collect_actual_profiles:  circle_of_profile = #{circle_of_profile},  first_row_profiles = #{first_row_profiles}"
+    # puts "In collect_actual_profiles:  circle_of_profile = #{circle_of_profile},  first_row_profiles = #{first_row_profiles}"
 
-    # first_row_profiles = profiles_in_action(action_profile_id)
     two_rows_action_profiles = second_row_profiles(first_row_profiles, action_profile_id)
-    # puts "In collect_actual_profiles: two_rows_action_profiles = #{two_rows_action_profiles}"
-
     search_results_profiles = SearchResults.search_results_profiles(current_user_id)
-    # puts "In collect_actual_profiles: search_results_profiles = #{search_results_profiles}"
 
     actual_profiles = ([action_profile_id] + two_rows_action_profiles + search_results_profiles).uniq
-    # puts "In collect_actual_profiles: actual_profiles = #{actual_profiles.inspect}"
 
     collect_actual_profiles_time = (Time.now - start_time) * 1000
     puts  "\n Collect_actual_profiles Time = #{collect_actual_profiles_time.round(2)} msec.\n\n"
@@ -134,18 +129,17 @@ class Profile < ActiveRecord::Base
   #   share/backup pg_dump -U weafamdb weafam > weafam_backup.bak
   def second_row_profiles(first_row_profiles, action_profile_id)
     second_row_profiles = first_row_profiles + [action_profile_id]
-    puts "In second: Before have_profile_circle: second_row_profiles = #{second_row_profiles}"
+    # puts "In second: Before have_profile_circle: second_row_profiles = #{second_row_profiles}"
     first_row_profiles.each do |one_first_row_profile|
       circle_of_profile, circle_is_profiles = SearchCircles.have_profile_circle(one_first_row_profile)
-      puts "In second:  circle_is_profiles = #{circle_is_profiles}"
+      # puts "In second:  circle_is_profiles = #{circle_is_profiles}"
       unless circle_is_profiles.blank?
         second_row_profiles = (second_row_profiles + circle_is_profiles).uniq
-        puts "In second:  growing second_row_profiles = #{second_row_profiles}"
+        # puts "In second:  growing second_row_profiles = #{second_row_profiles}"
       end
     end
     second_row_profiles
   end
-
 
 
   # @note: collect of actual profiles, from previous search results,
@@ -249,8 +243,8 @@ class Profile < ActiveRecord::Base
   def mothers_hash(user_id)
     hash = {}
     mothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    logger.info "== in mothers_hash: hash = #{hash} "
-    return hash
+    # logger.info "== in mothers_hash: hash = #{hash} "
+    hash
   end
 
 
@@ -259,7 +253,7 @@ class Profile < ActiveRecord::Base
     circle(user_id).each do |m|
       fathers << m if m.relation_id == 1
     end
-    return fathers
+    fathers
   end
 
 
@@ -267,8 +261,8 @@ class Profile < ActiveRecord::Base
   def fathers_hash(user_id)
     hash = {}
     fathers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    logger.info "== in fathers_hash: hash = #{hash} "
-    return hash
+    # logger.info "== in fathers_hash: hash = #{hash} "
+    hash
   end
 
 
@@ -277,7 +271,7 @@ class Profile < ActiveRecord::Base
     circle(user_id).each do |m|
       sons << m if m.relation_id == 3
     end
-    return sons
+    sons
   end
 
 
@@ -285,8 +279,8 @@ class Profile < ActiveRecord::Base
   def sons_hash(user_id)
     hash = {}
     sons(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    logger.info "== in sons_hash: hash = #{hash} "
-    return hash
+    # logger.info "== in sons_hash: hash = #{hash} "
+    hash
   end
 
 
@@ -296,7 +290,7 @@ class Profile < ActiveRecord::Base
     circle(user_id).each do |m|
       daughters << m if m.relation_id == 4
     end
-    return daughters
+    daughters
   end
 
 
@@ -304,8 +298,8 @@ class Profile < ActiveRecord::Base
   def daughters_hash(user_id)
     hash = {}
     daughters(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    logger.info "== in daughters_hash: hash = #{hash} "
-    return hash
+    # logger.info "== in daughters_hash: hash = #{hash} "
+    hash
   end
 
 
@@ -314,7 +308,7 @@ class Profile < ActiveRecord::Base
     circle(user_id).each do |m|
       brothers << m if m.relation_id == 5
     end
-    return brothers
+    brothers
   end
 
 
@@ -322,8 +316,8 @@ class Profile < ActiveRecord::Base
   def brothers_hash(user_id)
     hash = {}
     brothers(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    logger.info "== in brothers_hash: hash = #{hash} "
-    return hash
+    # logger.info "== in brothers_hash: hash = #{hash} "
+    hash
   end
 
 
@@ -332,7 +326,7 @@ class Profile < ActiveRecord::Base
     circle(user_id).each do |m|
       sisters << m if m.relation_id == 6
     end
-    return sisters
+    sisters
   end
 
 
@@ -340,8 +334,8 @@ class Profile < ActiveRecord::Base
   def sisters_hash(user_id)
     hash = {}
     sisters(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    logger.info "== in sisters_hash: hash = #{hash} "
-    return hash
+    # logger.info "== in sisters_hash: hash = #{hash} "
+    hash
   end
 
 
@@ -351,7 +345,7 @@ class Profile < ActiveRecord::Base
     circle(user_id).each do |m|
       husbands << m if m.relation_id == 7
     end
-    return husbands
+    husbands
   end
 
 
@@ -359,8 +353,8 @@ class Profile < ActiveRecord::Base
   def husbands_hash(user_id)
     hash = {}
     husbands(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    logger.info "== in husbands_hash: hash = #{hash} "
-    return hash
+    # logger.info "== in husbands_hash: hash = #{hash} "
+    hash
   end
 
 
@@ -369,7 +363,7 @@ class Profile < ActiveRecord::Base
     circle(user_id).each do |m|
       wives << m if m.relation_id == 8
     end
-    return wives
+    wives
   end
 
 
@@ -377,8 +371,8 @@ class Profile < ActiveRecord::Base
   def wives_hash(user_id)
     hash = {}
     wives(user_id).each{|m| hash[m.is_profile_id] = m.is_name_id}
-    logger.info "== in wives_hash: hash = #{hash} "
-    return hash
+    # logger.info "== in wives_hash: hash = #{hash} "
+    hash
   end
 
 
@@ -448,7 +442,7 @@ class Profile < ActiveRecord::Base
   #   то они участвуют в отработке логов: redo_deletion_log
   #   for ProfileKeys logs update: one profile could been previously deleted
   def self.check_profiles_exists?(profile_id, is_profile_id)
-    logger.info "*** In module Profile.check_profiles_exists"
+    # logger.info "*** In module Profile.check_profiles_exists"
     # logger.info "*** In module Profile.check_profiles_exists: 1ex = #{self.where(id: profile_id, deleted: 0).exists?.inspect} "
     # logger.info "*** In module Profile.check_profiles_exists: 2ex = #{self.where(id: is_profile_id, deleted: 0).exists?.inspect} "
     self.where(id: profile_id, deleted: 0).exists? && self.where(id: is_profile_id, deleted: 0).exists?

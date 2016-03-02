@@ -118,7 +118,7 @@ class SearchResults < ActiveRecord::Base
   # @note start search methods: # sims & search
   # first - similars, then - search if no sims results
   def self.start_search_methods(current_user, search_event)
-    logger.info  "In start_search_methods: start_search_methods: current_user.id = #{current_user.id.inspect} "
+    logger.info  "In SR::start_search_methods: current_user.id = #{current_user.id.inspect} "
 
     similars_results = current_user.start_similars
     # {tree_info: tree_info, new_sims: new_sims, similars: similars,connected_users: connected_users,
@@ -133,10 +133,10 @@ class SearchResults < ActiveRecord::Base
     #    :common_relations=>{"Дочь"=>[173, 354], "Жена"=>[187], "Зять"=>[370]},
     #    :common_power=>4, :inter_relations=>[]}]
 
-    logger.info  "In start_search_methods: similars_results[:similars] = #{similars_results[:similars].inspect}"
+    logger.info  "In SR::start_search_methods: similars_results[:similars] = #{similars_results[:similars].inspect}"
 
     if similars_results[:similars].blank?
-      logger.info  "In start_search_methods: No Similars -> start search "
+      logger.info  "In SR::start_search_methods: search_event = #{search_event}, No Similars -> start search "
       search_results = current_user.start_search(search_event)
       search_results
     else
