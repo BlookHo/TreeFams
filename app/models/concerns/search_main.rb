@@ -73,12 +73,12 @@ module SearchMain
     #   logger.info ""
     # else
       logger.info "Search results:"
-      logger.info "[:connected_author_arr] = #{results[:connected_author_arr].inspect}"
-      logger.info "[:uniq_profiles_pairs] = #{results[:uniq_profiles_pairs].inspect}"
-      logger.info "[:by_profiles] = #{results[:by_profiles].inspect}"
-      logger.info "[:by_trees] = #{results[:by_trees].inspect}"
-      logger.info "[:duplicates_one_to_many] = #{results[:duplicates_one_to_many].inspect}"
-      logger.info "[:duplicates_many_to_one] = #{results[:duplicates_many_to_one].inspect}"
+      logger.info ":connected_author_arr = #{results[:connected_author_arr].inspect}"
+      logger.info ":uniq_profiles_pairs = #{results[:uniq_profiles_pairs].inspect}"
+      logger.info ":by_profiles = #{results[:by_profiles].inspect}"
+      logger.info ":by_trees = #{results[:by_trees].inspect}"
+      logger.info ":duplicates_one_to_many = #{results[:duplicates_one_to_many].inspect}"
+      logger.info ":duplicates_many_to_one = #{results[:duplicates_many_to_one].inspect}"
 
       check_double(results) if self.double == 0
       SearchResults.store_search_results(results, self.id) if self.double == 1
@@ -100,6 +100,7 @@ module SearchMain
     logger.info "In all_tree_profiles: connected_users = #{connected_users}"
     author_tree_arr = Tree.get_connected_tree(connected_users) # Массив объединенного дерева из Tree
     tree_profiles = [self.profile_id] + author_tree_arr.map {|p| p.is_profile_id }.uniq
+    puts "In all_tree_profiles: tree_profiles = #{tree_profiles}"
     tree_profiles.uniq
   end
 
@@ -128,17 +129,17 @@ module SearchMain
       all_tree_profiles_qty = all_tree_profiles.size unless all_tree_profiles.blank?
       logger.info "In select_tree_profiles: all_tree_profiles_qty = #{all_tree_profiles_qty.inspect}"
       case search_event
-        when 10 # , 5  # create & (w/out rename) profile  or rename (5)
+        when 1 # , 5  # create & (w/out rename) profile  or rename (5)
           logger.info "Action: search_event = #{search_event.inspect}: create (1)  profile in tree"
           # puts "Action: search_event = #{search_event.inspect}: create (1)  profile in tree"
-          tree_profiles = logged_actual_profiles(:profile_id)
+          tree_profiles = logged_actual_profiles(:profile_id, connected_users)
 
-        when 20 # destroy profile
+        when 2 # destroy profile
           logger.info "Action: search_event = #{search_event.inspect}: destroy (2) profile in tree"
           # puts "Action: search_event = #{search_event.inspect}: destroy (2) profile in tree"
-          tree_profiles = logged_actual_profiles(:base_profile_id)
+          tree_profiles = logged_actual_profiles(:base_profile_id, connected_users)
 
-        when 1,2,   3, 4, 5, 6, 7, 100 # All other actions: rename, connection, sign_up, rollback, similars_connection, home
+        when    3, 4, 5, 6, 7, 100 # All other actions: rename, connection, sign_up, rollback, similars_connection, home
           logger.info "Action Others in tree: search_event = #{search_event.inspect}"
           # puts "Action Others in tree: search_event = #{search_event.inspect}"
           tree_profiles = all_tree_profiles
@@ -150,7 +151,7 @@ module SearchMain
       end
 
     end
-    logger.info "In select_tree_profiles: tree_profiles.size = #{tree_profiles.size}" unless tree_profiles.blank?
+    logger.info "In select_tree_profiles: After Actual collect: tree_profiles.size = #{tree_profiles.size}" unless tree_profiles.blank?
 
     { tree_profiles: tree_profiles,
       connected_users: connected_users,
@@ -160,15 +161,14 @@ module SearchMain
 
   # @note: start get actual tree_profiles upon CommonLog content
   #   Rspec tested
-  def logged_actual_profiles(name_actual_profile)
-    puts "In logged_actual_profiles: name_actual_profile = #{name_actual_profile.inspect} "
-    action_data = CommonLog.get_action_data(self.id)
+  def logged_actual_profiles(name_actual_profile, connected_users)
+    logger.info  "In logged_actual_profiles: name_actual_profile = #{name_actual_profile.inspect} "
+    action_data = CommonLog.get_action_data(connected_users)
     if action_data.blank?
       puts "Error in logged_actual_profiles: No CommonLog for search_event in tree. Blank action_data = #{action_data.inspect}"
       tree_profiles = []
     else
-      puts "In logged_actual_profiles: action_data = #{action_data.inspect}"
-      puts "action_profile_id = #{action_data[name_actual_profile].inspect}"
+      logger.info  "In logged_actual_profiles: action_data = #{action_data.inspect}"
       profile = Profile.find(self.profile_id)
       tree_profiles = profile.collect_actual_profiles(action_data[name_actual_profile], self.id)
     end
@@ -183,24 +183,19 @@ module SearchMain
     start_search_time = Time.now
     logger.info "## Search_Tree_Profiles: search_event = #{search_event}, CERTAIN_KOEFF = #{CERTAIN_KOEFF}"
     logger.info ""
-    results = {}
 
     # NEW REDUCED VAR
     selected_profiles_data = select_tree_profiles(search_event)
-    # puts "In search_tree_profiles: selected_profiles_data = #{selected_profiles_data} "
-    # logger.info "In search_tree_profiles: selected_profiles_data = #{selected_profiles_data} "
     tree_profiles = selected_profiles_data[:tree_profiles]
     connected_users = selected_profiles_data[:connected_users]
     all_tree_profiles_qty = selected_profiles_data[:all_tree_profiles_qty]
-
-    # logger.info "In search_tree_profiles: tree_profiles.size = #{tree_profiles.size}" unless tree_profiles.blank?
 
     uniq_profiles_pairs = {}
     profiles_with_match_hash = {}
     doubles_one_to_many_hash = {}
     if tree_profiles.blank?
       results = {}
-      puts "In search_tree_profiles: No results. tree_profiles.blank! = #{tree_profiles}, results = #{results} "
+      logger.info  "In search_tree_profiles: No results. tree_profiles.blank! = #{tree_profiles}, results = #{results} "
     else
       # Start MAIN SEARCH PROFILES CYCLE by profiles to search & found
       tree_profiles.each do |profile_id_searched|
@@ -227,13 +222,10 @@ module SearchMain
           duplicates_one_to_many:   doubles_one_to_many_hash,
           duplicates_many_to_one:   duplicates_many_to_one }
 
-
-      # tree_profiles_size = 1
-      # tree_profiles_size = tree_profiles.size unless tree_profiles.blank?
       tree_profiles.blank? ? tree_profiles_size = 1 : tree_profiles_size = tree_profiles.size
 
       search_time = ((Time.now - start_search_time) ).round(3)
-      puts "\n Time of Search_Tree_Profiles = #{search_time.round(3)} sec. In #{results[:connected_author_arr].inspect}, search_event = #{search_event}\n\n"
+      logger.info  "\n Time of Search_Tree_Profiles = #{search_time.round(3)} sec. In #{results[:connected_author_arr].inspect}, search_event = #{search_event}\n\n"
 
       store_log_data = { search_event:            search_event,
                          time:                    search_time,

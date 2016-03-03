@@ -13,7 +13,7 @@ class LogType < ActiveRecord::Base
   # Select name for current LogType
   def self.name_log_type(log_type)
     # logger.info "In LogType model name_log_type: log_type: #{log_type} "
-    name_event = ""
+    # name_event = ""
     case log_type
       when 1
         name_event = "Добавлен профиль"
@@ -31,7 +31,7 @@ class LogType < ActiveRecord::Base
         name_event = "Откат истории дерева"
       else
         name_event = "home in rails"
-        logger.info "home in rails  event = #{log_type} "
+        # logger.info "home in rails  event = #{log_type} "
     end
     name_event
   end

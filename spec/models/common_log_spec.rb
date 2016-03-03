@@ -348,13 +348,17 @@ RSpec.describe CommonLog, type: :model   do # , focus: true
 
     end
 
-    describe 'Method Profile get_action_profile test'   do # , focus: true
+    describe 'Method Profile get_action_profile test' , focus: true  do  # , focus: true
       context "- Check Method get_action_profile for last CommonLog action among exists -"   do  # , focus: true
         let(:current_user_9) { create(:user, :user_9) }  # User = 9. Tree = 9. profile_id = 85
         let(:current_user_9_id) { current_user_9.id } # [9]
         # let(:action_profile_id) { 173 } # profile: added or deleted or renamed
-        let(:action_data) { CommonLog.get_action_data(current_user_9_id) }
+        let(:action_data) { CommonLog.get_action_data(connected_users) }
         let(:current_profile) { current_user_9.profile_id }
+        it '- before check action_profile_id = connected_users - Ok' do
+          puts "before get_action_profile: connected_users = #{connected_users.inspect} \n"
+          expect(connected_users).to eq([9])
+        end
         it '- before check action_profile_id = current_user_9_id - Ok' do
           puts "before get_action_profile: current_user_9_id = #{current_user_9_id.inspect} \n"
           expect(current_user_9_id).to eq(9)

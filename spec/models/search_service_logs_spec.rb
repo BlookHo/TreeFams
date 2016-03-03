@@ -131,7 +131,7 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
           search_service_logs = SearchServiceLogs.find(1).attributes.except('created_at','updated_at')
           expect(search_service_logs).to eq({"id"=>1, "name"=>"Удален профиль", "search_event"=>2, "time"=>110.93,
                                              "connected_users"=> [1, 2], "searched_profiles"=>16,
-                                             "ave_profile_search_time"=> 6.93, "all_tree_profiles"=>26,
+                                             "ave_profile_search_time"=> 6.933, "all_tree_profiles"=>26,
                                              "all_profiles"=>195 } )
         end
       end

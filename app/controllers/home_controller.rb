@@ -287,14 +287,7 @@ class HomeController < ApplicationController
            render :template => 'similars/show_similars_data' # показываем инфу о похожих
            # end
          end
-         # similars_data = current_user.start_similars
-       # @tree_info = similars_data[:tree_info]
-       # # new_sims = similars_data[:new_sims]
-       # @similars = similars_data[:similars]
-       # logger.info "########## In home/index: @similars = #{@similars} "
-       # @log_connection_id = similars_data[:log_connection_id]
-
-       end
+      end
     end
 
           # todo: проверить: убрать запуск метода SimilarsLog.current_tree_log_id и взять @log_connection_id из sim_data

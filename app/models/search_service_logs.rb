@@ -37,8 +37,6 @@ class SearchServiceLogs < ActiveRecord::Base
   # scope :one_opp_way_result, -> (connected_users) {where("found_user_id in (?)", connected_users)}
 
   # @note: to generate the CSV data
-  # def self.to_csv
-  #   CSV.generate do |csv|
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
       csv << column_names
@@ -49,8 +47,6 @@ class SearchServiceLogs < ActiveRecord::Base
   end
 
 
-
-
   # @note: Store one row of search tome result for given data:
   # store_log_data = { search_event:            search_event,
   #                    time:                    search_time,
@@ -58,7 +54,7 @@ class SearchServiceLogs < ActiveRecord::Base
   #                    searched_profiles:       tree_profiles.size }
   #   name - created from LogType
   #   ave_profile_search_time - средняя длит-ть поиска на один профиль - вычисляется
-  #   all_profiles - все профили на сайте - из статистики.
+  #   all_profiles - все профили на сайте - из статистики last row.
   def self.store_search_time_log(store_log_data)
     search_event      = store_log_data[:search_event]
     time              = store_log_data[:time]
@@ -67,11 +63,9 @@ class SearchServiceLogs < ActiveRecord::Base
     all_tree_profiles = store_log_data[:all_tree_profiles] # all profiles qty in tree
 
     name = LogType.name_log_type(search_event)
-    logger.info "In SearchServiceLogs model #store_search_time_log : name = #{name.inspect} "
-
+    logger.info "In SearchServiceLogs#store_search_time_log: Event name = #{name.inspect} "
     ave_profile_search_time = (time.fdiv(searched_profiles.to_f)).round(3)
-
-    all_profiles = WeafamStat.last.profiles # all profiles qty in all trees - from statistics last row
+    all_profiles = WeafamStat.last.profiles
 
     create({
            name:                    name,
