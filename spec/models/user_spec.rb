@@ -1,5 +1,5 @@
 
-RSpec.describe User, :type => :model  , focus: true   do  # , focus: true
+RSpec.describe User, :type => :model    do  # , focus: true
 
   describe '- validation'    do
     before do
@@ -1005,7 +1005,7 @@ RSpec.describe User, :type => :model  , focus: true   do  # , focus: true
 
       describe 'Method logged_actual_profiles in <start_search> test'    do # , focus: true
 
-        describe 'Method logged_actual_profiles in <start_search> test: current_user_1, [1, 2]'  do # , focus: true
+        describe 'Method logged_actual_profiles in <start_search> test: current_user_1, [1, 2]' , focus: true  do # , focus: true
           context "- Check Method logged_actual_profiles -"   do  # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
             let(:name_actual_profile) { :profile_id }
             let(:connected_users) {current_user_1.connected_users}

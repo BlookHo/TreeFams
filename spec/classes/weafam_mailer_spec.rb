@@ -146,6 +146,12 @@ RSpec.describe WeafamMailer     do  #, focus: true
 
       FactoryGirl.create(:connect_profile, :connect_profile_124)  # 124
 
+      FactoryGirl.create(:connect_profile, :connect_profile_444)  # 444
+      FactoryGirl.create(:connect_profile, :connect_profile_555)  # 555
+      FactoryGirl.create(:connect_profile, :connect_profile_666)  # 666
+      FactoryGirl.create(:connect_profile, :connect_profile_777)  # 777
+      FactoryGirl.create(:connect_profile, :connect_profile_888)  # 888
+
       # Tree
       FactoryGirl.create(:connection_trees)                        # 17 pr2
       FactoryGirl.create(:connection_trees, :connect_tree_1_pr3)   # 17 pr3
@@ -441,7 +447,7 @@ RSpec.describe WeafamMailer     do  #, focus: true
         end
       end
 
-      describe '- check Profile have rows count before - Ok' , focus: true  do
+      describe '- check Profile have rows count before - Ok'   do
         let(:rows_qty) {27}
         it_behaves_like :successful_profiles_rows_count
         let(:profile) {Profile.find(17)}
@@ -468,12 +474,32 @@ RSpec.describe WeafamMailer     do  #, focus: true
       end
     end
 
+    describe 'in WeafamMailer: Check actions - '  , focus: true  do   #   , focus: true
+      context '- before actions - check all_users_names '    do   #   , focus: true
+        let(:users_names) { User.all_users_names }  # [1,2]
+        it '- check current_user_1.id - Ok' do
+          puts "before logged_actual_profiles: current_user_1.profile_id = #{current_user_1.profile_id.inspect} \n"
+          expect(current_user_1.profile_id).to eq(17)
+        end
+        it '- check all_users_names: - ' do
+          puts "all users_names =  #{users_names.inspect}"
+          expect(users_names.sort).to eq(["Алексей", "Анна", "Вера", "Дарья", "Наталья", "Петр", "Таисия", "Федор"])
+        end
+      end
+      context '- before actions - check all_users_emails '    do   #   , focus: true
+        let(:users_emails) { User.all_users_emails }  # [1,2]
+        it '- check all_users_emails: - ' do
+          puts "all users_emails =  #{users_emails.inspect}"
+          expect(users_emails.sort).to eq(["alexey@al.al", "aneta@an.an", "darja@pe.pe", "fedor@pe.pe", "natalia@pe.pe",
+                                           "petr@pe.pe", "taisia@pe.pe", "vera@na.na"])
+        end
+      end
 
 
 
 
 
-
+    end
 
   end
 

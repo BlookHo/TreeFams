@@ -93,6 +93,16 @@ class WeafamMailer < ActionMailer::Base
     puts "In collect_weekly_info:  current_user_id = #{current_user_id}"
     # ", @current_user_name = #{@current_user_name} " #
 
+    users_names = User.all_users_names
+    puts "In collect_weekly_info:  users_names = #{users_names}"
+    users_emails = User.all_users_emails
+    puts "In collect_weekly_info:  users_emails = #{users_emails}"
+
+    site_stat_info = WeafamStat.collect_site_stats
+    puts "In collect_weekly_info:  site_stat_info = #{site_stat_info}"
+
+    tree_stat_info = TreeStats.collect_tree_stats(current_user_id)
+    puts "In collect_weekly_info:  tree_stat_info = #{tree_stat_info}"
 
 
   end

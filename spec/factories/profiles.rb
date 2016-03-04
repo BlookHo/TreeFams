@@ -744,6 +744,46 @@ FactoryGirl.define   do
         deleted  0
       end
 
+      trait :connect_profile_444 do   # 444
+        id 444
+        user_id   nil
+        name_id   446
+        sex_id    0
+        tree_id   3
+        deleted  0
+      end
+      trait :connect_profile_555 do   # 555
+        id 555
+        user_id   nil
+        name_id   97
+        sex_id    0
+        tree_id   3
+        deleted  0
+      end
+      trait :connect_profile_666 do   # 666
+        id 666
+        user_id   nil
+        name_id   370
+        sex_id    1
+        tree_id   3
+        deleted  0
+      end
+      trait :connect_profile_777 do   # 777
+        id 777
+        user_id   nil
+        name_id   147
+        sex_id    0
+        tree_id   3
+        deleted  0
+      end
+      trait :connect_profile_888 do   # 888
+        id 888
+        user_id   nil
+        name_id   465
+        sex_id    1
+        tree_id   3
+        deleted  0
+      end
 
 
   end

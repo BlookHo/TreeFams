@@ -146,6 +146,15 @@ class User < ActiveRecord::Base
     users_names
   end
 
+  # @note: Определение all emails of юзерS
+  def self.all_users_emails
+    users = User.all
+    users_names = []
+    users.each do |user|
+      users_names << user.email
+    end
+    users_names
+  end
 
 
   def update_connected_users!
