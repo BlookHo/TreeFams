@@ -55,6 +55,7 @@ module Weafam
     config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'search_work')]
     config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'circles')]
     config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'common_models')]
+    config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'tree_stats')]
     config.autoload_paths += Dir[Rails.root.join('lib', 'added_classes', 'service')]
 
 
