@@ -86,6 +86,10 @@ class ProfileData < ActiveRecord::Base
           end
         end
 
+        ['photos'].each do |field|
+          new_data_row["#{field}"] = data_rewrite[0]["#{field}"] + data_destroy[0]["#{field}"]
+        end
+
         data_rewrite.each do |one_data_row|
           one_data_row.update_attributes(:last_name => new_data_row["last_name"],
                                          :biography => new_data_row["biography"],
@@ -93,6 +97,7 @@ class ProfileData < ActiveRecord::Base
                                          :country => new_data_row["country"],
                                          :city => new_data_row["city"],
                                          :avatar_mongo_id => new_data_row["avatar_mongo_id"],
+                                         :photos => new_data_row["photos"],
                                          :updated_at => Time.now)
         end
 
@@ -106,7 +111,8 @@ class ProfileData < ActiveRecord::Base
                     birthday: data_destroy[0]["birthday"],
                     country: data_destroy[0]["country"],
                     city: data_destroy[0]["city"],
-                    avatar_mongo_id: data_destroy[0]["avatar_mongo_id"] )
+                    avatar_mongo_id: data_destroy[0]["avatar_mongo_id"],
+                    photos: data_destroy[0]["photos"] )
         self.mark_deleted_profile_data(data_destroy)
         puts "In connect_profiles_data: Check rewrite=blank "
 
@@ -157,6 +163,9 @@ class ProfileData < ActiveRecord::Base
           count = count + 1
         end
         if !profile_data_row[0]['avatar_mongo_id'].blank?
+          count = count + 1
+        end
+        if !profile_data_row[0]['photos'].blank?
           count = count + 1
         end
       end

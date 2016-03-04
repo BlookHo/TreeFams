@@ -9,6 +9,7 @@ FactoryGirl.define do
     birthday '2015-06-18 11:28:09.738909'
     country "Россия"
     city    'Москва'
+    photos ["qwerty.jpeg", "ytrewq.jpeg"]
     deleted 0
 
     trait :correct2 do
@@ -18,6 +19,7 @@ FactoryGirl.define do
       birthday '2015-06-18 11:28:09.738909'
       country "Россия"
       city    'Санкт-Петербург'
+      photos ["qwerty.jpeg", "ytrewq.jpeg", "dfdfdf3434.jjj"]
       deleted 0
     end
 
@@ -29,6 +31,7 @@ FactoryGirl.define do
       birthday '2015-06-18 11:28:09.738909'
       country "Россия"
       city    'Санкт-Петербург'
+      photos ["qwerty.jpeg", "ytrewq.jpeg"]
       deleted 0
     end
     trait :connect_rewrite_2 do
@@ -38,6 +41,7 @@ FactoryGirl.define do
       birthday '1961-06-18 11:28:09.738909'
       country "Россия"
       city    ''
+      photos []
       deleted 0
     end
     trait :connect_rewrite_3 do
@@ -47,6 +51,7 @@ FactoryGirl.define do
       birthday '2015-06-18 11:28:09.738909'
       country ""
       city    'Санкт-Петербург'
+      photos []
       deleted 0
     end
     trait :connect_rewrite_4 do
@@ -56,6 +61,7 @@ FactoryGirl.define do
       birthday ''
       country "Россия"
       city    'Санкт-Петербург'
+      photos []
       deleted 0
     end
 
@@ -66,6 +72,7 @@ FactoryGirl.define do
       birthday '1988-06-18 11:28:09.738909'
       country "Белоруссия"
       city    ''
+      photos ["qwerty.jpeg", "ytrewq.jpeg", "dfdfdf3434.jjj"]
       deleted 0
     end
     trait :connect_destroy_2 do
@@ -75,6 +82,7 @@ FactoryGirl.define do
       birthday ''
       country "Молдавия"
       city    'Кишинев'
+      photos []
       deleted 0
     end
     trait :connect_destroy_3 do
@@ -84,6 +92,7 @@ FactoryGirl.define do
       birthday '1998-08-10 11:28:09.738909'
       country "Россия"
       city    ''
+      photos []
       deleted 0
     end
     trait :connect_destroy_4 do
@@ -93,6 +102,7 @@ FactoryGirl.define do
       birthday ''
       country "Китай"
       city    ''
+      photos []
       deleted 0
     end
 

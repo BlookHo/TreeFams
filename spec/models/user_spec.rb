@@ -1,5 +1,5 @@
 
-RSpec.describe User, :type => :model  , focus: true   do  # , focus: true
+RSpec.describe User, :type => :model     do  # , focus: true
 
   describe '- validation'    do
     before do
