@@ -12,15 +12,15 @@ module Meteor
             return render_json_error("Invalid params", @@endpoint, data)
           end
 
-          user, password = parse_user(data)
-          unless user
+          input_user, password = parse_user(data)
+          unless input_user
             return render_json_error("Invalid user params", @@endpoint, data)
           end
 
-          if user.valid?
+          if input_user.valid?
             begin
-              ActiveRecord::Base.transaction do
-                user = User.create_user_account_with_json_data(data, password)
+              user = ActiveRecord::Base.transaction do
+                User.create_user_account_with_json_data(data, password)
               end
               send_user_email(user, password)
               search_event = 6
