@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 20160304095524) do
     t.string   "city",            limit: 255
     t.integer  "deleted",                     default: 0
     t.string   "avatar_mongo_id", limit: 255
+    t.string   "photos",                      default: [], array: true
   end
 
   add_index "profile_data", ["profile_id"], name: "index_profile_data_on_profile_id", using: :btree
