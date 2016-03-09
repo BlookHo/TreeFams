@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304095524) do
+ActiveRecord::Schema.define(version: 20160309081158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "adminpack"
 
   create_table "admins", force: :cascade do |t|
     t.string   "email",           limit: 255
@@ -138,8 +139,6 @@ ActiveRecord::Schema.define(version: 20160304095524) do
   end
 
   add_index "names", ["name", "sex_id"], name: "index_names_on_name_and_sex_id", unique: true, using: :btree
-  add_index "names", ["name"], name: "index_names_on_name", using: :btree
-  add_index "names", ["only_male"], name: "index_names_on_only_male", using: :btree
   add_index "names", ["status_id"], name: "index_names_on_status_id", using: :btree
 
   create_table "pending_users", force: :cascade do |t|
@@ -162,6 +161,8 @@ ActiveRecord::Schema.define(version: 20160304095524) do
     t.integer  "deleted",                     default: 0
     t.string   "avatar_mongo_id", limit: 255
     t.string   "photos",                      default: [], array: true
+    t.string   "deathdate"
+    t.string   "prev_last_name"
   end
 
   add_index "profile_data", ["profile_id"], name: "index_profile_data_on_profile_id", using: :btree
@@ -229,16 +230,16 @@ ActiveRecord::Schema.define(version: 20160304095524) do
   add_index "search_results", ["user_id"], name: "index_search_results_on_user_id", using: :btree
 
   create_table "search_service_logs", force: :cascade do |t|
-    t.string   "name",                    limit: 255
+    t.string   "name"
     t.integer  "search_event"
-    t.float    "time",                                default: 0.0
-    t.integer  "connected_users",                     default: [],  array: true
+    t.float    "time",                    default: 0.0
+    t.integer  "connected_users",         default: [],  array: true
     t.integer  "searched_profiles"
-    t.float    "ave_profile_search_time",             default: 0.0
+    t.float    "ave_profile_search_time", default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "all_tree_profiles",                   default: 0
-    t.integer  "all_profiles",                        default: 0
+    t.integer  "all_tree_profiles",       default: 0
+    t.integer  "all_profiles",            default: 0
   end
 
   create_table "similars_founds", force: :cascade do |t|
