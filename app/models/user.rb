@@ -156,6 +156,18 @@ class User < ActiveRecord::Base
     users_names
   end
 
+  # @note: prepare users_data for weekly mail
+  #   users_data = { :users_names, :users_emails }
+  def self.users_mail_info
+
+    users_names = User.all_users_names
+    # puts "In collect_weekly_info:  users_names = #{users_names}"
+    users_emails = User.all_users_emails
+    # puts "In collect_weekly_info:  users_emails = #{users_emails}"
+    { users_names: users_names, users_emails: users_emails }
+
+  end
+
 
   def update_connected_users!
     connected_user_ids = self.get_connected_users

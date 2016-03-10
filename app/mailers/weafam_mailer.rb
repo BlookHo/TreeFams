@@ -36,11 +36,12 @@ class WeafamMailer < ActionMailer::Base
   end
 
   # @note: prepare and send weekly_manifest mail
-  def weekly_manifest_email(email_name, profile_id, current_user_id)
+  def weekly_manifest_email
 
-    collect_weekly_info(email_name, profile_id, current_user_id)
+    users_data = User.users_mail_info
+    puts "In weekly_manifest_email: users_data = #{users_data}"
 
-    proceed_weekly_mail
+    proceed_weekly_mail(users_data)
 
     # if !profile_id.to_i.blank? && !current_user_id.to_i.blank?
     #   @email_name = email_name
@@ -61,57 +62,76 @@ class WeafamMailer < ActionMailer::Base
 
   end
 
+
+
   # @note: prepare weekly mail data
-  # 1. все имена юзеров, все почты.
+  # #################  1. все имена юзеров, все почты.
   # 2. новости от всей родни из дерева:
-  #   -  дни рождения на след. неделе
-  #   -  фото у кого д.р.
+  #   -  дни рождения на след. неделе       NEWINFO of PROFILES
+  #   -  фото у кого д.р.     of PROFILES
   # 3. непрочитанные сообщения от:
-  #   - от кого: (имя, фамилия если есть)
+  #   - от кого: (имя, фамилия если есть)      NEWINFO of USERS
   #     - начало сообщения - 20 символов
   # 4. есть запросы юзеру на объединение от:
-  #   - от кого: (имя, фамилия если есть)
+  #   - от кого: (имя, фамилия если есть)       NEWINFO of USERS
   #     -  (в его дереве 45 чел.)
   # 5. Информация - статистика из дерева:
-  #   - Сейчас в вашем дереве - 120 чел.,
-  #       из них - 5 активных пользователей проекта. (?)
-  #   - За прошедший период добавилась информация о 10 чел.(),
-  #       из них 2 пользователей.
+  # #################   - Сейчас в вашем дереве - 120 чел.,  of PROFILES
+  # #################       из них - 5 #"#{активных}" пользователей проекта. (?)   of USERS
+  #   - За прошедший период добавилась информация о 10 чел.(),       NEWINFO  of PROFILES
+  #       из них 2 пользователей.       NEWINFO   of USERS
   #   -  Новые активные участники:
-  #       <ВСТАВИТЬ ФОТО>  (если есть)
+  #       <ВСТАВИТЬ ФОТО>  (если есть)   of USERS
   #         Сергей Митин (Минск)
-  #       <ВСТАВИТЬ ФОТО>  (если есть)
+  #       <ВСТАВИТЬ ФОТО>  (если есть)   of USERS
   #         Людмила (Минск)
-  #   - Произошло 1 объединений деревьев,
-  #       при этом добавилось в ваше дерево информацию о 5 чел.
-  #   - Ваша родня написала новых сообщений друг другу: 18
-  #   - Добавилось новых фотографий: 14
-  # 6. Информация - статистика сайта:
-  #   - Всего на сайте информация о 190 чел.,
-  #       из них - 20 (?) активных пользователей.
-  def collect_weekly_info(email_name, profile_id, current_user_id)
+  #   - Произошло 1 объединений деревьев,        NEWINFO   of USERS
+  #       при этом добавилось в ваше дерево информацию о 5 чел.        NEWINFO  of PROFILES
+  #   - Ваша родня написала новых сообщений друг другу: 18        NEWINFO   of USERS
+  #   - Добавилось новых фотографий: 14        NEWINFO   of PROFILES
+  # #################6. Информация - статистика сайта:
+  # #################  - Всего на сайте информация о 190 чел.,  of PROFILES
+  # #################      из них - 20 (?) активных пользователей.   of USERS
+  def collect_weekly_info(current_user_id)
     puts "In collect_weekly_info:  current_user_id = #{current_user_id}"
-    # ", @current_user_name = #{@current_user_name} " #
 
-    users_names = User.all_users_names
-    puts "In collect_weekly_info:  users_names = #{users_names}"
-    users_emails = User.all_users_emails
-    puts "In collect_weekly_info:  users_emails = #{users_emails}"
 
     site_stat_info = WeafamStat.collect_site_stats
     puts "In collect_weekly_info:  site_stat_info = #{site_stat_info}"
+    puts "In collect_weekly_info:  On site: profiles = #{site_stat_info[:profiles]}, users = #{site_stat_info[:users]}"
 
     tree_stat_info = TreeStats.collect_tree_stats(current_user_id)
     puts "In collect_weekly_info:  tree_stat_info = #{tree_stat_info}"
 
+    # tree_stats[:tree_profiles]        = tree_data[:tree_profiles]
+    # tree_stats[:connected_users]      = tree_data[:connected_author_arr]
+    # tree_stats[:qty_of_tree_profiles] = tree_data[:qty_of_tree_profiles]
+    # tree_stats[:qty_of_tree_users]    = users_qty
+
 
   end
 
-  # @note: sending weekly mail data
-  def proceed_weekly_mail  #(email_name, profile_id, current_user_id)
-    logger.info "In proceed_weekly_mail:  "
-    # "@profile_name = #{@profile_name}, @current_user_name = #{@current_user_name} " #
+  # @note: sending weekly mail data for every user
+  def proceed_weekly_mail(users_data)  #(email_name, profile_id, current_user_id)
+    logger.info "In proceed_weekly_mail: users_data = #{users_data} "
+    count_emails = 0
+    users_data[:users_emails].each_with_index do |one_email, index|
+      user_to_send_id = User.where( email: one_email)[0].id
+      user_to_send_name = users_data[:users_names][index]
+      puts "user to send: email = #{one_email}, id = #{user_to_send_id}, name = #{user_to_send_name} "
 
+      # collect_weekly_info(user_to_send_id)
+      # template_weekly_info(user_to_send_id)
+
+      @email_name = one_email
+      @user_name = user_to_send_name
+      # @confirmation_url = confirmation_url(user)
+      mail to: one_email, subject: 'One user weekly manifest email'
+      count_emails += 1
+
+    end
+    puts "In proceed_weekly_mail: count_week_emails = #{count_emails}"
+    count_emails
   end
 
 

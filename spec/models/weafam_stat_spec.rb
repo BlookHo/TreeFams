@@ -505,16 +505,16 @@ RSpec.describe WeafamStat, type: :model  do
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
       end
-      describe '- check User have rows count before - Ok' , focus: true   do
+      describe '- check User have rows count before - Ok'    do
         let(:rows_qty) {8}
         it_behaves_like :successful_users_rows_count
       end
     end
 
     describe 'in WeafamStat: Check actions - '     do   #   , focus: true
-      context '- check collect_site_stats ' , focus: true    do   #   , focus: true
+      context '- check collect_site_stats '     do   #   , focus: true
         let(:all_stat_data) { WeafamStat.collect_site_stats }
-        let(:all_trees) { User.pluck(:connected_users).uniq }
+        let(:all_trees) { User.pluck(:connected_users).uniq.length }
         let(:counters_invites) { Counter.first.invites }
         it '- check Counter - Ok'     do
           puts "check: counters_invites = #{counters_invites.inspect}"
@@ -524,7 +524,7 @@ RSpec.describe WeafamStat, type: :model  do
         it '- check all_trees - Ok' do
           puts "check: User.user_7 = #{User.find(7).id}, .connected_users = #{User.find(7).connected_users} \n"  # user_id = 7
           puts "all_trees = #{all_trees.inspect} \n"
-          expect(all_trees).to eq([[1, 2], [3], [4], [5], [6],  [7, 8]] )
+          expect(all_trees).to eq(6)
         end
 
         it '- check collect_site_stats - Ok' do

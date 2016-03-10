@@ -5,8 +5,9 @@ RSpec.describe WeafamMailer     do  #, focus: true
   describe '- test WeafamMailer methods - ' do
     # create model data
     before {
-      #Counters
-      FactoryGirl.create(:counter)    #
+
+      # Counter
+      FactoryGirl.create(:counter_row)                        #  invites 2689,  disconnects 67
 
       #Weafam_settings
       FactoryGirl.create(:weafam_setting)    #
@@ -439,7 +440,7 @@ RSpec.describe WeafamMailer     do  #, focus: true
       end
     end
 
-    context '- before actions - check tables values '    do   #   , focus: true
+    context '- before actions - check tables values '   do   #   , focus: true
       describe '- check User have double == 0 before - Ok' do
         it "- current_user.double == 0 check" do
           puts "Let created: current_user_1.double = #{current_user_1.double} \n"   # 0
@@ -448,7 +449,7 @@ RSpec.describe WeafamMailer     do  #, focus: true
       end
 
       describe '- check Profile have rows count before - Ok'   do
-        let(:rows_qty) {27}
+        let(:rows_qty) {32}
         it_behaves_like :successful_profiles_rows_count
         let(:profile) {Profile.find(17)}
         it "- Profile.find(17) check" do
@@ -456,7 +457,7 @@ RSpec.describe WeafamMailer     do  #, focus: true
           expect(profile.id).to eq(17)
         end
       end
-      describe '- check Tree have rows count before - Ok' do
+      describe '- check Tree have rows count before - Ok'   do
         let(:rows_qty) {28}
         it_behaves_like :successful_tree_rows_count
       end
@@ -474,7 +475,8 @@ RSpec.describe WeafamMailer     do  #, focus: true
       end
     end
 
-    describe 'in WeafamMailer: Check actions - '  , focus: true  do   #   , focus: true
+    describe 'in WeafamMailer: Check actions - '    do   #   , focus: true
+
       context '- before actions - check all_users_names '    do   #   , focus: true
         let(:users_names) { User.all_users_names }  # [1,2]
         it '- check current_user_1.id - Ok' do
@@ -494,9 +496,47 @@ RSpec.describe WeafamMailer     do  #, focus: true
                                            "petr@pe.pe", "taisia@pe.pe", "vera@na.na"])
         end
       end
+      context '- check collect_site_stats '    do   #   , focus: true
+        let(:all_stat_data) { WeafamStat.collect_site_stats }
+        it '- check collect_site_stats - Ok' do
+          puts "all_stat_data = #{all_stat_data.inspect} \n"
+          expect(all_stat_data).to eq({:profiles=>32, :profiles_male=>15, :profiles_female=>17, :users=>8,
+                                       :users_male=>1, :users_female=>2, :trees=>6, :invitations=>2689,
+                                       :requests=>0, :connections=>0, :refuse_requests=>0, :disconnections=>67,
+                                       :similars_found=>0} )
+        end
+      end
+      context '- check users_mail_info '    do   #   , focus: true
+        let(:users_data) { User.users_mail_info }  #
+        it '- check users_mail_info - Ok' do
+          puts "users_data = #{users_data.inspect} \n"
+          expect(users_data).to eq({:users_names=>["Алексей", "Анна", "Наталья", "Таисия", "Вера",
+                                                     "Петр", "Дарья", "Федор"],
+                                      :users_emails=>["alexey@al.al", "aneta@an.an", "vera@na.na",
+                                                      "darja@pe.pe", "natalia@pe.pe", "petr@pe.pe",
+                                                      "taisia@pe.pe", "fedor@pe.pe"]})
+        end
+      end
 
+      context '- check weekly_manifest_email '  , focus: true  do   #   , focus: true
+        let(:users_names) { ["Алексей", "Анна", "Наталья", "Таисия", "Вера", "Петр", "Дарья", "Федор"] }
+        let(:mail) { WeafamMailer.weekly_manifest_email }
+        it 'renders the subject' do
+          puts "mail.subject = #{mail.subject.inspect} \n"
+          expect(mail.subject).to eql('One user weekly manifest email')
+        end
+        it 'renders the sender email' do
+          puts "mail.from = #{mail.from.inspect} \n"
+          expect(mail.from).to eql(['notification@weallfamily.ru'])
+        end
+        it 'assigns @user_name' do
+          puts "mail.body.encoded = #{mail.body.encoded.inspect} \n"
+          puts "users_names.last = #{users_names.last.inspect} \n"
+          # let(:name_includes) { users_names.include?(@user_name) }
+          expect(mail.body.encoded).to match(users_names.last)
+        end
 
-
+      end
 
 
     end

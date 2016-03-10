@@ -11,18 +11,40 @@ class TreeStats
   def self.collect_tree_stats(current_user_id)
     puts " In TreeStat: collect_tree_stats: current_user_id = #{current_user_id}"  #unless rows.blank?
 
-    # model         = rename_data[:model]
-    # profile_field = rename_data[:profile_field]
-    # profile_id    = rename_data[:profile_id]
-    # name_field    = rename_data[:name_field]
-    # new_name_id   = rename_data[:new_name_id]
+    # var tree_uniq = _.uniq( Trees.find({}).fetch(), false, function(d) {return ( d.is_profile_id ) });
+    # tree_uniq.forEach( function(treeRow) {
+    #                      treeRow.is_sex_id == 1 ? maleProfilesQty++ : femaleProfilesQty++;
+    #                    });
     #
-    # rows = model.where(profile_field => profile_id)
-    # # p " Model TreeAndProfilekey: change_name - rows.size = #{rows.size}" unless rows.blank?
-    # rows.each {|one_row| one_row.update_attributes(name_field => new_name_id, updated_at: Time.now)} unless rows.blank?
+    # var connectedUsers = user.connected_users;
+    #
+    # usersQty:           connectedUsers.length,  // В дереве - юзеров
+    # treeProfilesQty:    tree_uniq.length,       // В дереве - профилей
+    # maleProfilesQty:    maleProfilesQty,        // В дереве - профилей М
+    # femaleProfilesQty:  femaleProfilesQty,      // В дереве - профилей Ж
 
-    {}
+    current_user = User.find(current_user_id)
+    tree_stats = {}
+    unless current_user.blank?
+      tree_data = Tree.tree_main_data(current_user)
 
+      # tree_data = {   author_tree_arr: author_tree_arr,
+      #     tree_profiles: tree_profiles,
+      #     qty_of_tree_profiles: qty_of_tree_profiles,
+      #     connected_author_arr: connected_author_arr  }
+
+      users_qty = 0
+      users_qty = tree_data[:connected_author_arr].length unless tree_data[:connected_author_arr].blank?
+
+      tree_stats[:tree_profiles]        = tree_data[:tree_profiles]
+      tree_stats[:connected_users]      = tree_data[:connected_author_arr]
+      tree_stats[:qty_of_tree_profiles] = tree_data[:qty_of_tree_profiles]
+      tree_stats[:qty_of_tree_users]    = users_qty
+
+      puts " In TreeStats: collect_tree_stats: users_qty = #{users_qty}"
+
+      tree_stats
+    end
   end
 
 
