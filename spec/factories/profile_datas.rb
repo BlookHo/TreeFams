@@ -11,6 +11,9 @@ FactoryGirl.define do
     city    'Москва'
     photos ["qwerty.jpeg", "ytrewq.jpeg"]
     deleted 0
+    deathdate "2015 03 15"
+    prev_last_name  ""
+    birth_place "Смоленск"
 
     trait :correct2 do
       profile_id  4
@@ -21,6 +24,9 @@ FactoryGirl.define do
       city    'Санкт-Петербург'
       photos ["qwerty.jpeg", "ytrewq.jpeg", "dfdfdf3434.jjj"]
       deleted 0
+      deathdate ""
+      prev_last_name  "Петров"
+      birth_place "Саратов"
     end
 
     # Test Method ProfileData connect
@@ -33,17 +39,25 @@ FactoryGirl.define do
       city    'Санкт-Петербург'
       photos ["qwerty.jpeg", "ytrewq.jpeg"]
       deleted 0
+      deathdate '2015 03 15'
+      prev_last_name  ''
+      birth_place ''
     end
+
     trait :connect_rewrite_2 do
       profile_id  6
       last_name   ""
-      biography ""
+      biography "Текст из 6 Ivanoff + "
       birthday '1961-06-18 11:28:09.738909'
       country "Россия"
       city    ''
       photos []
       deleted 0
+      deathdate ""
+      prev_last_name  ""
+      birth_place ""
     end
+
     trait :connect_rewrite_3 do
       profile_id  7
       last_name   "Иванов"
@@ -53,7 +67,11 @@ FactoryGirl.define do
       city    'Санкт-Петербург'
       photos []
       deleted 0
+      deathdate ""
+      prev_last_name  ""
+      birth_place "London"
     end
+
     trait :connect_rewrite_4 do
       profile_id  8
       last_name   "ИвановИЧ"
@@ -63,6 +81,9 @@ FactoryGirl.define do
       city    'Санкт-Петербург'
       photos []
       deleted 0
+      deathdate ""
+      prev_last_name  ""
+      birth_place ""
     end
 
     trait :connect_destroy_1 do
@@ -74,7 +95,11 @@ FactoryGirl.define do
       city    ''
       photos ["qwerty.jpeg", "ytrewq.jpeg", "dfdfdf3434.jjj"]
       deleted 0
+      deathdate ""
+      prev_last_name  ""
+      birth_place ""
     end
+
     trait :connect_destroy_2 do
       profile_id 11
       last_name   "Иванов"
@@ -84,7 +109,11 @@ FactoryGirl.define do
       city    'Кишинев'
       photos []
       deleted 0
+      deathdate ""
+      prev_last_name  ""
+      birth_place ""
     end
+
     trait :connect_destroy_3 do
       profile_id 12
       last_name   ""
@@ -94,7 +123,11 @@ FactoryGirl.define do
       city    ''
       photos []
       deleted 0
+      deathdate ""
+      prev_last_name  "Smith"
+      birth_place ""
     end
+
     trait :connect_destroy_4 do
       profile_id 13
       last_name   "Иванов"
@@ -104,6 +137,9 @@ FactoryGirl.define do
       city    ''
       photos []
       deleted 0
+      deathdate ""
+      prev_last_name  "Paris"
+      birth_place ""
     end
 
     # UNCORRECT
