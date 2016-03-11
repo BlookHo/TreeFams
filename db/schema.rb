@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(version: 20160309081158) do
     t.string   "photos",                      default: [], array: true
     t.string   "deathdate"
     t.string   "prev_last_name"
+    t.string   "birth_place"
   end
 
   add_index "profile_data", ["profile_id"], name: "index_profile_data_on_profile_id", using: :btree
