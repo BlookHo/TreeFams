@@ -64,7 +64,7 @@ class ProfileData < ActiveRecord::Base
       data_destroy = self.where(profile_id: profiles_to_destroy[index])
 
       if !data_rewrite.blank? && !data_destroy.blank?
-        ['last_name', 'biography', 'birthday', 'country', 'city', 'avatar_mongo_id'].each do |field|
+        ['last_name',  'birthday', 'country', 'city', 'avatar_mongo_id'].each do |field|
           if !data_rewrite[0]["#{field}"].blank? && !data_destroy[0]["#{field}"].blank?
             # Both - not empty   Проверять, кто Главный, того и записывать
             fillness_arr_rewrite[index] >= fillness_arr_destroy[index] ?
@@ -86,7 +86,7 @@ class ProfileData < ActiveRecord::Base
           end
         end
 
-        ['photos'].each do |field|
+        ['photos', 'biography',].each do |field|
           new_data_row["#{field}"] = data_rewrite[0]["#{field}"] + data_destroy[0]["#{field}"]
         end
 
