@@ -273,7 +273,7 @@ Weafam::Application.routes.draw do
       namespace :profile_datas do
         get :update, to: "profile_datas_update#update"
         post :add_photo, to: "profile_datas_photos#add"
-        get :remove_photo, to: "profile_datas_photos#remove"
+        post :remove_photo, to: "profile_datas_photos#remove"
       end
 
       namespace :stat do
