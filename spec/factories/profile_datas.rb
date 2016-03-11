@@ -39,9 +39,9 @@ FactoryGirl.define do
       city    'Санкт-Петербург'
       photos ["qwerty.jpeg", "ytrewq.jpeg"]
       deleted 0
-      deathdate ""
-      prev_last_name  ""
-      birth_place ""
+      deathdate '2015 03 15'
+      prev_last_name  ''
+      birth_place ''
     end
 
     trait :connect_rewrite_2 do
@@ -69,7 +69,7 @@ FactoryGirl.define do
       deleted 0
       deathdate ""
       prev_last_name  ""
-      birth_place ""
+      birth_place "London"
     end
 
     trait :connect_rewrite_4 do
@@ -124,7 +124,7 @@ FactoryGirl.define do
       photos []
       deleted 0
       deathdate ""
-      prev_last_name  ""
+      prev_last_name  "Smith"
       birth_place ""
     end
 
@@ -138,7 +138,7 @@ FactoryGirl.define do
       photos []
       deleted 0
       deathdate ""
-      prev_last_name  ""
+      prev_last_name  "Paris"
       birth_place ""
     end
 
