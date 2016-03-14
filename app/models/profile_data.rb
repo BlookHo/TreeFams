@@ -86,8 +86,19 @@ class ProfileData < ActiveRecord::Base
           end
         end
 
-        ['photos', 'biography',].each do |field|
-          new_data_row["#{field}"] = data_rewrite[0]["#{field}"] + data_destroy[0]["#{field}"]
+        ['photos'].each do |field|  # arraya
+          # new_data_row["#{field}"] = data_rewrite[0]["#{field}"] + data_destroy[0]["#{field}"]
+          new_data_row["#{field}"] = (data_rewrite[0]["#{field}"] || []) + (data_destroy[0]["#{field}"] || [])
+        end
+        ['biography',].each do |field|  # strings # todo: insert \n if second string not nil or ""
+          if data_destroy[0]["#{field}"].blank?
+            second_string = ""
+          else
+            second_string = "\n" + data_destroy[0]["#{field}"]
+          end
+
+          # new_data_row["#{field}"] = (data_rewrite[0]["#{field}"] || "") + " " + (data_destroy[0]["#{field}"] || "")
+          new_data_row["#{field}"] = (data_rewrite[0]["#{field}"] || "") + second_string
         end
 
         data_rewrite.each do |one_data_row|

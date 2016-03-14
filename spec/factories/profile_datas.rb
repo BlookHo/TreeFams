@@ -47,11 +47,11 @@ FactoryGirl.define do
     trait :connect_rewrite_2 do
       profile_id  6
       last_name   ""
-      biography "Текст из 6 Ivanoff + "
+      biography "Текст из 6 Ivanoff +"
       birthday '1961-06-18 11:28:09.738909'
       country "Россия"
       city    ''
-      photos []
+      photos nil
       deleted 0
       deathdate ""
       prev_last_name  ""
@@ -107,7 +107,7 @@ FactoryGirl.define do
       birthday ''
       country "Молдавия"
       city    'Кишинев'
-      photos []
+      photos ["image6_1.jpeg", "image6_2.jpeg"]
       deleted 0
       deathdate ""
       prev_last_name  ""
@@ -131,7 +131,7 @@ FactoryGirl.define do
     trait :connect_destroy_4 do
       profile_id 13
       last_name   "Иванов"
-      biography ""
+      biography nil
       birthday ''
       country "Китай"
       city    ''
