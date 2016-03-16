@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Profile, :type => :model   do # , focus: true
+RSpec.describe Profile, :type => :model    do # , focus: true
 
   describe 'Validation test Before Model Profile methods '    do # , focus: true
     after {
@@ -60,7 +60,7 @@ RSpec.describe Profile, :type => :model   do # , focus: true
         name_150_fields = Name.find(150).attributes.except('created_at','updated_at')
         expect(name_150_fields).to eq({"id"=>150, "name"=>"Демьян", "only_male"=>nil, "name_freq"=>0,
                                        "is_approved"=>false, "sex_id"=>1, "parent_name_id"=>nil,
-                                       "search_name_id"=>150})
+                                       "search_name_id"=>150, "status_id"=>0})
         end
       end
 
@@ -289,470 +289,467 @@ RSpec.describe Profile, :type => :model   do # , focus: true
   end
 
   describe '- Model methods'   do  # , focus: true
-    describe '- #' do
-      # create model data
-      before {
-        #Name -  # before
-        FactoryGirl.create(:name, :name_28)    # Алексей
-        FactoryGirl.create(:name, :name_48)    # Анна
-        FactoryGirl.create(:name, :name_82)    # Валентина
-        FactoryGirl.create(:name, :name_122)   # Вячеслав
-        FactoryGirl.create(:name, :name_147)   # Дарья
-        FactoryGirl.create(:name, :name_343)   # Николай
-        FactoryGirl.create(:name, :name_345)   # Нина
-        FactoryGirl.create(:name, :name_370)   # Петр
-        FactoryGirl.create(:name, :name_412)   # Светлана
-        FactoryGirl.create(:name, :name_419)   # Семен
-        FactoryGirl.create(:name, :name_446)   # Таисия
-        FactoryGirl.create(:name, :name_465)   # Федор
-        # puts "before All: Name.first.name = #{Name.first.name} \n"  # Алексей
+    # create model data
+    before {
+      #Name -  # before
+      FactoryGirl.create(:name, :name_28)    # Алексей
+      FactoryGirl.create(:name, :name_48)    # Анна
+      FactoryGirl.create(:name, :name_82)    # Валентина
+      FactoryGirl.create(:name, :name_122)   # Вячеслав
+      FactoryGirl.create(:name, :name_147)   # Дарья
+      FactoryGirl.create(:name, :name_343)   # Николай
+      FactoryGirl.create(:name, :name_345)   # Нина
+      FactoryGirl.create(:name, :name_370)   # Петр
+      FactoryGirl.create(:name, :name_412)   # Светлана
+      FactoryGirl.create(:name, :name_419)   # Семен
+      FactoryGirl.create(:name, :name_446)   # Таисия
+      FactoryGirl.create(:name, :name_465)   # Федор
+      # puts "before All: Name.first.name = #{Name.first.name} \n"  # Алексей
 
-        #Relation -  # before
-        FactoryGirl.create(:relation)
-        FactoryGirl.create(:relation, :relation_2)
-        FactoryGirl.create(:relation, :relation_3)
-        FactoryGirl.create(:relation, :relation_4)
-        FactoryGirl.create(:relation, :relation_5)
-        FactoryGirl.create(:relation, :relation_6)
-        FactoryGirl.create(:relation, :relation_7)
-        FactoryGirl.create(:relation, :relation_8)
-        FactoryGirl.create(:relation, :relation_9)
-        FactoryGirl.create(:relation, :relation_10)
-        FactoryGirl.create(:relation, :relation_11)
-        FactoryGirl.create(:relation, :relation_12)
-        FactoryGirl.create(:relation, :relation_13)
-        FactoryGirl.create(:relation, :relation_14)
-        FactoryGirl.create(:relation, :relation_15)
-        FactoryGirl.create(:relation, :relation_16)
-        FactoryGirl.create(:relation, :relation_17)
-        FactoryGirl.create(:relation, :relation_18)
-        FactoryGirl.create(:relation, :relation_19)
-        FactoryGirl.create(:relation, :relation_20)
-        FactoryGirl.create(:relation, :relation_21)
-        FactoryGirl.create(:relation, :relation_22)
-        FactoryGirl.create(:relation, :relation_23)
-        FactoryGirl.create(:relation, :relation_24)
-        FactoryGirl.create(:relation, :relation_25)
-        FactoryGirl.create(:relation, :relation_26)
-        FactoryGirl.create(:relation, :relation_27)
-        FactoryGirl.create(:relation, :relation_28)
-        FactoryGirl.create(:relation, :relation_29)
-        FactoryGirl.create(:relation, :relation_30)
-        FactoryGirl.create(:relation, :relation_31)
-        FactoryGirl.create(:relation, :relation_32)
-        FactoryGirl.create(:relation, :relation_33)
-        FactoryGirl.create(:relation, :relation_34)
-        FactoryGirl.create(:relation, :relation_35)
-        FactoryGirl.create(:relation, :relation_36)
-        FactoryGirl.create(:relation, :relation_37)
-        FactoryGirl.create(:relation, :relation_38)
-        FactoryGirl.create(:relation, :relation_39)
-        FactoryGirl.create(:relation, :relation_40)
-        FactoryGirl.create(:relation, :relation_41)
-        FactoryGirl.create(:relation, :relation_42)
-        FactoryGirl.create(:relation, :relation_43)
-        FactoryGirl.create(:relation, :relation_44)
-        FactoryGirl.create(:relation, :relation_45)
-        FactoryGirl.create(:relation, :relation_46)
-        FactoryGirl.create(:relation, :relation_47)
-        FactoryGirl.create(:relation, :relation_48)
-        FactoryGirl.create(:relation, :relation_49)
-        FactoryGirl.create(:relation, :relation_50)
-        FactoryGirl.create(:relation, :relation_51)
-        FactoryGirl.create(:relation, :relation_52)
-        FactoryGirl.create(:relation, :relation_53)
-        FactoryGirl.create(:relation, :relation_54)
-        FactoryGirl.create(:relation, :relation_55)
-        FactoryGirl.create(:relation, :relation_56)
+      #Relation -  # before
+      FactoryGirl.create(:relation)
+      FactoryGirl.create(:relation, :relation_2)
+      FactoryGirl.create(:relation, :relation_3)
+      FactoryGirl.create(:relation, :relation_4)
+      FactoryGirl.create(:relation, :relation_5)
+      FactoryGirl.create(:relation, :relation_6)
+      FactoryGirl.create(:relation, :relation_7)
+      FactoryGirl.create(:relation, :relation_8)
+      FactoryGirl.create(:relation, :relation_9)
+      FactoryGirl.create(:relation, :relation_10)
+      FactoryGirl.create(:relation, :relation_11)
+      FactoryGirl.create(:relation, :relation_12)
+      FactoryGirl.create(:relation, :relation_13)
+      FactoryGirl.create(:relation, :relation_14)
+      FactoryGirl.create(:relation, :relation_15)
+      FactoryGirl.create(:relation, :relation_16)
+      FactoryGirl.create(:relation, :relation_17)
+      FactoryGirl.create(:relation, :relation_18)
+      FactoryGirl.create(:relation, :relation_19)
+      FactoryGirl.create(:relation, :relation_20)
+      FactoryGirl.create(:relation, :relation_21)
+      FactoryGirl.create(:relation, :relation_22)
+      FactoryGirl.create(:relation, :relation_23)
+      FactoryGirl.create(:relation, :relation_24)
+      FactoryGirl.create(:relation, :relation_25)
+      FactoryGirl.create(:relation, :relation_26)
+      FactoryGirl.create(:relation, :relation_27)
+      FactoryGirl.create(:relation, :relation_28)
+      FactoryGirl.create(:relation, :relation_29)
+      FactoryGirl.create(:relation, :relation_30)
+      FactoryGirl.create(:relation, :relation_31)
+      FactoryGirl.create(:relation, :relation_32)
+      FactoryGirl.create(:relation, :relation_33)
+      FactoryGirl.create(:relation, :relation_34)
+      FactoryGirl.create(:relation, :relation_35)
+      FactoryGirl.create(:relation, :relation_36)
+      FactoryGirl.create(:relation, :relation_37)
+      FactoryGirl.create(:relation, :relation_38)
+      FactoryGirl.create(:relation, :relation_39)
+      FactoryGirl.create(:relation, :relation_40)
+      FactoryGirl.create(:relation, :relation_41)
+      FactoryGirl.create(:relation, :relation_42)
+      FactoryGirl.create(:relation, :relation_43)
+      FactoryGirl.create(:relation, :relation_44)
+      FactoryGirl.create(:relation, :relation_45)
+      FactoryGirl.create(:relation, :relation_46)
+      FactoryGirl.create(:relation, :relation_47)
+      FactoryGirl.create(:relation, :relation_48)
+      FactoryGirl.create(:relation, :relation_49)
+      FactoryGirl.create(:relation, :relation_50)
+      FactoryGirl.create(:relation, :relation_51)
+      FactoryGirl.create(:relation, :relation_52)
+      FactoryGirl.create(:relation, :relation_53)
+      FactoryGirl.create(:relation, :relation_54)
+      FactoryGirl.create(:relation, :relation_55)
+      FactoryGirl.create(:relation, :relation_56)
 
-        # User
-        FactoryGirl.create(:user)  # User = 1. Tree = 1. profile_id = 63
-        FactoryGirl.create(:user, :user_2 )  # User = 2 . Tree = 10. profile_id = 66
-        FactoryGirl.create(:user, :user_3 )  # User = 3 . Tree = 10. profile_id = 333
-        FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
-        FactoryGirl.create(:user, :user_5 )  # User = 5 . Tree = 10. profile_id = 555
-        FactoryGirl.create(:user, :user_6 )  # User = 6 . Tree = 10. profile_id = 666
-        FactoryGirl.create(:user, :user_7 )  # User = 7 . Tree = 10. profile_id = 777
-        FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
-        FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 9 . profile_id = 85
-        # FactoryGirl.create(:user, :user_10 )  # User = 10. Tree = 10. profile_id = 93
+      # User
+      FactoryGirl.create(:user)  # User = 1. Tree = 1. profile_id = 63
+      FactoryGirl.create(:user, :user_2 )  # User = 2 . Tree = 10. profile_id = 66
+      FactoryGirl.create(:user, :user_3 )  # User = 3 . Tree = 10. profile_id = 333
+      FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
+      FactoryGirl.create(:user, :user_5 )  # User = 5 . Tree = 10. profile_id = 555
+      FactoryGirl.create(:user, :user_6 )  # User = 6 . Tree = 10. profile_id = 666
+      FactoryGirl.create(:user, :user_7 )  # User = 7 . Tree = 10. profile_id = 777
+      FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
+      FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 9 . profile_id = 85
+      # FactoryGirl.create(:user, :user_10 )  # User = 10. Tree = 10. profile_id = 93
 
-        # SearchResults
-        FactoryGirl.create(:search_results, :correct_9_to_7_8)
-        FactoryGirl.create(:search_results, :correct_7_8_to_9)
+      # SearchResults
+      FactoryGirl.create(:search_results, :correct_9_to_7_8)
+      FactoryGirl.create(:search_results, :correct_7_8_to_9)
 
 
-        # ConnectedUser
-        FactoryGirl.create(:connected_user, :correct)      # 1  2
-        FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
+      # ConnectedUser
+      FactoryGirl.create(:connected_user, :correct)      # 1  2
+      FactoryGirl.create(:connected_user, :correct_3_4)  # 3  4
+      FactoryGirl.create(:connected_user, :correct_8_9)  # 8  9
 
-        # Profile
-        FactoryGirl.create(:add_profile, :add_profile_85)   # 85
-        FactoryGirl.create(:add_profile, :add_profile_86)   # 86
-        FactoryGirl.create(:add_profile, :add_profile_87)   # 87
-        FactoryGirl.create(:add_profile, :add_profile_88) # before
-        FactoryGirl.create(:add_profile, :add_profile_89) # before
-        FactoryGirl.create(:add_profile, :add_profile_90) # before
-        FactoryGirl.create(:add_profile, :add_profile_91) # before
-        FactoryGirl.create(:add_profile, :add_profile_92)   # 92
-        # FactoryGirl.create(:profile, :add_profile_93) # user_10 # before
-        # FactoryGirl.create(:profile, :add_profile_94)
-        # FactoryGirl.create(:profile, :add_profile_95)
-        # FactoryGirl.create(:profile, :add_profile_96) # before
-        # FactoryGirl.create(:profile, :add_profile_97) # before
-        # FactoryGirl.create(:profile, :add_profile_98) # before
-        # FactoryGirl.create(:profile, :add_profile_99) # before
-        # FactoryGirl.create(:profile, :add_profile_100)
-        FactoryGirl.create(:add_profile, :add_profile_172)   # 172
-        FactoryGirl.create(:add_profile, :add_profile_173)   # 173
+      # Profile
+      FactoryGirl.create(:add_profile, :add_profile_85)   # 85      tree = [9]  sex = 1    user_id = 9   more_1_week_ago
+      FactoryGirl.create(:add_profile, :add_profile_86)   # 86      tree = [9]  sex = 1   more_1_week_ago
+      FactoryGirl.create(:add_profile, :add_profile_87)   # 87      tree = [9]  sex = 0   more_1_week_ago
+      FactoryGirl.create(:add_profile, :add_profile_88) # before    tree = [9]  sex = 1    user_id = 9   more_1_week_ago
+      FactoryGirl.create(:add_profile, :add_profile_89) # before    tree = [9]  sex = 0   more_1_week_ago
+      FactoryGirl.create(:add_profile, :add_profile_90) # before    tree = [9]  sex = 1   more_1_week_ago
+      FactoryGirl.create(:add_profile, :add_profile_91) # before    tree = [9]  sex = 0   more_1_week_ago
+      FactoryGirl.create(:add_profile, :add_profile_92)   # 92      tree = [9]  sex = 0   more_1_week_ago
+      # FactoryGirl.create(:profile, :add_profile_93) # user_10 # before
+      # FactoryGirl.create(:profile, :add_profile_94)
+      # FactoryGirl.create(:profile, :add_profile_95)
+      # FactoryGirl.create(:profile, :add_profile_96) # before
+      # FactoryGirl.create(:profile, :add_profile_97) # before
+      # FactoryGirl.create(:profile, :add_profile_98) # before
+      # FactoryGirl.create(:profile, :add_profile_99) # before
+      # FactoryGirl.create(:profile, :add_profile_100)
+      FactoryGirl.create(:add_profile, :add_profile_172)   # 172    tree = [9]  sex = 1   more_1_week_ago
+      FactoryGirl.create(:add_profile, :add_profile_173)   # 173    tree = [9]  sex = 0    more_1_week_ago
 
-        # Tree
-        FactoryGirl.create(:tree, :add_tree9_1)   # 86
-        FactoryGirl.create(:tree, :add_tree9_2)   # 87
-        FactoryGirl.create(:tree, :add_tree9_3) # before # 88
-        # FactoryGirl.create(:tree, :add_tree9_4) # before # 89
-        # FactoryGirl.create(:tree, :add_tree9_5) # before # 90
-        FactoryGirl.create(:tree, :add_tree9_6) # before # 91
-        FactoryGirl.create(:tree, :add_tree9_7)   # 92
-        FactoryGirl.create(:tree, :add_tree9_172)   # 172
-        FactoryGirl.create(:tree, :add_tree9_173)   # 173 # - add_log 173
+      # to check new_weekly_profiles
+      FactoryGirl.create(:connect_profile, :connect_profile_8888)  # 8888  [8]   sex = 1   user_id = 8   more_1_week_ago
+      FactoryGirl.create(:connect_profile, :connect_profile_9999)  # 9999   [9]  sex = 1   user_id = 9   more_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles)                      #         [8] sex = 1    less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_8_new_profile_3)   #     [8] sex = 1   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_8_new_profile_4)   #     [8] sex = 1   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_8_new_profile_5)   #     [8] sex = 1   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_8_new_profile_6)   #     [8] sex = 1   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_8_new_profile_7)   #     [8] sex = 1   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_8_new_profile_8)   #     [8]  sex = 0   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_8_new_profile_9)   #     [8]  sex = 0   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_8_new_profile_10)  #     [8]  sex = 0   less_1_week_ago
 
-        #Profile_Key
-        # Before Add new Profile  -  tree #9 Petr
-        FactoryGirl.create(:profile_key, :profile_key9_add_1)   # 85 86
-        FactoryGirl.create(:profile_key, :profile_key9_add_2)   # 86 85
-        FactoryGirl.create(:profile_key, :profile_key9_add_3)    # 85 87
-        FactoryGirl.create(:profile_key, :profile_key9_add_4)   # 87 85
-        FactoryGirl.create(:profile_key, :profile_key9_add_5)   # 86, 87
-        FactoryGirl.create(:profile_key, :profile_key9_add_6)   # 86, 87
-        FactoryGirl.create(:profile_key, :profile_key9_add_7) # before # 85 88
-        FactoryGirl.create(:profile_key, :profile_key9_add_8) # before # 85 88
-        FactoryGirl.create(:profile_key, :profile_key9_add_9)  # 86 88
-        FactoryGirl.create(:profile_key, :profile_key9_add_10)  # 88 86
-        FactoryGirl.create(:profile_key, :profile_key9_add_11)   # 87 88
-        FactoryGirl.create(:profile_key, :profile_key9_add_12)   # 88 87
-        # FactoryGirl.create(:profile_key, :profile_key9_add_13) # before # 85 89
-        # FactoryGirl.create(:profile_key, :profile_key9_add_14) # before # 85 89
-        FactoryGirl.create(:profile_key, :profile_key9_add_15)    # 86 89
-        FactoryGirl.create(:profile_key, :profile_key9_add_16)    # 89 86
-        FactoryGirl.create(:profile_key, :profile_key9_add_17)    # 87 89        ######
-        FactoryGirl.create(:profile_key, :profile_key9_add_18)    # 87 89         ######
-        # FactoryGirl.create(:profile_key, :profile_key9_add_19) # before # 88 89
-        # FactoryGirl.create(:profile_key, :profile_key9_add_20) # before # 88 89
-        # FactoryGirl.create(:profile_key, :profile_key9_add_21) # before # 85 90
-        # FactoryGirl.create(:profile_key, :profile_key9_add_22) # before # 85 90
-        FactoryGirl.create(:profile_key, :profile_key9_add_23)  # 86 90      ######  deleted 1
-        FactoryGirl.create(:profile_key, :profile_key9_add_24)    # 90 86      ######  deleted 1
-        # FactoryGirl.create(:profile_key, :profile_key9_add_25)    # 87 90
-        # FactoryGirl.create(:profile_key, :profile_key9_add_26)  # 90 87
-        FactoryGirl.create(:profile_key, :profile_key9_add_27) # before  # 88 90  ######  deleted 1
-        FactoryGirl.create(:profile_key, :profile_key9_add_28) # before  # 90 88  ###### deleted  1
-        # FactoryGirl.create(:profile_key, :profile_key9_add_29) # before  # 89 90
-        # FactoryGirl.create(:profile_key, :profile_key9_add_30) # before  # 89 90
-        FactoryGirl.create(:profile_key, :profile_key9_add_31) # before  # 85 91
-        FactoryGirl.create(:profile_key, :profile_key9_add_32) # before  # 91 85
-        # FactoryGirl.create(:profile_key, :profile_key9_add_33) # before  # 90 91
-        # FactoryGirl.create(:profile_key, :profile_key9_add_34) # before  # 91 90
-        FactoryGirl.create(:profile_key, :profile_key9_add_35)   # 86 91
-        FactoryGirl.create(:profile_key, :profile_key9_add_36)    # 91 86
-        FactoryGirl.create(:profile_key, :profile_key9_add_37)    # 87 91
-        FactoryGirl.create(:profile_key, :profile_key9_add_38)    # 91 87
-        FactoryGirl.create(:profile_key, :profile_key9_add_39) # before # 88 91
-        FactoryGirl.create(:profile_key, :profile_key9_add_40) # before # 91 88
-        # FactoryGirl.create(:profile_key, :profile_key9_add_41) # before # 89 91
-        # FactoryGirl.create(:profile_key, :profile_key9_add_42) # before # 91 89
-        FactoryGirl.create(:profile_key, :profile_key9_add_43)    # 85 92
-        FactoryGirl.create(:profile_key, :profile_key9_add_44)   # 92 85
-        FactoryGirl.create(:profile_key, :profile_key9_add_45)   # 90 92   ######
-        FactoryGirl.create(:profile_key, :profile_key9_add_46)   # 92 90   ######
-        FactoryGirl.create(:profile_key, :profile_key9_add_47)   # 91 92
-        FactoryGirl.create(:profile_key, :profile_key9_add_48)   # 92 91
-        FactoryGirl.create(:profile_key, :profile_key9_add_49)   # 92 86
-        FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
-        FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
-        FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
-        FactoryGirl.create(:profile_key, :profile_key9_86_172_53)    # 86_172
-        FactoryGirl.create(:profile_key, :profile_key9_172_86_54)    # 172_86
-        FactoryGirl.create(:profile_key, :profile_key9_88_172_55)    # 88_172
-        FactoryGirl.create(:profile_key, :profile_key9_172_88_56)    # 172_88
-        FactoryGirl.create(:profile_key, :profile_key9_85_172_57)    # 85_172
-        FactoryGirl.create(:profile_key, :profile_key9_172_85_58)    # 172_85
-        FactoryGirl.create(:profile_key, :profile_key9_87_172_59)    # 87_172
-        FactoryGirl.create(:profile_key, :profile_key9_172_87_60)    # 172_87
-        FactoryGirl.create(:profile_key, :profile_key9_86_173_61)    # 86_173 # - add_log 173
-        FactoryGirl.create(:profile_key, :profile_key9_173_86_62)    # 173 86 # - add_log 173
-        FactoryGirl.create(:profile_key, :profile_key9_172_173_63)   # 172 173 # - add_log 173
-        FactoryGirl.create(:profile_key, :profile_key9_173_172_64)   # 173_172 # - add_log 173
-        FactoryGirl.create(:profile_key, :profile_key9_88_173_65)    # 88_173 # - add_log 173
-        FactoryGirl.create(:profile_key, :profile_key9_173_88_66)   # 173_88 # - add_log 173
-        FactoryGirl.create(:profile_key, :profile_key9_85_173_67)   # 85_173 # - add_log 173
-        FactoryGirl.create(:profile_key, :profile_key9_173_85_68)    # 173_85 # - add_log 173
-        FactoryGirl.create(:profile_key, :profile_key9_87_173_69)   # 87_173 # - add_log 173
-        FactoryGirl.create(:profile_key, :profile_key9_173_87_70)   # 173_87 # - add_log 173
+      FactoryGirl.create(:new_weekly_profiles, :tree_9_new_profile_2)   #        [9] sex = 1   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_9_new_profile_3)   #        [9] sex = 1   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_9_new_profile_4)   #        [9]  sex = 0   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_9_new_profile_5)   #        [9]  sex = 0   less_1_week_ago
+      FactoryGirl.create(:new_weekly_profiles, :tree_9_new_profile_6)   #        [9]  sex = 0   less_1_week_ago
 
-        FactoryGirl.create(:common_log, :log_delete_profile_89)    #
-        FactoryGirl.create(:common_log, :log_delete_profile_90)    #
-        FactoryGirl.create(:common_log, :log_add_profile_172)    #
-        FactoryGirl.create(:common_log, :log_add_profile_173)    #
-      }
 
-      after {
-        User.delete_all
-        User.reset_pk_sequence
-        ConnectedUser.delete_all
-        ConnectedUser.reset_pk_sequence
-        Tree.delete_all
-        Tree.reset_pk_sequence
-        Profile.delete_all
-        Profile.reset_pk_sequence
-        ProfileKey.delete_all
-        ProfileKey.reset_pk_sequence
-        # WeafamSetting.delete_all
-        # WeafamSetting.reset_pk_sequence
-        Name.delete_all
-        Name.reset_pk_sequence
-        CommonLog.delete_all
-        CommonLog.reset_pk_sequence
-      }
 
-      context '- before actions - check tables values '  do
-        describe '- check Tree have rows count before - Ok' do
-          let(:rows_qty) {7}
-          it_behaves_like :successful_tree_rows_count
-        end
-        describe '- check ProfileKey have rows count before - Ok' do
-          let(:rows_qty) {56}
-          it_behaves_like :successful_profile_keys_rows_count
-        end
-        describe '- check CommonLog have rows count before - Ok' do
-          let(:rows_qty) {4}
-          it_behaves_like :successful_common_logs_rows_count
-        end
-        it '- check CommonLog 1st row before - Ok' do
-          common_log_first =  CommonLog.first
-          expect(common_log_first.profile_id).to eq(89)
-          expect(common_log_first.id).to eq(1)
-        end
-        it '- check CommonLog 2nd row before - Ok' do
-          common_log_second =  CommonLog.second
-          # puts "before action: trees_count = #{trees_count.inspect} \n"
-          expect(common_log_second.profile_id).to eq(90)
-          expect(common_log_second.id).to eq(2)
-        end
-        it '- check CommonLog 3rd row before - Ok' do
-          common_log_third =  CommonLog.third
-          # puts "before action: trees_count = #{trees_count.inspect} \n"
-          expect(common_log_third.profile_id).to eq(172)
-          expect(common_log_third.id).to eq(3)
-        end
-        it '- check CommonLog 4th row before - Ok' do
-          common_log_forth =  CommonLog.find(4)
-          expect(common_log_forth.profile_id).to eq(173)
-          expect(common_log_forth.id).to eq(4)
-        end
-        describe '- check all relations generated in ProfileKey rows: start state - Ok'   do  # , focus: true
-          let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 7, 7,
-                                        7, 8, 8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 91, 101, 101, 101, 111,
-                                        111, 111, 111, 111, 121, 121, 191, 191, 211, 221]}
-          let(:relations_arr_all_size) {56}
-          let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 7, 7, 7, 8,
-                                    8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111,
-                                    121, 121, 191, 221]}
-          let(:relations_arr_size) {52}
-          it_behaves_like :successful_profile_keys_relation_ids
-        end
-        describe '- check all profile_ids generated in ProfileKey rows: start state - Ok' do
-          let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87,
-                                   87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 90, 90, 90, 91, 91, 91, 91, 91, 92,
-                                   92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
-          let(:profiles_ids_arr_size) {56}
-          it_behaves_like :successful_profile_keys_profile_ids
-        end
+      # Tree
+      FactoryGirl.create(:tree, :add_tree9_1)   # 86
+      FactoryGirl.create(:tree, :add_tree9_2)   # 87
+      FactoryGirl.create(:tree, :add_tree9_3) # before # 88
+      # FactoryGirl.create(:tree, :add_tree9_4) # before # 89
+      # FactoryGirl.create(:tree, :add_tree9_5) # before # 90
+      FactoryGirl.create(:tree, :add_tree9_6) # before # 91
+      FactoryGirl.create(:tree, :add_tree9_7)   # 92
+      FactoryGirl.create(:tree, :add_tree9_172)   # 172
+      FactoryGirl.create(:tree, :add_tree9_173)   # 173 # - add_log 173
+
+      #Profile_Key
+      # Before Add new Profile  -  tree #9 Petr
+      FactoryGirl.create(:profile_key, :profile_key9_add_1)   # 85 86
+      FactoryGirl.create(:profile_key, :profile_key9_add_2)   # 86 85
+      FactoryGirl.create(:profile_key, :profile_key9_add_3)    # 85 87
+      FactoryGirl.create(:profile_key, :profile_key9_add_4)   # 87 85
+      FactoryGirl.create(:profile_key, :profile_key9_add_5)   # 86, 87
+      FactoryGirl.create(:profile_key, :profile_key9_add_6)   # 86, 87
+      FactoryGirl.create(:profile_key, :profile_key9_add_7) # before # 85 88
+      FactoryGirl.create(:profile_key, :profile_key9_add_8) # before # 85 88
+      FactoryGirl.create(:profile_key, :profile_key9_add_9)  # 86 88
+      FactoryGirl.create(:profile_key, :profile_key9_add_10)  # 88 86
+      FactoryGirl.create(:profile_key, :profile_key9_add_11)   # 87 88
+      FactoryGirl.create(:profile_key, :profile_key9_add_12)   # 88 87
+      # FactoryGirl.create(:profile_key, :profile_key9_add_13) # before # 85 89
+      # FactoryGirl.create(:profile_key, :profile_key9_add_14) # before # 85 89
+      FactoryGirl.create(:profile_key, :profile_key9_add_15)    # 86 89
+      FactoryGirl.create(:profile_key, :profile_key9_add_16)    # 89 86
+      FactoryGirl.create(:profile_key, :profile_key9_add_17)    # 87 89        ######
+      FactoryGirl.create(:profile_key, :profile_key9_add_18)    # 87 89         ######
+      # FactoryGirl.create(:profile_key, :profile_key9_add_19) # before # 88 89
+      # FactoryGirl.create(:profile_key, :profile_key9_add_20) # before # 88 89
+      # FactoryGirl.create(:profile_key, :profile_key9_add_21) # before # 85 90
+      # FactoryGirl.create(:profile_key, :profile_key9_add_22) # before # 85 90
+      FactoryGirl.create(:profile_key, :profile_key9_add_23)  # 86 90      ######  deleted 1
+      FactoryGirl.create(:profile_key, :profile_key9_add_24)    # 90 86      ######  deleted 1
+      # FactoryGirl.create(:profile_key, :profile_key9_add_25)    # 87 90
+      # FactoryGirl.create(:profile_key, :profile_key9_add_26)  # 90 87
+      FactoryGirl.create(:profile_key, :profile_key9_add_27) # before  # 88 90  ######  deleted 1
+      FactoryGirl.create(:profile_key, :profile_key9_add_28) # before  # 90 88  ###### deleted  1
+      # FactoryGirl.create(:profile_key, :profile_key9_add_29) # before  # 89 90
+      # FactoryGirl.create(:profile_key, :profile_key9_add_30) # before  # 89 90
+      FactoryGirl.create(:profile_key, :profile_key9_add_31) # before  # 85 91
+      FactoryGirl.create(:profile_key, :profile_key9_add_32) # before  # 91 85
+      # FactoryGirl.create(:profile_key, :profile_key9_add_33) # before  # 90 91
+      # FactoryGirl.create(:profile_key, :profile_key9_add_34) # before  # 91 90
+      FactoryGirl.create(:profile_key, :profile_key9_add_35)   # 86 91
+      FactoryGirl.create(:profile_key, :profile_key9_add_36)    # 91 86
+      FactoryGirl.create(:profile_key, :profile_key9_add_37)    # 87 91
+      FactoryGirl.create(:profile_key, :profile_key9_add_38)    # 91 87
+      FactoryGirl.create(:profile_key, :profile_key9_add_39) # before # 88 91
+      FactoryGirl.create(:profile_key, :profile_key9_add_40) # before # 91 88
+      # FactoryGirl.create(:profile_key, :profile_key9_add_41) # before # 89 91
+      # FactoryGirl.create(:profile_key, :profile_key9_add_42) # before # 91 89
+      FactoryGirl.create(:profile_key, :profile_key9_add_43)    # 85 92
+      FactoryGirl.create(:profile_key, :profile_key9_add_44)   # 92 85
+      FactoryGirl.create(:profile_key, :profile_key9_add_45)   # 90 92   ######
+      FactoryGirl.create(:profile_key, :profile_key9_add_46)   # 92 90   ######
+      FactoryGirl.create(:profile_key, :profile_key9_add_47)   # 91 92
+      FactoryGirl.create(:profile_key, :profile_key9_add_48)   # 92 91
+      FactoryGirl.create(:profile_key, :profile_key9_add_49)   # 92 86
+      FactoryGirl.create(:profile_key, :profile_key9_add_50)   # 92 86
+      FactoryGirl.create(:profile_key, :profile_key9_add_51)   # 92 87
+      FactoryGirl.create(:profile_key, :profile_key9_add_52)   # 92 87
+      FactoryGirl.create(:profile_key, :profile_key9_86_172_53)    # 86_172
+      FactoryGirl.create(:profile_key, :profile_key9_172_86_54)    # 172_86
+      FactoryGirl.create(:profile_key, :profile_key9_88_172_55)    # 88_172
+      FactoryGirl.create(:profile_key, :profile_key9_172_88_56)    # 172_88
+      FactoryGirl.create(:profile_key, :profile_key9_85_172_57)    # 85_172
+      FactoryGirl.create(:profile_key, :profile_key9_172_85_58)    # 172_85
+      FactoryGirl.create(:profile_key, :profile_key9_87_172_59)    # 87_172
+      FactoryGirl.create(:profile_key, :profile_key9_172_87_60)    # 172_87
+      FactoryGirl.create(:profile_key, :profile_key9_86_173_61)    # 86_173 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_173_86_62)    # 173 86 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_172_173_63)   # 172 173 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_173_172_64)   # 173_172 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_88_173_65)    # 88_173 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_173_88_66)   # 173_88 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_85_173_67)   # 85_173 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_173_85_68)    # 173_85 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_87_173_69)   # 87_173 # - add_log 173
+      FactoryGirl.create(:profile_key, :profile_key9_173_87_70)   # 173_87 # - add_log 173
+
+      FactoryGirl.create(:common_log, :log_delete_profile_89)    #
+      FactoryGirl.create(:common_log, :log_delete_profile_90)    #
+      FactoryGirl.create(:common_log, :log_add_profile_172)    #
+      FactoryGirl.create(:common_log, :log_add_profile_173)    #
+    }
+
+    after {
+      User.delete_all
+      User.reset_pk_sequence
+      ConnectedUser.delete_all
+      ConnectedUser.reset_pk_sequence
+      Tree.delete_all
+      Tree.reset_pk_sequence
+      Profile.delete_all
+      Profile.reset_pk_sequence
+      ProfileKey.delete_all
+      ProfileKey.reset_pk_sequence
+      # WeafamSetting.delete_all
+      # WeafamSetting.reset_pk_sequence
+      Name.delete_all
+      Name.reset_pk_sequence
+      CommonLog.delete_all
+      CommonLog.reset_pk_sequence
+    }
+
+    context '- before actions - check tables values '  do
+      describe '- check Tree have rows count before - Ok' do
+        let(:rows_qty) {7}
+        it_behaves_like :successful_tree_rows_count
       end
-
-      context '- After actions - create profile '  do
-
+      describe '- check ProfileKey have rows count before - Ok' do
+        let(:rows_qty) {56}
+        it_behaves_like :successful_profile_keys_rows_count
       end
-
-
-      describe 'Method Profile profile_circle test'   do # , focus: true
-        context "- Check Method profile_circle for one Profile -"    do  # , focus: true
-          let(:connected_users_arr) {[9]}
-          let(:one_profile) { Profile.find(85) }
-          let(:circle_array) { one_profile.profile_circle(connected_users_arr) }
-          it '- check one profile exists - Ok' do
-            puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
-            expect(one_profile.id).to eq(85)
-          end
-          it '- check one profile Circle array size - Ok' do
-            puts "in profile_circle: circle_array = #{circle_array.inspect} \n"
-            expect(circle_array.size).to eq(7) unless circle_array.blank?
-          end
-          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
-            is_profiles_ids = []
-            circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id }
-            is_profiles_ids.uniq
-            puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
-            expect(is_profiles_ids).to eq([86, 87, 91, 88, 92, 172, 173])
-          end
-        end
-        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
-          let(:connected_users_arr) {[10]}
-          let(:one_profile) { Profile.find(85) }
-          let(:circle_array) { one_profile.profile_circle(connected_users_arr) }
-          it '- check one profile exists - Ok' do
-            puts "profile_circle for one_profile.id = #{one_profile.id.inspect} \n"
-            expect(one_profile.id).to eq(85)
-          end
-          it '- check one profile exists - Ok' do
-            puts "NO profile_circle: one_profile.tree_id = #{one_profile.tree_id.inspect} - NOT in #{connected_users_arr} \n"
-            expect(one_profile.tree_id).to eq(9)
-          end
-          it '- check one profile Circle array size - Ok' do
-            puts "NO circle_array = #{circle_array.inspect} \n"
-            expect(circle_array.size).to eq(0) unless circle_array.blank?
-          end
-          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
-            is_profiles_ids = []
-            circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id } unless circle_array.blank?
-            is_profiles_ids.uniq
-            puts "NO is_profiles_ids = #{is_profiles_ids.inspect} \n"
-            expect(is_profiles_ids).to eq([])
-          end
-        end
-        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
-          let(:connected_users_arr) {[9]}
-          let(:profile_94) {FactoryGirl.create(:add_profile, :add_profile_94)}
-          let(:circle_array) { profile_94.profile_circle(connected_users_arr) }
-          it '- check one profile exists - Ok' do
-            puts "profile_circle for profile_94.id = #{profile_94.id.inspect} \n"
-            expect(profile_94.id).to eq(94)
-          end
-          it '- check one profile exists - Ok' do
-            puts "NO profile_circle: profile_94.tree_id = #{profile_94.tree_id.inspect} - NOT in #{connected_users_arr} \n"
-            expect(profile_94.tree_id).to eq(10)
-          end
-          it '- check one profile Circle array size - Ok' do
-            puts "NO circle_array = #{circle_array.inspect} \n"
-            expect(circle_array.size).to eq(0) unless circle_array.blank?
-          end
-          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
-            is_profiles_ids = []
-            circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id } unless circle_array.blank?
-            is_profiles_ids.uniq
-            puts "NO is_profiles_ids = #{is_profiles_ids.inspect} \n"
-            expect(is_profiles_ids).to eq([])
-          end
-        end
+      describe '- check CommonLog have rows count before - Ok' do
+        let(:rows_qty) {4}
+        it_behaves_like :successful_common_logs_rows_count
       end
-
-      describe 'Method Profile profiles_in_action test'   do # , focus: true
-        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
-          let(:connected_users_arr) {[9]}
-          let(:one_profile) { Profile.find(85) }
-          let(:action_profiles) { one_profile.profiles_in_action(one_profile.id) }
-          it '- check one profile exists - Ok' do
-            # puts "before profile_circle: User.last = #{User.last.inspect} \n"
-            puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
-            expect(one_profile.id).to eq(85)
-          end
-          it '- check one profile exists - Ok' do
-            puts "profile_circle: one_profile.tree_id = #{one_profile.tree_id.inspect} - IN #{connected_users_arr} \n"
-            expect(one_profile.tree_id).to eq(9)
-          end
-          it '- check one profile action_profiles array size - Ok' do
-            puts "in profile_circle: action_profiles = #{action_profiles.inspect} \n"
-            expect(action_profiles.size).to eq(8) unless action_profiles.blank?
-          end
-          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
-            puts "in profile_circle: action_profiles = #{action_profiles.inspect} \n"
-            expect(action_profiles).to eq([85, 86, 87, 91, 88, 92, 172, 173])
-          end
-        end
+      it '- check CommonLog 1st row before - Ok' do
+        common_log_first =  CommonLog.first
+        expect(common_log_first.profile_id).to eq(89)
+        expect(common_log_first.id).to eq(1)
       end
-
-      describe 'Method Profile profiles_in_action test'   do # , focus: true
-        context "- Check Method profile_circle for one Profile -"   do  # , focus: true
-          let(:connected_users_arr) {[9]}
-          let(:one_profile) { Profile.find(85) }
-          let(:action_profile_id) { 173 } # profile: added or deleted or renamed
-          let(:action_profiles) { one_profile.profiles_in_action(action_profile_id) }
-          it '- check one profile exists - Ok' do
-            # puts "before profile_circle: User.last = #{User.last.inspect} \n"
-            puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
-            expect(one_profile.id).to eq(85)
-          end
-          it '- check one profile exists - Ok' do
-            puts "profile_circle: one_profile.tree_id = #{one_profile.tree_id.inspect} - IN #{connected_users_arr} \n"
-            expect(one_profile.tree_id).to eq(9)
-          end
-          it '- check one profile action_profiles array size - Ok' do
-            puts "in profile_circle: action_profiles = #{action_profiles.inspect} \n"
-            expect(action_profiles.size).to eq(6) unless action_profiles.blank?
-          end
-          it '- check one profile Circle: array of <is_profile_ids> - Ok' do
-            puts "in profile_circle: action_profiles = #{action_profiles.inspect} \n"
-            expect(action_profiles.sort).to eq([85, 86, 87, 88, 172, 173])
-          end
-        end
+      it '- check CommonLog 2nd row before - Ok' do
+        common_log_second =  CommonLog.second
+        # puts "before action: trees_count = #{trees_count.inspect} \n"
+        expect(common_log_second.profile_id).to eq(90)
+        expect(common_log_second.id).to eq(2)
       end
-
-      describe 'Method Profile second_row_profiles test'   do # , focus: true
-        context "- Check Method second_row_profiles for first_row_profiles -"   do  # , focus: true
-          let(:first_row_profiles) {[85, 86, 87, 91, 88, 92, 172, 173]}
-          let(:one_profile) { Profile.find(85) }
-          let(:one_user) { User.last }
-          let(:action_profiles) { one_profile.second_row_profiles(first_row_profiles) }
-          it '- check one profile exists - Ok' do
-            puts "before second_row_profiles: one_profile.id = #{one_profile.id.inspect} \n"
-            expect(one_profile.id).to eq(85)
-          end
-          it '- check one user.id - Ok' do
-            puts "before profile_circle: one_user.id = #{one_user.id.inspect} \n"
-            expect(one_user.id).to eq(9)
-          end
-          it '- check one user.connected_users - Ok' do
-            puts "before profile_circle: one_user.connected_users = #{one_user.connected_users.inspect} \n"
-            expect(one_user.connected_users).to eq([9])
-          end
-          it '- check first_row_profiles - Ok' do
-            puts "before second_row_profiles: first_row_profiles = #{first_row_profiles.inspect}"
-            expect(first_row_profiles).to eq([85, 86, 87, 91, 88, 92, 172, 173])
-          end
-          it '- check Final action_profiles array size - Ok' do
-            puts "After second_row_profiles: action_profiles = #{action_profiles.inspect} \n"
-            expect(action_profiles.size).to eq(10) unless action_profiles.blank?
-          end
-          it '- check second_row_profiles: Final array of action_profiles - Ok' do
-            puts "After second_row_profiles: action_profiles = #{action_profiles.inspect} \n"
-            expect(action_profiles.sort).to eq([85, 86, 87, 88, 89, 90, 91, 92, 172, 173])
-          end
-        end
+      it '- check CommonLog 3rd row before - Ok' do
+        common_log_third =  CommonLog.third
+        # puts "before action: trees_count = #{trees_count.inspect} \n"
+        expect(common_log_third.profile_id).to eq(172)
+        expect(common_log_third.id).to eq(3)
       end
-
-      describe 'Method Profile collect_actual_profiles test'     do # , focus: true
-        context "- Check Method second_row_profiles for first_row_profiles -"   do  # , focus: true
-          # let(:first_row_profiles) {[85, 86, 87, 91, 88, 92, 172, 173]}
-          let(:one_profile) { Profile.find(85) }
-          let(:current_user_id) { User.find(9).id } # [9]
-          let(:action_profile_id) { 173 } # profile: added or deleted or renamed
-          let(:action_profiles) { one_profile.collect_actual_profiles(action_profile_id, current_user_id) }
-          it '- check one profile exists - Ok' do
-            puts "before second_row_profiles: one_profile.id = #{one_profile.id.inspect} \n"
-            expect(one_profile.id).to eq(85)
-          end
-          it '- check one user.id - Ok' do
-            puts "before profile_circle: one_user.id = #{current_user_id.inspect} \n"
-            expect(current_user_id).to eq(9)
-          end
-          it '- check collect_actual_profiles - ' do
-            puts "After collect_actual_profiles: action_profiles = #{action_profiles.inspect}"
-            expect(action_profiles.sort).to eq([84, 85, 86, 87, 88, 89, 91, 92, 93, 94, 95, 172, 173])
-          end
-        end
+      it '- check CommonLog 4th row before - Ok' do
+        common_log_forth =  CommonLog.find(4)
+        expect(common_log_forth.profile_id).to eq(173)
+        expect(common_log_forth.id).to eq(4)
       end
+      describe '- check all relations generated in ProfileKey rows: start state - Ok'   do  # , focus: true
+        let(:relations_ids_arr_all) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 7, 7,
+                                      7, 8, 8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 91, 101, 101, 101, 111,
+                                      111, 111, 111, 111, 121, 121, 191, 191, 211, 221]}
+        let(:relations_arr_all_size) {56}
+        let(:relations_ids_arr) {[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 7, 7, 7, 8,
+                                  8, 8, 13, 13, 14, 14, 17, 17, 17, 17, 91, 91, 91, 101, 101, 101, 111, 111, 111, 111,
+                                  121, 121, 191, 221]}
+        let(:relations_arr_size) {52}
+        it_behaves_like :successful_profile_keys_relation_ids
+      end
+      describe '- check all profile_ids generated in ProfileKey rows: start state - Ok' do
+        let(:profiles_ids_arr) {[85, 85, 85, 85, 85, 85, 85, 86, 86, 86, 86, 86, 86, 86, 86, 86, 87, 87, 87, 87, 87,
+                                 87, 87, 87, 88, 88, 88, 88, 88, 88, 88, 89, 89, 90, 90, 90, 91, 91, 91, 91, 91, 92,
+                                 92, 92, 92, 92, 172, 172, 172, 172, 172, 173, 173, 173, 173, 173]}
+        let(:profiles_ids_arr_size) {56}
+        it_behaves_like :successful_profile_keys_profile_ids
+      end
+    end
+
+    context '- After actions - create profile '  do
 
     end
+
+
+    describe 'Method Profile profile_circle test'   do # , focus: true
+      context "- Check Method profile_circle for one Profile -"    do  # , focus: true
+        let(:connected_users_arr) {[9]}
+        let(:one_profile) { Profile.find(85) }
+        let(:circle_array) { one_profile.profile_circle(connected_users_arr) }
+        it '- check one profile exists - Ok' do
+          puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+          expect(one_profile.id).to eq(85)
+        end
+        it '- check one profile Circle array size - Ok' do
+          puts "in profile_circle: circle_array = #{circle_array.inspect} \n"
+          expect(circle_array.size).to eq(7) unless circle_array.blank?
+        end
+        it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+          is_profiles_ids = []
+          circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id }
+          is_profiles_ids.uniq
+          puts "in profile_circle: is_profiles_ids = #{is_profiles_ids.inspect} \n"
+          expect(is_profiles_ids).to eq([86, 87, 91, 88, 92, 172, 173])
+        end
+      end
+      context "- Check Method profile_circle for one Profile -"   do  # , focus: true
+        let(:connected_users_arr) {[10]}
+        let(:one_profile) { Profile.find(85) }
+        let(:circle_array) { one_profile.profile_circle(connected_users_arr) }
+        it '- check one profile exists - Ok' do
+          puts "profile_circle for one_profile.id = #{one_profile.id.inspect} \n"
+          expect(one_profile.id).to eq(85)
+        end
+        it '- check one profile exists - Ok' do
+          puts "NO profile_circle: one_profile.tree_id = #{one_profile.tree_id.inspect} - NOT in #{connected_users_arr} \n"
+          expect(one_profile.tree_id).to eq(9)
+        end
+        it '- check one profile Circle array size - Ok' do
+          puts "NO circle_array = #{circle_array.inspect} \n"
+          expect(circle_array.size).to eq(0) unless circle_array.blank?
+        end
+        it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+          is_profiles_ids = []
+          circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id } unless circle_array.blank?
+          is_profiles_ids.uniq
+          puts "NO is_profiles_ids = #{is_profiles_ids.inspect} \n"
+          expect(is_profiles_ids).to eq([])
+        end
+      end
+      context "- Check Method profile_circle for one Profile -"   do  # , focus: true
+        let(:connected_users_arr) {[9]}
+        let(:profile_94) {FactoryGirl.create(:add_profile, :add_profile_94)}
+        let(:circle_array) { profile_94.profile_circle(connected_users_arr) }
+        it '- check one profile exists - Ok' do
+          puts "profile_circle for profile_94.id = #{profile_94.id.inspect} \n"
+          expect(profile_94.id).to eq(94)
+        end
+        it '- check one profile exists - Ok' do
+          puts "NO profile_circle: profile_94.tree_id = #{profile_94.tree_id.inspect} - NOT in #{connected_users_arr} \n"
+          expect(profile_94.tree_id).to eq(10)
+        end
+        it '- check one profile Circle array size - Ok' do
+          puts "NO circle_array = #{circle_array.inspect} \n"
+          expect(circle_array.size).to eq(0) unless circle_array.blank?
+        end
+        it '- check one profile Circle: array of <is_profile_ids> - Ok' do
+          is_profiles_ids = []
+          circle_array.map { |one_record| is_profiles_ids << one_record.is_profile_id } unless circle_array.blank?
+          is_profiles_ids.uniq
+          puts "NO is_profiles_ids = #{is_profiles_ids.inspect} \n"
+          expect(is_profiles_ids).to eq([])
+        end
+      end
+    end
+
+    describe 'Method Profile second_row_profiles test'   do # , focus: true
+      context "- Check Method second_row_profiles for first_row_profiles -"   do  # , focus: true
+        let(:first_row_profiles) {[85, 86, 87, 91, 88, 92, 172, 173]}
+        let(:one_profile) { Profile.find(85) }
+        let(:action_profile_id) { 85 }
+        let(:one_user) { User.last }
+        let(:action_profiles) { one_profile.second_row_profiles(first_row_profiles, action_profile_id) }
+        it '- check one profile exists - Ok' do
+          puts "before second_row_profiles: one_profile.id = #{one_profile.id.inspect} \n"
+          expect(one_profile.id).to eq(85)
+        end
+        it '- check one user.id - Ok' do
+          puts "before profile_circle: one_user.id = #{one_user.id.inspect} \n"
+          expect(one_user.id).to eq(9)
+        end
+        it '- check one user.connected_users - Ok' do
+          puts "before profile_circle: one_user.connected_users = #{one_user.connected_users.inspect} \n"
+          expect(one_user.connected_users).to eq([8, 9])
+        end
+        it '- check first_row_profiles - Ok' do
+          puts "before second_row_profiles: first_row_profiles = #{first_row_profiles.inspect}"
+          expect(first_row_profiles).to eq([85, 86, 87, 91, 88, 92, 172, 173])
+        end
+        it '- check Final action_profiles array size - Ok' do
+          puts "After second_row_profiles: action_profiles = #{action_profiles.inspect} \n"
+          expect(action_profiles.size).to eq(10) unless action_profiles.blank?
+        end
+        it '- check second_row_profiles: Final array of action_profiles - Ok' do
+          puts "After second_row_profiles: action_profiles = #{action_profiles.inspect} \n"
+          expect(action_profiles.sort).to eq([85, 86, 87, 88, 89, 90, 91, 92, 172, 173])
+        end
+      end
+    end
+
+    describe 'Method Profile collect_actual_profiles test'     do # , focus: true
+      context "- Check Method second_row_profiles for first_row_profiles -"   do  # , focus: true
+        # let(:first_row_profiles) {[85, 86, 87, 91, 88, 92, 172, 173]}
+        let(:one_profile) { Profile.find(85) }
+        let(:current_user_id) { User.find(9).id } # [9]
+        let(:action_profile_id) { 173 } # profile: added or deleted or renamed
+        let(:action_profiles) { one_profile.collect_actual_profiles(action_profile_id, current_user_id) }
+        it '- check one profile exists - Ok' do
+          puts "before second_row_profiles: one_profile.id = #{one_profile.id.inspect} \n"
+          expect(one_profile.id).to eq(85)
+        end
+        it '- check one user.id - Ok' do
+          puts "before profile_circle: one_user.id = #{current_user_id.inspect} \n"
+          expect(current_user_id).to eq(9)
+        end
+        it '- check collect_actual_profiles - ' do
+          puts "After collect_actual_profiles: action_profiles = #{action_profiles.inspect}"
+          expect(action_profiles.sort).to eq([84, 85, 86, 87, 88, 89, 91, 92, 93, 94, 95, 172, 173])
+        end
+      end
+    end
+
+
+    describe 'Method Profile new_weekly_profiles(connected_users)'  , focus: true   do # , focus: true
+      context "- Check Method second_row_profiles for first_row_profiles -"   do  # , focus: true
+        let(:connected_users_arr) {[8, 9]}
+        let(:one_profile) { Profile.find(8888) }
+        let(:new_weekly_profiles_data) { Profile.new_weekly_profiles(connected_users_arr) }
+
+        describe '- check Profile have rows count before - Ok' do
+          let(:rows_qty) {26}
+          it_behaves_like :successful_profiles_rows_count
+        end
+        it '- check one_profile.id - Ok' do
+          puts "before profile_circle: one_profile.id = #{one_profile.id.inspect} \n"
+          expect(one_profile.id).to eq(8888)
+        end
+        it '- check new_weekly_profiles_data - Ok' do
+          puts "after new_weekly_profiles: new_weekly_profiles_data = #{new_weekly_profiles_data.inspect} \n"
+          expect(new_weekly_profiles_data).to eq({ :new_profiles_qty=>14, :new_profiles_male=>8,
+                                                   :new_profiles_female=>6,
+                                                   :new_profiles_ids=>[88882, 88883, 88884, 88885, 88886,
+                                                                       88887, 88888, 88889, 888810,
+                                                                       99992, 99993, 99994, 99995, 99996]})
+        end
+      end
+    end
+
+
   end
 
 

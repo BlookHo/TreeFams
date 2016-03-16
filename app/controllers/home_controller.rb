@@ -47,6 +47,8 @@ class HomeController < ApplicationController
     logger.info "certain_koeff = #{CERTAIN_KOEFF}"
     logger.info "certain_connect = #{CERTAIN_CONNECT}"
 
+    WeafamMailer.weekly_manifest_email.deliver_now
+
     # current_user.modified_search # now = srat_search
 
     # 64 - 65 - cert.4

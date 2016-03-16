@@ -55,9 +55,9 @@ RSpec.describe User, :type => :model    do  # , focus: true
       FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
       FactoryGirl.create(:user, :user_5 )  # User = 5 . Tree = 10. profile_id = 555
       FactoryGirl.create(:user, :user_6 )  # User = 6 . Tree = 10. profile_id = 666
-      FactoryGirl.create(:user, :user_7 )  # User = 7. Tree = 10. profile_id = 777
-      FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
-      FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 10. profile_id = 888
+      FactoryGirl.create(:user, :user_7 )  # User = 7. Tree = 10. profile_id = 7777 !
+      FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 8888 !
+      FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 10. profile_id = 9999 !
       FactoryGirl.create(:user, :user_10)  # User = 10. Tree = 10. profile_id = 888
       FactoryGirl.create(:user, :user_11)  # User = 11. Tree = 10. profile_id = 888
       FactoryGirl.create(:user, :user_12)  # User = 12. Tree = 10. profile_id = 888
@@ -152,8 +152,10 @@ RSpec.describe User, :type => :model    do  # , focus: true
   describe '- Check methods in User model'   do # , focus: true
     # create model data
     before {
-      #Counters
-      FactoryGirl.create(:counter)    #
+
+      # Counter
+      FactoryGirl.create(:counter_row)                        #  invites 2689,  disconnects 67
+
 
       #Weafam_settings
       FactoryGirl.create(:weafam_setting)    #
@@ -262,36 +264,36 @@ RSpec.describe User, :type => :model    do  # , focus: true
       FactoryGirl.create(:connected_user, :correct_7_8)  # 7  8
 
       # Profile
-      FactoryGirl.create(:connect_profile)   # 1
-      FactoryGirl.create(:connect_profile, :connect_profile_2)   # 2
-      FactoryGirl.create(:connect_profile, :connect_profile_3)   # 3
-      FactoryGirl.create(:connect_profile, :connect_profile_7)   # 7
-      FactoryGirl.create(:connect_profile, :connect_profile_8)   # 8
-      FactoryGirl.create(:connect_profile, :connect_profile_9)   # 9
-      FactoryGirl.create(:connect_profile, :connect_profile_10)  # 10
+      FactoryGirl.create(:connect_profile)   # 1          tree_id = 4
+      FactoryGirl.create(:connect_profile, :connect_profile_2)   # 2  tree_id = 1
+      FactoryGirl.create(:connect_profile, :connect_profile_3)   # 3  tree_id = 1
+      FactoryGirl.create(:connect_profile, :connect_profile_7)   # 7  tree_id = 1
+      FactoryGirl.create(:connect_profile, :connect_profile_8)   # 8  tree_id = 1
+      FactoryGirl.create(:connect_profile, :connect_profile_9)   # 9  tree_id = 1
+      FactoryGirl.create(:connect_profile, :connect_profile_10)  # 10 tree_id = 1
       # puts "before All: Profile.last.id = #{Profile.last.id}, .user_id = #{Profile.last.user_id.inspect} \n"  # user_id = nil
       # puts "before All: Profile.8.id = #{Profile.find(8).id}, .name_id = #{Profile.find(8).name_id} \n"  # name_id = 449
-      FactoryGirl.create(:connect_profile, :connect_profile_11)  # 11
-      FactoryGirl.create(:connect_profile, :connect_profile_12)  # 12
-      FactoryGirl.create(:connect_profile, :connect_profile_13)  # 13
-      FactoryGirl.create(:connect_profile, :connect_profile_14)  # 14
-      FactoryGirl.create(:connect_profile, :connect_profile_15)  # 15
-      FactoryGirl.create(:connect_profile, :connect_profile_16)  # 16
-      FactoryGirl.create(:connect_profile, :connect_profile_17)  # 17
-      FactoryGirl.create(:connect_profile, :connect_profile_18)  # 18
-      FactoryGirl.create(:connect_profile, :connect_profile_19)  # 19
-      FactoryGirl.create(:connect_profile, :connect_profile_20)  # 20
-      FactoryGirl.create(:connect_profile, :connect_profile_21)  # 21
-      FactoryGirl.create(:connect_profile, :connect_profile_22)  # 22
-      FactoryGirl.create(:connect_profile, :connect_profile_23)  # 23
-      FactoryGirl.create(:connect_profile, :connect_profile_24)  # 24
-      FactoryGirl.create(:connect_profile, :connect_profile_25)  # 25
-      FactoryGirl.create(:connect_profile, :connect_profile_26)  # 26
-      FactoryGirl.create(:connect_profile, :connect_profile_27)  # 27
-      FactoryGirl.create(:connect_profile, :connect_profile_28)  # 28
-      FactoryGirl.create(:connect_profile, :connect_profile_29)  # 29
+      FactoryGirl.create(:connect_profile, :connect_profile_11)  # 11   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_12)  # 12   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_13)  # 13   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_14)  # 14   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_15)  # 15   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_16)  # 16   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_17)  # 17  tree_id = 1
+      FactoryGirl.create(:connect_profile, :connect_profile_18)  # 18   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_19)  # 19   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_20)  # 20   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_21)  # 21   tree_id = 2
+      FactoryGirl.create(:connect_profile, :connect_profile_22)  # 22  tree_id = 3
+      FactoryGirl.create(:connect_profile, :connect_profile_23)  # 23  tree_id = 3
+      FactoryGirl.create(:connect_profile, :connect_profile_24)  # 24  tree_id = 3
+      FactoryGirl.create(:connect_profile, :connect_profile_25)  # 25  tree_id = 3
+      FactoryGirl.create(:connect_profile, :connect_profile_26)  # 26  tree_id = 3
+      FactoryGirl.create(:connect_profile, :connect_profile_27)  # 27  tree_id = 3
+      FactoryGirl.create(:connect_profile, :connect_profile_28)  # 28  tree_id = 3
+      FactoryGirl.create(:connect_profile, :connect_profile_29)  # 29  tree_id = 3
 
-      FactoryGirl.create(:connect_profile, :connect_profile_124)  # 124
+      FactoryGirl.create(:connect_profile, :connect_profile_124)  # 124  tree_id = 3
 
       # CommonLog
       FactoryGirl.create(:common_log, :log_actual_profile_172)    #
@@ -1005,7 +1007,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
 
       describe 'Method logged_actual_profiles in <start_search> test'    do # , focus: true
 
-        describe 'Method logged_actual_profiles in <start_search> test: current_user_1, [1, 2]' , focus: true  do # , focus: true
+        describe 'Method logged_actual_profiles in <start_search> test: current_user_1, [1, 2]'  do # , focus: true
           context "- Check Method logged_actual_profiles -"   do  # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
             let(:name_actual_profile) { :profile_id }
             let(:connected_users) {current_user_1.connected_users}
@@ -1109,8 +1111,50 @@ RSpec.describe User, :type => :model    do  # , focus: true
             end
           end
         end
-
       end
+
+
+      describe 'Method users_profiles in <connected_user> model: [1, 2]'    do # , focus: true
+        context "- Check Method users_profiles -"   do  # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
+          let(:users_connected) { [1,2] }
+          let(:users_profiles) {User.users_profiles(users_connected)}
+          it '- check users_profiles array - Ok' do
+            puts "after users_profiles: users_profiles = #{users_profiles.inspect} \n"
+            expect(users_profiles).to eq([17, 11])
+          end
+        end
+      end
+
+
+      describe 'Method collect_weekly_info User model'  , focus: true    do # , focus: true
+         context "- Check Method collect_weekly_info -"   do  # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
+          let(:weekly_info) {current_user_1.collect_weekly_info}
+          describe '- check Profile have rows count before - Ok' do
+            let(:rows_qty) {27}
+            it_behaves_like :successful_profiles_rows_count
+          end
+          it '- check weekly_info - Ok' do
+            puts "after collect_weekly_info: weekly_info = #{weekly_info.inspect} \n"
+            expect(weekly_info).to eq({
+              :site_info=>{
+                  :profiles=>27, :profiles_male=>13, :profiles_female=>14, :users=>8, :users_male=>1, :users_female=>2,
+                  :trees=>6, :invitations=>2689, :requests=>4, :connections=>2, :refuse_requests=>0,
+                  :disconnections=>67, :similars_found=>0},
+              :tree_info=>{
+                  :tree_profiles=>[17, 15, 9, 20, 16, 10, 3, 12, 13, 14, 21, 124, 18, 11, 8, 19, 2, 7],
+                  :connected_users=>[1, 2], :qty_of_tree_profiles=>18, :qty_of_tree_users=>2},
+              :connections_info=>{:new_users_connected=>[2], :conn_count=>1, :new_users_profiles=>[11]},
+              :new_weekly_profiles => {:new_profiles_qty=>17, :new_profiles_male=>9, :new_profiles_female=>8,
+                                       :new_profiles_ids=>[2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]}
+                                      } )
+          end
+        end
+      end
+
+
+
+
+      ######################################
 
       ######################################
 

@@ -31,7 +31,7 @@ FactoryGirl.define do
 
     trait :user_5 do
       profile_id 555
-      email "natalia@pe.pe"
+      email "zoneiva@gmail.com"
       connected_users [5]
     end
 
@@ -42,21 +42,21 @@ FactoryGirl.define do
     end
 
     trait :user_7 do
-      profile_id 777
+      profile_id 7777
       email "taisia@pe.pe"
       connected_users [7]
     end
 
     trait :user_8 do
-      profile_id 888
+      profile_id 8888
       email "fedor@pe.pe"
-      connected_users [8]
+      connected_users [8,9]
     end
 
     trait :user_9 do              # before
-      profile_id 85
+      profile_id 9999
       email "add_petr@pe.pe"
-      connected_users [9]
+      connected_users [8,9]
     end
     trait :user_10 do  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       profile_id 93

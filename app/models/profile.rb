@@ -458,6 +458,21 @@ class Profile < ActiveRecord::Base
     }
   end
 
+  # @note: collect new_weekly Profiles
+  #   @input: connected_users
+  def self.new_weekly_profiles(connected_users)
+    week_ago_time = 1.week.ago
+    puts "In new_weekly_profiles: week_ago_time = #{week_ago_time}" # = 2016-03-09 09:33:10 UTC
+
+    new_weekly_profiles = where("tree_id in (?)", connected_users).where("date_trunc('day', created_at) >= ?", "#{week_ago_time}")
+
+    { new_profiles_qty: new_weekly_profiles.count,
+      new_profiles_male: new_weekly_profiles.where(sex_id: 1).count,
+      new_profiles_female: new_weekly_profiles.where(sex_id: 0).count,
+      new_profiles_ids: new_weekly_profiles.pluck(:id)
+    }
+  end
+
 
 
 end

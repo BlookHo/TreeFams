@@ -100,4 +100,26 @@ validates_presence_of :user_id, :with_user_id, :connection_id, :rewrite_profile_
   end
 
 
+  # @note: get connection info from one tree for past week
+  def self.connections_weekly(connected_users)
+    connections_info = {}
+    week_ago_time = 1.week.ago
+    connections = where("user_id in (?)", connected_users)#.where("created_at >= #{week_ago_time}")
+    p "week_ago_time = #{week_ago_time}"
+    unless connections.blank?
+      new_users_connected = connections.pluck(:with_user_id)
+      new_users_profiles = User.users_profiles(new_users_connected)
+
+      connections_info = { new_users_connected: new_users_connected,
+                           conn_count:          new_users_connected.size,
+                           new_users_profiles:  new_users_profiles
+      }
+
+    end
+    connections_info
+  end
+
+
+
+
 end

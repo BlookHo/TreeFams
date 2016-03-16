@@ -6,6 +6,7 @@ class WeafamMailer < ActionMailer::Base
   #############################################################
 
   default from: "\"Мы все – родня!\" <notification@weallfamily.ru>"
+  # default from: "blookho@gmail.com"
 
   # @note: Prepare invit-n mail data
   def invitation_email(email_name, profile_id, current_user_id)
@@ -36,12 +37,71 @@ class WeafamMailer < ActionMailer::Base
   end
 
   # @note: prepare and send weekly_manifest mail
+  #   sending weekly mail data for every user
   def weekly_manifest_email
 
-    users_data = User.users_mail_info
-    puts "In weekly_manifest_email: users_data = #{users_data}"
+    # users_data = User.users_mail_info
+    # puts "In weekly_manifest_email: users_data = #{users_data}"
+    # users_data =
+    #     {:users_names=>
+    #          ["Алексей", "Анна", "Наталья", "Таисия", "Вера", "Петр", "Дарья", "Федор"],
+    #      :users_emails=>["alexey@al.al", "aneta@an.an", "vera@na.na", "darja@pe.pe",
+    #                      "natalia@pe.pe", "petr@pe.pe", "taisia@pe.pe", "fedor@pe.pe"]}
+    users_data =
+        {:users_names=> ["Алексей"],
+         :users_emails=>["zoneiva@gmail.com"] }
 
-    proceed_weekly_mail(users_data)
+
+    logger.info "In proceed_weekly_mail: users_data = #{users_data} "
+    count_emails = 0
+    users_data[:users_emails].each_with_index do |one_email, index|
+      user_to_send = User.where( email: one_email)
+      logger.info "In proceed_weekly_mail: user_to_send = #{user_to_send} "
+      unless user_to_send.blank?
+
+        user_to_send_id = user_to_send[0].id
+        user_to_send_name = users_data[:users_names][index]
+        puts "user to send: email = #{one_email}, id = #{user_to_send_id}, name = #{user_to_send_name} "
+
+
+        user_weekly_info = User.find(user_to_send_id).collect_weekly_info
+
+        # In collect_weekly_info:
+        # after collect_weekly_info: user_weekly_info =
+                  {:site_info=>
+                       {:profiles=>27, :profiles_male=>13, :profiles_female=>14, :users=>8, :users_male=>1,
+                        :users_female=>2, :trees=>6, :invitations=>2689, :requests=>4, :connections=>2,
+                        :refuse_requests=>0, :disconnections=>67, :similars_found=>0},
+                   :tree_info=>
+                       {:tree_profiles=>[17, 15, 9, 20, 16, 10, 3, 12, 13, 14, 21, 124, 18, 11, 8, 19, 2, 7],
+                        :connected_users=>[1, 2], :qty_of_tree_profiles=>18, :qty_of_tree_users=>2},
+                   :connections_info=>{:new_users_connected=>[2], :conn_count=>1, :new_users_profiles=>[11]},
+                   :new_weekly_profiles => {:new_profiles_qty=>17, :new_profiles_male=>9, :new_profiles_female=>8,
+                                            :new_profiles_ids=>[2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]}
+        }
+
+        @email_name = one_email
+        @user_name = user_to_send_name
+        @new_profiles = user_weekly_info[:new_weekly_profiles][:new_profiles_ids] # [2, 3, 7, 8, 9, 10, 11, 12, 13, ...]
+        @new_profiles_qty = @new_profiles.size # 17
+        @new_profiles_three = @new_profiles.take(3) # [2, 3, 7
+        @new_profiles_females = user_weekly_info[:new_weekly_profiles][:new_profiles_female] # 8
+        @new_profiles_males = user_weekly_info[:new_weekly_profiles][:new_profiles_male] # 9
+        puts "user to send: @email_name = #{one_email}, user_to_send_id = #{user_to_send_id}, @user_name = #{user_to_send_name} "
+        puts "vars: @new_profiles = #{@new_profiles}, @new_profiles_qty = #{@new_profiles_qty}"
+        puts "@new_profiles_three = #{@new_profiles_three}, @new_profiles_females = #{@new_profiles_females}, @new_profiles_males = #{@new_profiles_males} "
+
+        # @confirmation_url = confirmation_url(user)
+
+
+        mail to: one_email, subject: 'Новости вашей родни'
+        count_emails += 1
+      end
+      # template_weekly_info(user_to_send_id)
+
+    end
+    puts "In proceed_weekly_mail: count_week_emails = #{count_emails}"
+    count_emails
 
     # if !profile_id.to_i.blank? && !current_user_id.to_i.blank?
     #   @email_name = email_name
@@ -67,72 +127,59 @@ class WeafamMailer < ActionMailer::Base
   # @note: prepare weekly mail data
   # #################  1. все имена юзеров, все почты.
   # 2. новости от всей родни из дерева:
-  #   -  дни рождения на след. неделе       NEWINFO of PROFILES
-  #   -  фото у кого д.р.     of PROFILES
+  #   -  дни рождения на след. неделе       NEWINFO of PROFILES  DATA -  todo: def birthdays_weekly  DATA
+  #   -  фото у кого д.р.     of PROFILES    DATA                         todo:     with photos   DATA
   # 3. непрочитанные сообщения от:
   #   - от кого: (имя, фамилия если есть)      NEWINFO of USERS
   #     - начало сообщения - 20 символов
-  # 4. есть запросы юзеру на объединение от:
+  # 4. есть запросы юзеру на объединение от:    todo:   def conn_requests_weekly  +     with names, surnames   DATA
   #   - от кого: (имя, фамилия если есть)       NEWINFO of USERS
   #     -  (в его дереве 45 чел.)
   # 5. Информация - статистика из дерева:
   # #################   - Сейчас в вашем дереве - 120 чел.,  of PROFILES
   # #################       из них - 5 #"#{активных}" пользователей проекта. (?)   of USERS
   #   - За прошедший период добавилась информация о 10 чел.(),       NEWINFO  of PROFILES
-  #       из них 2 пользователей.       NEWINFO   of USERS
-  #   -  Новые активные участники:
-  #       <ВСТАВИТЬ ФОТО>  (если есть)   of USERS
+  #       из них 2 пользователей.       NEWINFO   of USERS  todo:   def new_profiles_weekly      with names, surnames  DATA
+  #   -  Новые активные участники:                       todo:     def new_users_weekly      with names, surnames, photos  DATA
+  #       <ВСТАВИТЬ ФОТО>  (если есть)   of USERS  DATA
   #         Сергей Митин (Минск)
-  #       <ВСТАВИТЬ ФОТО>  (если есть)   of USERS
+  #       <ВСТАВИТЬ ФОТО>  (если есть)   of USERS  DATA
   #         Людмила (Минск)
-  #   - Произошло 1 объединений деревьев,        NEWINFO   of USERS
-  #       при этом добавилось в ваше дерево информацию о 5 чел.        NEWINFO  of PROFILES
-  #   - Ваша родня написала новых сообщений друг другу: 18        NEWINFO   of USERS
-  #   - Добавилось новых фотографий: 14        NEWINFO   of PROFILES
+  #  ################# - Произошло 1 объединений деревьев,        NEWINFO   of USERS  todo:  def connections_weekly
+  #     ????  при этом добавилось в ваше дерево информацию о 5 чел.        NEWINFO  of PROFILES todo:  def connections_weekly
+  #   - Ваша родня написала новых сообщений друг другу: 18        NEWINFO   of USERS  todo:    def new_messages_weekly
+  #   - Добавилось новых фотографий: 14        NEWINFO   of PROFILES DATA   todo:     def new_photos_weekly  DATA
   # #################6. Информация - статистика сайта:
   # #################  - Всего на сайте информация о 190 чел.,  of PROFILES
   # #################      из них - 20 (?) активных пользователей.   of USERS
-  def collect_weekly_info(current_user_id)
-    puts "In collect_weekly_info:  current_user_id = #{current_user_id}"
 
-
-    site_stat_info = WeafamStat.collect_site_stats
-    puts "In collect_weekly_info:  site_stat_info = #{site_stat_info}"
-    puts "In collect_weekly_info:  On site: profiles = #{site_stat_info[:profiles]}, users = #{site_stat_info[:users]}"
-
-    tree_stat_info = TreeStats.collect_tree_stats(current_user_id)
-    puts "In collect_weekly_info:  tree_stat_info = #{tree_stat_info}"
-
-    # tree_stats[:tree_profiles]        = tree_data[:tree_profiles]
-    # tree_stats[:connected_users]      = tree_data[:connected_author_arr]
-    # tree_stats[:qty_of_tree_profiles] = tree_data[:qty_of_tree_profiles]
-    # tree_stats[:qty_of_tree_users]    = users_qty
-
-
-  end
-
-  # @note: sending weekly mail data for every user
-  def proceed_weekly_mail(users_data)  #(email_name, profile_id, current_user_id)
-    logger.info "In proceed_weekly_mail: users_data = #{users_data} "
-    count_emails = 0
-    users_data[:users_emails].each_with_index do |one_email, index|
-      user_to_send_id = User.where( email: one_email)[0].id
-      user_to_send_name = users_data[:users_names][index]
-      puts "user to send: email = #{one_email}, id = #{user_to_send_id}, name = #{user_to_send_name} "
-
-      # collect_weekly_info(user_to_send_id)
-      # template_weekly_info(user_to_send_id)
-
-      @email_name = one_email
-      @user_name = user_to_send_name
-      # @confirmation_url = confirmation_url(user)
-      mail to: one_email, subject: 'One user weekly manifest email'
-      count_emails += 1
-
-    end
-    puts "In proceed_weekly_mail: count_week_emails = #{count_emails}"
-    count_emails
-  end
+  # # @note:
+  # def proceed_weekly_mail(users_data)  #(email_name, profile_id, current_user_id)
+  #   logger.info "In proceed_weekly_mail: users_data = #{users_data} "
+  #   count_emails = 0
+  #   users_data[:users_emails].each_with_index do |one_email, index|
+  #     user_to_send = User.where( email: one_email)
+  #     unless user_to_send.blank?
+  #
+  #       user_to_send_id = user_to_send[0].id
+  #       user_to_send_name = users_data[:users_names][index]
+  #       puts "user to send: email = #{one_email}, id = #{user_to_send_id}, name = #{user_to_send_name} "
+  #
+  #       user_weekly_info = user_to_send.collect_weekly_info
+  #       @email_name = one_email
+  #       @user_name = user_to_send_name
+  #       # @confirmation_url = confirmation_url(user)
+  #       mail to: one_email, subject: 'One user weekly manifest email'
+  #       count_emails += 1
+  #
+  #     end
+  #     # template_weekly_info(user_to_send_id)
+  #
+  #
+  #   end
+  #   puts "In proceed_weekly_mail: count_week_emails = #{count_emails}"
+  #   count_emails
+  # end
 
 
 end

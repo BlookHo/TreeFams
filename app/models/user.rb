@@ -250,6 +250,52 @@ class User < ActiveRecord::Base
   end
 
 
+  # @note: collect profiles_ids of users array
+  #   use in weekly manifest email
+  def self.users_profiles(new_users_connected)
+    users_profiles = []
+    new_users_connected.each do |one_user_id|
+      one_profile_id = find(one_user_id).profile_id
+      users_profiles << one_profile_id
+    end
+    users_profiles
+  end
+
+
+  # @note: collect profiles_ids of users array
+  #   use in weekly manifest email
+  def collect_weekly_info
+    week_ago_time = 1.week.ago
+    puts "In collect_weekly_info:  current_user_id = #{self.id}, week_ago_time = #{week_ago_time}"
+
+    site_stat_info = WeafamStat.collect_site_stats
+    puts "In collect_weekly_info:  site_stat_info = #{site_stat_info}"
+    puts "In collect_weekly_info:  On site: profiles = #{site_stat_info[:profiles]}, users = #{site_stat_info[:users]}"
+
+    tree_stat_info = TreeStats.collect_tree_stats(self.id)
+    puts "In collect_weekly_info:  tree_stat_info = #{tree_stat_info}"
+
+    connected_users = tree_stat_info[:connected_users]
+    connections_info = ConnectedUser.connections_weekly(connected_users)
+    puts "In collect_weekly_info:  connections_info = #{connections_info}"
+
+    new_weekly_profiles = {}
+    new_weekly_profiles = Profile.new_weekly_profiles(connected_users)
+    puts "In collect_weekly_info:  new_weekly_profiles = #{new_weekly_profiles}"
+
+    # new_users_profile_data = ProfileData.profiles_data_info(connections_info[:new_users_profiles])
+
+    # new_conn_requests =
+    { site_info: site_stat_info,
+      tree_info: tree_stat_info,
+      connections_info: connections_info,
+      new_weekly_profiles: new_weekly_profiles
+
+    }
+
+  end
+
+
 
   private
 

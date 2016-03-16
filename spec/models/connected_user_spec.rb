@@ -148,8 +148,9 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
       FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
       FactoryGirl.create(:user, :user_5 )  # User = 5 . Tree = 10. profile_id = 555
       FactoryGirl.create(:user, :user_6 )  # User = 6 . Tree = 10. profile_id = 666
-      FactoryGirl.create(:user, :user_7 )  # User = 7. Tree = 10. profile_id = 777
-      FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
+      FactoryGirl.create(:user, :user_7 )  # User = 7. Tree = 7. profile_id = 7777
+      FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 8. profile_id = 8888
+      FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 9. profile_id = 9999
 
       # ConnectedUser
       FactoryGirl.create(:connected_user, :correct)      # 1  2
@@ -184,6 +185,10 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
       FactoryGirl.create(:connect_profile, :connect_profile_27)  # 27
       FactoryGirl.create(:connect_profile, :connect_profile_28)  # 28
       FactoryGirl.create(:connect_profile, :connect_profile_29)  # 29
+
+      FactoryGirl.create(:connect_profile, :connect_profile_7777)  # 29
+      FactoryGirl.create(:connect_profile, :connect_profile_8888)  # 29
+      FactoryGirl.create(:connect_profile, :connect_profile_9999)  # 29
 
       # Tree
       FactoryGirl.create(:connection_trees)                        # 17 pr2
@@ -477,7 +482,7 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
     end
     context '- before actions - check tables values ' do   #   , focus: true
       describe '- check Profile have rows count before - Ok' do
-        let(:rows_qty) {26}
+        let(:rows_qty) {29}
         it_behaves_like :successful_profiles_rows_count
       end
       describe '- check Tree have rows count before - Ok' do
@@ -494,7 +499,7 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
       end
     end
 
-      # from connect_users_trees_controller.rb
+    # from connect_users_trees_controller.rb
     describe ' Check action <set_users_connection> :'  do  # , focus: true
       context '- save in Table ConnectedUser connection data - rewrite and overwrite profiles rows ' do
 
@@ -535,7 +540,48 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
 
     end
 
-  end
+    describe ' Check action <connections_weekly> :' , focus: true  do  # , focus: true
+      context '- find in Table ConnectedUser connection data for one tree   ' do
+        before{ FactoryGirl.create(:connected_user, :correct_8_9)   }   #  8  9
 
+        let(:connected_users) { [7,8,9] }
+        let(:connection_weekly_info) { ConnectedUser.connections_weekly(connected_users ) }
+
+        describe '- check User have rows count before - Ok' do
+          let(:rows_qty) {9}
+          it_behaves_like :successful_users_rows_count
+        end
+        describe '- check ConnectedUser have rows count before - Ok' do
+          let(:rows_qty) {3}
+          it_behaves_like :successful_connected_users_rows_count
+        end
+        describe '- check connection_weekly_info after ConnectedUser.connections_weekly - Ok' do
+          it "- Return proper connection_weekly_info hash" do
+            puts "connection_weekly_info[:new_users_connected] = #{connection_weekly_info[:new_users_connected].inspect} \n"   # [1,2]
+            expect(connection_weekly_info[:new_users_connected]).to eq([8,9])
+          end
+        end
+        describe '- check connection_weekly_info after ConnectedUser.connections_weekly - Ok' do
+          it "- Return proper connection_weekly_info hash" do
+            puts "connection_weekly_info[:conn_count] = #{connection_weekly_info[:conn_count].inspect} \n"   # [1,2]
+            expect(connection_weekly_info[:conn_count]).to eq(2)
+          end
+        end
+        describe '- check connection_weekly_info after ConnectedUser.connections_weekly - Ok' do
+          it "- Return proper connection_weekly_info hash" do
+            puts "connection_weekly_info[:new_users_profiles] = #{connection_weekly_info[:new_users_profiles].inspect} \n"   # [1,2]
+            expect(connection_weekly_info[:new_users_profiles]).to eq([8888, 9999])
+          end
+        end
+      end
+
+    end
+
+
+
+
+
+
+  end
 end
 
