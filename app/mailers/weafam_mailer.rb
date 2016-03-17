@@ -56,7 +56,7 @@ class WeafamMailer < ActionMailer::Base
     count_emails = 0
     users_data[:users_emails].each_with_index do |one_email, index|
       user_to_send = User.where( email: one_email)
-      logger.info "In proceed_weekly_mail: user_to_send = #{user_to_send} "
+      logger.info "In proceed_weekly_mail: user_to_send = #{user_to_send},  "
       unless user_to_send.blank?
 
         user_to_send_id = user_to_send[0].id

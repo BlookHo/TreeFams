@@ -4,35 +4,53 @@
     %title Weafam INVITATION EMAIL
     %meta{:charset => "utf-8"}/
     %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    %style{:media => "screen", :type => "text/sass"}
+    :css
+      body { background-color:#cecece; width: 100%; }
+      .main { background-color: #FFF8F1; padding: 15px 15px 15px 15px;  color: #8A8A8A; }
+    -#    /*color:#000000; font-size:14px; font-family:Verdana,Helvetica,Arial; }*/
+    -#      .header { background-color:#cecece; margin: 5px 15px 0 0; }
+    -#
+    -#    /*.notice {margin: 10px auto;  background-color: #fbb752;  border: 1px solid #cecece; }*/
+    -#    h3 { color: #f00; }
+    -# h2 { color: #ffc477; }
 
 
 
   %body
     .main
-      %h1
+      -#{:style =>  "display: block; background-color: #4325AD; padding: 15px 15px; color: white;" }
+      .site_header{:style => "background-color: #2BA7F3;  height: 4em; padding: 5px; color: white; "}
+        %h1{:style => "top: .5em; left: 0; position: relative; color: #FCE3D0; margin: 3px; text-align: center;"}
+          Мы все - родня
+      %h2{:style => "color: #8A8A8A; text-align: center; "}
         Уважаем < ый > , #{@user_name}!
         Автоматические новости вашей родни от проекта < мывсеродня.рф. >
 
-      %h2
+      %h2{:style => "color: #ffc477; text-align: center; "}
         Предстоящие события:
-        %h3
+        %h3{:style => "color: #678A4B;"}
           <12 ноября 2015> - <70>-й День Рождения отмечает < Дмитрий Кузнецов > - <ВСТАВИТЬ ФОТО>
 
-      %h2
-        Ожидающие вашей реакции запросы на объединение деревьев от других пользователей проекта:
-        %h3
+      %h2{:style => "color: #8A8A8A; text-align: center; "}
+        запросы на объединение деревьев
+        %h3{:style => "color: #678A4B;"}
+          Ожидающие вашей реакции запросы на объединение деревьев от других пользователей проекта:
           От < Евгения Курилкина > (в его дереве <45> чел.)
           От < Сергея Кургиняна > (в его дереве <1024> чел.)
 
-      %h2
-        За прошедший период добавилась информация о #{@new_profiles_qty} чел., из них 2 пользователей.
-        Среди них: профили:  #{@new_profiles},
-        first three: #{@new_profiles_three}....
-        женщин -  #{@new_profiles_females}
-        мужчин -  #{@new_profiles_males}
+      %h2{:style => "color: #8A8A8A; text-align: center; "}
+        добавилась информация
+        %h3{:style => "color: #678A4B;"}
+          За прошедший период добавилась информация о #{@new_profiles_qty} чел., из них 2 пользователей.
+          Среди них: профили:  #{@new_profiles},
+          first three: #{@new_profiles_three}....
+          женщин -  #{@new_profiles_females}
+          мужчин -  #{@new_profiles_males}
 
+      %h2{:style => "color: #8A8A8A; text-align: center; "}
         Новые активные участники:
-        %h3
+        %h3{:style => "color: #678A4B;"}
           < ВСТАВИТЬ ФОТО > Сергей Митин (Минск)
           < ВСТАВИТЬ ФОТО > Людмила (Минск)
 
