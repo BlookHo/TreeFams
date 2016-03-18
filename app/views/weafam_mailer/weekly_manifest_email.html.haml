@@ -7,7 +7,9 @@
     %style{:media => "screen", :type => "text/sass"}
     :css
       body { background-color:#cecece; width: 100%; }
-      .main { background-color: #FFF8F1; padding: 15px 15px 15px 15px;  color: #8A8A8A; }
+      .main { background-color: #F5EEE8; padding: 15px 15px 15px 15px;  color: #8A8A8A; }
+      .info_body
+      /*{  background-color: #D0F5E0;   color: #8A677A; }*/
     -#    /*color:#000000; font-size:14px; font-family:Verdana,Helvetica,Arial; }*/
     -#      .header { background-color:#cecece; margin: 5px 15px 0 0; }
     -#
@@ -21,59 +23,67 @@
     .main
       -#{:style =>  "display: block; background-color: #4325AD; padding: 15px 15px; color: white;" }
       .site_header{:style => "background-color: #2BA7F3;  height: 4em; padding: 5px; color: white; "}
-        %h1{:style => "top: .5em; left: 0; position: relative; color: #FCE3D0; margin: 3px; text-align: center;"}
+        %h1{:style => "top: .3em; left: 0; position: relative; color: #FCE3D0; margin: 5px; text-align: center;"}
           Мы все - родня
       %h2{:style => "color: #8A8A8A; text-align: center; "}
-        Уважаемый(ая) #{@user_name}!
-        Предлагаем вам новости вашей родни из проекта < мы все родня.рф >.
+        %span{ :style => "display: block;"}
+          Уважаемый(ая) #{@user_name}!
+        %span{ :style => "display: block;"}
+          Предлагаем вам новости вашей родни из проекта < мы все родня.рф >.
 
-      %h2{:style => "color: #ffc477; text-align: center; "}
-        Предстоящие события у ваших родственников:
-        %h3{:style => "color: #678A4B;"} - table
-          <12 ноября 2015> - <70>-й День Рождения отмечает < Дмитрий Кузнецов > - <ВСТАВИТЬ ФОТО>
-          <2 марта 2015> - < > День Рождения отмечает < Анна Петрова > - <ВСТАВИТЬ ФОТО>
+      .info_body{:style => "padding: 5px; margin: 2.9em;"}
+        %h2{:style => "color: #8A8A8A; left: 15%; position: relative;"}
+          Предстоящие события у ваших родственников:
+          %h3{:style => "color: #678A4B;"}
+            <12 ноября 2015> - <70>-й День Рождения отмечает < Дмитрий Кузнецов > - <ВСТАВИТЬ ФОТО>
+            <2 марта 2015> - < > День Рождения отмечает < Анна Петрова > - <ВСТАВИТЬ ФОТО>
 
-      %h2{:style => "color: #8A8A8A; text-align: center; "}
-        Новые запросы на объединение с вашим деревом
-        %h3{:style => "color: #678A4B;"} - table
-          Активные пользователи проекта ожидают вашей реакции на свой запрос:
-          < Евгений Курилкина > (в его дереве <45> чел.)
-          < Семен Слепаков > (в его дереве <1024> чел.)
+        %h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
+          Новые запросы на объединение с вашим деревом
+          %h3{:style => "color: #678A4B;"}
+            Активные пользователи проекта ожидают вашей реакции на свой запрос:
+            < Евгений Курилкина > (в его дереве <45> чел.)
+            < Семен Слепаков > (в его дереве <1024> чел.)
 
-      %h2{:style => "color: #8A8A8A; text-align: center; "}
-        Новая информация
-        %h3{:style => "color: #678A4B;"} - table
-          За прошедший период в вашем дереве появилась информация о #{@new_profiles_qty} чел.
-          Среди них:   профили:  #{@new_profiles},
-          first three: #{@new_profiles_three}....
-          женщин -  #{@new_profiles_females}
-          мужчин -  #{@new_profiles_males}
-          Среди них:
-          %h3{:style => "color: #678A4B;"} - table
-            < Николай > - < день рождения: #{@birthday}, город:  #{@city}, фото:  #{@photos} >
-            < Галина Иванова > - < биография: #{@biography} , страна:  #{@country}, первая фамилия - #{@prev_surname} >
-            < Евгений Плющев > - < день рождения: #{@birthday} , фамилия:  #{@surname} >
+        %h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
+          Новая информация о вашей родне
+          %h3{:style => "color: #678A4B;"}
+            За прошедший период в вашем дереве появилась информация о #{@new_profiles_qty} родственниках.
+            Среди них:   профили:  #{@new_profiles},
+            first three: #{@new_profiles_three}....
+            женщин -  #{@new_profiles_females}
+            мужчин -  #{@new_profiles_males}
+            Среди них:
+            %h3{:style => "color: #678A4B;"}
+              < Николай > - < день рождения: #{@birthday}, город:  #{@city}, фото:  #{@photos} >
+              < Галина Иванова > - < биография: #{@biography} , страна:  #{@country}, первая фамилия - #{@prev_surname} >
+              < Евгений Плющев > - < день рождения: #{@birthday} , фамилия:  #{@surname} >
 
-      %h2{:style => "color: #8A8A8A; text-align: center; "}
-        Объединения с другими деревьями
-        %h3{:style => "color: #678A4B;"}
-          Произошло объединение вашего дерева с другими деревьями вашей родни
-          %h3{:style => "color: #678A4B;"} - table
-            #{@conn_date} - с деревом родственника по имени #{@conn_user_name} (#{@conn_user_city}) < ФОТО >
-            %h3{:style => "color: #678A4B;"} - table
-              В его дереве - информация о #{@conn_tree_profiles_qty} родственниках,
-              в том числе - о #{@conn_tree_users_qty} пользователях сайта.
-
-      %h2{:style => "color: #8A8A8A; text-align: center; "}
-        Чтобы подробнее ознакомиться со всеми событиями в вашем дереве - перейдите по ссылке
-        %link_to{}
-
-      %h2{:style => "color: #8A8A8A; text-align: center; "}
-        Следите за новостями проекта Мы все родня!
+        %h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
+          Объединения с другими деревьями
 
           %h3{:style => "color: #678A4B;"}
-            Данное сообщение направлено вам от команды проекта weallfamily.ru, Санкт-Петербург.
-        
+            Произошло объединение вашего дерева с другими деревьями вашей родни
+
+            %h3{:style => "color: #678A4B;"}
+              #{@conn_date} - с деревом родственника по имени #{@conn_user_name} (#{@conn_user_city})
+              #{@conn_user_avatar}
+
+              %h3{:style => "color: #678A4B;"}
+                В его дереве - информация о #{@conn_tree_profiles_qty} родственниках,
+                в том числе - о #{@conn_tree_users_qty} пользователях сайта.
+
+          %h2{:style => "color: #8A8A8A; text-align: center; "}
+            Чтобы подробнее ознакомиться со всеми событиями в вашем дереве - перейдите по ссылке
+            %link_to{}
+            %a(href="http://haml-lang.com")
+
+        %h2{:style => "color: #8A8A8A; text-align: center; "}
+          Следите за новостями проекта Мы все родня!
+
+        %h3{:style => "color: #678A4B; left: 5%; position: relative;"}
+          Данное сообщение направлено вам от команды проекта weallfamily.ru, Санкт-Петербург.
+
 
 
 
