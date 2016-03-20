@@ -484,7 +484,7 @@ class Profile < ActiveRecord::Base
     profiles_info = {}
     profiles_ids.each do |one_profile_id|
       profile = find(one_profile_id)
-      p "one_profile_id = #{one_profile_id}, profile.id = #{profile.id}"
+      # p "one_profile_id = #{one_profile_id}, profile.id = #{profile.id}"
       unless profile.blank?
         profiles_info.merge!( profile[:id] => { user_id: profile[:user_id], name_id: profile[:name_id],
                                                 sex_id: profile[:sex_id], tree_id: profile[:tree_id] })

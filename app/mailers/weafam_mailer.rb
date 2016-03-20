@@ -93,8 +93,9 @@ class WeafamMailer < ActionMailer::Base
         @new_profiles_qty = @new_profiles_ids.size # 17
         @new_profiles_three = @new_profiles_ids.take(3) # [2, 3, 7
 
-        @profiles_info = Profile.collect_profiles_info(@new_profiles_ids)
-        unless @profiles_info.blank?
+        profiles_info = Profile.collect_profiles_info(@new_profiles_ids)
+        @profiles_info = profiles_info # to view
+        unless profiles_info.blank?
           puts "@profiles_info = #{@profiles_info}"
           # @profiles_info =
               {   64=> {:user_id=>nil, :name_id=>90, :sex_id=>1, :tree_id=>7},
@@ -104,10 +105,14 @@ class WeafamMailer < ActionMailer::Base
               68=>{:user_id=>nil, :name_id=>343, :sex_id=>1, :tree_id=>7},
               66=>{:user_id=>8, :name_id=>370, :sex_id=>1, :tree_id=>7}}
 
-          first_elements_qty = first_three_qty(@profiles_info)
-
-          @profiles_info_three = @profiles_info.first(first_elements_qty).to_h
+          first_elements_qty = first_three_qty(profiles_info)
+          profiles_info_three = profiles_info.first(first_elements_qty).to_h
+          @profiles_info_three = profiles_info_three # to view
           puts "@profiles_info_three = #{@profiles_info_three}"
+
+          @profiles_info_complete = ProfileData.profiles_data_info(profiles_info_three)
+
+
         end
 
         @new_profiles_females = user_weekly_info[:new_weekly_profiles][:new_profiles_female] # 8
@@ -148,13 +153,13 @@ class WeafamMailer < ActionMailer::Base
   end
 
   # @note: service method
-  #   determine qty of first elements to take from array or hash
-  #
+  #   determine qty of first elements to take from hash
+  # todo: place this into Hash service class
   def first_three_qty(profiles_info)
     unless profiles_info.blank?
       first_elements_qty = 0
       info_size = profiles_info.size
-      if info_size >= 3 # todo: put this "3" in constants (qty of firest elements to take from array or hahs to display)
+      if info_size >= 3 # todo: put this "3" in constants (qty of firest elements to take from hahs to display)
         first_elements_qty = 3
       else
         first_elements_qty = info_size

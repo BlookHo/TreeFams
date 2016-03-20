@@ -63,7 +63,7 @@
               женщин -  #{@new_profiles_females}, мужчин -  #{@new_profiles_males}
             %span{ :style => "display: block;"}
               Среди них:
-              - if @profiles_info_three.blank?
+              - if @profiles_info_complete.blank?
                 %table
                   %tr
                     %td
@@ -72,29 +72,36 @@
               - else
                 -#%h1 История развития твоего дерева
                 -#%br
-                %table
-                  %tr
-                    %th ID
+                %table{ :style => "display: block;  color: #CE6DC8; background-color:#cecece;"}
+                  %tr{ :style => "color: #1DBDBD; "}
+                    -#%th ID
                     %th User
                     %th Дерево
                     %th Имя
+                    %th Фамилия
+                    %th Пред. фамилия
+                    %th Дата рождения
+                    %th Место рождения
+                    %th Дата смерти
+                    %th Страна
+                    %th Город
+                    %th Биография
                     %th Пол
-                    %th
-                  - @profiles_info_three.each do |profile_id, info_hash|
-                    -#%tr{data: {common_log_id: tree_one_log.id}}
+                  - @profiles_info_complete.each do |profile_id, info_hash|
                     %tr
                       -#%td= info_hash
                       %td= info_hash[:user_id] || ""
                       %td= info_hash[:tree_id] || ""
-                      %td= info_hash[:name_id] || ""
+                      %td{ :style => " color: blue; background-color:#F5F164;"}= Name.find(info_hash[:name_id]).name || ""
+                      %td{ :style => "color: red; "}= info_hash[:last_name] || ""
+                      %td= info_hash[:prev_last_name] || ""
+                      %td= info_hash[:birthday] || ""
+                      %td= info_hash[:birth_place] || ""
+                      %td= info_hash[:deathdate] || ""
+                      %td= info_hash[:country] || ""
+                      %td= info_hash[:country] || ""
+                      %td= info_hash[:biography] || ""
                       %td= info_hash[:sex_id] || ""
-                      -#%td= one_profile_info.tree_user_name
-                      -#%td= LogType.name_log_type(tree_one_log.log_type)  #
-                      -#%td= one_profile_info.agent_name #
-                      -#%td= one_profile_info.profile_id #
-                      -#%td= one_profile_info.log_id
-
-
 
 
             %h3{:style => "color: #678A4B;"}
