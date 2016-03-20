@@ -283,7 +283,7 @@ class User < ActiveRecord::Base
     new_weekly_profiles = Profile.new_weekly_profiles(connected_users)
     puts "In collect_weekly_info:  new_weekly_profiles = #{new_weekly_profiles}"
 
-    # new_users_profile_data = ProfileData.profiles_data_info(connections_info[:new_users_profiles])
+      # new_users_profile_data = ProfileData.profiles_data_info(connections_info[:new_users_profiles])
 
     # new_conn_requests =
     { site_info: site_stat_info,

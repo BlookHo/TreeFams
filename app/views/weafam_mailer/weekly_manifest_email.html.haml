@@ -32,32 +32,78 @@
           Предлагаем вам новости вашей родни из проекта < мы все родня.рф >.
 
       .info_body{:style => "padding: 5px; margin: 2.9em;"}
-        %h2{:style => "color: #8A8A8A; left: 15%; position: relative;"}
+        %h2{:style => "color: #8A8A8A; left: 15%; position: relative; "}
           Предстоящие события у ваших родственников:
-          %h3{:style => "color: #678A4B;"}
-            <12 ноября 2015> - <70>-й День Рождения отмечает < Дмитрий Кузнецов > - <ВСТАВИТЬ ФОТО>
-            <2 марта 2015> - < > День Рождения отмечает < Анна Петрова > - <ВСТАВИТЬ ФОТО>
+          %h3{:style => "color: #678A4B; background-color: #D0F5E0; display: block; "}
+            %span{ :style => "display: block; "}
+              <12 ноября 2015> - <70>-й День Рождения отмечает < Дмитрий Кузнецов > - <ВСТАВИТЬ ФОТО>
+            %span{ :style => "display: block; margin: 15px, 10px; padding: 10px, 10px;"}
+              <2 марта 2015> - < > День Рождения отмечает < Анна Петрова > - <ВСТАВИТЬ ФОТО>
 
         %h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
           Новые запросы на объединение с вашим деревом
-          %h3{:style => "color: #678A4B;"}
-            Активные пользователи проекта ожидают вашей реакции на свой запрос:
-            < Евгений Курилкина > (в его дереве <45> чел.)
-            < Семен Слепаков > (в его дереве <1024> чел.)
+          %h3{:style => "color: #678A4B; padding: 10px, 10px, 10px, 10px;"}
+            %span{ :style => "display: block;"}
+              Активные пользователи проекта ожидают вашей реакции на свой запрос:
+            %span{ :style => "display: block;"}
+              < Евгений Курилкина > (в его дереве <45> чел.)
+            %span{ :style => "display: block;"}
+              < Семен Слепаков > (в его дереве <1024> чел.)
 
         %h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
-          Новая информация о вашей родне
+          Новая информация о вашей родне:
           %h3{:style => "color: #678A4B;"}
-            За прошедший период в вашем дереве появилась информация о #{@new_profiles_qty} родственниках.
-            Среди них:   профили:  #{@new_profiles},
-            first three: #{@new_profiles_three}....
-            женщин -  #{@new_profiles_females}
-            мужчин -  #{@new_profiles_males}
-            Среди них:
+            %span{ :style => "display: block;"}
+              За прошедший период в вашем дереве появилась информация о #{@new_profiles_qty} родственниках.
+            %span{ :style => "display: block;"}
+              Среди них:   профили:  #{@new_profiles_three},
+            %span{ :style => "display: block;"}
+              first three: #{@new_profiles_three}....
+            %span{ :style => "display: block;"}
+              женщин -  #{@new_profiles_females}, мужчин -  #{@new_profiles_males}
+            %span{ :style => "display: block;"}
+              Среди них:
+              - if @profiles_info_three.blank?
+                %table
+                  %tr
+                    %td
+                      %h3 нет Three Profiles...
+                      %br
+              - else
+                -#%h1 История развития твоего дерева
+                -#%br
+                %table
+                  %tr
+                    %th ID
+                    %th User
+                    %th Дерево
+                    %th Имя
+                    %th Пол
+                    %th
+                  - @profiles_info_three.each do |profile_id, info_hash|
+                    -#%tr{data: {common_log_id: tree_one_log.id}}
+                    %tr
+                      -#%td= info_hash
+                      %td= info_hash[:user_id] || ""
+                      %td= info_hash[:tree_id] || ""
+                      %td= info_hash[:name_id] || ""
+                      %td= info_hash[:sex_id] || ""
+                      -#%td= one_profile_info.tree_user_name
+                      -#%td= LogType.name_log_type(tree_one_log.log_type)  #
+                      -#%td= one_profile_info.agent_name #
+                      -#%td= one_profile_info.profile_id #
+                      -#%td= one_profile_info.log_id
+
+
+
+
             %h3{:style => "color: #678A4B;"}
-              < Николай > - < день рождения: #{@birthday}, город:  #{@city}, фото:  #{@photos} >
-              < Галина Иванова > - < биография: #{@biography} , страна:  #{@country}, первая фамилия - #{@prev_surname} >
-              < Евгений Плющев > - < день рождения: #{@birthday} , фамилия:  #{@surname} >
+              %span{ :style => "display: block;"}
+                < Николай > - < день рождения: #{@birthday}, город:  #{@city}, фото:  #{@photos} >
+              %span{ :style => "display: block;"}
+                < Галина Иванова > - < биография: #{@biography} , страна:  #{@country}, первая фамилия - #{@prev_surname} >
+              %span{ :style => "display: block;"}
+                < Евгений Плющев > - < день рождения: #{@birthday} , фамилия:  #{@surname} >
 
         %h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
           Объединения с другими деревьями

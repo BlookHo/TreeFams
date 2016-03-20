@@ -475,4 +475,29 @@ class Profile < ActiveRecord::Base
 
 
 
+
+  # @note: collect profiles info by profiles_ids
+  # @output: hash structure (json type)
+  #   one_profile_info = { profile_id: profile_id, name_id: name_id, sex_id: sex_id }
+  # to test in rails c: [790,791,792,795]
+  def self.collect_profiles_info(profiles_ids)
+    profiles_info = {}
+    profiles_ids.each do |one_profile_id|
+      profile = find(one_profile_id)
+      p "one_profile_id = #{one_profile_id}, profile.id = #{profile.id}"
+      unless profile.blank?
+        profiles_info.merge!( profile[:id] => { user_id: profile[:user_id], name_id: profile[:name_id],
+                                                sex_id: profile[:sex_id], tree_id: profile[:tree_id] })
+      end
+    end
+    profiles_info
+  end
+
+
+
+
+
+
+
+
 end

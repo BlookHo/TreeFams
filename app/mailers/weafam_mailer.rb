@@ -47,9 +47,16 @@ class WeafamMailer < ActionMailer::Base
     #          ["Алексей", "Анна", "Наталья", "Таисия", "Вера", "Петр", "Дарья", "Федор"],
     #      :users_emails=>["alexey@al.al", "aneta@an.an", "vera@na.na", "darja@pe.pe",
     #                      "natalia@pe.pe", "petr@pe.pe", "taisia@pe.pe", "fedor@pe.pe"]}
+
+    # # real sending
+    # users_data =
+    #     {:users_names=> ["Алексей"],
+    #      :users_emails=>["zoneiva@gmail.com"] }
+
+    # mailcatcher sending
     users_data =
-        {:users_names=> ["Алексей"],
-         :users_emails=>["zoneiva@gmail.com"] }
+        {:users_names=> ["Андрей"],
+         :users_emails=>["andrey-7-tree@an.an"] }
 
 
     logger.info "In proceed_weekly_mail: users_data = #{users_data} "
@@ -82,13 +89,31 @@ class WeafamMailer < ActionMailer::Base
 
         @email_name = one_email
         @user_name = user_to_send_name
-        @new_profiles = user_weekly_info[:new_weekly_profiles][:new_profiles_ids] # [2, 3, 7, 8, 9, 10, 11, 12, 13, ...]
-        @new_profiles_qty = @new_profiles.size # 17
-        @new_profiles_three = @new_profiles.take(3) # [2, 3, 7
+        @new_profiles_ids = user_weekly_info[:new_weekly_profiles][:new_profiles_ids] # [2, 3, 7, 8, 9, 10, 11, 12, 13, ...]
+        @new_profiles_qty = @new_profiles_ids.size # 17
+        @new_profiles_three = @new_profiles_ids.take(3) # [2, 3, 7
+
+        @profiles_info = Profile.collect_profiles_info(@new_profiles_ids)
+        unless @profiles_info.blank?
+          puts "@profiles_info = #{@profiles_info}"
+          # @profiles_info =
+              {   64=> {:user_id=>nil, :name_id=>90, :sex_id=>1, :tree_id=>7},
+                  65=>{:user_id=>nil, :name_id=>345, :sex_id=>0, :tree_id=>7},
+                  63=>{:user_id=>7, :name_id=>40, :sex_id=>1, :tree_id=>7},
+              67=>{:user_id=>nil, :name_id=>173, :sex_id=>0, :tree_id=>7},
+              68=>{:user_id=>nil, :name_id=>343, :sex_id=>1, :tree_id=>7},
+              66=>{:user_id=>8, :name_id=>370, :sex_id=>1, :tree_id=>7}}
+
+          first_elements_qty = first_three_qty(@profiles_info)
+
+          @profiles_info_three = @profiles_info.first(first_elements_qty).to_h
+          puts "@profiles_info_three = #{@profiles_info_three}"
+        end
+
         @new_profiles_females = user_weekly_info[:new_weekly_profiles][:new_profiles_female] # 8
         @new_profiles_males = user_weekly_info[:new_weekly_profiles][:new_profiles_male] # 9
         puts "user to send: @email_name = #{one_email}, user_to_send_id = #{user_to_send_id}, @user_name = #{user_to_send_name} "
-        puts "vars: @new_profiles = #{@new_profiles}, @new_profiles_qty = #{@new_profiles_qty}"
+        puts "vars: @new_profiles_ids = #{@new_profiles_ids}, @new_profiles_qty = #{@new_profiles_qty}"
         puts "@new_profiles_three = #{@new_profiles_three}, @new_profiles_females = #{@new_profiles_females}, @new_profiles_males = #{@new_profiles_males} "
 
         # @confirmation_url = confirmation_url(user)
@@ -122,6 +147,21 @@ class WeafamMailer < ActionMailer::Base
 
   end
 
+  # @note: service method
+  #   determine qty of first elements to take from array or hash
+  #
+  def first_three_qty(profiles_info)
+    unless profiles_info.blank?
+      first_elements_qty = 0
+      info_size = profiles_info.size
+      if info_size >= 3 # todo: put this "3" in constants (qty of firest elements to take from array or hahs to display)
+        first_elements_qty = 3
+      else
+        first_elements_qty = info_size
+      end
+    end
+    # first_elements_qty
+  end
 
 
   # @note: prepare weekly mail data
