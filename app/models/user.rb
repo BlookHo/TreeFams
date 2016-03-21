@@ -279,17 +279,22 @@ class User < ActiveRecord::Base
     connections_info = ConnectedUser.connections_weekly(connected_users)
     puts "In collect_weekly_info:  connections_info = #{connections_info}"
 
-    new_weekly_profiles = {}
+    # new_weekly_profiles = {}
     new_weekly_profiles = Profile.new_weekly_profiles(connected_users)
     puts "In collect_weekly_info:  new_weekly_profiles = #{new_weekly_profiles}"
 
-      # new_users_profile_data = ProfileData.profiles_data_info(connections_info[:new_users_profiles])
+    connection_requests_info = ConnectionRequest.connection_requests_exists(connected_users)
+    puts "In collect_weekly_info:  connection_requests_info = #{connection_requests_info}"
+    # {:request_users_ids=>[57], :request_users_qty=>1, :request_users_profiles=>[790]}
+
+    # new_users_profile_data = ProfileData.profiles_data_info(connections_info[:new_users_profiles])
 
     # new_conn_requests =
     { site_info: site_stat_info,
       tree_info: tree_stat_info,
       connections_info: connections_info,
-      new_weekly_profiles: new_weekly_profiles
+      new_weekly_profiles: new_weekly_profiles,
+      connection_requests_info: connection_requests_info
 
     }
 
