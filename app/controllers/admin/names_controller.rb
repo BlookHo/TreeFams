@@ -42,6 +42,7 @@ class Admin::NamesController < Admin::AdminController
 
   def new
     @name = Name.new
+    @status = NameStatus.all
     @name.name =  params[:name].mb_chars.capitalize if params[:name]
     @name.sex_id =  params[:sex_id] if params[:sex_id]
     @parent_names = Name.parent_names
