@@ -49,14 +49,16 @@ class WeafamMailer < ActionMailer::Base
     #                      "natalia@pe.pe", "petr@pe.pe", "taisia@pe.pe", "fedor@pe.pe"]}
 
     # # real sending
-    # users_data =
-    #     {:users_names=> ["Алексей"],
-    #      :users_emails=>["zoneiva@gmail.com"] }
+    users_data =
+        # {:users_names=> ["Алексей"],
+        #  :users_emails=>["zoneiva@gmail.com"] }
 
     # mailcatcher sending
-    users_data =
-        {:users_names=> ["Андрей"],
-         :users_emails=>["andrey-7-tree@an.an"] }
+    # users_data =
+    #     {:users_names=> ["Андрей"],
+    #      :users_emails=>["andrey-7-tree@an.an"] }
+    {:users_names=> ["Андрей"],
+    :users_emails=>["zoneiva@gmail.com"] }
 
 
     logger.info "In proceed_weekly_mail: users_data = #{users_data} "
@@ -70,118 +72,194 @@ class WeafamMailer < ActionMailer::Base
         user_to_send_name = users_data[:users_names][index]
         puts "user to send: email = #{one_email}, id = #{user_to_send_id}, name = #{user_to_send_name} "
 
-
-        user_weekly_info = User.find(user_to_send_id).collect_weekly_info
-
-        # In collect_weekly_info:
-        # after collect_weekly_info:
-        # user_weekly_info =
-                  {:site_info=>
-                       {:profiles=>27, :profiles_male=>13, :profiles_female=>14, :users=>8, :users_male=>1,
-                        :users_female=>2, :trees=>6, :invitations=>2689, :requests=>4, :connections=>2,
-                        :refuse_requests=>0, :disconnections=>67, :similars_found=>0},
-                   :tree_info=>
-                       {:tree_profiles=>[17, 15, 9, 20, 16, 10, 3, 12, 13, 14, 21, 124, 18, 11, 8, 19, 2, 7],
-                        :connected_users=>[1, 2], :qty_of_tree_profiles=>18, :qty_of_tree_users=>2},
-                   :connections_info=>{:new_users_connected=>[2], :conn_count=>1, :new_users_profiles=>[11]},
-                   :new_weekly_profiles => {:new_profiles_qty=>17, :new_profiles_male=>9, :new_profiles_female=>8,
-                                            :new_profiles_ids=>[2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]}
-        }
-
-        # connection_requests
-        connect_request_users_ids = user_weekly_info[:connection_requests_info][:request_users_ids]#
-        @connect_request_users_ids = connect_request_users_ids
-        connect_request_users_qty = user_weekly_info[:connection_requests_info][:request_users_qty]#
-        @connect_request_users_qty = connect_request_users_qty
-
-
-
-        # connections
-        # @new_connected_users_ids = user_weekly_info[:connections_info][:new_users_connected] #
-        new_connect_profiles_id = user_weekly_info[:connections_info][:new_users_profiles].first#
-        @new_connect_profiles_ids = [new_connect_profiles_id]
-        new_user_connected_id = user_weekly_info[:connections_info][:new_users_connected].first #
-        @new_user_connected_id = [new_user_connected_id]
-
-        connect_user_weekly_info = User.find(new_user_connected_id).collect_weekly_info
-        # @connect_user_weekly_info = connect_user_weekly_info # to view
-        puts "@connect_user_weekly_info = #{connect_user_weekly_info}"
-        # @connect_user_weekly_info =
-            {:site_info=>
-                 {:profiles=>405, :profiles_male=>219, :profiles_female=>186,
-                  :users=>29, :users_male=>23, :users_female=>6, :trees=>24,
-                  :invitations=>3, :requests=>54, :connections=>47, :refuse_requests=>0,
-                  :disconnections=>34, :similars_found=>5},
-             :tree_info=>{:tree_profiles=>[66, 69, 79, 967, 70, 64, 68, 84, 65, 80, 968, 67, 969, 971, 63],
-                          :connected_users=>[7, 8], :qty_of_tree_profiles=>15, :qty_of_tree_users=>2},
-             :connections_info=>{:new_users_connected=>[8], :conn_count=>1, :new_users_profiles=>[66]},
-             :new_weekly_profiles=>{:new_profiles_qty=>6, :new_profiles_male=>4, :new_profiles_female=>2,
-                                    :new_profiles_ids=>[64, 65, 63, 67, 68, 66]}}
-
-        @connect_tree_profiles_qty = connect_user_weekly_info[:tree_info][:qty_of_tree_profiles]
-        @connect_tree_users_qty = connect_user_weekly_info[:tree_info][:qty_of_tree_users]
-
-        connect_profiles_info = Profile.collect_profiles_info(@new_connect_profiles_ids)
-        @connect_profiles_info = connect_profiles_info # to view
-        unless connect_profiles_info.blank?
-          puts "@connect_profiles_info = #{@connect_profiles_info}"
-
-          first_elements_qty = first_three_qty(connect_profiles_info)
-          connect_profiles_info_three = connect_profiles_info.first(first_elements_qty).to_h
-          @connect_profiles_info_three = connect_profiles_info_three # to view
-          puts "@connect_profiles_info_three = #{@connect_profiles_info_three}"
-
-          @connect_profiles_info_complete = ProfileData.profiles_data_info(connect_profiles_info_three)
-
-
-
-
-        end
-
-
         @email_name = one_email
         @user_name = user_to_send_name
 
-        # new profiles
-        @new_profiles_ids = user_weekly_info[:new_weekly_profiles][:new_profiles_ids] # [2, 3, 7, 8, 9, 10, 11, 12, 13, ...]
-        @new_profiles_qty = @new_profiles_ids.size # 17
-        @new_profiles_three = @new_profiles_ids.take(3) # [2, 3, 7
 
-        profiles_info = Profile.collect_profiles_info(@new_profiles_ids)
-        # @profiles_info =
-        {   64=> {:user_id=>nil, :name_id=>90, :sex_id=>1, :tree_id=>7},
-            65=>{:user_id=>nil, :name_id=>345, :sex_id=>0, :tree_id=>7},
-            63=>{:user_id=>7, :name_id=>40, :sex_id=>1, :tree_id=>7},
-            67=>{:user_id=>nil, :name_id=>173, :sex_id=>0, :tree_id=>7},
-            68=>{:user_id=>nil, :name_id=>343, :sex_id=>1, :tree_id=>7},
-            66=>{:user_id=>8, :name_id=>370, :sex_id=>1, :tree_id=>7}}
+        user_weekly_info = User.find(user_to_send_id).collect_weekly_info
+        puts "To send user_weekly_info = #{user_weekly_info}"
 
-        @profiles_info = profiles_info # to view
-        unless profiles_info.blank?
-          puts "@profiles_info = #{@profiles_info}"
+        # In collect_weekly_info:
+        # after collect_weekly_info:
+        # To send user_weekly_info = PGlocal
+        # user_weekly_info =
+          {:site_info=>
+               {:profiles=>405, :profiles_male=>219, :profiles_female=>186, :users=>29,
+                :users_male=>23, :users_female=>6, :trees=>24, :invitations=>3, :requests=>55,
+                :connections=>47, :refuse_requests=>0, :disconnections=>34, :similars_found=>5},
+           :tree_info=>
+               {:tree_profiles=>[63, 69, 79, 967, 70, 64, 66, 84, 65, 80, 67, 68, 968, 969, 971],
+                :connected_users=>[7, 8], :qty_of_tree_profiles=>15, :qty_of_tree_users=>2},
+           :connections_info=>
+               {:new_users_connected=>[8], :conn_count=>1, :new_users_profiles=>[66]}, # [8]
+           :new_weekly_profiles=>
+               {:new_profiles_qty=>6, :new_profiles_male=>4, :new_profiles_female=>2,
+                :new_profiles_ids=>[64, 65, 63, 67, 68, 66]},  # [64, 65, 63, 67, 68, 66]
+           :connection_requests_info=>
+               {:request_users_ids=>[57], :request_users_qty=>1, :request_users_profiles=>[790]}}   # [57]
 
-          first_elements_qty = first_three_qty(profiles_info)
-          profiles_info_three = profiles_info.first(first_elements_qty).to_h
-          @profiles_info_three = profiles_info_three # to view
-          puts "@profiles_info_three = #{@profiles_info_three}"
+        @tree_profiles_qty = user_weekly_info[:tree_info][:qty_of_tree_profiles]
+        @tree_users_qty = user_weekly_info[:tree_info][:qty_of_tree_users]
 
-          @profiles_info_complete = ProfileData.profiles_data_info(profiles_info_three)
+        # user_weekly_info = RSpec
+        #           {:site_info=>
+        #                {:profiles=>27, :profiles_male=>13, :profiles_female=>14, :users=>8, :users_male=>1,
+        #                 :users_female=>2, :trees=>6, :invitations=>2689, :requests=>4, :connections=>2,
+        #                 :refuse_requests=>0, :disconnections=>67, :similars_found=>0},
+        #            :tree_info=>
+        #                {:tree_profiles=>[17, 15, 9, 20, 16, 10, 3, 12, 13, 14, 21, 124, 18, 11, 8, 19, 2, 7],
+        #                 :connected_users=>[1, 2], :qty_of_tree_profiles=>18, :qty_of_tree_users=>2},
+        #            :connections_info=>{:new_users_connected=>[2], :conn_count=>1, :new_users_profiles=>[11]},
+        #            :new_weekly_profiles => {:new_profiles_qty=>17, :new_profiles_male=>9, :new_profiles_female=>8,
+        #                                     :new_profiles_ids=>[2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]}
+        # }
+
+        # connection_requests
+        if user_weekly_info[:connection_requests_info][:request_users_ids].blank?
+          @new_conn_requests_exists = false
+        else
+          @new_conn_requests_exists = true
+          # All requests:
+          @connect_request_user_ids = user_weekly_info[:connection_requests_info][:request_users_ids]
+          @connect_request_users_qty = user_weekly_info[:connection_requests_info][:request_users_qty]
+
+          # First request
+          connect_request_users_id = user_weekly_info[:connection_requests_info][:request_users_ids].first#
+          @connect_request_users_id = [connect_request_users_id]
+          connect_request_profile_id = user_weekly_info[:connection_requests_info][:request_users_profiles].first#
+          @connect_request_profile_id = [connect_request_profile_id]
+          connect_request_user_info = User.find(connect_request_users_id).collect_weekly_info
+          puts "@connect_request_user_info = #{connect_request_user_info}"
+          # @connect_request_user_info =
+              {:site_info=>
+                   {:profiles=>405, :profiles_male=>219, :profiles_female=>186, :users=>29,
+                    :users_male=>23, :users_female=>6, :trees=>24, :invitations=>3, :requests=>55,
+                    :connections=>47, :refuse_requests=>0, :disconnections=>34, :similars_found=>5},
+               :tree_info=>
+                   {:tree_profiles=>[790, 792, 794, 814, 799, 796, 797, 791, 808, 898, 798, 815, 807,
+                                     795, 793, 913, 902, 806, 897, 813, 812],
+                    :connected_users=>[57, 58, 60], :qty_of_tree_profiles=>21, :qty_of_tree_users=>3},
+               :connections_info=>
+                   {:new_users_connected=>[58, 58, 58, 58, 58, 58, 60, 60, 60, 60, 60, 60, 60, 60],
+                    :conn_count=>14,
+                    :new_users_profiles=>[795, 795, 795, 795, 795, 795, 794, 794, 794, 794, 794, 794, 794, 794]},
+               :new_weekly_profiles=>
+                   {:new_profiles_qty=>0, :new_profiles_male=>0, :new_profiles_female=>0, :new_profiles_ids=>[]},
+               :connection_requests_info=>{:request_users_ids=>[], :request_users_qty=>0, :request_users_profiles=>[]}}
+          @conn_req_tree_profiles_qty = connect_request_user_info[:tree_info][:qty_of_tree_profiles]
+          @conn_req_tree_users_qty = connect_request_user_info[:tree_info][:qty_of_tree_users]
+
+          conn_request_profiles_info = Profile.collect_profiles_info(@connect_request_profile_id)
+          p "1 conn_request_profiles_info = #{conn_request_profiles_info}"
+          @conn_request_profiles_info = conn_request_profiles_info # to view
+          unless conn_request_profiles_info.blank?
+            puts "2 @conn_request_profiles_info = #{@conn_request_profiles_info}"
+
+            first_elements_qty = first_three_qty(conn_request_profiles_info)
+            conn_req_profiles_info_three = conn_request_profiles_info.first(first_elements_qty).to_h
+            @conn_req_profiles_info_three = conn_req_profiles_info_three # to view
+            puts "3 @conn_req_profiles_info_three = #{@conn_req_profiles_info_three}"
+
+            @conn_req_profiles_complete = ProfileData.profiles_data_info(conn_req_profiles_info_three)
+          end
 
         end
 
-        @new_profiles_females = user_weekly_info[:new_weekly_profiles][:new_profiles_female] # 8
-        @new_profiles_males = user_weekly_info[:new_weekly_profiles][:new_profiles_male] # 9
-        puts "user to send: @email_name = #{one_email}, user_to_send_id = #{user_to_send_id}, @user_name = #{user_to_send_name} "
-        puts "vars: @new_profiles_ids = #{@new_profiles_ids}, @new_profiles_qty = #{@new_profiles_qty}"
-        puts "@new_profiles_three = #{@new_profiles_three}, @new_profiles_females = #{@new_profiles_females}, @new_profiles_males = #{@new_profiles_males} "
+
+        # connections
+        if user_weekly_info[:connections_info][:new_users_connected].blank?
+          @new_connections_exists = false
+        else
+          @new_connections_exists = true
+          new_connect_profiles_id = user_weekly_info[:connections_info][:new_users_profiles].first#
+          @new_connect_profiles_id = [new_connect_profiles_id]
+          new_user_connected_id = user_weekly_info[:connections_info][:new_users_connected].first #
+          @new_user_connected_id = [new_user_connected_id]
+
+          connect_user_weekly_info = User.find(new_user_connected_id).collect_weekly_info
+          # @connect_user_weekly_info = connect_user_weekly_info # to view
+          puts "@connect_user_weekly_info = #{connect_user_weekly_info}"
+          # @connect_user_weekly_info =
+              {:site_info=>
+                   {:profiles=>405, :profiles_male=>219, :profiles_female=>186,
+                    :users=>29, :users_male=>23, :users_female=>6, :trees=>24,
+                    :invitations=>3, :requests=>54, :connections=>47, :refuse_requests=>0,
+                    :disconnections=>34, :similars_found=>5},
+               :tree_info=>{:tree_profiles=>[66, 69, 79, 967, 70, 64, 68, 84, 65, 80, 968, 67, 969, 971, 63],
+                            :connected_users=>[7, 8], :qty_of_tree_profiles=>15, :qty_of_tree_users=>2},
+               :connections_info=>{:new_users_connected=>[8], :conn_count=>1, :new_users_profiles=>[66]},
+               :new_weekly_profiles=>{:new_profiles_qty=>6, :new_profiles_male=>4, :new_profiles_female=>2,
+                                      :new_profiles_ids=>[64, 65, 63, 67, 68, 66]}}
+
+          @connect_tree_profiles_qty = connect_user_weekly_info[:tree_info][:qty_of_tree_profiles]
+          @connect_tree_users_qty = connect_user_weekly_info[:tree_info][:qty_of_tree_users]
+
+          connect_profiles_info = Profile.collect_profiles_info(@new_connect_profiles_id)
+          @connect_profiles_info = connect_profiles_info # to view
+          unless connect_profiles_info.blank?
+            puts "@connect_profiles_info = #{@connect_profiles_info}"
+
+            first_elements_qty = first_three_qty(connect_profiles_info)
+            connect_profiles_info_three = connect_profiles_info.first(first_elements_qty).to_h
+            @connect_profiles_info_three = connect_profiles_info_three # to view
+            puts "@connect_profiles_info_three = #{@connect_profiles_info_three}"
+
+            @connect_profiles_info_complete = ProfileData.profiles_data_info(connect_profiles_info_three)
+          end
+        end
+
+
+        # new profiles
+        if user_weekly_info[:new_weekly_profiles][:new_profiles_ids].blank?
+          @new_profiles_exists = false
+        else
+          @new_profiles_exists = true
+          @new_profiles_ids = user_weekly_info[:new_weekly_profiles][:new_profiles_ids] # [2, 3, 7, 8, 9, 10, 11, 12, 13, ...]
+          @new_profiles_qty = @new_profiles_ids.size # 17
+          @new_profiles_three = @new_profiles_ids.take(3) # [2, 3, 7
+
+          profiles_info = Profile.collect_profiles_info(@new_profiles_ids)
+          # @profiles_info =
+          {   64=> {:user_id=>nil, :name_id=>90, :sex_id=>1, :tree_id=>7},
+              65=>{:user_id=>nil, :name_id=>345, :sex_id=>0, :tree_id=>7},
+              63=>{:user_id=>7, :name_id=>40, :sex_id=>1, :tree_id=>7},
+              67=>{:user_id=>nil, :name_id=>173, :sex_id=>0, :tree_id=>7},
+              68=>{:user_id=>nil, :name_id=>343, :sex_id=>1, :tree_id=>7},
+              66=>{:user_id=>8, :name_id=>370, :sex_id=>1, :tree_id=>7}}
+
+          @profiles_info = profiles_info # to view
+          unless profiles_info.blank?
+            puts "@profiles_info = #{@profiles_info}"
+
+            first_elements_qty = first_three_qty(profiles_info)
+            profiles_info_three = profiles_info.first(first_elements_qty).to_h
+            @profiles_info_three = profiles_info_three # to view
+            puts "@profiles_info_three = #{@profiles_info_three}"
+
+            @profiles_info_complete = ProfileData.profiles_data_info(profiles_info_three)
+
+          end
+
+          @new_profiles_females = user_weekly_info[:new_weekly_profiles][:new_profiles_female] # 8
+          @new_profiles_males = user_weekly_info[:new_weekly_profiles][:new_profiles_male] # 9
+          puts "user to send: @email_name = #{one_email}, user_to_send_id = #{user_to_send_id}, @user_name = #{user_to_send_name} "
+          puts "vars: @new_profiles_ids = #{@new_profiles_ids}, @new_profiles_qty = #{@new_profiles_qty}"
+          puts "@new_profiles_three = #{@new_profiles_three}, @new_profiles_females = #{@new_profiles_females}, @new_profiles_males = #{@new_profiles_males} "
+        end
 
         # @confirmation_url = confirmation_url(user)
 
-
-        mail to: one_email, subject: 'Новости вашей родни'
-        count_emails += 1
+        events = {
+            new_conn_requests_exists: @new_conn_requests_exists,
+            new_connections_exists: @new_connections_exists,
+            new_profiles_exists: @new_profiles_exists
+        }
+        puts "events = #{events}"
+        if Service.check_all_events_exists?(events) # Send OR not Send for this user?
+          mail to: one_email, subject: 'Новости вашей родни'
+          count_emails += 1
+        end
       end
-      # template_weekly_info(user_to_send_id)
 
     end
     puts "In proceed_weekly_mail: count_week_emails = #{count_emails}"
@@ -205,6 +283,21 @@ class WeafamMailer < ActionMailer::Base
     # end
 
   end
+
+  # @note: service method
+  #   determine: whether all event necessary to send weekly email - all exists
+  # @input: events = { new_conn_requests_exists: @new_conn_requests_exists,
+  #     new_connections_exists: @new_connections_exists,
+  #     new_profiles_exists: @new_profiles_exists }
+  # todo: place this into service class
+  def check_all_events_exists?(events)
+    events.each do |name, truefalse|
+      return false unless truefalse
+    end
+    true
+  end
+
+
 
   # @note: service method
   #   determine qty of first elements to take from hash

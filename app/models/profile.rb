@@ -462,6 +462,7 @@ class Profile < ActiveRecord::Base
   #   @input: connected_users
   def self.new_weekly_profiles(connected_users)
     week_ago_time = 1.week.ago
+    # week_ago_time = 1.day.ago
     puts "In new_weekly_profiles: week_ago_time = #{week_ago_time}" # = 2016-03-09 09:33:10 UTC
 
     new_weekly_profiles = where("tree_id in (?)", connected_users).where("date_trunc('day', created_at) >= ?", "#{week_ago_time}")
