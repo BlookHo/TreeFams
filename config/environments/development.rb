@@ -28,28 +28,27 @@ Weafam::Application.configure do
 
   # For Mailcatcher
   #config.action_mailer.smtp_settings = { :address => "localhost", :domain => 'localhost:3003', :port => 1025 }
-  #config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
-#  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
 
-  config.action_mailer.smtp_settings =
-      {
-       :port => 465 ,  # yandex
-           #25,
-       # :port =>  1025, #    -  mailcatcher
-       # :port =>  587, # - gmail
-      :enable_starttls_auto => true,  #
-      # :address => "smtp.gmail.com",       ## CHANGE for Gmail
-      :address => "smtp.yandex.ru",       ## for Yandex
-      :domain => 'localhost:3003',
-       # :user_name => 'blookho@gmail.com',  ########### CHANGE!!
-       # :password => '1219dmkv1219',                ########### CHANGE new passw!!
-      :user_name => 'notification@weallfamily.ru',  ########### CHANGE!!
-      :password => '32d2h990',                ########### CHANGE new passw!!
-      :authentication => 'plain',
-      # :openssl_verify_mode  => 'none' # gmail
-      :ssl => true  # yandex
-     }
-
+  # config.action_mailer.smtp_settings =
+  #     {
+  #      :port => 465 ,  # yandex
+  #          #25,
+  #      # :port =>  1025, #    -  mailcatcher
+  #      # :port =>  587, # - gmail
+  #     :enable_starttls_auto => true,  #
+  #     # :address => "smtp.gmail.com",       ## CHANGE for Gmail
+  #     :address => "smtp.yandex.ru",       ## for Yandex
+  #     :domain => 'localhost:3003',
+  #      # :user_name => 'blookho@gmail.com',  ########### CHANGE!!
+  #      # :password => '1219dmkv1219',                ########### CHANGE new passw!!
+  #     :user_name => 'notification@weallfamily.ru',  ########### CHANGE!!
+  #     :password => '32d2h990',                ########### CHANGE new passw!!
+  #     :authentication => 'plain',
+  #     # :openssl_verify_mode  => 'none' # gmail
+  #     :ssl => true  # yandex
+  #    }
+  #
 
 
   # Print deprecation notices to the Rails logger.

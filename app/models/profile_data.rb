@@ -214,14 +214,14 @@ class ProfileData < ActiveRecord::Base
       # p "one_profile_id = #{one_profile_id}, profile_info = #{profile_info}"
       unless one_profile_data.blank?
         # p "one_profile_data[0].id = #{one_profile_data[0].id}"
-        profile_info[:last_name] = one_profile_data[0][:last_name]
-        profile_info[:country] = one_profile_data[0][:country]
-        profile_info[:birthday] = one_profile_data[0][:birthday]
-        profile_info[:birth_place] = one_profile_data[0][:birth_place]
-        profile_info[:deathdate] = one_profile_data[0][:deathdate]
+        profile_info[:last_name]      = one_profile_data[0][:last_name]
+        profile_info[:country]        = one_profile_data[0][:country]
+        profile_info[:birthday]       = one_profile_data[0][:birthday]
+        profile_info[:birth_place]    = one_profile_data[0][:birth_place]
+        profile_info[:deathdate]      = one_profile_data[0][:deathdate]
         profile_info[:prev_last_name] = one_profile_data[0][:prev_last_name]
-        profile_info[:biography] = one_profile_data[0][:biography]
-        profile_info[:city] = one_profile_data[0][:city]
+        profile_info[:biography]      = one_profile_data[0][:biography]
+        profile_info[:city]           = one_profile_data[0][:city]
         updated_profiles_info.merge!( one_profile_id => profile_info )
       end
     end

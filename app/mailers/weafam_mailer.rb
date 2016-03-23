@@ -58,7 +58,7 @@ class WeafamMailer < ActionMailer::Base
     #     {:users_names=> ["Андрей"],
     #      :users_emails=>["andrey-7-tree@an.an"] }
     {:users_names=> ["Андрей"],
-    :users_emails=>["zoneiva@gmail.com"] }
+    :users_emails=>["azoneiva@gmail.coma"] }
 
 
     logger.info "In proceed_weekly_mail: users_data = #{users_data} "
@@ -113,6 +113,19 @@ class WeafamMailer < ActionMailer::Base
         #            :new_weekly_profiles => {:new_profiles_qty=>17, :new_profiles_male=>9, :new_profiles_female=>8,
         #                                     :new_profiles_ids=>[2, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]}
         # }
+
+
+        # relatives_events
+        if user_weekly_info[:connection_requests_info][:request_users_ids].blank?
+          @new_relatives_events_exists = false
+        else
+          @new_relatives_events_exists = true
+
+
+        end
+
+
+
 
         # connection_requests
         if user_weekly_info[:connection_requests_info][:request_users_ids].blank?
