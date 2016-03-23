@@ -227,9 +227,11 @@ module SearchMain
       search_time = ((Time.now - start_search_time) ).round(3)
       logger.info  "\n Time of Search_Tree_Profiles = #{search_time.round(3)} sec. In #{results[:connected_author_arr].inspect}, search_event = #{search_event}\n\n"
 
+      p  "Before SearchServiceLogs.store_search_time_log: self.id = #{self.id.inspect}"
       store_log_data = { search_event:            search_event,
                          time:                    search_time,
                          connected_users:         connected_users,
+                         user_id:                 self.id,
                          searched_profiles:       tree_profiles_size,
                          all_tree_profiles:       all_tree_profiles_qty }
       SearchServiceLogs.store_search_time_log(store_log_data)

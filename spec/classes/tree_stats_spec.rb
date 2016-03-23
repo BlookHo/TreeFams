@@ -158,8 +158,8 @@ RSpec.describe TreeStats     do  #, focus: true
       FactoryGirl.create(:connect_profile, :connect_profile_444)  # 444
       FactoryGirl.create(:connect_profile, :connect_profile_555)  # 555
       FactoryGirl.create(:connect_profile, :connect_profile_666)  # 666
-      FactoryGirl.create(:connect_profile, :connect_profile_777)  # 777
-      FactoryGirl.create(:connect_profile, :connect_profile_888)  # 888
+      FactoryGirl.create(:connect_profile, :connect_profile_7777)  # 7777
+      FactoryGirl.create(:connect_profile, :connect_profile_8888)  # 8888
 
       # Tree
       FactoryGirl.create(:connection_trees)                        # 17 pr2
@@ -492,7 +492,7 @@ RSpec.describe TreeStats     do  #, focus: true
         end
         it '- check all_users_names: - ' do
           puts "all users_names =  #{users_names.inspect}"
-          expect(users_names.sort).to eq(["Алексей", "Анна", "Вера", "Дарья", "Наталья", "Петр", "Таисия", "Федор"])
+          expect(users_names.sort).to eq(["Алексей", "Анна", "Вера", "Вячеслав", "Дарья", "Наталья", "Петр", "Таисия"])
         end
       end
 

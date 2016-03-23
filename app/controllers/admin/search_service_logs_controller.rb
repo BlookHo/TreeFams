@@ -1,6 +1,6 @@
 class Admin::SearchServiceLogsController < Admin::AdminController
 
-  before_action :set_search_service_log, only: [:show, :destroy]
+  before_action :set_search_service_log, only: [:show, :destroy]  #
 
   # GET /search_service_logs
   # @note: show search_service_logs rows in DESCend order
@@ -59,7 +59,7 @@ class Admin::SearchServiceLogsController < Admin::AdminController
   def search_service_logs_params
     params.require(:search_service_log).permit( :name, :search_event, :time, :connected_users,
                                                  :searched_profiles, :ave_profile_search_time,
-                                                 :all_tree_profiles, :all_profiles)
+                                                 :all_tree_profiles, :all_profiles, :user_id)
   end
 
 end

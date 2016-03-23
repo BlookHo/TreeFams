@@ -95,6 +95,7 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
 
     # create User parameters
     let(:current_user_1) { User.first }  # User = 1. Tree = [1,2]. profile_id = 17
+    let(:current_user_1_id) { User.first.id }  # user_id = 1. Tree = [1,2]. profile_id = 17
     describe 'Method store_search_time_log in <start_search> test'   do # , focus: true
 
       context "- Check Method logged_actual_profiles -"   do  # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
@@ -107,6 +108,7 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
         let(:store_log_data) {{ search_event: search_event,
                                 time: time,
                                 connected_users: connected_users,
+                                user_id: current_user_1_id,
                                 searched_profiles: searched_profiles,
                                 all_tree_profiles: all_tree_profiles,
                                 all_profiles: all_profiles } }
@@ -132,7 +134,7 @@ RSpec.describe SearchServiceLogs, type: :model    do  #, focus: true
           expect(search_service_logs).to eq({"id"=>1, "name"=>"Удален профиль", "search_event"=>2, "time"=>110.93,
                                              "connected_users"=> [1, 2], "searched_profiles"=>16,
                                              "ave_profile_search_time"=> 6.933, "all_tree_profiles"=>26,
-                                             "all_profiles"=>195 } )
+                                             "all_profiles"=>195, "user_id"=>1 } )
         end
       end
 

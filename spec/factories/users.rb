@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :user do          # For 2 connected trees test - 1st. Tree = 1
-    admin false
     profile_id 63
     email "petr_andr@pe.pe"
     password 'qwertyuiop'

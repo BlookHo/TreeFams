@@ -577,6 +577,8 @@ RSpec.describe User, :type => :model    do  # , focus: true
       UpdatesFeed.reset_pk_sequence
       SearchResults.delete_all
       SearchResults.reset_pk_sequence
+      SearchServiceLogs.delete_all
+      SearchServiceLogs.reset_pk_sequence
       WeafamStat.delete_all
       WeafamStat.reset_pk_sequence
     }
@@ -1101,7 +1103,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
               puts "before logged_actual_profiles: current_user_4.profile_id = #{current_user_4.profile_id.inspect} \n"
               expect(current_user_4.profile_id).to eq(444)
             end
-            it '- check current_user_3.connected_users - ' do
+            it '- check current_user_4.connected_users - ' do
               puts "After logged_actual_profiles: current_user_3.connected_users = #{current_user_4.connected_users.inspect}"
               expect(current_user_4.connected_users).to eq([4])
             end
@@ -1126,7 +1128,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
       end
 
 
-      describe 'Method collect_weekly_info User model'  , focus: true    do # , focus: true
+      describe 'Method collect_weekly_info User model'     do # , focus: true
          context "- Check Method collect_weekly_info -"   do  # , focus: true # User = 1. Tree = [1,2]. profile_id = 17
           let(:weekly_info) {current_user_1.collect_weekly_info}
           describe '- check Profile have rows count before - Ok' do
@@ -1169,6 +1171,7 @@ RSpec.describe User, :type => :model    do  # , focus: true
         let(:certain_koeff_for_connect) { CERTAIN_KOEFF }  # 5
         let(:search_results) { current_user_1.start_search(search_event) }
         let(:weafam_stat_last_profiles) { WeafamStat.last.profiles }
+        let(:connected_users) {current_user_1.connected_users}
 
         it "- Check weafam_stat_last_profiles before start_search"   do
           puts "In User model: weafam_stat_last_profiles = #{weafam_stat_last_profiles} \n"   # 4
@@ -1259,15 +1262,41 @@ RSpec.describe User, :type => :model    do  # , focus: true
         # {:found_tree_id=>3, :found_profile_ids=>[28, 23, 24, 22, 29, 26, 25, 27]}],
         # :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}}
 
+
+
+
+
       end
     end
 
-    context '- check SearchResults model after run <search> module'    do #  ,  focus: true
+    context '- check SearchResults model after run <search> module'  , focus: true    do #  ,  focus: true
       let(:search_event) { 100 }
       before { current_user_1.start_search(search_event) }
       describe '- check SearchResults have rows count after <search> - Ok' do
         let(:rows_qty) {3}
         it_behaves_like :successful_search_results_rows_count
+      end
+
+      # Check SearchServiceLogs
+      it '- check current_user_1.connected_users - '    do
+        puts "Before start_search: current_user_1.connected_users = #{current_user_1.connected_users.inspect}"
+        expect(current_user_1.connected_users).to eq([1,2])
+      end
+      describe '- check WeafamStat have rows count after <search> - Ok'   do
+        let(:rows_qty) {3}
+        it_behaves_like :successful_weafam_stats_rows_count
+      end
+      describe '- check SearchServiceLogs have rows count after <search> - Ok'   do
+        let(:rows_qty) {1}
+        it_behaves_like :success_search_service_count
+      end
+      it ' - check SearchServiceLogs First stored row - Ok'    do # , focus: true
+        puts "check After SearchServiceLogs.store_search_time_log\n"   # 0
+        search_service_logs = SearchServiceLogs.find(1)
+                                  .attributes.except('created_at','updated_at', 'time','ave_profile_search_time')
+        expect(search_service_logs).to eq({"id"=>1, "name"=>"home in rails", "search_event"=>100,
+                                           "connected_users"=>[1, 2], "searched_profiles"=>18,
+                                           "all_tree_profiles"=>18, "all_profiles"=>195, "user_id"=>1} )
       end
 
       describe '- check User have double == 1 after <search> - Ok' do

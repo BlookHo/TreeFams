@@ -8,6 +8,7 @@
     <Table>
       <Row>
         <Cell><Data ss:Type="String"># ID</Data></Cell>
+        <Cell><Data ss:Type="String">Автор</Data></Cell>
         <Cell><Data ss:Type="String">Дата</Data></Cell>
         <Cell><Data ss:Type="String">Событие</Data></Cell>
         <Cell><Data ss:Type="String">Время T, сек</Data></Cell>
@@ -21,6 +22,7 @@
       <% @search_service_logs.each do |search_row| %>
           <Row>
             <Cell><Data ss:Type="Number"><%= search_row.id %></Data></Cell>
+            <Cell><Data ss:Type="Number"><%= search_row.user_id %></Data></Cell>
             <Cell><Data ss:Type="Data">  <%= search_row.created_at.strftime("%d-%b-%Y %H:%M") %></Data></Cell>
             <Cell><Data ss:Type="String"><%= search_row.name %></Data></Cell>
             <Cell><Data ss:Type="Number"><%= search_row.time %></Data></Cell>

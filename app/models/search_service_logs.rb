@@ -9,9 +9,9 @@ class SearchServiceLogs < ActiveRecord::Base
   #############################################################
 
   validates_presence_of :name, :search_event, :time, :connected_users, :searched_profiles, :ave_profile_search_time,
-                        :all_tree_profiles, :all_profiles,
+                        :all_tree_profiles, :all_profiles, :user_id,
                         :message => "Должно присутствовать в SearchServiceLogs"
-  validates_numericality_of :search_event, :searched_profiles, :all_tree_profiles, :all_profiles,
+  validates_numericality_of :search_event, :searched_profiles, :all_tree_profiles, :all_profiles, :user_id,
                             :only_integer => true, :greater_than => 0,
                             :message => "Должны быть целым числом and > 0 в SearchServiceLogs"
   validates_numericality_of :time, :ave_profile_search_time,
@@ -59,6 +59,7 @@ class SearchServiceLogs < ActiveRecord::Base
     search_event      = store_log_data[:search_event]
     time              = store_log_data[:time]
     connected_users   = store_log_data[:connected_users]
+    user_id           = store_log_data[:user_id]
     searched_profiles = store_log_data[:searched_profiles] # selected searched tree_profiles.size
     all_tree_profiles = store_log_data[:all_tree_profiles] # all profiles qty in tree
 
@@ -72,6 +73,7 @@ class SearchServiceLogs < ActiveRecord::Base
            search_event:            search_event,
            time:                    time,
            connected_users:         connected_users,
+           user_id:                 user_id,
            searched_profiles:       searched_profiles,
            ave_profile_search_time: ave_profile_search_time,
            all_tree_profiles:       all_tree_profiles,
