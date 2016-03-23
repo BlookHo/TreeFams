@@ -41,27 +41,34 @@ RSpec.configure do |config|
   # Keep only the screenshots generated from the last failing test suite
   Capybara::Screenshot.prune_strategy = :keep_last_run
 
+  # config.use_transactional_fixtures = true
 
   # @source http://devblog.avdi.org/2012/08/31/configuring-database_cleaner-with-rails-rspec-capybara-and-selenium/
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
+  # config.before(:suite) do
+  #   DatabaseCleaner.clean_with(:truncation)
+  # end
+  #
+  # config.before(:each) do
+  #   DatabaseCleaner.strategy = :transaction
+  # end
+  #
+  # config.before(:each, js: true) do
+  #   DatabaseCleaner.strategy = :truncation
+  # end
+  #
+  # config.before(:each) do
+  #   DatabaseCleaner.start
+  # end
+
+  config.after :each do
+    ActiveRecord::Base.subclasses.each(&:delete_all)
+    ActiveRecord::Base.subclasses.each(&:reset_pk_sequence)
   end
 
-  config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
+  # config.after(:each) do
+  #   DatabaseCleaner.clean
+  #   DatabaseCleaner.strategy = :deletion
+  # end
 
   # Filtes needed tests(add :focus to run them, add :disable to disable them)
   config.filter_run :focus

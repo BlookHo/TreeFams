@@ -645,7 +645,7 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
         ConnectionRequest.make_request(request_user, current_user_3_id )
       }
 
-      context '- Check ConnectionRequest AFTER <create_requests> - '   do
+      context '- Check ConnectionRequest AFTER <create_requests> - ' , focus: true   do
         describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok'   do
           puts "Check ConnectionRequest: Counter request exists - does not create new request"
           let(:rows_qty) {4}
@@ -793,7 +793,7 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
 
     describe ' Check ConnectionRequest service Methods:' , focus: true   do  # , focus: true
       context '- Check requests counts'    do
-        # before { ConnectionRequest.all.count }
+        puts "Check ConnectionRequest service Methods for stats"
         it '- check all made requests count value - Ok' do
           all_count = ConnectionRequest.all.count
           expect(all_count).to eq(4)
