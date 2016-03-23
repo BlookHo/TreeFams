@@ -1,61 +1,29 @@
 require 'rails_helper'
 
-RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
+RSpec.describe TreeStats     do  #, focus: true
 
-  describe '- Validation' do
-    describe '- on create' do
-
-      context '- valid connected_users' do
-        let(:good_connected_users) {FactoryGirl.build(:connected_user, :correct)}
-        it '- 1. Saves a valid good_connected_users pair' do
-          puts " Model ConnectedUser validation "
-          expect(good_connected_users).to be_valid
-        end
-        let(:good_connected_users_2) {FactoryGirl.build(:connected_user, :big_IDs)}
-        it '- 2. Saves a valid connected_users pair - big IDs' do
-          expect(good_connected_users_2).to be_valid
-        end
-      end
-
-      context '- Invalid connected_users pairs' do
-        let(:bad_connected_users_1) {FactoryGirl.build(:connected_user, :user_id_nil)}
-        it '- 1. Does not save an invalid connected_users pair - user_id_nil' do
-          expect(bad_connected_users_1).to_not be_valid
-        end
-        let(:bad_connected_users_2) {FactoryGirl.build(:connected_user, :ids_equal)}
-        it '- 2. Does not save an invalid connected_users pair - equal Profile_IDs' do
-          expect(bad_connected_users_2).to_not be_valid
-        end
-        let(:bad_connected_users_3) {FactoryGirl.build(:connected_user, :one_id_less_zero)}
-        it '- 3. Does not save an invalid connected_users pair - one_id_less_zero' do
-          expect(bad_connected_users_3).to_not be_valid
-        end
-        let(:bad_connected_users_4) {FactoryGirl.build(:connected_user, :other_id_less_zero)}
-        it '- 4. Does not save an invalid connected_users pair - other_id_less_zero' do
-          expect(bad_connected_users_4).to_not be_valid
-        end
-        let(:bad_connected_users_5) {FactoryGirl.build(:connected_user, :one_id_Uninteger)}
-        it '- 5. Does not save an invalid connected_users pair - one_id_Uninteger' do
-          expect(bad_connected_users_5).to_not be_valid
-        end
-      end
-
-      context '- invalid connected_users rows' do
-        let(:bad_profiles_fields_are_equal) {FactoryGirl.build(:connected_user, :bad_profiles_fields_eual)}
-        it '- 1 Dont save: - bad_profiles_fields - equal' do
-          expect(bad_profiles_fields_are_equal).to_not be_valid
-        end
-      end
+  describe 'Class TreeStat Before methods validation test'   do # , focus: true
+    it "has a valid factory" do
+      puts " Class TreeStats validation - has a valid factory"
+      # expect(FactoryGirl.create(:weafam_stat)).to be_valid
     end
   end
 
-  describe '- CHECK ConnectedUser Model methods'  do  # , focus: true
 
+  describe '- test TreeStats methods - ' do
     # create model data
     before {
+
+      # Counter
+      FactoryGirl.create(:counter_row)                        #  invites 2689,  disconnects 67
+
+      #Weafam_settings
+      FactoryGirl.create(:weafam_setting)    #
+
       # SearchResults
       FactoryGirl.create(:search_results)
-
+      FactoryGirl.create(:search_results, :correct2)
+      FactoryGirl.create(:search_results, :correct3)
 
       #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
@@ -142,15 +110,14 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
       # User current_user_1_connected
       FactoryGirl.create(:user, :current_user_1_connected )  # User = 1 . Tree = [1,2]. profile_id = 17
       FactoryGirl.create(:user, :user_2_connected )  # User = 2 . Tree = [1,2]. profile_id = 11
-          # puts "before All: User.last.id = #{User.last.id}, .profile_id = #{User.last.profile_id} \n"  # user_id = 1
+      # puts "before All: User.last.id = #{User.last.id}, .profile_id = #{User.last.profile_id} \n"  # user_id = 1
       FactoryGirl.create(:user, :user_3_to_connect )  # User = 3 . Tree = [3]. profile_id = 22
       # puts "before All: User.second.id = #{User.second.id}, .profile_id = #{User.second.profile_id} \n"  # user_id = 1
       FactoryGirl.create(:user, :user_4 )  # User = 4 . Tree = 10. profile_id = 444
       FactoryGirl.create(:user, :user_5 )  # User = 5 . Tree = 10. profile_id = 555
       FactoryGirl.create(:user, :user_6 )  # User = 6 . Tree = 10. profile_id = 666
-      FactoryGirl.create(:user, :user_7 )  # User = 7. Tree = 7. profile_id = 7777
-      FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 8. profile_id = 8888
-      FactoryGirl.create(:user, :user_9 )  # User = 9 . Tree = 9. profile_id = 9999
+      FactoryGirl.create(:user, :user_7 )  # User = 7. Tree = 10. profile_id = 777
+      FactoryGirl.create(:user, :user_8 )  # User = 8 . Tree = 10. profile_id = 888
 
       # ConnectedUser
       FactoryGirl.create(:connected_user, :correct)      # 1  2
@@ -186,9 +153,13 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
       FactoryGirl.create(:connect_profile, :connect_profile_28)  # 28
       FactoryGirl.create(:connect_profile, :connect_profile_29)  # 29
 
-      FactoryGirl.create(:connect_profile, :connect_profile_7777)  # 29
-      FactoryGirl.create(:connect_profile, :connect_profile_8888)  # 29
-      FactoryGirl.create(:connect_profile, :connect_profile_9999)  # 29
+      FactoryGirl.create(:connect_profile, :connect_profile_124)  # 124
+
+      FactoryGirl.create(:connect_profile, :connect_profile_444)  # 444
+      FactoryGirl.create(:connect_profile, :connect_profile_555)  # 555
+      FactoryGirl.create(:connect_profile, :connect_profile_666)  # 666
+      FactoryGirl.create(:connect_profile, :connect_profile_777)  # 777
+      FactoryGirl.create(:connect_profile, :connect_profile_888)  # 888
 
       # Tree
       FactoryGirl.create(:connection_trees)                        # 17 pr2
@@ -432,19 +403,11 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_195)  # 16  124
       FactoryGirl.create(:connection_profile_keys, :connect_profile_key_2_196)  # 124 16
 
-
-
-      #     # puts "before All: ProfileKey.last.user_id = #{ProfileKey.last.user_id} \n"  # user_id = 1
-  #     # puts "before All: ProfileKey.last.name_id = #{ProfileKey.last.is_name_id} \n"  # name_id = 187
-  #     # puts "before All: ProfileKey.count = #{ProfileKey.all.count} \n" # 112
-  #
-  #     FactoryGirl.create(:common_log, :log_delete_profile_89)    #
-  #     FactoryGirl.create(:common_log, :log_delete_profile_90)    #
-  #     FactoryGirl.create(:common_log, :log_add_profile_172)    #
-  #     FactoryGirl.create(:common_log, :log_add_profile_173)    #
     }
 
     after {
+      ConnectionRequest.delete_all
+      ConnectionRequest.reset_pk_sequence
       User.delete_all
       User.reset_pk_sequence
       ConnectedUser.delete_all
@@ -455,12 +418,16 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
       Profile.reset_pk_sequence
       ProfileKey.delete_all
       ProfileKey.reset_pk_sequence
-      # WeafamSetting.delete_all
-      # WeafamSetting.reset_pk_sequence
       Name.delete_all
       Name.reset_pk_sequence
-      # CommonLog.delete_all
-      # CommonLog.reset_pk_sequence
+      ConnectionLog.delete_all
+      ConnectionLog.reset_pk_sequence
+      CommonLog.delete_all
+      CommonLog.reset_pk_sequence
+      UpdatesFeed.delete_all
+      UpdatesFeed.reset_pk_sequence
+      SearchResults.delete_all
+      SearchResults.reset_pk_sequence
     }
 
     # create User parameters
@@ -468,9 +435,9 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
     let(:currentuser_id) {current_user_1.id}  # id = 1
     let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
 
-    context '- before actions - check connected_users' do
+    context '- before TreeStats actions - check connected_users'    do
       it "- Return proper connected_users Array result for current_user_id = 1" do
-        puts "Let created: currentuser_id = #{currentuser_id} \n"   # 1
+        puts "In TreeStatsSpec\nLet created: currentuser_id = #{currentuser_id} \n"   # 1
         puts "Check ConnectedUser Model methods \n"
         puts "Before All - connected_users created \n"  #
         expect(connected_users).to be_a_kind_of(Array)
@@ -480,10 +447,23 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
         expect(connected_users).to eq([1,2])
       end
     end
-    context '- before actions - check tables values ' do   #   , focus: true
-      describe '- check Profile have rows count before - Ok' do
-        let(:rows_qty) {29}
+
+    context '- before TreeStats actions - check tables values '   do   #   , focus: true
+      describe '- check User have double == 0 before - Ok' do
+        it "- current_user.double == 0 check" do
+          puts "Let created: current_user_1.double = #{current_user_1.double} \n"   # 0
+          expect(current_user_1.double).to eq(0)
+        end
+      end
+
+      describe '- check Profile have rows count before - Ok'   do
+        let(:rows_qty) {32}
         it_behaves_like :successful_profiles_rows_count
+        let(:profile) {Profile.find(17)}
+        it "- Profile.find(17) check" do
+          puts "Profile.find(17).id = #{profile.id} \n"   # 0
+          expect(profile.id).to eq(17)
+        end
       end
       describe '- check Tree have rows count before - Ok' do
         let(:rows_qty) {28}
@@ -497,91 +477,38 @@ RSpec.describe ConnectedUser, :type => :model   do  #  , focus: true
         let(:rows_qty) {2}
         it_behaves_like :successful_connected_users_rows_count
       end
-    end
-
-    # from connect_users_trees_controller.rb
-    describe ' Check action <set_users_connection> :'  do  # , focus: true
-      context '- save in Table ConnectedUser connection data - rewrite and overwrite profiles rows ' do
-
-        # connection_data = {:who_connect=>[1, 2], :with_whom_connect=>[3],
-        #                    :profiles_to_rewrite=>[14, 21, 19, 11, 20, 12, 13, 18],
-        #                    :profiles_to_destroy=>[22, 29, 27, 25, 28, 23, 24, 26],
-        #                    :current_user_id=>2, :user_id=>3, :connection_id=>3}
-
-        let(:connection_data) { {:who_connect => [1, 2], :with_whom_connect => [3],
-                                 :profiles_to_rewrite => [14, 21, 19, 11, 20, 12, 13, 18],
-                                 :profiles_to_destroy => [22, 29, 27, 25, 28, 23, 24, 26],
-                                 :current_user_id => 2, :user_id => 3,:connection_id => 3 } }
-        before { ConnectedUser.set_users_connection(connection_data ) }
-
-        describe '- check ConnectedUser have rows count before - Ok' do
-          let(:rows_qty) {10}
-          it_behaves_like :successful_connected_users_rows_count
-        end
-        describe '- check ConnectedUser rewrite_profile_ids generated - Ok' do
-          let(:rewrite_profile_ids_arr) {[11, 12, 13, 14, 18, 19, 20, 21, 66, 85]}
-          let(:rewrite_profile_ids_arr_size) {10}
-          it_behaves_like :successful_connected_users_rewrite_profile_ids
-        end
-        describe '- check ConnectedUser overwrite_profile_ids generated - Ok' do
-          let(:overwrite_profile_ids_arr) {[22, 23, 24, 25, 26, 27, 28, 29, 100, 101]}
-          let(:overwrite_profile_ids_arr_size) {10}
-          it_behaves_like :successful_connected_users_overwrite_profile_ids
-        end
-        describe '- check ConnectedUser get_connected_users got Ok' do
-          let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
-          it "- Return proper connected_users Array result for current_user_id = 1" do
-            puts "Let created: connected_users = #{connected_users} \n"   # [1,2]
-            expect(connected_users).to eq([1,2,3])
-          end
-        end
-
+      describe '- check SearchResults have rows count before - Ok' do
+        let(:rows_qty) {3}
+        it_behaves_like :successful_search_results_rows_count
       end
-
     end
 
-    describe ' Check action <connections_weekly> :' , focus: true  do  # , focus: true
-      context '- find in Table ConnectedUser connection data for one tree   ' do
-        before{ FactoryGirl.create(:connected_user, :correct_8_9)   }   #  8  9
-
-        let(:connected_users) { [7,8,9] }
-        let(:connection_weekly_info) { ConnectedUser.connections_weekly(connected_users ) }
-
-        describe '- check User have rows count before - Ok' do
-          let(:rows_qty) {9}
-          it_behaves_like :successful_users_rows_count
+    describe 'in TreeStats: Check actions - '  , focus: true  do   #   , focus: true
+      context '- before actions - check all_users_names '    do   #   , focus: true
+        let(:users_names) { User.all_users_names }  # [1,2]
+        it '- check current_user_1.id - Ok' do
+          puts "before logged_actual_profiles: current_user_1.profile_id = #{current_user_1.profile_id.inspect} \n"
+          expect(current_user_1.profile_id).to eq(17)
         end
-        describe '- check ConnectedUser have rows count before - Ok' do
-          let(:rows_qty) {3}
-          it_behaves_like :successful_connected_users_rows_count
-        end
-        describe '- check connection_weekly_info after ConnectedUser.connections_weekly - Ok' do
-          it "- Return proper connection_weekly_info hash" do
-            puts "connection_weekly_info[:new_users_connected] = #{connection_weekly_info[:new_users_connected].inspect} \n"   # [1,2]
-            expect(connection_weekly_info[:new_users_connected]).to eq([8,9])
-          end
-        end
-        describe '- check connection_weekly_info after ConnectedUser.connections_weekly - Ok' do
-          it "- Return proper connection_weekly_info hash" do
-            puts "connection_weekly_info[:conn_count] = #{connection_weekly_info[:conn_count].inspect} \n"   # [1,2]
-            expect(connection_weekly_info[:conn_count]).to eq(2)
-          end
-        end
-        describe '- check connection_weekly_info after ConnectedUser.connections_weekly - Ok' do
-          it "- Return proper connection_weekly_info hash" do
-            puts "connection_weekly_info[:new_users_profiles] = #{connection_weekly_info[:new_users_profiles].inspect} \n"   # [1,2]
-            expect(connection_weekly_info[:new_users_profiles]).to eq([8888, 9999])
-          end
+        it '- check all_users_names: - ' do
+          puts "all users_names =  #{users_names.inspect}"
+          expect(users_names.sort).to eq(["Алексей", "Анна", "Вера", "Дарья", "Наталья", "Петр", "Таисия", "Федор"])
         end
       end
 
+      context '- check collect_tree_stats '    do   #   , focus: true
+        let(:tree_stats) { TreeStats.collect_tree_stats(currentuser_id) }
+        it '- check collect_tree_stats - Ok' do
+          puts "tree_stats = #{tree_stats.inspect} \n"
+          expect(tree_stats).to eq({:tree_profiles=>[17, 15, 9, 20, 16, 10, 3, 12, 13, 14, 21, 124, 18, 11, 8, 19, 2, 7],
+                                    :connected_users=>[1, 2], :qty_of_tree_profiles=>18, :qty_of_tree_users=>2 })
+        end
+      end
+
+
+
     end
-
-
-
-
-
 
   end
-end
 
+end

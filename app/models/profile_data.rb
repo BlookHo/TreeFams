@@ -232,4 +232,44 @@ class ProfileData < ActiveRecord::Base
     end
   end
 
+
+  # @note: collect profiles data info by profiles_ids
+  # @input: hash structure (json type)
+  #   profiles_info_three =
+  # {64=>{:user_id=>nil, :name_id=>90, :sex_id=>1, :tree_id=>7},
+  # 65=>{:user_id=>nil, :name_id=>345, :sex_id=>0, :tree_id=>7},
+  # 63=>{:user_id=>7, :name_id=>40, :sex_id=>1, :tree_id=>7}}
+  # @output:
+  #   one_profile_info = { profile_id: profile_id, name_id: name_id, sex_id: sex_id }
+  # to test in rails c: [790,791,792,795]
+  def self.profiles_data_info(profiles_info_three)
+    updated_profiles_info = profiles_info_three
+    profiles_info_three.each do |one_profile_id, profile_info|
+      one_profile_data = where(profile_id: one_profile_id)
+      # p "one_profile_id = #{one_profile_id}, profile_info = #{profile_info}"
+      unless one_profile_data.blank?
+        # p "one_profile_data[0].id = #{one_profile_data[0].id}"
+        profile_info[:last_name]      = one_profile_data[0][:last_name]
+        profile_info[:country]        = one_profile_data[0][:country]
+        profile_info[:birthday]       = one_profile_data[0][:birthday]
+        profile_info[:birth_place]    = one_profile_data[0][:birth_place]
+        profile_info[:deathdate]      = one_profile_data[0][:deathdate]
+        profile_info[:prev_last_name] = one_profile_data[0][:prev_last_name]
+        profile_info[:biography]      = one_profile_data[0][:biography]
+        profile_info[:city]           = one_profile_data[0][:city]
+        updated_profiles_info.merge!( one_profile_id => profile_info )
+      end
+    end
+    updated_profiles_info
+  end
+
+
+
+
+
+
+
+
+
+
 end

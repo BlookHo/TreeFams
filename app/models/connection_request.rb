@@ -271,6 +271,34 @@ class ConnectionRequest < ActiveRecord::Base
 
   end
 
+  # @note: Find Array of connection_ids of all requests - included in just connected [1,2,3]
+  #   Найти все запросы, в которых участвуют члены объединенного дерева
+  # @param: current_user_id=>1
+  def self.connection_requests_exists(connected_users)
+    week_ago_time = 1.week.ago
+    p "week_ago_time = #{week_ago_time} "
+    users_ids = self.where("user_id in (?)", connected_users).where(done: false)
+                    .where("date_trunc('day', created_at) >= ?", "#{week_ago_time}")
+                    .pluck(:with_user_id)
+    with_users_ids = self.where("with_user_id in (?)", connected_users).where(done: false)
+                         .where("date_trunc('day', created_at) >= ?", "#{week_ago_time}")
+                         .pluck(:with_user_id)
+    # users_ids = [1,2,3,4,5,10,11]
+    # with_users_ids = [2,3,4,5, 6,7,8]
+    all_users_ids = users_ids + with_users_ids
+    p "users_ids = #{users_ids}, with_users_ids = #{with_users_ids} "
+    conn_req_users_ids = all_users_ids.uniq - connected_users
+    p "all_users_ids = #{all_users_ids}, conn_req_users_ids = #{conn_req_users_ids} "
+    request_users_profiles = User.users_profiles(conn_req_users_ids)
+
+    # connections_info =
+        { request_users_ids: conn_req_users_ids,
+                         request_users_qty:          conn_req_users_ids.size,
+                         request_users_profiles:  request_users_profiles
+    }
+
+  end
+
 
 
 end

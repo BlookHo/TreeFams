@@ -20,39 +20,43 @@ FactoryGirl.define do
     trait :user_3 do
       profile_id 333
       email "mail_3@pe.pe"
+      connected_users [3]
     end
 
     trait :user_4 do
       profile_id 444
-      email "mail_4@pe.pe"
+      email "darja@pe.pe"
       connected_users [4]
     end
 
     trait :user_5 do
       profile_id 555
-      email "mail_5@pe.pe"
+      email "zoneiva@gmail.com"
       connected_users [5]
     end
 
     trait :user_6 do
       profile_id 666
-      email "mail_6@pe.pe"
+      email "petr@pe.pe"
+      connected_users [6]
     end
 
     trait :user_7 do
-      profile_id 777
-      email "mail_7@pe.pe"
+      profile_id 7777
+      email "taisia@pe.pe"
+      connected_users [7]
     end
 
     trait :user_8 do
-      profile_id 888
-      email "mail_8@pe.pe"
+      profile_id 8888
+      email "fedor@pe.pe"
+      connected_users [8,9]
     end
 
     trait :user_9 do              # before
-      profile_id 85
+      profile_id 9999
       email "add_petr@pe.pe"
-      connected_users [9]
+      connected_users [8,9]
     end
     trait :user_10 do  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       profile_id 93
@@ -91,7 +95,7 @@ FactoryGirl.define do
     end
     trait :user_3_to_connect do        # For [3] to be connected [1,2,3] trees test
       profile_id 22
-      email "natali@na.na"
+      email "vera@na.na"
       password '11111'
       connected_users [3]
     end

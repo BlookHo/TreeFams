@@ -268,6 +268,7 @@ FactoryGirl.define   do
       sex_id    1
       tree_id   9
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
     end
     trait :add_profile_86 do
       id 86
@@ -276,6 +277,8 @@ FactoryGirl.define   do
       sex_id    1
       tree_id   9
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
+
     end
     trait :add_profile_87 do
       id 87
@@ -284,6 +287,8 @@ FactoryGirl.define   do
       sex_id    0
       tree_id   9
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
+
     end
     # 85;9;"2015-03-05 17:52:17.536001";"2015-03-05 17:52:17.633286";370;1;9;370
     # 86;;"2015-03-05 17:52:17.702448";"2015-03-05 17:52:17.702448";28;1;9;28
@@ -296,6 +301,7 @@ FactoryGirl.define   do
       sex_id    1
       tree_id   9
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
     end
     trait :add_profile_89 do # before
       id 89
@@ -304,6 +310,7 @@ FactoryGirl.define   do
       sex_id    0
       tree_id   9
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
     end
     trait :add_profile_90 do # before
       id 90
@@ -312,6 +319,7 @@ FactoryGirl.define   do
       sex_id    1
       tree_id   9
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
     end
     # 88;;"2015-03-05 17:52:18.23326";"2015-03-05 17:52:18.23326";465;1;9;465
     # 89;;"2015-03-05 17:52:18.532318";"2015-03-05 17:52:18.532318";345;0;9;345
@@ -324,6 +332,7 @@ FactoryGirl.define   do
       sex_id    0
       tree_id   9
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
     end
     trait :add_profile_92 do
       id 92
@@ -332,6 +341,7 @@ FactoryGirl.define   do
       sex_id    0
       tree_id   9
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
     end
     # 91;;"2015-03-05 17:52:19.201909";"2015-03-05 17:52:19.201909";446;0;9;446
     # 92;;"2015-03-05 17:52:19.668259";"2015-03-05 17:52:19.668259";147;0;9;147
@@ -439,6 +449,7 @@ FactoryGirl.define   do
       sex_id    1
       tree_id   9 #
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
     end
     trait :add_profile_173 do  # Валентина
       id 173
@@ -447,6 +458,7 @@ FactoryGirl.define   do
       sex_id    0
       tree_id   9  #
       deleted  0
+      created_at '2016-03-07 09:33:10 UTC'
     end
     # 172;;"2015-03-21 14:18:28.192824";"2015-03-21 14:18:28.192824";122;1;9;122
     # 173;;"2015-03-21 14:18:44.147049";"2015-03-21 14:18:44.147049";82;0;9;82
@@ -744,10 +756,198 @@ FactoryGirl.define   do
         deleted  0
       end
 
+      trait :connect_profile_444 do   # 444
+        id 444
+        user_id   nil
+        name_id   446
+        sex_id    0
+        tree_id   3
+        deleted  0
+      end
+      trait :connect_profile_555 do   # 555
+        id 555
+        user_id   nil
+        name_id   97
+        sex_id    0
+        tree_id   3
+        deleted  0
+      end
+      trait :connect_profile_666 do   # 666
+        id 666
+        user_id   nil
+        name_id   370
+        sex_id    1
+        tree_id   3
+        deleted  0
+      end
+      trait :connect_profile_777 do   # 777
+        id 777
+        user_id   nil
+        name_id   147
+        sex_id    0
+        tree_id   3
+        deleted  0
+      end
+      trait :connect_profile_888 do   # 888
+        id 888
+        user_id   nil
+        name_id   465
+        sex_id    1
+        tree_id   3
+        deleted  0
+      end
 
+      trait :connect_profile_7777 do   # 777
+        id 7777
+        user_id   7
+        name_id   147
+        sex_id    0
+        tree_id   3
+        deleted  0
+      end
+      trait :connect_profile_8888 do   # 888
+        id 8888
+        user_id   8
+        name_id   122
+        sex_id    1
+        tree_id   8
+        deleted  0
+        created_at '2016-03-07 09:33:10 UTC'
+      end
+      trait :connect_profile_9999 do   # 888
+        id 9999
+        user_id   9
+        name_id   465
+        sex_id    1
+        tree_id   9
+        deleted  0
+        created_at '2016-03-07 09:33:10 UTC'
+      end
 
   end
 
+  factory :new_weekly_profiles, class: Profile do   # For new_weekly_profiles Profile TEST: 2 connected trees test [8, 9]
+
+    # tree 8
+    id 88882
+    user_id   nil
+    name_id   419
+    sex_id    1
+    tree_id   8
+    deleted  0
+
+    trait :tree_8_new_profile_3  do
+      id 88883
+      user_id   nil
+      name_id   122
+      sex_id    1
+      tree_id   8
+      deleted  0
+    end
+    trait :tree_8_new_profile_4  do
+      id 88884
+      user_id   nil
+      name_id   343
+      sex_id    1
+      tree_id   8
+      deleted  0
+    end
+    trait :tree_8_new_profile_5  do
+      id 88885
+      user_id   nil
+      name_id   28
+      sex_id    1
+      tree_id   8
+      deleted  0
+    end
+    trait :tree_8_new_profile_6  do
+      id 88886
+      user_id   nil
+      name_id   122
+      sex_id    1
+      tree_id   8
+      deleted  0
+    end
+    trait :tree_8_new_profile_7  do
+      id 88887
+      user_id   nil
+      name_id   370
+      sex_id    1
+      tree_id   8
+      deleted  0
+    end
+    trait :tree_8_new_profile_8  do
+      id 88888
+      user_id   nil
+      name_id   48
+      sex_id    0
+      tree_id   8
+      deleted  0
+    end
+    trait :tree_8_new_profile_9  do
+      id 88889
+      user_id   nil
+      name_id   82
+      sex_id    0
+      tree_id   8
+      deleted  0
+    end
+    trait :tree_8_new_profile_10 do
+      id 888810
+      user_id   nil
+      name_id   412
+      sex_id    0
+      tree_id   8
+      deleted  0
+    end
+
+
+    # tree 9
+    trait :tree_9_new_profile_2  do
+      id 99992
+      user_id   nil
+      name_id   28
+      sex_id    1
+      tree_id   9
+      deleted  0
+    end
+    trait :tree_9_new_profile_3  do
+      id 99993
+      user_id   nil
+      name_id   122
+      sex_id    1
+      tree_id   9
+      deleted  0
+    end
+    trait :tree_9_new_profile_4  do
+      id 99994
+      user_id   nil
+      name_id   147
+      sex_id    0
+      tree_id   9
+      deleted  0
+    end
+    trait :tree_9_new_profile_5  do
+      id 99995
+      user_id   nil
+      name_id   412
+      sex_id    0
+      tree_id   9
+      deleted  0
+    end
+    trait :tree_9_new_profile_6  do
+      id 99996
+      user_id   nil
+      name_id   446
+      sex_id    0
+      tree_id   9
+      deleted  0
+    end
+
+
+
+
+  end
 
 end
 

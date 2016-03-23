@@ -146,6 +146,27 @@ class User < ActiveRecord::Base
     users_names
   end
 
+  # @note: Определение all emails of юзерS
+  def self.all_users_emails
+    users = User.all
+    users_names = []
+    users.each do |user|
+      users_names << user.email
+    end
+    users_names
+  end
+
+  # @note: prepare users_data for weekly mail
+  #   users_data = { :users_names, :users_emails }
+  def self.users_mail_info
+
+    users_names = User.all_users_names
+    # puts "In collect_weekly_info:  users_names = #{users_names}"
+    users_emails = User.all_users_emails
+    # puts "In collect_weekly_info:  users_emails = #{users_emails}"
+    { users_names: users_names, users_emails: users_emails }
+
+  end
 
 
   def update_connected_users!
@@ -226,6 +247,55 @@ class User < ActiveRecord::Base
       end
     end
     { users_male: users_male, users_female: users_female}
+  end
+
+
+  # @note: collect profiles_ids of users array
+  #   use in weekly manifest email
+  def self.users_profiles(new_users_connected)
+    users_profiles = []
+    new_users_connected.each do |one_user_id|
+      one_profile_id = find(one_user_id).profile_id
+      users_profiles << one_profile_id
+    end
+    users_profiles
+  end
+
+
+  # @note: collect profiles_ids of users array
+  #   use in weekly manifest email
+  def collect_weekly_info
+    week_ago_time = 1.week.ago
+    puts "In collect_weekly_info:  current_user_id = #{self.id}, week_ago_time = #{week_ago_time}"
+
+    site_stat_info = WeafamStat.collect_site_stats
+    puts "In collect_weekly_info:  site_stat_info = #{site_stat_info}"
+    puts "In collect_weekly_info:  On site: profiles = #{site_stat_info[:profiles]}, users = #{site_stat_info[:users]}"
+
+    tree_stat_info = TreeStats.collect_tree_stats(self.id)
+    puts "In collect_weekly_info:  tree_stat_info = #{tree_stat_info}"
+
+    connected_users = tree_stat_info[:connected_users]
+    connections_info = ConnectedUser.connections_weekly(connected_users)
+    puts "In collect_weekly_info:  connections_info = #{connections_info}"
+
+    # new_weekly_profiles = {}
+    new_weekly_profiles = Profile.new_weekly_profiles(connected_users)
+    puts "In collect_weekly_info:  new_weekly_profiles = #{new_weekly_profiles}"
+
+    connection_requests_info = ConnectionRequest.connection_requests_exists(connected_users)
+    puts "In collect_weekly_info:  connection_requests_info = #{connection_requests_info}"
+    # {:request_users_ids=>[57], :request_users_qty=>1, :request_users_profiles=>[790]}
+
+    # new_conn_requests =
+    { site_info: site_stat_info,
+      tree_info: tree_stat_info,
+      connections_info: connections_info,
+      new_weekly_profiles: new_weekly_profiles,
+      connection_requests_info: connection_requests_info
+
+    }
+
   end
 
 

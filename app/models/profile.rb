@@ -458,6 +458,47 @@ class Profile < ActiveRecord::Base
     }
   end
 
+  # @note: collect new_weekly Profiles
+  #   @input: connected_users
+  def self.new_weekly_profiles(connected_users)
+    week_ago_time = 1.week.ago
+    # week_ago_time = 1.day.ago
+    puts "In new_weekly_profiles: week_ago_time = #{week_ago_time}" # = 2016-03-09 09:33:10 UTC
+
+    new_weekly_profiles = where("tree_id in (?)", connected_users).where("date_trunc('day', created_at) >= ?", "#{week_ago_time}")
+
+    { new_profiles_qty: new_weekly_profiles.count,
+      new_profiles_male: new_weekly_profiles.where(sex_id: 1).count,
+      new_profiles_female: new_weekly_profiles.where(sex_id: 0).count,
+      new_profiles_ids: new_weekly_profiles.pluck(:id)
+    }
+  end
+
+
+
+
+  # @note: collect profiles info by profiles_ids
+  # @output: hash structure (json type)
+  #   one_profile_info = { profile_id: profile_id, name_id: name_id, sex_id: sex_id }
+  # to test in rails c: [790,791,792,795]
+  def self.collect_profiles_info(profiles_ids)
+    profiles_info = {}
+    profiles_ids.each do |one_profile_id|
+      profile = find(one_profile_id)
+      # p "one_profile_id = #{one_profile_id}, profile.id = #{profile.id}"
+      unless profile.blank?
+        profiles_info.merge!( profile[:id] => { user_id: profile[:user_id], name_id: profile[:name_id],
+                                                sex_id: profile[:sex_id], tree_id: profile[:tree_id] })
+      end
+    end
+    profiles_info
+  end
+
+
+
+
+
+
 
 
 end

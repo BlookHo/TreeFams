@@ -17,6 +17,8 @@
 RSpec.configure do |config|
 
   # config.include FactoryGirl::Syntax::Methods   #  ERROR - Failed: "rspec -f Fuubar -r /home/aleks_i/.rvm/gems/ruby-2.2.0@weafam/gems/guard-rspec-4.6.2/lib/guard/rspec_formatter.rb -f Guard::RSpecFormatter --failure-exit-code 2  spec" (exit code: 1)
+  config.expose_current_running_example_as :example
+  config.warnings = false
 
 
   # The settings below are suggested to provide a good initial experience

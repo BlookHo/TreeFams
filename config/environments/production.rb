@@ -77,7 +77,7 @@ Weafam::Application.configure do
   config.action_mailer.smtp_settings =
       {
       :address => "smtp.yandex.ru",       ## for Yandex
-      :port => 25, #587,
+      :port => 25, #587,            465 - for yandex(?)
 
       :domain => 'weallfamily.ru',
 
