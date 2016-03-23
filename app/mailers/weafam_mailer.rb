@@ -50,15 +50,15 @@ class WeafamMailer < ActionMailer::Base
 
     # # real sending
     users_data =
-        # {:users_names=> ["Алексей"],
-        #  :users_emails=>["zoneiva@gmail.com"] }
+        {:users_names=> ["Алексей"],
+        :users_emails=>["zoneiva@gmail.com"] }
 
     # mailcatcher sending
     # users_data =
     #     {:users_names=> ["Андрей"],
     #      :users_emails=>["andrey-7-tree@an.an"] }
-    {:users_names=> ["Андрей"],
-    :users_emails=>["azoneiva@gmail.coma"] }
+    # {:users_names=> ["Андрей"],
+    # :users_emails=>["azoneiva@gmail.coma"] }
 
 
     logger.info "In proceed_weekly_mail: users_data = #{users_data} "
