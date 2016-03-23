@@ -53,7 +53,7 @@ class Admin::WeafamStatsController < Admin::AdminController
     params.require(:weafam_stat).permit(:users, :users_male, :users_female,
                                         :profiles, :profiles_male, :profiles_female,
                                         :trees, :invitations,
-                                        :requests, :connections, :refuse_requests,
+                                        :requests, :requests_wait, :connections, :refuse_requests,
                                         :disconnections, :similars_found)
   end
 

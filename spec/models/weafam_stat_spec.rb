@@ -63,6 +63,12 @@ RSpec.describe WeafamStat, type: :model  do
       FactoryGirl.create(:search_results, :correct2)
       FactoryGirl.create(:search_results, :correct3)
 
+      # ConnectionRequest
+      FactoryGirl.create(:connection_request, :conn_request_1_2)    #
+      FactoryGirl.create(:connection_request, :conn_request_7_8)    #
+      FactoryGirl.create(:connection_request, :conn_request_3_1)    #
+      FactoryGirl.create(:connection_request, :conn_request_3_2)    #
+
       #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
       FactoryGirl.create(:name, :name_48)    # Анна
@@ -440,7 +446,12 @@ RSpec.describe WeafamStat, type: :model  do
 
     }
 
+    # after {
+    #   DatabaseCleaner.clean
+    #   DatabaseCleaner.start
+
     after {
+
       ConnectionRequest.delete_all
       ConnectionRequest.reset_pk_sequence
       User.delete_all
@@ -465,7 +476,7 @@ RSpec.describe WeafamStat, type: :model  do
       SearchResults.reset_pk_sequence
       Counter.delete_all
       Counter.reset_pk_sequence
-    }
+   }
 
     # create User parameters
     let(:current_user_1) { User.first }  # User = 1. Tree = [1,2]. profile_id = 17
@@ -531,8 +542,8 @@ RSpec.describe WeafamStat, type: :model  do
           puts "all_stat_data = #{all_stat_data.inspect} \n"
           expect(all_stat_data).to eq({:profiles=>32, :profiles_male=>15, :profiles_female=>17, :users=>8,
                                        :users_male=>1, :users_female=>2, :trees=>6, :invitations=>2689,
-                                       :requests=>0, :connections=>0, :refuse_requests=>0, :disconnections=>67,
-                                       :similars_found=>0}
+                                       :requests=>4, :requests_wait=>2,  :connections=>2, :refuse_requests=>0,
+                                       :disconnections=>67, :similars_found=>0}
                                    )
         end
       end

@@ -299,6 +299,14 @@ class ConnectionRequest < ActiveRecord::Base
 
   end
 
+  # @note: Find request which are waiting to be DONE
+  #   i.e. done == FALSE
+  def self.requests_waiting
+    requests_waiting = where(done: false)
+    requests_waiting.count
+  end
+
+
 
 
 end
