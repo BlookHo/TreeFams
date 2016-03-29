@@ -1,6 +1,18 @@
 class EventType < ActiveRecord::Base
 
 
+  validates_presence_of :type_number, :name, :message => "Должно присутствовать в EventType"
+
+  validates_numericality_of :type_number, :greater_than => 0,  :message => "Должнo быть больше 0 в EventType"
+  validates_numericality_of :type_number, :only_integer => true, :message => "Должнo быть целым числом в EventType"
+
+  validates_inclusion_of :type_number, :in => [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26],
+                         :message => "Должнo быть числом в диапазоне [1,2,3,4,5,6,7] в EventType"
+  # validates_inclusion_of :table_name, :in => ["adds_logs", "deletions_logs", "similars_logs", "connections_logs",
+  #                                             "renames_logs", "sign_ups", "rollbacks common_logs", "home in rails"],
+  #                        :message => "Должнo быть именем из заданного списка в EventType"
+  validates :name, format: { with: /\A[a-zA-Zа-яА-Я]+\z/, message: "only allows letters" }
+
 
   #  event_type:, read: bool
   #  user_id: email: profile_id:
