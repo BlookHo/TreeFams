@@ -1,0 +1,249 @@
+I, [2016-03-14T10:56:51.890993 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.891182 #3203]  INFO -- : one_tree_profile = [1537, 21149], found_profile_id = 21149
+I, [2016-03-14T10:56:51.892504 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.892627 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.892788 #3203]  INFO -- : one_tree_profile = [1607, 22745], found_profile_id = 22745
+I, [2016-03-14T10:56:51.894099 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.894221 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.894430 #3203]  INFO -- : one_tree_profile = [1642, 22971], found_profile_id = 22971
+I, [2016-03-14T10:56:51.895699 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.895823 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.895971 #3203]  INFO -- : one_tree_profile = [1706, 23650], found_profile_id = 23650
+I, [2016-03-14T10:56:51.897199 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.897319 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.897467 #3203]  INFO -- : one_tree_profile = [1739, 24091], found_profile_id = 24091
+I, [2016-03-14T10:56:51.899156 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.899287 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.899437 #3203]  INFO -- : one_tree_profile = [1804, 24907], found_profile_id = 24907
+I, [2016-03-14T10:56:51.900681 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.900801 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.900963 #3203]  INFO -- : one_tree_profile = [1813, 25016], found_profile_id = 25016
+I, [2016-03-14T10:56:51.902737 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.902867 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.903013 #3203]  INFO -- : one_tree_profile = [1834, 25366], found_profile_id = 25366
+I, [2016-03-14T10:56:51.904303 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.904426 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.904607 #3203]  INFO -- : one_tree_profile = [1839, 25431], found_profile_id = 25431
+I, [2016-03-14T10:56:51.905925 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.906045 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.906187 #3203]  INFO -- : one_tree_profile = [1877, 26064], found_profile_id = 26064
+I, [2016-03-14T10:56:51.907411 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.907532 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.907671 #3203]  INFO -- : one_tree_profile = [1947, 26986], found_profile_id = 26986
+I, [2016-03-14T10:56:51.909062 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.909182 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.909319 #3203]  INFO -- : one_tree_profile = [1982, 27276], found_profile_id = 27276
+I, [2016-03-14T10:56:51.911432 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.911590 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.911730 #3203]  INFO -- : one_tree_profile = [1997, 27402], found_profile_id = 27402
+I, [2016-03-14T10:56:51.912966 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.913087 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.913224 #3203]  INFO -- : one_tree_profile = [2085, 28337], found_profile_id = 28337
+I, [2016-03-14T10:56:51.914507 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.914665 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.914815 #3203]  INFO -- : one_tree_profile = [2179, 29767], found_profile_id = 29767
+I, [2016-03-14T10:56:51.916048 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.916170 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.916352 #3203]  INFO -- : one_tree_profile = [2179, 29813], found_profile_id = 29813
+I, [2016-03-14T10:56:51.917617 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.917742 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.917876 #3203]  INFO -- : one_tree_profile = [2193, 29990], found_profile_id = 29990
+I, [2016-03-14T10:56:51.919347 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:51.919508 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:51.919642 #3203]  INFO -- : one_tree_profile = [2193, 30301], found_profile_id = 30301
+I, [2016-03-14T10:56:51.920814 #3203]  INFO -- : EXCLUSIONS PASSED
+I, [2016-03-14T10:56:51.920934 #3203]  INFO -- : PROFILES ARE EQUAL - match_count > CK
+I, [2016-03-14T10:56:51.921084 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = [[2193, 30301, 5]]
+I, [2016-03-14T10:56:51.921241 #3203]  INFO -- : certain_search_data = {:search=>29416, :founds=>[30301], :counts=>[5], :trees=>[2193]}
+I, [2016-03-14T10:56:51.921386 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29416=>{2193=>30301}}, :profiles_counts=>{30301=>5}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:51.922883 #3203]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-14T10:56:51.923020 #3203]  INFO -- : profile_search_data = {:connected_users=>[2152], :profile_id_searched=>29389, :name_id_searched=>207}
+I, [2016-03-14T10:56:51.994488 #3203]  INFO -- : one_tree_profile = [2193, 30007], found_profile_id = 30007
+I, [2016-03-14T10:56:51.995812 #3203]  INFO -- : EXCLUSIONS PASSED
+I, [2016-03-14T10:56:51.996001 #3203]  INFO -- : PROFILES ARE EQUAL - match_count > CK
+I, [2016-03-14T10:56:51.996132 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = [[2193, 30007, 6]]
+I, [2016-03-14T10:56:51.996296 #3203]  INFO -- : certain_search_data = {:search=>29389, :founds=>[30007], :counts=>[6], :trees=>[2193]}
+I, [2016-03-14T10:56:51.996449 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29389=>{2193=>30007}}, :profiles_counts=>{30007=>6}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:51.998418 #3203]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-14T10:56:51.998726 #3203]  INFO -- : profile_search_data = {:connected_users=>[2152], :profile_id_searched=>29541, :name_id_searched=>110}
+I, [2016-03-14T10:56:52.059859 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-14T10:56:52.060132 #3203]  INFO -- : certain_search_data = {:search=>29541, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-14T10:56:52.060918 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29541=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:52.062603 #3203]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-14T10:56:52.062886 #3203]  INFO -- : profile_search_data = {:connected_users=>[2152], :profile_id_searched=>29496, :name_id_searched=>166}
+I, [2016-03-14T10:56:52.125999 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-14T10:56:52.126181 #3203]  INFO -- : certain_search_data = {:search=>29496, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-14T10:56:52.126330 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29496=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:52.127404 #3203]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-14T10:56:52.127616 #3203]  INFO -- : profile_search_data = {:connected_users=>[2152], :profile_id_searched=>29466, :name_id_searched=>27}
+I, [2016-03-14T10:56:52.196964 #3203]  INFO -- : one_tree_profile = [119, 1977], found_profile_id = 1977
+I, [2016-03-14T10:56:52.198628 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.198768 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.198931 #3203]  INFO -- : one_tree_profile = [525, 9955], found_profile_id = 9955
+I, [2016-03-14T10:56:52.200336 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.200462 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.200620 #3203]  INFO -- : one_tree_profile = [620, 8323], found_profile_id = 8323
+I, [2016-03-14T10:56:52.201936 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.202076 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.202226 #3203]  INFO -- : one_tree_profile = [856, 11518], found_profile_id = 11518
+I, [2016-03-14T10:56:52.203642 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.203805 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.203952 #3203]  INFO -- : one_tree_profile = [906, 12244], found_profile_id = 12244
+I, [2016-03-14T10:56:52.205245 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.205384 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.205530 #3203]  INFO -- : one_tree_profile = [996, 13636], found_profile_id = 13636
+I, [2016-03-14T10:56:52.206802 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.206944 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.207120 #3203]  INFO -- : one_tree_profile = [1047, 14555], found_profile_id = 14555
+I, [2016-03-14T10:56:52.208432 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.208583 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.208726 #3203]  INFO -- : one_tree_profile = [1065, 14834], found_profile_id = 14834
+I, [2016-03-14T10:56:52.210080 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.210206 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.210365 #3203]  INFO -- : one_tree_profile = [1130, 15808], found_profile_id = 15808
+I, [2016-03-14T10:56:52.211664 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.211789 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.211956 #3203]  INFO -- : one_tree_profile = [1489, 20649], found_profile_id = 20649
+I, [2016-03-14T10:56:52.213273 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-14T10:56:52.213402 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.213541 #3203]  INFO -- : one_tree_profile = [1875, 26011], found_profile_id = 26011
+I, [2016-03-14T10:56:52.215223 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.215363 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.215501 #3203]  INFO -- : one_tree_profile = [2179, 29790], found_profile_id = 29790
+I, [2016-03-14T10:56:52.216866 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.216990 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.217136 #3203]  INFO -- : one_tree_profile = [2193, 29981], found_profile_id = 29981
+I, [2016-03-14T10:56:52.217980 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.218108 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.218243 #3203]  INFO -- : one_tree_profile = [2193, 30235], found_profile_id = 30235
+I, [2016-03-14T10:56:52.219440 #3203]  INFO -- : EXCLUSIONS PASSED
+I, [2016-03-14T10:56:52.219585 #3203]  INFO -- : PROFILES ARE EQUAL - match_count > CK
+I, [2016-03-14T10:56:52.219713 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = [[2193, 30235, 8]]
+I, [2016-03-14T10:56:52.219907 #3203]  INFO -- : certain_search_data = {:search=>29466, :founds=>[30235], :counts=>[8], :trees=>[2193]}
+I, [2016-03-14T10:56:52.220059 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29466=>{2193=>30235}}, :profiles_counts=>{30235=>8}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:52.221121 #3203]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-14T10:56:52.221260 #3203]  INFO -- : profile_search_data = {:connected_users=>[2152], :profile_id_searched=>29489, :name_id_searched=>335}
+I, [2016-03-14T10:56:52.304409 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-14T10:56:52.304665 #3203]  INFO -- : certain_search_data = {:search=>29489, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-14T10:56:52.304897 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29489=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:52.306880 #3203]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-14T10:56:52.307171 #3203]  INFO -- : profile_search_data = {:connected_users=>[2152], :profile_id_searched=>29498, :name_id_searched=>166}
+I, [2016-03-14T10:56:52.366786 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-14T10:56:52.366973 #3203]  INFO -- : certain_search_data = {:search=>29498, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-14T10:56:52.367203 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29498=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:52.368597 #3203]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-14T10:56:52.368803 #3203]  INFO -- : profile_search_data = {:connected_users=>[2152], :profile_id_searched=>29471, :name_id_searched=>1035}
+I, [2016-03-14T10:56:52.429281 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-14T10:56:52.429545 #3203]  INFO -- : certain_search_data = {:search=>29471, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-14T10:56:52.430210 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29471=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:52.431699 #3203]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-14T10:56:52.431923 #3203]  INFO -- : profile_search_data = {:connected_users=>[2152], :profile_id_searched=>29534, :name_id_searched=>27}
+I, [2016-03-14T10:56:52.496548 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-14T10:56:52.496771 #3203]  INFO -- : certain_search_data = {:search=>29534, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-14T10:56:52.497025 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29534=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:52.498394 #3203]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-14T10:56:52.498657 #3203]  INFO -- : profile_search_data = {:connected_users=>[2152], :profile_id_searched=>29387, :name_id_searched=>27}
+I, [2016-03-14T10:56:52.567732 #3203]  INFO -- : one_tree_profile = [1130, 15808], found_profile_id = 15808
+I, [2016-03-14T10:56:52.568887 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.569060 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.569250 #3203]  INFO -- : one_tree_profile = [1947, 26984], found_profile_id = 26984
+I, [2016-03-14T10:56:52.571532 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.571703 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.571893 #3203]  INFO -- : one_tree_profile = [2179, 29790], found_profile_id = 29790
+I, [2016-03-14T10:56:52.573068 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.573233 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.573459 #3203]  INFO -- : one_tree_profile = [2182, 29834], found_profile_id = 29834
+I, [2016-03-14T10:56:52.576088 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.576260 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.576467 #3203]  INFO -- : one_tree_profile = [2193, 29981], found_profile_id = 29981
+I, [2016-03-14T10:56:52.577717 #3203]  INFO -- : EXCLUSIONS PASSED
+I, [2016-03-14T10:56:52.577888 #3203]  INFO -- : PROFILES ARE EQUAL - match_count > CK
+I, [2016-03-14T10:56:52.578064 #3203]  INFO -- : one_tree_profile = [2193, 30235], found_profile_id = 30235
+I, [2016-03-14T10:56:52.579170 #3203]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-14T10:56:52.579396 #3203]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-14T10:56:52.579578 #3203]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = [[2193, 29981, 14]]
+I, [2016-03-14T10:56:52.579796 #3203]  INFO -- : certain_search_data = {:search=>29387, :founds=>[29981], :counts=>[14], :trees=>[2193]}
+I, [2016-03-14T10:56:52.579997 #3203]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{29387=>{2193=>29981}}, :profiles_counts=>{29981=>14}, :doubles_one_to_many=>{}}
+I, [2016-03-14T10:56:52.582220 #3203]  INFO -- : 
+ Time of Search_Tree_Profiles = 5.546 sec. In [2152], search_event = 4
+
+
+I, [2016-03-14T10:56:52.582437 #3203]  INFO -- : In SearchServiceLogs#store_search_time_log: Event name = "Объединение деревьев" 
+I, [2016-03-14T10:56:52.589414 #3203]  INFO -- : Search results:
+I, [2016-03-14T10:56:52.589548 #3203]  INFO -- : :connected_author_arr = [2152]
+I, [2016-03-14T10:56:52.589767 #3203]  INFO -- : :uniq_profiles_pairs = {29384=>{2193=>29980}, 29413=>{2193=>30300}, 29412=>{2193=>30302}, 29391=>{2193=>30010}, 29474=>{2193=>30234}, 29463=>{2193=>30012}, 29400=>{2193=>30005}, 29392=>{2193=>30009}, 29475=>{2193=>30251}, 29469=>{2193=>30233}, 29388=>{2193=>29966}, 29393=>{2193=>30006}, 29398=>{2193=>29965}, 29397=>{2193=>29958}, 29420=>{2193=>30299}, 29416=>{2193=>30301}, 29389=>{2193=>30007}, 29466=>{2193=>30235}, 29387=>{2193=>29981}}
+I, [2016-03-14T10:56:52.590121 #3203]  INFO -- : :by_profiles = [{:search_profile_id=>29388, :found_tree_id=>2193, :found_profile_id=>29966, :count=>15}, {:search_profile_id=>29391, :found_tree_id=>2193, :found_profile_id=>30010, :count=>14}, {:search_profile_id=>29392, :found_tree_id=>2193, :found_profile_id=>30009, :count=>14}, {:search_profile_id=>29387, :found_tree_id=>2193, :found_profile_id=>29981, :count=>14}, {:search_profile_id=>29384, :found_tree_id=>2193, :found_profile_id=>29980, :count=>14}, {:search_profile_id=>29463, :found_tree_id=>2193, :found_profile_id=>30012, :count=>13}, {:search_profile_id=>29393, :found_tree_id=>2193, :found_profile_id=>30006, :count=>9}, {:search_profile_id=>29466, :found_tree_id=>2193, :found_profile_id=>30235, :count=>8}, {:search_profile_id=>29398, :found_tree_id=>2193, :found_profile_id=>29965, :count=>7}, {:search_profile_id=>29474, :found_tree_id=>2193, :found_profile_id=>30234, :count=>7}, {:search_profile_id=>29469, :found_tree_id=>2193, :found_profile_id=>30233, :count=>7}, {:search_profile_id=>29389, :found_tree_id=>2193, :found_profile_id=>30007, :count=>6}, {:search_profile_id=>29400, :found_tree_id=>2193, :found_profile_id=>30005, :count=>6}, {:search_profile_id=>29420, :found_tree_id=>2193, :found_profile_id=>30299, :count=>5}, {:search_profile_id=>29416, :found_tree_id=>2193, :found_profile_id=>30301, :count=>5}, {:search_profile_id=>29475, :found_tree_id=>2193, :found_profile_id=>30251, :count=>5}, {:search_profile_id=>29412, :found_tree_id=>2193, :found_profile_id=>30302, :count=>5}, {:search_profile_id=>29413, :found_tree_id=>2193, :found_profile_id=>30300, :count=>5}, {:search_profile_id=>29397, :found_tree_id=>2193, :found_profile_id=>29958, :count=>5}]
+I, [2016-03-14T10:56:52.590278 #3203]  INFO -- : :by_trees = [{:found_tree_id=>2193, :found_profile_ids=>[29980, 30300, 30302, 30010, 30234, 30012, 30005, 30009, 30251, 30233, 29966, 30006, 29965, 29958, 30299, 30301, 30007, 30235, 29981]}]
+I, [2016-03-14T10:56:52.590390 #3203]  INFO -- : :duplicates_one_to_many = {}
+I, [2016-03-14T10:56:52.590534 #3203]  INFO -- : :duplicates_many_to_one = {}
+I, [2016-03-14T10:56:52.612310 #3203]  INFO -- : 
+I, [2016-03-14T10:56:52.612455 #3203]  INFO -- : #### End of Main search - Ok
+I, [2016-03-14T10:56:52.612565 #3203]  INFO -- : 
+I, [2016-03-14T10:56:52.613021 #3203]  INFO -- : after start_search: search_results = {:connected_author_arr=>[2152], :uniq_profiles_pairs=>{29384=>{2193=>29980}, 29413=>{2193=>30300}, 29412=>{2193=>30302}, 29391=>{2193=>30010}, 29474=>{2193=>30234}, 29463=>{2193=>30012}, 29400=>{2193=>30005}, 29392=>{2193=>30009}, 29475=>{2193=>30251}, 29469=>{2193=>30233}, 29388=>{2193=>29966}, 29393=>{2193=>30006}, 29398=>{2193=>29965}, 29397=>{2193=>29958}, 29420=>{2193=>30299}, 29416=>{2193=>30301}, 29389=>{2193=>30007}, 29466=>{2193=>30235}, 29387=>{2193=>29981}}, :by_profiles=>[{:search_profile_id=>29388, :found_tree_id=>2193, :found_profile_id=>29966, :count=>15}, {:search_profile_id=>29391, :found_tree_id=>2193, :found_profile_id=>30010, :count=>14}, {:search_profile_id=>29392, :found_tree_id=>2193, :found_profile_id=>30009, :count=>14}, {:search_profile_id=>29387, :found_tree_id=>2193, :found_profile_id=>29981, :count=>14}, {:search_profile_id=>29384, :found_tree_id=>2193, :found_profile_id=>29980, :count=>14}, {:search_profile_id=>29463, :found_tree_id=>2193, :found_profile_id=>30012, :count=>13}, {:search_profile_id=>29393, :found_tree_id=>2193, :found_profile_id=>30006, :count=>9}, {:search_profile_id=>29466, :found_tree_id=>2193, :found_profile_id=>30235, :count=>8}, {:search_profile_id=>29398, :found_tree_id=>2193, :found_profile_id=>29965, :count=>7}, {:search_profile_id=>29474, :found_tree_id=>2193, :found_profile_id=>30234, :count=>7}, {:search_profile_id=>29469, :found_tree_id=>2193, :found_profile_id=>30233, :count=>7}, {:search_profile_id=>29389, :found_tree_id=>2193, :found_profile_id=>30007, :count=>6}, {:search_profile_id=>29400, :found_tree_id=>2193, :found_profile_id=>30005, :count=>6}, {:search_profile_id=>29420, :found_tree_id=>2193, :found_profile_id=>30299, :count=>5}, {:search_profile_id=>29416, :found_tree_id=>2193, :found_profile_id=>30301, :count=>5}, {:search_profile_id=>29475, :found_tree_id=>2193, :found_profile_id=>30251, :count=>5}, {:search_profile_id=>29412, :found_tree_id=>2193, :found_profile_id=>30302, :count=>5}, {:search_profile_id=>29413, :found_tree_id=>2193, :found_profile_id=>30300, :count=>5}, {:search_profile_id=>29397, :found_tree_id=>2193, :found_profile_id=>29958, :count=>5}], :by_trees=>[{:found_tree_id=>2193, :found_profile_ids=>[29980, 30300, 30302, 30010, 30234, 30012, 30005, 30009, 30251, 30233, 29966, 30006, 29965, 29958, 30299, 30301, 30007, 30235, 29981]}], :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}} 
+I, [2016-03-14T10:56:52.613307 #3203]  INFO -- : Before complete_search: complete_search_data = {:with_whom_connect=>[2193], :uniq_profiles_pairs=>{29384=>{2193=>29980}, 29413=>{2193=>30300}, 29412=>{2193=>30302}, 29391=>{2193=>30010}, 29474=>{2193=>30234}, 29463=>{2193=>30012}, 29400=>{2193=>30005}, 29392=>{2193=>30009}, 29475=>{2193=>30251}, 29469=>{2193=>30233}, 29388=>{2193=>29966}, 29393=>{2193=>30006}, 29398=>{2193=>29965}, 29397=>{2193=>29958}, 29420=>{2193=>30299}, 29416=>{2193=>30301}, 29389=>{2193=>30007}, 29466=>{2193=>30235}, 29387=>{2193=>29981}}, :certain_koeff=>4}
+I, [2016-03-14T10:56:52.613430 #3203]  INFO -- : ** IN complete_search Module *** 
+I, [2016-03-14T10:56:52.613690 #3203]  INFO -- : with_whom_connect_users_arr = [2193], uniq_profiles_pairs = {29384=>{2193=>29980}, 29413=>{2193=>30300}, 29412=>{2193=>30302}, 29391=>{2193=>30010}, 29474=>{2193=>30234}, 29463=>{2193=>30012}, 29400=>{2193=>30005}, 29392=>{2193=>30009}, 29475=>{2193=>30251}, 29469=>{2193=>30233}, 29388=>{2193=>29966}, 29393=>{2193=>30006}, 29398=>{2193=>29965}, 29397=>{2193=>29958}, 29420=>{2193=>30299}, 29416=>{2193=>30301}, 29389=>{2193=>30007}, 29466=>{2193=>30235}, 29387=>{2193=>29981}}
+I, [2016-03-14T10:56:52.613941 #3203]  INFO -- : IN complete_search init_connection_hash = {29384=>29980, 29413=>30300, 29412=>30302, 29391=>30010, 29474=>30234, 29463=>30012, 29400=>30005, 29392=>30009, 29475=>30251, 29469=>30233, 29388=>29966, 29393=>30006, 29398=>29965, 29397=>29958, 29420=>30299, 29416=>30301, 29389=>30007, 29466=>30235, 29387=>29981}
+I, [2016-03-14T10:56:52.614098 #3203]  INFO -- : ** IN UNTIL top: init_connection_hash = {29384=>29980, 29413=>30300, 29412=>30302, 29391=>30010, 29474=>30234, 29463=>30012, 29400=>30005, 29392=>30009, 29475=>30251, 29469=>30233, 29388=>29966, 29393=>30006, 29398=>29965, 29397=>29958, 29420=>30299, 29416=>30301, 29389=>30007, 29466=>30235, 29387=>29981}
+I, [2016-03-14T10:56:52.614243 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29384, profile_found = 29980
+I, [2016-03-14T10:56:52.631272 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29413, profile_found = 30300
+I, [2016-03-14T10:56:52.643527 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29412, profile_found = 30302
+I, [2016-03-14T10:56:52.655354 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29391, profile_found = 30010
+I, [2016-03-14T10:56:52.669262 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29474, profile_found = 30234
+I, [2016-03-14T10:56:52.679232 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29463, profile_found = 30012
+I, [2016-03-14T10:56:52.692324 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29400, profile_found = 30005
+I, [2016-03-14T10:56:52.700277 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29392, profile_found = 30009
+I, [2016-03-14T10:56:52.713197 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29475, profile_found = 30251
+I, [2016-03-14T10:56:52.721436 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29469, profile_found = 30233
+I, [2016-03-14T10:56:52.730427 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29388, profile_found = 29966
+I, [2016-03-14T10:56:52.743439 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29393, profile_found = 30006
+I, [2016-03-14T10:56:52.756276 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29398, profile_found = 29965
+I, [2016-03-14T10:56:52.765666 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29397, profile_found = 29958
+I, [2016-03-14T10:56:52.775269 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29420, profile_found = 30299
+I, [2016-03-14T10:56:52.793681 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29416, profile_found = 30301
+I, [2016-03-14T10:56:52.807134 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29389, profile_found = 30007
+I, [2016-03-14T10:56:52.815214 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29466, profile_found = 30235
+I, [2016-03-14T10:56:52.825881 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29387, profile_found = 29981
+I, [2016-03-14T10:56:53.053465 #3203]  INFO -- : ** IN UNTIL top: init_connection_hash = {29390=>30008, 29399=>30004}
+I, [2016-03-14T10:56:53.053678 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29390, profile_found = 30008
+I, [2016-03-14T10:56:53.065877 #3203]  INFO -- : === КРУГИ ПРОФИЛЕЙ: profile_searched = 29399, profile_found = 30004
+I, [2016-03-14T10:56:53.081908 #3203]  INFO -- : AFTER complete_search:
+I, [2016-03-14T10:56:53.082162 #3203]  INFO -- : ALL profiles_to_rewrite = [29384, 29413, 29412, 29391, 29474, 29463, 29400, 29392, 29475, 29469, 29388, 29393, 29398, 29397, 29420, 29416, 29389, 29466, 29387, 29390, 29399] 
+I, [2016-03-14T10:56:53.082381 #3203]  INFO -- : ALL profiles_to_destroy = [29980, 30300, 30302, 30010, 30234, 30012, 30005, 30009, 30251, 30233, 29966, 30006, 29965, 29958, 30299, 30301, 30007, 30235, 29981, 30008, 30004] 
+I, [2016-03-14T10:56:53.082886 #3203]  INFO -- : Before check_connection_arrs: connection_results = {:who_connect_arr=>[2152], :with_whom_connect_arr=>[2193], :uniq_profiles_pairs=>{29384=>{2193=>29980}, 29413=>{2193=>30300}, 29412=>{2193=>30302}, 29391=>{2193=>30010}, 29474=>{2193=>30234}, 29463=>{2193=>30012}, 29400=>{2193=>30005}, 29392=>{2193=>30009}, 29475=>{2193=>30251}, 29469=>{2193=>30233}, 29388=>{2193=>29966}, 29393=>{2193=>30006}, 29398=>{2193=>29965}, 29397=>{2193=>29958}, 29420=>{2193=>30299}, 29416=>{2193=>30301}, 29389=>{2193=>30007}, 29466=>{2193=>30235}, 29387=>{2193=>29981}}, :duplicates_one_to_many=>{}, :duplicates_many_to_one=>{}, :profiles_to_rewrite=>[29384, 29413, 29412, 29391, 29474, 29463, 29400, 29392, 29475, 29469, 29388, 29393, 29398, 29397, 29420, 29416, 29389, 29466, 29387, 29390, 29399], :profiles_to_destroy=>[29980, 30300, 30302, 30010, 30234, 30012, 30005, 30009, 30251, 30233, 29966, 30006, 29965, 29958, 30299, 30301, 30007, 30235, 29981, 30008, 30004], :current_user_id=>2152, :user_id=>"2193", :connection_id=>"110", :search_time=>6.05146}
+I, [2016-03-14T10:56:53.156001 #3203]  INFO -- : Для объединения - все корректно!, stop_connection = false, connection_message = Данные для объединения деревьев - корректны. 
+I, [2016-03-14T10:56:53.156196 #3203]  INFO -- : In connection_in_tables
+I, [2016-03-14T10:56:53.232832 #3203]  INFO -- : Completed 500 Internal Server Error in 6212ms (ActiveRecord: 4488.2ms)
+F, [2016-03-14T10:56:53.235006 #3203] FATAL -- : 
+NoMethodError (undefined method `+' for nil:NilClass):
+  app/models/profile_data.rb:90:in `block (2 levels) in connect_profiles_data'
+  app/models/profile_data.rb:89:in `each'
+  app/models/profile_data.rb:89:in `block in connect_profiles_data'
+  app/models/profile_data.rb:61:in `each'
+  app/models/profile_data.rb:61:in `each_with_index'
+  app/models/profile_data.rb:61:in `connect_profiles_data'
+  app/models/concerns/connection_trees.rb:194:in `connect_trees'
+  app/models/concerns/connection_trees.rb:174:in `connection_in_tables'
+  app/models/concerns/connection_trees.rb:154:in `block in connection'
+  app/models/concerns/connection_trees.rb:14:in `connection'
+  app/controllers/meteor/v1/connection_requests/yes_connect_controller.rb:21:in `yes_connect'
+
+

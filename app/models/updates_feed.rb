@@ -283,3 +283,6 @@ class UpdatesFeed < ActiveRecord::Base
 
 
 end
+
+
+
