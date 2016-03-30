@@ -27,7 +27,11 @@
           Мы все - родня
       %h2{:style => "color: #8A8A8A; text-align: center; "}
         %span{ :style => "display: block;"}
-          Уважаемый(ая) #{@user_name}!
+          - if @user_sex == 1
+            Уважаемый #{@user_name}!
+          - else
+            Уважаемая #{@user_name}!
+
         %br
         %span{ :style => "display: block;"}
           Предлагаем вам новости вашей родни из проекта «Мы все родня!».
@@ -39,12 +43,12 @@
 
       .info_body{:style => "padding: 5px; margin: 2.9em;"}
         %h2{:style => "color: #8A8A8A; left: 15%; position: relative; "}
-          Напоминаем Вам о предстоящих событиях вашей родни:
-          %h3{:style => "color: #678A4B; background-color: #D0F5E0; display: block; "}
-            %span{ :style => "display: block; "}
-              12 ноября 1935 г. родился Дмитрий Кузнецов
-            %span{ :style => "display: block; margin: 15px, 10px; padding: 10px, 10px;"}
-              2 марта 1965 г. родилась Анна Петрова
+          -#Напоминаем Вам о предстоящих событиях вашей родни:
+          -#%h3{:style => "color: #678A4B; background-color: #D0F5E0; display: block; "}
+          -#  %span{ :style => "display: block; "}
+          -#    12 ноября 1935 г. родился Дмитрий Кузнецов
+          -#  %span{ :style => "display: block; margin: 15px, 10px; padding: 10px, 10px;"}
+          -#    2 марта 1965 г. родилась Анна Петрова
 
         %h2{:style => "color: #8A8A8A; left: 15%; position: relative; "}
           События, которые произошли в Вашем дереве.
@@ -61,8 +65,6 @@
                       %h3 нет Three Profiles...
                       %br
               - else
-                -#%h1 История развития твоего дерева
-                -#%br
                 %table{ :style => "display: block;  color: #CE6DC8; background-color:#cecece;"}
                   %tr{ :style => "color: #1DBDBD; "}
                     -#%th ID
@@ -104,13 +106,12 @@
             Новая информация о вашей родне:
             %h3{:style => "color: #678A4B;"}
               %span{ :style => "display: block;"}
-                В вашем дереве появилась новая информация о #{@new_profiles_qty} родственниках.
-              -#%span{ :style => "display: block;"}
-              -#  Среди них:   профили:  #{@new_profiles_three},
-              -#%span{ :style => "display: block;"}
-              -#  first three: #{@new_profiles_three}....
+                В вашем дереве появилась новая информация о #{@new_profiles_qty} родственниках. В том числе:
               %span{ :style => "display: block;"}
-                В том числе: женщин -  #{@new_profiles_females}, мужчин -  #{@new_profiles_males}
+                - if @new_profiles_females > 0
+                  женщин - #{@new_profiles_females}
+                - if @new_profiles_males > 0
+                  мужчин - #{@new_profiles_males}
               %span{ :style => "display: block;"}
                 Среди них:
                 - if @profiles_info_complete.blank?
@@ -120,8 +121,6 @@
                         %h3 нет Three Profiles...
                         %br
                 - else
-                  -#%h1 История развития твоего дерева
-                  -#%br
                   %table{ :style => "display: block;  color: #CE6DC8; background-color:#cecece;"}
                     %tr{ :style => "color: #1DBDBD; "}
                       -#%th ID
@@ -155,15 +154,10 @@
 
 
         - if @new_conn_requests_exists
-          -#%h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
           -#  Новые запросы на объединение с вашим деревом
-          %h3{:style => "color: #678A4B; padding: 10px, 10px, 10px, 10px;"}
+          %h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
             %span{ :style => "display: block;"}
               Кроме того, следующий пользователь проекта ожидает Вашего подтверждения на свой запрос:
-            -#%span{ :style => "display: block;"}
-            -#  -#Пользователи: -  #{@connect_request_user_ids}, всего: #{@connect_request_users_qty} запрос(а)
-            -#  Всего запросов: #{@connect_request_users_qty}.
-            -#  Среди них:
             - if @conn_req_profiles_complete.blank?
               %table
                 %tr
@@ -171,8 +165,6 @@
                     %h3 нет Three Profiles...
                     %br
             - else
-              -#%h1 История развития твоего дерева
-              -#%br
               %table{ :style => "display: block;  color: #CE6DC8; background-color:#cecece;"}
                 %tr{ :style => "color: #1DBDBD; "}
                   -#%th ID
@@ -204,23 +196,26 @@
                     %td= info_hash[:biography] || ""
                     %td= info_hash[:sex_id] || ""
 
-                %h3{:style => "color: #678A4B;"}
-                  В его дереве - информация о #{@conn_req_tree_profiles_qty} родственниках,
-                  в том числе - о #{@conn_req_tree_users_qty} пользователях сайта.
+              %h3{:style => "color: #678A4B;"}
+                В его дереве - информация о #{@conn_req_tree_profiles_qty} родственниках,
+                в том числе - о #{@conn_req_tree_users_qty} пользователях сайта.
+                -#%span{ :style => "display: block; margin-top: 5px; "}
 
 
         %h2{:style => "color: #8A8A8A; text-align: center; "}
           Чтобы подробнее ознакомиться с событиями в вашем дереве
           -#= link_to image_tag( 'http://www.weallfamily.ru/assets/logo-tree.png', {:width => "45", :height =>"45"}), 'http://www.weallfamily.ru'
-          = link_to 'пройдите по этой ссылке ', 'http://www.weallfamily.ru'
-
-            Для входа на сайт www.weallfamily.com воспользуйтесь своим логином denis@lobkov.net.
-
+          %span{ :style => "display: block; margin-top: 5px; "}
+            = link_to 'пройдите по этой ссылке ', 'http://www.weallfamily.ru'
+          %span{ :style => "display: block; margin-top: 15px; "}
+            Для входа на сайт www.weallfamily.com воспользуйтесь своим логином #{@email_name}.
+          %span{ :style => "display: block; margin-top: 15px; "}
             О том, как пользоваться сайтом, Вы можете ознакомиться с помощью короткого видеоролика.
-
+          %span{ :style => "display: block; margin-top: 15px; "}
             Напоминаем, что проект «Мы все - родня!» призван объединить людей всего мира.
             С его помощью у Вас есть возможность собрать всю Вашу родню в одно большое дерево,
             делиться воспоминаниями и узнать много нового.
+          %span{ :style => "display: block; margin-top: 15px; "}
             Продолжайте собирать и исследовать информацию о Вашей общей ближней и дальней родне.
 
         %h2{:style => "color: #8A8A8A; text-align: center; "}

@@ -61,7 +61,7 @@ class WeafamMailer < ActionMailer::Base
     # :users_emails=>["azoneiva@gmail.coma"] }
 
 
-    logger.info "In proceed_weekly_mail: users_data = #{users_data} "
+    puts "In proceed_weekly_mail: users_data = #{users_data} "
     count_emails = 0
     users_data[:users_emails].each_with_index do |one_email, index|
       user_to_send = User.where( email: one_email)
@@ -74,7 +74,10 @@ class WeafamMailer < ActionMailer::Base
 
         @email_name = one_email
         @user_name = user_to_send_name
+        user_profile = Profile.find(user_to_send[0].profile_id)
+        @user_sex = user_profile.sex_id
 
+        puts "user to send: @user_sex = #{@user_sex}"
 
         user_weekly_info = User.find(user_to_send_id).collect_weekly_info
         puts "To send user_weekly_info = #{user_weekly_info}"
@@ -271,6 +274,7 @@ class WeafamMailer < ActionMailer::Base
         if Service.check_all_events_exists?(events) # Send OR not Send for this user?
           mail to: one_email, subject: 'Новости вашей родни'
           count_emails += 1
+          puts "*** Week manifest email sent Ok to #{one_email} ***"
         end
       end
 
