@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Event, type: :model do
+RSpec.describe Event, type: :model   do  # , focus: true
 
   describe '- validation' do
     describe '- on create' do
@@ -38,10 +38,42 @@ RSpec.describe Event, type: :model do
 
   end
 
+  describe 'Event model methods test'  , focus: true    do   # , focus: true
+    describe '- profile events ' do
+      #     {type_number: 4, name: 'создание профиля'},
+      #     {type_number: 5, name: 'переименование'},
+      #     {type_number: 6, name: 'удаление'},
+      let(:profile_event_data) {{
+              event_type: 4,
+              user_id: 57,
+              email: "zoneiva@gmail.com",
+              profile_id: 790,
+              user_profile_data: "Aleksey",
+              agent_profile_id: 799,
+              agent_profile_data: "Anna"
+            }}
+
+      # let(:one_event_row) { Event.profile_event(profile_event_data) }
+
+      context '- profile_event(profile_event_data) - On create - ' do
+        before { Event.profile_event(profile_event_data) }
+        it "- Make proper event row after Event.profile_event: " do
+          puts "Event 'create profile' Method 'profile_event' check:
+                profile_event_data = #{profile_event_data}"
+          puts "Event 'create profile' Method 'profile_event' check:
+                Event.all.count = #{Event.all.count}\n"
+          event_fields = Event.first.attributes.except('created_at','updated_at')
+          expect(event_fields).to eq({"id"=>1, "event_type"=>4, "read"=>false, "user_id"=>57,
+                                      "email"=>"zoneiva@gmail.com", "profile_id"=>790,
+                                      "user_profile_data"=>"Aleksey", "agent_user_id"=>nil, "agent_profile_id"=>799,
+                                      "agent_profile_data"=>"Anna", "profiles_qty"=>nil,
+                                      "log_type"=>nil, "log_id"=>nil})
+        end
 
 
+      end
 
+    end
 
-
-
+  end
 end
