@@ -19,9 +19,10 @@ every 1.day, :at => '4:00 pm' do   # 16 () + 8 = 24 (00) MSK - появился 
   # runner "Counter.increment_disconnects"# , environment: :development
 end
 
-every 2.minutes do
-  runner "WeafamMailer.weekly_manifest_email.deliver" , environment: :development
-end
+# Mailer
+# every 2.minutes do
+#   runner "WeafamMailer.weekly_manifest_email.deliver" , environment: :development
+# end
 
 
 # every 1.minutes do
