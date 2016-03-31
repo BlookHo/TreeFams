@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disabled=>true
 
-  describe '- Validation'   do
+  describe '- Validation'    do
     describe '- on create' do  #  , focus: true
 
-      context '- valid connected_users' do
+      context '- valid connected_users'    do
         let(:good_connected_users) {FactoryGirl.build(:connected_user, :correct)}
         it '- 1. Saves a valid good_connected_users pair' do
           puts " Model ConnectedUser validation "
@@ -17,7 +17,7 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
         end
       end
 
-      context '- Invalid connected_users pairs' do
+      context '- Invalid connected_users pairs'  do
         let(:bad_connected_users_1) {FactoryGirl.build(:connected_user, :user_id_nil)}
         it '- 1. Does not save an invalid connected_users pair - user_id_nil' do
           expect(bad_connected_users_1).to_not be_valid
@@ -40,7 +40,7 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
         end
       end
 
-      context '- invalid connected_users rows' do
+      context '- invalid connected_users rows'   do
         let(:bad_profiles_fields_are_equal) {FactoryGirl.build(:connected_user, :bad_profiles_fields_eual)}
         it '- 1 Dont save: - bad_profiles_fields - equal' do
           expect(bad_profiles_fields_are_equal).to_not be_valid
@@ -187,6 +187,7 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
       FactoryGirl.create(:connect_profile, :connect_profile_27)  # 27
       FactoryGirl.create(:connect_profile, :connect_profile_28)  # 28
       FactoryGirl.create(:connect_profile, :connect_profile_29)  # 29
+      FactoryGirl.create(:connect_profile, :connect_profile_124)  # 124
 
       # Tree
       FactoryGirl.create(:connection_trees)                        # 17 pr2
@@ -443,6 +444,12 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
       #     FactoryGirl.create(:common_log, :log_delete_profile_90)    #
       #     FactoryGirl.create(:common_log, :log_add_profile_172)    #
       #     FactoryGirl.create(:common_log, :log_add_profile_173)    #
+
+      # WeafamStat
+      FactoryGirl.create(:weafam_stat, :weafam_stat_1)      #
+      FactoryGirl.create(:weafam_stat, :weafam_stat_2)      #
+      FactoryGirl.create(:weafam_stat, :weafam_stat_3)      #
+
     }
 
     after {
@@ -470,6 +477,10 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
       UpdatesFeed.reset_pk_sequence
       SearchResults.delete_all
       SearchResults.reset_pk_sequence
+      SearchServiceLogs.delete_all
+      SearchServiceLogs.reset_pk_sequence
+      WeafamStat.delete_all
+      WeafamStat.reset_pk_sequence
     }
 
     # create User parameters
@@ -481,7 +492,7 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
       let(:certain_koeff_for_connect) { WeafamSetting.first.certain_koeff }  # 4
       before { current_user_1.start_search(certain_koeff_for_connect) }
 
-      describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok' do
+      describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok'   do
         let(:rows_qty) {4}
         it_behaves_like :successful_connection_request_rows_count
       end
@@ -493,8 +504,8 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
       it '- check SearchResults First Factory row - Ok' do # , focus: true
         search_results_fields = SearchResults.first.attributes.except('created_at','updated_at')
         expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
-                                             "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
-                                             "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
+                                             "found_profile_id"=>7, "count"=>5, "found_profile_ids"=>[7, 25],
+                                             "searched_profile_ids"=>[5, 52], "counts"=>[5, 5],
                                              "connection_id"=>nil, "pending_connect"=>0,
                                              "searched_connected"=>[15], "founded_connected"=>[35]} )
       end
@@ -581,8 +592,8 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
           it '- check SearchResults Third row - made by Method Search - Ok'  do # , focus: true
             search_results_fields = SearchResults.find(1).attributes.except('created_at','updated_at')
             expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
-                                                 "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
-                                                 "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
+                                                 "found_profile_id"=>7, "count"=>5, "found_profile_ids"=>[7, 25],
+                                                 "searched_profile_ids"=>[5, 52], "counts"=>[5, 5],
                                                  "connection_id"=>nil, "pending_connect"=>0,
                                                  "searched_connected"=>[15], "founded_connected"=>[35]} )
           end
@@ -634,7 +645,7 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
         ConnectionRequest.make_request(request_user, current_user_3_id )
       }
 
-      context '- Check ConnectionRequest AFTER <create_requests> - '   do
+      context '- Check ConnectionRequest AFTER <create_requests> - ' , focus: true   do
         describe '- check ConnectionRequest have rows count AFTER <create_requests> - Ok'   do
           puts "Check ConnectionRequest: Counter request exists - does not create new request"
           let(:rows_qty) {4}
@@ -659,8 +670,8 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
           #                                                                'searched_profile_ids')
           search_results_fields = SearchResults.find(1).attributes.except('created_at','updated_at')
           expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
-                                               "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
-                                               "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
+                                               "found_profile_id"=>7, "count"=>5, "found_profile_ids"=>[7, 25],
+                                               "searched_profile_ids"=>[5, 52], "counts"=>[5, 5],
                                                "connection_id"=>nil, "pending_connect"=>0,
                                                "searched_connected"=>[15], "founded_connected"=>[35]} )
         end
@@ -697,7 +708,7 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
       end
     end
 
-      describe ' Check ConnectionRequest AFTER make_request(current_user, with_user_id) Method:'   do  # , focus: true
+      describe ' Check ConnectionRequest AFTER make_request(current_user, with_user_id) Method:'    do  # , focus: true
 
         let(:current_user_3) { User.third }  # User = 3. Tree = [3]. profile_id = 17
         let(:current_user_3_id) { current_user_3.id }  # User = 2 . Tree = [1,2]. profile_id = 22
@@ -741,8 +752,8 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
             #                                                                'searched_profile_ids')
             search_results_fields = SearchResults.find(1).attributes.except('created_at','updated_at')
             expect(search_results_fields).to eq({"id"=>1, "user_id"=>15, "found_user_id"=>35, "profile_id"=>5,
-                                                 "found_profile_id"=>7, "count"=>4, "found_profile_ids"=>[7, 25],
-                                                 "searched_profile_ids"=>[5, 52], "counts"=>[4, 4],
+                                                 "found_profile_id"=>7, "count"=>5, "found_profile_ids"=>[7, 25],
+                                                 "searched_profile_ids"=>[5, 52], "counts"=>[5, 5],
                                                  "connection_id"=>nil, "pending_connect"=>0,
                                                  "searched_connected"=>[15], "founded_connected"=>[35]} )
           end
@@ -778,19 +789,30 @@ RSpec.describe ConnectionRequest, :type => :model   do #   , focus: true  ,:disa
 
         end
 
+      end
 
-
-
+    describe ' Check ConnectionRequest service Methods:' , focus: true   do  # , focus: true
+      context '- Check requests counts'    do
+        puts "Check ConnectionRequest service Methods for stats"
+        it '- check all made requests count value - Ok' do
+          all_count = ConnectionRequest.all.count
+          expect(all_count).to eq(4)
+        end
+        it '- check requests_waiting count value - Ok' do
+          waiting_count = ConnectionRequest.requests_waiting
+          expect(waiting_count).to eq(2)
+        end
 
 
       end
 
 
+    end
 
 
 
 
 
-  end
+    end
 
 end

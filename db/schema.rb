@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323163528) do
+ActiveRecord::Schema.define(version: 20160329090930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,30 @@ ActiveRecord::Schema.define(version: 20160323163528) do
 
   add_index "deletion_logs", ["current_user_id"], name: "index_deletion_logs_on_current_user_id", using: :btree
   add_index "deletion_logs", ["log_number"], name: "index_deletion_logs_on_log_number", using: :btree
+
+  create_table "event_types", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "type_number"
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.integer  "event_type"
+    t.boolean  "read"
+    t.integer  "user_id"
+    t.string   "email"
+    t.integer  "profile_id"
+    t.string   "user_profile_data"
+    t.integer  "agent_user_id"
+    t.integer  "agent_profile_id"
+    t.string   "agent_profile_data"
+    t.integer  "profiles_qty"
+    t.integer  "log_type"
+    t.integer  "log_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
 
   create_table "log_types", force: :cascade do |t|
     t.integer  "type_number"
@@ -359,6 +383,7 @@ ActiveRecord::Schema.define(version: 20160323163528) do
     t.integer  "similars_found",  default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "requests_wait",   default: 0
   end
 
 end

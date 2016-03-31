@@ -1,0 +1,900 @@
+I, [2016-03-19T20:54:46.575188 #16938]  INFO -- : profile_search_data = {:connected_users=>[2352], :profile_id_searched=>32691, :name_id_searched=>104}
+I, [2016-03-19T20:54:46.673027 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T20:54:46.673257 #16938]  INFO -- : certain_search_data = {:search=>32691, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T20:54:46.673473 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{32691=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T20:54:46.674911 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T20:54:46.675160 #16938]  INFO -- : profile_search_data = {:connected_users=>[2352], :profile_id_searched=>32692, :name_id_searched=>359}
+I, [2016-03-19T20:54:46.733582 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T20:54:46.733759 #16938]  INFO -- : certain_search_data = {:search=>32692, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T20:54:46.733896 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{32692=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T20:54:46.734109 #16938]  INFO -- : 
+ Time of Search_Tree_Profiles = 0.668 sec. In [2352], search_event = 1
+
+
+I, [2016-03-19T20:54:46.734250 #16938]  INFO -- : In SearchServiceLogs#store_search_time_log: Event name = "Добавлен профиль" 
+I, [2016-03-19T20:54:46.740809 #16938]  INFO -- : Search results:
+I, [2016-03-19T20:54:46.741003 #16938]  INFO -- : :connected_author_arr = [2352]
+I, [2016-03-19T20:54:46.741348 #16938]  INFO -- : :uniq_profiles_pairs = {}
+I, [2016-03-19T20:54:46.741504 #16938]  INFO -- : :by_profiles = []
+I, [2016-03-19T20:54:46.742032 #16938]  INFO -- : :by_trees = []
+I, [2016-03-19T20:54:46.742219 #16938]  INFO -- : :duplicates_one_to_many = {}
+I, [2016-03-19T20:54:46.742384 #16938]  INFO -- : :duplicates_many_to_one = {}
+I, [2016-03-19T20:54:46.747951 #16938]  INFO -- : 
+I, [2016-03-19T20:54:46.748123 #16938]  INFO -- : #### End of Main search - Ok
+I, [2016-03-19T20:54:46.748274 #16938]  INFO -- : 
+I, [2016-03-19T20:55:33.184828 #16938]  INFO -- : Started GET "/meteor/v1/profile_datas/update" for 46.101.148.117 at 2016-03-19 20:55:33 +0300
+I, [2016-03-19T20:55:33.191835 #16938]  INFO -- : Processing by Meteor::V1::ProfileDatas::ProfileDatasUpdateController#update as JSON
+I, [2016-03-19T20:55:33.192051 #16938]  INFO -- :   Parameters: {"profile_id"=>"32686", "last_name"=>"Студеникин", "prev_last_name"=>"", "birthday"=>"", "deathdate"=>"", "city"=>"", "birth_place"=>""}
+I, [2016-03-19T20:55:33.209985 #16938]  INFO -- : Completed 200 OK in 17ms (Views: 0.9ms | ActiveRecord: 4.9ms)
+I, [2016-03-19T20:55:41.461067 #16938]  INFO -- : Started GET "/meteor/v1/profile_datas/update" for 46.101.148.117 at 2016-03-19 20:55:41 +0300
+I, [2016-03-19T20:55:41.463820 #16938]  INFO -- : Processing by Meteor::V1::ProfileDatas::ProfileDatasUpdateController#update as JSON
+I, [2016-03-19T20:55:41.463979 #16938]  INFO -- :   Parameters: {"profile_id"=>"32693", "last_name"=>"Студеникина", "prev_last_name"=>"", "birthday"=>"", "deathdate"=>"", "city"=>"", "birth_place"=>""}
+I, [2016-03-19T20:55:41.477126 #16938]  INFO -- : Completed 200 OK in 13ms (Views: 0.5ms | ActiveRecord: 4.5ms)
+I, [2016-03-19T20:55:53.413404 #16938]  INFO -- : Started GET "/meteor/v1/profile_datas/update" for 46.101.148.117 at 2016-03-19 20:55:53 +0300
+I, [2016-03-19T20:55:53.416864 #16938]  INFO -- : Processing by Meteor::V1::ProfileDatas::ProfileDatasUpdateController#update as JSON
+I, [2016-03-19T20:55:53.417185 #16938]  INFO -- :   Parameters: {"profile_id"=>"32687", "last_name"=>"Студеникина", "prev_last_name"=>"Халяпина", "birthday"=>"", "deathdate"=>"", "city"=>"", "birth_place"=>""}
+I, [2016-03-19T20:55:53.432812 #16938]  INFO -- : Completed 200 OK in 15ms (Views: 0.5ms | ActiveRecord: 4.8ms)
+I, [2016-03-19T21:09:59.836955 #16938]  INFO -- : Started GET "/meteor/v1/login?email=oxana.alkina34%40gmail.com&password=[FILTERED]" for 46.101.148.117 at 2016-03-19 21:09:59 +0300
+I, [2016-03-19T21:09:59.858747 #16938]  INFO -- : Processing by Meteor::V1::LoginController#login as JSON
+I, [2016-03-19T21:09:59.859123 #16938]  INFO -- :   Parameters: {"email"=>"oxana.alkina34@gmail.com", "password"=>"[FILTERED]"}
+I, [2016-03-19T21:09:59.889195 #16938]  INFO -- : Completed 200 OK in 30ms (Views: 0.5ms | ActiveRecord: 2.9ms)
+I, [2016-03-19T21:12:14.349300 #16938]  INFO -- : Started GET "/admin/login" for 66.102.9.56 at 2016-03-19 21:12:14 +0300
+I, [2016-03-19T21:12:14.355116 #16938]  INFO -- : Processing by Admin::SessionsController#new as HTML
+I, [2016-03-19T21:12:14.365470 #16938]  INFO -- :   Rendered admin/sessions/new.html.haml within layouts/admin (6.1ms)
+I, [2016-03-19T21:12:14.368189 #16938]  INFO -- :   Rendered admin/shared/_flash.html.haml (0.3ms)
+I, [2016-03-19T21:12:14.369234 #16938]  INFO -- : Completed 200 OK in 14ms (Views: 11.3ms | ActiveRecord: 0.0ms)
+I, [2016-03-19T21:12:27.731860 #16938]  INFO -- : Started GET "/admin" for 37.144.76.50 at 2016-03-19 21:12:27 +0300
+I, [2016-03-19T21:12:27.735919 #16938]  INFO -- : Processing by Admin::UsersController#index as HTML
+I, [2016-03-19T21:12:27.879577 #16938]  INFO -- :   Rendered admin/users/_table.html.haml (116.4ms)
+I, [2016-03-19T21:12:27.890432 #16938]  INFO -- :   Rendered admin/users/index.html.haml within layouts/admin (145.6ms)
+I, [2016-03-19T21:12:27.893351 #16938]  INFO -- :   Rendered admin/shared/_header.html.haml (1.5ms)
+I, [2016-03-19T21:12:27.894078 #16938]  INFO -- :   Rendered admin/shared/_flash.html.haml (0.2ms)
+I, [2016-03-19T21:12:27.894900 #16938]  INFO -- : Completed 200 OK in 159ms (Views: 131.7ms | ActiveRecord: 20.5ms)
+I, [2016-03-19T21:12:46.590979 #16938]  INFO -- : Started GET "/admin/search_service_logs" for 37.144.76.50 at 2016-03-19 21:12:46 +0300
+I, [2016-03-19T21:12:46.594583 #16938]  INFO -- : Processing by Admin::SearchServiceLogsController#index as HTML
+I, [2016-03-19T21:12:46.639564 #16938]  INFO -- :   Rendered admin/search_service_logs/_table.html.haml (20.7ms)
+I, [2016-03-19T21:12:46.647571 #16938]  INFO -- :   Rendered admin/search_service_logs/index.html.haml within layouts/admin (47.6ms)
+I, [2016-03-19T21:12:46.649870 #16938]  INFO -- :   Rendered admin/shared/_header.html.haml (1.0ms)
+I, [2016-03-19T21:12:46.650561 #16938]  INFO -- :   Rendered admin/shared/_flash.html.haml (0.2ms)
+I, [2016-03-19T21:12:46.651236 #16938]  INFO -- : Completed 200 OK in 56ms (Views: 47.1ms | ActiveRecord: 5.6ms)
+I, [2016-03-19T21:13:14.630506 #16938]  INFO -- : Started GET "/meteor/v1/profiles/create" for 46.101.148.117 at 2016-03-19 21:13:14 +0300
+I, [2016-03-19T21:13:14.634980 #16938]  INFO -- : Processing by Meteor::V1::Profiles::ProfilesCreateController#create as JSON
+I, [2016-03-19T21:13:14.635254 #16938]  INFO -- :   Parameters: {"base_profile_id"=>"13619", "profile_name_id"=>"166", "relation_id"=>"1", "name"=>"[object Object]"}
+I, [2016-03-19T21:13:14.652958 #16938]  INFO -- : In Rails Concern: create_keys: profile.id = 13619, new_profile.id = 32694, relation_id = 1, user.id = 994 
+I, [2016-03-19T21:13:14.796215 #16938]  INFO -- : == AR POOL SIZE LOG: {search.start_search_methods_in_thread} size: 5
+I, [2016-03-19T21:13:14.796988 #16938]  INFO -- : In SR::start_search_methods: current_user.id = 994 
+I, [2016-03-19T21:13:14.800596 #16938]  INFO -- : Completed 200 OK in 163ms (Views: 0.7ms | ActiveRecord: 41.5ms)
+I, [2016-03-19T21:13:14.895499 #16938]  INFO -- : In SimilarsStart:  connected_users = [994]
+I, [2016-03-19T21:13:14.898273 #16938]  INFO -- : In similars_init_search
+I, [2016-03-19T21:13:14.994640 #16938]  INFO -- : *** compare profiles: one_profile_id = 13599: [458, 0] <--> b_profile_id = 13616: [458, 0]
+I, [2016-03-19T21:13:14.994806 #16938]  INFO -- : *** common_hash: {}
+I, [2016-03-19T21:13:14.995081 #16938]  INFO -- : *** compare profiles: one_profile_id = 13600: [176, 0] <--> b_profile_id = 13621: [176, 0]
+I, [2016-03-19T21:13:14.995211 #16938]  INFO -- : *** common_hash: {}
+I, [2016-03-19T21:13:14.995452 #16938]  INFO -- : *** compare profiles: one_profile_id = 13602: [29, 1] <--> b_profile_id = 13613: [29, 1]
+I, [2016-03-19T21:13:14.995676 #16938]  INFO -- : *** common_hash: {"Жена"=>[51]}
+I, [2016-03-19T21:13:14.995822 #16938]  INFO -- : *** check_similars_exclusions ***
+I, [2016-03-19T21:13:14.996025 #16938]  INFO -- : *** unsimilar_sign: false, Uncommon relations: ["Сын", "Дочь"]
+I, [2016-03-19T21:13:14.996225 #16938]  INFO -- : *** compare profiles: one_profile_id = 13603: [51, 0] <--> b_profile_id = 13605: [51, 0]
+I, [2016-03-19T21:13:14.996406 #16938]  INFO -- : *** common_hash: {"Муж"=>[29]}
+I, [2016-03-19T21:13:14.996534 #16938]  INFO -- : *** check_similars_exclusions ***
+I, [2016-03-19T21:13:14.996733 #16938]  INFO -- : *** unsimilar_sign: false, Uncommon relations: ["Сын", "Дочь"]
+I, [2016-03-19T21:13:14.997303 #16938]  INFO -- : *** compare profiles: one_profile_id = 13612: [347, 1] <--> b_profile_id = 32185: [347, 1]
+I, [2016-03-19T21:13:14.997478 #16938]  INFO -- : *** common_hash: {}
+I, [2016-03-19T21:13:14.998921 #16938]  INFO -- : *** compare profiles: one_profile_id = 13615: [359, 0] <--> b_profile_id = 13620: [359, 0]
+I, [2016-03-19T21:13:14.999090 #16938]  INFO -- : *** common_hash: {}
+I, [2016-03-19T21:13:14.999548 #16938]  INFO -- : *** compare profiles: one_profile_id = 13623: [335, 0] <--> b_profile_id = 32177: [335, 0]
+I, [2016-03-19T21:13:14.999673 #16938]  INFO -- : *** common_hash: {}
+I, [2016-03-19T21:13:14.999843 #16938]  INFO -- : *** compare profiles: one_profile_id = 13623: [335, 0] <--> b_profile_id = 32181: [335, 0]
+I, [2016-03-19T21:13:15.000045 #16938]  INFO -- : *** common_hash: {"Дед-о"=>[29], "Бабка-о"=>[51], "Дядя-о"=>[198, 347, 366], "Тетя-о"=>[51, 458]}
+I, [2016-03-19T21:13:15.002127 #16938]  INFO -- : *** check_similars_exclusions ***
+I, [2016-03-19T21:13:15.002314 #16938]  INFO -- : *** unsimilar_sign: false, Uncommon relations: ["Отец", "Мама"]
+I, [2016-03-19T21:13:15.002545 #16938]  INFO -- : *** compare profiles: one_profile_id = 32176: [286, 0] <--> b_profile_id = 32178: [286, 0]
+I, [2016-03-19T21:13:15.002788 #16938]  INFO -- : *** common_hash: {"Свекор"=>[29], "Свекровь"=>[51]}
+I, [2016-03-19T21:13:15.002912 #16938]  INFO -- : *** check_similars_exclusions ***
+I, [2016-03-19T21:13:15.003150 #16938]  INFO -- : *** unsimilar_sign: false, Uncommon relations: ["Сын", "Муж"]
+I, [2016-03-19T21:13:15.003326 #16938]  INFO -- : *** compare profiles: one_profile_id = 32176: [286, 0] <--> b_profile_id = 32180: [286, 0]
+I, [2016-03-19T21:13:15.003490 #16938]  INFO -- : *** common_hash: {"Свекор"=>[29], "Свекровь"=>[51]}
+I, [2016-03-19T21:13:15.003663 #16938]  INFO -- : *** check_similars_exclusions ***
+I, [2016-03-19T21:13:15.003818 #16938]  INFO -- : *** unsimilar_sign: false, Uncommon relations: ["Дочь", "Муж"]
+I, [2016-03-19T21:13:15.003986 #16938]  INFO -- : *** compare profiles: one_profile_id = 32177: [335, 0] <--> b_profile_id = 32181: [335, 0]
+I, [2016-03-19T21:13:15.004103 #16938]  INFO -- : *** common_hash: {}
+I, [2016-03-19T21:13:15.004283 #16938]  INFO -- : *** compare profiles: one_profile_id = 32178: [286, 0] <--> b_profile_id = 32180: [286, 0]
+I, [2016-03-19T21:13:15.004473 #16938]  INFO -- : *** common_hash: {"Свекор"=>[29], "Свекровь"=>[51]}
+I, [2016-03-19T21:13:15.004591 #16938]  INFO -- : *** check_similars_exclusions ***
+I, [2016-03-19T21:13:15.004751 #16938]  INFO -- : *** unsimilar_sign: false, Uncommon relations: ["Муж"]
+I, [2016-03-19T21:13:15.004948 #16938]  INFO -- : After compare_tree_circles : similars = []
+I, [2016-03-19T21:13:15.007770 #16938]  INFO -- : In SR::start_search_methods: similars_results[:similars] = []
+I, [2016-03-19T21:13:15.007911 #16938]  INFO -- : In SR::start_search_methods: search_event = 1, No Similars -> start search 
+I, [2016-03-19T21:13:15.008048 #16938]  INFO -- : 
+I, [2016-03-19T21:13:15.008231 #16938]  INFO -- : #### Main start_search (modified + w/exclusions + w/determine actual tree_profiles), connected_users = [994]
+I, [2016-03-19T21:13:15.008391 #16938]  INFO -- : ## Search_Tree_Profiles: search_event = 1, CERTAIN_KOEFF = 5
+I, [2016-03-19T21:13:15.008506 #16938]  INFO -- : 
+I, [2016-03-19T21:13:15.014506 #16938]  INFO -- : In update_connected_users!: self.get_connected_users = [994]
+I, [2016-03-19T21:13:15.014686 #16938]  INFO -- : In update_connected_users!: self.connected_users = [994]
+I, [2016-03-19T21:13:15.014995 #16938]  INFO -- : In select_tree_profiles: connected_users = [994]
+I, [2016-03-19T21:13:15.015280 #16938]  INFO -- : In all_tree_profiles: connected_users = [994]
+I, [2016-03-19T21:13:15.018667 #16938]  INFO -- : In select_tree_profiles: all_tree_profiles_qty = 38
+I, [2016-03-19T21:13:15.018817 #16938]  INFO -- : Action: search_event = 1: create (1)  profile in tree
+I, [2016-03-19T21:13:15.018960 #16938]  INFO -- : In logged_actual_profiles: name_actual_profile = :profile_id 
+I, [2016-03-19T21:13:15.021508 #16938]  INFO -- : In logged_actual_profiles: action_data = {:log_type=>1, :profile_id=>32694, :base_profile_id=>13619}
+I, [2016-03-19T21:13:15.062980 #16938]  INFO -- : Collected searched_profile_ids = []
+I, [2016-03-19T21:13:15.063297 #16938]  INFO -- : In select_tree_profiles: After Actual collect: tree_profiles.size = 24
+I, [2016-03-19T21:13:15.064387 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.064539 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>32694, :name_id_searched=>166}
+I, [2016-03-19T21:13:15.156134 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:15.156369 #16938]  INFO -- : certain_search_data = {:search=>32694, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:15.156547 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{32694=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:15.157942 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.158117 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13619, :name_id_searched=>281}
+I, [2016-03-19T21:13:15.239265 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:15.239458 #16938]  INFO -- : certain_search_data = {:search=>13619, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:15.239682 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13619=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:15.240756 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.240904 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13610, :name_id_searched=>134}
+I, [2016-03-19T21:13:15.317690 #16938]  INFO -- : one_tree_profile = [291, 4072], found_profile_id = 4072
+I, [2016-03-19T21:13:15.319855 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.320120 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.320457 #16938]  INFO -- : one_tree_profile = [646, 8703], found_profile_id = 8703
+I, [2016-03-19T21:13:15.323729 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.323925 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.324116 #16938]  INFO -- : one_tree_profile = [958, 13086], found_profile_id = 13086
+I, [2016-03-19T21:13:15.325477 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.325621 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.325769 #16938]  INFO -- : one_tree_profile = [1178, 16027], found_profile_id = 16027
+I, [2016-03-19T21:13:15.327099 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.327252 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.327459 #16938]  INFO -- : one_tree_profile = [1207, 16697], found_profile_id = 16697
+I, [2016-03-19T21:13:15.328772 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.328968 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.329194 #16938]  INFO -- : one_tree_profile = [1464, 20265], found_profile_id = 20265
+I, [2016-03-19T21:13:15.331203 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.331332 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.331497 #16938]  INFO -- : one_tree_profile = [1486, 20552], found_profile_id = 20552
+I, [2016-03-19T21:13:15.333025 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.333153 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.333294 #16938]  INFO -- : one_tree_profile = [2100, 28518], found_profile_id = 28518
+I, [2016-03-19T21:13:15.334706 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.334851 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.334989 #16938]  INFO -- : one_tree_profile = [2179, 29792], found_profile_id = 29792
+I, [2016-03-19T21:13:15.336542 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.336670 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.336808 #16938]  INFO -- : one_tree_profile = [2193, 29989], found_profile_id = 29989
+I, [2016-03-19T21:13:15.338534 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.338663 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.338860 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:15.339004 #16938]  INFO -- : certain_search_data = {:search=>13610, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:15.339195 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13610=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:15.340238 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.340392 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>32181, :name_id_searched=>335}
+I, [2016-03-19T21:13:15.410015 #16938]  INFO -- : one_tree_profile = [82, 1436], found_profile_id = 1436
+I, [2016-03-19T21:13:15.411459 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.411589 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.411731 #16938]  INFO -- : one_tree_profile = [82, 1328], found_profile_id = 1328
+I, [2016-03-19T21:13:15.413222 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.413352 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.413501 #16938]  INFO -- : one_tree_profile = [957, 12973], found_profile_id = 12973
+I, [2016-03-19T21:13:15.417098 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.417303 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.417488 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:15.418197 #16938]  INFO -- : certain_search_data = {:search=>32181, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:15.418380 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{32181=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:15.420077 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.420293 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13616, :name_id_searched=>458}
+I, [2016-03-19T21:13:15.495914 #16938]  INFO -- : one_tree_profile = [31, 1065], found_profile_id = 1065
+I, [2016-03-19T21:13:15.497399 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.497604 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.497756 #16938]  INFO -- : one_tree_profile = [74, 1463], found_profile_id = 1463
+I, [2016-03-19T21:13:15.499348 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.499479 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.499622 #16938]  INFO -- : one_tree_profile = [82, 1324], found_profile_id = 1324
+I, [2016-03-19T21:13:15.500991 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.501120 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.501283 #16938]  INFO -- : one_tree_profile = [119, 1955], found_profile_id = 1955
+I, [2016-03-19T21:13:15.502734 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.502969 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.503156 #16938]  INFO -- : one_tree_profile = [496, 6645], found_profile_id = 6645
+I, [2016-03-19T21:13:15.505120 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.505337 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.505497 #16938]  INFO -- : one_tree_profile = [502, 11465], found_profile_id = 11465
+I, [2016-03-19T21:13:15.506962 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.507128 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.507260 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:15.507491 #16938]  INFO -- : certain_search_data = {:search=>13616, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:15.507716 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13616=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:15.508683 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.508824 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13602, :name_id_searched=>29}
+I, [2016-03-19T21:13:15.581079 #16938]  INFO -- : one_tree_profile = [31, 545], found_profile_id = 545
+I, [2016-03-19T21:13:15.584233 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.584451 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.584759 #16938]  INFO -- : one_tree_profile = [119, 1966], found_profile_id = 1966
+I, [2016-03-19T21:13:15.587991 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.588175 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.588410 #16938]  INFO -- : one_tree_profile = [221, 3339], found_profile_id = 3339
+I, [2016-03-19T21:13:15.589897 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.590069 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.590230 #16938]  INFO -- : one_tree_profile = [604, 7934], found_profile_id = 7934
+I, [2016-03-19T21:13:15.591795 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.591979 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.592194 #16938]  INFO -- : one_tree_profile = [620, 8372], found_profile_id = 8372
+I, [2016-03-19T21:13:15.593515 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.593712 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.593863 #16938]  INFO -- : one_tree_profile = [687, 9458], found_profile_id = 9458
+I, [2016-03-19T21:13:15.595218 #16938]  INFO -- : EXCLUSIONS PASSED
+I, [2016-03-19T21:13:15.595403 #16938]  INFO -- : PROFILES ARE EQUAL - match_count > CK
+I, [2016-03-19T21:13:15.595611 #16938]  INFO -- : one_tree_profile = [720, 9897], found_profile_id = 9897
+I, [2016-03-19T21:13:15.596987 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.597118 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.597267 #16938]  INFO -- : one_tree_profile = [1316, 18348], found_profile_id = 18348
+I, [2016-03-19T21:13:15.599342 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 2
+I, [2016-03-19T21:13:15.599476 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.599769 #16938]  INFO -- : one_tree_profile = [1566, 21839], found_profile_id = 21839
+I, [2016-03-19T21:13:15.601179 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.601308 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.601513 #16938]  INFO -- : one_tree_profile = [1652, 23098], found_profile_id = 23098
+I, [2016-03-19T21:13:15.602827 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.602957 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.603140 #16938]  INFO -- : one_tree_profile = [1901, 26425], found_profile_id = 26425
+I, [2016-03-19T21:13:15.604604 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.604742 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.604886 #16938]  INFO -- : one_tree_profile = [2252, 30983], found_profile_id = 30983
+I, [2016-03-19T21:13:15.606514 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.606645 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.606787 #16938]  INFO -- : one_tree_profile = [2277, 31507], found_profile_id = 31507
+I, [2016-03-19T21:13:15.608313 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.608447 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.608586 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = [[687, 9458, 5]]
+I, [2016-03-19T21:13:15.608760 #16938]  INFO -- : certain_search_data = {:search=>13602, :founds=>[9458], :counts=>[5], :trees=>[687]}
+I, [2016-03-19T21:13:15.608979 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13602=>{687=>9458}}, :profiles_counts=>{9458=>5}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:15.610015 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.610213 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13603, :name_id_searched=>51}
+I, [2016-03-19T21:13:15.683926 #16938]  INFO -- : one_tree_profile = [8, 170], found_profile_id = 170
+I, [2016-03-19T21:13:15.685458 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.685888 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.686121 #16938]  INFO -- : one_tree_profile = [31, 546], found_profile_id = 546
+I, [2016-03-19T21:13:15.687611 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.687744 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.687918 #16938]  INFO -- : one_tree_profile = [31, 548], found_profile_id = 548
+I, [2016-03-19T21:13:15.689283 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.689415 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.689604 #16938]  INFO -- : one_tree_profile = [125, 2101], found_profile_id = 2101
+I, [2016-03-19T21:13:15.691049 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.691253 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.691475 #16938]  INFO -- : one_tree_profile = [248, 3444], found_profile_id = 3444
+I, [2016-03-19T21:13:15.693167 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.693356 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.693544 #16938]  INFO -- : one_tree_profile = [329, 4562], found_profile_id = 4562
+I, [2016-03-19T21:13:15.694868 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.695123 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.695302 #16938]  INFO -- : one_tree_profile = [604, 8060], found_profile_id = 8060
+I, [2016-03-19T21:13:15.696662 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.696793 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.696963 #16938]  INFO -- : one_tree_profile = [667, 9214], found_profile_id = 9214
+I, [2016-03-19T21:13:15.698803 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 3
+I, [2016-03-19T21:13:15.698994 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.699201 #16938]  INFO -- : one_tree_profile = [687, 9459], found_profile_id = 9459
+I, [2016-03-19T21:13:15.700522 #16938]  INFO -- : EXCLUSIONS PASSED
+I, [2016-03-19T21:13:15.700651 #16938]  INFO -- : PROFILES ARE EQUAL - match_count > CK
+I, [2016-03-19T21:13:15.700790 #16938]  INFO -- : one_tree_profile = [720, 9900], found_profile_id = 9900
+I, [2016-03-19T21:13:15.702423 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.702555 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.702724 #16938]  INFO -- : one_tree_profile = [789, 14234], found_profile_id = 14234
+I, [2016-03-19T21:13:15.704139 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.704323 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.704581 #16938]  INFO -- : one_tree_profile = [850, 11348], found_profile_id = 11348
+I, [2016-03-19T21:13:15.706595 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.706727 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.706912 #16938]  INFO -- : one_tree_profile = [913, 12329], found_profile_id = 12329
+I, [2016-03-19T21:13:15.708310 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.708492 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.708657 #16938]  INFO -- : one_tree_profile = [1033, 17715], found_profile_id = 17715
+I, [2016-03-19T21:13:15.709970 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.710158 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.710324 #16938]  INFO -- : one_tree_profile = [1047, 14486], found_profile_id = 14486
+I, [2016-03-19T21:13:15.712282 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.712496 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.712740 #16938]  INFO -- : one_tree_profile = [1178, 16020], found_profile_id = 16020
+I, [2016-03-19T21:13:15.714866 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 2
+I, [2016-03-19T21:13:15.715131 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.715414 #16938]  INFO -- : one_tree_profile = [1198, 16523], found_profile_id = 16523
+I, [2016-03-19T21:13:15.718637 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.718861 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.719056 #16938]  INFO -- : one_tree_profile = [1291, 17992], found_profile_id = 17992
+I, [2016-03-19T21:13:15.720464 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.720606 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.720818 #16938]  INFO -- : one_tree_profile = [1351, 18838], found_profile_id = 18838
+I, [2016-03-19T21:13:15.722177 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.722348 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.722515 #16938]  INFO -- : one_tree_profile = [1512, 20858], found_profile_id = 20858
+I, [2016-03-19T21:13:15.723890 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.724022 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.724177 #16938]  INFO -- : one_tree_profile = [1518, 20982], found_profile_id = 20982
+I, [2016-03-19T21:13:15.725654 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.725811 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.725967 #16938]  INFO -- : one_tree_profile = [1652, 23105], found_profile_id = 23105
+I, [2016-03-19T21:13:15.727455 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 2
+I, [2016-03-19T21:13:15.727628 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.727868 #16938]  INFO -- : one_tree_profile = [1680, 23399], found_profile_id = 23399
+I, [2016-03-19T21:13:15.729335 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.729473 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.729990 #16938]  INFO -- : one_tree_profile = [1834, 25321], found_profile_id = 25321
+I, [2016-03-19T21:13:15.731463 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.731640 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.731827 #16938]  INFO -- : one_tree_profile = [1840, 25456], found_profile_id = 25456
+I, [2016-03-19T21:13:15.733192 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.733323 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.733532 #16938]  INFO -- : one_tree_profile = [1943, 26910], found_profile_id = 26910
+I, [2016-03-19T21:13:15.734926 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.735097 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.735258 #16938]  INFO -- : one_tree_profile = [1945, 26948], found_profile_id = 26948
+I, [2016-03-19T21:13:15.737088 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.737218 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.737369 #16938]  INFO -- : one_tree_profile = [2079, 28247], found_profile_id = 28247
+I, [2016-03-19T21:13:15.739216 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.739349 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.739499 #16938]  INFO -- : one_tree_profile = [2142, 29402], found_profile_id = 29402
+I, [2016-03-19T21:13:15.741302 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.741505 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.743289 #16938]  INFO -- : one_tree_profile = [2227, 30464], found_profile_id = 30464
+I, [2016-03-19T21:13:15.745078 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 2
+I, [2016-03-19T21:13:15.745428 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.745606 #16938]  INFO -- : one_tree_profile = [2288, 31759], found_profile_id = 31759
+I, [2016-03-19T21:13:15.746982 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.747299 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.747467 #16938]  INFO -- : one_tree_profile = [2334, 32383], found_profile_id = 32383
+I, [2016-03-19T21:13:15.748819 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:15.749286 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.749469 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = [[687, 9459, 5]]
+I, [2016-03-19T21:13:15.749979 #16938]  INFO -- : certain_search_data = {:search=>13603, :founds=>[9459], :counts=>[5], :trees=>[687]}
+I, [2016-03-19T21:13:15.750151 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13603=>{687=>9459}}, :profiles_counts=>{9459=>5}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:15.751373 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.751530 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>32182, :name_id_searched=>42}
+I, [2016-03-19T21:13:15.819728 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:15.819927 #16938]  INFO -- : certain_search_data = {:search=>32182, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:15.820117 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{32182=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:15.821735 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.821883 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13608, :name_id_searched=>198}
+I, [2016-03-19T21:13:15.892028 #16938]  INFO -- : one_tree_profile = [74, 1488], found_profile_id = 1488
+I, [2016-03-19T21:13:15.894414 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.894599 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.894857 #16938]  INFO -- : one_tree_profile = [119, 12356], found_profile_id = 12356
+I, [2016-03-19T21:13:15.896808 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.896990 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.897201 #16938]  INFO -- : one_tree_profile = [688, 9492], found_profile_id = 9492
+I, [2016-03-19T21:13:15.899665 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.899860 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.900030 #16938]  INFO -- : one_tree_profile = [862, 11590], found_profile_id = 11590
+I, [2016-03-19T21:13:15.901428 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.901578 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.901739 #16938]  INFO -- : one_tree_profile = [1024, 14124], found_profile_id = 14124
+I, [2016-03-19T21:13:15.903141 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.903274 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.903424 #16938]  INFO -- : one_tree_profile = [1033, 14299], found_profile_id = 14299
+I, [2016-03-19T21:13:15.904846 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.905030 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.905186 #16938]  INFO -- : one_tree_profile = [1566, 21837], found_profile_id = 21837
+I, [2016-03-19T21:13:15.906765 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.906950 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.907153 #16938]  INFO -- : one_tree_profile = [1607, 22715], found_profile_id = 22715
+I, [2016-03-19T21:13:15.908590 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.908722 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.908870 #16938]  INFO -- : one_tree_profile = [1652, 23072], found_profile_id = 23072
+I, [2016-03-19T21:13:15.910903 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.911058 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.911221 #16938]  INFO -- : one_tree_profile = [1712, 23839], found_profile_id = 23839
+I, [2016-03-19T21:13:15.912556 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.912710 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.912875 #16938]  INFO -- : one_tree_profile = [1947, 27005], found_profile_id = 27005
+I, [2016-03-19T21:13:15.914520 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.914649 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.914838 #16938]  INFO -- : one_tree_profile = [2202, 30198], found_profile_id = 30198
+I, [2016-03-19T21:13:15.916192 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.916324 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.916585 #16938]  INFO -- : one_tree_profile = [2225, 30559], found_profile_id = 30559
+I, [2016-03-19T21:13:15.917991 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.918122 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.918252 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:15.918409 #16938]  INFO -- : certain_search_data = {:search=>13608, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:15.918555 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13608=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:15.919615 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:15.919761 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13612, :name_id_searched=>347}
+I, [2016-03-19T21:13:15.990044 #16938]  INFO -- : one_tree_profile = [31, 560], found_profile_id = 560
+I, [2016-03-19T21:13:15.992162 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 2
+I, [2016-03-19T21:13:15.992351 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.992690 #16938]  INFO -- : one_tree_profile = [31, 557], found_profile_id = 557
+I, [2016-03-19T21:13:15.995211 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.995348 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.995514 #16938]  INFO -- : one_tree_profile = [74, 1457], found_profile_id = 1457
+I, [2016-03-19T21:13:15.997040 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.997168 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.997425 #16938]  INFO -- : one_tree_profile = [82, 1325], found_profile_id = 1325
+I, [2016-03-19T21:13:15.999363 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:15.999493 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:15.999668 #16938]  INFO -- : one_tree_profile = [119, 1976], found_profile_id = 1976
+I, [2016-03-19T21:13:16.001231 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.001357 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.001606 #16938]  INFO -- : one_tree_profile = [248, 3667], found_profile_id = 3667
+I, [2016-03-19T21:13:16.002881 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.003013 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.003261 #16938]  INFO -- : one_tree_profile = [291, 6669], found_profile_id = 6669
+I, [2016-03-19T21:13:16.004892 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.005022 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.005253 #16938]  INFO -- : one_tree_profile = [329, 4559], found_profile_id = 4559
+I, [2016-03-19T21:13:16.007213 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.007478 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.007640 #16938]  INFO -- : one_tree_profile = [460, 6275], found_profile_id = 6275
+I, [2016-03-19T21:13:16.008950 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.009079 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.009290 #16938]  INFO -- : one_tree_profile = [856, 11397], found_profile_id = 11397
+I, [2016-03-19T21:13:16.011185 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.011379 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.011539 #16938]  INFO -- : one_tree_profile = [862, 11978], found_profile_id = 11978
+I, [2016-03-19T21:13:16.012932 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.013092 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.013251 #16938]  INFO -- : one_tree_profile = [1130, 15806], found_profile_id = 15806
+I, [2016-03-19T21:13:16.014893 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.015096 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.015285 #16938]  INFO -- : one_tree_profile = [1316, 18269], found_profile_id = 18269
+I, [2016-03-19T21:13:16.016631 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:16.016758 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.016907 #16938]  INFO -- : one_tree_profile = [1351, 18687], found_profile_id = 18687
+I, [2016-03-19T21:13:16.019754 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.019937 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.020156 #16938]  INFO -- : one_tree_profile = [1430, 19853], found_profile_id = 19853
+I, [2016-03-19T21:13:16.021764 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.021894 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.022042 #16938]  INFO -- : one_tree_profile = [1486, 20553], found_profile_id = 20553
+I, [2016-03-19T21:13:16.023553 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.023681 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.023832 #16938]  INFO -- : one_tree_profile = [1548, 21581], found_profile_id = 21581
+I, [2016-03-19T21:13:16.025151 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.025277 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.025424 #16938]  INFO -- : one_tree_profile = [1607, 22718], found_profile_id = 22718
+I, [2016-03-19T21:13:16.026756 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.026922 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.027140 #16938]  INFO -- : one_tree_profile = [1739, 24457], found_profile_id = 24457
+I, [2016-03-19T21:13:16.028475 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.028687 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.028844 #16938]  INFO -- : one_tree_profile = [1804, 24897], found_profile_id = 24897
+I, [2016-03-19T21:13:16.030802 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.030929 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.031098 #16938]  INFO -- : one_tree_profile = [1834, 25318], found_profile_id = 25318
+I, [2016-03-19T21:13:16.032894 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.033052 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.033206 #16938]  INFO -- : one_tree_profile = [1879, 26088], found_profile_id = 26088
+I, [2016-03-19T21:13:16.034930 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.035086 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.035261 #16938]  INFO -- : one_tree_profile = [1947, 27003], found_profile_id = 27003
+I, [2016-03-19T21:13:16.036708 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.036836 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.036975 #16938]  INFO -- : one_tree_profile = [1947, 26985], found_profile_id = 26985
+I, [2016-03-19T21:13:16.038763 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.038890 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.039051 #16938]  INFO -- : one_tree_profile = [2152, 29412], found_profile_id = 29412
+I, [2016-03-19T21:13:16.040446 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.040620 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.040759 #16938]  INFO -- : one_tree_profile = [2277, 31528], found_profile_id = 31528
+I, [2016-03-19T21:13:16.042864 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:16.043004 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.043169 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.043322 #16938]  INFO -- : certain_search_data = {:search=>13612, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.043575 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13612=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.044553 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.044692 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13611, :name_id_searched=>366}
+I, [2016-03-19T21:13:16.120623 #16938]  INFO -- : one_tree_profile = [74, 1490], found_profile_id = 1490
+I, [2016-03-19T21:13:16.122728 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.122911 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.123169 #16938]  INFO -- : one_tree_profile = [291, 4012], found_profile_id = 4012
+I, [2016-03-19T21:13:16.126980 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.127207 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.127443 #16938]  INFO -- : one_tree_profile = [789, 14222], found_profile_id = 14222
+I, [2016-03-19T21:13:16.129203 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.129355 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.129511 #16938]  INFO -- : one_tree_profile = [1024, 14126], found_profile_id = 14126
+I, [2016-03-19T21:13:16.130964 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.131137 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.131347 #16938]  INFO -- : one_tree_profile = [1790, 24730], found_profile_id = 24730
+I, [2016-03-19T21:13:16.132822 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.132984 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.133134 #16938]  INFO -- : one_tree_profile = [1947, 26987], found_profile_id = 26987
+I, [2016-03-19T21:13:16.134725 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.134967 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.135226 #16938]  INFO -- : one_tree_profile = [2142, 29258], found_profile_id = 29258
+I, [2016-03-19T21:13:16.136892 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.137029 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.137210 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.137458 #16938]  INFO -- : certain_search_data = {:search=>13611, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.138017 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13611=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.139225 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.139393 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13609, :name_id_searched=>428}
+I, [2016-03-19T21:13:16.216062 #16938]  INFO -- : one_tree_profile = [119, 2740], found_profile_id = 2740
+I, [2016-03-19T21:13:16.218351 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.218536 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.218791 #16938]  INFO -- : one_tree_profile = [291, 6668], found_profile_id = 6668
+I, [2016-03-19T21:13:16.220715 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.220899 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.221120 #16938]  INFO -- : one_tree_profile = [460, 6274], found_profile_id = 6274
+I, [2016-03-19T21:13:16.224373 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.224518 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.224773 #16938]  INFO -- : one_tree_profile = [465, 6243], found_profile_id = 6243
+I, [2016-03-19T21:13:16.226194 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.226406 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.226646 #16938]  INFO -- : one_tree_profile = [647, 8778], found_profile_id = 8778
+I, [2016-03-19T21:13:16.228131 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.228324 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.228560 #16938]  INFO -- : one_tree_profile = [765, 10384], found_profile_id = 10384
+I, [2016-03-19T21:13:16.229980 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.230113 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.230364 #16938]  INFO -- : one_tree_profile = [996, 13654], found_profile_id = 13654
+I, [2016-03-19T21:13:16.232017 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.232165 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.232368 #16938]  INFO -- : one_tree_profile = [1047, 14565], found_profile_id = 14565
+I, [2016-03-19T21:13:16.234122 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.234264 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.234473 #16938]  INFO -- : one_tree_profile = [1113, 15604], found_profile_id = 15604
+I, [2016-03-19T21:13:16.236281 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.236429 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.236612 #16938]  INFO -- : one_tree_profile = [1207, 16698], found_profile_id = 16698
+I, [2016-03-19T21:13:16.238575 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.238734 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.238889 #16938]  INFO -- : one_tree_profile = [1227, 16872], found_profile_id = 16872
+I, [2016-03-19T21:13:16.240424 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.240559 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.240710 #16938]  INFO -- : one_tree_profile = [1464, 20288], found_profile_id = 20288
+I, [2016-03-19T21:13:16.242229 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.242362 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.242514 #16938]  INFO -- : one_tree_profile = [1566, 22846], found_profile_id = 22846
+I, [2016-03-19T21:13:16.243933 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:16.244068 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.244230 #16938]  INFO -- : one_tree_profile = [1613, 22500], found_profile_id = 22500
+I, [2016-03-19T21:13:16.245770 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.245945 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.246118 #16938]  INFO -- : one_tree_profile = [2037, 27735], found_profile_id = 27735
+I, [2016-03-19T21:13:16.247647 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.247821 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.247972 #16938]  INFO -- : one_tree_profile = [2142, 29414], found_profile_id = 29414
+I, [2016-03-19T21:13:16.249438 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.249674 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.249833 #16938]  INFO -- : one_tree_profile = [2158, 29518], found_profile_id = 29518
+I, [2016-03-19T21:13:16.251227 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.251416 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.251566 #16938]  INFO -- : one_tree_profile = [2311, 32066], found_profile_id = 32066
+I, [2016-03-19T21:13:16.252876 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.253012 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.253233 #16938]  INFO -- : one_tree_profile = [2334, 32398], found_profile_id = 32398
+I, [2016-03-19T21:13:16.254963 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.255156 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.255341 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.255502 #16938]  INFO -- : certain_search_data = {:search=>13609, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.255651 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13609=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.256639 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.256875 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13605, :name_id_searched=>51}
+I, [2016-03-19T21:13:16.332848 #16938]  INFO -- : one_tree_profile = [4, 552], found_profile_id = 552
+I, [2016-03-19T21:13:16.335306 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.335553 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.335792 #16938]  INFO -- : one_tree_profile = [31, 552], found_profile_id = 552
+I, [2016-03-19T21:13:16.338227 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.338410 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.338614 #16938]  INFO -- : one_tree_profile = [74, 1466], found_profile_id = 1466
+I, [2016-03-19T21:13:16.341080 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.341271 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.341476 #16938]  INFO -- : one_tree_profile = [119, 2738], found_profile_id = 2738
+I, [2016-03-19T21:13:16.343914 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.344152 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.344320 #16938]  INFO -- : one_tree_profile = [1130, 15804], found_profile_id = 15804
+I, [2016-03-19T21:13:16.345991 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.346125 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.346336 #16938]  INFO -- : one_tree_profile = [1316, 18268], found_profile_id = 18268
+I, [2016-03-19T21:13:16.347714 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:16.347892 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.348063 #16938]  INFO -- : one_tree_profile = [1449, 20148], found_profile_id = 20148
+I, [2016-03-19T21:13:16.349454 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.349609 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.349757 #16938]  INFO -- : one_tree_profile = [1834, 25321], found_profile_id = 25321
+I, [2016-03-19T21:13:16.351156 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.351381 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.351520 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.351664 #16938]  INFO -- : certain_search_data = {:search=>13605, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.351809 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13605=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.352848 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.352997 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>32175, :name_id_searched=>56}
+I, [2016-03-19T21:13:16.422440 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.422665 #16938]  INFO -- : certain_search_data = {:search=>32175, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.422866 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{32175=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.424466 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.424758 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13599, :name_id_searched=>458}
+I, [2016-03-19T21:13:16.506393 #16938]  INFO -- : one_tree_profile = [4, 1065], found_profile_id = 1065
+I, [2016-03-19T21:13:16.509223 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.509404 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.510066 #16938]  INFO -- : one_tree_profile = [31, 1065], found_profile_id = 1065
+I, [2016-03-19T21:13:16.511686 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.511815 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.512006 #16938]  INFO -- : one_tree_profile = [74, 1463], found_profile_id = 1463
+I, [2016-03-19T21:13:16.513889 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.514027 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.514221 #16938]  INFO -- : one_tree_profile = [74, 1483], found_profile_id = 1483
+I, [2016-03-19T21:13:16.515542 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.515672 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.515861 #16938]  INFO -- : one_tree_profile = [82, 1418], found_profile_id = 1418
+I, [2016-03-19T21:13:16.517354 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.517487 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.517716 #16938]  INFO -- : one_tree_profile = [82, 1427], found_profile_id = 1427
+I, [2016-03-19T21:13:16.519107 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.519241 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.519428 #16938]  INFO -- : one_tree_profile = [119, 1955], found_profile_id = 1955
+I, [2016-03-19T21:13:16.520795 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.520980 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.521167 #16938]  INFO -- : one_tree_profile = [156, 2493], found_profile_id = 2493
+I, [2016-03-19T21:13:16.522790 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.522956 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.523180 #16938]  INFO -- : one_tree_profile = [275, 3844], found_profile_id = 3844
+I, [2016-03-19T21:13:16.524422 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.524553 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.524794 #16938]  INFO -- : one_tree_profile = [291, 6665], found_profile_id = 6665
+I, [2016-03-19T21:13:16.526589 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.526798 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.527901 #16938]  INFO -- : one_tree_profile = [432, 5851], found_profile_id = 5851
+I, [2016-03-19T21:13:16.531383 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.531578 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.531870 #16938]  INFO -- : one_tree_profile = [460, 6261], found_profile_id = 6261
+I, [2016-03-19T21:13:16.534770 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.534984 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.535249 #16938]  INFO -- : one_tree_profile = [502, 11465], found_profile_id = 11465
+I, [2016-03-19T21:13:16.536806 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.536979 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.537265 #16938]  INFO -- : one_tree_profile = [555, 7401], found_profile_id = 7401
+I, [2016-03-19T21:13:16.539439 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.539695 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.540011 #16938]  INFO -- : one_tree_profile = [569, 7593], found_profile_id = 7593
+I, [2016-03-19T21:13:16.542180 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.542424 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.542828 #16938]  INFO -- : one_tree_profile = [579, 7712], found_profile_id = 7712
+I, [2016-03-19T21:13:16.544766 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.544961 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.545328 #16938]  INFO -- : one_tree_profile = [600, 7899], found_profile_id = 7899
+I, [2016-03-19T21:13:16.547669 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.547811 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.548097 #16938]  INFO -- : one_tree_profile = [687, 9460], found_profile_id = 9460
+I, [2016-03-19T21:13:16.549451 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 2
+I, [2016-03-19T21:13:16.549599 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.549781 #16938]  INFO -- : one_tree_profile = [749, 10244], found_profile_id = 10244
+I, [2016-03-19T21:13:16.551216 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.551382 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.551566 #16938]  INFO -- : one_tree_profile = [908, 12262], found_profile_id = 12262
+I, [2016-03-19T21:13:16.552904 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.553036 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.553235 #16938]  INFO -- : one_tree_profile = [917, 12395], found_profile_id = 12395
+I, [2016-03-19T21:13:16.554870 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.555111 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.555291 #16938]  INFO -- : one_tree_profile = [918, 12405], found_profile_id = 12405
+I, [2016-03-19T21:13:16.556579 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.556751 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.557024 #16938]  INFO -- : one_tree_profile = [1002, 13793], found_profile_id = 13793
+I, [2016-03-19T21:13:16.559096 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.559254 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.559436 #16938]  INFO -- : one_tree_profile = [1019, 14364], found_profile_id = 14364
+I, [2016-03-19T21:13:16.560827 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.561022 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.561240 #16938]  INFO -- : one_tree_profile = [1178, 16028], found_profile_id = 16028
+I, [2016-03-19T21:13:16.562590 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.562724 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.562893 #16938]  INFO -- : one_tree_profile = [1243, 17330], found_profile_id = 17330
+I, [2016-03-19T21:13:16.564460 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.564624 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.564797 #16938]  INFO -- : one_tree_profile = [1291, 18002], found_profile_id = 18002
+I, [2016-03-19T21:13:16.566410 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.566543 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.566708 #16938]  INFO -- : one_tree_profile = [1318, 18250], found_profile_id = 18250
+I, [2016-03-19T21:13:16.568220 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.568380 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.568602 #16938]  INFO -- : one_tree_profile = [1400, 19435], found_profile_id = 19435
+I, [2016-03-19T21:13:16.569936 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.570124 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.570339 #16938]  INFO -- : one_tree_profile = [1414, 19616], found_profile_id = 19616
+I, [2016-03-19T21:13:16.571775 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.571909 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.572074 #16938]  INFO -- : one_tree_profile = [1518, 20975], found_profile_id = 20975
+I, [2016-03-19T21:13:16.573470 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.573635 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.573800 #16938]  INFO -- : one_tree_profile = [1544, 21456], found_profile_id = 21456
+I, [2016-03-19T21:13:16.575200 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.575347 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.575510 #16938]  INFO -- : one_tree_profile = [1548, 21498], found_profile_id = 21498
+I, [2016-03-19T21:13:16.576971 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.577114 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.577274 #16938]  INFO -- : one_tree_profile = [1548, 21632], found_profile_id = 21632
+I, [2016-03-19T21:13:16.579103 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.579256 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.579419 #16938]  INFO -- : one_tree_profile = [1551, 21498], found_profile_id = 21498
+I, [2016-03-19T21:13:16.580858 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.580997 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.581207 #16938]  INFO -- : one_tree_profile = [1610, 22310], found_profile_id = 22310
+I, [2016-03-19T21:13:16.583159 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.583379 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.583613 #16938]  INFO -- : one_tree_profile = [1628, 22713], found_profile_id = 22713
+I, [2016-03-19T21:13:16.586245 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.586463 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.586739 #16938]  INFO -- : one_tree_profile = [1652, 23094], found_profile_id = 23094
+I, [2016-03-19T21:13:16.588643 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.588899 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.589137 #16938]  INFO -- : one_tree_profile = [1739, 24304], found_profile_id = 24304
+I, [2016-03-19T21:13:16.591543 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.591754 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.591976 #16938]  INFO -- : one_tree_profile = [1839, 25423], found_profile_id = 25423
+I, [2016-03-19T21:13:16.594280 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.594596 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.594825 #16938]  INFO -- : one_tree_profile = [1879, 26087], found_profile_id = 26087
+I, [2016-03-19T21:13:16.596485 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.596653 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.596810 #16938]  INFO -- : one_tree_profile = [1943, 26912], found_profile_id = 26912
+I, [2016-03-19T21:13:16.598513 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.598710 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.598912 #16938]  INFO -- : one_tree_profile = [1947, 27008], found_profile_id = 27008
+I, [2016-03-19T21:13:16.600319 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.600458 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.600609 #16938]  INFO -- : one_tree_profile = [1947, 26971], found_profile_id = 26971
+I, [2016-03-19T21:13:16.602281 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.602416 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.602566 #16938]  INFO -- : one_tree_profile = [1972, 27154], found_profile_id = 27154
+I, [2016-03-19T21:13:16.603894 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.604027 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.604175 #16938]  INFO -- : one_tree_profile = [2255, 31092], found_profile_id = 31092
+I, [2016-03-19T21:13:16.605557 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.606032 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.606225 #16938]  INFO -- : one_tree_profile = [2271, 31807], found_profile_id = 31807
+I, [2016-03-19T21:13:16.607632 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.607766 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.607911 #16938]  INFO -- : one_tree_profile = [2311, 32065], found_profile_id = 32065
+I, [2016-03-19T21:13:16.609366 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.609496 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.609720 #16938]  INFO -- : one_tree_profile = [2312, 32152], found_profile_id = 32152
+I, [2016-03-19T21:13:16.611343 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.611478 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.611669 #16938]  INFO -- : one_tree_profile = [2343, 32590], found_profile_id = 32590
+I, [2016-03-19T21:13:16.613108 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.613252 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.613413 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.613597 #16938]  INFO -- : certain_search_data = {:search=>13599, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.613767 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13599=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.614829 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.614977 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13618, :name_id_searched=>296}
+I, [2016-03-19T21:13:16.677011 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.677243 #16938]  INFO -- : certain_search_data = {:search=>13618, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.678343 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13618=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.680094 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.680353 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13617, :name_id_searched=>520}
+I, [2016-03-19T21:13:16.755797 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.756084 #16938]  INFO -- : certain_search_data = {:search=>13617, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.756315 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13617=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.757860 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.758070 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>32179, :name_id_searched=>53}
+I, [2016-03-19T21:13:16.822856 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.823153 #16938]  INFO -- : certain_search_data = {:search=>32179, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.823386 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{32179=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.824808 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.825013 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13624, :name_id_searched=>404}
+I, [2016-03-19T21:13:16.898473 #16938]  INFO -- : one_tree_profile = [1207, 16711], found_profile_id = 16711
+I, [2016-03-19T21:13:16.900298 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:16.900484 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.900680 #16938]  INFO -- : one_tree_profile = [1464, 20297], found_profile_id = 20297
+I, [2016-03-19T21:13:16.902671 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 1
+I, [2016-03-19T21:13:16.902809 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:16.902969 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.903222 #16938]  INFO -- : certain_search_data = {:search=>13624, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.903374 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13624=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.904785 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.904994 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13614, :name_id_searched=>158}
+I, [2016-03-19T21:13:16.974732 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:16.975146 #16938]  INFO -- : certain_search_data = {:search=>13614, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:16.975382 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13614=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:16.976750 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:16.977039 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13622, :name_id_searched=>177}
+I, [2016-03-19T21:13:17.051378 #16938]  INFO -- : one_tree_profile = [765, 10362], found_profile_id = 10362
+I, [2016-03-19T21:13:17.054145 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:17.054344 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:17.054534 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:17.054835 #16938]  INFO -- : certain_search_data = {:search=>13622, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:17.055127 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13622=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:17.056662 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:17.056879 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13623, :name_id_searched=>335}
+I, [2016-03-19T21:13:17.130294 #16938]  INFO -- : one_tree_profile = [82, 1328], found_profile_id = 1328
+I, [2016-03-19T21:13:17.131633 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:17.131833 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:17.131975 #16938]  INFO -- : one_tree_profile = [2158, 29525], found_profile_id = 29525
+I, [2016-03-19T21:13:17.133185 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:17.133385 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:17.133935 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:17.134107 #16938]  INFO -- : certain_search_data = {:search=>13623, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:17.134261 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13623=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:17.135389 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:17.135536 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13620, :name_id_searched=>359}
+I, [2016-03-19T21:13:17.200783 #16938]  INFO -- : one_tree_profile = [1113, 15619], found_profile_id = 15619
+I, [2016-03-19T21:13:17.202696 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:17.202878 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:17.203107 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:17.203316 #16938]  INFO -- : certain_search_data = {:search=>13620, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:17.203751 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13620=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:17.205071 #16938]  INFO -- : ##### modi_search_one_profile #####
+
+
+I, [2016-03-19T21:13:17.205281 #16938]  INFO -- : profile_search_data = {:connected_users=>[994], :profile_id_searched=>13615, :name_id_searched=>359}
+I, [2016-03-19T21:13:17.273285 #16938]  INFO -- : one_tree_profile = [1024, 14085], found_profile_id = 14085
+I, [2016-03-19T21:13:17.275478 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:17.275667 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:17.275864 #16938]  INFO -- : one_tree_profile = [1113, 15619], found_profile_id = 15619
+I, [2016-03-19T21:13:17.278130 #16938]  INFO -- : In All checks failed: - priznak = false, match_count = 0
+I, [2016-03-19T21:13:17.278294 #16938]  INFO -- : EXCLUSIONS DID NOT PASSED
+I, [2016-03-19T21:13:17.278456 #16938]  INFO -- : After Profiles Ok checking: reduced_trees_profiles = []
+I, [2016-03-19T21:13:17.278637 #16938]  INFO -- : certain_search_data = {:search=>13615, :founds=>[], :counts=>[], :trees=>[]}
+I, [2016-03-19T21:13:17.278857 #16938]  INFO -- : Search one_profile_results = {:profiles_trees_pairs=>{13615=>{}}, :profiles_counts=>{}, :doubles_one_to_many=>{}}
+I, [2016-03-19T21:13:17.279407 #16938]  INFO -- : 
+ Time of Search_Tree_Profiles = 2.271 sec. In [994], search_event = 1
+
+
+I, [2016-03-19T21:13:17.279608 #16938]  INFO -- : In SearchServiceLogs#store_search_time_log: Event name = "Добавлен профиль" 
+I, [2016-03-19T21:13:17.288607 #16938]  INFO -- : Search results:
+I, [2016-03-19T21:13:17.288804 #16938]  INFO -- : :connected_author_arr = [994]
+I, [2016-03-19T21:13:17.288987 #16938]  INFO -- : :uniq_profiles_pairs = {13602=>{687=>9458}, 13603=>{687=>9459}}
+I, [2016-03-19T21:13:17.289414 #16938]  INFO -- : :by_profiles = [{:search_profile_id=>13603, :found_tree_id=>687, :found_profile_id=>9459, :count=>5}, {:search_profile_id=>13602, :found_tree_id=>687, :found_profile_id=>9458, :count=>5}]
+I, [2016-03-19T21:13:17.289943 #16938]  INFO -- : :by_trees = [{:found_tree_id=>687, :found_profile_ids=>[9458, 9459]}]
+I, [2016-03-19T21:13:17.290120 #16938]  INFO -- : :duplicates_one_to_many = {}
+I, [2016-03-19T21:13:17.290272 #16938]  INFO -- : :duplicates_many_to_one = {}
+I, [2016-03-19T21:13:17.319738 #16938]  INFO -- : 
+I, [2016-03-19T21:13:17.319927 #16938]  INFO -- : #### End of Main search - Ok
+I, [2016-03-19T21:13:17.320087 #16938]  INFO -- : 
+I, [2016-03-19T21:13:34.360394 #16938]  INFO -- : Started GET "/admin/search_service_logs" for 37.144.76.50 at 2016-03-19 21:13:34 +0300
+I, [2016-03-19T21:13:34.363378 #16938]  INFO -- : Processing by Admin::SearchServiceLogsController#index as HTML
+I, [2016-03-19T21:13:34.402599 #16938]  INFO -- :   Rendered admin/search_service_logs/_table.html.haml (19.7ms)
+I, [2016-03-19T21:13:34.411245 #16938]  INFO -- :   Rendered admin/search_service_logs/index.html.haml within layouts/admin (43.3ms)
+I, [2016-03-19T21:13:34.414849 #16938]  INFO -- :   Rendered admin/shared/_header.html.haml (0.9ms)
+I, [2016-03-19T21:13:34.415732 #16938]  INFO -- :   Rendered admin/shared/_flash.html.haml (0.3ms)
+I, [2016-03-19T21:13:34.416803 #16938]  INFO -- : Completed 200 OK in 53ms (Views: 46.3ms | ActiveRecord: 3.6ms)
+I, [2016-03-19T21:13:34.548980 #16938]  INFO -- : Started GET "/assets/admin/application-5df1f835b6b6cd402651de967f3852c1.css" for 37.144.76.50 at 2016-03-19 21:13:34 +0300
+I, [2016-03-19T21:13:34.587647 #16938]  INFO -- : Started GET "/assets/admin/application-b9aa55c27fd961437bd44a916176dbde.js" for 37.144.76.50 at 2016-03-19 21:13:34 +0300

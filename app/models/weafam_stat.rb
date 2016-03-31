@@ -4,20 +4,20 @@ class WeafamStat < ActiveRecord::Base
   validates_presence_of :users, :users_male, :users_female,
                         :profiles, :profiles_male, :profiles_female,
                         :trees, :invitations,
-                        :requests, :connections, :refuse_requests,
+                        :requests, :requests_wait, :connections, :refuse_requests,
                         :disconnections, :similars_found,
                         :message => "Должно присутствовать в WeafamStat"
   validates_numericality_of :users, :users_male, :users_female,
                             :profiles, :profiles_male, :profiles_female,
                             :trees, :invitations,
-                            :requests, :connections, :refuse_requests,
+                            :requests, :requests_wait, :connections, :refuse_requests,
                             :disconnections, :similars_found,
                             :only_integer => true,
                             :message => "Должны быть целым числом в WeafamStat"
   validates_numericality_of :users, :users_male, :users_female,
                             :profiles, :profiles_male, :profiles_female,
                             :trees, :invitations,
-                            :requests, :connections, :refuse_requests,
+                            :requests, :requests_wait, :connections, :refuse_requests,
                             :disconnections, :similars_found,
                             :greater_than_or_equal_to => 0,
                             :message => "Должны быть больше или равно 0 в WeafamStat"
@@ -55,6 +55,7 @@ class WeafamStat < ActiveRecord::Base
     users_stat_data = User.collect_user_stats
     trees = User.pluck(:connected_users).uniq.length
     requests = ConnectionRequest.all.count
+    requests_wait = ConnectionRequest.requests_waiting
     connections = ConnectionRequest.connections_amount
     refuse_requests = ConnectionRequest.connections_refuses
     invitations = Counter.first.invites
@@ -71,6 +72,7 @@ class WeafamStat < ActiveRecord::Base
       trees: trees,
       invitations: invitations,
       requests: requests,
+      requests_wait: requests_wait,
       connections: connections,
       refuse_requests: refuse_requests,
       disconnections: disconnections,

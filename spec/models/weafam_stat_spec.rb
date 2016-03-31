@@ -63,6 +63,12 @@ RSpec.describe WeafamStat, type: :model  do
       FactoryGirl.create(:search_results, :correct2)
       FactoryGirl.create(:search_results, :correct3)
 
+      # ConnectionRequest
+      FactoryGirl.create(:connection_request, :conn_request_1_2)    #
+      FactoryGirl.create(:connection_request, :conn_request_7_8)    #
+      FactoryGirl.create(:connection_request, :conn_request_3_1)    #
+      FactoryGirl.create(:connection_request, :conn_request_3_2)    #
+
       #Name -  # before
       FactoryGirl.create(:name, :name_28)    # Алексей
       FactoryGirl.create(:name, :name_48)    # Анна
@@ -440,40 +446,44 @@ RSpec.describe WeafamStat, type: :model  do
 
     }
 
-    after {
-      ConnectionRequest.delete_all
-      ConnectionRequest.reset_pk_sequence
-      User.delete_all
-      User.reset_pk_sequence
-      ConnectedUser.delete_all
-      ConnectedUser.reset_pk_sequence
-      Tree.delete_all
-      Tree.reset_pk_sequence
-      Profile.delete_all
-      Profile.reset_pk_sequence
-      ProfileKey.delete_all
-      ProfileKey.reset_pk_sequence
-      Name.delete_all
-      Name.reset_pk_sequence
-      ConnectionLog.delete_all
-      ConnectionLog.reset_pk_sequence
-      CommonLog.delete_all
-      CommonLog.reset_pk_sequence
-      UpdatesFeed.delete_all
-      UpdatesFeed.reset_pk_sequence
-      SearchResults.delete_all
-      SearchResults.reset_pk_sequence
-      Counter.delete_all
-      Counter.reset_pk_sequence
-    }
+    # after {
+    #   DatabaseCleaner.clean
+    #   DatabaseCleaner.start
+
+   # after {
+   #    ConnectionRequest.delete_all
+   #    ConnectionRequest.reset_pk_sequence
+   #    User.delete_all
+   #    User.reset_pk_sequence
+   #    ConnectedUser.delete_all
+   #    ConnectedUser.reset_pk_sequence
+   #    Tree.delete_all
+   #    Tree.reset_pk_sequence
+   #    Profile.delete_all
+   #    Profile.reset_pk_sequence
+   #    ProfileKey.delete_all
+   #    ProfileKey.reset_pk_sequence
+   #    Name.delete_all
+   #    Name.reset_pk_sequence
+   #    ConnectionLog.delete_all
+   #    ConnectionLog.reset_pk_sequence
+   #    CommonLog.delete_all
+   #    CommonLog.reset_pk_sequence
+   #    UpdatesFeed.delete_all
+   #    UpdatesFeed.reset_pk_sequence
+   #    SearchResults.delete_all
+   #    SearchResults.reset_pk_sequence
+   #    Counter.delete_all
+   #    Counter.reset_pk_sequence
+   # }
 
     # create User parameters
     let(:current_user_1) { User.first }  # User = 1. Tree = [1,2]. profile_id = 17
     let(:currentuser_id) {current_user_1.id}  # id = 1
     let(:connected_users) { current_user_1.get_connected_users }  # [1,2]
 
-    context '- before actions - check tables values '    do   #   , focus: true
-      describe '- check User have double == 0 before - Ok' do
+    context '- before actions - check tables values '  , focus: true   do   #   , focus: true
+      describe '- check User have double == 0 before - Ok'    do
         it "- current_user.double == 0 check" do
           puts "Let created: current_user_1.double = #{current_user_1.double} \n"   # 0
           expect(current_user_1.double).to eq(0)
@@ -511,12 +521,12 @@ RSpec.describe WeafamStat, type: :model  do
       end
     end
 
-    describe 'in WeafamStat: Check actions - '     do   #   , focus: true
+    describe 'in WeafamStat: Check actions - '   do   #   , focus: true
       context '- check collect_site_stats '     do   #   , focus: true
         let(:all_stat_data) { WeafamStat.collect_site_stats }
         let(:all_trees) { User.pluck(:connected_users).uniq.length }
         let(:counters_invites) { Counter.first.invites }
-        it '- check Counter - Ok'     do
+        it '- check Counter - Ok'      do
           puts "check: counters_invites = #{counters_invites.inspect}"
           expect(counters_invites).to eq(2689 )
         end
@@ -531,8 +541,8 @@ RSpec.describe WeafamStat, type: :model  do
           puts "all_stat_data = #{all_stat_data.inspect} \n"
           expect(all_stat_data).to eq({:profiles=>32, :profiles_male=>15, :profiles_female=>17, :users=>8,
                                        :users_male=>1, :users_female=>2, :trees=>6, :invitations=>2689,
-                                       :requests=>0, :connections=>0, :refuse_requests=>0, :disconnections=>67,
-                                       :similars_found=>0}
+                                       :requests=>4, :requests_wait=>2,  :connections=>2, :refuse_requests=>0,
+                                       :disconnections=>67, :similars_found=>0}
                                    )
         end
       end

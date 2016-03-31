@@ -11,7 +11,8 @@
       %th Профили Ж
       %th Деревья
       %th Пригл.
-      %th Запросы
+      %th Запросы - всего
+      %th Запросы - ждут
       %th Объед.
       %th Отказы
       %th Разъед.
@@ -33,6 +34,7 @@
         %td= stat.trees
         %td= stat.invitations
         %td= stat.requests
+        %td= stat.requests_wait
         %td= stat.connections
         %td= stat.refuse_requests
         %td= stat.disconnections
