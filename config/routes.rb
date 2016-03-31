@@ -276,6 +276,10 @@ Weafam::Application.routes.draw do
         post :remove_photo, to: "profile_datas_photos#remove"
       end
 
+      namespace :support_messages do
+        post :create, to: "support_messages#create"
+      end
+
       namespace :stat do
         get :stat_common, to: "stat#stat_common"
       end

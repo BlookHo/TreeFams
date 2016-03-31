@@ -115,3 +115,11 @@ AFTER INSERT OR UPDATE OR DELETE
 ON similars_logs
 FOR EACH ROW
 EXECUTE PROCEDURE notify_trigger();
+
+
+-- trigger for SupportMessage table
+CREATE TRIGGER watched_table
+AFTER INSERT OR UPDATE OR DELETE
+ON support_messages
+FOR EACH ROW
+EXECUTE PROCEDURE notify_trigger();

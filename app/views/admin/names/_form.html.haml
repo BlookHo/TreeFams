@@ -49,8 +49,8 @@
 .form-group
   .col-sm-offset-2.col-sm-6
     = f.submit "Сохранить", class: "btn btn-success btn-lg"
-    - unless @name.new_record?
-      = link_to "Удалить имя", admin_name_path(@name),
-                               method: :delete,
-                               :data => {confirm: "Вы уверены, что хотите удалить имя #{@name.name}"},
-                               class: "btn btn-danger btn-lg pull-right"
+    -# - unless @name.new_record?
+    -#   = link_to "Удалить имя", admin_name_path(@name),
+    -#                            method: :delete,
+    -#                            :data => {confirm: "Вы уверены, что хотите удалить имя #{@name.name}"},
+    -#                            class: "btn btn-danger btn-lg pull-right"
