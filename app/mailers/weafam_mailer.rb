@@ -49,9 +49,23 @@ class WeafamMailer < ActionMailer::Base
     #                      "natalia@pe.pe", "petr@pe.pe", "taisia@pe.pe", "fedor@pe.pe"]}
 
     # # real sending
-    users_data =
-        {:users_names=> ["Алексей"],
-        :users_emails=>["zoneiva@gmail.com"] }
+    users_data =     # Август  loc user_id = 23  pr+id = 404
+        #, "Денис", "Алексей","Август"],  # Алексей  loc user_id = 57 # prod  user_id = 3 pr_id = 8724, name_id = 29
+        # {:users_names=> ["Денис"],
+        # :users_emails=>["denis@lobkov.net"] }
+        # {:users_names=> ["Август"],
+        # :users_emails=>["blookho@gmail.com"] }
+    # {:users_names=> ["Август", "Алексей"], # last come
+    # :users_emails=>["blookho@gmail.com", "zoneiva@gmail.com"] }
+
+    {:users_names=> [ "Алексей","Денис", "Август"],
+    :users_emails=>[ "zoneiva@gmail.com", "denis@lobkov.net", "blookho@gmail.com" ] }
+        #, "denis@lobkov.net", "medvedev.alexey@gmail.com", "blookho@gmail.com"] }
+
+    # denis@lobkov.net                  loc user_id = 61      prod  user_id = 3,  pr_id =  1059, name_id = 155 Денис
+    # medvedev.alexey@gmail.com         prod  user_id = 1,  pr_id = 1,     name_id = 29 Алексей
+    # konstantin.starovoytov@gmail.com  prod  user_id = 9,  pr_id =  176,  name_id = 249 Константин
+    # annach61@mail.ru                  loc user_id = 61   prod  user_id = 3,  pr_id = 8725,  name_id = 533 Анета
 
     # mailcatcher sending
     # users_data =
@@ -81,6 +95,21 @@ class WeafamMailer < ActionMailer::Base
 
         user_weekly_info = User.find(user_to_send_id).collect_weekly_info
         puts "To send user_weekly_info = #{user_weekly_info}"
+
+        # email = blookho@gmail.com, id = 23, name = Август
+        # To send user_weekly_info =
+        {:site_info=>{:profiles=>406, :profiles_male=>220, :profiles_female=>186,
+                      :users=>29, :users_male=>23, :users_female=>6, :trees=>24,
+                      :invitations=>3, :requests=>55, :requests_wait=>3,
+                      :connections=>46, :refuse_requests=>0,
+                      :disconnections=>34, :similars_found=>5},
+         :tree_info=>{:tree_profiles=>[404, 405, 407, 418, 419, 406, 411, 409, 1028, 408],
+                      :connected_users=>[23], :qty_of_tree_profiles=>10, :qty_of_tree_users=>1},
+         :connections_info=>{},
+         :new_weekly_profiles=>{:new_profiles_qty=>4, :new_profiles_male=>2,
+                                :new_profiles_female=>2, :new_profiles_ids=>[409, 410, 411, 408]},
+         :connection_requests_info=>{:request_users_ids=>[], :request_users_qty=>0, :request_users_profiles=>[]}}
+
 
         # In collect_weekly_info:
         # after collect_weekly_info:

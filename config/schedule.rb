@@ -20,7 +20,7 @@ every 1.day, :at => '4:00 pm' do   # 16 () + 8 = 24 (00) MSK - появился 
 end
 
 # Mailer
-# every 2.minutes do
+# every 4.minutes do
 #   runner "WeafamMailer.weekly_manifest_email.deliver" , environment: :development
 # end
 
