@@ -21,10 +21,9 @@
 
   %body
     .main
-      -#{:style =>  "display: block; background-color: #4325AD; padding: 15px 15px; color: white;" }
-      .site_header{:style => "background-color: #2BA7F3;  height: 4em; padding: 5px; color: white; "}
-        %h1{:style => "top: .3em; left: 0; position: relative; color: #FCE3D0; margin: 5px; text-align: center;"}
-          Мы все - родня
+      -#.site_header{:style => "background-color: #2BA7F3;  height: 4em; padding: 5px; color: white; "}
+      -#  %h1{:style => "top: .3em; left: 0; position: relative; color: #FCE3D0; margin: 5px; text-align: center;"}
+      -#    Мы все - родня
       %h2{:style => "color: #8A8A8A; text-align: center; "}
         %span{ :style => "display: block;"}
           - if @user_sex == 1
@@ -34,15 +33,15 @@
 
         %br
         %span{ :style => "display: block;"}
-          Предлагаем вам новости вашей родни из проекта «Мы все родня!».
+          Предлагаем вам новости проекта «Мы все родня!».
         %span{ :style => "display: block; margin-top: 15px; "}
           Сейчас в вашем дереве содержится информация о #{@tree_profiles_qty} родственниках.
-        %span{ :style => "display: block;"}
-          Среди них пользователей сайта - #{@tree_users_qty} .
+        -#%span{ :style => "display: block;"}
+        -#  Среди них пользователей сайта - #{@tree_users_qty} .
 
 
       .info_body{:style => "padding: 5px; margin: 2.9em;"}
-        %h2{:style => "color: #8A8A8A; left: 15%; position: relative; "}
+        -#%h2{:style => "color: #8A8A8A; left: 15%; position: relative; "}
           -#Напоминаем Вам о предстоящих событиях вашей родни:
           -#%h3{:style => "color: #678A4B; background-color: #D0F5E0; display: block; "}
           -#  %span{ :style => "display: block; "}
@@ -68,33 +67,33 @@
                 %table{ :style => "display: block;  color: #CE6DC8; background-color:#cecece;"}
                   %tr{ :style => "color: #1DBDBD; "}
                     -#%th ID
-                    %th User
-                    %th Дерево
+                    -#%th User
+                    -#%th Дерево
                     %th Имя
                     %th Фамилия
-                    %th Пред. фамилия
-                    %th Дата рождения
-                    %th Место рождения
-                    %th Дата смерти
-                    %th Страна
+                    -#%th Пред. фамилия
                     %th Город
-                    %th Биография
-                    %th Пол
+                    %th Дата рождения
+                    -#%th Место рождения
+                    -#%th Дата смерти
+                    -#%th Страна
+                    -#%th Биография
+                    -#%th Пол
                   - @connect_profiles_info_complete.each do |profile_id, info_hash|
                     %tr
                       -#%td= info_hash
-                      %td= info_hash[:user_id] || ""
-                      %td= info_hash[:tree_id] || ""
+                      -#%td= info_hash[:user_id] || ""
+                      -#%td= info_hash[:tree_id] || ""
                       %td{ :style => " color: blue; background-color:#F5F164;"}= Name.find(info_hash[:name_id]).name || ""
                       %td{ :style => "color: red; "}= info_hash[:last_name] || ""
-                      %td= info_hash[:prev_last_name] || ""
-                      %td= info_hash[:birthday] || ""
-                      %td= info_hash[:birth_place] || ""
-                      %td= info_hash[:deathdate] || ""
-                      %td= info_hash[:country] || ""
+                      -#%td= info_hash[:prev_last_name] || ""
                       %td= info_hash[:city] || ""
-                      %td= info_hash[:biography] || ""
-                      %td= info_hash[:sex_id] || ""
+                      %td= info_hash[:birthday] || ""
+                      -#%td= info_hash[:birth_place] || ""
+                      -#%td= info_hash[:deathdate] || ""
+                      -#%td= info_hash[:country] || ""
+                      -#%td= info_hash[:biography] || ""
+                      -#%td= info_hash[:sex_id] || ""
 
                 %h3{:style => "color: #678A4B;"}
                   В его дереве - информация о #{@connect_tree_profiles_qty} родственниках,
@@ -102,62 +101,62 @@
 
 
         - if @new_profiles_exists
-          %h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
-            Новая информация о вашей родне:
-            %h3{:style => "color: #678A4B;"}
-              %span{ :style => "display: block;"}
-                В вашем дереве появилась новая информация о #{@new_profiles_qty} родственниках. В том числе:
-              %span{ :style => "display: block;"}
-                - if @new_profiles_females > 0
-                  женщин - #{@new_profiles_females}
-                - if @new_profiles_males > 0
-                  мужчин - #{@new_profiles_males}
-              %span{ :style => "display: block;"}
-                Среди них:
-                - if @profiles_info_complete.blank?
-                  %table
+          -#%h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
+          -#  Новая информация о вашей родне:
+          %h3{:style => "color: #678A4B;"}
+            %span{ :style => "display: block;"}
+              В вашем дереве появилась новая информация о #{@new_profiles_qty} родственниках. В том числе:
+            %span{ :style => "display: block;"}
+              - if @new_profiles_females > 0
+                женщин - #{@new_profiles_females}
+              - if @new_profiles_males > 0
+                мужчин - #{@new_profiles_males}
+            %span{ :style => "display: block;"}
+              Среди них:
+              - if @profiles_info_complete.blank?
+                %table
+                  %tr
+                    %td
+                      %h3 нет Three Profiles...
+                      %br
+              - else
+                %table{ :style => "display: block;  color: #CE6DC8; background-color:#cecece;"}
+                  %tr{ :style => "color: #1DBDBD; "}
+                    -#%th ID
+                    -#%th User
+                    -#%th Дерево
+                    %th Имя
+                    %th Фамилия
+                    -#%th Пред. фамилия
+                    %th Город
+                    %th Дата рождения
+                    -#%th Место рождения
+                    -#%th Дата смерти
+                    -#%th Страна
+                    -#%th Биография
+                    -#%th Пол
+                  - @profiles_info_complete.each do |profile_id, info_hash|
                     %tr
-                      %td
-                        %h3 нет Three Profiles...
-                        %br
-                - else
-                  %table{ :style => "display: block;  color: #CE6DC8; background-color:#cecece;"}
-                    %tr{ :style => "color: #1DBDBD; "}
-                      -#%th ID
-                      %th User
-                      %th Дерево
-                      %th Имя
-                      %th Фамилия
-                      %th Пред. фамилия
-                      %th Дата рождения
-                      %th Место рождения
-                      %th Дата смерти
-                      %th Страна
-                      %th Город
-                      %th Биография
-                      %th Пол
-                    - @profiles_info_complete.each do |profile_id, info_hash|
-                      %tr
-                        -#%td= info_hash
-                        %td= info_hash[:user_id] || ""
-                        %td= info_hash[:tree_id] || ""
-                        %td{ :style => " color: blue; background-color:#F5F164;"}= Name.find(info_hash[:name_id]).name || ""
-                        %td{ :style => "color: red; "}= info_hash[:last_name] || ""
-                        %td= info_hash[:prev_last_name] || ""
-                        %td= info_hash[:birthday] || ""
-                        %td= info_hash[:birth_place] || ""
-                        %td= info_hash[:deathdate] || ""
-                        %td= info_hash[:country] || ""
-                        %td= info_hash[:city] || ""
-                        %td= info_hash[:biography] || ""
-                        %td= info_hash[:sex_id] || ""
+                      -#%td= info_hash
+                      -#%td= info_hash[:user_id] || ""
+                      -#%td= info_hash[:tree_id] || ""
+                      %td{ :style => " color: blue; background-color:#F5F164;"}= Name.find(info_hash[:name_id]).name || ""
+                      %td{ :style => "color: red; "}= info_hash[:last_name] || ""
+                      -#%td= info_hash[:prev_last_name] || ""
+                      %td= info_hash[:city] || ""
+                      %td= info_hash[:birthday] || ""
+                      -#%td= info_hash[:birth_place] || ""
+                      -#%td= info_hash[:deathdate] || ""
+                      -#%td= info_hash[:country] || ""
+                      -#%td= info_hash[:biography] || ""
+                      -#%td= info_hash[:sex_id] || ""
 
 
         - if @new_conn_requests_exists
           -#  Новые запросы на объединение с вашим деревом
           %h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
             %span{ :style => "display: block;"}
-              Кроме того, следующий пользователь проекта ожидает Вашего подтверждения на свой запрос:
+              Следующий пользователь проекта ожидает Вашего подтверждения на свой запрос на объединение деревьев:
             - if @conn_req_profiles_complete.blank?
               %table
                 %tr
@@ -168,45 +167,45 @@
               %table{ :style => "display: block;  color: #CE6DC8; background-color:#cecece;"}
                 %tr{ :style => "color: #1DBDBD; "}
                   -#%th ID
-                  %th User
-                  %th Дерево
+                  -#%th User
+                  -#%th Дерево
                   %th Имя
                   %th Фамилия
-                  %th Пред. фамилия
-                  %th Дата рождения
-                  %th Место рождения
-                  %th Дата смерти
-                  %th Страна
+                  -#%th Пред. фамилия
                   %th Город
-                  %th Биография
-                  %th Пол
+                  %th Дата рождения
+                  -#%th Место рождения
+                  -#%th Дата смерти
+                  -#%th Страна
+                  -#%th Биография
+                  -#%th Пол
                 - @conn_req_profiles_complete.each do |profile_id, info_hash|
                   %tr
                     -#%td= info_hash
-                    %td= info_hash[:user_id] || ""
-                    %td= info_hash[:tree_id] || ""
+                    -#%td= info_hash[:user_id] || ""
+                    -#%td= info_hash[:tree_id] || ""
                     %td{ :style => " color: blue; background-color:#F5F164;"}= Name.find(info_hash[:name_id]).name || ""
                     %td{ :style => "color: red; "}= info_hash[:last_name] || ""
-                    %td= info_hash[:prev_last_name] || ""
-                    %td= info_hash[:birthday] || ""
-                    %td= info_hash[:birth_place] || ""
-                    %td= info_hash[:deathdate] || ""
-                    %td= info_hash[:country] || ""
+                    -#%td= info_hash[:prev_last_name] || ""
                     %td= info_hash[:city] || ""
-                    %td= info_hash[:biography] || ""
-                    %td= info_hash[:sex_id] || ""
+                    %td= info_hash[:birthday] || ""
+                    -#%td= info_hash[:birth_place] || ""
+                    -#%td= info_hash[:deathdate] || ""
+                    -#%td= info_hash[:country] || ""
+                    -#%td= info_hash[:biography] || ""
+                    -#%td= info_hash[:sex_id] || ""
 
               %h3{:style => "color: #678A4B;"}
-                В его дереве - информация о #{@conn_req_tree_profiles_qty} родственниках,
-                в том числе - о #{@conn_req_tree_users_qty} пользователях сайта.
+                Его дерево состоит из #{@conn_req_tree_profiles_qty} родственников.
+                -#в том числе - о #{@conn_req_tree_users_qty} пользователях сайта.
                 -#%span{ :style => "display: block; margin-top: 5px; "}
 
 
         %h2{:style => "color: #8A8A8A; text-align: center; "}
-          Чтобы подробнее ознакомиться с событиями в вашем дереве
-          -#= link_to image_tag( 'http://www.weallfamily.ru/assets/logo-tree.png', {:width => "45", :height =>"45"}), 'http://www.weallfamily.ru'
-          %span{ :style => "display: block; margin-top: 5px; "}
-            = link_to 'пройдите по этой ссылке ', 'http://www.weallfamily.ru'
+          -#Чтобы подробнее ознакомиться с событиями в вашем дереве
+          -#-#= link_to image_tag( 'http://www.weallfamily.ru/assets/logo-tree.png', {:width => "45", :height =>"45"}), 'http://www.weallfamily.ru'
+          -#%span{ :style => "display: block; margin-top: 5px; "}
+          -#  = link_to 'пройдите по этой ссылке ', 'http://www.weallfamily.ru'
           %span{ :style => "display: block; margin-top: 15px; "}
             Для входа на сайт www.weallfamily.com воспользуйтесь своим логином #{@email_name}.
           %span{ :style => "display: block; margin-top: 15px; "}
@@ -219,10 +218,10 @@
             Продолжайте собирать и исследовать информацию о Вашей общей ближней и дальней родне.
 
         %h2{:style => "color: #8A8A8A; text-align: center; "}
-          Следите за новостями проекта "Мы все родня!"
+          С уважением,
 
         %h3{:style => "color: #678A4B; left: 15%; position: relative;"}
-          Данное сообщение направлено вам от команды проекта "weallfamily.ru", Санкт-Петербург.
+          Команда проекта 'Мы все - родня!'
 
 
 
