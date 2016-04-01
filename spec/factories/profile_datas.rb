@@ -1,4 +1,22 @@
 FactoryGirl.define do
+
+  factory :test_model_profile_data, class: ProfileData do |f|
+    # let(:row) { FactoryGirl.create(:test_model_name).id }
+    f.profile_id { Faker::Number.number(5) }
+    f.last_name   "Иванов"
+    f.biography "Текст про Иванова"
+    f.birthday '2015-06-18 11:28:09.738909'
+    f.country "Россия"
+    f.city    'Москва'
+    f.photos ["qwerty.jpeg", "ytrewq.jpeg"]
+    f.deathdate "2015 03 15"
+    f.prev_last_name  ""
+    f.birth_place "Смоленск"
+    f.deleted  {Faker::Number.between(0, 1)}
+    f.created_at { Faker::Date.between(2.days.ago, Date.today) }
+  end
+
+
   factory :profile_data, class: ProfileData  do
     # validation
     # CORRECT
@@ -14,6 +32,7 @@ FactoryGirl.define do
     deathdate "2015 03 15"
     prev_last_name  ""
     birth_place "Смоленск"
+    created_at { Faker::Date.between(2.days.ago, Date.today) }
 
     trait :correct2 do
       profile_id  4
@@ -27,6 +46,7 @@ FactoryGirl.define do
       deathdate ""
       prev_last_name  "Петров"
       birth_place "Саратов"
+      created_at { Faker::Date.between(3.days.ago, Date.today) }
     end
 
     # Test Method ProfileData connect
@@ -42,6 +62,7 @@ FactoryGirl.define do
       deathdate '2015 03 15'
       prev_last_name  ''
       birth_place ''
+      created_at { Faker::Date.between(4.days.ago, Date.today) }
     end
 
     trait :connect_rewrite_2 do
@@ -56,6 +77,7 @@ FactoryGirl.define do
       deathdate ""
       prev_last_name  ""
       birth_place ""
+      created_at { Faker::Date.between(10.days.ago, 8.days.ago) }
     end
 
     trait :connect_rewrite_3 do
@@ -70,6 +92,7 @@ FactoryGirl.define do
       deathdate ""
       prev_last_name  ""
       birth_place "London"
+      created_at { Faker::Date.between(12.days.ago, 9.days.ago) }
     end
 
     trait :connect_rewrite_4 do
@@ -84,6 +107,7 @@ FactoryGirl.define do
       deathdate ""
       prev_last_name  ""
       birth_place ""
+      created_at { Faker::Date.between(12.days.ago, 9.days.ago) }
     end
 
     trait :connect_destroy_1 do
@@ -98,6 +122,7 @@ FactoryGirl.define do
       deathdate ""
       prev_last_name  ""
       birth_place ""
+      created_at { Faker::Date.between(12.days.ago, 9.days.ago) }
     end
 
     trait :connect_destroy_2 do
@@ -112,6 +137,7 @@ FactoryGirl.define do
       deathdate ""
       prev_last_name  ""
       birth_place ""
+      created_at { Faker::Date.between(6.days.ago, 5.days.ago) }
     end
 
     trait :connect_destroy_3 do
@@ -126,6 +152,7 @@ FactoryGirl.define do
       deathdate ""
       prev_last_name  "Smith"
       birth_place ""
+      created_at { Faker::Date.between(12.days.ago, 9.days.ago) }
     end
 
     trait :connect_destroy_4 do
@@ -140,6 +167,7 @@ FactoryGirl.define do
       deathdate ""
       prev_last_name  "Paris"
       birth_place ""
+      created_at { Faker::Date.between(6.days.ago, 2.days.ago) }
     end
 
     # UNCORRECT

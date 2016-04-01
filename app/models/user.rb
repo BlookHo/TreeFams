@@ -300,6 +300,12 @@ class User < ActiveRecord::Base
 
 
 
+
+
+
+
+
+
   private
 
 

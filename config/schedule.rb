@@ -24,6 +24,10 @@ end
 #   runner "WeafamMailer.weekly_manifest_email.deliver" , environment: :development
 # end
 
+# every 4.minutes do
+#   runner "WeafamMailer.weekly_emails_deliver" , environment: :development
+# end
+
 
 # every 1.minutes do
 #   runner "Pool.log"

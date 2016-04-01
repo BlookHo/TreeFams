@@ -7,9 +7,10 @@
     %style{:media => "screen", :type => "text/sass"}
     :css
       body {  width: 100%; }
-      .main,h2,h3 {padding: 15px 15px 15px 15px; color: #4E618A; }
-      /*tr, td::before { content: "o"; }*/
-      /*.info_body*/
+      .main,h2,h3 { color: #4E618A; }
+      /*tr:before { content: "⚫"; }*/
+      /*td:before { content: "⚫"; }*/
+      /*.info_body  padding: 15px 15px 15px 15px; */
       /*{  background-color: #D0F5E0;   color: #8A8A8A; }*/
 
   %body
@@ -42,11 +43,11 @@
           -#  %span{ :style => "display: block; margin: 15px, 10px; padding: 10px, 10px;"}
           -#    2 марта 1965 г. родилась Анна Петрова
 
-        %h2{:style => " left: 15%; position: relative; "}
+        %h2{:style => " padding: 15px; left: 15%; position: relative; "}
           События, которые произошли в Вашем дереве:
 
         - if @new_connections_exists
-          %h2{:style => " left: 15%; position: relative; "}
+          %h2
             %span{ :style => "display: block;"}
               Произошло объединение вашего дерева с другими деревьями вашей родни. Среди них:
             - if @connect_profiles_info_complete.blank?
@@ -72,12 +73,14 @@
                   -#%th Биография
                   -#%th Пол
                 - @connect_profiles_info_complete.each do |profile_id, info_hash|
-                  %tr{:style => " left: 25%; position: relative;  margin-left: 10px;"}
-                    %td= ""
+                  %tr{:style => " left: 25%; position: relative;  padding-left: 10px;"}
+                    -##{&#9899}
+                    -#⚫
+                    -#%td= ⚫
                     -#%td= info_hash[:tree_id] || ""
                     -#%td{ :style => " color: blue; background-color:#F5F164;"}= Name.find(info_hash[:name_id]).name || ""
                     -#%td{ :style => "color: red; "}= info_hash[:last_name] || ""
-                    %td= ("o     " + Name.find(info_hash[:name_id]).name) || ""
+                    %td= ("⚫     " + Name.find(info_hash[:name_id]).name) || ""
                     %td= info_hash[:last_name] || ""
                     -#%td= info_hash[:prev_last_name] || ""
                     %td= info_hash[:city] || ""
@@ -97,7 +100,7 @@
         - if @new_profiles_exists
           -#%h2{:style => "color: #8A8A8A;  left: 15%; position: relative; "}
           -#  Новая информация о вашей родне:
-          %h2{:style => " left: 15%; position: relative; "}
+          %h2
             %span{ :style => "display: block;"}
               В вашем дереве появилась новая информация о #{@new_profiles_qty} родственниках. В том числе:
             %span{ :style => "display: block;"}
@@ -134,7 +137,7 @@
                       -#%td= info_hash
                       -#%td= info_hash[:user_id] || ""
                       -#%td= info_hash[:tree_id] || ""
-                      %td= ("o     " + Name.find(info_hash[:name_id]).name) || ""
+                      %td= ("⚫     " + Name.find(info_hash[:name_id]).name) || ""
                       %td= info_hash[:last_name] || ""
                       -#%td= info_hash[:prev_last_name] || ""
                       %td= info_hash[:city] || ""
@@ -148,7 +151,7 @@
 
         - if @new_conn_requests_exists
           -#  Новые запросы на объединение с вашим деревом
-          %h2{:style => " left: 15%; position: relative; "}
+          %h2
             %span{ :style => "display: block;"}
               Следующий пользователь проекта ожидает Вашего подтверждения на свой запрос на объединение деревьев:
             - if @conn_req_profiles_complete.blank?
@@ -178,7 +181,7 @@
                     -#%td= info_hash
                     -#%td= info_hash[:user_id] || ""
                     -#%td= info_hash[:tree_id] || ""
-                    %td= ("o     " + Name.find(info_hash[:name_id]).name) || ""
+                    %td= ("⚫     " + Name.find(info_hash[:name_id]).name) || ""
                     %td= info_hash[:last_name] || ""
                     -#%td= info_hash[:prev_last_name] || ""
                     %td= info_hash[:city] || ""
@@ -190,13 +193,13 @@
                     -#%td= info_hash[:sex_id] || ""
 
             %h2{:style => " left: 15%; position: relative; "}
-              %span{ :style => "display: block; margin-top: 15px; "}
+              %span{ :style => "display: block; "}
                 Его дерево состоит из #{@conn_req_tree_profiles_qty} родственников.
                 -#в том числе - о #{@conn_req_tree_users_qty} пользователях сайта.
                 -#%span{ :style => "display: block; margin-top: 5px; "}
 
 
-        %h2{:style => " left: 15%; position: relative; "}
+        %h2{:style => " padding: 15px; left: 15%; position: relative; "}
           -#Чтобы подробнее ознакомиться с событиями в вашем дереве
           -#-#= link_to image_tag( 'http://www.weallfamily.ru/assets/logo-tree.png', {:width => "45", :height =>"45"}), 'http://www.weallfamily.ru'
           -#%span{ :style => "display: block; margin-top: 5px; "}
