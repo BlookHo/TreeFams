@@ -55,11 +55,11 @@ class WeafamMailer < ActionMailer::Base
         # :users_emails=>["denis@lobkov.net"] }
         # {:users_names=> ["Август"],
         # :users_emails=>["blookho@gmail.com"] }
-    # {:users_names=> ["Август", "Алексей"], # last come
-    # :users_emails=>["blookho@gmail.com", "zoneiva@gmail.com"] }
+    {:users_names=> ["Август", "Алексей"], # last come
+    :users_emails=>["blookho@gmail.com", "zoneiva@gmail.com"] }
 
-    {:users_names=> [ "Алексей","Денис", "Август"],
-    :users_emails=>[ "zoneiva@gmail.com", "denis@lobkov.net", "blookho@gmail.com" ] }
+    # {:users_names=> [ "Алексей","Денис", "Август"],
+    # :users_emails=>[ "zoneiva@gmail.com", "denis@lobkov.net", "blookho@gmail.com" ] }
         #, "denis@lobkov.net", "medvedev.alexey@gmail.com", "blookho@gmail.com"] }
 
     # denis@lobkov.net                  loc user_id = 61      prod  user_id = 3,  pr_id =  1059, name_id = 155 Денис
