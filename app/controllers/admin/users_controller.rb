@@ -38,6 +38,8 @@ class Admin::UsersController < Admin::AdminController
         CommonLog.where("user_id = ?", user_id).destroy_all
         # delete Profiles
         Profile.where("tree_id = ?", user_id).destroy_all
+        # delete SupportMessage
+        SupportMessage.where("user_id = ?", user_id).destroy_all
         # all others
         User.find(user_id).destroy
       end
