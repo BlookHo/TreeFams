@@ -48,7 +48,8 @@ module Meteor
           message = {
             user_id: user.id,
             body: body,
-            support_id: 1
+            support_id: 1,
+            is_welcome: true
           }
           SupportMessage.create(message)
         end

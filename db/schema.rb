@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160331143046) do
+ActiveRecord::Schema.define(version: 20160403102334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -301,6 +301,8 @@ ActiveRecord::Schema.define(version: 20160331143046) do
     t.datetime "updated_at"
     t.boolean  "new",          default: true
     t.boolean  "is_favorites", default: false
+    t.boolean  "is_welcome",   default: false
+    t.boolean  "is_mass",      default: false
   end
 
   create_table "trees", force: :cascade do |t|
