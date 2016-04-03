@@ -23,6 +23,7 @@ module Meteor
                 User.create_user_account_with_json_data(data, password)
               end
               send_user_email(user, password)
+              send_support_message(user)
               search_event = 6
               ::SearchResults.start_search_methods_in_thread(user, search_event)
               return render json: {token: user.access_token}
@@ -35,6 +36,21 @@ module Meteor
         end
 
         private
+
+
+        def send_support_message(user)
+          body =
+          "Привет!
+           Я очень рад, что ты присоединился к проекту Мы все – родня!
+           Несмотря на то, что мы постарались сделать работу с сайтом простой и понятной, могут возникнуть ситуации, в которых потребуется моя помощь.
+           Пожалуйста, не стесняйся и задавай в чате любые вопросы, по работе сайта. Не обещаю, что отвечу мгновенно, но постараюсь как можно быстрее помочь.
+          "
+          message = {
+            user_id: user.id,
+            body: body
+          }
+          SupportMessage.create(message)
+        end
 
         def send_user_email(user, password)
           Thread.new do
