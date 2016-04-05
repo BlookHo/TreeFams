@@ -2,6 +2,12 @@ require 'rails_helper'
 
 RSpec.describe ProfileData, :type => :model  do # , focus: true
 
+  describe '- main faker validation'    do  # , focus: true
+    it "has a valid factory" do
+      puts " Model ProfileData main faker validation - has a valid factory"
+      expect(FactoryGirl.create(:test_model_profile_data)).to be_valid
+    end
+  end
 
   describe '- validation'    do
     before {
@@ -358,11 +364,83 @@ RSpec.describe ProfileData, :type => :model  do # , focus: true
 
     end
 
-
   end
 
 
+  describe '- Method check - new_weekly_profile_datas'   , focus: true   do # , focus: true
+    # create model data
+    let(:tree_profiles) {[3,4,5,6,7,8,10,11,12,13]}
+    let(:weekly_profiles_datas) { ProfileData.new_weekly_profile_datas(tree_profiles) }
 
+    describe '- check ProfileData Method connect- Ok'    do
+      before do
+
+        #ProfileData
+        FactoryGirl.create(:profile_data)    #
+        FactoryGirl.create(:profile_data, :correct2)    #
+
+        FactoryGirl.create(:profile_data, :connect_rewrite_1)    # id = 3
+        FactoryGirl.create(:profile_data, :connect_rewrite_2)    # id = 4
+        FactoryGirl.create(:profile_data, :connect_rewrite_3)    # id = 5
+        FactoryGirl.create(:profile_data, :connect_rewrite_4)    # id = 6
+
+        FactoryGirl.create(:profile_data, :connect_destroy_1)    # id = 7
+        FactoryGirl.create(:profile_data, :connect_destroy_2)    # id = 8
+        FactoryGirl.create(:profile_data, :connect_destroy_3)    # id = 9
+        FactoryGirl.create(:profile_data, :connect_destroy_4)    # id = 10
+
+        FactoryGirl.create(:user_profile_data)             # User = 155. profile_id = 559
+        FactoryGirl.create(:user_profile_data, :user_210)  # User = 210. profile_id = 22111
+
+        FactoryGirl.create(:connected_user, :for_profile_data_5_10)    #
+        FactoryGirl.create(:connected_user, :for_profile_data_6_11)    #
+        FactoryGirl.create(:connected_user, :for_profile_data_7_12)    #
+        FactoryGirl.create(:connected_user, :for_profile_data_8_13)    #
+
+        # Profile
+        FactoryGirl.create(:profile_one)   # 1
+        FactoryGirl.create(:profile_two)   # 2
+        FactoryGirl.create(:profile_three)   # 3
+        FactoryGirl.create(:profile_four)   # 4
+        FactoryGirl.create(:connect_profile)   # 5
+        FactoryGirl.create(:connect_profile, :connect_profile_2)   # 6
+        FactoryGirl.create(:connect_profile, :connect_profile_7)  # 7
+        FactoryGirl.create(:connect_profile, :connect_profile_8)  # 8   tree_id = 2
+        FactoryGirl.create(:connect_profile, :connect_profile_9)  # 9   tree_id = 2
+        FactoryGirl.create(:connect_profile, :connect_profile_10)  # 10   tree_id = 2
+        FactoryGirl.create(:connect_profile, :connect_profile_11)  # 11   tree_id = 2
+        FactoryGirl.create(:connect_profile, :connect_profile_12)  # 12   tree_id = 2
+        FactoryGirl.create(:connect_profile, :connect_profile_13)  # 13   tree_id = 2
+      end
+
+      after {
+        ProfileData.delete_all
+        ProfileData.reset_pk_sequence
+        ConnectedUser.delete_all
+        ConnectedUser.reset_pk_sequence
+        User.delete_all
+        User.reset_pk_sequence
+      }
+
+      describe '- check Profile have rows count before - Ok' do
+        let(:rows_qty) {13}
+        it_behaves_like :successful_profiles_rows_count
+      end
+
+      it "- Check proper weekly_profiles_datas after ProfileData.new_weekly_profile_datas: " do
+        puts "new_weekly_profile_datas Method check:\n tree_profiles = #{tree_profiles}"
+        puts "new_weekly_profile_datas Method check:\n weekly_profiles_datas = #{weekly_profiles_datas}"
+
+        profile_data_fields = ProfileData.first.attributes.except('updated_at','birthday')
+        puts "new_weekly_profile_datas Method check:\n profile_data_fields = #{profile_data_fields}"
+        expect(weekly_profiles_datas).to eq({:new_profiles_qty=>5, :new_profiles_male=>3,
+                                           :new_profiles_female=>2, :new_profiles_ids=>[3, 4, 5, 11, 13]
+                                          })
+      end
+
+
+    end
+
+  end
 
 end
-
