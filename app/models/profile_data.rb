@@ -269,12 +269,13 @@ class ProfileData < ActiveRecord::Base
   def self.new_weekly_profile_datas(tree_profiles)
     week_ago_time = 1.week.ago
     # week_ago_time = 1.day.ago
-    puts "In new_weekly_profiles: week_ago_time = #{week_ago_time}" # = 2016-03-09 09:33:10 UTC
+    # puts "In new_weekly_profile_datas: tree_profiles = #{tree_profiles}" #
+    # puts "In new_weekly_profile_datas: week_ago_time = #{week_ago_time}" # = 2016-03-09 09:33:10 UTC
 
     new_weekly_profile_datas = where("profile_id in (?)", tree_profiles).where("date_trunc('day', created_at) >= ?", "#{week_ago_time}").pluck(:profile_id)
-    puts "In new_weekly_profiles: new_weekly_profile_datas = #{new_weekly_profile_datas}" #
+    # puts "In new_weekly_profile_datas: new_weekly_profile_datas = #{new_weekly_profile_datas}" #
     new_weekly_profiles = Profile.where("id in (?)", new_weekly_profile_datas)
-    puts "In new_weekly_profiles: new_weekly_profiles = #{new_weekly_profiles}" #
+    # puts "In new_weekly_profile_datas: new_weekly_profiles = #{new_weekly_profiles}" #
 
     { new_profiles_qty: new_weekly_profiles.count,
       new_profiles_male: new_weekly_profiles.where(sex_id: 1).count,
