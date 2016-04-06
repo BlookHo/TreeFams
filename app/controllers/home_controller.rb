@@ -48,7 +48,7 @@ class HomeController < ApplicationController
     logger.info "certain_connect = #{CERTAIN_CONNECT}"
 
    # WeafamMailer.weekly_manifest_email.deliver_now
- # User.send_weekly_manifest
+ User.send_weekly_manifest
 
     # current_user.modified_search # now = srat_search
 

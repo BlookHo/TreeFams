@@ -303,8 +303,11 @@ class User < ActiveRecord::Base
         # {:users_names=> ["Август"],
         # :users_emails=>["blookho@gmail.com"] }
 
-        {:users_names=> ["Август", "Алексей", "Андрей"], # last come
-        :users_emails=>["blookho@gmail.com", "zoneiva@gmail.com", "medvedev.alexey@gmail.com"] }
+        {:users_names=> ["Август", "Алексей"], # last come
+         :users_emails=>["blookho@gmail.com", "zoneiva@gmail.com"] }
+
+        # {:users_names=> ["Август", "Алексей", "Андрей"], # last come
+        # :users_emails=>["blookho@gmail.com", "zoneiva@gmail.com", "medvedev.alexey@gmail.com"] }
 
         # {:users_names=> [ "Алексей"],
         # :users_emails=>[ "zoneiva@gmail.com"] }
